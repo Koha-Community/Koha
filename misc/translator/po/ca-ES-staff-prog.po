@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:34-0300\n"
+"POT-Creation-Date: 2020-04-16 20:44-0300\n"
 "PO-Revision-Date: 2017-02-22 14:46+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -1503,6 +1503,16 @@ msgstr "%s %s (%s cancelat) %s "
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s No hi ha regla de coincidencia activa %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5124,15 +5134,8 @@ msgstr "%s  Codi postal:"
 msgid "%s ZIP/Postal code: "
 msgstr "Codi postal: "
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr ""
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5143,7 +5146,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5286,7 +5289,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, fuzzy, c-format
 msgid "%s data added"
 msgstr "Data en què s'ha afegit"
@@ -10362,15 +10365,15 @@ msgstr "Suggerit per:"
 msgid "Accepted payment (%s) from "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, fuzzy, c-format
 msgid "Access files"
 msgstr "Codi de barres "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -10974,7 +10977,7 @@ msgstr "Afegir un altre camp"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "Elimina els ítems seleccionats"
@@ -11584,8 +11587,8 @@ msgstr "Camps codificats"
 msgid "Additional thanks to..."
 msgstr "Autors addicionals:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, fuzzy, c-format
 msgid "Additional tools"
 msgstr "Autors addicionals:"
@@ -14178,10 +14181,10 @@ msgid ""
 "doesn't match your library. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, fuzzy, c-format
 msgid "Automatic item modifications by age"
 msgstr "Cancel·la la notificació per correu electrònic"
@@ -14561,7 +14564,7 @@ msgstr ""
 msgid "Basic constraints"
 msgstr "Contingut millorat:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, c-format
 msgid "Basic installation complete."
 msgstr ""
@@ -14842,6 +14845,14 @@ msgstr "descripció de projecte"
 msgid "Batch edit patrons "
 msgstr "Edicions"
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, fuzzy, c-format
+msgid "Batch extend due dates"
+msgstr "Data de la reserva"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -14850,9 +14861,9 @@ msgstr "Edicions"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, fuzzy, c-format
@@ -14864,9 +14875,9 @@ msgstr "Supressió immediata"
 msgid "Batch item deletion results"
 msgstr "Torna als resultats"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, fuzzy, c-format
@@ -14919,16 +14930,16 @@ msgstr ""
 msgid "Batch patrons results"
 msgstr "Torna als resultats"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "Supressió immediata"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, fuzzy, c-format
@@ -15488,7 +15499,7 @@ msgid "Browse system logs"
 msgstr "Explora per prestatgeria"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, fuzzy, c-format
 msgid "Browse the system logs"
 msgstr "Explora els resultats"
@@ -15764,8 +15775,8 @@ msgstr "perfil"
 msgid "CSV profile: "
 msgstr "perfil"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, fuzzy, c-format
 msgid "CSV profiles"
@@ -15811,8 +15822,8 @@ msgstr ""
 msgid "Calculated on %s. From %s to %s"
 msgstr "Resultats %s a %s de %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, fuzzy, c-format
 msgid "Calendar"
 msgstr "estàndard"
@@ -16096,6 +16107,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -16824,10 +16837,10 @@ msgstr ""
 msgid "Cassette recording"
 msgstr "Cinta de gravació"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17381,7 +17394,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:116
@@ -17528,6 +17542,8 @@ msgstr "Prestat ("
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17538,6 +17554,8 @@ msgstr "Prestat ("
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -17635,6 +17653,11 @@ msgstr "Prestat"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #, fuzzy, c-format
 msgid "Checkout count:"
+msgstr "Prestat"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, fuzzy, c-format
+msgid "Checkout criteria:"
 msgstr "Prestat"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
@@ -18371,6 +18394,7 @@ msgstr "Esborra"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19490,13 +19514,14 @@ msgstr "Contingut de"
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, fuzzy, c-format
 msgid "Continue"
 msgstr "Continua:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr ""
@@ -19507,9 +19532,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, c-format
 msgid "Continue to the next step"
 msgstr ""
@@ -20203,7 +20228,7 @@ msgstr "Elimina el llistat"
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr ""
@@ -20236,7 +20261,7 @@ msgstr "Crea un nou llistat"
 msgid "Create routing list for "
 msgstr "Crea un nou llistat "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "Crea un nou llistat"
@@ -20726,7 +20751,7 @@ msgstr "base de dades "
 msgid "Database settings:"
 msgstr "base de dades"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr ""
@@ -21323,7 +21348,7 @@ msgid "Define currencies and exchange rates used for acquisitions."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr ""
@@ -21383,7 +21408,7 @@ msgid ""
 "libraries, patron categories, and item types"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr ""
@@ -21639,12 +21664,12 @@ msgstr "Elimina el llistat"
 msgid "Delete SQL reports"
 msgstr "Crea un nou llistat"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, fuzzy, c-format
 msgid "Delete a batch of items"
 msgstr "Elimina aquest llistat"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr ""
@@ -22902,6 +22927,8 @@ msgstr "Venciment %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -22916,6 +22943,21 @@ msgstr "Esborra la data"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, fuzzy, c-format
+msgid "Due date from: "
+msgstr "Data: "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, fuzzy, c-format
+msgid "Due date to:"
+msgstr "Esborra la data"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, fuzzy, c-format
+msgid "Due dates have been modified! "
+msgstr "El suggeriment seleccionat s'ha eliminat. "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23476,7 +23518,7 @@ msgstr "Edicions"
 msgid "Edit purchase suggestion #%s"
 msgstr "els meus suggeriments de compra"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr ""
@@ -23919,7 +23961,7 @@ msgstr ""
 msgid "Enter"
 msgstr "Imprimeix"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24412,7 +24454,7 @@ msgstr ""
 msgid "Everyone"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, c-format
 msgid "Everything went okay. Update done."
 msgstr ""
@@ -24669,7 +24711,7 @@ msgstr "HarvestBibliographicRecords"
 msgid "Export bibliographic records"
 msgstr "HarvestBibliographicRecords"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr ""
@@ -24689,8 +24731,8 @@ msgstr ""
 msgid "Export configuration"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, fuzzy, c-format
 msgid "Export data"
 msgstr "retrats"
@@ -26710,6 +26752,11 @@ msgstr "Manuals"
 msgid "Hard due date"
 msgstr "Data de la reserva"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, fuzzy, c-format
+msgid "Hard due date: "
+msgstr "Data de la reserva"
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27380,6 +27427,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -27624,6 +27672,8 @@ msgstr "Biblioteca d'origen"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28239,7 +28289,7 @@ msgid ""
 "to a vendor. Click OK to ignore or Cancel to return and enter a vendor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28435,7 +28485,7 @@ msgstr "Imatges per %s "
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -28586,7 +28636,7 @@ msgid ""
 "records must be up-to-date on this computer: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29012,8 +29062,8 @@ msgstr "Imatges per %s"
 msgid "Invalid year entered in field %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, fuzzy, c-format
@@ -29667,6 +29717,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -32270,6 +32322,11 @@ msgstr ""
 msgid "Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age"
 msgstr "%s%s%s%sKoha online%s catàleg &rsaquo; Enviant el llistat %s"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "%s%s%s%sKoha online%s catàleg &rsaquo; Enviant el llistat %s"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33035,8 +33092,8 @@ msgstr "[Nova cerca]"
 msgid "Label batches"
 msgstr "Gestionat per"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -33475,6 +33532,11 @@ msgstr "Informació de sèrie: "
 #, fuzzy, c-format
 msgid "Libraries limitation: "
 msgstr "Informació de sèrie: "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, fuzzy, c-format
+msgid "Libraries: "
+msgstr "Biblioteques"
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34192,7 +34254,7 @@ msgstr "Inicia sessió"
 msgid "Log in as a different user"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34204,8 +34266,8 @@ msgstr ""
 msgid "Log out"
 msgstr "Sortir"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, fuzzy, c-format
 msgid "Log viewer"
 msgstr "Inicia sessió"
@@ -34484,7 +34546,7 @@ msgstr ""
 msgid "MARC frameworks: %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, fuzzy, c-format
 msgid "MARC modification templates"
@@ -34761,7 +34823,7 @@ msgid "Manage API keys"
 msgstr "perfil"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr ""
@@ -34791,7 +34853,7 @@ msgstr ""
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, fuzzy, c-format
 msgid "Manage MARC modification templates"
 msgstr "Torna als resultats"
@@ -34811,7 +34873,7 @@ msgstr "perfil"
 msgid "Manage SMS cellular providers"
 msgstr "Cerca avançada"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
@@ -35073,7 +35135,7 @@ msgid "Manage restrictions for accounts"
 msgstr "Totes les col·leccions"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, fuzzy, c-format
 msgid "Manage rotating collections"
 msgstr "Totes les col·leccions"
@@ -35130,7 +35192,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "suggeriments"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr ""
@@ -35183,7 +35245,7 @@ msgid "Managed in tab: "
 msgstr "Gestionat per "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -35203,13 +35265,15 @@ msgstr "Gestionat per"
 msgid "Managing library:"
 msgstr "Biblioteca d'associació:"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, fuzzy, c-format
 msgid "Mandatory data added"
 msgstr "Data en què s'ha afegit"
@@ -35954,7 +36018,7 @@ msgid "Moderate patron comments. "
 msgstr "Comentaris d'usuari sobre %s "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr ""
@@ -36011,7 +36075,7 @@ msgstr "Busca per:"
 msgid "Modify a CSV profile"
 msgstr "perfil"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr ""
@@ -36082,7 +36146,7 @@ msgstr "Modificar"
 msgid "Modify item type"
 msgstr "Tots els tipus d'exemplar"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr ""
@@ -36126,6 +36190,12 @@ msgstr "Registre amb codi de barres coincident"
 msgid "Modify record using the following template: "
 msgstr "Registre amb codi de barres coincident"
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+#, fuzzy
+msgid "Modify selected checkouts"
+msgstr "Elimina els seleccionats"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, fuzzy, c-format
 msgid "Modify selected items"
@@ -36141,6 +36211,11 @@ msgstr "Elimina els seleccionats"
 #, fuzzy, c-format
 msgid "Modify splitting rule"
 msgstr "(modificat a %s)"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -36440,7 +36515,7 @@ msgstr "Préstecs"
 msgid "My library"
 msgstr "Biblioteca d'origen"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, fuzzy, c-format
 msgid "MySQL data added"
 msgstr "Data en què s'ha afegit"
@@ -36978,6 +37053,16 @@ msgstr ""
 msgid "New definition"
 msgstr "No ficció"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, fuzzy, c-format
+msgid "New due date"
+msgstr "Data de la reserva"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, fuzzy, c-format
+msgid "New due date:"
+msgstr "Data de la reserva"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, fuzzy, c-format
 msgid "New enrollment field"
@@ -37235,10 +37320,10 @@ msgstr ""
 msgid "New vendor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, fuzzy, c-format
@@ -37552,6 +37637,11 @@ msgstr "El suggeriment seleccionat s'ha eliminat. "
 #, fuzzy, c-format
 msgid "No change"
 msgstr "Envia els canvis"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, fuzzy, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "Elimina els ítems seleccionats"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38124,7 +38214,7 @@ msgstr "Hi ha %s resultats per la teva cerca "
 msgid "No results."
 msgstr "Explora els resultats"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -38893,7 +38983,7 @@ msgid ""
 "this to access Koha as a staff member with all permissions. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -39727,7 +39817,13 @@ msgstr ""
 msgid "Operator"
 msgstr "Directoris"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, fuzzy, c-format
+msgid "Optional"
+msgstr "(Opcional)"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, fuzzy, c-format
 msgid "Optional data added"
 msgstr "Data en què s'ha afegit"
@@ -39749,6 +39845,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Options"
 msgstr "(Opcional)"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, fuzzy, c-format
+msgid "Or add number of days:"
+msgstr "Signatura topogràfica"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40063,7 +40164,7 @@ msgstr "Altres edicions:"
 msgid "Other course reserves"
 msgstr "globus terrestre"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, fuzzy, c-format
 msgid "Other data"
 msgstr "Altre"
@@ -41309,6 +41410,11 @@ msgstr "Confirma el préstec:"
 msgid "Patrons with the most checkouts"
 msgstr "amb el sistema d'autopréstec"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, fuzzy, c-format
+msgid "Patrons' categories: "
+msgstr "Categoria d'usuari:"
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, fuzzy, c-format
 msgid "Pattern name:"
@@ -41517,6 +41623,11 @@ msgstr "Torna a autopréstec"
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr ""
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, fuzzy, c-format
+msgid "Perform batch extend due dates"
+msgstr "Torna a autopréstec"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, fuzzy, c-format
 msgid "Perform batch modification of items"
@@ -41533,12 +41644,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, c-format
 msgid "Perform inventory of your catalog"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42038,7 +42149,7 @@ msgstr ". Contacta amb la biblioteca per a més informació."
 msgid "Please confirm whether this is a duplicate patron"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, fuzzy, c-format
 msgid "Please contact your system administrator"
 msgstr ". Contacta amb la biblioteca per a més informació."
@@ -42433,6 +42544,12 @@ msgstr "Has de seleccionar com a mínim un ítem."
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 #, fuzzy
 msgid "Please select at least one card to export."
+msgstr "Has de seleccionar com a mínim un ítem."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "Please select at least one checkout to process"
 msgstr "Has de seleccionar com a mínim un ítem."
 
 #. SCRIPT
@@ -43719,8 +43836,8 @@ msgstr ""
 msgid "Quick add new patron "
 msgstr "No es pot reservar"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -43732,14 +43849,14 @@ msgstr ""
 msgid "Quote"
 msgstr "Notes"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, c-format
 msgid "Quote editor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr ""
@@ -44331,6 +44448,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:164
 #, c-format
 msgid "Reminder: this action will modify all selected biblios!"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
@@ -45750,12 +45872,12 @@ msgstr "Número de carnet:"
 msgid "Rota status"
 msgstr "Ubicació (estatus)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, fuzzy, c-format
 msgid "Rotating collections"
 msgstr "Totes les col·leccions"
@@ -46368,7 +46490,7 @@ msgid "Schedule "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr ""
@@ -47214,6 +47336,7 @@ msgstr "Elimina el llistat"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -47224,8 +47347,8 @@ msgstr "Elimina el llistat"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -47311,8 +47434,8 @@ msgstr "Selecciona la base de dades local:"
 msgid "Select month:"
 msgstr "Selecciona un llistat"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Selecciona un llistat"
@@ -47910,7 +48033,7 @@ msgid "Set to patron"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr ""
 
@@ -48920,7 +49043,7 @@ msgstr "Nota de contingut:"
 msgid "Staff notes:"
 msgstr "Nota de contingut:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr ""
@@ -48931,7 +49054,7 @@ msgid "Stage MARC records"
 msgstr "Guarda el registre:"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -48943,7 +49066,7 @@ msgstr ""
 msgid "Stage MARC records into the reservoir"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr ""
@@ -48965,12 +49088,12 @@ msgstr ""
 msgid "Staged"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr ""
@@ -49414,8 +49537,8 @@ msgstr ""
 msgid "Still %s servers to search"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, fuzzy, c-format
@@ -50537,7 +50660,7 @@ msgstr "Edita"
 msgid "Tag has no subfields"
 msgstr "Tanca aquesta finestra"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr ""
@@ -50577,7 +50700,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "Etiquetes"
@@ -50615,10 +50738,10 @@ msgstr ""
 msgid "Target (database) record check field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr ""
@@ -51247,7 +51370,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr ""
@@ -52927,6 +53050,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -53406,8 +53531,8 @@ msgid ""
 "Too many on-site checked out. %s on-site checked out, only %s are allowed."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, fuzzy, c-format
 msgid "Tool plugins"
 msgstr "Wiki de Koha"
@@ -53446,6 +53571,7 @@ msgstr "Wiki de Koha"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -54546,7 +54672,7 @@ msgstr ""
 msgid "Update child to adult patron"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr ""
@@ -54573,7 +54699,7 @@ msgstr "fulls solts"
 msgid "Update patron records"
 msgstr "&#8674; Canvia la teva contrasenya"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr ""
@@ -54583,7 +54709,7 @@ msgstr ""
 msgid "Update succeeded"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, fuzzy, c-format
 msgid "Update your database"
 msgstr "base de dades"
@@ -54621,12 +54747,12 @@ msgstr "UF: %s"
 msgid "Updated:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -54665,13 +54791,13 @@ msgstr "Exemplars d'una subscripció"
 msgid "Upload another KOC file"
 msgstr "Afegir un altre camp"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "al fitxer"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr ""
@@ -54710,10 +54836,10 @@ msgstr "Imatge de la coberta"
 msgid "Upload images"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr ""
@@ -54753,8 +54879,8 @@ msgstr ""
 msgid "Upload patron image"
 msgstr "Imatge de la coberta"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -54762,7 +54888,7 @@ msgid "Upload patron images"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr ""
@@ -55004,7 +55130,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr ""
@@ -55132,7 +55258,7 @@ msgstr ""
 msgid "Using the following CSV profile: "
 msgstr "Registre amb codi de barres coincident"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr ""
@@ -55950,14 +56076,14 @@ msgstr ""
 msgid "We"
 msgstr "Dc."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, c-format
 msgid "We are ready to do some basic configuration."
 msgstr ""
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr ""
@@ -56012,12 +56138,12 @@ msgstr "Crea un nou llistat"
 msgid "Web installer &rsaquo; Database settings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr ""
@@ -56042,17 +56168,17 @@ msgstr ""
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr ""
@@ -56170,7 +56296,7 @@ msgstr ""
 msgid "When to charge"
 msgstr "Sancions i càrrecs"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -56273,7 +56399,7 @@ msgid "Working day"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr ""
@@ -56774,7 +56900,7 @@ msgid ""
 "record, to remember where the suggested MARC data comes from!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
@@ -57059,6 +57185,17 @@ msgstr ""
 #, fuzzy, c-format
 msgid "You must enter a term to search on "
 msgstr "- Has d'introduir un títol "
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill at least one of the two due date options"
+msgstr "Has de seleccionar com a mínim un ítem."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+msgid "You must fill only one of the two due date options"
+msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -57453,13 +57590,6 @@ msgstr ""
 msgid "[ New list ]"
 msgstr "[Llista nova]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr ""
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
@@ -57478,7 +57608,7 @@ msgid ""
 "%%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -57488,7 +57618,7 @@ msgid ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -57501,8 +57631,19 @@ msgid ""
 "CAN_user_tools_upload_local_cover_images ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "

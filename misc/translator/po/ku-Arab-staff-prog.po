@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:48-0300\n"
+"POT-Creation-Date: 2020-04-16 20:58-0300\n"
 "PO-Revision-Date: 2013-06-19 01:21+0300\n"
 "Last-Translator: Harem Abdullah <harem.suli@gmail.com>\n"
 "Language-Team: kurdish translation team\n"
@@ -1488,6 +1488,16 @@ msgstr "%s %s %s %s(%s) %s "
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s یاسای هاوتاکردنی کارا نیە %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, fuzzy, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr "المادة مرتبطة بنجاح إلى "
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5133,15 +5143,8 @@ msgstr "%s الرمز البريدى:"
 msgid "%s ZIP/Postal code: "
 msgstr "%s الرمز البريدى: "
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr ""
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5152,7 +5155,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5299,7 +5302,7 @@ msgstr ""
 "خوازیار: %s; نازناو: %s). %s "
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, c-format
 msgid "%s data added"
 msgstr "%sزانیارییە زیادکراوەکان"
@@ -10454,15 +10457,15 @@ msgstr "تم قبولة من طرف"
 msgid "Accepted payment (%s) from "
 msgstr "قبول الدفع(%s) من "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, fuzzy, c-format
 msgid "Access files"
 msgstr "ملف الباركود: "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11066,7 +11069,7 @@ msgstr "أضف نوع سمة مستفيد"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "إضافة /إحذف المواد المختارة"
@@ -11679,8 +11682,8 @@ msgstr "تعديل الحقول الفرعية"
 msgid "Additional thanks to..."
 msgstr "شكر إضافي ل"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Additional tools"
 msgstr "أدوات إضافية"
@@ -14276,10 +14279,10 @@ msgstr ""
 "القيم الإستنادية IndependentBranches و Autolocation قد تمَّ تشغيلهما وأنتَ مسجل "
 "دخولك من معرف IP لا يتطابق مع مكتبتك. "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, fuzzy, c-format
 msgid "Automatic item modifications by age"
 msgstr "التعديل الكمّي للمواد"
@@ -14660,7 +14663,7 @@ msgstr "المستوى الأساس"
 msgid "Basic constraints"
 msgstr "أخفِ القيود"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, fuzzy, c-format
 msgid "Basic installation complete."
 msgstr "إكتمل التركيب."
@@ -14941,6 +14944,14 @@ msgstr "وصف الإتفاقية:"
 msgid "Batch edit patrons "
 msgstr "تعديل المستفيدين"
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, fuzzy, c-format
+msgid "Batch extend due dates"
+msgstr "تاريخ الإستحقاق الثابت"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -14949,9 +14960,9 @@ msgstr "تعديل المستفيدين"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "دفعة المواد %sحذف%sتعديل%s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, c-format
@@ -14963,9 +14974,9 @@ msgstr "الحذف الكمّي للمواد"
 msgid "Batch item deletion results"
 msgstr "نتائج حذف دفعة المواد"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, c-format
@@ -15018,16 +15029,16 @@ msgstr "التعديل الكمّي للمواد"
 msgid "Batch patrons results"
 msgstr "نتائج حذف دفعة المواد"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "الحذف الكمّي للمواد"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, fuzzy, c-format
@@ -15595,7 +15606,7 @@ msgid "Browse system logs"
 msgstr "تصفّح سجلات نظام"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Browse the system logs"
 msgstr "تصفح سجلات النظام"
@@ -15871,8 +15882,8 @@ msgstr "ملفات CSV"
 msgid "CSV profile: "
 msgstr "ملفات CSV"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, c-format
 msgid "CSV profiles"
@@ -15918,8 +15929,8 @@ msgstr ""
 msgid "Calculated on %s. From %s to %s"
 msgstr "محسوب في %s. من %s إلى %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, c-format
 msgid "Calendar"
 msgstr "التقويم"
@@ -16209,6 +16220,8 @@ msgstr "لا يمكن حفظ هذه التسجيلة لان الحقل التا�
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -16938,10 +16951,10 @@ msgstr ""
 msgid "Cassette recording"
 msgstr "تسجيل كاسيت"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17494,8 +17507,9 @@ msgid "Check the box next to the alert you want to delete."
 msgstr "التحقق من المربعات لمكتبات قبولك لمواد الاعارة من."
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
-#, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
+#, fuzzy, c-format
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
 msgstr "التحقق من المربعات لمكتبات قبولك لمواد الاعارة من."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:116
@@ -17647,6 +17661,8 @@ msgstr "تم إعارته %s أوقات"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17657,6 +17673,8 @@ msgstr "الإعارة من"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -17758,6 +17776,11 @@ msgstr "عدد الإعارات"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #, fuzzy, c-format
 msgid "Checkout count:"
+msgstr "عدد الإعارات"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, fuzzy, c-format
+msgid "Checkout criteria:"
 msgstr "عدد الإعارات"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
@@ -18498,6 +18521,7 @@ msgstr "مسح"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19614,13 +19638,14 @@ msgstr "تتألف من "
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, c-format
 msgid "Continue"
 msgstr "المتابعة"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "تابع تسجيل الدخول إلى كوها"
@@ -19631,9 +19656,9 @@ msgstr "تابع تسجيل الدخول إلى كوها"
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, fuzzy, c-format
 msgid "Continue to the next step"
 msgstr "تابع تسجيل الدخول إلى كوها"
@@ -20338,7 +20363,7 @@ msgstr "تكرار المستفيد"
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "إنشئ لاصقات كعب الكتاب وباركود صالحة للطباعة من بيانات الفهرس."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "إنشئ لاصقات كعب الكتاب وباركود صالحة للطباعة من بيانات الفهرس."
@@ -20371,7 +20396,7 @@ msgstr "إنشاء قائمة التوجيه"
 msgid "Create routing list for "
 msgstr "إنشاء قائمة التوجيه لل "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "إنشئ قائمة جديدة"
@@ -20861,7 +20886,7 @@ msgstr "منفذ قاعدة البيانات: "
 msgid "Database settings:"
 msgstr "إعدادات قاعدة البيانات:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr "تم إنشاء جدول قاعدة البيانات"
@@ -21465,7 +21490,7 @@ msgid "Define currencies and exchange rates used for acquisitions."
 msgstr "عرف العملات وأسعار الصرف المستخدمة للتزويد."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "حدد الإجازات (الايام التى تغلق فيها المكتبة)"
@@ -21528,7 +21553,7 @@ msgstr ""
 "تحديد القواعد من أجل إشعارات إعارة المواد وارجاعها لمجموعات من المكتبات، "
 "والفئات المستفيدين وأنواع المواد"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr ""
@@ -21791,12 +21816,12 @@ msgstr "حذف الصور"
 msgid "Delete SQL reports"
 msgstr "قاعدة بينات جديدة"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, c-format
 msgid "Delete a batch of items"
 msgstr "حذف دفعة من المواد"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr ""
@@ -23043,6 +23068,8 @@ msgstr "مستحق %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -23057,6 +23084,21 @@ msgstr "تاريخ الإستحقاق"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, fuzzy, c-format
+msgid "Due date from: "
+msgstr "من تاريخ "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, fuzzy, c-format
+msgid "Due date to:"
+msgstr "تاريخ الإستحقاق"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, fuzzy, c-format
+msgid "Due dates have been modified! "
+msgstr "هیچ کام لە جۆرەکان بوونیان نیە "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23621,7 +23663,7 @@ msgstr "تعديل الميزانية"
 msgid "Edit purchase suggestion #%s"
 msgstr "تعديل مقترحات الشراء #%s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr ""
@@ -24062,7 +24104,7 @@ msgstr "فترة التسجيل: "
 msgid "Enter"
 msgstr "فصل الشتاء"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24561,7 +24603,7 @@ msgstr "كل واحد"
 msgid "Everyone"
 msgstr "كل واحد"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, fuzzy, c-format
 msgid "Everything went okay. Update done."
 msgstr "أصبح كلّ شيء على مايرام، تم التجديد."
@@ -24818,7 +24860,7 @@ msgstr "تصدير التسجيلات الببليوغرافية"
 msgid "Export bibliographic records"
 msgstr "تصدير التسجيلات الببليوغرافية"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, fuzzy, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "تصدير التسجيلات الببليوغرافية"
@@ -24838,8 +24880,8 @@ msgstr "نەخوازراوە لە بەرواری:"
 msgid "Export configuration"
 msgstr "شريط التهيئة:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Export data"
 msgstr "تصدير البيانات"
@@ -26878,6 +26920,11 @@ msgstr "كتيبات"
 msgid "Hard due date"
 msgstr "تاريخ الإستحقاق الثابت"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, fuzzy, c-format
+msgid "Hard due date: "
+msgstr "تاريخ الإستحقاق الثابت"
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27551,6 +27598,7 @@ msgstr "عطلة تتكرر سنويا لمجموعة معينة"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -27795,6 +27843,8 @@ msgstr "المكتبة الرئيسية"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28429,7 +28479,7 @@ msgstr ""
 "اذا كنت ترغب المطالبة بالمصادر المتأخرة أو المفقودة يجب عليك أن تربط هذا "
 "الاشتراك إلى الموّرد. اضغط موافق للتجاهُل أو الغاء للرجوع وادخال موّرد"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28632,7 +28682,7 @@ msgstr "صور من أجل "
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -28790,7 +28840,7 @@ msgid ""
 "records must be up-to-date on this computer: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29219,8 +29269,8 @@ msgstr "بەهایەکی ڕێگەپێدراوی نوێ بۆ %s"
 msgid "Invalid year entered in field %s"
 msgstr "أُدخل عام غير صالح في الحقل "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, c-format
@@ -29877,6 +29927,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -32602,6 +32654,11 @@ msgstr "كوها &rsaquo; أدوات &rsaquo; %sدفعة حذف مادة%sدفع
 msgid "Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age"
 msgstr "كوها &rsaquo; الأدوات &rsaquo; التعديل الكمِّي للمواد"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "كوها &rsaquo; الأدوات &rsaquo; الحذف الكمِّي للمواد"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33389,8 +33446,8 @@ msgstr "کۆمەڵێک بەرهەمی نوێ"
 msgid "Label batches"
 msgstr "إدارة الدفعات"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -33829,6 +33886,11 @@ msgstr "استعادة, تقليد "
 #, fuzzy, c-format
 msgid "Libraries limitation: "
 msgstr "استعادة, تقليد "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, fuzzy, c-format
+msgid "Libraries: "
+msgstr "المكتبات"
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34551,7 +34613,7 @@ msgstr "عارض السجل"
 msgid "Log in as a different user"
 msgstr "دەتوانی گەڕانێکی جیاواز تاقیبکەیتەوە بۆ "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34563,8 +34625,8 @@ msgstr ""
 msgid "Log out"
 msgstr "تسجيل الخروج"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Log viewer"
 msgstr "عارض السجل"
@@ -34843,7 +34905,7 @@ msgstr "قوالب مارك"
 msgid "MARC frameworks: %s"
 msgstr "قوالب مارك: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, fuzzy, c-format
 msgid "MARC modification templates"
@@ -35130,7 +35192,7 @@ msgid "Manage API keys"
 msgstr "إدارة مجموعات OAI"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "إدارة تصدير الملفات الشخصية"
@@ -35160,7 +35222,7 @@ msgstr ""
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "اختبار قوالب مارك الببليوغرافية"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, fuzzy, c-format
 msgid "Manage MARC modification templates"
 msgstr "إدارة القوالب"
@@ -35180,7 +35242,7 @@ msgstr "إدارة مجموعات OAI"
 msgid "Manage SMS cellular providers"
 msgstr "&rsaquo; هەناردەکردنی پرۆفایلی CSV "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
@@ -35444,7 +35506,7 @@ msgid "Manage restrictions for accounts"
 msgstr "أدر أشكال بطاقات المستفيدين"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, fuzzy, c-format
 msgid "Manage rotating collections"
 msgstr "مجموعات التدوير"
@@ -35501,7 +35563,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "إدارة المقترحات"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, fuzzy, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr "أدر القواعد لمضاهاة تسجيلات مارك آليا أثناء إستيرادات التسجيلة."
@@ -35554,7 +35616,7 @@ msgid "Managed in tab: "
 msgstr "مدار في التبويب: "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr " تسجيلات مارك المجهزة المدارة، تشتمل إكمالها وتحويلها الإستيرادات."
@@ -35574,13 +35636,15 @@ msgstr "مدار بواسطة"
 msgid "Managing library:"
 msgstr "المكتبة الرئيسية"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr "إلزامى"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, fuzzy, c-format
 msgid "Mandatory data added"
 msgstr "%sزانیارییە زیادکراوەکان"
@@ -36333,7 +36397,7 @@ msgid "Moderate patron comments. "
 msgstr "تعديل تعليقات المستفيد "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr "تعديل وسوم المستفيد"
@@ -36390,7 +36454,7 @@ msgstr "بحث الحقول:"
 msgid "Modify a CSV profile"
 msgstr "عدِّل أو احذف ملف تصدير CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr ""
@@ -36461,7 +36525,7 @@ msgstr "عدّل مدينة"
 msgid "Modify item type"
 msgstr "عدّل نوع مادة"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr "عدل المواد بشكل كمّي"
@@ -36505,6 +36569,12 @@ msgstr "عدّل قاعدة تطابق التسجيلة"
 msgid "Modify record using the following template: "
 msgstr "عدّل قاعدة تطابق التسجيلة"
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+#, fuzzy
+msgid "Modify selected checkouts"
+msgstr "حذف المواد المحددة"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, fuzzy, c-format
 msgid "Modify selected items"
@@ -36520,6 +36590,11 @@ msgstr "حذف المواد المحددة"
 #, fuzzy, c-format
 msgid "Modify splitting rule"
 msgstr "تعديل قاعدة التصنيف"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, fuzzy, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr "عدل المواد بشكل كمّي"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -36819,7 +36894,7 @@ msgstr "0 خوازراوەکان"
 msgid "My library"
 msgstr "مكتبتي"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, fuzzy, c-format
 msgid "MySQL data added"
 msgstr "%sزانیارییە زیادکراوەکان"
@@ -37360,6 +37435,16 @@ msgstr "درواێکی نوێ"
 msgid "New definition"
 msgstr "پێناسەیەکی نوێ"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, fuzzy, c-format
+msgid "New due date"
+msgstr "تجديد تاريخ الاستحقاق:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, fuzzy, c-format
+msgid "New due date:"
+msgstr "تجديد تاريخ الاستحقاق:"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, fuzzy, c-format
 msgid "New enrollment field"
@@ -37617,10 +37702,10 @@ msgstr ""
 msgid "New vendor"
 msgstr "فرۆشیارێکی نوێ"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, c-format
@@ -37939,6 +38024,11 @@ msgstr "هیچ کام لە جۆرەکان بوونیان نیە "
 #, fuzzy, c-format
 msgid "No change"
 msgstr "خەزن کردنی گۆڕانکاریەکان"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, fuzzy, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "ئایتمە پشکنراوەکان نوێ بکەرەوە یان بیان گەڕێنەوە"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38518,7 +38608,7 @@ msgstr "هیچ ئەنجامێک لە گەڵ گەڕانەکەتدا ڕێک ناک
 msgid "No results."
 msgstr "هیچ ئەنجامێک نیە"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -39297,7 +39387,7 @@ msgid ""
 "this to access Koha as a staff member with all permissions. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -40136,7 +40226,13 @@ msgstr "کرایەوە لە:"
 msgid "Operator"
 msgstr "مركاتور"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, fuzzy, c-format
+msgid "Optional"
+msgstr "هەڵبژاردنەکان"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, fuzzy, c-format
 msgid "Optional data added"
 msgstr "%sزانیارییە زیادکراوەکان"
@@ -40158,6 +40254,11 @@ msgstr "یەکەی هەڵبژاردنی وونبوو"
 #, c-format
 msgid "Options"
 msgstr "هەڵبژاردنەکان"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, fuzzy, c-format
+msgid "Or add number of days:"
+msgstr "رقم الفاتورة"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40471,7 +40572,7 @@ msgstr "چالاکی تر"
 msgid "Other course reserves"
 msgstr "Autre orchestre"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, c-format
 msgid "Other data"
 msgstr "داتای تر"
@@ -41726,6 +41827,11 @@ msgstr "ئەو خوێنەرانەی کە بردنە دەرەوەیان نیە"
 msgid "Patrons with the most checkouts"
 msgstr "ئەو خوێنەرانەی کە زۆرترین بردنە دەرەوەیان هەیە"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, fuzzy, c-format
+msgid "Patrons' categories: "
+msgstr "جۆرەکانی خوێنەر"
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, fuzzy, c-format
 msgid "Pattern name:"
@@ -41933,6 +42039,11 @@ msgstr "تأكيد حذف  الطابعة "
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr ""
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, fuzzy, c-format
+msgid "Perform batch extend due dates"
+msgstr "تأكيد حذف  الطابعة "
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, fuzzy, c-format
 msgid "Perform batch modification of items"
@@ -41949,12 +42060,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, fuzzy, c-format
 msgid "Perform inventory of your catalog"
 msgstr "کرداری ژماردن ئەنجام بدە بۆ پێڕستەکەت"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42455,7 +42566,7 @@ msgstr "تکایە جەخت بکەرەوە لەسەر سڕینەوەی بەشد�
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "تکایە دڵنیا بەرەوە لەوەی کە ئایا ئەم خوێنەرە خوێنەرێکی دووبارەیە"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "تکایە پەیوەندی بکە بە بەڕێوبەری سیستەمەکەتەوە"
@@ -42875,6 +42986,12 @@ msgstr "رجاءاً حدد على الأقل دفعة واحدة للتصدير
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 msgid "Please select at least one card to export."
+msgstr "تکایە بە لایەنی کەمەوە یەک کارت هەڵبژێرە بۆ هەناردە کردن"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "Please select at least one checkout to process"
 msgstr "تکایە بە لایەنی کەمەوە یەک کارت هەڵبژێرە بۆ هەناردە کردن"
 
 #. SCRIPT
@@ -44160,8 +44277,8 @@ msgstr ""
 msgid "Quick add new patron "
 msgstr "لا يمكن إضافة مستفيد"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -44173,14 +44290,14 @@ msgstr "دروستکەری خێرای نیشانەی سەر بڕبڕەی کتێ�
 msgid "Quote"
 msgstr "تێبینیەکان"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, fuzzy, c-format
 msgid "Quote editor"
 msgstr "چاککەر"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr ""
@@ -44775,6 +44892,11 @@ msgstr "سيتم حذف %sكل%sالمحددة%sالمواد."
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:164
 #, fuzzy, c-format
 msgid "Reminder: this action will modify all selected biblios!"
+msgstr "سيتم حذف %sكل%sالمحددة%sالمواد."
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, fuzzy, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
 msgstr "سيتم حذف %sكل%sالمحددة%sالمواد."
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
@@ -46194,12 +46316,12 @@ msgstr "ناوی ڕاپۆرت"
 msgid "Rota status"
 msgstr "حالات مفقودة:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, fuzzy, c-format
 msgid "Rotating collections"
 msgstr "مجموعات التدوير"
@@ -46810,7 +46932,7 @@ msgid "Schedule "
 msgstr "خشتەی کات"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "خشتەی کاتی کارەکان بۆ کار پێکردنی"
@@ -47658,6 +47780,7 @@ msgstr "حذف القائمة"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -47668,8 +47791,8 @@ msgstr "حذف القائمة"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -47757,8 +47880,8 @@ msgstr "إختر قواعد البيانات المحلية"
 msgid "Select month:"
 msgstr "إختر الشهر:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "إختر الملاحظة:"
@@ -48358,7 +48481,7 @@ msgid "Set to patron"
 msgstr "ضبط إلى المستفيد"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr ""
 
@@ -49371,7 +49494,7 @@ msgstr "عميل الموظفين:"
 msgid "Staff notes:"
 msgstr "عميل الموظفين:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr "جهز مارك للاستيراد"
@@ -49382,7 +49505,7 @@ msgid "Stage MARC records"
 msgstr "أدر تسجيلات مارك المجهزة"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -49394,7 +49517,7 @@ msgstr "جهز تسجيلات مارك للاستيراد"
 msgid "Stage MARC records into the reservoir"
 msgstr "جهز تسجيلات مارك إلى المستودع."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr "جهز تسجيلات مارك إلى المستودع."
@@ -49416,12 +49539,12 @@ msgstr "جهز التسجيلات إلى داخل المستودع"
 msgid "Staged"
 msgstr "مجهز"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr "إدارة تجهيز مارك"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr "إدارة تسجيلات مارك المجهزة"
@@ -49862,8 +49985,8 @@ msgstr "Steven Callender"
 msgid "Still %s servers to search"
 msgstr "لا يزال %s مخدمات للبحث"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, fuzzy, c-format
@@ -50990,7 +51113,7 @@ msgstr "چاککەر"
 msgid "Tag has no subfields"
 msgstr "الوسيمة %s بنية الحقل الفرعي"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr "تعديل الوسيمة"
@@ -51030,7 +51153,7 @@ msgstr "عرض الشريط:"
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "الأوسمة"
@@ -51068,10 +51191,10 @@ msgstr "هدف"
 msgid "Target (database) record check field"
 msgstr "الهدف (قاعدة البيانات) حقل فحص التسجيلة"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr "مجدول المهام"
@@ -51714,7 +51837,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr "تم العثور على أرقام الباركود التالية: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr "حدث الخطأ التالي أثناء استيراد بنية قاعدة البيانات:"
@@ -53423,6 +53546,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -53902,8 +54027,8 @@ msgid ""
 "Too many on-site checked out. %s on-site checked out, only %s are allowed."
 msgstr "إعارات كثيرة جداً. %s  مُعار ، فقط %s مسموح."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, fuzzy, c-format
 msgid "Tool plugins"
 msgstr "البرنامج المساعد"
@@ -53942,6 +54067,7 @@ msgstr "البرنامج المساعد"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -55042,7 +55168,7 @@ msgstr ""
 msgid "Update child to adult patron"
 msgstr "تحديث المستفيد الطفل إلى مستفيد بالغ"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr "تحديث الأخطاء:"
@@ -55068,7 +55194,7 @@ msgstr "تعديل المواد"
 msgid "Update patron records"
 msgstr "تكرار سجل المستفيد؟"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr "جدد التقرير :"
@@ -55078,7 +55204,7 @@ msgstr "جدد التقرير :"
 msgid "Update succeeded"
 msgstr "تحديث النجاح"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, fuzzy, c-format
 msgid "Update your database"
 msgstr "حدّث قاعدة بياناتك"
@@ -55116,12 +55242,12 @@ msgstr "التحديث"
 msgid "Updated:"
 msgstr "التحديث:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr "تحديث بنية قاعدة البيانات"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -55161,13 +55287,13 @@ msgstr "رفع صور مستفيد دفعة واحدة أو واحدة كل مر
 msgid "Upload another KOC file"
 msgstr "أضف حقل آخر"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "رفع ملف"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr ""
@@ -55206,10 +55332,10 @@ msgstr "رفع صورة"
 msgid "Upload images"
 msgstr "رفع صور"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr "رفع صور غلاف محلية"
@@ -55249,8 +55375,8 @@ msgstr "رفع بيانات الإعارة دون إتصال"
 msgid "Upload patron image"
 msgstr "رفع صور مستفيد"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -55258,7 +55384,7 @@ msgid "Upload patron images"
 msgstr "رفع صور مستفيد"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, fuzzy, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "رفع صور مستفيد دفعة واحدة أو واحدة كل مرة"
@@ -55506,7 +55632,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr "استخدم شريط الأدوات أعلاه لإنشاء جديد %s."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr ""
@@ -55634,7 +55760,7 @@ msgstr "إستخدام القالب:"
 msgid "Using the following CSV profile: "
 msgstr "عدّل قاعدة تطابق التسجيلة"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "تستخدم لرفع صور اﻷغلفة الممسوحة ضوئيا لعرضها على اﻷوباك"
@@ -56458,14 +56584,14 @@ msgstr "Waylon Robertson"
 msgid "We"
 msgstr "الاربعاء"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, c-format
 msgid "We are ready to do some basic configuration."
 msgstr ""
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, fuzzy, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr "نقوم بالترقية من كوها %s إلى  %s ، ينبغي عليك "
@@ -56520,12 +56646,12 @@ msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 msgid "Web installer &rsaquo; Database settings"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr "تركيب إعدادات التكوين الأساسية"
@@ -56550,17 +56676,17 @@ msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr "مثبت ويب &rsaquo؛ خطوة 1"
@@ -56679,7 +56805,7 @@ msgstr ""
 msgid "When to charge"
 msgstr "تێچوونی کرێ"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, fuzzy, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -56785,7 +56911,7 @@ msgid "Working day"
 msgstr "يوم عمل"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "قم بكتابة الأخبار للأوباك وواجهة العميل"
@@ -57292,7 +57418,7 @@ msgstr ""
 "يمكنك إدخال إسم لهذا الاستيراد. يمكن أن يكون ذلك مفيدا, عند إنشاء تسجيلة "
 "بيبلوجرافية, لتتذكرمن أين أتت بيانات مارك المقترحة!"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
@@ -57584,6 +57710,17 @@ msgstr "يجب على إدارتك تعريف ميزانية في الإدارة
 #, c-format
 msgid "You must enter a term to search on "
 msgstr "يجب عليك إدخال مصطلح للبحث على "
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill at least one of the two due date options"
+msgstr "تکایە بە لایەنی کەمەوە یەک ئایتم هەڵبژێرە بۆ سڕینەوە."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+msgid "You must fill only one of the two due date options"
+msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -57983,13 +58120,6 @@ msgstr ""
 msgid "[ New list ]"
 msgstr "[ قائمة جديدة ]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr ""
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 #, fuzzy
@@ -58009,7 +58139,7 @@ msgid ""
 "%%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -58019,7 +58149,7 @@ msgid ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -58032,8 +58162,19 @@ msgid ""
 "CAN_user_tools_upload_local_cover_images ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "

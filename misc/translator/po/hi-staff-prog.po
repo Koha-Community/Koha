@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:42-0300\n"
-"PO-Revision-Date: 2020-03-15 02:46+0000\n"
+"POT-Creation-Date: 2020-04-16 20:52-0300\n"
+"PO-Revision-Date: 2020-04-17 06:00+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1584240396.988940\n"
+"X-POOTLE-MTIME: 1587103224.897775\n"
 "X-Pootle-Path: /hi/18.05/hi-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1572,6 +1572,16 @@ msgstr "%s %s (%s रद्द किया) %s "
 #, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s प्रभाव में मिलान नियम नही %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr "%s %s (यह त्रुटि थी: %s. अधिक जानकारी के लिए कोहा लॉगफाइल देखें). %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5372,15 +5382,8 @@ msgstr "%s ZIP/डाक कोड"
 msgid "%s ZIP/Postal code: "
 msgstr "%s ZIP/डाक कोडः"
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr "%s [#%% शाखा-विशिष्ट %%#] %s "
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5396,7 +5399,7 @@ msgstr ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5549,7 +5552,7 @@ msgstr ""
 "मान है &quot;%s&quot; %s गायब %s (borrowernumber: %s; surname: %s). %s "
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, c-format
 msgid "%s data added"
 msgstr "%s डेटा जोड़ा"
@@ -10687,15 +10690,15 @@ msgstr "पर स्वीकृत:"
 msgid "Accepted payment (%s) from "
 msgstr "स्वीकृत भुगतान ( %s ) से "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, c-format
 msgid "Access files"
 msgstr "फ़ाइलों तक पहुंचें"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr "लॉग फ़ाइलों या रिपोर्ट जैसे सर्वर पर संग्रहीत फ़ाइलों तक पहुंचें"
@@ -11291,7 +11294,7 @@ msgstr "नया गुण जोड़ें"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr "फंड जोड़ें और हटाएं (लेकिन फंड को संशोधित नहीं कर सकते)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, c-format
 msgid "Add and remove items from rotas"
 msgstr "जोड़ें और rotas से आइटम निकालने"
@@ -11897,8 +11900,8 @@ msgstr "अतिरिक्त उपक्षेत्रों  (XML)"
 msgid "Additional thanks to..."
 msgstr "अतिरिक्त धन्यवाद को..."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Additional tools"
 msgstr "अतिरिक्त उपकरण"
@@ -14426,10 +14429,10 @@ msgstr ""
 "Autolocation चालू है और आप एक आईपी पते के साथ प्रवेश कर रहे हैं जोकि आपके पुस्तकालय से मेल "
 "नहीं खाती।"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, c-format
 msgid "Automatic item modifications by age"
 msgstr "उम्र से स्वत: आइटम संशोधनों"
@@ -14809,7 +14812,7 @@ msgstr "आधार स्तर बिताया"
 msgid "Basic constraints"
 msgstr "मूल बाध्यताएं"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, c-format
 msgid "Basic installation complete."
 msgstr "मूल स्थापना पूर्ण।"
@@ -15090,6 +15093,14 @@ msgstr "बैच विवरण:"
 msgid "Batch edit patrons "
 msgstr "बैच संपादित करें संरक्षक"
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, c-format
+msgid "Batch extend due dates"
+msgstr "बैच देय तिथियों का विस्तार करते हैं"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -15098,9 +15109,9 @@ msgstr "बैच संपादित करें संरक्षक"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "बैच आइटम %sहटाना%sसंशोधन%s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, c-format
@@ -15112,9 +15123,9 @@ msgstr "बैच संरक्षक को नष्ट करना"
 msgid "Batch item deletion results"
 msgstr "बैच आइटम को नष्ट परिणाम"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, c-format
@@ -15167,16 +15178,16 @@ msgstr "बैच संरक्षक सँशोधन"
 msgid "Batch patrons results"
 msgstr "बैच संरक्षक परिणाम"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, c-format
 msgid "Batch record deletion"
 msgstr "बैच रिकार्ड हटाना"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, c-format
@@ -15745,7 +15756,7 @@ msgid "Browse system logs"
 msgstr "ब्राउज़ करें तंत्र लॉग"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Browse the system logs"
 msgstr "ब्राउज़ करें प्रणाली लॉग"
@@ -16037,8 +16048,8 @@ msgstr "सीएसवी प्रोफ़ाइल आईडी"
 msgid "CSV profile: "
 msgstr "सीएसवी प्रोफ़ाइल:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, c-format
 msgid "CSV profiles"
@@ -16084,8 +16095,8 @@ msgstr "केटलीन गुर्गर"
 msgid "Calculated on %s. From %s to %s"
 msgstr "%s पर की गणना. %s %s से"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, c-format
 msgid "Calendar"
 msgstr "कैलेंडर"
@@ -16369,6 +16380,8 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -17090,10 +17103,10 @@ msgstr "नगदी रजिस्टर सांख्यिकी %s को
 msgid "Cassette recording"
 msgstr "कैसेट रिकॉर्डिंग"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17643,8 +17656,11 @@ msgstr "बॉक्स चेतावनी आप हटाना चाह�
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
 #, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
-msgstr "पुस्तकालयों आप से आइटम में जांच करने के लिए स्वीकार करने के लिए बॉक्स चेक करें।"
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
+msgstr ""
+"पुस्तकालयों के लिए उन बक्से की जाँच करें जिन्हें आप अपने आइटम को स्थानांतरित "
+"करने की अनुमति देते हैं."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:116
 #, c-format
@@ -17791,6 +17807,8 @@ msgstr "चेकआउट %s बार"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17801,6 +17819,8 @@ msgstr "चेकआउट से"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -17903,6 +17923,11 @@ msgstr "चेकआउट गणना"
 #, c-format
 msgid "Checkout count:"
 msgstr "चेकआउट गणनाः"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, c-format
+msgid "Checkout criteria:"
+msgstr "चेकआउट मानदंड:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
 #, c-format
@@ -18646,6 +18671,7 @@ msgstr "स्पष्ट"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19772,13 +19798,14 @@ msgstr "सामग्री "
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, c-format
 msgid "Continue"
 msgstr "जारी रखें"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "जारी रखें Koha करने में लॉग इन करने के लिए"
@@ -19789,9 +19816,9 @@ msgstr "जारी रखें Koha करने में लॉग इन �
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, c-format
 msgid "Continue to the next step"
 msgstr "अगले कदम के लिए आगे बढ़ें"
@@ -20499,7 +20526,7 @@ msgstr "संरक्षक सूची बनाएं:"
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "सूची और संरक्षक डेटा से प्रिंट करने योग्य लेबल और बारकोड बनाएं"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "सूची डेटा से प्रिंट करने योग्य लेबल और बारकोड बनाएं"
@@ -20532,7 +20559,7 @@ msgstr "अनुमार्गण सूची बनाएँ"
 msgid "Create routing list for "
 msgstr "अनुमार्गण सूची बनाएँ के लिए"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, c-format
 msgid "Create, edit and delete rotas"
 msgstr "रोटा बनाएं, संपादित करें और हटाएं"
@@ -21021,7 +21048,7 @@ msgstr "डाटाबेस पोर्ट: "
 msgid "Database settings:"
 msgstr "डाटाबेस सेटिंग्स:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr "डाटाबेस सारणियां बनाया"
@@ -21624,7 +21651,7 @@ msgid "Define currencies and exchange rates used for acquisitions."
 msgstr "मुद्राओं और विनिमय दरों के अधिग्रहण के लिए इस्तेमाल किया परिभाषित."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "परिभाषित दिनों जब पुस्तकालय बंद है"
@@ -21688,7 +21715,7 @@ msgstr ""
 "परिभाषित परिसंचरण और पुस्तकालयों के संयोजन के लिए जुर्माना नियमों, संरक्षक श्रेणियों, और मद "
 "प्रकार"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr "नियमों को परिभाषित उम्र से आइटम को संशोधित करने के लिए"
@@ -21949,12 +21976,12 @@ msgstr "छवि हटाए"
 msgid "Delete SQL reports"
 msgstr "एसक्यूएल रिपोर्ट हटाएं"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, c-format
 msgid "Delete a batch of items"
 msgstr "मदों की एक बैच हटाएँ"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr "(ग्रंथ सूची या प्राधिकरण) के रिकॉर्ड के एक बैच को हटाएँ"
@@ -23192,6 +23219,8 @@ msgstr "कारण %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -23206,6 +23235,21 @@ msgstr "नियत तारीख"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "नियत दिनांक (अस्वरूपित, छिपा)"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, c-format
+msgid "Due date from: "
+msgstr "देय तिथि से:  "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, c-format
+msgid "Due date to:"
+msgstr "देय तिथि को:  "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, c-format
+msgid "Due dates have been modified! "
+msgstr "नियत तिथियों को संशोधित किया गया है! "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23765,7 +23809,7 @@ msgstr "प्रदान संपादित %s"
 msgid "Edit purchase suggestion #%s"
 msgstr "खरीद सुझाव संपादित करें #%s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr "QOTD सुविधा के लिए बोलियां संपादित करें"
@@ -24200,7 +24244,7 @@ msgstr "नामांकन अवधि: "
 msgid "Enter"
 msgstr "एंटर"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24698,7 +24742,7 @@ msgstr "प्रत्येक"
 msgid "Everyone"
 msgstr "हर कोई"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, c-format
 msgid "Everything went okay. Update done."
 msgstr "सब कुछ ठीक हो गया। अपडेट किया गया"
@@ -24954,7 +24998,7 @@ msgstr "निर्यात ग्रंथ सूची और होल्�
 msgid "Export bibliographic records"
 msgstr "निर्यात ग्रंथ सूची रिकार्ड"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "निर्यात ग्रंथ सूची, होल्डिग और प्राधिकरण रिकार्ड"
@@ -24974,8 +25018,8 @@ msgstr "निर्यातचैक आउट प्रारूप का �
 msgid "Export configuration"
 msgstr "विन्यास निर्यात"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Export data"
 msgstr "निर्यात डेटा"
@@ -27000,6 +27044,11 @@ msgstr "हैंडबुक"
 msgid "Hard due date"
 msgstr "हार्ड  देय तिथि"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, c-format
+msgid "Hard due date: "
+msgstr "हार्ड देय तारीख:  "
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27671,6 +27720,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -27915,6 +27965,8 @@ msgstr "होम पुस्तकालयों"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28565,7 +28617,7 @@ msgstr ""
 "करना चाहते हैं. पर क्लिक करें की उपेक्षा करने या रद्द कर वापस करने के लिए और एक विक्रेता "
 "दर्ज ठीक है"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28768,7 +28820,7 @@ msgstr "छवियाँ के लिए"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -28927,7 +28979,7 @@ msgstr ""
 "इस कंप्यूटर पर काम करने के लिए ऑफ़लाइन संचलन के लिए आदेश में, अपने पुस्तकालय के रिकॉर्ड को "
 "अप-टू-डेट इस कंप्यूटर पर होना चाहिए: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29354,8 +29406,8 @@ msgstr "के लिए अमान्य मान %s"
 msgid "Invalid year entered in field %s"
 msgstr "अमान्य साल क्षेत्र में प्रवेश किया %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, c-format
@@ -30005,6 +30057,8 @@ msgstr "आइटम टैग वर्तमान में सहेजा �
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -32730,6 +32784,11 @@ msgstr "कोहा &rsaquo; उपकरण &rsaquo; %sबैच आइटम 
 msgid "Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age"
 msgstr "कोहा &rsaquo; उपकरण &rsaquo; उम्र से स्वत: आइटम संशोधनों"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "कोहा &rsaquo; उपकरण &rsaquo; बैच देय तिथियों का विस्तार करते हैं"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33547,8 +33606,8 @@ msgstr "लेबल बैच"
 msgid "Label batches"
 msgstr "लेबल बैचों"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -33986,6 +34045,11 @@ msgstr "पुस्तकालयों की जानकारी:"
 #, c-format
 msgid "Libraries limitation: "
 msgstr "लाइब्रेरीयों की सीमाए"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, c-format
+msgid "Libraries: "
+msgstr "पुस्तकालयों: "
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34705,7 +34769,7 @@ msgstr "लॉग इन"
 msgid "Log in as a different user"
 msgstr "बतौर भिन्न उपयोक्ता लॉग इन करें"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34719,8 +34783,8 @@ msgstr ""
 msgid "Log out"
 msgstr "लॉग आउट"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Log viewer"
 msgstr "प्रवेश करें दर्शक"
@@ -34999,7 +35063,7 @@ msgstr "MARC फ्रेमवर्क"
 msgid "MARC frameworks: %s"
 msgstr "MARC फ्रेमवर्क: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
@@ -35288,7 +35352,7 @@ msgid "Manage API keys"
 msgstr "एपीआई कुंजी प्रबंधित करें"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "सीएसवी निर्यात प्रोफाइल की व्यवस्था करें"
@@ -35318,7 +35382,7 @@ msgstr "कोहा प्रणाली सेटिंग्स (प्र�
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "मार्क ग्रंथ सूची और प्राधिकरण ढांचे को प्रबंधित करें और उनका परीक्षण करें"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "मार्क संशोधन टेम्पलेट प्रबंधित"
@@ -35338,7 +35402,7 @@ msgstr "प्रबंधित OAI सेटस"
 msgid "Manage SMS cellular providers"
 msgstr "एसएमएस सेलुलर प्रदाताओं की व्यवस्था करें"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr "स्टॉक रोटेशन रोटा, रोटा चरणों और रोटा आइटम प्रबंधित करें"
@@ -35607,7 +35671,7 @@ msgid "Manage restrictions for accounts"
 msgstr "खातों के लिए प्रतिबंध का प्रबंधन करें"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, c-format
 msgid "Manage rotating collections"
 msgstr "घूर्णन संग्रह का प्रबंधन"
@@ -35667,7 +35731,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "प्रबंधित सुझाव"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr "आयात के दौरान मार्क रिकॉर्ड को संशोधित करने के लिए टेम्पलेट्स की व्यवस्था करें।"
@@ -35720,7 +35784,7 @@ msgid "Managed in tab: "
 msgstr "टैब में प्रबंधित: "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr "प्रबंधित, पूरा करने और आयात पीछे सहित MARC रिकॉर्ड रचा"
@@ -35740,13 +35804,15 @@ msgstr "प्रबंधक नाम"
 msgid "Managing library:"
 msgstr "पुस्तकालय का प्रबंधन:"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr "अनिवार्य"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, c-format
 msgid "Mandatory data added"
 msgstr "अनिवार्य डेटा जोड़ा"
@@ -36480,7 +36546,7 @@ msgid "Moderate patron comments. "
 msgstr "संयमी संरक्षक टिप्पणियाँ "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr "संयमी संरक्षक टैग"
@@ -36537,7 +36603,7 @@ msgstr "ग्रंथ सूची के रिकॉर्ड के लि�
 msgid "Modify a CSV profile"
 msgstr "संशोधित करें एक सीएसवी प्रोफ़ाइल"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr "रिकॉर्ड के एक बैच को संशोधित (biblios या अधिकारियों)"
@@ -36608,7 +36674,7 @@ msgstr "संशोधित होल्डस प्राथमिकता"
 msgid "Modify item type"
 msgstr "संशोधित मद प्रकार"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr "एक बैच में संशोधित आइटम"
@@ -36651,6 +36717,11 @@ msgstr "संशोधित रिकार्ड शासन मिलान
 msgid "Modify record using the following template: "
 msgstr "निम्नलिखित टेम्पलेट का उपयोग कर रिकार्ड सुधारे:"
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+msgid "Modify selected checkouts"
+msgstr "चयनित चैकआउट संशोधित करें"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, c-format
 msgid "Modify selected items"
@@ -36665,6 +36736,11 @@ msgstr "चयनित आइटम संशोधित करें"
 #, c-format
 msgid "Modify splitting rule"
 msgstr "विभाजन नियम को संशोधित करें"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr "बैच में देय तिथियों के चेकआउट को संशोधित करें"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -36951,7 +37027,7 @@ msgstr "मेरे चेकआउटस"
 msgid "My library"
 msgstr "मेरा पुस्तकालय"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, c-format
 msgid "MySQL data added"
 msgstr "माइएसक्यूएल डेटा जोड़ा"
@@ -37492,6 +37568,16 @@ msgstr "नई मुद्रा"
 msgid "New definition"
 msgstr "नई परिभाषा"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, c-format
+msgid "New due date"
+msgstr "नई देय तिथि"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, c-format
+msgid "New due date:"
+msgstr "नई देय तिथि:"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, c-format
 msgid "New enrollment field"
@@ -37747,10 +37833,10 @@ msgstr "न्यू मूल्य: %s %s । %s । ऋण के लिए �
 msgid "New vendor"
 msgstr "नई विक्रेता"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, c-format
@@ -38069,6 +38155,11 @@ msgstr "श्रेणियों में परिभाषित नही
 #, c-format
 msgid "No change"
 msgstr "कोई बदलाव नहीं"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "चयनित फ़िल्टर के लिए कोई चेकआउट नहीं है. "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38641,7 +38732,7 @@ msgstr "कोई परिणाम आपकी खोज से मेल क
 msgid "No results."
 msgstr "कोई परिणाम नहीं."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -39421,7 +39512,7 @@ msgstr ""
 "अब हम अधिकाधिक अनुमति के साथ संरक्षक बनाएंगे। सभी अनुमतियों वाले स्टाफ सदस्य के रूप में "
 "कोहा पहुंचने के लिए इस के साथ प्रवेश करें"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -40256,7 +40347,13 @@ msgstr "इसमें खोलें:"
 msgid "Operator"
 msgstr "ऑपरेटर"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, c-format
+msgid "Optional"
+msgstr "वैकल्पिक"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, c-format
 msgid "Optional data added"
 msgstr "वैकल्पिक डेटा जोड़ा गया"
@@ -40278,6 +40375,11 @@ msgstr "वैकल्पिक मॉड्यूल लापता"
 #, c-format
 msgid "Options"
 msgstr "विकल्प"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, c-format
+msgid "Or add number of days:"
+msgstr "या दिनों की संख्या जोड़ें:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40589,7 +40691,7 @@ msgstr "अन्य कार्रवाई"
 msgid "Other course reserves"
 msgstr "अन्य पाठ्यक्रम रिजर्वस"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, c-format
 msgid "Other data"
 msgstr "अन्य डेटा"
@@ -41827,6 +41929,11 @@ msgstr "चैकआउट नहीं के साथ संरक्षक"
 msgid "Patrons with the most checkouts"
 msgstr "सबसे checkouts के साथ संरक्षक"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, c-format
+msgid "Patrons' categories: "
+msgstr "संरक्षकों की श्रेणियां: "
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, c-format
 msgid "Pattern name:"
@@ -42034,6 +42141,11 @@ msgstr "आइटम के बैच विलोपन प्रदर्श�
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "रिकॉर्ड की बैच विलोपन (ग्रंथ सूची या प्राधिकरण) को पूरा करें"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, c-format
+msgid "Perform batch extend due dates"
+msgstr "प्रदर्शन बैच देय तिथियों का विस्तार करें"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, c-format
 msgid "Perform batch modification of items"
@@ -42050,12 +42162,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr "रिकॉर्ड की बैच संशोधन प्रदर्शन करना (biblios या अधिकारियों)"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, c-format
 msgid "Perform inventory of your catalog"
 msgstr "अपनी सूची की इन्वेंट्री को पूरा करें"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42554,7 +42666,7 @@ msgstr "कृपया सदस्यता के हटाए जाने �
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "कृपया यह एक नकली संरक्षक है कि क्या"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "कृपया अपने सिस्टम व्यवस्थापक से संपर्क करें"
@@ -42936,6 +43048,11 @@ msgstr "कृपया निर्यात करने के लिए क�
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 msgid "Please select at least one card to export."
 msgstr "कृपया निर्यात करने के लिए कम से कम एक कार्ड का चयन करें।"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+msgid "Please select at least one checkout to process"
+msgstr "कृपया प्रक्रिया करने के लिए कम से कम एक चेकआउट चुनें"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:213
@@ -44203,8 +44320,8 @@ msgstr "त्वरित जोड़ें"
 msgid "Quick add new patron "
 msgstr "त्वरित नया संरक्षक जोड़ने"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -44215,14 +44332,14 @@ msgstr "त्वरित रीढ़ लेबल निर्माता"
 msgid "Quote"
 msgstr "उद्धरण"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, c-format
 msgid "Quote editor"
 msgstr "उद्धरण संपादक"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "ओपेक में बोली-ऑफ-द-दिन सुविधा के लिए बोली का संपादक"
@@ -44815,6 +44932,11 @@ msgstr "अनुस्मारक: इस कार्रवाई के स�
 #, c-format
 msgid "Reminder: this action will modify all selected biblios!"
 msgstr "अनुस्मारक: इस कार्रवाई के सभी चयनित biblos संशोधित करेगा!"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
+msgstr "अनुस्मारक: यह क्रिया सभी चयनित चेकआउट को संशोधित करेगी!"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, c-format
@@ -46223,12 +46345,12 @@ msgstr "रोटा नाम"
 msgid "Rota status"
 msgstr "रोटा स्थिति"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, c-format
 msgid "Rotating collections"
 msgstr "संग्रह घूर्णन"
@@ -46831,7 +46953,7 @@ msgid "Schedule "
 msgstr "अनुसूची"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "अनुसूची काम चलाने के लिए"
@@ -47665,6 +47787,7 @@ msgstr "चुनें एक समय"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -47675,8 +47798,8 @@ msgstr "चुनें एक समय"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -47763,8 +47886,8 @@ msgstr "चुनें स्थानीय डेटाबेस"
 msgid "Select month:"
 msgstr "महीना चुनें:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, c-format
 msgid "Select none"
 msgstr "किसी का चयन न करें"
@@ -48362,7 +48485,7 @@ msgid "Set to patron"
 msgstr "संरक्षक सेट करने के लिए"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr "कोहा की बुनियादी आवश्यकताओं के कुछ सेट करें"
 
@@ -49379,7 +49502,7 @@ msgstr "स्टाफ टिप्पणीः"
 msgid "Staff notes:"
 msgstr "स्टाफ टिप्पणीः"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr "आयात के लिए मार्क स्टेज"
@@ -49390,7 +49513,7 @@ msgid "Stage MARC records"
 msgstr "मार्क स्टेज रिकार्ड"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -49402,7 +49525,7 @@ msgstr "मार्क स्टेज रिकॉर्ड्स आयात
 msgid "Stage MARC records into the reservoir"
 msgstr "स्टेज मार्क जलाशय में रिकॉर्ड"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr "इस जलाशय में स्टेज MARC रिकॉर्ड."
@@ -49424,12 +49547,12 @@ msgstr "इस जलाशय में स्टेज रिकॉर्ड"
 msgid "Staged"
 msgstr "मंचन"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr "मंचन मार्क प्रबंधन"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr "स्टेज मार्क रिकॉर्ड्स आयात के लिए"
@@ -49872,8 +49995,8 @@ msgstr "स्टेवन कालेंडर"
 msgid "Still %s servers to search"
 msgstr "खोज करने के लिए अभी भी %s सर्वर"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, c-format
@@ -51003,7 +51126,7 @@ msgstr "टैग संपादक"
 msgid "Tag has no subfields"
 msgstr "टैग के उपक्षेत्रों नही है"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr "टैग मॉडरेशन"
@@ -51043,7 +51166,7 @@ msgstr "साथ टैग किया गया:"
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "टैग"
@@ -51081,10 +51204,10 @@ msgstr "लक्ष्य"
 msgid "Target (database) record check field"
 msgstr "लक्ष्य (डेटाबेस) रिकार्ड चेक क्षेत्र"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr "टास्क शेड्यूलर"
@@ -51741,7 +51864,7 @@ msgstr "पहले नोटिस देरी दूसरे से कम 
 msgid "The following barcodes were found: "
 msgstr "निम्नलिखित बारकोड पाया गया:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr "जबकि डेटाबेस संरचना आयात निम्नलिखित त्रुटि:"
@@ -53499,6 +53622,8 @@ msgstr "TinyMCE संपादक v3.5.8 "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -53987,8 +54112,8 @@ msgid ""
 "Too many on-site checked out. %s on-site checked out, only %s are allowed."
 msgstr "ऑन साइट भी कई चैक आइट. %sऑन-साइट पर चैक आउट, केवल%s की अनुमति. "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, c-format
 msgid "Tool plugins"
 msgstr "उपकरण प्लगइन:"
@@ -54027,6 +54152,7 @@ msgstr "उपकरण प्लगइन:"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -55109,7 +55235,7 @@ msgstr "इस मालिक के साथ सभी बच्चे नि
 msgid "Update child to adult patron"
 msgstr "बच्चे से वयस्क संरक्षक को अद्यतन "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr "अद्यतन त्रुटियाँ:"
@@ -55134,7 +55260,7 @@ msgstr "संपादित आइटम"
 msgid "Update patron records"
 msgstr "अद्यतन संरक्षक रिकॉर्ड"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr "अद्यतन रिपोर्ट:"
@@ -55144,7 +55270,7 @@ msgstr "अद्यतन रिपोर्ट:"
 msgid "Update succeeded"
 msgstr "अपडेट सफल"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, c-format
 msgid "Update your database"
 msgstr "अपने डेटाबेस को अपडेट करें"
@@ -55181,12 +55307,12 @@ msgstr "को अपडेट किया %s"
 msgid "Updated:"
 msgstr "अद्यतन किया गया"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr "डेटाबेस संरचना अद्यतन"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -55225,13 +55351,13 @@ msgstr "संरक्षक कार्ड्स के लिए अति�
 msgid "Upload another KOC file"
 msgstr "एक और KOC फ़ाइल अपलोड करें"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, c-format
 msgid "Upload any file"
 msgstr "कोई भी फ़ाइल अपलोड करें"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr "शब्द फ़ाइल के किसी भी प्रकार, अपलोड प्रबंधन"
@@ -55270,10 +55396,10 @@ msgstr "अपलोड छवियाँ करे"
 msgid "Upload images"
 msgstr "अपलोड छवियाँ करें"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr "अपलोड लोकल कवर छवियाँ करें"
@@ -55313,8 +55439,8 @@ msgstr "अपलोड करें ऑफ़लाइन परिसंचर
 msgid "Upload patron image"
 msgstr "अपलोड संरक्षक छवियाँ"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -55322,7 +55448,7 @@ msgid "Upload patron images"
 msgstr "अपलोड संरक्षक छवियाँ"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "एक बैच या एक में संरक्षक छवियों को अपलोड एक समय में"
@@ -55569,7 +55695,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr "एक नया बनाने के लिए ऊपर स्थित टूलबार का प्रयोग %s ।"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr "उपयोग उपकरण plugins"
@@ -55696,7 +55822,7 @@ msgstr "फ्रेमवर्क का प्रयोग:"
 msgid "Using the following CSV profile: "
 msgstr "निम्न सीएसवी प्रोफ़ाइल का उपयोग करना:  "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "ओपेक में प्रदर्शन के लिए स्कैन कवर छवियों को अपलोड करने के लिए उपयोगिता"
@@ -56525,14 +56651,14 @@ msgstr "Waylon रॉबर्टसन"
 msgid "We"
 msgstr "बुध"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, c-format
 msgid "We are ready to do some basic configuration."
 msgstr "हम कुछ बुनियादी कॉन्फ़िगरेशन करने के लिए तैयार हैं"
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr "हम कोहा से उन्नयन कर रहे हैं %s से %s"
@@ -56587,12 +56713,12 @@ msgstr "वेब इंस्टॉलर &rsaquo; संरक्षक श्
 msgid "Web installer &rsaquo; Database settings"
 msgstr "वेब इंस्टॉलर &rsaquo; डेटाबेस सेटिंग्स"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr "वेब इंस्टॉलर &rsaquo; डिफ़ॉल्ट डेटा लोड किया गया"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr "वेब इंस्टॉलर &rsaquo; बुनियादी कॉन्फ़िगरेशन सेटिंग इंस्टॉल करें"
@@ -56617,17 +56743,17 @@ msgstr "वेब इंस्टॉलर &rsaquo; पर्ल संस्क
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr "वेब इंस्टॉलर &rsaquo; डिफ़ॉल्ट सेटिंग्स का चयन करना"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr "वेब इंस्टॉलर &rsaquo; डेटाबेस को सेट करें"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr "वेब इंस्टॉलर &rsaquo; सफलता"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr "वेब इंस्टॉलर &rsaquo; डेटाबेस अद्यतन करें"
@@ -56750,7 +56876,7 @@ msgstr "जब एक अनियमित मुद्दा है:"
 msgid "When to charge"
 msgstr "जब चार्ज करने के लिए"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -56852,7 +56978,7 @@ msgid "Working day"
 msgstr "कार्य दिवस"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "इस OPAC और स्टाफ के लिए लिखें समाचार इंटरफेस"
@@ -57373,7 +57499,7 @@ msgstr ""
 "आप इस आयात के लिए एक नाम दर्ज कर सकते हैं। यह उपयोगी हो सकता है, जब एक रिकॉर्ड "
 "बनाने, याद करने के लिए जहां सुझाव मार्क डेटा से आता है!"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr "आप हमारे साथ अपने आंकड़े साझा करके कोहा समुदाय की मदद कर सकते हैं."
@@ -57684,6 +57810,16 @@ msgstr "आपको प्रशासन में एक बजट को प
 #, c-format
 msgid "You must enter a term to search on "
 msgstr "आप पर खोज करने के लिए एक शब्द दर्ज करना होगा"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+msgid "You must fill at least one of the two due date options"
+msgstr "आपको दो देय तिथि विकल्पों में से कम से कम एक भरना होगा"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+msgid "You must fill only one of the two due date options"
+msgstr "आपको दो देय तिथि विकल्पों में से केवल एक भरना होगा"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -58080,13 +58216,6 @@ msgstr "ज़ो शॉइलर"
 msgid "[ New list ]"
 msgstr "[ नई सूची ]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr "[#%% डिफ़ॉल्ट शाखा %%#] %s %s "
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
@@ -58108,7 +58237,7 @@ msgstr ""
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription) "
 "%% ] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -58123,7 +58252,7 @@ msgstr ""
 "( UseKohaPlugins && CAN_user_plugins_tool ) || "
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -58143,9 +58272,27 @@ msgstr ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:7
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "

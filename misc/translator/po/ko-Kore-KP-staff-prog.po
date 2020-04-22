@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:48-0300\n"
+"POT-Creation-Date: 2020-04-16 20:58-0300\n"
 "PO-Revision-Date: 2015-10-07 15:49+0000\n"
 "Last-Translator: Vinea-Hgi <dopple813@naver.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1525,6 +1525,18 @@ msgstr "%s %s (%s 취소) %s "
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s 효과적인 일치규칙이 없습니다. %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, fuzzy, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr ""
+"성공적으로 수정되었습니다. %s %s (에러는: %s, 자세한 정보는 Koha의 로그파일"
+"을 보세요). %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5231,15 +5243,8 @@ msgstr "%s 우편 번호:"
 msgid "%s ZIP/Postal code: "
 msgstr "%s 우편 번호: "
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr ""
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5250,7 +5255,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5392,7 +5397,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, c-format
 msgid "%s data added"
 msgstr "%s 데이터 추가"
@@ -10503,15 +10508,15 @@ msgstr "허용자:"
 msgid "Accepted payment (%s) from "
 msgstr "지불 허용 (%s)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, fuzzy, c-format
 msgid "Access files"
 msgstr "바코드 파일"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11112,7 +11117,7 @@ msgstr "속성 추가"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "항목 추가 또는 제거"
@@ -11717,8 +11722,8 @@ msgstr "추가적인 하위분야 (XML)"
 msgid "Additional thanks to..."
 msgstr "추가적인 감사표시..."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Additional tools"
 msgstr "추가적인 도구"
@@ -14277,10 +14282,10 @@ msgid ""
 "doesn't match your library. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, fuzzy, c-format
 msgid "Automatic item modifications by age"
 msgstr "항목 묶음 수정"
@@ -14659,7 +14664,7 @@ msgstr "기본-수준 지출"
 msgid "Basic constraints"
 msgstr "기본 제한"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, fuzzy, c-format
 msgid "Basic installation complete."
 msgstr "설치 완료."
@@ -14940,6 +14945,14 @@ msgstr "계약 설명:"
 msgid "Batch edit patrons "
 msgstr "이용자 편집"
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, fuzzy, c-format
+msgid "Batch extend due dates"
+msgstr "고정 만기일"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -14948,9 +14961,9 @@ msgstr "이용자 편집"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "항목 묶음 %s삭제%s수정%s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, c-format
@@ -14962,9 +14975,9 @@ msgstr "항목 삭제 묶음"
 msgid "Batch item deletion results"
 msgstr "항목 삭제 묶음 결과"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, c-format
@@ -15017,16 +15030,16 @@ msgstr "이용자 수정 묶음"
 msgid "Batch patrons results"
 msgstr "이용자 묶음 결과"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, c-format
 msgid "Batch record deletion"
 msgstr "레코드 삭제 묶음"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, c-format
@@ -15592,7 +15605,7 @@ msgid "Browse system logs"
 msgstr "시스템 로그 훑어보기"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Browse the system logs"
 msgstr "시스템 로그 훑어보기"
@@ -15883,8 +15896,8 @@ msgstr "CSV 프로파일:"
 msgid "CSV profile: "
 msgstr "CSV 프로파일:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, c-format
 msgid "CSV profiles"
@@ -15930,8 +15943,8 @@ msgstr ""
 msgid "Calculated on %s. From %s to %s"
 msgstr "계산됨 %s. %s로부터 %s로"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, c-format
 msgid "Calendar"
 msgstr "달력"
@@ -16224,6 +16237,8 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -16949,10 +16964,10 @@ msgstr ""
 msgid "Cassette recording"
 msgstr "카세트 기록"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17502,8 +17517,9 @@ msgid "Check the box next to the alert you want to delete."
 msgstr "당신이 허용한 반납 항목으로부터 도서관의 상자를 확인합니다."
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
-#, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
+#, fuzzy, c-format
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
 msgstr "당신이 허용한 반납 항목으로부터 도서관의 상자를 확인합니다."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:116
@@ -17648,6 +17664,8 @@ msgstr "반납된 %s 시간"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17658,6 +17676,8 @@ msgstr "대출"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -17755,6 +17775,11 @@ msgstr "대출 수"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #, c-format
 msgid "Checkout count:"
+msgstr "대출 수:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, fuzzy, c-format
+msgid "Checkout criteria:"
 msgstr "대출 수:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
@@ -18495,6 +18520,7 @@ msgstr "제거"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19622,13 +19648,14 @@ msgstr "내용"
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, c-format
 msgid "Continue"
 msgstr "계속"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "Koha에 계속 로그인"
@@ -19639,9 +19666,9 @@ msgstr "Koha에 계속 로그인"
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, fuzzy, c-format
 msgid "Continue to the next step"
 msgstr "Koha에 계속 로그인"
@@ -20349,7 +20376,7 @@ msgstr "이용자 생성"
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "목록 데이터에서 인쇄 가능한 레이블과 바코드 생성"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "목록 데이터에서 인쇄 가능한 레이블과 바코드 생성"
@@ -20382,7 +20409,7 @@ msgstr "회람표 생성"
 msgid "Create routing list for "
 msgstr "회람표 생성"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "신규 템플릿 생성"
@@ -20871,7 +20898,7 @@ msgstr "데이터베이스 포트 :"
 msgid "Database settings:"
 msgstr "데이터베이스 설정:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr "데이터베이스표 생성"
@@ -21470,7 +21497,7 @@ msgid "Define currencies and exchange rates used for acquisitions."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "도서관이 휴관할때 날짜를 정의하세요"
@@ -21530,7 +21557,7 @@ msgid ""
 "libraries, patron categories, and item types"
 msgstr "도서관, 이용자분류 그리고 항목형식에 따른 반납과 대출 알림 규칙 정의"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr ""
@@ -21788,12 +21815,12 @@ msgstr "이미지 삭제"
 msgid "Delete SQL reports"
 msgstr "신규 SQL 보고서"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, c-format
 msgid "Delete a batch of items"
 msgstr "항목 묶음 삭제"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr "레코드 묶음 삭제 (서지 또는 전거)"
@@ -23035,6 +23062,8 @@ msgstr "만기일 %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -23049,6 +23078,21 @@ msgstr "만기일"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "만기일 (포맷되지 않음, 숨겨짐)"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, fuzzy, c-format
+msgid "Due date from: "
+msgstr "날짜: 로부터"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, fuzzy, c-format
+msgid "Due date to:"
+msgstr "만기일"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, fuzzy, c-format
+msgid "Due dates have been modified! "
+msgstr "청구서가 수정됨"
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23609,7 +23653,7 @@ msgstr "%s 예산 편집"
 msgid "Edit purchase suggestion #%s"
 msgstr "구매 제안 편집 #%s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr ""
@@ -24049,7 +24093,7 @@ msgstr "등록기간:"
 msgid "Enter"
 msgstr "겨울"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24542,7 +24586,7 @@ msgstr "모두"
 msgid "Everyone"
 msgstr "모두"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, fuzzy, c-format
 msgid "Everything went okay. Update done."
 msgstr "모든상황이 좋습니다, 업데이트가 완료되었습니다."
@@ -24800,7 +24844,7 @@ msgstr "서지 레코드 출력"
 msgid "Export bibliographic records"
 msgstr "서지 레코드 출력"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "서지레코드, 예약레코드, 전거레코드 출력"
@@ -24820,8 +24864,8 @@ msgstr "대출에 사용하는 형식 출력:"
 msgid "Export configuration"
 msgstr "배열 출력"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Export data"
 msgstr "데이터 출력"
@@ -26848,6 +26892,11 @@ msgstr "편람"
 msgid "Hard due date"
 msgstr "고정 만기일"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, fuzzy, c-format
+msgid "Hard due date: "
+msgstr "고정 만기일"
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27518,6 +27567,7 @@ msgstr "연간 범위안에 반복되는 휴일"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -27762,6 +27812,8 @@ msgstr "지정 도서관"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28381,7 +28433,7 @@ msgid ""
 "to a vendor. Click OK to ignore or Cancel to return and enter a vendor"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28584,7 +28636,7 @@ msgstr "이미지"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -28740,7 +28792,7 @@ msgid ""
 "records must be up-to-date on this computer: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29166,8 +29218,8 @@ msgstr "%s의 값이 잘못되었습니다"
 msgid "Invalid year entered in field %s"
 msgstr "필드에 잘못된 년이 입력되었습니다 %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, c-format
@@ -29818,6 +29870,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -32521,6 +32575,11 @@ msgstr "Koha &rsaquo; 도구 &rsaquo; %s항목 묶음 삭제%s항목 묶음 수�
 msgid "Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age"
 msgstr "Koha &rsaquo; 도구 &rsaquo; 항목 묶음 수정"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "Koha &rsaquo; 도구 &rsaquo; 항목 묶음 삭제"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33306,8 +33365,8 @@ msgstr "신규 묶음"
 msgid "Label batches"
 msgstr "묶음 관리"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -33746,6 +33805,11 @@ msgstr "도서관 규제:"
 #, c-format
 msgid "Libraries limitation: "
 msgstr "도서관 규제:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, fuzzy, c-format
+msgid "Libraries: "
+msgstr "도서관"
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34462,7 +34526,7 @@ msgstr "로그 보기"
 msgid "Log in as a different user"
 msgstr "다른 사용자로 로그인"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34474,8 +34538,8 @@ msgstr ""
 msgid "Log out"
 msgstr "로그아웃"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Log viewer"
 msgstr "로그 보기"
@@ -34754,7 +34818,7 @@ msgstr "MARC 프레임워크"
 msgid "MARC frameworks: %s"
 msgstr "MARC 프레임워크: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
@@ -35035,7 +35099,7 @@ msgid "Manage API keys"
 msgstr "OAI 설정 관리"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "CSV 프로파일 출력 관리"
@@ -35065,7 +35129,7 @@ msgstr ""
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "MARC 서지 프레임워크 테스트"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "MARC 템플릿 수정 관리"
@@ -35085,7 +35149,7 @@ msgstr "OAI 설정 관리"
 msgid "Manage SMS cellular providers"
 msgstr "&rsaquo; CSV 프로파일 출력"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
@@ -35347,7 +35411,7 @@ msgid "Manage restrictions for accounts"
 msgstr "이용자카드 레이아웃 관리"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, c-format
 msgid "Manage rotating collections"
 msgstr "순환 장서 관리"
@@ -35404,7 +35468,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "제안 관리"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr ""
@@ -35457,7 +35521,7 @@ msgid "Managed in tab: "
 msgstr "탭에서 관리:"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -35477,13 +35541,15 @@ msgstr "관리자"
 msgid "Managing library:"
 msgstr "도서관"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr "필수"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, fuzzy, c-format
 msgid "Mandatory data added"
 msgstr "%s 데이터 추가"
@@ -36224,7 +36290,7 @@ msgid "Moderate patron comments. "
 msgstr "목차 "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr "보통의 이용자태그"
@@ -36281,7 +36347,7 @@ msgstr "SRU 검색필드 매핑 수정"
 msgid "Modify a CSV profile"
 msgstr "CSV 프로파일 출력 수정 혹은 삭제"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr "레코드의 묶음 수정 (서지 또는 전거)"
@@ -36352,7 +36418,7 @@ msgstr "도시 수정"
 msgid "Modify item type"
 msgstr "항목 형식 수정"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr "묶음의 항목 수정"
@@ -36395,6 +36461,12 @@ msgstr "레코드 일치규칙 수정"
 msgid "Modify record using the following template: "
 msgstr "다음 템플릿을 사용하여 레코드 수정:"
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+#, fuzzy
+msgid "Modify selected checkouts"
+msgstr "선택한 레코드 수정"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, c-format
 msgid "Modify selected items"
@@ -36409,6 +36481,11 @@ msgstr "선택한 레코드 수정"
 #, fuzzy, c-format
 msgid "Modify splitting rule"
 msgstr "배열 규칙 수정"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, fuzzy, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr "묶음의 이용자 수정"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -36699,7 +36776,7 @@ msgstr "내 대출현황"
 msgid "My library"
 msgstr "내 도서관"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, fuzzy, c-format
 msgid "MySQL data added"
 msgstr "%s 데이터 추가"
@@ -37237,6 +37314,16 @@ msgstr "신규 최신성"
 msgid "New definition"
 msgstr "신규 정의"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, fuzzy, c-format
+msgid "New due date"
+msgstr "갱신 만료일:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, fuzzy, c-format
+msgid "New due date:"
+msgstr "갱신 만료일:"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, fuzzy, c-format
 msgid "New enrollment field"
@@ -37494,10 +37581,10 @@ msgstr ""
 msgid "New vendor"
 msgstr "신규 판매업체"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, c-format
@@ -37816,6 +37903,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "No change"
 msgstr "변경사항 저장"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, fuzzy, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "선택한 항목을 갱신 또는 확인"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38385,7 +38477,7 @@ msgstr "검색과 일치하는 결과가 없습니다"
 msgid "No results."
 msgstr "결과가 없습니다."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -39149,7 +39241,7 @@ msgid ""
 "this to access Koha as a staff member with all permissions. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -39983,7 +40075,13 @@ msgstr ""
 msgid "Operator"
 msgstr "연산자"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, fuzzy, c-format
+msgid "Optional"
+msgstr "옵션"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, fuzzy, c-format
 msgid "Optional data added"
 msgstr "%s 데이터 추가"
@@ -40005,6 +40103,11 @@ msgstr "옵션 모듈이 없습니다"
 #, c-format
 msgid "Options"
 msgstr "옵션"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, fuzzy, c-format
+msgid "Or add number of days:"
+msgstr "청구서 번호"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40316,7 +40419,7 @@ msgstr "다른 동작"
 msgid "Other course reserves"
 msgstr "다른 코스 예약"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, c-format
 msgid "Other data"
 msgstr "다른 데이터"
@@ -41557,6 +41660,11 @@ msgstr "대출하지 않은 이용자"
 msgid "Patrons with the most checkouts"
 msgstr "가장 많이 대출한 이용자"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, fuzzy, c-format
+msgid "Patrons' categories: "
+msgstr "이용자분류"
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, c-format
 msgid "Pattern name:"
@@ -41764,6 +41872,11 @@ msgstr "프린터 삭제 확인"
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "레코드 묶음 삭제 (서지 또는 전거)"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, fuzzy, c-format
+msgid "Perform batch extend due dates"
+msgstr "프린터 삭제 확인"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, fuzzy, c-format
 msgid "Perform batch modification of items"
@@ -41780,12 +41893,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr "레코드의 묶음 수정 (서지 또는 전거)"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, fuzzy, c-format
 msgid "Perform inventory of your catalog"
 msgstr "당신의 목록에서 인벤토리 (장서 점검) 수행"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42282,7 +42395,7 @@ msgstr "구독 삭제를 확인해 주세요"
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "이 이용자가 중복되어 있는지 확인해주세요"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "시스템 관리자에게 연락해주세요"
@@ -42671,6 +42784,12 @@ msgstr "적어도 한개의 출력할 묶음을 선택해 주세요."
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 msgid "Please select at least one card to export."
 msgstr "적어도 하나의 출력할 카드를 선택해주세요."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "Please select at least one checkout to process"
+msgstr "적어도 하나의 처리할 레코드를 선택하세요"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:213
@@ -43945,8 +44064,8 @@ msgstr ""
 msgid "Quick add new patron "
 msgstr "신규 이용자를 추가할 수 없습니다."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -43958,14 +44077,14 @@ msgstr ""
 msgid "Quote"
 msgstr "주"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, c-format
 msgid "Quote editor"
 msgstr "인용부호 편집기"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr ""
@@ -44558,6 +44677,11 @@ msgstr "상기할것: 이 동작은 모든 선택한 전거를 수정할 것입�
 #, c-format
 msgid "Reminder: this action will modify all selected biblios!"
 msgstr "상기할것: 이 동작은 모든 선택한 도서를 수정할 것입니다!"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, fuzzy, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
+msgstr "상기할것: 이 동작은 모든 선택한 전거를 수정할 것입니다!"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, fuzzy, c-format
@@ -45972,12 +46096,12 @@ msgstr "보고서 이름"
 msgid "Rota status"
 msgstr "분실 상태"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, fuzzy, c-format
 msgid "Rotating collections"
 msgstr "합집:"
@@ -46583,7 +46707,7 @@ msgid "Schedule "
 msgstr "일정"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "사업시행 일정"
@@ -47422,6 +47546,7 @@ msgstr "템플릿 선택"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -47432,8 +47557,8 @@ msgstr "템플릿 선택"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -47521,8 +47646,8 @@ msgstr "지역 데이터베이스 선택"
 msgid "Select month:"
 msgstr "월 선택:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "주기 선택"
@@ -48120,7 +48245,7 @@ msgid "Set to patron"
 msgstr "이용자 설정"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr ""
 
@@ -49128,7 +49253,7 @@ msgstr "직원 주기:"
 msgid "Staff notes:"
 msgstr "직원 주기:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr "가져올 MARC 준비"
@@ -49139,7 +49264,7 @@ msgid "Stage MARC records"
 msgstr "MARC 레코드 관리 준비"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -49151,7 +49276,7 @@ msgstr "가져올 MARC 레코드 준비"
 msgid "Stage MARC records into the reservoir"
 msgstr "저장소에서 MARC 레코드 준비."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr "저장소에서 MARC 레코드 준비."
@@ -49173,12 +49298,12 @@ msgstr "저장소에서 레코드 준비"
 msgid "Staged"
 msgstr "준비됨"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr "MARC 관리 준비"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr "MARC 레코드 관리 준비"
@@ -49621,8 +49746,8 @@ msgstr "Steven Callender"
 msgid "Still %s servers to search"
 msgstr "계속 %s 서버 검색"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, fuzzy, c-format
@@ -50750,7 +50875,7 @@ msgstr "태그 편집기"
 msgid "Tag has no subfields"
 msgstr "태그 %s 하위분야 구조"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr "태그 관리"
@@ -50790,7 +50915,7 @@ msgstr "태그:"
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "태그"
@@ -50828,10 +50953,10 @@ msgstr "대상"
 msgid "Target (database) record check field"
 msgstr "대상 (데이터베이스) 레코드 필드 확인"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr "작업 일정"
@@ -51473,7 +51598,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr "다음 바코드를 찾았습니다:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr "데이터베이스 구조를 가져오는 동안 다음 오류가 발생했습니다:"
@@ -53181,6 +53306,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -53663,8 +53790,8 @@ msgid ""
 "Too many on-site checked out. %s on-site checked out, only %s are allowed."
 msgstr "대출이 너무 많습니다. %s 대출은, %s만 허용됩니다."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, fuzzy, c-format
 msgid "Tool plugins"
 msgstr "도구 플러그인"
@@ -53703,6 +53830,7 @@ msgstr "도구 플러그인"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -54797,7 +54925,7 @@ msgstr ""
 msgid "Update child to adult patron"
 msgstr "아동에서 성인 이용자 업데이트"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr "업데이트 오류 :"
@@ -54822,7 +54950,7 @@ msgstr "항목 업데이트"
 msgid "Update patron records"
 msgstr "이용자 레코드 업데이트"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr "보고서 업데이트 :"
@@ -54832,7 +54960,7 @@ msgstr "보고서 업데이트 :"
 msgid "Update succeeded"
 msgstr "업데이트 성공"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, fuzzy, c-format
 msgid "Update your database"
 msgstr "데이터베이스를 업데이트하세요"
@@ -54870,12 +54998,12 @@ msgstr "업데이트"
 msgid "Updated:"
 msgstr "업데이트됨:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr "데이터베이스 구조 업데이트"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -54914,13 +55042,13 @@ msgstr "이용자 이미지를 한번에 한개 또는 묶음으로 업로드"
 msgid "Upload another KOC file"
 msgstr "다른 KOC 파일 업로드"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "파일 업로드"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr ""
@@ -54959,10 +55087,10 @@ msgstr "이미지 업로드"
 msgid "Upload images"
 msgstr "이미지 업로드"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr "지역 표지 이미지 업로드"
@@ -55002,8 +55130,8 @@ msgstr "오프라인 대출 파일 (.koc) 업로드"
 msgid "Upload patron image"
 msgstr "이용자 이미지 업로드"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -55011,7 +55139,7 @@ msgid "Upload patron images"
 msgstr "이용자 이미지 업로드"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "이용자 이미지를 한번에 한개 또는 묶음으로 업로드"
@@ -55256,7 +55384,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr "신규 %s를 생성하는데 툴바 사용."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr "도구 플러그인을 사용"
@@ -55384,7 +55512,7 @@ msgstr "프레임워크 사용:"
 msgid "Using the following CSV profile: "
 msgstr "다음 템플릿을 사용하여 레코드 수정:"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "OPAC에 표시되는 스캔된 표지 이미지를 업로드하는 유틸리티"
@@ -56210,14 +56338,14 @@ msgstr "Waylon Robertson"
 msgid "We"
 msgstr "우리"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, fuzzy, c-format
 msgid "We are ready to do some basic configuration."
 msgstr "시스템 구성에 관하여 경고"
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, fuzzy, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr "Koha를 %s에서 %s로 업그레이드 했습니다, 당신은 반드시"
@@ -56272,12 +56400,12 @@ msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 msgid "Web installer &rsaquo; Database settings"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr "기본 설정 구성 설치"
@@ -56302,17 +56430,17 @@ msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr "웹 설치 프로그램 &rsaquo; 1단계"
@@ -56430,7 +56558,7 @@ msgstr ""
 msgid "When to charge"
 msgstr "대여비용"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -56532,7 +56660,7 @@ msgid "Working day"
 msgstr "근무일"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "OPAC과 직원 인터페이스를 위한 뉴스 작성"
@@ -57036,7 +57164,7 @@ msgstr ""
 "이것을 가져올 이름을 입력할 수 있습니다. 이것은 레코드를 생성할때 유용할 것입"
 "니다, MARC 데이터가 어디에서 제안되었는지 기억하세요!"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
@@ -57339,6 +57467,18 @@ msgstr "당신의 관리자는 반드시 관리 예산을 정의해야 합니다
 #, c-format
 msgid "You must enter a term to search on "
 msgstr "반드시 검색할 용어를 입력해야 합니다"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill at least one of the two due date options"
+msgstr "적어도 두개의 병합할 청구서를 선택해야 합니다."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill only one of the two due date options"
+msgstr "이 옵션은 온라인에서만 사용가능합니다."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -57733,13 +57873,6 @@ msgstr ""
 msgid "[ New list ]"
 msgstr "[ 신규 목록 ]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr ""
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
@@ -57761,7 +57894,7 @@ msgstr ""
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -57771,7 +57904,7 @@ msgid ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -57784,8 +57917,19 @@ msgid ""
 "CAN_user_tools_upload_local_cover_images ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "

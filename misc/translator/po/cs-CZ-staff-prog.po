@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:34-0300\n"
-"PO-Revision-Date: 2020-03-05 23:08+0000\n"
+"POT-Creation-Date: 2020-04-16 20:44-0300\n"
+"PO-Revision-Date: 2020-04-12 21:47+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1583449700.993820\n"
+"X-POOTLE-MTIME: 1586728025.081361\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1591,6 +1591,18 @@ msgstr "%s %s (%s zrušeno) %s "
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s Nebylo použito žádné pravidlo shody %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, fuzzy, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr ""
+"byl úspěšně upraven. %s %s (Chyba: %s, více informací naleznete v "
+"systémových záznamech). %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5449,15 +5461,8 @@ msgstr "%s PSČ:"
 msgid "%s ZIP/Postal code: "
 msgstr "%s PSČ: "
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr "%s [#%% Branch-specific %%#] %s "
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5473,7 +5478,7 @@ msgstr ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5627,7 +5632,7 @@ msgstr ""
 "(borrowernumber: %s; surname: %s). %s "
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, c-format
 msgid "%s data added"
 msgstr "Vložené údaje - %s"
@@ -10806,15 +10811,15 @@ msgstr "Schváleno dne:"
 msgid "Accepted payment (%s) from "
 msgstr "Platba přijata dne (%s) od "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, c-format
 msgid "Access files"
 msgstr "Přístup k souborům"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11412,7 +11417,7 @@ msgstr "Přidat atribut"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr "Vytvářet a odstraňovat rozpočty (nelze upravovat rozpočty)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, c-format
 msgid "Add and remove items from rotas"
 msgstr "Přidávat a odebírat jednotky z putovních fondů"
@@ -12018,8 +12023,8 @@ msgstr "Další podpole (XML)"
 msgid "Additional thanks to..."
 msgstr "Další poděkování pro..."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Additional tools"
 msgstr "Další nástroje"
@@ -14569,10 +14574,10 @@ msgstr ""
 "Nastavení Autolocation je zapnuté a pokoušíte se přihlásit z IP adresy, "
 "která neodpovídá vaší knihovně. "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, c-format
 msgid "Automatic item modifications by age"
 msgstr "Automatické úpravy jednotek podle stáří"
@@ -14954,7 +14959,7 @@ msgstr "Základní úroveň vyčerpána"
 msgid "Basic constraints"
 msgstr "Skrýt pokročilá omezení"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, c-format
 msgid "Basic installation complete."
 msgstr "Základní instalace byla dokončena."
@@ -15235,6 +15240,14 @@ msgstr "Popis dávky:"
 msgid "Batch edit patrons "
 msgstr "Dávková úprava čtenářů "
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, fuzzy, c-format
+msgid "Batch extend due dates"
+msgstr "Fixní datum vrácení"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -15243,9 +15256,9 @@ msgstr "Dávková úprava čtenářů "
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "%sDávkové mazání%sDávková úprava%s jednotek"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, c-format
@@ -15257,9 +15270,9 @@ msgstr "Dávkové mazání jednotek"
 msgid "Batch item deletion results"
 msgstr "Výsledky dávkového mazání jednotek"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, c-format
@@ -15312,16 +15325,16 @@ msgstr "Výsledky dávkové úpravy čtenářů"
 msgid "Batch patrons results"
 msgstr "Výsledky zpracování dávky"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, c-format
 msgid "Batch record deletion"
 msgstr "Dávkové mazání záznamů"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, c-format
@@ -15892,7 +15905,7 @@ msgid "Browse system logs"
 msgstr "Prohlížení systémových záznamů"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Browse the system logs"
 msgstr "Prohlížení systémových záznamů"
@@ -16184,8 +16197,8 @@ msgstr "ID CSV profilu"
 msgid "CSV profile: "
 msgstr "CSV profil: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, c-format
 msgid "CSV profiles"
@@ -16231,8 +16244,8 @@ msgstr "Caitlin Goodger"
 msgid "Calculated on %s. From %s to %s"
 msgstr "Vypočítáno dne %s. Od %s do %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, c-format
 msgid "Calendar"
 msgstr "Kalendář"
@@ -16530,6 +16543,8 @@ msgstr "Záznam není možné uložit, protože nebyla vyplněna následující 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -17253,10 +17268,10 @@ msgstr "Statistika pokladny od %s do %s"
 msgid "Cassette recording"
 msgstr "Záznamy na kazetě"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17809,8 +17824,9 @@ msgid "Check the box next to the alert you want to delete."
 msgstr "Zaškrtněte políčko vedle upozornění, které chcete odstranit."
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
-#, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
+#, fuzzy, c-format
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
 msgstr "Zaškrtněte políčka pro knihovny z kterých přijímáte výpůjčky."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:116
@@ -17963,6 +17979,8 @@ msgstr "Vypůjčeno %s krát"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17973,6 +17991,8 @@ msgstr "Vypůjčeno od"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -18075,6 +18095,11 @@ msgstr "Počet výpůjček"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #, c-format
 msgid "Checkout count:"
+msgstr "Počet výpůjček:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, fuzzy, c-format
+msgid "Checkout criteria:"
 msgstr "Počet výpůjček:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
@@ -18272,7 +18297,7 @@ msgstr "Vyberte dodavatele, od kterého bude prováděn přesun"
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:96
 #, c-format
 msgid "Choose a vendor to transfer to"
-msgstr "Vyberte dodavatele, ke který převezme objednávku"
+msgstr "Vyberte dodavatele, který převezme objednávku"
 
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:15
 #, c-format
@@ -18825,6 +18850,7 @@ msgstr "Vymazat"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19960,13 +19986,14 @@ msgstr "Obsah seznamu "
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, c-format
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "Pokračovat na přihlášení do systému Koha"
@@ -19977,9 +20004,9 @@ msgstr "Pokračovat na přihlášení do systému Koha"
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, c-format
 msgid "Continue to the next step"
 msgstr "Pokračovat k dalšímu kroku"
@@ -20692,7 +20719,7 @@ msgstr "Vytvořit seznam čtenářů: "
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "Vytvářet štítky, čárové kódy a průkazky"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "Tvorba a tisk štítků a čárových kódů podle údajů z katalogu"
@@ -20725,7 +20752,7 @@ msgstr "Vytvořit distribuční seznam"
 msgid "Create routing list for "
 msgstr "Vytvořit distribuční seznam pro "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, c-format
 msgid "Create, edit and delete rotas"
 msgstr "Přidávat, upravovat a mazat putovní fondy"
@@ -21216,7 +21243,7 @@ msgstr "Port databáze: "
 msgid "Database settings:"
 msgstr "Nastavení databáze:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr "Databázové tabulky byly vytvořeny"
@@ -21820,7 +21847,7 @@ msgid "Define currencies and exchange rates used for acquisitions."
 msgstr "Definování měn používaných při akvizici a jejich směnných kurzů."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "Nastavení dní, kdy je knihovna uzavřena"
@@ -21884,7 +21911,7 @@ msgstr ""
 "Definujte pravidla pro oznámení výpůjček a vracení při kombinacích knihoven, "
 "kategorií čtenářů a typů jednotek"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr "Stanoví pravidla pro úpravu jednotek podle stáří"
@@ -22148,12 +22175,12 @@ msgstr "Odstranit obrázky"
 msgid "Delete SQL reports"
 msgstr "Smazat SQL výstupy"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, c-format
 msgid "Delete a batch of items"
 msgstr "Hromadné mazání jednotek"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr "Dávkově smazat záznamy (bibliografické nebo autoritní)"
@@ -23395,6 +23422,8 @@ msgstr "Půjčeno do %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -23409,6 +23438,21 @@ msgstr "Půjčeno do"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "Půjčeno do (neformátováno, skryté)"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, fuzzy, c-format
+msgid "Due date from: "
+msgstr "Datum: od "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, fuzzy, c-format
+msgid "Due date to:"
+msgstr "Půjčeno do"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, fuzzy, c-format
+msgid "Due dates have been modified! "
+msgstr "Nebyly definovány žádné kategorie. "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23970,7 +24014,7 @@ msgstr "Upravit poskytovatele %s"
 msgid "Edit purchase suggestion #%s"
 msgstr "Upravit návrh k nákupu #%s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr "Správa citací pro \"Citát dne\""
@@ -24405,7 +24449,7 @@ msgstr "Registrační období: "
 msgid "Enter"
 msgstr "Enter"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24901,7 +24945,7 @@ msgstr "Každý"
 msgid "Everyone"
 msgstr "Každý"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, c-format
 msgid "Everything went okay. Update done."
 msgstr "Všechno proběhlo hladce. Aktualizace provedena."
@@ -25157,7 +25201,7 @@ msgstr "Exportovat bibliografické a jednotkové záznamy"
 msgid "Export bibliographic records"
 msgstr "Exportovat bibliografické záznamy"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "Exportovat bibliografické záznamy, jednotky a záznamy autorit."
@@ -25177,8 +25221,8 @@ msgstr "Exportovat výpůjčky ve formátu:"
 msgid "Export configuration"
 msgstr "Exportovat nastavení"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Export data"
 msgstr "Exportovat data"
@@ -27210,6 +27254,11 @@ msgstr "Příručky"
 msgid "Hard due date"
 msgstr "Fixní datum vrácení"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, fuzzy, c-format
+msgid "Hard due date: "
+msgstr "Fixní datum vrácení"
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27883,6 +27932,7 @@ msgstr "Každoročně opakovaná uzavírka"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -28127,6 +28177,8 @@ msgstr "Domovské knihovny"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28783,7 +28835,7 @@ msgstr ""
 "dodavatele tohoto předplatného. Klepněte na tlačítko 'OK' pro ignorování "
 "nebo 'Zrušit' pro návrat a zadejte dodavatele"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28988,7 +29040,7 @@ msgstr "Obrázky pro "
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -29152,7 +29204,7 @@ msgstr ""
 "Aby mohla funkce offline výpůjček správně pracovat, musejí být v tomto "
 "počítači stažené aktuální záznamy knihovny: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29580,8 +29632,8 @@ msgstr "Neplatná hodnota pro %s"
 msgid "Invalid year entered in field %s"
 msgstr "Zadán neplatný rok v poli %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, c-format
@@ -30236,6 +30288,8 @@ msgstr "Pole s jednotkami není možné uložit"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -33000,6 +33054,11 @@ msgstr ""
 "Koha &rsaquo; Nástroje &rsaquo; Automatická úprava jednotek podle jejich "
 "stáří"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "Koha &rsaquo; Nástroje &rsaquo; Dávkové mazání jednotek"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33832,8 +33891,8 @@ msgstr "Dávka štítků"
 msgid "Label batches"
 msgstr "Dávky štítků"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -34274,6 +34333,11 @@ msgstr "Informace o knihovně: "
 #, c-format
 msgid "Libraries limitation: "
 msgstr "Omezení knihoven: "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, fuzzy, c-format
+msgid "Libraries: "
+msgstr "Knihovny"
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34999,7 +35063,7 @@ msgstr "Přihlásit se"
 msgid "Log in as a different user"
 msgstr "Přihlásit se jako jiný uživatel"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -35013,8 +35077,8 @@ msgstr ""
 msgid "Log out"
 msgstr "Odhlásit se"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Log viewer"
 msgstr "Prohlížeč logu"
@@ -35293,7 +35357,7 @@ msgstr "Šablony MARC"
 msgid "MARC frameworks: %s"
 msgstr "Šablony MARC: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
@@ -35586,7 +35650,7 @@ msgid "Manage API keys"
 msgstr "Správa klíčů API"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "Správa CSV profilů pro export"
@@ -35618,7 +35682,7 @@ msgstr ""
 "Spravovat MARC šablony bibliografických a autoritních šablon a spouštět test "
 "těchto šablon"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Modifikační šablony MARC"
@@ -35638,7 +35702,7 @@ msgstr "Spravovat OAI sady"
 msgid "Manage SMS cellular providers"
 msgstr "Spravovat poskytovatele SMS služeb"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr "Spravovat putovní fondy, jejich jednotky a zastávky"
@@ -35909,7 +35973,7 @@ msgid "Manage restrictions for accounts"
 msgstr "Spravovat omezení účtů"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, c-format
 msgid "Manage rotating collections"
 msgstr "Spravovat výměnné soubory"
@@ -35969,7 +36033,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "Spravovat návrhy na nákup"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr "Správa šablon pro úpravu MARC záznamů během importu."
@@ -36022,7 +36086,7 @@ msgid "Managed in tab: "
 msgstr "Spravováno v záložce: "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr "Správa připravených MARC záznamů, včetně importu a rušení importu"
@@ -36042,13 +36106,15 @@ msgstr "Knihovník"
 msgid "Managing library:"
 msgstr "Knihovna spravující tento košík:"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr "Povinné"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, c-format
 msgid "Mandatory data added"
 msgstr "Povinné údaje vloženy"
@@ -36784,7 +36850,7 @@ msgid "Moderate patron comments. "
 msgstr "Moderovat komentáře uživatelů. "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr "Moderovat štítky od čtenářů"
@@ -36841,7 +36907,7 @@ msgstr "Upravit mapování SRU polí pro vyhledávání pro bibliografické záz
 msgid "Modify a CSV profile"
 msgstr "Upravit profil CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr "Dávková úprava záznamů (bibliografických nebo autoritních)"
@@ -36914,7 +36980,7 @@ msgstr "Měnit pořadí vyřizování rezervací"
 msgid "Modify item type"
 msgstr "Upravit typ jednotek"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr "Hromadná úprava jednotek"
@@ -36957,6 +37023,12 @@ msgstr "Upravit pravidlo shody záznamů"
 msgid "Modify record using the following template: "
 msgstr "Upravit záznamy použitím šablony: "
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+#, fuzzy
+msgid "Modify selected checkouts"
+msgstr "Upravit vybrané záznamy"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, c-format
 msgid "Modify selected items"
@@ -36971,6 +37043,11 @@ msgstr "Upravit vybrané záznamy"
 #, c-format
 msgid "Modify splitting rule"
 msgstr "Upravit rozdělovací pravidlo"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, fuzzy, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr "Hromadné úpravy čtenářů"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -37257,7 +37334,7 @@ msgstr "Výpůjčky"
 msgid "My library"
 msgstr "Moje knihovna"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, c-format
 msgid "MySQL data added"
 msgstr "MySQL data přidána"
@@ -37799,6 +37876,16 @@ msgstr "Nová měna"
 msgid "New definition"
 msgstr "Nová definice"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, fuzzy, c-format
+msgid "New due date"
+msgstr "Prodloužit do:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, fuzzy, c-format
+msgid "New due date:"
+msgstr "Prodloužit do:"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, c-format
 msgid "New enrollment field"
@@ -38054,10 +38141,10 @@ msgstr "Nová hodnota: %s %s. %s Dostupné k vypůjčení. %s "
 msgid "New vendor"
 msgstr "Nový dodavatel"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, c-format
@@ -38380,6 +38467,11 @@ msgstr "Nebyly definovány žádné kategorie. "
 #, c-format
 msgid "No change"
 msgstr "Žádná změna"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, fuzzy, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "Prodloužit nebo vrátit označené"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38967,7 +39059,7 @@ msgstr "Nenalezli jsme žádné relevantní výsledky při hledání "
 msgid "No results."
 msgstr "Žádné výsledky."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -39756,7 +39848,7 @@ msgstr ""
 "Nyní vytvoříme záznam uživatele s právy superknihovníka. Při přihlášení do "
 "systému tímto účtem budete disponovat všemi oprávněními. "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -40599,7 +40691,13 @@ msgstr "Otevřený dne:"
 msgid "Operator"
 msgstr "Operátor"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, fuzzy, c-format
+msgid "Optional"
+msgstr "Možnosti"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, c-format
 msgid "Optional data added"
 msgstr "Volitelné údaje přidány"
@@ -40621,6 +40719,11 @@ msgstr "Chybějící volitelný modul"
 #, c-format
 msgid "Options"
 msgstr "Možnosti"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, fuzzy, c-format
+msgid "Or add number of days:"
+msgstr "Chybný počet kopií"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40932,7 +41035,7 @@ msgstr "Další akce"
 msgid "Other course reserves"
 msgstr "Další kurz"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, c-format
 msgid "Other data"
 msgstr "Další údaje"
@@ -42182,6 +42285,11 @@ msgstr "Čtenáři bez výpůjček"
 msgid "Patrons with the most checkouts"
 msgstr "Čtenáři s nejvíce výpůjčkami"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, fuzzy, c-format
+msgid "Patrons' categories: "
+msgstr "Kategorie čtenářů"
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, c-format
 msgid "Pattern name:"
@@ -42389,6 +42497,11 @@ msgstr "Provádět dávkové mazání jednotek"
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "Provádět dávkové mazání záznamů (bibliografických i autoritních)"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, fuzzy, c-format
+msgid "Perform batch extend due dates"
+msgstr "Provádět dávkové mazání jednotek"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, c-format
 msgid "Perform batch modification of items"
@@ -42405,12 +42518,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr "Provádět dávkové úpravy záznamů (bibliografických i autoritních)"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Provést revizi knihovního fondu"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42913,7 +43026,7 @@ msgstr "Potvrďte, prosím, odstranění předplatného"
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "Potvrďte, prosím, zda se jedná o duplicitního čtenáře"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "Kontaktujte, prosím, svého správce systému."
@@ -43300,6 +43413,12 @@ msgstr "Vyberte, prosím, alespoň jednu dávku pro export."
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 msgid "Please select at least one card to export."
 msgstr "Vyberte, prosím, alespoň jeden čtenářský průkaz pro export."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "Please select at least one checkout to process"
+msgstr "Vyberte, prosím, alespoň jeden záznam ke zpracování."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:213
@@ -44568,8 +44687,8 @@ msgstr "Rychlé přidání"
 msgid "Quick add new patron "
 msgstr "Rychlé přidání nového čtenáře "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -44580,14 +44699,14 @@ msgstr "Rychlá tvorba štítků"
 msgid "Quote"
 msgstr "Krátká citace"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, c-format
 msgid "Quote editor"
 msgstr "Editor citátů"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Editor citátů pro funkci \"Citát dne\" v on-line katalogu"
@@ -45180,6 +45299,11 @@ msgstr "Upozornění: tato akce upraví všechny vybrané autoritní záznamy!"
 #, c-format
 msgid "Reminder: this action will modify all selected biblios!"
 msgstr "Upozornění: tato akce upraví všechny vybrané bibliografické záznamy!"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, fuzzy, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
+msgstr "Upozornění: tato akce upraví všechny vybrané autoritní záznamy!"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, c-format
@@ -46592,12 +46716,12 @@ msgstr "Název putovního fondu"
 msgid "Rota status"
 msgstr "Stav putovního fondu"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, c-format
 msgid "Rotating collections"
 msgstr "Výměnné soubory"
@@ -47200,7 +47324,7 @@ msgid "Schedule "
 msgstr "Plán: "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "Nastavení spouštění naplánovaných úloh"
@@ -48036,6 +48160,7 @@ msgstr "Vyberte čas"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -48046,8 +48171,8 @@ msgstr "Vyberte čas"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -48134,8 +48259,8 @@ msgstr "Vyberte lokální databáze"
 msgid "Select month:"
 msgstr "Vyberte měsíc:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, c-format
 msgid "Select none"
 msgstr "Zrušit výběr"
@@ -48737,7 +48862,7 @@ msgid "Set to patron"
 msgstr "Nastavit na čtenáře"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr "Nastavte některá základní nastavení Koha"
 
@@ -49758,7 +49883,7 @@ msgstr "Poznámka pro knihovníky:"
 msgid "Staff notes:"
 msgstr "Poznámka pro obsluhu:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Připravit MARC pro import"
@@ -49769,7 +49894,7 @@ msgid "Stage MARC records"
 msgstr "Správa připravených MARC záznamů"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -49781,7 +49906,7 @@ msgstr "Připravit MARC záznamy pro import"
 msgid "Stage MARC records into the reservoir"
 msgstr "Nahrání MARC záznamů do zásobníku pro import."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr "Příprava MARC záznamů do zásobníku."
@@ -49803,12 +49928,12 @@ msgstr "Vložit záznamy do zásobníku"
 msgid "Staged"
 msgstr "Připraveno"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr "Správa připravených MARC záznamů"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr "Správa připravených MARC záznamů"
@@ -50253,8 +50378,8 @@ msgstr "Steven Callender"
 msgid "Still %s servers to search"
 msgstr "Stále %s serverů prohledat"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, c-format
@@ -51386,7 +51511,7 @@ msgstr "Editor tagů"
 msgid "Tag has no subfields"
 msgstr "Pole neobsahuje žádná podpole"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr "Moderování štítků"
@@ -51426,7 +51551,7 @@ msgstr "Označené s:"
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "Štítky"
@@ -51464,10 +51589,10 @@ msgstr "Server"
 msgid "Target (database) record check field"
 msgstr "Kontrolní pole cílového záznamu (databáze)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr "Plánovač úloh"
@@ -52133,7 +52258,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr "Byly nalezeny následující čárové kódy: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr "Při importu databázové struktury došlo k následující chybě:"
@@ -53911,6 +54036,8 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -54409,8 +54536,8 @@ msgstr ""
 "Příliš mnoho prezenčních výpůjček. Aktuální počet výpůjček je %s, ale "
 "povoleno je pouze %s."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, c-format
 msgid "Tool plugins"
 msgstr "Zásuvné moduly"
@@ -54449,6 +54576,7 @@ msgstr "Zásuvné moduly"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -55533,7 +55661,7 @@ msgstr "Aktualizovat všechny dílčí fondy, které mají jako majitele "
 msgid "Update child to adult patron"
 msgstr "Převést dítě do kategorie dospělých"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr "Chyby aktualizace :"
@@ -55558,7 +55686,7 @@ msgstr "Aktualizovat záznam"
 msgid "Update patron records"
 msgstr "Aktualizovat záznam o čtenáři"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr "Přehled :"
@@ -55568,7 +55696,7 @@ msgstr "Přehled :"
 msgid "Update succeeded"
 msgstr "Aktualizace proběhla úspěšně"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, c-format
 msgid "Update your database"
 msgstr "Aktualizujte vaši databázi"
@@ -55605,12 +55733,12 @@ msgstr "Aktualizováno %s"
 msgid "Updated:"
 msgstr "Aktualizováno:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr "Aktualizuje se struktura databáze"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -55649,13 +55777,13 @@ msgstr "Nahrát další obrázky pro použití na průkazkách"
 msgid "Upload another KOC file"
 msgstr "Načíst další soubor *.koc"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, c-format
 msgid "Upload any file"
 msgstr "Nahrát libovolný soubor"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr "Nahrání libovolného typu souboru, správa nahraných souborů"
@@ -55694,10 +55822,10 @@ msgstr "Načíst obrázek"
 msgid "Upload images"
 msgstr "Načíst obrázky"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr "Načíst obrázek obálky"
@@ -55737,8 +55865,8 @@ msgstr "Načtení souboru (.koc) s offline záznamem výpůjček"
 msgid "Upload patron image"
 msgstr "Načtení fotografie čtenáře"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -55746,7 +55874,7 @@ msgid "Upload patron images"
 msgstr "Načíst fotografie čtenářů"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "Nahrání fotografií čtenářů - hromadně či jednotlivě"
@@ -55996,7 +56124,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr "Použijte horní lištu abyste vytvořili nové %s."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr "Použijte nástroj Zásuvné moduly"
@@ -56126,7 +56254,7 @@ msgstr "Použít šablonu:"
 msgid "Using the following CSV profile: "
 msgstr "Použít následující CSV profil: "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "Načítání naskenovaných obálek pro on-line katalog"
@@ -56966,14 +57094,14 @@ msgstr "Waylon Robertson"
 msgid "We"
 msgstr "St"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, c-format
 msgid "We are ready to do some basic configuration."
 msgstr "Vše je připraveno pro základní nastavení systému."
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr "Provádí se aktualizace systému Koha z verze %s na %s"
@@ -57028,12 +57156,12 @@ msgstr "Webový instalátor &rsaquo; Vytvoření kategorie čtenářů"
 msgid "Web installer &rsaquo; Database settings"
 msgstr "Webový instalátor &rsaquo; Nastavení databáze"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr "Webový instalátor &rsaquo; Výchozí data byla nahrána"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr "Webový instalátor &rsaquo; Základní nastavení"
@@ -57058,17 +57186,17 @@ msgstr "Webový instalátor &rsaquo; Verze Perl je příliš zastaralá"
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr "Webový instalátor &rsaquo; Výběr základních nastavení"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr "Webový instalátor &rsaquo; Nastavení databáze"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr "Webový instalátor &rsaquo; Podařilo se"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr "Webový instalátor &rsaquo; Aktualizace databáze"
@@ -57189,7 +57317,7 @@ msgstr "Jestliže bude vydáno mimořádné číslo:"
 msgid "When to charge"
 msgstr "Kdy účtovat?"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -57294,7 +57422,7 @@ msgid "Working day"
 msgstr "Pracovní den"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "Novinky pro on-line katalog a intranet"
@@ -57818,7 +57946,7 @@ msgstr ""
 "Můžete zadat název tohoto importu. To může být užitečné při vytváření "
 "záznamu, abyste si vzpomněli, odkud data pocházejí."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr "Sdílením vašich statistik s komunitou nám pomáháte Kohu vylepšovat. "
@@ -58131,6 +58259,18 @@ msgstr "Nejprve musíte nastavit rozpočet v Administraci"
 #, c-format
 msgid "You must enter a term to search on "
 msgstr "Musíte zadat výraz na vyhledání "
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill at least one of the two due date options"
+msgstr "Je nutné vybrat alespoň jedno periodikum k úpravě"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill only one of the two due date options"
+msgstr "Chcete-li použít tyto odkazy, musíte být online."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -58524,13 +58664,6 @@ msgstr "Zoe Schoeler"
 msgid "[ New list ]"
 msgstr "[ Nový seznam ]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr "[#%% Výchozí knihovna %%#] %s %s "
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
@@ -58552,7 +58685,7 @@ msgstr ""
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -58567,7 +58700,7 @@ msgstr ""
 "( UseKohaPlugins && CAN_user_plugins_tool ) || "
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -58587,9 +58720,26 @@ msgstr ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, fuzzy, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || "
+"CAN_user_tools_batch_upload_patron_images ) %%] "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:7
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
@@ -58768,7 +58918,7 @@ msgstr "aktivní"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:34
 #, c-format
 msgid "added successfully"
-msgstr "úspěšně přidána"
+msgstr "úspěšně přidán"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:26
 #, c-format

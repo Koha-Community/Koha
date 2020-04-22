@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 09:03-0300\n"
+"POT-Creation-Date: 2020-04-16 21:13-0300\n"
 "PO-Revision-Date: 2019-05-30 09:00+0000\n"
 "Last-Translator: Nghĩa Zer <nghia.zer.7@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1536,6 +1536,16 @@ msgstr "%s %s (%s bị hủy bỏ) %s "
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s Không có quy tắc %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF message.error 
+#. %3$s:  message.error | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:42
+#, fuzzy, c-format
+msgid ""
+"%s %s (The error was: %s. See the Koha logfile for more information). %s "
+msgstr "Tài liệu được liên kết thành công tới biểu ghi: "
 
 #. %1$s:  ELSE 
 #. %2$s:  basketgroup.name | html 
@@ -5232,15 +5242,8 @@ msgstr "%s Mã bưu chính:"
 msgid "%s ZIP/Postal code: "
 msgstr "%s Mã bưu chính: "
 
-#. %1$s:  ELSE 
-#. %2$s:  IF ( not refundLostItemFeeRule ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:606
-#, c-format
-msgid "%s [#%% Branch-specific %%#] %s "
-msgstr ""
-
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_edit_calendar || "
@@ -5251,7 +5254,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:46
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:49
 #, c-format
 msgid ""
 "%s [%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod "
@@ -5398,7 +5401,7 @@ msgstr ""
 "tự bạn đọc: %s; Họ: %s). %s "
 
 #. %1$s:  lis.level FILTER ucfirst | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
 #, c-format
 msgid "%s data added"
 msgstr "%s dữ liệu đã được thêm"
@@ -10590,15 +10593,15 @@ msgstr "Người duyệt:"
 msgid "Accepted payment (%s) from "
 msgstr "Chấp nhận thanh toán khoản tiền phạt (%s) từ bạn đọc "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:134
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:5
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:20
 #, fuzzy, c-format
 msgid "Access files"
 msgstr "Tệp tin chứa đăng ký cá biệt: "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
 msgid "Access files stored on the server, like log files or reports"
 msgstr ""
@@ -11199,7 +11202,7 @@ msgstr "Tạo thuộc tính mới"
 msgid "Add and delete funds (but can't modify funds)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "Thêm/Loại bỏ tài liệu"
@@ -11808,8 +11811,8 @@ msgstr "Trường con bổ sung (XML)"
 msgid "Additional thanks to..."
 msgstr "Sự đóng góp của các cá nhân..."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:104
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Additional tools"
 msgstr "Công cụ bổ trợ"
@@ -14390,10 +14393,10 @@ msgid ""
 "doesn't match your library. "
 msgstr "Địa chỉ IP của bạn không phù hợp."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:43
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
 #, fuzzy, c-format
 msgid "Automatic item modifications by age"
 msgstr "Chỉnh sửa bản tài liệu theo lô"
@@ -14772,7 +14775,7 @@ msgstr "Đã chi"
 msgid "Basic constraints"
 msgstr "Thông tin cơ bản"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:182
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
 #, fuzzy, c-format
 msgid "Basic installation complete."
 msgstr "Installation complete."
@@ -15053,6 +15056,14 @@ msgstr "Mô tả:"
 msgid "Batch edit patrons "
 msgstr "Nhập thẻ bạn đọc"
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:23
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:31
+#, fuzzy, c-format
+msgid "Batch extend due dates"
+msgstr "Ngày hết hạn"
+
 #. %1$s:  IF ( del ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -15061,9 +15072,9 @@ msgstr "Nhập thẻ bạn đọc"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "%sXóa%sChỉnh sửa%s bản tài liệu theo lô"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:16
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:19
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:24
 #, c-format
@@ -15075,9 +15086,9 @@ msgstr "Xóa bản tài liệu theo lô"
 msgid "Batch item deletion results"
 msgstr "Kết quả xóa bản tài liệu theo lô"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:18
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:63
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
 #, c-format
@@ -15130,16 +15141,16 @@ msgstr "Thay đổi nhóm bạn đọc theo lô"
 msgid "Batch patrons results"
 msgstr "Hiện thị nhóm bạn đọc"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:26
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "Xóa bản tài liệu theo lô"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:26
 #, fuzzy, c-format
@@ -15712,7 +15723,7 @@ msgid "Browse system logs"
 msgstr "Chọn nhật ký hệ thống"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:115
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Browse the system logs"
 msgstr "Xem nhật ký hệ thống"
@@ -16003,8 +16014,8 @@ msgstr "Mẫu CSV"
 msgid "CSV profile: "
 msgstr "Mẫu CSV"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:246
 #, c-format
 msgid "CSV profiles"
@@ -16050,8 +16061,8 @@ msgstr ""
 msgid "Calculated on %s. From %s to %s"
 msgstr "Thống kê vào ngày %s. Kết quả thống kê từ ngày %s đến ngày %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:107
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:110
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #, c-format
 msgid "Calendar"
 msgstr "Lập lịch làm việc"
@@ -16353,6 +16364,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:103
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -17081,10 +17094,10 @@ msgstr ""
 msgid "Cassette recording"
 msgstr "Băng Cassette"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:22
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:55
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:142
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:69
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:115
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:236
@@ -17638,8 +17651,9 @@ msgstr ""
 "tới thư viện bạn đang cấu hình."
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:31
-#, c-format
-msgid "Check the boxes for the libraries you accept to checkin items from."
+#, fuzzy, c-format
+msgid ""
+"Check the boxes for the libraries you allow your items to be transferred to."
 msgstr ""
 "Tích vào ô vuông cạnh thư viện để cho phép chuyển tài liệu từ thư viện đó "
 "tới thư viện bạn đang cấu hình."
@@ -17794,6 +17808,8 @@ msgstr "Hiện tại tài liệu được ghi mượn %s lần"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:170
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
@@ -17804,6 +17820,8 @@ msgstr "Nơi ghi mượn"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:121
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:169
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
@@ -17907,6 +17925,11 @@ msgstr "Số lần ghi mượn"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #, fuzzy, c-format
 msgid "Checkout count:"
+msgstr "Số lần ghi mượn"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:56
+#, fuzzy, c-format
+msgid "Checkout criteria:"
 msgstr "Số lần ghi mượn"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:78
@@ -18653,6 +18676,7 @@ msgstr "Xóa"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:168
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:111
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
@@ -19788,13 +19812,14 @@ msgstr "Giá sách ảo "
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:67
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:103
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:102
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:45
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:288
 #, c-format
 msgid "Continue"
 msgstr "Tiếp tục"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:261
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:267
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "Continue to log in to Koha"
@@ -19805,9 +19830,9 @@ msgstr "Continue to log in to Koha"
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:56
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:242
 #, fuzzy, c-format
 msgid "Continue to the next step"
 msgstr "Continue to log in to Koha"
@@ -20516,7 +20541,7 @@ msgstr "tạo tài khoản bạn đọc"
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "Thiết kế và in nhãn gáy tài liệu có trong cơ sở dữ liệu"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
 msgstr "Thiết kế và in nhãn gáy tài liệu có trong cơ sở dữ liệu"
@@ -20549,7 +20574,7 @@ msgstr "Tạo danh sách nhận"
 msgid "Create routing list for "
 msgstr "Tạo danh sách nhận ÂPĐK "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:147
+#: intranet-tmpl/prog/en/includes/permissions.inc:148
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "Tạo mẫu mới"
@@ -21041,7 +21066,7 @@ msgstr "database port : "
 msgid "Database settings:"
 msgstr "Database settings:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:210
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
 #, c-format
 msgid "Database tables created"
 msgstr "Database tables created"
@@ -21647,7 +21672,7 @@ msgstr ""
 "sung."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:90
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Define days when the library is closed"
 msgstr "Thiết lập ngày nghỉ, ngày làm việc cho thư viện"
@@ -21711,7 +21736,7 @@ msgstr ""
 "Thiết lập thông báo mượn, trả tài liệu theo thư viện, kiểu bạn đọc, kiểu tài "
 "liệu."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
 #, c-format
 msgid "Define rules to modify items by age"
 msgstr ""
@@ -21977,12 +22002,12 @@ msgstr "Xóa hình ảnh"
 msgid "Delete SQL reports"
 msgstr "Tạo báo cáo SQL"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:147
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
 #, c-format
 msgid "Delete a batch of items"
 msgstr "Thực hiện xóa nhiều bản tài liệu đồng thời"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
 #, c-format
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr ""
@@ -23229,6 +23254,8 @@ msgstr "Ngày hết hạn: %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
@@ -23243,6 +23270,21 @@ msgstr "Ngày hết hạn"
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:76
+#, fuzzy, c-format
+msgid "Due date from: "
+msgstr "Từ ngày: "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:81
+#, fuzzy, c-format
+msgid "Due date to:"
+msgstr "Ngày hết hạn"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:158
+#, fuzzy, c-format
+msgid "Due dates have been modified! "
+msgstr "Không có kiểu bạn đọc được định nghĩa. "
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23806,7 +23848,7 @@ msgstr "Chỉnh sửa %s"
 msgid "Edit purchase suggestion #%s"
 msgstr "Chỉnh sửa đề xuất mua số%s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #, c-format
 msgid "Edit quotes for QOTD feature"
 msgstr "Lập trích dẫn trên OPAC"
@@ -24247,7 +24289,7 @@ msgstr "Thời hạn tài khoản: "
 msgid "Enter"
 msgstr "Đông"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:187
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid ""
 "Enter a barcode to generate a printable spine label. For use with dedicated "
@@ -24746,7 +24788,7 @@ msgstr "Every"
 msgid "Everyone"
 msgstr "Tất cả"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:259
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:265
 #, fuzzy, c-format
 msgid "Everything went okay. Update done."
 msgstr "Everything went OK, update done."
@@ -25005,7 +25047,7 @@ msgstr "Xuất biểu ghi thư mục"
 msgid "Export bibliographic records"
 msgstr "Xuất biểu ghi thư mục"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:172
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Export bibliographic, holdings, and authority records"
 msgstr ""
@@ -25027,8 +25069,8 @@ msgstr "Xuất dữ liệu ghi mượn theo định dạng:"
 msgid "Export configuration"
 msgstr "Kết xuất cấu hình CSDL"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:171
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
 #, c-format
 msgid "Export data"
 msgstr "Xuất dữ liệu"
@@ -27064,6 +27106,11 @@ msgstr "Handbooks"
 msgid "Hard due date"
 msgstr "Ngày hết hạn"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:90
+#, fuzzy, c-format
+msgid "Hard due date: "
+msgstr "Ngày hết hạn"
+
 #: intranet-tmpl/prog/en/modules/about.tt:875
 #, fuzzy, c-format
 msgid "Harrison Carmel Public Library, USA"
@@ -27748,6 +27795,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:17
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:19
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:21
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:17
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
@@ -27992,6 +28040,8 @@ msgstr "Thư viện chính"
 #: intranet-tmpl/prog/en/columns.def:49
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:58
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:358
@@ -28634,7 +28684,7 @@ msgstr ""
 "nhà cung cấp. Bạn chọn 'Đồng ý' để bỏ qua hoặc 'Hủy bỏ' để quay lại và khai "
 "báo thêm thông tin nhà cung cấp"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid ""
 "If you wish to share some of your data, please enable the functionality in "
@@ -28842,7 +28892,7 @@ msgstr "Ảnh bìa biểu ghi: "
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:156
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:162
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:218
@@ -29005,7 +29055,7 @@ msgstr ""
 "Để sử sụng tính năng lưu thông ngoại tuyến trên máy trạm này, cơ sở dữ liệu "
 "của bạn phải được cập nhật và đồng bộ trên máy trạm: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
 #, c-format
 msgid ""
 "In the next steps you will be guided through some basic requirements like "
@@ -29434,8 +29484,8 @@ msgstr "Tạo giá trị định trước cho %s"
 msgid "Invalid year entered in field %s"
 msgstr "Giá trị năm không hợp lệ được nhập vào trường thông tin "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:16
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:23
 #, c-format
@@ -30090,6 +30140,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:167
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
@@ -32895,6 +32947,11 @@ msgstr ""
 msgid "Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age"
 msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Chỉnh sửa bản tài liệu theo lô"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:11
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Batch extend due dates"
+msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Xóa bản tài liệu theo lô"
+
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:5
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Batch item deletion"
@@ -33726,8 +33783,8 @@ msgstr "Tạo lô nhãn gáy"
 msgid "Label batches"
 msgstr "Quản lý lô nhãn gáy"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:81
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:17
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:28
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:30
@@ -34166,6 +34223,11 @@ msgstr "Giới hạn cho thư viện: "
 #, c-format
 msgid "Libraries limitation: "
 msgstr "Giới hạn cho thư viện: "
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:69
+#, fuzzy, c-format
+msgid "Libraries: "
+msgstr "Thư viện"
 
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:152
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
@@ -34886,7 +34948,7 @@ msgstr "Nhật ký"
 msgid "Log in as a different user"
 msgstr ". Bạn có thể thử một tìm kiếm khác hoặc "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34898,8 +34960,8 @@ msgstr ""
 msgid "Log out"
 msgstr "Đăng xuất"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:113
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:98
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Log viewer"
 msgstr "Nhật ký"
@@ -35178,7 +35240,7 @@ msgstr "Khung mẫu MARC"
 msgid "MARC frameworks: %s"
 msgstr "Khung mẫu MARC: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
@@ -35465,7 +35527,7 @@ msgid "Manage API keys"
 msgstr "Quản lý các nhóm OAI"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:103
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "Quản lý các trường CSV"
@@ -35495,7 +35557,7 @@ msgstr ""
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "Kiểm tra khung mẫu biên mục MARC"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Mẫu chỉnh sửa biểu ghi MARC"
@@ -35515,7 +35577,7 @@ msgstr "Quản lý các nhóm OAI"
 msgid "Manage SMS cellular providers"
 msgstr "&rsaquo; Mẫu CSV "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
 #, c-format
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
@@ -35777,7 +35839,7 @@ msgid "Manage restrictions for accounts"
 msgstr "Quản lý nội dung thẻ bạn đọc"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:111
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:197
 #, fuzzy, c-format
 msgid "Manage rotating collections"
 msgstr "Bộ sưu tập luân phiên"
@@ -35836,7 +35898,7 @@ msgstr ""
 msgid "Manage suggestions"
 msgstr "Quản lý đề xuất mua"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:202
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
 #, c-format
 msgid "Manage templates for modifying MARC records during import."
 msgstr ""
@@ -35891,7 +35953,7 @@ msgid "Managed in tab: "
 msgstr "Thẻ quản lý: "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:105
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
@@ -35913,13 +35975,15 @@ msgstr "Người quản lý"
 msgid "Managing library:"
 msgstr "Main library"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:92
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:132
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
 #, c-format
 msgid "Mandatory"
 msgstr "Bắt buộc"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:164
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:170
 #, fuzzy, c-format
 msgid "Mandatory data added"
 msgstr "%s dữ liệu đã được thêm"
@@ -36663,7 +36727,7 @@ msgid "Moderate patron comments. "
 msgstr "Quản lý bình luận của bạn đọc. "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:108
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Moderate patron tags"
 msgstr "Quản lý các từ khóa bạn đọc gán cho tài liệu của thư viện"
@@ -36720,7 +36784,7 @@ msgstr "Tìm kiếm theo trường:"
 msgid "Modify a CSV profile"
 msgstr "Chỉnh sửa hoặc xóa một mẫu CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:162
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:167
 #, c-format
 msgid "Modify a batch of records (biblios or authorities)"
 msgstr ""
@@ -36791,7 +36855,7 @@ msgstr "Chỉnh sửa địa chỉ thành phố"
 msgid "Modify item type"
 msgstr "Chỉnh sửa kiểu tài liệu"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:152
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:157
 #, c-format
 msgid "Modify items in a batch"
 msgstr "Chỉnh sửa nhiều bản tài liệu đồng thời"
@@ -36834,6 +36898,12 @@ msgstr "Chỉnh sửa quy tắc kiểm soát biểu ghi"
 msgid "Modify record using the following template: "
 msgstr "Chỉnh sửa biểu ghi bằng các mẫu sau đây: "
 
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:148
+#, fuzzy
+msgid "Modify selected checkouts"
+msgstr "Chỉnh sửa tài liệu được chọn"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:347
 #, c-format
 msgid "Modify selected items"
@@ -36849,6 +36919,11 @@ msgstr "Chỉnh sửa tài liệu được chọn"
 #, fuzzy, c-format
 msgid "Modify splitting rule"
 msgstr "Chỉnh sửa quy tắc phân loại"
+
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
+#, fuzzy, c-format
+msgid "Modify the due date checkouts in batch"
+msgstr "Sửa nhiều bạn đọc đồng thời"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:52
 #, c-format
@@ -37140,7 +37215,7 @@ msgstr "0 Ghi mượn"
 msgid "My library"
 msgstr "Thư viện của tôi"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:168
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:174
 #, fuzzy, c-format
 msgid "MySQL data added"
 msgstr "%s dữ liệu đã được thêm"
@@ -37681,6 +37756,16 @@ msgstr "Tạo đơn vị tiền tệ"
 msgid "New definition"
 msgstr "Tạo định nghĩa"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:123
+#, fuzzy, c-format
+msgid "New due date"
+msgstr "Gia hạn đến ngày:"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:87
+#, fuzzy, c-format
+msgid "New due date:"
+msgstr "Gia hạn đến ngày:"
+
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
 #, fuzzy, c-format
 msgid "New enrollment field"
@@ -37938,10 +38023,10 @@ msgstr ""
 msgid "New vendor"
 msgstr "Tạo nhà cung cấp"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:116
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:63
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:21
 #, c-format
@@ -38267,6 +38352,11 @@ msgstr "Không có kiểu bạn đọc được định nghĩa. "
 #, fuzzy, c-format
 msgid "No change"
 msgstr "Lưu"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:153
+#, fuzzy, c-format
+msgid "No checkouts for the selected filters. "
+msgstr "Gia hạn hoặc ghi trả"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:150
 #, c-format
@@ -38852,7 +38942,7 @@ msgstr "Không tìm thấy tài liệu phù hợp với tìm kiếm của bạn 
 msgid "No results."
 msgstr "Không có đề xuất mua trong danh sách hiện tại."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:126
 #, c-format
 msgid ""
 "No sample data and settings are available for your language. Defaulting to "
@@ -39628,7 +39718,7 @@ msgid ""
 "this to access Koha as a staff member with all permissions. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:226
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -40472,7 +40562,13 @@ msgstr "Ngày tạo:"
 msgid "Operator"
 msgstr "Nhà điều hành"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:166
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:93
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#, fuzzy, c-format
+msgid "Optional"
+msgstr "Tùy chọn"
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:172
 #, fuzzy, c-format
 msgid "Optional data added"
 msgstr "%s dữ liệu đã được thêm"
@@ -40494,6 +40590,11 @@ msgstr "Optional module missing"
 #, c-format
 msgid "Options"
 msgstr "Tùy chọn"
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:95
+#, fuzzy, c-format
+msgid "Or add number of days:"
+msgstr "Số hóa đơn"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:75
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:79
@@ -40807,7 +40908,7 @@ msgstr "Thao tác khác"
 msgid "Other course reserves"
 msgstr "Khóa học khác"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:120
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:123
 #, c-format
 msgid "Other data"
 msgstr "Other data"
@@ -42055,6 +42156,11 @@ msgstr "Bạn đọc không ghi mượn tài liệu"
 msgid "Patrons with the most checkouts"
 msgstr "Bạn đọc ghi mượn nhiều nhất"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:59
+#, fuzzy, c-format
+msgid "Patrons' categories: "
+msgstr "để kiểm tra lại."
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:359
 #, c-format
 msgid "Pattern name:"
@@ -42262,6 +42368,11 @@ msgstr "Xác nhận xóa máy in "
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr ""
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#, fuzzy, c-format
+msgid "Perform batch extend due dates"
+msgstr "Xác nhận xóa máy in "
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, fuzzy, c-format
 msgid "Perform batch modification of items"
@@ -42278,12 +42389,12 @@ msgid "Perform batch modification of records (biblios or authorities)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:98
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:182
 #, fuzzy, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Kiểm kê tài liệu trong kho"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42785,7 +42896,7 @@ msgstr "Xác nhận xóa ấn phẩm định kỳ"
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "Vui lòng xác nhận xem đây có phải là một bạn đọc bị trùng lặp"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:207
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "Please contact your system administrator"
@@ -43190,6 +43301,12 @@ msgstr "Vui lòng chọn lô nhãn gáy bạn muốn in."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:137
 msgid "Please select at least one card to export."
+msgstr "Vui lòng chọn thẻ bạn đọc bạn muốn in."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "Please select at least one checkout to process"
 msgstr "Vui lòng chọn thẻ bạn đọc bạn muốn in."
 
 #. SCRIPT
@@ -44471,8 +44588,8 @@ msgstr ""
 msgid "Quick add new patron "
 msgstr "Không thể tạo tài khoản bạn đọc"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:19
 #, c-format
 msgid "Quick spine label creator"
@@ -44484,14 +44601,14 @@ msgstr "Tạo nhanh nhãn gáy"
 msgid "Quote"
 msgstr "Ghi chú"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:23
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #, c-format
 msgid "Quote editor"
 msgstr "Chỉnh sửa trích dẫn trên OPAC"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Cho phép thủ thư tạo các trích dẫn, thông báo nhanh trên OPAC"
@@ -45084,6 +45201,11 @@ msgstr "Bạn sẽ xóa  %stất cả tài liệu%stất cả tài liệu đư�
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:164
 #, fuzzy, c-format
 msgid "Reminder: this action will modify all selected biblios!"
+msgstr "Bạn sẽ xóa  %stất cả tài liệu%stất cả tài liệu được lựa chọn%s."
+
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:143
+#, fuzzy, c-format
+msgid "Reminder: this action will modify all selected checkouts!"
 msgstr "Bạn sẽ xóa  %stất cả tài liệu%stất cả tài liệu được lựa chọn%s."
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
@@ -46501,12 +46623,12 @@ msgstr "Tên báo cáo"
 msgid "Rota status"
 msgstr "Trạng thái mất"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:18
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:191
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
 #, c-format
 msgid "Rotating collections"
 msgstr "Bộ sưu tập luân phiên"
@@ -47115,7 +47237,7 @@ msgid "Schedule "
 msgstr "Lập lịch báo cáo"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:112
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:114
 #, c-format
 msgid "Schedule tasks to run"
 msgstr "Thiết lập thời gian tự động gửi các báo cáo mặc định"
@@ -47965,6 +48087,7 @@ msgstr "Xóa mẫu"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:139
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:87
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
@@ -47975,8 +48098,8 @@ msgstr "Xóa mẫu"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:126
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:96
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:133
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:99
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:139
 #: intranet-tmpl/prog/en/modules/members/member.tt:55
 #: intranet-tmpl/prog/en/modules/members/pay.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
@@ -48064,8 +48187,8 @@ msgstr "Chọn sơ sở dữ liệu nội bộ"
 msgid "Select month:"
 msgstr "Chọn tháng:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:97
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:134
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:100
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:140
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Chọn ghi chú"
@@ -48666,7 +48789,7 @@ msgid "Set to patron"
 msgstr "Tìm kiếm"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:197
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:203
 msgid "Set up some of Koha's basic requirements"
 msgstr ""
 
@@ -49685,7 +49808,7 @@ msgstr "Ghi chú thủ thư:"
 msgid "Staff notes:"
 msgstr "Ghi chú thủ thư:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Duyệt biểu ghi MARC tải lên"
@@ -49696,7 +49819,7 @@ msgid "Stage MARC records"
 msgstr "Quản lý các bản ghi đã được kiểm duyệt"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
 #, c-format
@@ -49710,7 +49833,7 @@ msgstr ""
 "Phân tích và kiểm tra dữ liệu các biểu ghi MARC chứa trong tệp tin tải lên "
 "hệ thống."
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:207
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Stage MARC records into the reservoir."
 msgstr ""
@@ -49734,12 +49857,12 @@ msgstr "Duyệt biểu ghi trước khi nhập vào CSDL"
 msgid "Staged"
 msgstr "Đã kiểm duyệt"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #, c-format
 msgid "Staged MARC management"
 msgstr "Quản lý biểu ghi MARC được duyệt"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:211
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
 #, c-format
 msgid "Staged MARC record management"
 msgstr "Quản lý biểu ghi MARC được duyệt"
@@ -50182,8 +50305,8 @@ msgstr "Steven Callender"
 msgid "Still %s servers to search"
 msgstr "Hiện tại vẫn còn tìm kiếm trên %s máy chủ"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:196
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:24
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:54
 #, fuzzy, c-format
@@ -51317,7 +51440,7 @@ msgstr ", editor"
 msgid "Tag has no subfields"
 msgstr "Cấu trúc trường con của trường %s "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
 #, c-format
 msgid "Tag moderation"
 msgstr "Từ khóa"
@@ -51357,7 +51480,7 @@ msgstr "Được gán từ khóa:"
 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:17
 #: intranet-tmpl/prog/en/modules/tags/review.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:68
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Tags"
 msgstr "Từ khóa"
@@ -51395,10 +51518,10 @@ msgstr "Tên thư viện"
 msgid "Target (database) record check field"
 msgstr "Trường được kiểm tra trên biểu ghi đích (cơ sở dữ liệu)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:119
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:122
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:13
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:31
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #, c-format
 msgid "Task scheduler"
 msgstr "Lập lịch báo cáo"
@@ -52042,7 +52165,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr "Các đăng ký cá biệt được tìm thấy: "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:211
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr "The following error occurred while importing the database structure:"
@@ -53787,6 +53910,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:118
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:166
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:100
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:160
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:366
@@ -54276,8 +54401,8 @@ msgstr ""
 "Hiện tại bạn đọc đã mượn %s tài liệu cùng loại. Bạn đọc chỉ được phép mượn "
 "tối đa %s tài liệu."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:125
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #, fuzzy, c-format
 msgid "Tool plugins"
 msgstr "Công cụ bổ trợ"
@@ -54316,6 +54441,7 @@ msgstr "Công cụ bổ trợ"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:22
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
@@ -55412,7 +55538,7 @@ msgstr ""
 msgid "Update child to adult patron"
 msgstr "Cập nhật Trẻ em - Người lớn"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:251
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:257
 #, c-format
 msgid "Update errors :"
 msgstr "Update errors :"
@@ -55437,7 +55563,7 @@ msgstr "Cập nhật tài liệu"
 msgid "Update patron records"
 msgstr "Cập nhật tài khoản bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:243
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:249
 #, c-format
 msgid "Update report :"
 msgstr "Update report :"
@@ -55447,7 +55573,7 @@ msgstr "Update report :"
 msgid "Update succeeded"
 msgstr "Cập nhật thành công"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:238
 #, fuzzy, c-format
 msgid "Update your database"
 msgstr "update your database"
@@ -55485,12 +55611,12 @@ msgstr "Cập nhật"
 msgid "Updated:"
 msgstr "Đã được cập nhật:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:247
 #, c-format
 msgid "Updating database structure"
 msgstr "Updating database structure"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:131
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:27
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:83
@@ -55529,13 +55655,13 @@ msgstr "Tải ảnh đại diện bạn đọc lên cơ sở dữ liệu"
 msgid "Upload another KOC file"
 msgstr "Tải lên tệp tin .koc khác"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:128
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:131
 #: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "Tải lên"
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:129
 #, c-format
 msgid "Upload any type of file, manage uploads"
 msgstr ""
@@ -55574,10 +55700,10 @@ msgstr "Thêm ảnh bìa"
 msgid "Upload images"
 msgstr "Chọn tệp tin tải lên"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:16
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:24
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:216
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:221
 #, c-format
 msgid "Upload local cover image"
 msgstr "Thêm ảnh bìa cho biểu ghi"
@@ -55617,8 +55743,8 @@ msgstr "Tải tệp tin (.koc) lên Koha"
 msgid "Upload patron image"
 msgstr "Nhập ảnh bạn đọc"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:14
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:87
 #, c-format
@@ -55626,7 +55752,7 @@ msgid "Upload patron images"
 msgstr "Nhập ảnh bạn đọc"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:88
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:79
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
 msgstr "Tải ảnh đại diện bạn đọc lên cơ sở dữ liệu"
@@ -55882,7 +56008,7 @@ msgid "Use the toolbar above to create a new %s."
 msgstr "Sử dụng thanh công cụ bên trên để tạo %s thẻ bạn đọc mới."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:134
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:124
 #, c-format
 msgid "Use tool plugins"
 msgstr "Sử dụng công cụ bổ trợ"
@@ -56012,7 +56138,7 @@ msgstr "Sử dụng khung mẫu biên mục:"
 msgid "Using the following CSV profile: "
 msgstr "Chỉnh sửa biểu ghi bằng các mẫu sau đây: "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:222
 #, c-format
 msgid "Utility to upload scanned cover images for display in OPAC"
 msgstr "Tải lên hình ảnh bìa của các biểu ghi tài liệu"
@@ -56850,14 +56976,14 @@ msgstr "Waylon Robertson"
 msgid "We"
 msgstr "We"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:235
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:241
 #, fuzzy, c-format
 msgid "We are ready to do some basic configuration."
 msgstr "Warnings regarding the system configuration"
 
 #. %1$s:  dbversion | html 
 #. %2$s:  kohaversion | html 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:231
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:237
 #, fuzzy, c-format
 msgid "We are upgrading from Koha %s to %s"
 msgstr "We are upgrading from Koha %s to %s, you must "
@@ -56912,12 +57038,12 @@ msgstr "Web installer &rsaquo; Step 1"
 msgid "Web installer &rsaquo; Database settings"
 msgstr "Web installer &rsaquo; Step 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:161
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:167
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Default data loaded"
 msgstr "Web installer &rsaquo; Step 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Install basic configuration settings"
 msgstr "install basic configuration settings"
@@ -56942,17 +57068,17 @@ msgstr "Web installer &rsaquo; Step 1"
 msgid "Web installer &rsaquo; Selecting default settings"
 msgstr "Web installer &rsaquo; Step 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:219
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Set up database"
 msgstr "Web installer &rsaquo; Step 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:215
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Success"
 msgstr "Web installer &rsaquo; Step 1"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, fuzzy, c-format
 msgid "Web installer &rsaquo; Update database"
 msgstr "Web installer &rsaquo; Step 1"
@@ -57072,7 +57198,7 @@ msgstr "Khi có kỳ phát hành bổ sung:"
 msgid "When to charge"
 msgstr "Phí mượn tài liệu"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:154
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:160
 #, fuzzy, c-format
 msgid ""
 "When you've made your selections, please click 'Import' below to begin the "
@@ -57176,7 +57302,7 @@ msgid "Working day"
 msgstr "Ngày làm việc"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:91
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
 msgstr "Soạn thảo các bản tin trên OPAC và giao diện nhân viên"
@@ -57691,7 +57817,7 @@ msgstr ""
 "Bạn nên đặt tên cho việc nhập dữ liệu này để bạn có thể biết được biểu ghi "
 "MARC được nhập vào từ đâu."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:187
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:193
 #, c-format
 msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
@@ -58010,6 +58136,18 @@ msgstr "Thông báo cho cán bộ quản trị để tạo ngân sách cho phân
 #, c-format
 msgid "You must enter a term to search on "
 msgstr "Bạn phải nhập từ khóa tìm kiếm "
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill at least one of the two due date options"
+msgstr "Bạn phải chọn tối thiểu hai hóa đơn để sát nhập."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
+#, fuzzy
+msgid "You must fill only one of the two due date options"
+msgstr "Bạn phải kết nối tới máy chủ để sử dụng các tùy chọn này."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:233
@@ -58406,13 +58544,6 @@ msgstr ""
 msgid "[ New list ]"
 msgstr "[ Tạo giá sách ảo ]"
 
-#. %1$s:  IF ( current_branch == '*' ) 
-#. %2$s:  IF ( ( not refundLostItemFeeRule.refund.defined ) || refundLostItemFeeRule.refund ) 
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:590
-#, c-format
-msgid "[#%% Default branch %%#] %s %s "
-msgstr ""
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
@@ -58434,7 +58565,7 @@ msgstr ""
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:80
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:85
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
@@ -58444,7 +58575,7 @@ msgid ""
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:135
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:140
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || "
@@ -58457,8 +58588,19 @@ msgid ""
 "CAN_user_tools_upload_local_cover_images ) %%] "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:15
+#, c-format
+msgid ""
+"[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "
+"CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
+"CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
+"CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
+"CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || "
+"CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) "
+"%%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:7
 #, c-format
 msgid ""
 "[%% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || "

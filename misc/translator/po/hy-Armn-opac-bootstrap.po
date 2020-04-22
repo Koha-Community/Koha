@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-03-19 08:43-0300\n"
+"POT-Creation-Date: 2020-04-16 20:54-0300\n"
 "PO-Revision-Date: 2019-12-04 10:27+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -52,7 +52,7 @@ msgstr "%s %s %s %s %s Անվերնագիր %s %s , %s %s"
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:699
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:701
 #, c-format
 msgid "%s %s %s %s Item in transit from "
 msgstr "%s %s %s %s Նյութը փոխանցման մեջ է այստեղից "
@@ -94,7 +94,7 @@ msgstr ""
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:683
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:685
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Նյութը սպասում է "
@@ -177,7 +177,7 @@ msgstr "%s %s Ավարտի ամսաթիվ: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:696
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:698
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Նյութը տեղափոխման մեջ է դեպի "
@@ -475,7 +475,7 @@ msgstr "%s <%s > <%s src=\"%s\" %s /> "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Հաշիվը սառեցված է %s %s "
@@ -530,13 +530,13 @@ msgstr ""
 "%s pdf ֆայլի գեներացման ժամանակ առաջացել է սխալ։ Դիմիր աշխատակազմին։ %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Ավտոմատ թարմացում "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:313
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "%s Ավտոմատ թարմացումը ձախողվեց, քո հաշիվը ժամկետանց է։ "
@@ -639,13 +639,13 @@ msgid "%s Issue notes have not been enabled. Please contact the library. %s "
 msgstr "%s Համարի նշումները չեն թույլատրվել։ Կապվիր գրադարանի հետ։ %s "
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:694
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:696
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Նյութը սպասում է դուրս հանմանը այստեղից "
 
 #. %1$s:  issues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:187
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Նյութ(եր) դուրս տրված"
@@ -659,7 +659,7 @@ msgstr "%s Այս գրառման համար հոդվածի պատվերներ հ
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
 #, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -669,7 +669,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:317
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Թարմացում չկա մինչ %s "
@@ -689,20 +689,20 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s Չկան արդյունքներ, փորձիր փոխել զտիչները։ %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:567
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s Չի թույլատրված"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
 #, c-format
 msgid "%s Not renewable "
 msgstr "%s Չթարմացվող "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "%s Չթարմացվող %s Չի թույլատրված "
@@ -710,7 +710,7 @@ msgstr "%s Չթարմացվող %s Չի թույլատրված "
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:571
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Պահման մեջ %s Թարմացումներ չեն մնացել %s "
@@ -748,7 +748,7 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:872
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s Սպասող %s Կատարվող %s Ավարտված %s Չեղարկված %s "
@@ -781,7 +781,7 @@ msgstr "%s Մեջբերումներ"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:322
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s Թարմացումը չի թույլատրված %s "
@@ -952,7 +952,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:581
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Այո %s Ոչ %s "
@@ -961,7 +961,7 @@ msgstr "%s Այո %s Ոչ %s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr "%s Այո (նյութը ժամկետանց է կամ կորած) %s Այո (Վարձավճարներ) %s Ոչ %s "
@@ -1047,7 +1047,7 @@ msgstr ""
 #. %4$s:  RESERVE.expirationdate | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:687
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:689
 #, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s սկսած %s %s մինչ %s %s %s "
@@ -1972,7 +1972,7 @@ msgstr ""
 #. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:49
 #, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
@@ -2703,27 +2703,27 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft | html 
 #. %2$s:  ISSUE.renewsallowed | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:317
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:320
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:567
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:322
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s ընդամենը %s չկատարած թարմացումներ)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:600
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:806
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:223
 #, c-format
 msgid "(%s total)"
 msgstr "(%s ընդամենը)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:136
 #, c-format
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
@@ -2892,19 +2892,19 @@ msgstr "(զտված է _MAX_ ընդհանուր մուտքերից)"
 msgid "(modified on %s)"
 msgstr "(թարմացված է %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #, c-format
 msgid "(on hold)"
 msgstr "(պահված)"
 
 #. %1$s:  ar.item.barcode | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:831
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:833
 #, c-format
 msgid "(only %s)"
 msgstr "(միայն %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:306
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:571
 #, c-format
 msgid "(overdue)"
 msgstr "(Ժամկետանց)"
@@ -2993,8 +2993,8 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:661
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:669
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
@@ -3266,8 +3266,8 @@ msgstr "Հասցե:"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:125
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:107
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:163
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:218
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:220
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:312
 msgid "Adlibris cover image"
 msgstr "Adlibris կազմի պատկեր"
@@ -3357,9 +3357,9 @@ msgstr "Այլընտրանքային հասցե։ "
 msgid "Alternate contact"
 msgstr "Փոխարինող կոնտակտ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:416
 #, c-format
 msgid "Amount"
 msgstr "Մեծություն"
@@ -3475,14 +3475,14 @@ msgid "April"
 msgstr "Ապրիլ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Վստա՞հ ես որ ուզում ես չեղյալ անել այս հոդվածի պահանջը։"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Վստա՞հ ես որ ուզում ես չեղյալ անել այս պահումը։"
 
@@ -3537,7 +3537,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Վստա՞հ ես որ ցանկանում ես հեռացնել այս համատեղը։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Վսհա՞հ ես որ ցանկանում ես չեղյալ անել կամ կասեցնել այս պահումը։"
 
@@ -3547,7 +3547,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Վստա՞հ ես որ ուզում ես վերադարձնել այս նյութը։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Վսհա՞հ ես որ ցանկանում ես կասեցնել բոլոր պահումները։"
 
@@ -3556,13 +3556,13 @@ msgstr "Վսհա՞հ ես որ ցանկանում ես կասեցնել բոլո
 msgid "Arrived"
 msgstr "Ժամանած"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:806
 #, c-format
 msgid "Article requests "
 msgstr "Հոդվածի պատվեր "
 
 #. %1$s:  logged_in_user.article_requests_current.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:166
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
 #, c-format
 msgid "Article requests (%s)"
 msgstr "Հոդվածի պատվեր (%s)"
@@ -3650,8 +3650,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:190
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:810
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:812
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:215
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
@@ -3808,17 +3808,17 @@ msgstr "Հետ որոնման արդյունքների ցուցակին"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:196
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:432
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1208
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, c-format
 msgid "Barcode"
 msgstr "Շտրիխկոդ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:282
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:547
 #, c-format
 msgid "Barcode:"
 msgstr "Շտրիխկոդ:"
@@ -3947,16 +3947,16 @@ msgid "Call Number"
 msgstr "Դասիչ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:435
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:484
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
 #, c-format
 msgid "Call no."
 msgstr "Դասիչի հմր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:287
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:552
 #, c-format
 msgid "Call no.:"
 msgstr "Դասիչի հմր"
@@ -4018,9 +4018,9 @@ msgstr "Դասիչ: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:749
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:768
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:770
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:890
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:297
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:277
@@ -4032,7 +4032,7 @@ msgstr "Դասիչ: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:159
 #, c-format
 msgid "Cancel"
 msgstr "Չեղյալ անել"
@@ -4059,7 +4059,7 @@ msgstr "Չեղարկել ներգրավվածությունը "
 msgid "Cancel rating"
 msgstr "Չեղյալ անել գնահատումը"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:887
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:889
 #, c-format
 msgid "Cancel:"
 msgstr "Չեղյալ անել:"
@@ -4149,7 +4149,7 @@ msgstr "Փոխիր քո գաղտնաբառը"
 msgid "Change your password "
 msgstr "Փոխիր քո գաղտնաբառը "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:817
 #, c-format
 msgid "Chapters"
 msgstr "Բաժիններ"
@@ -4202,7 +4202,7 @@ msgid "Checked out"
 msgstr "Դուրս տրված"
 
 #. %1$s:  issues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Դուրս տրված (%s)"
@@ -4328,8 +4328,8 @@ msgstr "Մաքրիր բոլորը"
 msgid "Clear date"
 msgstr "Մաքրիր ամսաթիվը"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Մաքրիր ամսաթիվը անորոշ ժամանակով կասեցնելու համար"
@@ -4384,8 +4384,8 @@ msgid "Click to open in new window"
 msgstr "Սեղմիր նոր պատուհանում բացելու համար"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:510
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
 msgid "Click to view in Google Books"
 msgstr "Սեղմիր Google Books-ում դիտելու համար"
 
@@ -4417,7 +4417,7 @@ msgstr "Փակիր պատուհանը"
 
 #. %1$s:  borrower_club_enrollments.count || 0 | html 
 #. %2$s:  borrower_enrollable_clubs.count || 0 | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:161
 #, c-format
 msgid "Clubs (%s/%s) "
 msgstr "Ակումբներ (%s/%s) "
@@ -4700,13 +4700,13 @@ msgstr ""
 "Ընթերցողի համար Կոհայի տվյալ մատենագիտական գրառման համար ստեղծում է նյութի "
 "մակարդակի պահում։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
 #, c-format
 msgid "Credits"
 msgstr "Կրեդիտներ"
 
 #. %1$s:  amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
 #, c-format
 msgid "Credits (%s)"
 msgstr "Կրեդիտներ (%s)"
@@ -4755,7 +4755,7 @@ msgstr "DVD տեսա / տեսադիսկ"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:813
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:815
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:104
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:149
@@ -4784,9 +4784,9 @@ msgstr "Ամսաթիվը ավելացված է"
 msgid "Date due"
 msgstr "Վերադարձի ամսաթիվ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:260
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:267
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:557
 #, c-format
 msgid "Date due:"
 msgstr "Վերադարձի ամսաթիվ:"
@@ -4825,7 +4825,7 @@ msgstr "Ամսաթիվ։"
 msgid "Dates"
 msgstr "Ամսաթվեր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
 #, c-format
 msgid "Days in advance"
 msgstr "Օրերը նախապես"
@@ -4985,7 +4985,7 @@ msgstr "Բառարաններ"
 msgid "Did you mean:"
 msgstr "Նկատի ունես:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:43
 #, c-format
 msgid "Digests only "
 msgstr "Միայն դայջեստներ "
@@ -5020,12 +5020,12 @@ msgstr ""
 "Ցանկանու՞մ ես ստանալ էլ փոստ երբ այս բաժանորդագրության համար նոր նյութ է "
 "ստացված։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Չունե՞ս գրադարանային քարտ։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:182
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Դեռ չունե՞ս գաղտնաբառ։"
@@ -5050,7 +5050,7 @@ msgstr "Կատարված"
 msgid "Download"
 msgstr "Բեռնաթափիր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr "Բեռնաթափիր որպես iCal/.ics ֆայլ"
@@ -5081,9 +5081,9 @@ msgstr "Բեռնաթափիր ցուցակ "
 msgid "Dublin Core"
 msgstr "Դուբլինյան միջուկ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:431
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:230
 #, c-format
 msgid "Due"
@@ -5117,7 +5117,7 @@ msgstr "ՍԽԱԼ։ Գրառման id չի հստակեցված։ "
 msgid "Edit"
 msgstr "Խմբագրել"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
 #, c-format
 msgid "Edit / Create note"
 msgstr "Խմբագրի / Ստեղծիր նշում"
@@ -5162,9 +5162,9 @@ msgstr "Հրատարակչական տվյալներ։"
 msgid "Editions"
 msgstr "Հրատարակումներ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:196
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:42
 #, c-format
 msgid "Email"
 msgstr "էլ փոստ"
@@ -5392,13 +5392,13 @@ msgstr "Սպասվում է հատկանշական նյութի ընտրությ
 msgid "Expiration date:"
 msgstr "Ժամկետը լրանալու ամսաթիվ։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:657
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #, c-format
 msgid "Expiration:"
 msgstr "Ժամկետի լրացում"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, c-format
 msgid "Expires on"
 msgstr "Լրանում է"
@@ -5447,7 +5447,7 @@ msgstr "Փետրվար"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr "Վճար նյութի տեսակի համար '%s': %s"
@@ -5482,8 +5482,8 @@ msgstr "Filmographies"
 msgid "Fine amount"
 msgstr "Տուգանքի գումար"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:203
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:488
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:205
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:233
 #, c-format
 msgid "Fines"
@@ -5491,21 +5491,21 @@ msgstr "Տուգանքներ"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:152
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:155
 #, c-format
 msgid "Fines (%s)"
 msgstr "Տուգանքներ (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:384
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:398
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
 #, c-format
 msgid "Fines and charges"
 msgstr "Տոգանքներ և ծախսեր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:581
 #, c-format
 msgid "Fines:"
 msgstr "Տուգանքներ։"
@@ -5575,7 +5575,7 @@ msgstr ""
 "տարբերակ է այն օգտվողների համար ովքեր ցանկանում են հետևել թե ինչ են կարդում։"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:329
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:134
 #, c-format
 msgid "Forgot your password?"
@@ -5864,7 +5864,7 @@ msgstr "Թաքցրու պատուհանը"
 msgid "Highlight"
 msgstr "Ընդգծել"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:651
 #, c-format
 msgid "Hold date:"
 msgstr "Պահման ամսաթիվ։"
@@ -5920,13 +5920,13 @@ msgstr "Պահումներ։"
 msgid "Holds"
 msgstr "Պահումներ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:600
 #, c-format
 msgid "Holds "
 msgstr "Պահումներ "
 
 #. %1$s:  RESERVES.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
 #, c-format
 msgid "Holds (%s)"
 msgstr "Պահումներ (%s)"
@@ -6205,13 +6205,13 @@ msgstr ""
 "Եթե չունես Shibboleth հաշիվ, բայց ունես տեղային հաշիվ, ապա ստորին մասից "
 "կարող ես մուտք գործել։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:185
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr "Եթե չունես գրադարանի քարտ, այցելիր տեղային գրադարան գրանցվելու։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -6363,7 +6363,7 @@ msgstr "Միջգրադարանային բաժնույթի հարցումներ"
 msgid "Invalid shelf number."
 msgstr "Սխալ դարականիշ։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:812
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:814
 #, c-format
 msgid "Issue"
 msgstr "Համար"
@@ -6444,8 +6444,8 @@ msgstr "Նյութի թարմացումը չի թույլատրված։"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:480
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:131
 #, c-format
@@ -6453,7 +6453,7 @@ msgid "Item type"
 msgstr "Նյութի տեսակ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:58
 #, c-format
 msgid "Item type:"
@@ -6740,7 +6740,7 @@ msgid "LinkedIn"
 msgstr "LinkedIn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:208
 #, c-format
 msgid "Links"
 msgstr "Կապեր"
@@ -6815,11 +6815,11 @@ msgstr "Բեռնավորում "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:71
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Loading..."
 msgstr "Բեռնավորվում է..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
 #, c-format
 msgid "Loading... "
 msgstr "Բեռնավորվում է... "
@@ -6863,7 +6863,7 @@ msgstr "Տեղակայություններ"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:19
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:171
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:125
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:665
@@ -6940,14 +6940,14 @@ msgstr "Դուրս արի և փորձիր կրկին որպես այլ օգտվ�
 msgid "Log out from your OverDrive account"
 msgstr "Դուրս եկ քո OverDrive հաշիվից"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:195
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Մուտք դեպի քարտարան չի թույլատրվել գրադարանի կողմից։"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:4
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:166
 #, c-format
 msgid "Login"
 msgstr "Գրանցում"
@@ -7138,7 +7138,7 @@ msgstr "Բացակա համարներ։ %s "
 msgid "Mo"
 msgstr "Mo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:621
 #, c-format
 msgid "Modify"
 msgstr "Ձևափոխիր"
@@ -7226,7 +7226,7 @@ msgstr "Նեղ տերմին"
 msgid "Never"
 msgstr "Երբեք"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #, c-format
 msgid "Never expires "
 msgstr "Անժամկետ "
@@ -7383,12 +7383,12 @@ msgstr "Դուրս տրումներ չկան"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:224
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:234
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:514
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:523
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:318
@@ -7626,7 +7626,7 @@ msgstr "Պահման մեջ չէ"
 msgid "Not what you expected? Check for "
 msgstr "Քո սպասվածը չէ՞։ Ստուգիր "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:209
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:211
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:181
 #, c-format
@@ -7716,7 +7716,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:146
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:816
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:818
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1206
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:38
 #, c-format
@@ -7750,13 +7750,13 @@ msgid "Nothing"
 msgstr "Ոչինչ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr "Ոչինչ չի ընտրված։ Թարմացվող յուրաքանչյուրի նյութի համար ընտրիր վանդակը"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid "Notice:"
 msgstr "Նշում։"
@@ -7944,7 +7944,7 @@ msgstr "OutputIntermediateFormat "
 msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
 #, c-format
 msgid "OverDrive Account"
 msgstr "OverDrive հաշիվ"
@@ -7969,12 +7969,12 @@ msgid "Overall queue priority: %s"
 msgstr "Հարցման առաջնայնություն։ %s"
 
 #. %1$s:  overdues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:152
 #, c-format
 msgid "Overdue (%s)"
 msgstr "Ժամկետանցներ (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
 #, c-format
 msgid "Overdues "
 msgstr "Ժամկետանցներ "
@@ -7985,7 +7985,7 @@ msgstr "Ժամկետանցներ "
 msgid "Owner only"
 msgstr "Միայն տնօրինողը"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:814
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:816
 #, c-format
 msgid "Pages"
 msgstr "Էջեր"
@@ -8012,7 +8012,7 @@ msgstr "էջեր։"
 msgid "Parameters"
 msgstr "Պարամետրեր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:168
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:835
@@ -8117,7 +8117,7 @@ msgstr "Վճարման մեթոդ"
 msgid "Pending hold"
 msgstr "Սպասող պահում"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
 #, c-format
 msgid "Phone"
 msgstr "Հեռախոս"
@@ -8135,18 +8135,18 @@ msgstr "Հեռախոս։"
 msgid "Physical details:"
 msgstr "Ֆիզիկական մանրամասներ։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:612
 #, c-format
 msgid "Pick up location"
 msgstr "Վերցնելու վայր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #, c-format
 msgid "Pick up location:"
 msgstr "Վերցնելու վայր։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:818
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:820
 #, c-format
 msgid "Pickup library"
 msgstr "Վերցնելու գրադարան"
@@ -8196,9 +8196,9 @@ msgstr "Դնել պահում"
 msgid "Place request"
 msgstr "Տեղադրի պատվեր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:808
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:810
 #, c-format
 msgid "Placed on"
 msgstr "Տեղաբաշխված է"
@@ -8289,7 +8289,7 @@ msgstr "Խնդրում եմ մանրամասների համար կապվիր գ�
 msgid "Please contact a librarian to verify your payment."
 msgstr "Խնդրում եմ կապվիր գրադարանավարի հետ քո վճարումը ստուգելու համար։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:153
 #, c-format
 msgid ""
 "Please contact a library staff member if you are unsure of your mobile "
@@ -8326,7 +8326,7 @@ msgstr "Մի օգտագործիր այս էլ. փոստը գրքերի պատվ�
 msgid "Please enter additional information about the requested item:"
 msgstr "Պատվիրված նյութի համար մուտք արա լրացուցիչ տեղեկատվություն։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:136
 #, c-format
 msgid "Please enter numbers only. "
 msgstr "Մուտք արա միայն համարները "
@@ -8563,12 +8563,12 @@ msgstr "Տպել"
 msgid "Print list"
 msgstr "Տպիր ցուցակը"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "Priority"
 msgstr "Առաջնայնություն"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:678
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
 #, c-format
 msgid "Priority:"
 msgstr "Առաջնայնություն։"
@@ -8792,12 +8792,12 @@ msgstr "Գրառման URL"
 msgid "Record not found"
 msgstr "Գրառումը չի գտնվել"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:807
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:809
 #, c-format
 msgid "Record title"
 msgstr "Գրառման վերնագիր"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:173
 #, c-format
 msgid "RecordedBooks Account"
 msgstr "RecordedBooks հաշիվ"
@@ -8856,12 +8856,12 @@ msgstr "Կանոնավոր տպում"
 msgid "Related Term"
 msgstr "Կապված տերմին"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:434
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:436
 #, c-format
 msgid "Relative"
 msgstr "Կապ ունեցող"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:151
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "Տացքեր բարեկամներին"
@@ -8915,18 +8915,18 @@ msgstr "Հեռացրու ընտրված փնտրումները"
 msgid "Remove share"
 msgstr "Հեռացրու համատեղումը"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:567
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:231
 #, c-format
 msgid "Renew"
 msgstr "Թարմացրու"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Renew all"
 msgstr "Թարմացրու բոլորը"
 
@@ -8939,8 +8939,8 @@ msgid "Renew item"
 msgstr "Թարմացրու նյութը"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Renew selected"
 msgstr "Թարմացրու ընտրվածը"
 
@@ -8951,7 +8951,7 @@ msgstr "Թարմացրու ընտրվածը"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:294
 #, c-format
 msgid "Renewed!"
 msgstr "Թարմացված"
@@ -9116,17 +9116,17 @@ msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr ""
 "Որոնման արդյունքներ %sսրա համար '%s'%s%s&nbsp;սահմանափակումով:&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:725
 #, c-format
 msgid "Resume"
 msgstr "Վերսկսել"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:794
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Կատարի բոլոր կասեցված պահումները"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:736
 #, c-format
 msgid "Resume your hold on "
 msgstr "Վերսկսիր քո պահումը "
@@ -9236,17 +9236,17 @@ msgstr "Գրախոսություններ տրամադրված Syndetics-ից"
 msgid "Routing lists"
 msgstr "Շրջաբերական ցուցակներ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:40
 #, c-format
 msgid "SMS"
 msgstr "SMS"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
 #, c-format
 msgid "SMS number:"
 msgstr "SMS համար:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:142
 #, c-format
 msgid "SMS provider:"
 msgstr "SMS մատակարար:"
@@ -9473,8 +9473,8 @@ msgstr "Բաժին։"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:290
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:301
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:239
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:519
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:103
@@ -9801,7 +9801,7 @@ msgstr "Նման նյութեր"
 msgid "Simple DC-RDF"
 msgstr "Պարզ DC-RDF"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
@@ -9822,7 +9822,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Something went wrong. The note has not been saved"
 msgstr "Ինչ որ բան գնացել է սխալ։ Նշումը չի հիշվել։"
 
@@ -10022,8 +10022,8 @@ msgstr "Վիճակագրություն"
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:121
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:817
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:819
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1204
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:184
@@ -10032,7 +10032,7 @@ msgid "Status"
 msgstr "Վիճակ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:683
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:685
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:235
 #, c-format
 msgid "Status:"
@@ -10130,8 +10130,8 @@ msgstr "Հաստատիր և փակիր այս պատուհանը"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:159
 msgid "Submit changes"
 msgstr "Հաստատիր փոփոխությունները"
 
@@ -10142,8 +10142,8 @@ msgstr "Հաստատիր ձևափոխումները"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 #, c-format
 msgid "Submit note"
 msgstr "Հաստատիր նշումը"
@@ -10289,26 +10289,26 @@ msgstr "Ազգանուն։"
 msgid "Surveys"
 msgstr "Հարցախույզներ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:727
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:745
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:748
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:756
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:750
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:758
 #, c-format
 msgid "Suspend"
 msgstr "Կասեցնել"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:779
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:781
 #, c-format
 msgid "Suspend all holds"
 msgstr "Կասեցրու բոլոր պահումները"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:743
 #, c-format
 msgid "Suspend until:"
 msgstr "Կասեցրու մինչև։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:736
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:738
 #, c-format
 msgid "Suspend your hold on "
 msgstr "Կասեցրու քո պահումը "
@@ -10950,11 +10950,11 @@ msgstr "Մինչ սպասում ես տպելու հաստատմանը ժամա�
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:430
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:602
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:809
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:811
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
@@ -11019,7 +11019,7 @@ msgstr "Քո գրառման մեջ փոփոխություններ կատարել
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:196
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։"
@@ -11197,7 +11197,7 @@ msgstr "Միավորված վերնագիր: %s "
 msgid "Uniform titles:"
 msgstr "Համընդհանուր վերնագրեր։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:144
 #, c-format
 msgid "Unknown"
 msgstr "Չճանաչված"
@@ -11217,7 +11217,7 @@ msgstr "Թարմացնել"
 msgid "Updates to your record"
 msgstr "Քո գրառման թարմացումներ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:198
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Օգտագործիր ընտրացանկի վերին տողը Կոհայի այլ մասեր տեղափոխվելու համար։"
@@ -11316,8 +11316,8 @@ msgid "View interlibrary loan request"
 msgstr "Դիտիր միջգրադարանային բաժնույթի պահանջը"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:224
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
 msgid "View on Amazon.com"
 msgstr "Դիտիր Amazon.com-ից"
 
@@ -11337,7 +11337,7 @@ msgstr "Դիտիր փնտրման քո պատմությունը"
 msgid "Vol info"
 msgstr "Հատորի տվյալ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:811
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:813
 #, c-format
 msgid "Volume"
 msgstr "Հատոր"
@@ -11516,7 +11516,7 @@ msgstr "Դու մուտք ես գործել որպես %s."
 msgid "You are logging from a different IP address. Please log in again."
 msgstr "Դու մուտք ես գործում մեկ այլ IP հասցեից։ Մուտք գործիր նորից։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:164
 #, c-format
 msgid "You are not allowed to call this page directly"
 msgstr "Դու չունես իրավասություն ուղղակի կանչելու այս էջը։"
@@ -11546,7 +11546,7 @@ msgstr ""
 "ցուցակների։ Եթե ցանկանում ես կատարել փոփոխություններ, կապվիր գրադարանի հետ։"
 
 #. I
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:43
 msgid ""
 "You can ask for a digest to reduce the number of messages. Messages will be "
 "saved and sent as a single message."
@@ -11620,8 +11620,8 @@ msgstr "Դու չես կարող համատեղել հանրային ցուցա�
 msgid "You currently have nothing checked out."
 msgstr "Այս պահին դու ոչինչ չունես դուրս տրված։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:389
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:391
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Այս պահին դու ունես տուգանքներ և ծախսեր որոնք կազմում են."
@@ -11691,7 +11691,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr "Դու հետևել ես ժամկետանց հղման, այսինքն որոնման շարժիչից կամ էջանշանից։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:417
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:419
 #, c-format
 msgid "You have a credit of:"
 msgstr "Դու ունես կանխավճար։"
@@ -11701,7 +11701,7 @@ msgstr "Դու ունես կանխավճար։"
 msgid "You have already requested this title."
 msgstr "Դու արդեն իսկ պահանջել ես այս վերնագիրը։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:898
 #, c-format
 msgid "You have no article requests currently."
 msgstr "Դու չունես հոդվածների պատվերներ։"
@@ -11719,7 +11719,7 @@ msgid ""
 msgstr ""
 "Դու չես լրացրել բոլոր պահանջվող դաշտերը։ Լրացրու պակասողները և կրկին գրանցի"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:370
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Դու ոչինչ չունես դուրս տրված"
@@ -11783,7 +11783,7 @@ msgid ""
 "available."
 msgstr "Դու օգտագործել ես արտաքին հղում արդեն անհասանելի քարտարանի նյութին։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
 #, c-format
 msgid "You may register here."
 msgstr "Դու կարող ես գրանցվել այստեղ։"
@@ -12062,17 +12062,17 @@ msgid "Your messaging settings"
 msgstr "Քո հաղորդագրության կարգաբերումները"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Your note about %s could not be saved."
 msgstr "Քո նշումը սրա մասին %s չի կարող հիշվել։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Քո նշումը սրա մասին %s հիշված է, և ուղարկված է գրադարանին։"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:927
 msgid "Your note about %s was removed."
 msgstr "Քո նշումը սրա մասին %s հեռացված է։"
 
@@ -12764,7 +12764,7 @@ msgstr "show_loans"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:704
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:706
 #, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -12907,7 +12907,7 @@ msgstr "ուղարկել մեկնաբանություն"
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
 #, c-format
 msgid "until "
 msgstr "մինչ "
@@ -13007,7 +13007,7 @@ msgstr "width=device-width, initial-scale=1"
 msgid "will be sent shortly to %s."
 msgstr "կուղարկվի %s։"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:136
 #, c-format
 msgid "would be entered as "
 msgstr "մւոտք կարվի որպես "
@@ -13106,7 +13106,7 @@ msgstr "քո ցուցիչները"
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:732
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:142
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:269
 #, c-format
