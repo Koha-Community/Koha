@@ -70,7 +70,7 @@ die $usage if $help;
 
 cronlogaction();
 
-if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+if ( C4::Context->config("enable_plugins") ) {
     my @plugins = Koha::Plugins->new->GetPlugins({
         method => 'before_send_messages',
     });
