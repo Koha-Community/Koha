@@ -83,7 +83,7 @@ sub UpdateStats {
     return () if ! defined $params;
 # change these arrays if new types of transaction or new parameters are allowed
     my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber ccode location);
-    my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout);
+    my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout recall);
     my @allowed_accounts_types = qw (writeoff payment);
     my @circulation_mandatory_keys = qw (type branch borrowernumber itemnumber ccode itemtype);
     my @accounts_mandatory_keys = qw (type branch borrowernumber amount);
