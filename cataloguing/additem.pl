@@ -687,7 +687,7 @@ if ($op eq "additem") {
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
         $error = $item->safe_delete({ skip_modzebra_update => 1 });
-        next if $error eq '1'; # Means ok
+        next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
         push @errors,$error;
     }
     C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
