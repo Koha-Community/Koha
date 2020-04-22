@@ -30,6 +30,7 @@ use base qw(Koha::Object);
 
 use Koha::Items;
 use Koha::Biblioitems;
+use Koha::Biblio::Metadata;
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
 use Koha::IssuingRules;
@@ -59,6 +60,21 @@ sub store {
     $self->datecreated( dt_from_string ) unless $self->datecreated;
 
     return $self->SUPER::store;
+}
+
+=head3 metadata
+
+my $metadata = $biblio->metadata();
+
+Returns a Koha::Biblio::Metadata object
+
+=cut
+
+sub metadata {
+    my ( $self ) = @_;
+
+    my $metadata = $self->_result->metadata;
+    return Koha::Biblio::Metadata->_new_from_dbic($metadata);
 }
 
 =head3 subtitles

@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Exceptions::Metadata;
 
 use base qw(Koha::Object);
 
@@ -32,6 +33,58 @@ Koha::Metadata - Koha Metadata Object class
 =head2 Class Methods
 
 =cut
+
+=head3 record
+
+my $record = $metadata->record;
+
+Returns an object representing the metadata record. The expected record type
+corresponds to this table:
+
+    -------------------------------
+    | format     | object type    |
+    -------------------------------
+    | marcxml    | MARC::Record   |
+    -------------------------------
+
+=head4 Error handling
+
+=over
+
+=item If an unsupported format is found, it throws a I<Koha::Exceptions::Metadata> exception.
+
+=item If it fails to create the record object, it throws a I<Koha::Exceptions::Metadata::Invalid> exception.
+
+=back
+
+=cut
+
+sub record {
+
+    my ($self) = @_;
+
+    my $record;
+
+    if ( $self->format eq 'marcxml' ) {
+        $record = eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->marcflavour ); };
+        my $marcxml_error = $@;
+        chomp $marcxml_error;
+        unless ($record) {
+            Koha::Exceptions::Metadata::Invalid->throw(
+                id     => $self->id,
+                format => $self->format,
+                marcflavour => $self->marcflavour,
+                decoding_error => $marcxml_error,
+            );
+        }
+    }
+    else {
+        Koha::Exceptions::Metadata->throw(
+            'Koha::Biblio::Metadata->record called on unhandled format: ' . $self->format );
+    }
+
+    return $record;
+}
 
 =head3 type
 
