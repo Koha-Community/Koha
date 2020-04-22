@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Context;
 use C4::Overdues qw( CalcFine );
@@ -192,6 +192,60 @@ subtest 'Test cap_fine_to_replacement_pricew with overduefinescap' => sub {
     Koha::CirculationRules->set_rule({ rule_name => 'overduefinescap', rule_value => 6, branchcode => undef, categorycode => undef, itemtype => undef });
     ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 5, 'Get the lesser of overduefinescap and replacement price where overduefinescap > replacement price' );
+
+    teardown();
+};
+
+subtest 'Recall overdue fines' => sub {
+    plan tests => 2;
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                fine                          => '1.00',
+                lengthunit                    => 'days',
+                finedays                      => 0,
+                firstremind                   => 0,
+                chargeperiod                  => 1,
+                recall_overdue_fine           => '5.00',
+            },
+        }
+    );
+
+    my $start_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 1,
+    );
+
+    my $end_dt = DateTime->new(
+        year       => 2000,
+        month      => 1,
+        day        => 6,
+    );
+
+    my $recall = Koha::Recall->new({
+        borrowernumber => $patron->{borrowernumber},
+        recalldate => dt_from_string,
+        biblionumber => $item->{biblionumber},
+        branchcode => $branch->{branchcode},
+        status => 'R',
+        itemnumber => $item->{itemnumber},
+        expirationdate => undef,
+        item_level_recall => 1
+    })->store;
+    $recall->set_overdue;
+
+    my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    is( int($amount), 25, 'Use recall fine amount specified in circulation rules' );
+
+    $recall->set_finished;
+    ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    is( int($amount), 5, 'With no recall, use normal fine amount' );
+
 
     teardown();
 };

@@ -33,6 +33,7 @@ use Koha::Logger;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Libraries;
+use Koha::Recalls;
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -236,6 +237,7 @@ sub CalcFine {
                 'fine',
                 'overduefinescap',
                 'cap_fine_to_replacement_price',
+                'recall_overdue_fine',
             ]
         }
     );
@@ -255,7 +257,27 @@ sub CalcFine {
         # If chargeperiod_charge_at = 1, we charge a fine at the start of each charge period
         # if chargeperiod_charge_at = 0, we charge at the end of each charge period
         $charge_periods = defined $issuing_rule->{chargeperiod_charge_at} && $issuing_rule->{chargeperiod_charge_at} == 1 ? ceil($charge_periods) : floor($charge_periods);
-        $amount = $charge_periods * $issuing_rule->{fine};
+
+        # check if item has been recalled. recall should have been marked Overdue by cronjob, so only look at overdue recalls
+        # only charge using recall_overdue_fine if there is an item-level recall for this particular item, OR a biblio-level recall
+        my @recalls = Koha::Recalls->search({ biblionumber => $item->{biblionumber}, old => undef, status => 'O' });
+        my $bib_level_recall = 0;
+        $bib_level_recall = 1 if scalar @recalls > 0;
+        foreach my $recall ( @recalls ) {
+            if ( $recall->item_level_recall and $recall->itemnumber == $item->{itemnumber} and $issuing_rule->{recall_overdue_fine} ) {
+                $bib_level_recall = 0;
+                $amount = $charge_periods * $issuing_rule->{recall_overdue_fine};
+                last;
+            }
+        }
+        if ( $bib_level_recall and $issuing_rule->{recall_overdue_fine} ) {
+            # biblio-level recall
+            $amount = $charge_periods * $issuing_rule->{recall_overdue_fine};
+        }
+        if ( scalar @recalls == 0 ) {
+            # no recall, use normal fine amount
+            $amount = $charge_periods * $issuing_rule->{fine};
+        }
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
     $amount = $issuing_rule->{overduefinescap} if $issuing_rule->{overduefinescap} && $amount > $issuing_rule->{overduefinescap};
