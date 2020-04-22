@@ -6,7 +6,7 @@ package C4::SIP::ILS;
 
 use warnings;
 use strict;
-use C4::SIP::Sip qw(syslog);
+use C4::SIP::Sip qw(siplog);
 use Data::Dumper;
 
 use C4::SIP::ILS::Item;
@@ -47,7 +47,7 @@ sub new {
     my $type = ref($class) || $class;
     my $self = {};
 	$debug and warn "new ILS: INSTITUTION: " . Dumper($institution);
-    syslog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
+    siplog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
     $self->{institution} = $institution;
     return bless $self, $type;
 }
@@ -82,7 +82,7 @@ sub supports {
 sub check_inst_id {
     my ($self, $id, $whence) = @_;
     if ($id ne $self->{institution}->{id}) {
-        syslog("LOG_WARNING", "%s: received institution '%s', expected '%s'", $whence, $id, $self->{institution}->{id});
+        siplog("LOG_WARNING", "%s: received institution '%s', expected '%s'", $whence, $id, $self->{institution}->{id});
         # Just an FYI check, we don't expect the user to change location from that in SIPconfig.xml
     }
 }
@@ -167,13 +167,13 @@ sub checkout {
             push( @{ $patron->{items} }, { barcode => $item_id } );
             $circ->desensitize( !$item->magnetic_media );
 
-            syslog(
+            siplog(
                 "LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
                 $patron_id, join( ', ', map{ $_->{barcode} } @{ $patron->{items} } )
             );
         }
         else {
-            syslog( "LOG_ERR", "ILS::Checkout Issue failed" );
+            siplog( "LOG_ERR", "ILS::Checkout Issue failed" );
         }
     }
 
@@ -219,20 +219,20 @@ sub checkin {
 
     if ( !$circ->ok && $circ->alert_type && $circ->alert_type == 98 ) { # data corruption
         $circ->screen_msg("Checkin failed: data problem");
-        syslog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
+        siplog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
     } elsif ( $data->{messages}->{withdrawn} && !$circ->ok && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
             $circ->screen_msg("Item withdrawn, return not allowed");
-            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
+            siplog ("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
     } elsif ( $data->{messages}->{WasLost} && !$circ->ok && C4::Context->preference("BlockReturnOfLostItems") ) {
             $circ->screen_msg("Item lost, return not allowed");
-            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item lost");
+            siplog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item lost");
     } elsif ( !$item->{patron} ) {
         if ( $checked_in_ok ) { # Mark checkin ok although book not checked out
             $circ->ok( 1 );
-            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - using checked_in_ok");
+            siplog("LOG_DEBUG", "C4::SIP::ILS::Checkin - using checked_in_ok");
         } else {
             $circ->screen_msg("Item not checked out");
-            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item not checked out");
+            siplog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item not checked out");
         }
     } elsif ( $circ->ok ) {
         $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{patron} ) );
@@ -244,7 +244,7 @@ sub checkin {
         # Bug 10748 with pref BlockReturnOfLostItems adds another case to come
         # here: returning a lost item when the pref is set.
         $circ->screen_msg("Checkin failed");
-        syslog( "LOG_WARNING", "Checkin failed: probably for Wrongbranch or withdrawn" );
+        siplog( "LOG_WARNING", "Checkin failed: probably for Wrongbranch or withdrawn" );
     }
 
     return $circ;
@@ -461,10 +461,10 @@ sub renew {
 		my $count = scalar @{$patron->{items}};
 		foreach my $i (@{$patron->{items}}) {
             unless (defined $i->{barcode}) {    # FIXME: using data instead of objects may violate the abstraction layer
-                syslog("LOG_ERR", "No barcode for item %s of %s: $item_id", $j+1, $count);
+                siplog("LOG_ERR", "No barcode for item %s of %s: $item_id", $j+1, $count);
                 next;
             }
-            syslog("LOG_DEBUG", "checking item %s of %s: $item_id vs. %s", ++$j, $count, $i->{barcode});
+            siplog("LOG_DEBUG", "checking item %s of %s: $item_id vs. %s", ++$j, $count, $i->{barcode});
             if ($i->{barcode} eq $item_id) {
 				# We have it checked out
 				$item = C4::SIP::ILS::Item->new( $item_id );
@@ -498,9 +498,9 @@ sub renew_all {
 
     $trans->patron($patron = C4::SIP::ILS::Patron->new( $patron_id ));
     if (defined $patron) {
-        syslog("LOG_DEBUG", "ILS::renew_all: patron '%s': renew_ok: %s", $patron->name, $patron->renew_ok);
+        siplog("LOG_DEBUG", "ILS::renew_all: patron '%s': renew_ok: %s", $patron->name, $patron->renew_ok);
     } else {
-        syslog("LOG_DEBUG", "ILS::renew_all: Invalid patron id: '%s'", $patron_id);
+        siplog("LOG_DEBUG", "ILS::renew_all: Invalid patron id: '%s'", $patron_id);
     }
 
     if (!defined($patron)) {

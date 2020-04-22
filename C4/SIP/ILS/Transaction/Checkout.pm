@@ -8,7 +8,7 @@ use warnings;
 use strict;
 
 use POSIX qw(strftime);
-use C4::SIP::Sip qw(syslog);
+use C4::SIP::Sip qw(siplog);
 use Data::Dumper;
 use CGI qw ( -utf8 );
 
@@ -47,7 +47,7 @@ sub new {
 
 sub do_checkout {
 	my $self = shift;
-	syslog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
+	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
 	my $shelf          = $self->{item}->hold_shelf;
 	my $barcode        = $self->{item}->id;
 	my $patron_barcode = $self->{patron}->id;
@@ -103,7 +103,7 @@ sub do_checkout {
                 # We've been returned a case other than those above
                 $self->screen_msg("Item cannot be issued: $confirmation");
                 $noerror = 0;
-                syslog('LOG_DEBUG', "Blocking checkout Reason:$confirmation");
+                siplog('LOG_DEBUG', "Blocking checkout Reason:$confirmation");
                 last;
             }
         }

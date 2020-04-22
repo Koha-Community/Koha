@@ -266,14 +266,14 @@ sub new {
         # it's using the 2.00 login process, so it must support 2.00.
         $protocol_version = 2;
     }
-    syslog( "LOG_DEBUG", "Sip::MsgType::new('%s', '%s...', '%s'): seq.no '%s', protocol %s", $class, substr( $msg, 0, 10 ), $msgtag, $seqno, $protocol_version );
+    siplog( "LOG_DEBUG", "Sip::MsgType::new('%s', '%s...', '%s'): seq.no '%s', protocol %s", $class, substr( $msg, 0, 10 ), $msgtag, $seqno, $protocol_version );
 
     # warn "SIP PROTOCOL: $protocol_version";
     if ( !exists( $handlers{$msgtag} ) ) {
-        syslog( "LOG_WARNING", "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'", $msgtag, $msg );
+        siplog( "LOG_WARNING", "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'", $msgtag, $msg );
         return;
     } elsif ( !exists( $handlers{$msgtag}->{protocol}->{$protocol_version} ) ) {
-        syslog( "LOG_WARNING", "new Sip::MsgType: Skipping message '%s' unsupported by protocol rev. '%d'", $msgtag, $protocol_version );
+        siplog( "LOG_WARNING", "new Sip::MsgType: Skipping message '%s' unsupported by protocol rev. '%d'", $msgtag, $protocol_version );
         return;
     }
 
@@ -305,7 +305,7 @@ sub _initialize {
         $self->{fields}->{$field} = undef;
     }
 
-    syslog( "LOG_DEBUG", "Sip::MsgType::_initialize('%s', '%s', '%s', '%s', ...)", $self->{name}, $msg, $proto->{template}, $proto->{template_len} );
+    siplog( "LOG_DEBUG", "Sip::MsgType::_initialize('%s', '%s', '%s', '%s', ...)", $self->{name}, $msg, $proto->{template}, $proto->{template_len} );
 
     $self->{fixed_fields} = [ unpack( $proto->{template}, $msg ) ];    # see http://perldoc.perl.org/5.8.8/functions/unpack.html
 
@@ -315,9 +315,9 @@ sub _initialize {
         $fn = substr( $field, 0, 2 );
 
         if ( !exists( $self->{fields}->{$fn} ) ) {
-            syslog( "LOG_WARNING", "Unsupported field '%s' in %s message '%s'", $fn, $self->{name}, $msg );
+            siplog( "LOG_WARNING", "Unsupported field '%s' in %s message '%s'", $fn, $self->{name}, $msg );
         } elsif ( defined( $self->{fields}->{$fn} ) ) {
-            syslog( "LOG_WARNING", "Duplicate field '%s' (previous value '%s') in %s message '%s'", $fn, $self->{fields}->{$fn}, $self->{name}, $msg );
+            siplog( "LOG_WARNING", "Duplicate field '%s' (previous value '%s') in %s message '%s'", $fn, $self->{fields}->{$fn}, $self->{name}, $msg );
         } else {
             $self->{fields}->{$fn} = substr( $field, 2 );
         }
@@ -366,7 +366,7 @@ sub handle {
         $error_detection = 1;
 
         if ( !verify_cksum($msg) ) {
-            syslog( "LOG_WARNING", "Checksum failed on message '%s'", $msg );
+            siplog( "LOG_WARNING", "Checksum failed on message '%s'", $msg );
 
             # REQUEST_SC_RESEND with error detection
             $last_response = REQUEST_SC_RESEND_CKSUM;
@@ -382,7 +382,7 @@ sub handle {
 
         # We received a non-ED message when ED is supposed to be active.
         # Warn about this problem, then process the message anyway.
-        syslog( "LOG_WARNING", "Received message without error detection: '%s'", $msg );
+        siplog( "LOG_WARNING", "Received message without error detection: '%s'", $msg );
         $error_detection = 0;
         $self = C4::SIP::Sip::MsgType->new( $msg, 0 );
     } else {
@@ -395,7 +395,7 @@ sub handle {
         return substr( $msg, 0, 2 );
     }
     unless ( $self->{handler} ) {
-        syslog( "LOG_WARNING", "No handler defined for '%s'", $msg );
+        siplog( "LOG_WARNING", "No handler defined for '%s'", $msg );
         $last_response = REQUEST_SC_RESEND;
         print("$last_response\r");
         return REQUEST_ACS_RESEND;
@@ -526,7 +526,7 @@ sub handle_checkout {
 
         # Off-line transactions need to be recorded, but there's
         # not a lot we can do about it
-        syslog( "LOG_WARNING", "received no-block checkout from terminal '%s'", $account->{id} );
+        siplog( "LOG_WARNING", "received no-block checkout from terminal '%s'", $account->{id} );
 
         $status = $ils->checkout_no_block( $patron_id, $item_id, $sc_renewal_policy, $trans_date, $nb_due_date );
     } else {
@@ -653,7 +653,7 @@ sub handle_checkin {
     if ( $no_block eq 'Y' ) {
 
         # Off-line transactions, ick.
-        syslog( "LOG_WARNING", "received no-block checkin from terminal '%s'", $account->{id} );
+        siplog( "LOG_WARNING", "received no-block checkin from terminal '%s'", $account->{id} );
         $status = $ils->checkin_no_block( $item_id, $trans_date, $return_date, $item_props, $cancel );
     } else {
         $status = $ils->checkin( $item_id, $trans_date, $return_date, $my_branch, $item_props, $cancel, $account->{checked_in_ok}, $account->{cv_triggers_alert} );
@@ -772,19 +772,19 @@ sub handle_sc_status {
     } elsif ( $sc_protocol_version =~ /^2\./ ) {
         $new_proto = 2;
     } else {
-        syslog( "LOG_WARNING", "Unrecognized protocol revision '%s', falling back to '1'", $sc_protocol_version );
+        siplog( "LOG_WARNING", "Unrecognized protocol revision '%s', falling back to '1'", $sc_protocol_version );
         $new_proto = 1;
     }
 
     if ( $new_proto != $protocol_version ) {
-        syslog( "LOG_INFO", "Setting protocol level to $new_proto" );
+        siplog( "LOG_INFO", "Setting protocol level to $new_proto" );
         $protocol_version = $new_proto;
     }
 
     if ( $status == SC_STATUS_PAPER ) {
-        syslog( "LOG_WARNING", "Self-Check unit '%s@%s' out of paper", $self->{account}->{id}, $self->{account}->{institution} );
+        siplog( "LOG_WARNING", "Self-Check unit '%s@%s' out of paper", $self->{account}->{id}, $self->{account}->{institution} );
     } elsif ( $status == SC_STATUS_SHUTDOWN ) {
-        syslog( "LOG_WARNING", "Self-Check unit '%s@%s' shutting down", $self->{account}->{id}, $self->{account}->{institution} );
+        siplog( "LOG_WARNING", "Self-Check unit '%s@%s' shutting down", $self->{account}->{id}, $self->{account}->{institution} );
     }
 
     $self->{account}->{print_width} = $print_width;
@@ -824,10 +824,10 @@ sub login_core {
     my $pwd    = shift;
     my $status = 1;                 # Assume it all works
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
-        syslog( "LOG_WARNING", "MsgType::login_core: Unknown login '$uid'" );
+        siplog( "LOG_WARNING", "MsgType::login_core: Unknown login '$uid'" );
         $status = 0;
     } elsif ( $server->{config}->{accounts}->{$uid}->{password} ne $pwd ) {
-        syslog( "LOG_WARNING", "MsgType::login_core: Invalid password for login '$uid'" );
+        siplog( "LOG_WARNING", "MsgType::login_core: Invalid password for login '$uid'" );
         $status = 0;
     } else {
 
@@ -841,16 +841,16 @@ sub login_core {
 
         my $auth_status = api_auth( $uid, $pwd, $inst );
         if ( !$auth_status or $auth_status !~ /^ok$/i ) {
-            syslog( "LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s", $uid, $inst, ( $auth_status || 'unknown' ) );
+            siplog( "LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s", $uid, $inst, ( $auth_status || 'unknown' ) );
             $status = 0;
         } else {
-            syslog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
+            siplog( "LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst );
 
             #
             # initialize connection to ILS
             #
             my $module = $server->{config}->{institutions}->{$inst}->{implementation};
-            syslog( "LOG_DEBUG", 'login_core: ' . Dumper($module) );
+            siplog( "LOG_DEBUG", 'login_core: ' . Dumper($module) );
 
             # Suspect this is always ILS but so we don't break any eccentic install (for now)
             if ( $module eq 'ILS' ) {
@@ -858,14 +858,14 @@ sub login_core {
             }
             $module->use;
             if ($@) {
-                syslog( "LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed", $server->{service}, $module, $inst );
+                siplog( "LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed", $server->{service}, $module, $inst );
                 die("Failed to load ILS implementation '$module' for $inst");
             }
 
             # like   ILS->new(), I think.
             $server->{ils} = $module->new( $server->{institution}, $server->{account} );
             if ( !$server->{ils} ) {
-                syslog( "LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst );
+                siplog( "LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst );
                 die("Unable to connect to ILS '$inst'");
             }
         }
@@ -888,7 +888,7 @@ sub handle_login {
     $pwd = $fields->{ (FID_LOGIN_PWD) };    # Terminal PWD, not patron PWD.
 
     if ( $uid_algorithm || $pwd_algorithm ) {
-        syslog( "LOG_ERR", "LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm" );
+        siplog( "LOG_ERR", "LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm" );
         $status = 0;
     } else {
         $status = login_core( $server, $uid, $pwd );
@@ -927,13 +927,13 @@ sub summary_info {
         return '';    # No detailed information required
     }
 
-    syslog( "LOG_DEBUG", "Summary_info: index == '%d', field '%s'", $summary_type, $summary_map[$summary_type]->{fid} );
+    siplog( "LOG_DEBUG", "Summary_info: index == '%d', field '%s'", $summary_type, $summary_map[$summary_type]->{fid} );
 
     my $func     = $summary_map[$summary_type]->{func};
     my $fid      = $summary_map[$summary_type]->{fid};
     my $itemlist = &$func( $patron, $start, $end, $server );
 
-    syslog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map{ $_->{barcode} } @{$itemlist} ) );
+    siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map{ $_->{barcode} } @{$itemlist} ) );
     foreach my $i ( @{$itemlist} ) {
         $resp .= add_field( $fid, $i->{barcode}, $server );
     }
@@ -1256,7 +1256,7 @@ sub handle_item_status_update {
     $item_props = $fields->{ (FID_ITEM_PROPS) };
 
     if ( !defined($item_id) ) {
-        syslog( "LOG_WARNING", "handle_item_status: received message without Item ID field" );
+        siplog( "LOG_WARNING", "handle_item_status: received message without Item ID field" );
     } else {
         $item = $ils->find_item($item_id);
     }
@@ -1301,7 +1301,7 @@ sub handle_patron_enable {
     $patron_id  = $fields->{ (FID_PATRON_ID) };
     $patron_pwd = $fields->{ (FID_PATRON_PWD) };
 
-    syslog( "LOG_DEBUG", "handle_patron_enable: patron_id: '%s', patron_pwd: '%s'", $patron_id, $patron_pwd );
+    siplog( "LOG_DEBUG", "handle_patron_enable: patron_id: '%s', patron_pwd: '%s'", $patron_id, $patron_pwd );
 
     $patron = $ils->find_patron($patron_id);
 
@@ -1371,7 +1371,7 @@ sub handle_hold {
     } elsif ( $hold_mode eq '*' ) {
         $status = $ils->alter_hold( $patron_id, $patron_pwd, $item_id, $title_id, $expiry_date, $pickup_locn, $hold_type, $fee_ack );
     } else {
-        syslog( "LOG_WARNING", "handle_hold: Unrecognized hold mode '%s' from terminal '%s'", $hold_mode, $server->{account}->{id} );
+        siplog( "LOG_WARNING", "handle_hold: Unrecognized hold mode '%s' from terminal '%s'", $hold_mode, $server->{account}->{id} );
         $status = $ils->Transaction::Hold;    # new?
         $status->screen_msg("System error. Please contact library staff.");
     }
@@ -1419,7 +1419,7 @@ sub handle_renew {
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_renew" );
 
     if ( $no_block eq 'Y' ) {
-        syslog( "LOG_WARNING", "handle_renew: received 'no block' renewal from terminal '%s'", $server->{account}->{id} );
+        siplog( "LOG_WARNING", "handle_renew: received 'no block' renewal from terminal '%s'", $server->{account}->{id} );
     }
 
     $patron_id  = $fields->{ (FID_PATRON_ID) };
@@ -1586,7 +1586,7 @@ sub send_acs_status {
     $retries            = sprintf( "%03d", $policy->{retries} );
 
     if ( length($retries) != 3 ) {
-        syslog( "LOG_ERR", "handle_acs_status: retries field wrong size: '%s'", $retries );
+        siplog( "LOG_ERR", "handle_acs_status: retries field wrong size: '%s'", $retries );
         $retries = '000';
     }
 
@@ -1599,7 +1599,7 @@ sub send_acs_status {
     } elsif ( $protocol_version == 2 ) {
         $msg .= '2.00';
     } else {
-        syslog( "LOG_ERR", 'Bad setting for $protocol_version, "%s" in send_acs_status', $protocol_version );
+        siplog( "LOG_ERR", 'Bad setting for $protocol_version, "%s" in send_acs_status', $protocol_version );
         $msg .= '1.00';
     }
 
@@ -1619,7 +1619,7 @@ sub send_acs_status {
             }
         }
         if ( length($supported_msgs) < 16 ) {
-            syslog( "LOG_ERR", 'send_acs_status: supported messages "%s" too short', $supported_msgs );
+            siplog( "LOG_ERR", 'send_acs_status: supported messages "%s" too short', $supported_msgs );
         }
         $msg .= add_field( FID_SUPPORTED_MSGS, $supported_msgs, $server );
     }
@@ -1629,7 +1629,7 @@ sub send_acs_status {
     if (   defined( $account->{print_width} )
         && defined($print_line)
         && $account->{print_width} < length($print_line) ) {
-        syslog( "LOG_WARNING", "send_acs_status: print line '%s' too long.  Truncating", $print_line );
+        siplog( "LOG_WARNING", "send_acs_status: print line '%s' too long.  Truncating", $print_line );
         $print_line = substr( $print_line, 0, $account->{print_width} );
     }
 
@@ -1649,7 +1649,7 @@ sub patron_status_string {
     my $patron = shift;
     my $patron_status;
 
-    syslog( "LOG_DEBUG", "patron_status_string: %s charge_ok: %s", $patron->id, $patron->charge_ok );
+    siplog( "LOG_DEBUG", "patron_status_string: %s charge_ok: %s", $patron->id, $patron->charge_ok );
     $patron_status = sprintf(
         '%s%s%s%s%s%s%s%s%s%s%s%s%s%s',
         denied( $patron->charge_ok ),

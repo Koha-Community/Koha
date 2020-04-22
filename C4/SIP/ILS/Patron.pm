@@ -12,7 +12,7 @@ use warnings;
 use Exporter;
 use Carp;
 
-use C4::SIP::Sip qw(syslog);
+use C4::SIP::Sip qw(siplog);
 use Data::Dumper;
 
 use C4::SIP::Sip qw(add_field maybe_add);
@@ -42,7 +42,7 @@ sub new {
       || Koha::Patrons->find( { userid => $patron_id } );
     $debug and warn "new Patron: " . Dumper($patron->unblessed) if $patron;
     unless ($patron) {
-        syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
+        siplog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
     }
     $kp = $patron->unblessed;
@@ -149,7 +149,7 @@ sub new {
 
     $self = \%ilspatron;
     $debug and warn Dumper($self);
-    syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
+    siplog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
     bless $self, $type;
     return $self;
 }
@@ -239,7 +239,7 @@ sub format {
             $tt->process( \$template, { patron => $patron }, \$output );
         };
         if ( $@ ){
-            syslog("LOG_DEBUG", "Error processing template: $template");
+            siplog("LOG_DEBUG", "Error processing template: $template");
             return "";
         }
         return $output;
@@ -414,7 +414,7 @@ sub enable {
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
         $self->{$field} = 1;
     }
-    syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
+    siplog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
        $self->{id}, $self->{charge_ok}, $self->{renew_ok},
        $self->{recall_ok}, $self->{hold_ok});
     $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record

@@ -22,13 +22,13 @@ use base qw(Exporter);
 our @EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
     denied sipbool boolspace write_msg
     $error_detection $protocol_version $field_delimiter
-    $last_response syslog);
+    $last_response siplog);
 
 our %EXPORT_TAGS = (
     all => [qw(y_or_n timestamp add_field maybe_add
         add_count denied sipbool boolspace write_msg
         $error_detection $protocol_version
-        $field_delimiter $last_response syslog)]);
+        $field_delimiter $last_response siplog)]);
 
 our $error_detection = 0;
 our $protocol_version = 1;
@@ -68,7 +68,7 @@ sub add_field {
     my ($i, $ent);
 
     if (!defined($value)) {
-	syslog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
+	siplog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
 	       $field_id);
 		$value = '';
     }
@@ -127,7 +127,7 @@ sub add_count {
 
     $count = sprintf("%04d", $count);
     if (length($count) != 4) {
-		syslog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
+		siplog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
 	       $label, $count);
 		$count = ' ' x 4;
     }
@@ -198,13 +198,13 @@ sub write_msg {
     } else {
         STDOUT->autoflush(1);
         print $msg, $terminator;
-        syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
+        siplog("LOG_INFO", "OUTPUT MSG: '$msg'");
     }
 
     $last_response = $msg;
 }
 
-sub syslog {
+sub siplog {
     my ( $level, $mask, @args ) = @_;
 
     my $method =

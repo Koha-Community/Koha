@@ -9,7 +9,7 @@ package C4::SIP::ILS::Item;
 use strict;
 use warnings;
 
-use C4::SIP::Sip qw(syslog);
+use C4::SIP::Sip qw(siplog);
 use Carp;
 use Template;
 
@@ -77,7 +77,7 @@ sub new {
     my $type = ref($class) || $class;
     my $item = Koha::Items->find( { barcode => barcodedecode( $item_id ) } );
     unless ( $item ) {
-        syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
+        siplog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
         warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
     }
@@ -107,7 +107,7 @@ sub new {
     $self->{author} = $biblio->author;
     bless $self, $type;
 
-    syslog( "LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
+    siplog( "LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
         $item_id, $self->{title} // '' );
 
     return $self;
@@ -181,7 +181,7 @@ sub hold_patron_name {
 
     my $holder = Koha::Patrons->find( $borrowernumber );
     unless ($holder) {
-        syslog("LOG_ERR", "While checking hold, failed to retrieve the patron with borrowernumber '$borrowernumber'");
+        siplog("LOG_ERR", "While checking hold, failed to retrieve the patron with borrowernumber '$borrowernumber'");
         return;
     }
     my $email = $holder->email || '';
