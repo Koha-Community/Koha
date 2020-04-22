@@ -94,3 +94,6 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 
 # run merge authorities
 20 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/merge_authorities.pl -b
+
+# PLUGIN JOBS
+10   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/plugins_nightly.pl

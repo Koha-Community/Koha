@@ -26,4 +26,5 @@ koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl 
 koha-foreach --chdir --enabled --noemail /usr/share/koha/bin/cronjobs/cleanup_database.pl --confirm --mail
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/holds/auto_unsuspend_holds.pl > /dev/null 2>&1
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/merge_authorities.pl -b
+koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/plugins_nightly.pl
 koha-run-backups --days 2 --output /var/spool/koha
