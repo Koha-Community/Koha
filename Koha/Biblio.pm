@@ -1162,6 +1162,114 @@ sub get_marc_host {
     }
 }
 
+=head3 recalls
+
+    my @recalls = $biblio->recalls;
+
+Return all active recalls attached to this biblio, sorted by oldest first
+
+=cut
+
+sub recalls {
+    my ( $self ) = @_;
+    my @recalls_rs = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } });
+    return @recalls_rs;
+}
+
+=head3 can_be_recalled
+
+    my @items_for_recall = $biblio->can_be_recalled({ patron => $patron_object });
+
+Does biblio-level checks and returns the items attached to this biblio that are available for recall
+
+=cut
+
+sub can_be_recalled {
+    my ( $self, $params ) = @_;
+
+    return 0 if !( C4::Context->preference('UseRecalls') );
+
+    my $patron = $params->{patron};
+
+    my $branchcode = C4::Context->userenv->{'branch'};
+    if ( C4::Context->preference('CircControl') eq 'PatronLibrary' and $patron ) {
+        $branchcode = $patron->branchcode;
+    }
+
+    my @all_items = Koha::Items->search({ biblionumber => $self->biblionumber });
+
+    # if there are no available items at all, no recall can be placed
+    return 0 if ( scalar @all_items == 0 );
+
+    my @itemtypes;
+    my @itemnumbers;
+    my @items;
+    foreach my $item ( @all_items ) {
+        if ( $item->can_be_recalled({ patron => $patron }) ) {
+            push( @itemtypes, $item->effective_itemtype );
+            push( @itemnumbers, $item->itemnumber );
+            push( @items, $item );
+        }
+    }
+
+    # if there are no recallable items, no recall can be placed
+    return 0 if ( scalar @items == 0 );
+
+    # Check the circulation rule for each relevant itemtype for this biblio
+    my ( @recalls_allowed, @recalls_per_record, @on_shelf_recalls );
+    foreach my $itemtype ( @itemtypes ) {
+        my $rule = Koha::CirculationRules->get_effective_rules({
+            branchcode => $branchcode,
+            categorycode => $patron ? $patron->categorycode : undef,
+            itemtype => $itemtype,
+            rules => [
+                'recalls_allowed',
+                'recalls_per_record',
+                'on_shelf_recalls',
+            ],
+        });
+        push( @recalls_allowed, $rule->{recalls_allowed} ) if $rule;
+        push( @recalls_per_record, $rule->{recalls_per_record} ) if $rule;
+        push( @on_shelf_recalls, $rule->{on_shelf_recalls} ) if $rule;
+    }
+    my $recalls_allowed = (sort {$b <=> $a} @recalls_allowed)[0]; # take highest
+    my $recalls_per_record = (sort {$b <=> $a} @recalls_per_record)[0]; # take highest
+    my %on_shelf_recalls_count = ();
+    foreach my $count ( @on_shelf_recalls ) {
+        $on_shelf_recalls_count{$count}++;
+    }
+    my $on_shelf_recalls = (sort {$on_shelf_recalls_count{$b} <=> $on_shelf_recalls_count{$a}} @on_shelf_recalls)[0]; # take most common
+
+    # check recalls allowed has been set and is not zero
+    return 0 if ( !defined($recalls_allowed) || $recalls_allowed == 0 );
+
+    if ( $patron ) {
+        # check borrower has not reached open recalls allowed limit
+        return 0 if ( $patron->recalls->count >= $recalls_allowed );
+
+        # check borrower has not reached open recalls allowed per record limit
+        return 0 if ( $patron->recalls({ biblionumber => $self->biblionumber })->count >= $recalls_per_record );
+
+        # check if any of the items under this biblio are already checked out by this borrower
+        return 0 if ( Koha::Checkouts->search({ itemnumber => [ @itemnumbers ], borrowernumber => $patron->borrowernumber })->count > 0 );
+    }
+
+    # check item availability
+    my $checked_out_count = 0;
+    foreach (@items) {
+        if ( Koha::Checkouts->search({ itemnumber => $_->itemnumber })->count > 0 ){ $checked_out_count++; }
+    }
+
+    # can't recall if on shelf recalls only allowed when all unavailable, but items are still available for checkout
+    return 0 if ( $on_shelf_recalls eq 'all' && $checked_out_count < scalar @items );
+
+    # can't recall if no items have been checked out
+    return 0 if ( $checked_out_count == 0 );
+
+    # can recall
+    return @items;
+}
+
 =head2 Internal methods
 
 =head3 type

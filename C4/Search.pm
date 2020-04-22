@@ -1785,6 +1785,7 @@ sub searchResults {
         my $item_in_transit_count = 0;
         my $item_onhold_count     = 0;
         my $notforloan_count      = 0;
+        my $item_recalled_count   = 0;
         my $items_count           = scalar(@fields);
         my $maxitems_pref = C4::Context->preference('maxItemsinSearchResults');
         my $maxitems = $maxitems_pref ? $maxitems_pref - 1 : 1;
@@ -1876,6 +1877,9 @@ sub searchResults {
                 # is item on the reserve shelf?
                 my $reservestatus = '';
 
+                # is item a waiting recall?
+                my $recallstatus = '';
+
                 unless ($item->{withdrawn}
                         || $item->{itemlost}
                         || $item->{damaged}
@@ -1897,6 +1901,7 @@ sub searchResults {
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
                     $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
+                    $recallstatus = 'Waiting' if Koha::Recalls->search({ itemnumber => $item->{itemnumber}, status => 'W' })->count;
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit
@@ -1905,6 +1910,7 @@ sub searchResults {
                     || $item->{damaged}
                     || $item->{notforloan}
                     || $reservestatus eq 'Waiting'
+                    || $recallstatus eq 'Waiting'
                     || ($transfertwhen && $transfertwhen ne ''))
                 {
                     $withdrawn_count++        if $item->{withdrawn};
@@ -1912,6 +1918,7 @@ sub searchResults {
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen && $transfertwhen ne '';
                     $item_onhold_count++     if $reservestatus eq 'Waiting';
+                    $item_recalled_count++   if $recallstatus eq 'Waiting';
                     $item->{status} = ($item->{withdrawn}//q{}) . "-" . ($item->{itemlost}//q{}) . "-" . ($item->{damaged}//q{}) . "-" . ($item->{notforloan}//q{});
 
                     $other_count++;
@@ -1921,6 +1928,7 @@ sub searchResults {
                         $other_items->{$key}->{$_} = $item->{$_};
                     }
                     $other_items->{$key}->{intransit} = ( $transfertwhen ne '' ) ? 1 : 0;
+                    $other_items->{$key}->{recalled} = ($recallstatus) ? 1 : 0;
                     $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
                     $other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value and $item->{notforloan};
                     $other_items->{$key}->{count}++ if $item->{$hbranch};
@@ -2014,6 +2022,7 @@ sub searchResults {
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{onholdcount}          = $item_onhold_count;
+        $oldbiblio->{recalledcount}        = $item_recalled_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{notforloancount}      = $notforloan_count;
 

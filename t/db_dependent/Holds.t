@@ -1549,7 +1549,34 @@ subtest 'non priority holds' => sub {
     is( $err, 'on_reserve', 'Item is on hold' );
 
     $schema->storage->txn_rollback;
+};
 
+subtest 'CanItemBeReserved / recall' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries', value => {pickup_location => 1} } );
+    my $patron1   = $builder->build_object( { class => 'Koha::Patrons', value => {branchcode => $library1->branchcode} } );
+    my $biblio1 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
+    my $item1   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio1->biblionumber,
+            library      => $library1->branchcode
+        }
+    );
+    Koha::Recall->new({
+        borrowernumber => $patron1->borrowernumber,
+        biblionumber => $biblio1->biblionumber,
+        branchcode => $library1->branchcode,
+        itemnumber => $item1->itemnumber,
+        recalldate => '2020-05-04 10:10:10',
+        item_level_recall => 1,
+    })->store;
+    is( CanItemBeReserved( $patron1->borrowernumber, $item1->itemnumber, $library1->branchcode )->{status}, 'recall', "Can't reserve an item that they have already recalled" );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'CanItemBeReserved rule precedence tests' => sub {

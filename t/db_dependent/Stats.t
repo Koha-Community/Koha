@@ -55,7 +55,7 @@ $return_error = $@;
 isnt ($return_error,'',"UpdateStats returns undef and croaks if type is undef");
 
 # returns undef and croaks if mandatory params are missing
-my @allowed_circulation_types = qw (renew issue localuse return);
+my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout recall);
 my @allowed_accounts_types = qw (writeoff payment);
 my @circulation_mandatory_keys = qw (branch borrowernumber itemnumber ccode itemtype); #don't check type here
 my @accounts_mandatory_keys = qw (branch borrowernumber amount); #don't check type here

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 use Test::Warn;
 
@@ -1048,6 +1048,57 @@ subtest 'messages' => sub {
     is( $messages->count, 2, "There are two messages for this patron" );
     is( $messages->next->message, $message_1->message );
     is( $messages->next->message, $message_2->message );
+    $schema->storage->txn_rollback;
+};
+
+subtest 'recalls() tests' => sub {
+
+    plan tests => 2;
+    my $biblio1 = $builder->build_object({ class => 'Koha::Biblios' });
+    my $item1 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio1->biblionumber } });
+    my $biblio2 = $builder->build_object({ class => 'Koha::Biblios' });
+    my $item2 = $builder->build_object({ class => 'Koha::Items' }, { value => { biblionumber => $biblio2->biblionumber } });
+
+    Koha::Recall->new({
+        biblionumber => $biblio1->biblionumber,
+        borrowernumber => $patron->borrowernumber,
+        itemnumber => $item1->itemnumber,
+        branchcode => $patron->branchcode,
+        recalldate => dt_from_string,
+        status => 'R',
+        item_level_recall => 1,
+    })->store;
+    Koha::Recall->new({
+        biblionumber => $biblio2->biblionumber,
+        borrowernumber => $patron->borrowernumber,
+        itemnumber => $item2->itemnumber,
+        branchcode => $patron->branchcode,
+        recalldate => dt_from_string,
+        status => 'R',
+        item_level_recall => 1,
+    })->store;
+    Koha::Recall->new({
+        biblionumber => $biblio1->biblionumber,
+        borrowernumber => $patron->borrowernumber,
+        itemnumber => undef,
+        branchcode => $patron->branchcode,
+        recalldate => dt_from_string,
+        status => 'R',
+        item_level_recall => 0,
+    })->store;
+    my $recall = Koha::Recall->new({
+        biblionumber => $biblio1->biblionumber,
+        borrowernumber => $patron->borrowernumber,
+        itemnumber => undef,
+        branchcode => $patron->branchcode,
+        recalldate => dt_from_string,
+        status => 'R',
+        item_level_recall => 0,
+    })->store;
+    $recall->set_cancelled;
+
+    is( $patron->recalls->count, 3, "Correctly gets this patron's active recalls" );
+    is( $patron->recalls({ biblionumber => $biblio1->biblionumber })->count, 2, "Correctly gets this patron's active recalls on a specific biblio" );
 
     $schema->storage->txn_rollback;
 };

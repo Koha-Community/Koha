@@ -375,6 +375,7 @@ sub CanBookBeReserved{
          { status => libraryNotPickupLocation },   if given branchcode is not configured to be a pickup location
          { status => cannotBeTransferred }, if branch transfer limit applies on given item and branchcode
          { status => pickupNotInHoldGroup }, pickup location is not in hold group, and pickup locations are only allowed from hold groups.
+         { status => recall }, if the borrower has already placed a recall on this item
 
 =cut
 
@@ -419,6 +420,10 @@ sub CanItemBeReserved {
         && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
         return { status =>'alreadypossession' };
     }
+
+    # check if a recall exists on this item from this borrower
+    return { status => 'recall' }
+      if Koha::Recalls->search({ borrowernumber => $borrowernumber, itemnumber => $itemnumber, old => undef })->count;
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 

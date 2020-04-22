@@ -48,7 +48,7 @@ subtest 'transformMARCXML4XSLT tests' => sub {
 };
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 16;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     t::lib::Mocks::mock_preference( 'OPACResultsLibrary', 'holdingbranch' );
@@ -131,7 +131,8 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr{<substatus>Waiting</substatus>},"Waiting status takes precedence over In transit");
+    like($xml,qr{<substatus>Waiting</substatus>},"Waiting status takes precedence over In transit (holds)");
+    $hold->cancel;
 
     $builder->build({ source => "TmpHoldsqueue", value => {
         itemnumber => $item->itemnumber
@@ -141,6 +142,17 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     like($xml,qr{<substatus>Pending hold</substatus>},"Pending status takes precedence over all");
     my $library_name = $holdinglibrary->branchname;
     like($xml,qr{<resultbranch>${library_name}</resultbranch>}, "Found resultbranch / holding branch" );
+
+    my $recall = $builder->build_object({ class => 'Koha::Recalls', value => {
+        biblionumber    => $item->biblionumber,
+        itemnumber      => $item->itemnumber,
+        branchcode      => $item->holdingbranch,
+        status          => 'R',
+    }});
+    $recall->set_waiting;
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+    like($xml,qr{<status>Waiting</status>},"Waiting status takes precedence over In transit (recalls)");
+
 };
 
 $schema->storage->txn_rollback;

@@ -2054,6 +2054,30 @@ sub safe_to_delete {
     return Koha::Result::Boolean->new(1);
 }
 
+=head3 recalls
+
+    my $recalls = $patron->recalls;
+
+    my $recalls = $patron->recalls({ biblionumber => $biblionumber });
+
+Return the patron's active recalls - total, or on a specific biblio
+
+=cut
+
+sub recalls {
+    my ( $self, $params ) = @_;
+
+    my $biblionumber = $params->{biblionumber};
+
+    my $recalls_rs = Koha::Recalls->search({ borrowernumber => $self->borrowernumber, old => undef });
+
+    if ( $biblionumber ) {
+        $recalls_rs = Koha::Recalls->search({ borrowernumber => $self->borrowernumber, old => undef, biblionumber => $biblionumber });
+    }
+
+    return $recalls_rs;
+}
+
 =head2 Internal methods
 
 =head3 _type

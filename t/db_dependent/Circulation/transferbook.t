@@ -27,6 +27,9 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfers;
 
 my $builder = t::lib::TestBuilder->new;
+my $schema = Koha::Database->new->schema;
+
+$schema->storage->txn_begin;
 
 subtest 'transfer a non-existant item' => sub {
     plan tests => 2;
@@ -101,7 +104,7 @@ subtest 'field population tests' => sub {
 #FIXME:'UseBranchTransferLimits tests missing
 
 subtest 'transfer already at destination' => sub {
-    plan tests => 5;
+    plan tests => 9;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
@@ -151,6 +154,33 @@ subtest 'transfer already at destination' => sub {
     is( $dotransfer, 0, 'Transfer of reserved item doesn\'t succeed without ignore_reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
     is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
+
+    # recalls
+    t::lib::Mocks::mock_preference('UseRecalls', 1);
+    my $recall = Koha::Recall->new({
+        biblionumber => $item->biblionumber,
+        itemnumber => $item->itemnumber,
+        item_level_recall => 1,
+        borrowernumber => $patron->borrowernumber,
+        branchcode => $library->branchcode,
+        status => 'R',
+    })->store;
+    ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
+    is( $dotransfer, 0, 'Do not transfer recalled item, it has already arrived' );
+    is( $messages->{RecallPlacedAtHoldingBranch}, 1, "We found the recall");
+
+    my $item2 = $builder->build_object({ class => 'Koha::Items' }); # this item will have a different holding branch to the pickup branch
+    $recall = Koha::Recall->new({
+        biblionumber => $item2->biblionumber,
+        itemnumber => $item2->itemnumber,
+        item_level_recall => 1,
+        borrowernumber => $patron->borrowernumber,
+        branchcode => $library->branchcode,
+        status => 'R',
+    })->store;
+    ( $recall, $dotransfer, $messages ) = $recall->start_transfer;
+    is( $dotransfer, 1, 'Transfer of recalled item succeeded' );
+    is( $messages->{RecallFound}->recall_id, $recall->recall_id, "We found the recall");
 };
 
 subtest 'transfer an issued item' => sub {
@@ -301,3 +331,4 @@ subtest 'transferbook test from branch' => sub {
     is( $to_branch, $library->branchcode, 'The transfer is initiated to the specified branch');
 
 };
+$schema->storage->txn_rollback;

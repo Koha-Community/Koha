@@ -1165,7 +1165,193 @@ subtest 'columns_to_str' => sub {
     $cache->clear_from_cache("MarcSubfieldStructure-");
 
     $schema->storage->txn_rollback;
+};
 
+subtest 'Recalls tests' => sub {
+
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $item1 = $builder->build_sample_item;
+    my $biblio = $item1->biblio;
+    my $branchcode = $item1->holdingbranch;
+    my $patron1 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
+    my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
+    my $patron3 = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $branchcode } });
+    my $item2 = $builder->build_object({ class => 'Koha::Items', value => { holdingbranch => $branchcode, homebranch => $branchcode, biblionumber => $biblio->biblionumber, itype => $item1->effective_itemtype } });
+    t::lib::Mocks::mock_userenv({ patron => $patron1 });
+
+    my $recall1 = Koha::Recall->new({
+        borrowernumber => $patron1->borrowernumber,
+        recalldate => Koha::DateUtils::dt_from_string,
+        biblionumber => $biblio->biblionumber,
+        branchcode => $branchcode,
+        status => 'R',
+        itemnumber => $item1->itemnumber,
+        expirationdate => undef,
+        item_level_recall => 1
+    })->store;
+    my $recall2 = Koha::Recall->new({
+        borrowernumber => $patron2->borrowernumber,
+        recalldate => Koha::DateUtils::dt_from_string,
+        biblionumber => $biblio->biblionumber,
+        branchcode => $branchcode,
+        status => 'R',
+        itemnumber => $item1->itemnumber,
+        expirationdate => undef,
+        item_level_recall =>1
+    })->store;
+
+    is( $item1->recall->borrowernumber, $patron1->borrowernumber, 'Correctly returns most relevant recall' );
+
+    $recall2->set_cancelled;
+
+    t::lib::Mocks::mock_preference('UseRecalls', 0);
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall with UseRecalls disabled" );
+
+    t::lib::Mocks::mock_preference("UseRecalls", 1);
+
+    $item1->update({ notforloan => 1 });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall that is not for loan" );
+    $item1->update({ notforloan => 0, itemlost => 1 });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall that is marked lost" );
+    $item1->update({ itemlost => 0, withdrawn => 1 });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall that is withdrawn" );
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall item if not checked out" );
+
+    $item1->update({ withdrawn => 0 });
+    C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
+
+    Koha::CirculationRules->set_rules({
+        branchcode => $branchcode,
+        categorycode => $patron1->categorycode,
+        itemtype => $item1->effective_itemtype,
+        rules => {
+            recalls_allowed => 0,
+            recalls_per_record => 1,
+            on_shelf_recalls => 'all',
+        },
+    });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if recalls_allowed = 0" );
+
+    Koha::CirculationRules->set_rules({
+        branchcode => $branchcode,
+        categorycode => $patron1->categorycode,
+        itemtype => $item1->effective_itemtype,
+        rules => {
+            recalls_allowed => 1,
+            recalls_per_record => 1,
+            on_shelf_recalls => 'all',
+        },
+    });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if patron has more existing recall(s) than recalls_allowed" );
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if patron has more existing recall(s) than recalls_per_record" );
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if patron has already recalled this item" );
+
+    my $reserve_id = C4::Reserves::AddReserve({ branchcode => $branchcode, borrowernumber => $patron1->borrowernumber, biblionumber => $item1->biblionumber, itemnumber => $item1->itemnumber });
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall item if patron has already reserved it" );
+    C4::Reserves::ModReserve({ rank => 'del', reserve_id => $reserve_id, branchcode => $branchcode, itemnumber => $item1->itemnumber, borrowernumber => $patron1->borrowernumber, biblionumber => $item1->biblionumber });
+
+    $recall1->set_cancelled;
+    is( $item1->can_be_recalled({ patron => $patron2 }), 0, "Can't recall if patron has already checked out an item attached to this biblio" );
+
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if on_shelf_recalls = all and items are still available" );
+
+    Koha::CirculationRules->set_rules({
+        branchcode => $branchcode,
+        categorycode => $patron1->categorycode,
+        itemtype => $item1->effective_itemtype,
+        rules => {
+            recalls_allowed => 1,
+            recalls_per_record => 1,
+            on_shelf_recalls => 'any',
+        },
+    });
+    C4::Circulation::AddReturn( $item1->barcode, $branchcode );
+    is( $item1->can_be_recalled({ patron => $patron1 }), 0, "Can't recall if no items are checked out" );
+
+    C4::Circulation::AddIssue( $patron2->unblessed, $item1->barcode );
+    is( $item1->can_be_recalled({ patron => $patron1 }), 1, "Can recall item" );
+
+    $recall1 = Koha::Recall->new({
+        borrowernumber => $patron1->borrowernumber,
+        recalldate => Koha::DateUtils::dt_from_string,
+        biblionumber => $biblio->biblionumber,
+        branchcode => $branchcode,
+        status => 'R',
+        itemnumber => undef,
+        expirationdate => undef,
+        item_level_recall => 0
+    })->store;
+
+    # Patron2 has Item1 checked out. Patron1 has placed a biblio-level recall on Biblio1, so check if Item1 can fulfill Patron1's recall.
+
+    Koha::CirculationRules->set_rules({
+        branchcode => undef,
+        categorycode => undef,
+        itemtype => $item1->effective_itemtype,
+        rules => {
+            recalls_allowed => 0,
+            recalls_per_record => 1,
+            on_shelf_recalls => 'any',
+        },
+    });
+    is( $item1->can_be_waiting_recall, 0, "Recalls not allowed for this itemtype" );
+
+    Koha::CirculationRules->set_rules({
+        branchcode => undef,
+        categorycode => undef,
+        itemtype => $item1->effective_itemtype,
+        rules => {
+            recalls_allowed => 1,
+            recalls_per_record => 1,
+            on_shelf_recalls => 'any',
+        },
+    });
+    is( $item1->can_be_waiting_recall, 1, "Recalls are allowed for this itemtype" );
+
+    # check_recalls tests
+
+    $recall1 = Koha::Recall->new({
+        borrowernumber => $patron2->borrowernumber,
+        recalldate => Koha::DateUtils::dt_from_string,
+        biblionumber => $biblio->biblionumber,
+        branchcode => $branchcode,
+        status => 'R',
+        itemnumber => $item1->itemnumber,
+        expirationdate => undef,
+        item_level_recall => 1
+    })->store;
+    $recall2 = Koha::Recall->new({
+        borrowernumber => $patron1->borrowernumber,
+        recalldate => Koha::DateUtils::dt_from_string,
+        biblionumber => $biblio->biblionumber,
+        branchcode => $branchcode,
+        status => 'R',
+        itemnumber => undef,
+        expirationdate => undef,
+        item_level_recall => 0
+    })->store;
+    $recall2->set_waiting({ item => $item1 });
+
+    # return a waiting recall
+    my $check_recall = $item1->check_recalls;
+    is( $check_recall->borrowernumber, $patron1->borrowernumber, "Waiting recall is highest priority and returned" );
+
+    $recall2->revert_waiting;
+
+    # return recall based on recalldate
+    $check_recall = $item1->check_recalls;
+    is( $check_recall->borrowernumber, $patron1->borrowernumber, "No waiting recall, so oldest recall is returned" );
+
+    $recall1->set_cancelled;
+
+    # return a biblio-level recall
+    $check_recall = $item1->check_recalls;
+    is( $check_recall->borrowernumber, $patron1->borrowernumber, "Only remaining recall is returned" );
+
+    $recall2->set_cancelled;
 };
 
 subtest 'store() tests' => sub {

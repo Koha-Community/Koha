@@ -26,6 +26,7 @@ use Koha::Holds;
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::ArticleRequests;
+use Koha::Recalls;
 
 sub HoldsCount {
     my ( $self, $biblionumber ) = @_;
@@ -54,6 +55,14 @@ sub CanArticleRequest {
     my $borrower = Koha::Patrons->find( $borrowernumber );
 
     return $biblio ? $biblio->can_article_request( $borrower ) : 0;
+}
+
+sub RecallsCount {
+    my ( $self, $biblionumber ) = @_;
+
+    my $recalls = Koha::Recalls->search({ biblionumber => $biblionumber, old => undef });
+
+    return $recalls->count;
 }
 
 1;

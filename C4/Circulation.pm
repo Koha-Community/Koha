@@ -299,6 +299,14 @@ The item was reserved. The value is a reference-to-hash whose keys are fields fr
 
 The item was eligible to be transferred. Barring problems communicating with the database, the transfer should indeed have succeeded. The value should be ignored.
 
+=item C<RecallPlacedAtHoldingBranch>
+
+A recall for this item was found, and the transfer has already been completed as the item's branch matches the recall's pickup branch.
+
+=item C<RecallFound>
+
+A recall for this item was found, and the item needs to be transferred to the recall's pickup branch.
+
 =back
 
 =back
@@ -370,6 +378,19 @@ sub transferbook {
         $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
         $dotransfer = 0 unless $ignoreRs;
+    }
+
+    # find recall
+    my $recall = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
+    if ( defined $recall and C4::Context->preference('UseRecalls') ) {
+        # do a transfer if the recall branch is different to the item holding branch
+        if ( $recall->branchcode eq $fbr ) {
+            $dotransfer = 0;
+            $messages->{'RecallPlacedAtHoldingBranch'} = 1;
+        } else {
+            $dotransfer = 1;
+            $messages->{'RecallFound'} = $recall;
+        }
     }
 
     #actually do the transfer....
@@ -721,6 +742,10 @@ sticky due date is invalid or due date in the past
 =head3 TOO_MANY
 
 if the borrower borrows to much things
+
+=head3 RECALLED
+
+recalled by someone else
 
 =cut
 
@@ -1095,7 +1120,50 @@ sub CanBookBeIssued {
         }
     }
 
-    unless ( $ignore_reserves ) {
+    my $recall;
+    # CHECK IF ITEM HAS BEEN RECALLED BY ANOTHER PATRON
+    # Only bother doing this if UseRecalls is enabled and the item is recallable
+    # Don't look at recalls that are in transit
+    if ( C4::Context->preference('UseRecalls') and $item_object->can_be_waiting_recall ) {
+        my @recalls = $biblio->recalls;
+
+        foreach my $r ( @recalls ) {
+            if ( $r->itemnumber and
+                $r->itemnumber == $item_object->itemnumber and
+                $r->borrowernumber == $patron->borrowernumber and
+                $r->waiting ) {
+                $messages{RECALLED} = $r->recall_id;
+                $recall = $r;
+                # this item is already waiting for this borrower and the recall can be fulfilled
+                last;
+            }
+            elsif ( $r->itemnumber and
+                $r->itemnumber == $item_object->itemnumber and
+                $r->in_transit ) {
+                # recalled item is in transit
+                $issuingimpossible{RECALLED_INTRANSIT} = $r->branchcode;
+            }
+            elsif ( $r->item_level_recall and
+                $r->itemnumber == $item_object->itemnumber and
+                $r->borrowernumber != $patron->borrowernumber and
+                !$r->in_transit ) {
+                # this specific item has been recalled by a different patron
+                $needsconfirmation{RECALLED} = $r;
+                $recall = $r;
+                last;
+            }
+            elsif ( !$r->item_level_recall and
+                $r->borrowernumber != $patron->borrowernumber and
+                !$r->in_transit ) {
+                # a different patron has placed a biblio-level recall and this item is eligible to fill it
+                $needsconfirmation{RECALLED} = $r;
+                $recall = $r;
+                last;
+            }
+        }
+    }
+
+    unless ( $ignore_reserves and defined $recall ) {
         # See if the item is on reserve.
         my ( $restype, $res ) = C4::Reserves::CheckReserves( $item_object->itemnumber );
         if ($restype) {
@@ -1409,6 +1477,10 @@ AddIssue does the following things :
           * RESERVE PLACED ?
               - fill reserve if reserve to this patron
               - cancel reserve or not, otherwise
+          * RECALL PLACED ?
+              - fill recall if recall to this patron
+              - cancel recall or not
+              - revert recall's waiting status or not
           * TRANSFERT PENDING ?
               - complete the transfert
           * ISSUE THE BOOK
@@ -1423,6 +1495,8 @@ sub AddIssue {
     my $onsite_checkout = $params && $params->{onsite_checkout} ? 1 : 0;
     my $switch_onsite_checkout = $params && $params->{switch_onsite_checkout};
     my $auto_renew = $params && $params->{auto_renew};
+    my $cancel_recall = $params && $params->{cancel_recall};
+    my $recall_id = $params && $params->{recall_id};
     my $dbh          = C4::Context->dbh;
     my $barcodecheck = CheckValidBarcode($barcode);
 
@@ -1495,6 +1569,8 @@ sub AddIssue {
                 # AddReturn certainly has side-effects, like onloan => undef
                 $item_object->discard_changes;
             }
+
+            Koha::Recalls->move_recall({ action => $cancel_recall, recall_id => $recall_id, itemnumber => $item_object->itemnumber, borrowernumber => $borrower->{borrowernumber} }) if C4::Context->preference('UseRecalls');
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
 
@@ -1922,6 +1998,16 @@ Value 1 if return is successful.
 
 If AutomaticItemReturn is disabled, return branch is given as value of NeedsTransfer.
 
+=item C<RecallFound>
+
+This item can fill a recall. The recall object is returned. If the recall pickup branch differs from
+the branch this item is being returned at, C<RecallNeedsTransfer> is also returned which contains this
+branchcode.
+
+=item C<TransferredRecall>
+
+This item has been transferred to this branch to fill a recall. The recall object is returned.
+
 =back
 
 C<$iteminformation> is a reference-to-hash, giving information about the
@@ -2198,6 +2284,17 @@ sub AddReturn {
         }
     }
 
+    # find recalls...
+    # check if this item is recallable first, which includes checking if UseRecalls syspref is enabled
+    my $recall = undef;
+    $recall = $item->check_recalls if $item->can_be_waiting_recall;
+    if ( defined $recall ) {
+        $messages->{RecallFound} = $recall;
+        if ( $recall->branchcode ne $branch ) {
+            $messages->{RecallNeedsTransfer} = $branch;
+        }
+    }
+
     # find reserves.....
     # launch the Checkreserves routine to find any holds
     my ($resfound, $resrec);
@@ -2257,13 +2354,22 @@ sub AddReturn {
         $request->status('RET') if $request;
     }
 
+    my $transfer_recall = Koha::Recalls->find({ itemnumber => $item->itemnumber, status => 'T' }); # all recalls that have triggered a transfer will have an allocated itemnumber
+    if ( $transfer_recall and
+         $transfer_recall->branchcode eq $branch and
+         C4::Context->preference('UseRecalls') ) {
+        $messages->{TransferredRecall} = $transfer_recall;
+    }
+
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
     if ( $validTransfer && !C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber )
         && ( $doreturn or $messages->{'NotIssued'} )
         and !$resfound
         and ( $branch ne $returnbranch )
         and not $messages->{'WrongTransfer'}
-        and not $messages->{'WasTransfered'} )
+        and not $messages->{'WasTransfered'}
+        and not $messages->{TransferredRecall}
+        and not $messages->{RecallNeedsTransfer} )
     {
         my $BranchTransferLimitsType = C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' ? 'effective_itemtype' : 'ccode';
         if  (C4::Context->preference("AutomaticItemReturn"    ) or
@@ -2771,6 +2877,18 @@ sub CanBookBeRenewed {
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_account_expired';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_late';
         return ( 0, $auto_renew  ) if $auto_renew =~ 'auto_too_much_oweing';
+    }
+
+    my $recall = undef;
+    $recall = $item->check_recalls if $item->can_be_waiting_recall;
+    if ( defined $recall ) {
+        if ( $recall->item_level_recall ) {
+            # item-level recall. check if this item is the recalled item, otherwise renewal will be allowed
+            return ( 0, 'recalled' ) if ( $recall->itemnumber == $item->itemnumber );
+        } else {
+            # biblio-level recall, so only disallow renewal if the biblio-level recall has been fulfilled by a different item
+            return ( 0, 'recalled' ) unless ( $recall->waiting );
+        }
     }
 
     my ( $resfound, $resrec, $possible_reserves ) = C4::Reserves::CheckReserves($itemnumber);

@@ -1451,6 +1451,182 @@ sub _after_item_action_hooks {
     );
 }
 
+=head3 recall
+
+    my $recall = $item->recall;
+
+Return the relevant recall for this item
+
+=cut
+
+sub recall {
+    my ( $self ) = @_;
+    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, old => undef }, { order_by => { -asc => 'recalldate' } });
+    foreach my $recall (@recalls) {
+        if ( $recall->item_level_recall and $recall->itemnumber == $self->itemnumber ){
+            return $recall;
+        }
+    }
+    # no item-level recall to return, so return earliest biblio-level
+    # FIXME: eventually this will be based on priority
+    return $recalls[0];
+}
+
+=head3 can_be_recalled
+
+    if ( $item->can_be_recalled({ patron => $patron_object }) ) # do recall
+
+Does item-level checks and returns if items can be recalled by this borrower
+
+=cut
+
+sub can_be_recalled {
+    my ( $self, $params ) = @_;
+
+    return 0 if !( C4::Context->preference('UseRecalls') );
+
+    # check if this item is not for loan, withdrawn or lost
+    return 0 if ( $self->notforloan != 0 );
+    return 0 if ( $self->itemlost != 0 );
+    return 0 if ( $self->withdrawn != 0 );
+
+    # check if this item is not checked out - if not checked out, can't be recalled
+    return 0 if ( !defined( $self->checkout ) );
+
+    my $patron = $params->{patron};
+
+    my $branchcode = C4::Context->userenv->{'branch'};
+    if ( $patron ) {
+        $branchcode = C4::Circulation::_GetCircControlBranch( $self->unblessed, $patron->unblessed );
+    }
+
+    # Check the circulation rule for each relevant itemtype for this item
+    my $rule = Koha::CirculationRules->get_effective_rules({
+        branchcode => $branchcode,
+        categorycode => $patron ? $patron->categorycode : undef,
+        itemtype => $self->effective_itemtype,
+        rules => [
+            'recalls_allowed',
+            'recalls_per_record',
+            'on_shelf_recalls',
+        ],
+    });
+
+    # check recalls allowed has been set and is not zero
+    return 0 if ( !defined($rule->{recalls_allowed}) || $rule->{recalls_allowed} == 0 );
+
+    if ( $patron ) {
+        # check borrower has not reached open recalls allowed limit
+        return 0 if ( $patron->recalls->count >= $rule->{recalls_allowed} );
+
+        # check borrower has not reach open recalls allowed per record limit
+        return 0 if ( $patron->recalls({ biblionumber => $self->biblionumber })->count >= $rule->{recalls_per_record} );
+
+        # check if this patron has already recalled this item
+        return 0 if ( Koha::Recalls->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber, old => undef })->count > 0 );
+
+        # check if this patron has already checked out this item
+        return 0 if ( Koha::Checkouts->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
+
+        # check if this patron has already reserved this item
+        return 0 if ( Koha::Holds->search({ itemnumber => $self->itemnumber, borrowernumber => $patron->borrowernumber })->count > 0 );
+    }
+
+    # check item availability
+    # items are unavailable for recall if they are lost, withdrawn or notforloan
+    my @items = Koha::Items->search({ biblionumber => $self->biblionumber, itemlost => 0, withdrawn => 0, notforloan => 0 });
+
+    # if there are no available items at all, no recall can be placed
+    return 0 if ( scalar @items == 0 );
+
+    my $checked_out_count = 0;
+    foreach (@items) {
+        if ( Koha::Checkouts->search({ itemnumber => $_->itemnumber })->count > 0 ){ $checked_out_count++; }
+    }
+
+    # can't recall if on shelf recalls only allowed when all unavailable, but items are still available for checkout
+    return 0 if ( $rule->{on_shelf_recalls} eq 'all' && $checked_out_count < scalar @items );
+
+    # can't recall if no items have been checked out
+    return 0 if ( $checked_out_count == 0 );
+
+    # can recall
+    return 1;
+}
+
+=head3 can_be_waiting_recall
+
+    if ( $item->can_be_waiting_recall ) { # allocate item as waiting for recall
+
+Checks item type and branch of circ rules to return whether this item can be used to fill a recall.
+At this point the item has already been recalled. We are now at the checkin and set waiting stage.
+
+=cut
+
+sub can_be_waiting_recall {
+    my ( $self ) = @_;
+
+    return 0 if !( C4::Context->preference('UseRecalls') );
+
+    # check if this item is not for loan, withdrawn or lost
+    return 0 if ( $self->notforloan != 0 );
+    return 0 if ( $self->itemlost != 0 );
+    return 0 if ( $self->withdrawn != 0 );
+
+    my $branchcode = $self->holdingbranch;
+    if ( C4::Context->preference('CircControl') eq 'PickupLibrary' and C4::Context->userenv and C4::Context->userenv->{'branch'} ) {
+        $branchcode = C4::Context->userenv->{'branch'};
+    } else {
+        $branchcode = ( C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ) ? $self->homebranch : $self->holdingbranch;
+    }
+
+    # Check the circulation rule for each relevant itemtype for this item
+    my $rule = Koha::CirculationRules->get_effective_rules({
+        branchcode => $branchcode,
+        categorycode => undef,
+        itemtype => $self->effective_itemtype,
+        rules => [
+            'recalls_allowed',
+        ],
+    });
+
+    # check recalls allowed has been set and is not zero
+    return 0 if ( !defined($rule->{recalls_allowed}) || $rule->{recalls_allowed} == 0 );
+
+    # can recall
+    return 1;
+}
+
+=head3 check_recalls
+
+    my $recall = $item->check_recalls;
+
+Get the most relevant recall for this item.
+
+=cut
+
+sub check_recalls {
+    my ( $self ) = @_;
+
+    my @recalls = Koha::Recalls->search({ biblionumber => $self->biblionumber, itemnumber => [ $self->itemnumber, undef ], status => [ 'R','O','W','T' ] }, { order_by => { -asc => 'recalldate' } });
+
+    my $recall;
+    # iterate through relevant recalls to find the best one.
+    # if we come across a waiting recall, use this one.
+    # if we have iterated through all recalls and not found a waiting recall, use the first recall in the array, which should be the oldest recall.
+    foreach my $r ( @recalls ) {
+        if ( $r->waiting ) {
+            $recall = $r;
+            last;
+        }
+    }
+    unless ( defined $recall ) {
+        $recall = $recalls[0];
+    }
+
+    return $recall;
+}
+
 =head3 _type
 
 =cut

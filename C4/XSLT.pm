@@ -354,7 +354,13 @@ sub buildKohaItemsNamespace {
         my $status;
         my $substatus = '';
 
-        if ($item->has_pending_hold) {
+        my $recalls = Koha::Recalls->search({ itemnumber => $item->itemnumber, status => 'W' });
+
+        if ( $recalls->count ) {
+            # recalls take priority over holds
+            $status = 'Waiting';
+        }
+        elsif ( $item->has_pending_hold ) {
             $status = 'other';
             $substatus = 'Pending hold';
         }
