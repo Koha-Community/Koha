@@ -390,7 +390,8 @@ sub mockedC4Config {
     if ( ref $class eq 'HASH' ) {
         return $class->{$param};
     }
-    return;
+
+    return C4::Context::_common_config($param, 'config');
 }
 
 # Function that mocks the call to Net::LDAP
