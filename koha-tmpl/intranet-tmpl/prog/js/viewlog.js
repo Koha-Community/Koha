@@ -1,18 +1,18 @@
 function tickAll(section){
-    $("input[name='" + section + "']").prop("checked", true);
+    $("input[type='checkbox'][name='" + section + "']").prop("checked", true);
     $("#" + section.slice(0,-1) + "ALL").prop("checked", true);
-    $("input[name='" + section + "']").prop("disabled", true);
+    $("input[type='checkbox'][name='" + section + "']").prop("disabled", true);
     $("#" + section.slice(0,-1) + "ALL").prop("disabled", false);
 }
 
 function untickAll(section){
-    $("input[name='" + section + "']").prop("checked", false);
-    $("input[name='" + section + "']").prop("disabled", false);
+    $("input[type='checkbox'][name='" + section + "']").prop("checked", false);
+    $("input[type='checkbox'][name='" + section + "']").prop("disabled", false);
 }
 
 $(document).ready(function(){
 
-    if ( $('input[name="modules"]:checked').length == 0 ) {
+    if ( $('input[type="checkbox"][name="modules"]:checked').length == 0 ) {
         tickAll('modules');
     }
     $("#moduleALL").change(function(){
@@ -22,7 +22,7 @@ $(document).ready(function(){
             untickAll('modules');
         }
     });
-    $("input[name='modules']").change(function(){
+    $("input[type='checkbox'][name='modules']").change(function(){
         if ( $("input[name='modules']:checked").length == $("input[name='modules']").length - 1 ){
             tickAll('modules');
         }
