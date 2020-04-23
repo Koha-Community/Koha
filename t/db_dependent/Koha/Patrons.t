@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -86,6 +86,14 @@ subtest 'library' => sub {
     plan tests => 2;
     is( $retrieved_patron_1->library->branchcode, $library->{branchcode}, 'Koha::Patron->library should return the correct library' );
     is( ref($retrieved_patron_1->library), 'Koha::Library', 'Koha::Patron->library should return a Koha::Library object' );
+};
+
+subtest 'sms_provider' => sub {
+    plan tests => 2;
+    my $sms_provider = $builder->build({source => 'SmsProvider' });
+    $retrieved_patron_1->sms_provider_id( $sms_provider->{id} )->store;
+    is_deeply( $retrieved_patron_1->sms_provider->unblessed, $sms_provider, 'Koha::Patron->sms_provider returns the correct SMS provider' );
+    is( ref($retrieved_patron_1->sms_provider), 'Koha::SMS::Provider', 'Koha::Patron->sms_provider should return a Koha::SMS::Provider object' );
 };
 
 subtest 'guarantees' => sub {

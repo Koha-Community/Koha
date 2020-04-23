@@ -414,6 +414,10 @@
                                                     <span class="label">SMS number:</span>
                                                     <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
                                                 </li>
+                                                <li>
+                                                    <span class="label">SMS provider:</span>
+                                                    [% patron.sms_provider.name | html %]
+                                                </li>
                                             </ol>
                                         </div>
                                     [% END %]

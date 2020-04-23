@@ -431,6 +431,17 @@ sub library {
     return Koha::Library->_new_from_dbic($self->_result->branchcode);
 }
 
+=head3 sms_provider
+
+Returns a Koha::SMS::Provider object representing the patron's SMS provider.
+
+=cut
+
+sub sms_provider {
+    my ( $self ) = @_;
+    return Koha::SMS::Provider->_new_from_dbic($self->_result->sms_provider);
+}
+
 =head3 guarantor_relationships
 
 Returns Koha::Patron::Relationships object for this patron's guarantors
