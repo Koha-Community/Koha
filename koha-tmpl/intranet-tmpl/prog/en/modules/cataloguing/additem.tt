@@ -166,10 +166,22 @@
                         [% IF aval == mv.default %]
                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                         [% ELSE %]
-                        <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                            [% IF ite.IS_LOST_AV && aval == Koha.Preference("ClaimReturnedLostValue") %]
+                                [% SET add_claims_returned_tip = mv.labels.$aval %]
+                                <option disabled="disabled" value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                            [%  ELSE %]
+                                <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                            [% END %]
                         [% END %]
                     [% END %]
                     </select>
+
+                    [% IF ite.IS_LOST_AV && add_claims_returned_tip %]
+                        &nbsp;
+                        <i class="fa fa-question-circle" data-toggle="tooltip"
+                           title="The value '[% add_claims_returned_tip | html %]' cannot be selected. Return claims must be processed from the patron details page."
+                           data-placement="right"></i>
+                    [% END %]
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     [% IF mv.readonly %]
                         <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />

@@ -79,7 +79,7 @@
                 [% IF ( ITEM_DAT.withdrawn ) %]Withdrawn[% END %]
             )[% END %]</h4>
 
-            <div class="rows">
+            <span class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
@@ -104,11 +104,13 @@
                             <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                             <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
                             <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                            <select name="itemlost" >
+                            <select name="itemlost">
                                 <option value="">Choose</option>
                                 [% FOREACH itemlostloo IN itemlostloop %]
-                                    [% NEXT IF ClaimReturnedLostValue && !ITEM_DAT.itemlost && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
-                                    [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
+                                    [% IF ClaimReturnedLostValue && !ITEM_DAT.itemlost && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
+                                        [% SET add_claims_returned_tip = itemlostloo.lib %]
+                                        <option value="[% itemlostloo.authorised_value | html %]" disabled="disabled">[% itemlostloo.lib | html %]</option>
+                                    [% ELSIF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
                                         <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
                                     [% ELSE %]
                                         <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
@@ -118,12 +120,18 @@
                             <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
                             <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
 
+                            [% IF add_claims_returned_tip %]
+                                <i class="fa fa-question-circle" data-toggle="tooltip"
+                                   title="The value '[% add_claims_returned_tip | html %]' cannot be selected. Return claims must be processed from the patron details page."
+                                   data-placement="right"></i>
+                            [% END %]
+
                             [% IF ClaimReturnedLostValue && ITEM_DAT.itemlost == ClaimReturnedLostValue %]
                                 <input type="submit" name="submit" class="submit" value="Set status" disabled="disabled"/>
                                 <p class="help-block">Item has been claimed as returned.</p>
                             [% ELSE %]
                                 <input type="hidden" name="op" value="set_lost" />
-                                <input type="submit" name="submit" class="submit" value="Set status" /></form>
+                                <input type="submit" name="submit" class="submit" value="Set status" />
                             [% END %]
                         </form>
                     [% ELSE %]
@@ -304,6 +312,9 @@
     <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
+        $( document ).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
