@@ -15,7 +15,7 @@ sub PRINT {
     my $logger =
       Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
     warn @_;
-    $logger->error(@_);
+    $logger->warn(@_);
     $Log::Log4perl::caller_depth--;
 }
 
