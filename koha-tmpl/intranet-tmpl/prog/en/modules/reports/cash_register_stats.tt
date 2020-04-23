@@ -121,11 +121,10 @@
                         [% END %]
 
                         [% FOREACH manualinv IN manualinv_types %]
-                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
-                            [% IF transaction_type == value_manualinv %]
-                            <option value="[% value_manualinv | html %]" selected="selected">[% manualinv.authorised_value | html %]</option>
+                            [% IF transaction_type == manualinv.authorised_value %]
+                            <option value="[% manualinv.authorised_value | html %]" selected="selected">[% manualinv.authorised_value | html %]</option>
                             [% ELSE %]
-                            <option value="[% value_manualinv | html %]">[% manualinv.authorised_value | html %]</option>
+                            <option value="[% manualinv.authorised_value | html %]">[% manualinv.authorised_value | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
