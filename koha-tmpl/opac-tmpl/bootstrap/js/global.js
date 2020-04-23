@@ -65,8 +65,8 @@ function confirmModal(message, title, yes_label, no_label, callback) {
                     </div>\
                     <div class="modal-body"><p></p></div>\
                     <div class="modal-footer">\
-                        <a href="#" id="bootstrap-confirm-box-modal-submit" class="btn btn-danger"><i class="fa fa-check"></i></a>\
-                        <a href="#" id="bootstrap-confirm-box-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove"></i></a>\
+                        <a href="#" id="bootstrap-confirm-box-modal-submit" class="btn btn-danger"><i class="fa fa-check" aria-hidden="true"></i></a>\
+                        <a href="#" id="bootstrap-confirm-box-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove" aria-hidden="true"></i></a>\
                     </div>\
                 </div>\
             </div>\
