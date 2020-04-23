@@ -136,6 +136,7 @@
             <td>
                 [% FOR claim IN lateorder.claims %]
                     <span title="[% lateorder.claims.last.claimed_on | html %]">[% claim.claimed_on | $KohaDates %]</span>
+                    [% UNLESS loop.last %]<br/>[% END %]
                 [% END %]
             </td>
             <td>
