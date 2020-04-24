@@ -473,17 +473,22 @@
                 ]
             }));
 
-            $("#logout_form").submit(function(){
+            $("#logout_form").submit(function(e){
+                e.preventDefault(e);
                 clearTimeout(mainTimeout);
                 [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
                     var confirmStart = Date.now();
-                    if(confirm(_("Would you like to print a receipt?"))){
-                        if ( (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
-                            window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber | html %]&amp;print=qslip");
+                    confirmModal("", _("Would you like to print a receipt?"), _("Yes"), _("No"), function(result) {
+                        if ( result && (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
+                            var win = window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber | html %]&amp;print=qslip");
+                            win.print();
+                            location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                         } else {
-                            alert(_("Timeout while waiting for print confirmation"));
+                            location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                         }
-                    }
+                    })
+                [% ELSE %]
+                    location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                 [% END %]
 
                 return true;
