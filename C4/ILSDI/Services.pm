@@ -756,7 +756,7 @@ sub HoldTitle {
     my $priority= C4::Reserves::CalculatePriority( $biblionumber );
     AddReserve(
         {
-            branch           => $branch,
+            branchcode       => $branch,
             borrowernumber   => $borrowernumber,
             biblionumber     => $biblionumber,
             priority         => $priority,
@@ -852,7 +852,7 @@ sub HoldItem {
     my $priority = C4::Reserves::CalculatePriority($biblionumber);
     AddReserve(
         {
-            branch           => $branch,
+            branchcode       => $branch,
             borrowernumber   => $borrowernumber,
             biblionumber     => $biblionumber,
             priority         => $priority,
