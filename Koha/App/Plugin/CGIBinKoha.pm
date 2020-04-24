@@ -85,7 +85,7 @@ sub _psgi_env {
 
     # Starman sets PATH_INFO to the same value of SCRIPT_NAME, which confuses
     # CGI and causes the redirect after OPAC login to fail
-    delete $env->{PATH_INFO} if ($env->{PATH_INFO} eq $env->{SCRIPT_NAME});
+    delete $env->{PATH_INFO} if ($env->{PATH_INFO} && $env->{PATH_INFO} eq $env->{SCRIPT_NAME});
 
     for my $name (@{ $c->req->headers->names }) {
         my $value = $c->req->headers->header($name);
