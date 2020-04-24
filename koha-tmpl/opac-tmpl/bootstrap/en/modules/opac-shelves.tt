@@ -192,12 +192,13 @@
                                             <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share"></i> Share list</a>
                                         [% END %]
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
-                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
+                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="unshare[% shelf.shelfnumber | html %]" class="form-inline">
                                             <input type="hidden" name="op" value="remove_share" />
                                             <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <button type="submit" class="btn btn-link deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);"><i class="fa fa-fw fa-remove"></i> Remove share</button>
+                                            <button type="submit" class="btn btn-link remove remove_share"
+                                                            data-shelfname="[% shelf.shelfname | html %]" data-shelfnumber="[% shelf.shelfnumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Remove share</button>
                                         </form>
                                     [% END %]
                                 </div>
@@ -699,12 +700,13 @@
                                                         <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share"></i> Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
-                                                        <form action="opac-shelves.pl" method="post" class="form-inline">
+                                                        <form action="opac-shelves.pl" method="post" id="unshare[% s.shelfnumber | html %]" class="form-inline">
                                                             <input type="hidden" name="op" value="remove_share" />
                                                             <input type="hidden" name="referer" value="list" />
                                                             <input type='hidden' name='category' value='[% category | html %]' />
                                                             <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
-                                                            <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
+                                                            <button type="submit" class="btn btn-link remove remove_share"
+                                                            data-shelfname="[% s.shelfname | html %]" data-shelfnumber="[% s.shelfnumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Remove share</button>
                                                         </form>
                                                     [% END %]&nbsp;
                                                 </td>
@@ -963,6 +965,18 @@ $(function() {
             $('#sorting-form').submit();
         });
     [% END %]
+
+    $(".remove_share").on("click", function(e){
+        e.preventDefault();
+        var shelf_name = $(this).data("shelfname");
+        var shelf_number = $(this).data("shelfnumber");
+        confirmModal( shelf_name, _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function( result ){
+                if( result ){
+                    $("#unshare" + shelf_number ).submit();
+                }
+            }
+        );
+    });
 
 }); // document.ready
 
