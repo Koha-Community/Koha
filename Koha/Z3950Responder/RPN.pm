@@ -40,7 +40,7 @@ sub to_koha {
     my ($self, $mappings) = @_;
 
     my $attrs = $self->{'attributes'};
-    my $fields = $mappings->{use}{default} // '_all';
+    my $fields = $mappings->{use}{default};
     my $split = 0;
     my $prefix = '';
     my $suffix = '';
@@ -62,7 +62,7 @@ sub to_koha {
         }
     }
 
-    $fields = [$fields] unless ref($fields) eq 'ARRAY';
+    $fields = [$fields] unless !defined $fields || ref($fields) eq 'ARRAY';
 
     if ($split) {
         my @terms;
@@ -72,8 +72,12 @@ sub to_koha {
             next if (!$word);
             $word = $self->escape($word);
             my @words;
-            foreach my $field (@{$fields}) {
-                push(@words, "$field:($prefix$word$suffix)");
+            if( $fields ) {
+                foreach my $field (@{$fields}) {
+                    push(@words, "$field:($prefix$word$suffix)");
+                }
+            } else {
+                push(@words, "($prefix$word$suffix)");
             }
             push (@terms, join(' OR ', @words));
         }
@@ -82,6 +86,7 @@ sub to_koha {
 
     my @terms;
     $term = $self->escape($term);
+    return "($prefix$term$suffix)" unless $fields;
     foreach my $field (@{$fields}) {
         push(@terms, "$field:($prefix$term$suffix)");
     }
