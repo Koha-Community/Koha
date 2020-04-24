@@ -70,7 +70,7 @@ sub do_hold {
     AddReserve(
         {
             priority       => $priority,
-            branch         => $branch,
+            branchcode     => $branch,
             borrowernumber => $patron->borrowernumber,
             biblionumber   => $item->biblionumber
         }
