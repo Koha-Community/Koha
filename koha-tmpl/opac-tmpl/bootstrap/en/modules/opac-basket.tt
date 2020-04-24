@@ -17,6 +17,7 @@
                 <div class="span12">
                     <div id="userbasket">
                         <h2>Your cart</h2>
+                        <div id="floating">
                             <div id="toolbar" class="toolbar noprint">
                                 [% IF ( verbose ) %]
                                     <a href="opac-basket.pl" class="btn btn-link brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
@@ -62,6 +63,7 @@
                                 </span>
                                 [% END %]
                             </div>
+                        </div> <!-- /#floating -->
 
                         [% IF ( verbose ) %]
                             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
@@ -304,6 +306,7 @@
 
 [% BLOCK jsinclude %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         <script>
             [% IF ( TagsInputEnabled && loggedinusername ) %]
@@ -456,6 +459,12 @@
                     return false;
                 });
                 enableCheckboxActions();
+
+                Sticky = $("#floating");
+                Sticky.hcSticky({
+                    stickTo: "#userbasket",
+                    stickyClass: "floating"
+                });
             });
 
             function enableCheckboxActions(){
