@@ -101,11 +101,6 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 
-if ( $op eq 'list' ) {
-    my $cities = Koha::Cities->search( { city_name => { -like => "%$searchfield%" } } );
-    $template->param( cities => $cities, );
-}
-
 $template->param(
     cityid      => $cityid,
     searchfield => $searchfield,

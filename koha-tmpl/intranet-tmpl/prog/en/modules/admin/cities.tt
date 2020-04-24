@@ -133,39 +133,18 @@
         Searching: [% searchfield | html %]
     [% END %]
 
-    [% IF cities.count %]
-        <table id="table_cities">
-            <thead>
-                <tr>
-                    <th>City ID</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>ZIP/Postal code</th>
-                    <th>Country</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                [% FOREACH city IN cities %]
-                <tr>
-                    <td>[% city.cityid | html %]</td>
-                    <td>[% city.city_name | html %]</td>
-                    <td>[% city.city_state | html %]</td>
-                    <td>[% city.city_zipcode | html %]</td>
-                    <td>[% city.city_country | html %]</td>
-                    <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid=[% city.cityid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid=[% city.cityid | html %]"><i class="fa fa-trash"></i> Delete</a>
-                    </td>
-                </tr>
-                [% END %]
-            </tbody>
-        </table>
-    [% ELSE %]
-        <div class="dialog message">
-            There are no cities defined. <a href="/cgi-bin/koha/admin/cities.pl?op=add_form">Create a new city</a>.
-        </div>
-    [% END %]
+    <table id="table_cities">
+        <thead>
+            <tr>
+                <th>City ID</th>
+                <th>City</th>
+                <th>State</th>
+                <th>ZIP/Postal code</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
 [% END %]
 
             </main>
@@ -183,14 +162,51 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-                ],
-                "aaSorting": [[ 1, "asc" ]],
-                "iDisplayLength": 10,
-                "sPaginationType": "full_numbers"
-            }));
+            var cities_table_url = '/api/v1/cities';
+            var cities_table = $("#table_cities").api({
+                "ajax": {
+                    "url": cities_table_url
+                },
+                'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "columns": [
+                    {
+                        "data": "city_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "name",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "state",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "postal_code",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "country",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+
+                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid='+ row.id +'"><i class="fa fa-pencil"></i> Edit</a>';
+                            result += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid='+ row.id +'"><i class="fa fa-trash"></i> Delete</a>';
+                            return result;
+
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ]
+            });
         });
     </script>
 [% END %]
