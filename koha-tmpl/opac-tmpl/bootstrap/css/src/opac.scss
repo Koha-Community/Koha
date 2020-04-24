@@ -58,14 +58,18 @@ $footer-height: 45px;
 }
 
 a {
-    color: $links;
+    &:link,
+    &:visited {
+        color: $links;
+    }
+
+    &:hover,
+    &:active {
+        color: $links-hover;
+    }
 
     &.cancel {
         padding-left: 1em;
-    }
-
-    &:visited {
-        color: $links;
     }
 
     &.title {
@@ -834,8 +838,6 @@ ul {
 
     .ui-state-default {
         a {
-            color: #006699;
-
             &:link {
                 color: #006699;
             }
@@ -847,8 +849,6 @@ ul {
     }
 
     .ui-state-hover a {
-        color: #990033;
-
         &:link {
             color: #990033;
         }
@@ -997,9 +997,13 @@ ul {
     border: 1px solid #AAA;
     color: #222222;
 
-    a,
+    a:link,
     a:visited {
         color: $links;
+    }
+    a:hover,
+    a:active {
+        color: $links-hover;
     }
 }
 
@@ -2320,8 +2324,10 @@ input {
 
 button {
     &.btn-link {
+        color: $links;
         &:focus,
         &:hover {
+            color: $links-hover;
             text-decoration: none;
         }
     }
