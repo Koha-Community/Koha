@@ -1284,3 +1284,10 @@ Circulation:
                   1: Use
                   0: "Don't use"
             - recalls. Make sure you configure <a href="/cgi-bin/koha/admin/smart-rules.pl">circulation and fines rules</a> for recalls once enabled.
+
+    SIP2:
+        -
+            - "Use the following mappings to determine the sort_bin of a returned item. The mapping should be on the form 'branchcode:item field:item field value:sort bin number', with one mapping per line."
+            - pref: SIP2SortBinMapping
+              type: textarea
+              class: long

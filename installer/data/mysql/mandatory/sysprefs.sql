@@ -621,6 +621,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ShowPatronImageInWebBasedSelfCheck','0','','If ON, displays patron image when a patron uses web-based self-checkout','YesNo'),
 ('ShowReviewer','full','none|full|first|surname|firstandinitial|username','Choose how a commenter\'s identity is presented alongside comments in the OPAC','Choice'),
 ('ShowReviewerPhoto','1','','If ON, photo of reviewer will be shown beside comments in OPAC','YesNo'),
+('SIP2SortBinMapping','',NULL,'Use the following mappings to determine the sort_bin of a returned item. The mapping should be on the form \"branchcode:item field:item field value:sort bin number\", with one mapping per line.','free'),
 ('SkipHoldTrapOnNotForLoanValue','',NULL,'If set, Koha will never trap items for hold with this notforloan value','Integer'),
 ('SlipCSS','',NULL,'Slips CSS url.','free'),
 ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free'),

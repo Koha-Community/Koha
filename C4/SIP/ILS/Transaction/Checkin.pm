@@ -168,6 +168,10 @@ sub do_checkin {
         $self->alert( !$return || defined $self->alert_type );
     }
 
+    # Set sort bin based on info in the item associated with the issue, and the
+    # mapping from SIP2SortBinMapping
+    $self->sort_bin( _get_sort_bin( $self->{item} ) );
+
     $self->ok($return);
 
     return { messages => $messages };
@@ -189,6 +193,62 @@ sub patron_id {
 		return;
 	}
 	return $self->{patron}->id;
+}
+
+=head1 _get_sort_bin
+
+Takes an item represented as a hashref as argument.
+
+Uses the contents of the SIP2SortBinMapping syspref to determine the sort_bin
+value that should be returned for an item checked in via SIP2.
+
+The mapping should be:
+
+ <branchcode>:<item field>:<item field value>:<sort bin number>
+
+For example:
+
+ CPL:itype:BOOK:1
+ CPL:location:OFFICE:2
+
+This will give:
+
+=over 4
+
+=item * sort_bin = "1" for items at the CPL branch with an itemtype of BOOK
+
+=item * sort_bin = "2" for items at the CPL branch with a location of OFFICE
+
+=back
+
+Returns the ID of the appropriate sort_bin, if there is one, or undef.
+
+=cut
+
+sub _get_sort_bin {
+
+    # We should get an item represented as a hashref here
+    my ( $item ) = @_;
+    return undef unless $item;
+
+    # Get the mapping and split on newlines
+    my $raw_map = C4::Context->preference('SIP2SortBinMapping');
+    return unless $raw_map;
+    my @lines = split /\r\n/, $raw_map;
+
+    # Iterate over the mapping. The first hit wins.
+    foreach my $line ( @lines ) {
+        # Split the line into fields
+        my ( $branchcode, $item_property, $value, $sort_bin ) = split /:/, $line;
+        # Check the fields against values in the item
+        if ( ( $item->{homebranch} eq $branchcode ) && ( $item->{$item_property} eq $value ) ) {
+            return $sort_bin;
+        }
+    }
+
+    # Return undef if no hits were found
+    return undef;
+
 }
 
 1;
