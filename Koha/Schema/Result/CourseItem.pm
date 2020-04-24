@@ -71,6 +71,26 @@ __PACKAGE__->table("course_items");
   is_nullable: 1
   size: 80
 
+=head2 homebranch
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
+=head2 homebranch_enabled
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+=head2 homebranch_storage
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
 =head2 holdingbranch
 
   data_type: 'varchar'
@@ -141,6 +161,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ccode_storage",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "homebranch",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "homebranch_enabled",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "homebranch_storage",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "holdingbranch_enabled",
@@ -232,6 +258,46 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 homebranch
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "homebranch",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "homebranch" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 homebranch_storage
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "homebranch_storage",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "homebranch_storage" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -248,8 +314,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-19 16:07:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8tTH0fAzewvaXRYs8+VZcg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-04-24 10:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cXNlGAgIZMs+Id7/FJSBRQ
 
 __PACKAGE__->add_columns(
     '+itype_enabled'         => { is_boolean => 1 },
