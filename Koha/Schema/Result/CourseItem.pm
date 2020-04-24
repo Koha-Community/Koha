@@ -320,6 +320,7 @@ __PACKAGE__->belongs_to(
 __PACKAGE__->add_columns(
     '+itype_enabled'         => { is_boolean => 1 },
     '+ccode_enabled'         => { is_boolean => 1 },
+    '+homebranch_enabled'    => { is_boolean => 1 },
     '+holdingbranch_enabled' => { is_boolean => 1 },
     '+location_enabled'      => { is_boolean => 1 },
 );
