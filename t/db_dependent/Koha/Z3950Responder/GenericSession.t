@@ -23,7 +23,7 @@ our $child;
 
 subtest 'test_search' => sub {
 
-    plan tests => 19;
+    plan tests => 20;
 
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
 
@@ -75,7 +75,7 @@ subtest 'test_search' => sub {
     $search->mock('simple_search_compat', sub {
         my ( $self, $query ) = @_;
 
-        return ('unexpected query', undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(speciäl))))';
+        return ('unexpected query', undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(speciäl))))' || $query eq "(simple search)";
 
         my @records = ($marc_record_1, $marc_record_2);
         return (undef, \@records, 2);
@@ -116,6 +116,9 @@ subtest 'test_search' => sub {
     my $returned2= MARC::Record->new_from_xml($rs->record(1)->raw(), 'UTF-8');
     ok($returned2, 'Record 2 returned as MARCXML');
     is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
+
+    $rs = $Zconn->search_pqf('"simple search"');
+    is($Zconn->errcode(), 0, 'Search is successful: ' . $Zconn->errmsg());
 
     # SRU protocol tests
     my $base = 'http://localhost:42111';
