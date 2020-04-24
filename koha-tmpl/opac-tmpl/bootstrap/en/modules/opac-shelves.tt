@@ -8,6 +8,22 @@
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
+[% BLOCK delete_shelf %]
+    <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="form-inline">
+        <input type="hidden" name="op" value="delete" />
+        <input type="hidden" name="referer" value="list" />
+        <input type='hidden' name='category' value='[% category | html %]' />
+        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+        <button type="submit" class="btn btn-link remove deleteshelf" data-shelfnumber="[% shelf.shelfnumber | html %]" data-shelfname="[% shelf.shelfname | html %]" data-shared="[% shelf.is_shared | html %]" data-count="[% contents.count | html %]"><i class="fa fa-remove" aria-hidden="true"></i>
+            [% IF ( context == "list" ) %]
+                Delete
+            [% ELSE %]
+                Delete list
+            [% END %]
+        </button>
+    </form>
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF op == 'view' %]Contents of [% shelf.shelfname | html %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
@@ -159,6 +175,8 @@
                         </h3>
 
                          [% IF ( itemsloop ) %]
+                            [% SET contents = shelf.get_contents %]
+                            [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
                             <div id="floating">
                              <div id="toolbar" class="toolbar clearfix">
                                  <div class="list-actions">
@@ -181,13 +199,8 @@
                                             <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o"></i> Edit list</button>
                                         </form>
 
-                                        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
-                                            <input type="hidden" name="op" value="delete" />
-                                            <input type="hidden" name="referer" value="list" />
-                                            <input type='hidden' name='category' value='[% shelf.category | html %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-fw fa-remove"></i> Delete list</button>
-                                        </form>
+                                        [% PROCESS delete_shelf context = "details" %]
+
                                         [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
                                             <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share"></i> Share list</a>
                                         [% END %]
@@ -504,12 +517,8 @@
                                             <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o"></i> Edit list</button>
                                         </form>
 
-                                        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
-                                            <input type="hidden" name="op" value="delete" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
-                                            <input type="hidden" name="category" value="[% shelf.category | html %]" />
-                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-fw fa-remove"></i> Delete list</button>
-                                        </form>
+                                        [% PROCESS delete_shelf context = "details" %]
+
                                     [% END %]
                                 </div> <!-- / .list-actions -->
                             </div> <!-- / #toolbar -->
@@ -688,13 +697,7 @@
                                                         </form>
                                                     [% END %]
                                                     [% IF s.can_be_deleted( loggedinusernumber ) %]
-                                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
-                                                            <input type="hidden" name="op" value="delete" />
-                                                            <input type="hidden" name="referer" value="list" />
-                                                            <input type='hidden' name='category' value='[% category | html %]' />
-                                                            <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
-                                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-remove"></i> Delete</button>
-                                                        </form>
+                                                        [% PROCESS delete_shelf shelf = s context = "list" %]
                                                     [% END %]
                                                     [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
                                                         <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share"></i> Share</a>
@@ -965,6 +968,27 @@ $(function() {
             $('#sorting-form').submit();
         });
     [% END %]
+
+    $(".deleteshelf").on("click", function(e){
+        e.preventDefault();
+        var shelf_name = $(this).data("shelfname");
+        var shelf_number = $(this).data("shelfnumber");
+        var is_shared = $(this).data("shared");
+        var count = $(this).data("count");
+        var message = "<p><i>" + shelf_name + "</i></p>";
+        if( count ){
+            message += "<p>" + _("Items on this list:") + " <strong>" + count + "</strong></p>";
+        }
+        if( is_shared ){
+            message += "<p>" + _("This list is shared. Other users will lose access to it.") + "</p>";
+        }
+        confirmModal( message, _("Are you sure you want to delete this list?"), _("Yes, delete"), _("No, do not delete"), function( result ){
+                if( result ){
+                    $("#deleteshelf" + shelf_number ).submit();
+                }
+            }
+        );
+    });
 
     $(".remove_share").on("click", function(e){
         e.preventDefault();
