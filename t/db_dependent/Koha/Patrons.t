@@ -89,8 +89,9 @@ subtest 'library' => sub {
 };
 
 subtest 'sms_provider' => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $sms_provider = $builder->build({source => 'SmsProvider' });
+    is( $retrieved_patron_1->sms_provider, undef, '->sms_provider should return undef if none defined' );
     $retrieved_patron_1->sms_provider_id( $sms_provider->{id} )->store;
     is_deeply( $retrieved_patron_1->sms_provider->unblessed, $sms_provider, 'Koha::Patron->sms_provider returns the correct SMS provider' );
     is( ref($retrieved_patron_1->sms_provider), 'Koha::SMS::Provider', 'Koha::Patron->sms_provider should return a Koha::SMS::Provider object' );

@@ -439,7 +439,9 @@ Returns a Koha::SMS::Provider object representing the patron's SMS provider.
 
 sub sms_provider {
     my ( $self ) = @_;
-    return Koha::SMS::Provider->_new_from_dbic($self->_result->sms_provider);
+    my $sms_provider_rs = $self->_result->sms_provider;
+    return unless $sms_provider_rs;
+    return Koha::SMS::Provider->_new_from_dbic($sms_provider_rs);
 }
 
 =head3 guarantor_relationships
