@@ -1139,7 +1139,7 @@ sub _search_fields {
         subfield => undef,
     };
     my $cache = Koha::Caches->get_instance();
-    my $cache_key = 'elasticsearch_search_fields' . ($params->{is_opac} ? '_opac' : '_staff_client');
+    my $cache_key = 'elasticsearch_search_fields' . ($params->{is_opac} ? '_opac' : '_staff_client') . "_" . $self->index;
     my $search_fields = $cache->get_from_cache($cache_key, { unsafe => 1 });
     if (!$search_fields) {
         # The reason we don't use Koha::SearchFields->search here is we don't
