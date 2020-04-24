@@ -548,10 +548,32 @@ subtest 'build query from form subtests' => sub {
 };
 
 subtest 'build_query with weighted fields tests' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     $se->mock( '_load_elasticsearch_mappings', sub {
         return {
+            authorities => {
+                heading => {
+                    label => 'heading',
+                    type => 'string',
+                    opac => 0,
+                    staff_client => 1,
+                    mappings => [{
+                        marc_field => '150',
+                        marc_type => 'marc21',
+                    }]
+                },
+                headingmain => {
+                    label => 'headingmain',
+                    type => 'string',
+                    opac => 1,
+                    staff_client => 1,
+                    mappings => [{
+                        marc_field => '150',
+                        marc_type => 'marc21',
+                    }]
+                }
+            },
             biblios => {
                 abstract => {
                     label => 'abstract',
@@ -636,6 +658,18 @@ subtest 'build_query with weighted fields tests' => sub {
         ['abstract'],
         'Only OPAC search fields are used when opac search is performed'
     );
+
+    $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'authorities' } );
+    ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
+    undef, undef, undef, { weighted_fields => 1 });
+    $fields = $query->{query}{query_string}{fields};
+    is_deeply( [sort @$fields], ['heading','headingmain'],'Authorities fields retrieve for authorities index');
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
+    undef, undef, undef, { weighted_fields => 1, is_opac => 1 });
+    $fields = $query->{query}{query_string}{fields};
+    is_deeply($fields,['headingmain'],'Only opac authorities fields retrieved for authorities index is is_opac');
+
 };
 
 subtest "_convert_sort_fields() tests" => sub {
