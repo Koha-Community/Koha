@@ -623,7 +623,7 @@ CREATE TABLE `deleteditems` (
   `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
   `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
   `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
-  `issues` smallint(6) default NULL, -- number of times this item has been checked out
+  `issues` smallint(6) default 0, -- number of times this item has been checked out
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
@@ -872,7 +872,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
   `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
   `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
-  `issues` smallint(6) default NULL, -- number of times this item has been checked out/issued
+  `issues` smallint(6) default 0, -- number of times this item has been checked out/issued
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
