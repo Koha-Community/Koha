@@ -159,7 +159,8 @@ __PACKAGE__->table("items");
 =head2 issues
 
   data_type: 'smallint'
-  is_nullable: 1
+  is_nullable: 0
+  default_value: 0
 
 =head2 renewals
 
@@ -355,7 +356,10 @@ __PACKAGE__->add_columns(
   "coded_location_qualifier",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
-  { data_type => "smallint", is_nullable => 1 },
+  { data_type => "smallint",
+    is_nullable => 0,
+    default_value => 0,
+  },
   "renewals",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
