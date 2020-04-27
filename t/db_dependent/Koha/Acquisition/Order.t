@@ -285,7 +285,7 @@ subtest 'duplicate_to | add_item' => sub {
 
 subtest 'current_item_level_holds() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -334,16 +334,23 @@ subtest 'current_item_level_holds() tests' => sub {
         }
     );
 
-    is( $order->current_item_level_holds, undef, 'Returns undef if no linked biblio');
+    my $holds = $order->current_item_level_holds;
+
+    is( ref($holds), 'Koha::Holds', 'Koha::Holds iterator returned if no linked biblio' );
+    is( $holds->count, 0, 'Count is 0 if no linked biblio' );
 
     $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
 
-    is( $order->current_item_level_holds, undef, 'Returns undef if no linked items');
+    $holds = $order->current_item_level_holds;
+
+    is( ref($holds), 'Koha::Holds', 'Koha::Holds iterator returned if no linked items' );
+    is( $holds->count, 0, 'Count is 0 if no linked items' );
 
     $order->add_item( $item_2->itemnumber );
     $order->add_item( $item_3->itemnumber );
 
-    is( $order->current_item_level_holds->count, 1, 'Only current (not future) holds are returned');
+    $holds = $order->current_item_level_holds;
+    is( $holds->count, 1, 'Only current (not future) holds are returned');
 
     $schema->storage->txn_rollback;
 };
