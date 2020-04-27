@@ -25,6 +25,7 @@ use Koha::Acquisition::Invoices;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
+use Koha::Holds;
 use Koha::Items;
 use Koha::Subscriptions;
 
@@ -182,9 +183,7 @@ sub subscription {
     my $holds = $order->current_item_level_holds;
 
 Returns the current item-level holds associated to the order. It returns a I<Koha::Holds>
-resultset in scalar context or a list of I<Koha::Hold> objects in list context.
-
-It returns B<undef> if no I<biblio> or no I<items> are linked to the order.
+resultset.
 
 =cut
 
@@ -193,11 +192,11 @@ sub current_item_level_holds {
 
     my $items_rs     = $self->_result->aqorders_items;
     my @item_numbers = $items_rs->get_column('itemnumber')->all;
+    my $biblio       = $self->biblio;
 
-    return unless @item_numbers;
-
-    my $biblio = $self->biblio;
-    return unless $biblio;
+    unless ( $biblio and @item_numbers ) {
+        return Koha::Holds->new->empty;
+    }
 
     return $biblio->current_holds->search(
         {
