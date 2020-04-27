@@ -611,7 +611,7 @@ subtest 'SearchItems test' => sub {
     my ($cpl_items_after) = SearchItems( { field => 'homebranch', query => $library1->{branchcode} } );
     is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItems should return something' );
 
-    # Issues count may be NULL
+    # Issues count = 0
     $filter = {
         conjunction => 'AND',
         filters => [
@@ -628,7 +628,7 @@ subtest 'SearchItems test' => sub {
         ],
     };
     ($items, $total_results) = SearchItems($filter);
-    is($total_results, 1, "Search items.issues is NULL with filter issues = 0");
+    is($total_results, 1, "Search items.issues issues = 0 returns result (items.issues defaults to 0)");
 
     $schema->storage->txn_rollback;
 };
