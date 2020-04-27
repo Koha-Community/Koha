@@ -321,29 +321,27 @@
                                                         [% END %]
                                                     </td>
                                                     <td>
-                                                        <div class="dropup">
-                                                            <div class="btn-group">
-                                                                [%# There should be no space between these two buttons, it would render badly %]
-                                                                <a class="btn btn-default btn-xs" role="button"
-                                                                   href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
-                                                                   class="fa fa-play"></i> Run</a><a
-                                                                   class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
-                                                                   href="#"><b class="caret"></b></a>
-                                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                                                                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
-                                                                    [% IF ( CAN_user_reports_create_reports ) %]
-                                                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
-                                                                        <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
-                                                                    [% END %]
-                                                                    [% IF (Koha.Preference('Mana') == 1) %]
-                                                                        <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
-                                                                    [% END %]
-                                                                    <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
-                                                                    [% IF ( CAN_user_reports_delete_reports ) %]
-                                                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
-                                                                    [% END %]
-                                                                </ul>
-                                                            </div>
+                                                        <div class="btn-group dropup">
+                                                            [%# There should be no space between these two buttons, it would render badly %]
+                                                            <a class="btn btn-default btn-xs" role="button"
+                                                               href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Run%20this%20report"><i
+                                                               class="fa fa-play"></i> Run</a><a
+                                                               class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
+                                                               href="#"><b class="caret"></b></a>
+                                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                                                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
+                                                                [% IF ( CAN_user_reports_create_reports ) %]
+                                                                    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
+                                                                    <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
+                                                                [% END %]
+                                                                [% IF (Koha.Preference('Mana') == 1) %]
+                                                                    <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>
+                                                                [% END %]
+                                                                <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
+                                                                [% IF ( CAN_user_reports_delete_reports ) %]
+                                                                    <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
+                                                                [% END %]
+                                                            </ul>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -934,7 +932,7 @@
 
                             [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                                 <p>
-                                    <div class="dropdown">
+                                    <div class="btn-group">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             Batch operations with [% IF unlimited_total > limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
                                             <span class="caret"></span>

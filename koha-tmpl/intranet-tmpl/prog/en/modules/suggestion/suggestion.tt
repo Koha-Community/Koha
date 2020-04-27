@@ -626,8 +626,7 @@
                     [% END %]
                 </td>
                 <td class="actions">
-                    <div class="dropup">
-                    <div class="btn-group">
+                    <div class="btn-group dropup">
                         <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% suggestions_loo.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% suggestions_loo.suggestionid | html %]">
                             <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a></li>
@@ -637,7 +636,6 @@
                                 <li><a class="unarchivesuggestion" href="suggestion.pl?op=unarchive&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-archive"></i> Unarchive</a></li>
                             [% END %]
                         </ul>
-                    </div>
                     </div>
                 </td>
         </tr>
