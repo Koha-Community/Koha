@@ -256,6 +256,7 @@
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
 
                             [% IF ( suggestions_loop ) %]
+                                [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
                                     <fieldset>
                                         <label for="title">Search for:</label>
@@ -321,6 +322,7 @@
                                                     [% IF ( loggedinusername ) %]
                                                         <td>
                                                             [% IF ( suggestions_loo.showcheckbox ) %]
+                                                                [% SET can_delete_suggestion = 1 %]
                                                                 <input type="checkbox" class="cb" id="id[% suggestions_loo.suggestionid | html %]" name="delete_field" data-title="[% suggestions_loo.title | html %]" value="[% suggestions_loo.suggestionid | html %]" />
                                                             [% END %]
                                                         </td>
@@ -386,7 +388,7 @@
                                         </tbody>
                                     </table>
 
-                                    [% IF ( loggedinusername ) %]
+                                    [% IF ( loggedinusername && can_delete_suggestion ) %]
                                         <fieldset class="action">
                                             <input type="submit" class="btn btn-danger removeitems" value="Delete selected" />
                                         </fieldset>
