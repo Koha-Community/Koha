@@ -166,8 +166,10 @@ if ( $op eq 'edit' ) {
         $schema->storage->txn_commit;
 
         my $cache = Koha::Caches->get_instance();
-        $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
-        $cache->clear_from_cache('elasticsearch_search_fields_opac');
+        $cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
+        $cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
+        $cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
+        $cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');
 
         $update_mappings->();
     }
