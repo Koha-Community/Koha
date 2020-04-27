@@ -509,7 +509,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
 (function($) {
 
-    $.fn.api = function(options) {
+    $.fn.api = function(options, columns_settings, add_filters) {
         var settings = null;
         if(options) {
             if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
@@ -520,6 +520,10 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         'serverSide': true,
                         'searching': true,
                         'pagingType': 'full_numbers',
+                        'processing': true,
+                        'language': {
+                            'emptyTable': (options.emptyTable) ? options.emptyTable : _("No data available in table")
+                        },
                         'ajax': {
                             'type': 'GET',
                             'cache': true,
@@ -592,6 +596,131 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         }
                     }, options);
         }
+
+        var counter = 0;
+        var hidden_ids = [];
+        var included_ids = [];
+
+        $(columns_settings).each( function() {
+            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', this ).index( 'th' );
+            var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
+            if ( used_id == -1 ) return;
+
+            if ( this['is_hidden'] == "1" ) {
+                hidden_ids.push( used_id );
+            }
+            if ( this['cannot_be_toggled'] == "0" ) {
+                included_ids.push( used_id );
+            }
+            counter++;
+        });
+
+        var exportColumns = ":visible:not(.noExport)";
+        if( settings.hasOwnProperty("exportColumns") ){
+            // A custom buttons configuration has been passed from the page
+            exportColumns = settings["exportColumns"];
+        }
+
+        var export_format = {
+            body: function ( data, row, column, node ) {
+                var newnode = $(node);
+
+                if ( newnode.find(".noExport").length > 0 ) {
+                    newnode = newnode.clone();
+                    newnode.find(".noExport").remove();
+                }
+
+                return newnode.text().replace( /\n/g, ' ' ).trim();
+            }
+        }
+
+        var export_buttons = [
+            {
+                extend: 'excelHtml5',
+                text: _("Excel"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_format
+                },
+            },
+            {
+                extend: 'csvHtml5',
+                text: _("CSV"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_format
+                },
+            },
+            {
+                extend: 'copyHtml5',
+                text: _("Copy"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_format
+                },
+            },
+            {
+                extend: 'print',
+                text: _("Print"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_format
+                },
+            }
+        ];
+
+        settings[ "buttons" ] = [
+            {
+                fade: 100,
+                className: "dt_button_clear_filter",
+                titleAttr: _("Clear filter"),
+                enabled: false,
+                text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+                action: function ( e, dt, node, config ) {
+                    dt.search( "" ).draw("page");
+                    node.addClass("disabled");
+                }
+            }
+        ];
+
+        if( included_ids.length > 0 ){
+            settings[ "buttons" ].push(
+                {
+                    extend: 'colvis',
+                    fade: 100,
+                    columns: included_ids,
+                    className: "columns_controls",
+                    titleAttr: _("Columns settings"),
+                    text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
+                    exportOptions: {
+                        columns: exportColumns
+                    }
+                }
+            );
+        }
+
+        settings[ "buttons" ].push(
+            {
+                extend: 'collection',
+                autoClose: true,
+                fade: 100,
+                className: "export_controls",
+                titleAttr: _("Export or print"),
+                text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + _("Export") + '</span>',
+                buttons: export_buttons
+            }
+        );
+
+        if ( add_filters ) {
+            // Duplicate the table header row for columnFilter
+            thead_row = this.find('thead tr');
+            clone = thead_row.clone().addClass('filters_row');
+            clone.find("th.NoSort").html('');
+            thead_row.before(clone);
+        }
+
+        $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
+
         return $(this).dataTable(settings);
     };
 
