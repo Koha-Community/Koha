@@ -21853,6 +21853,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25045, "Add a way to restrict anonymous access to public routes (OpacPublic behaviour)");
 }
 
+$DBversion = '19.12.00.080';
+if( CheckVersion( $DBversion ) ) {
+     $dbh->do( "UPDATE items set issues=0 where issues is null" );
+     $dbh->do( "UPDATE deleteditems set issues=0 where issues is null" );
+     $dbh->do( "ALTER TABLE items ALTER issues set default 0" );
+     $dbh->do( "ALTER TABLE deleteditems ALTER issues set default 0" );
+
+    NewVersion( $DBversion, 23081, "Set default to 0 for items.issues");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
