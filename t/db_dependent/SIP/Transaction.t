@@ -4,11 +4,12 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+use C4::SIP::ILS;
 use C4::SIP::ILS::Patron;
 use C4::SIP::ILS::Transaction::RenewAll;
 use C4::SIP::ILS::Transaction::Checkout;
@@ -318,4 +319,79 @@ subtest do_checkin => sub {
     is( $patron->checkouts->count, 0, 'Checkin should have been done successfully');
 };
 
+subtest checkin_lost => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library     => $library->branchcode,
+        }
+    );
+
+    $item->itemlost(1)->itemlost_on(dt_from_string)->store();
+
+    my $instituation = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils = C4::SIP::ILS->new( $instituation );
+
+    t::lib::Mocks::mock_preference('BlockReturnOfLostItems', '1');
+    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    is( $circ->{screen_msg}, 'Item lost, return not allowed', "Got correct screen message" );
+
+    t::lib::Mocks::mock_preference('BlockReturnOfLostItems', '0');
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
+};
+
+subtest checkin_withdrawn => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library     => $library->branchcode,
+        }
+    );
+
+    $item->withdrawn(1)->withdrawn_on(dt_from_string)->store();
+
+    my $instituation = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils = C4::SIP::ILS->new( $instituation );
+
+    t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '1');
+    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    is( $circ->{screen_msg}, 'Item withdrawn, return not allowed', "Got correct screen message" );
+
+    t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '0');
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
+};
 $schema->storage->txn_rollback;
