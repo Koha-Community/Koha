@@ -395,10 +395,22 @@
                                     [% END %]
                                 </form>
                             [% ELSE %]
-                                [% UNLESS Koha.Preference( 'OPACViewOthersSuggestions' ) or loggedinusername %]
-                                    <p>You are not authorized to see pending purchase suggestions.</p>
+                                [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
+                                    [% IF ( loggedinusername ) %]
+                                        [% IF ( suggested_by_anyone ) %]
+                                            <p>There are no pending purchase suggestions.</p>
+                                        [% ELSE %]
+                                            <p>You have no pending purchase suggestions. <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">View all suggestions</a></p>
+                                        [% END %]
+                                    [% ELSE %]
+                                        <p>There are no pending purchase suggestions.</p>
+                                    [% END %]
                                 [% ELSE %]
-                                    <p>There are no pending purchase suggestions.</p>
+                                    [% IF ( loggedinusername ) %]
+                                        <p>You have no pending purchase suggestions.</p>
+                                    [% ELSE %]
+                                        <p>You are not authorized to see pending purchase suggestions.</p>
+                                    [% END %]
                                 [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                     [% IF ( Koha.Preference('MaxTotalSuggestions') != ''  && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]

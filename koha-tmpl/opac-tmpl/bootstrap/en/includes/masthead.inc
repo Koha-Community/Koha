@@ -309,10 +309,8 @@
                                     [% IF Koha.Preference( 'OpacTopissue' ) == 1 %]<li><a href="/cgi-bin/koha/opac-topissues.pl">Most popular</a></li>[% END %]
                                     [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference( 'OpacBrowseSearch' ) == 1 %]<li><a href="/cgi-bin/koha/opac-browse.pl">Browse search</a></li>[% END %]
                                     [% IF Koha.Preference( 'suggestion' ) == 1 %]
-                                        [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
-                                            <li><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase suggestions</a></li>
-                                        [% ELSIF ( ( Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 ) ) %]
-                                            <li><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase suggestions</a></li>
+                                        [% IF Koha.Preference( 'AnonSuggestions' ) == 1 || Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
+                                            <li><a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">Purchase suggestions</a></li>
                                         [% END %]
                                     [% END %]
                                     [% Koha.Preference('OpacMoreSearches') | $raw %]
