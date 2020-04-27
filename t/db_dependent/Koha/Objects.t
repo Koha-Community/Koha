@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Exception;
 use Test::Warn;
 
@@ -796,6 +796,23 @@ subtest 'prefetch_whitelist() tests' => sub {
         'Koha::Item',
         'Guessed the standard object class correctly'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'empty() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Add a patron, we need more than 0
+    $builder->build_object({ class => 'Koha::Patrons' });
+    ok( Koha::Patrons->count > 0, 'There is more than one Koha::Patron on the resultset' );
+
+    my $empty = Koha::Patrons->new->empty;
+    is( ref($empty), 'Koha::Patrons', '->empty returns a Koha::Patrons iterator' );
+    is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
 
     $schema->storage->txn_rollback;
 };
