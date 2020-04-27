@@ -61,7 +61,7 @@ foreach my $line (<$MARC21UTF8>) {
 $marc21_utf8 =~ s/\n$//;
 close $MARC21UTF8;
 
-open(my $MARC21MARC8COMBCHARS, '<', WHEREAMI."/marc21_marc8_combining_chars.dat" or die $!;
+open(my $MARC21MARC8COMBCHARS, '<', WHEREAMI."/marc21_marc8_combining_chars.dat") or die $!;
 my $marc21_marc8_combining_chars;
 foreach my $line(<$MARC21MARC8COMBCHARS>) {
 	$marc21_marc8_combining_chars.=$line;

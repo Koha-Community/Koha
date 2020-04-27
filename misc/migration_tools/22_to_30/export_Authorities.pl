@@ -31,7 +31,9 @@ while (my ($authid,$authtypecode)=$rq->fetchrow){
   
   if (C4::Context->preference('marcflavour') eq "UNIMARC"){
 	$record->leader('     nac  22     1u 4500');
-    my $string= ($time=~m/([0-9\-]+)/) ? $1 : undef
+    my @time = localtime(time);
+    my $time = sprintf('%04d%02d%02d', $time[5] + 1900, $time[4] + 1, $time[3]);
+    my $string= ($time=~m/([0-9\-]+)/) ? $1 : undef;
     $string=~s/\-//g;
      $string = sprintf("%-*s",26, $string);
      substr($string,9,6,"frey50");

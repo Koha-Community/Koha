@@ -60,6 +60,8 @@ also need to override WEBSERVER_IP.
 
 =cut
 
+my $myhost;
+my $mydomain;
 if ( $myhost = $ENV{WEBSERVER_HOST} || hostname ) {
     ( $mydomain = $myhost ) =~ s/.*?\.//;
 } else {
@@ -67,6 +69,7 @@ if ( $myhost = $ENV{WEBSERVER_HOST} || hostname ) {
     $mydomain = 'localdomain';
 }
 
+my $myip;
 unless ( $myip = $ENV{WEBSERVER_IP} ) {
     my $byname = gethostbyname( $myhost )
 	or die "Could not get the IP address of $myhost, DNS fault? ($!)";
@@ -75,12 +78,12 @@ unless ( $myip = $ENV{WEBSERVER_IP} ) {
 }
 
 
-$prefix = $ENV{'INSTALL_BASE'} || "/usr";
+my $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 
 # These are our configuration guesses
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
-%configuration = (
+my %configuration = (
   "__KOHA_INSTALLED_VERSION__" => "no_version_found",
   "__LOG_DIR__" => "/var/log",
   "__PLUGINS_DIR__" => "/var/lib/koha/plugins",
@@ -172,8 +175,8 @@ if ($configuration{'__INSTALL_PAZPAR2__'} eq 'yes') {
     $configuration{'__PAZPAR2_TOGGLE_XML_POST__'} = '';
 }
 
-$fname = $ARGV[0];
-$file = &read_file($fname);
+my $fname = $ARGV[0];
+my $file = &read_file($fname);
 $file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
 
 # At this point, file is in 'blib' and by default

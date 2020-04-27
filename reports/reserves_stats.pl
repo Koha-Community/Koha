@@ -38,11 +38,11 @@ use YAML;
 
 =head1 NAME
 
-    reports/reserve_stats.pl
+reports/reserve_stats.pl
 
 =head1 DESCRIPTION
 
-    Plugin that shows reserve stats
+Plugin that shows reserve stats
 
 =cut
 
