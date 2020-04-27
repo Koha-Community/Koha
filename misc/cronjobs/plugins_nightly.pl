@@ -2,9 +2,12 @@
 
 use Modern::Perl;
 
+use Koha::Logger;
 use Koha::Script -cron;
+
 cronlogaction();
 
+my $logger = Koha::Logger->get();
 if ( C4::Context->config("enable_plugins") ) {
     my @plugins = Koha::Plugins->new->GetPlugins(
         {
@@ -18,6 +21,7 @@ if ( C4::Context->config("enable_plugins") ) {
         }
         catch {
             warn "$_";
+            $logger->warn("$_");
         };
     }
 }
