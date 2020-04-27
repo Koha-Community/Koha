@@ -159,8 +159,8 @@ __PACKAGE__->table("items");
 =head2 issues
 
   data_type: 'smallint'
-  is_nullable: 0
   default_value: 0
+  is_nullable: 1
 
 =head2 renewals
 
@@ -356,10 +356,7 @@ __PACKAGE__->add_columns(
   "coded_location_qualifier",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
-  { data_type => "smallint",
-    is_nullable => 0,
-    default_value => 0,
-  },
+  { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "renewals",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
@@ -750,8 +747,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-17 10:42:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CcrMhgq+PQ1MHV6jZEN8wA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-27 10:38:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IpI7wRweeZCbCeU1LhZbRQ
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
