@@ -147,11 +147,6 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 
-if ( $op eq 'list' ) {
-    my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
-    $template->param( libraries => $libraries, );
-}
-
 $template->param(
     messages => \@messages,
     op       => $op,
