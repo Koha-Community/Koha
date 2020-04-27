@@ -22,6 +22,8 @@ use Modern::Perl;
 use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Koha qw( GetAuthorisedValues );
 
+use Koha::Caches;
+
 use Net::Z3950::SimpleServer;
 
 =head1 NAME
@@ -177,6 +179,12 @@ Callback that is called when a new search is performed
 
 sub search_handler {
     my ( $self, $args ) = @_;
+
+    my $SearchEngine = C4::Context->preference('SearchEngine');
+    # Flushing L1 to make sure the search will be processed using the correct data
+    Koha::Caches->flush_L1_caches();
+    $self->init_handler($args)
+        if $SearchEngine ne C4::Context->preference('SearchEngine');
 
     $args->{HANDLE}->search_handler($args);
 }
