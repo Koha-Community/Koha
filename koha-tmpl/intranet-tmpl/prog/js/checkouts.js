@@ -908,7 +908,13 @@ $(document).ready(function() {
                               if ( oObj.author ) {
                                 title += ' by ' + oObj.author;
                               }
-                              title += ' <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' + oObj.biblionumber + '&itemnumber=' + oObj.itemnumber + '">' + oObj.barcode + '</a>';
+                              title += ' <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber='
+                                    + oObj.biblionumber
+                                    + '&itemnumber='
+                                    + oObj.itemnumber
+                                    + '">'
+                                    + (oObj.barcode ? oObj.barcode.escapeHtml() : "")
+                                    + '</a>';
 
                               return title;
                         }
