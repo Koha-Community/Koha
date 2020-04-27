@@ -73,5 +73,7 @@ is($title_sf->weight, '20.00', 'Title search field is weighted with 20');
 $schema->storage->txn_rollback;
 
 $cache = Koha::Caches->get_instance();
-$cache->clear_from_cache('elasticsearch_search_fields_staff_client');
-$cache->clear_from_cache('elasticsearch_search_fields_opac');
+$cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
+$cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
+$cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
+$cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');

@@ -103,8 +103,10 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 
 my $cache = Koha::Caches->get_instance();
 my $clear_search_fields_cache = sub {
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac');
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');
 };
 
 subtest 'build_authorities_query_compat() tests' => sub {
