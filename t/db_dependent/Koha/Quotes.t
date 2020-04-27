@@ -39,15 +39,15 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 # Ids not starting with 1 to reflect possible deletes, this acts as a regression test for bug 11297
-my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string()); #???
-my $quote_1 = Koha::Quote->new({ id => 6, source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  $timestamp })->store;
-my $quote_2 = Koha::Quote->new({ id => 7, source => 'Thomas Jefferson', text => 'When angry, count ten, before you speak; if very angry, an hundred.', timestamp =>  $timestamp })->store;
-my $quote_3 = Koha::Quote->new({ id => 8, source => 'Abraham Lincoln', text => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal', timestamp =>  $timestamp })->store;
-my $quote_4 = Koha::Quote->new({ id => 9, source => 'Abraham Lincoln', text => 'I have always found that mercy bears richer fruits than strict justice.', timestamp =>  $timestamp })->store;
-my $quote_5 = Koha::Quote->new({ id => 10, source => 'Andrew Johnson', text => 'I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.', timestamp =>  $timestamp })->store;
+my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string());
+my $quote_1 = Koha::Quote->new({ source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  $timestamp })->store;
+my $quote_2 = Koha::Quote->new({ source => 'Thomas Jefferson', text => 'When angry, count ten, before you speak; if very angry, an hundred.', timestamp =>  $timestamp })->store;
+my $quote_3 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal', timestamp =>  $timestamp })->store;
+my $quote_4 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'I have always found that mercy bears richer fruits than strict justice.', timestamp =>  $timestamp })->store;
+my $quote_5 = Koha::Quote->new({ source => 'Andrew Johnson', text => 'I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.', timestamp =>  $timestamp })->store;
 
 my $expected_quote = {
-    id          => 8,
+    id          => $quote_3->id,
     source      => 'Abraham Lincoln',
     text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
     timestamp   => dt_from_string,
@@ -75,10 +75,10 @@ $quote = eval {Koha::Quote->get_daily_quote();};
 is( $@, '', 'get_daily_quote does not die if no quote exist' );
 is_deeply( $quote, {}, 'get_daily_quote return an empty hashref is no quote exist'); # Is it what we expect?
 
-my $quote_6 = Koha::Quote->new({ id => 6, source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  dt_from_string() })->store;
+my $quote_6 = Koha::Quote->new({ source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  dt_from_string() })->store;
 
 $quote = Koha::Quote->get_daily_quote();
-is( $quote->{id}, 6, ' get_daily_quote returns the only existing quote' );
+is( $quote->{id}, $quote_6->id, ' get_daily_quote returns the only existing quote' );
 
 $schema->storage->txn_rollback;
 
@@ -89,10 +89,10 @@ subtest "get_daily_quote_for_interface" => sub {
     $schema->storage->txn_begin;
 
     my ($quote);
-    my $quote_1 = Koha::Quote->new({ id => 10, source => 'Dusk And Her Embrace', text => 'Unfurl thy limbs breathless succubus<br/>How the full embosomed fog<br/>Imparts the night to us....', timestamp =>  dt_from_string })->store;
+    my $quote_1 = Koha::Quote->new({ source => 'Dusk And Her Embrace', text => 'Unfurl thy limbs breathless succubus<br/>How the full embosomed fog<br/>Imparts the night to us....', timestamp =>  dt_from_string })->store;
 
     my $expected_quote = {
-        id          => 10,
+        id          => $quote_1->id,
         source      => 'Dusk And Her Embrace',
         text        => 'Unfurl thy limbs breathless succubus<br/>How the full embosomed fog<br/>Imparts the night to us....',
         timestamp   => DateTime::Format::MySQL->format_datetime(dt_from_string),
