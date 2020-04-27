@@ -237,7 +237,23 @@ sub last {
     return $object;
 }
 
+=head3 empty
 
+    my $empty_rs = Koha::Objects->new->empty;
+
+Sets the resultset empty. This is handy for consistency on method returns
+(e.g. if we know in advance we won't have results but want to keep returning
+an iterator).
+
+=cut
+
+sub empty {
+    my ($self) = @_;
+
+    $self->_resultset()->set_cache([]);
+
+    return $self;
+}
 
 =head3 Koha::Objects->reset();
 
