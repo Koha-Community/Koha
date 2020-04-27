@@ -26,7 +26,7 @@ $dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` LONGBLOB NULL DEFAULT N
 # adding marc xml, just for convenience
 $dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ');
 # moving data from marc_subfield_value to biblio
-$sth = $dbh->prepare('select bibid,biblionumber from marc_biblio');
+my $sth = $dbh->prepare('select bibid,biblionumber from marc_biblio');
 $sth->execute;
 my $sth_update = $dbh->prepare('update biblioitems set marc=?, marcxml=? where biblionumber=?');
 my $totaldone=0;
@@ -46,7 +46,7 @@ while (my ($bibid,$biblionumber) = $sth->fetchrow) {
     $sth_update->execute($record->as_usmarc(),$record->as_xml_record($marcflavour),$biblionumber);
     $totaldone++;
     print ".";
-    print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
+    print "\r$totaldone" unless ($totaldone % 100);
 }
 print "\rdone\n";
 
@@ -149,7 +149,6 @@ sub LocalMARCgetbiblio {
     }
     if (C4::Context->preference('marcflavour')=~/unimarc/i){
       $record->leader('     nac  22     1u 4500');
-      $update=1;
       my $string;
       if ($record->field(100)) {
         $string = substr($record->subfield(100,"a")."                                   ",0,35);
