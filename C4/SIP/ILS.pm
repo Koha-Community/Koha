@@ -220,7 +220,7 @@ sub checkin {
     if ( !$circ->ok && $circ->alert_type && $circ->alert_type == 98 ) { # data corruption
         $circ->screen_msg("Checkin failed: data problem");
         syslog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
-    } elsif ( $data->{messages}->{withdrawn} && !$circ->ok ) {
+    } elsif ( $data->{messages}->{withdrawn} && !$circ->ok && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
             $circ->screen_msg("Item withdrawn, return not allowed");
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
     } elsif ( $data->{messages}->{WasLost} && !$circ->ok && C4::Context->preference("BlockReturnOfLostItems") ) {
