@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -29,6 +29,8 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
+
+use C4::Linker::Default;
 
 BEGIN {
     use_ok('C4::Biblio');
@@ -150,6 +152,32 @@ subtest "GetMarcFromKohaField" => sub {
     is( @retval, 4, 'Still got two pairs of tags/subfields' );
     is( $retval[0].$retval[1], '399a', 'Including 399a' );
 };
+
+subtest "Authority creation with default linker" => sub {
+    plan tests => 2;
+    # Automatic authority creation
+    t::lib::Mocks::mock_preference('LinkerModule', 'Default');
+    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    my $linker = C4::Linker::Default->new({});
+    my $authorities_mod = Test::MockModule->new( 'C4::Heading' );
+    $authorities_mod->mock(
+        'authorities',
+        sub {
+            my $results = [{ authid => 'original' },{ authid => 'duplicate' }];
+            return $results;
+        }
+    );
+    my $marc_record = MARC::Record->new();
+    my $field = MARC::Field->new(655, ' ', ' ','a' => 'Magical realism');
+    $marc_record->append_fields( $field );
+    my ($num_changed,$results) = LinkBibHeadingsToAuthorities($linker, $marc_record, "",undef);
+    is( $num_changed, 0, "We shouldn't link or create a new record");
+    ok( !defined $results->{added}, "If we have multiple matches, we shouldn't create a new record");
+};
+
+
 
 # Mocking variables
 my $biblio_module = new Test::MockModule('C4::Biblio');
@@ -411,12 +439,12 @@ sub run_tests {
     # Automatic authority creation
     t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
-    my $authorities_mod = Test::MockModule->new( 'C4::AuthoritiesMarc' );
+    my $authorities_mod = Test::MockModule->new( 'C4::Heading' );
     $authorities_mod->mock(
-        'SearchAuthorities',
+        'authorities',
         sub {
             my @results;
-            return \@results, 0;
+            return \@results;
         }
     );
     $success = 0;
