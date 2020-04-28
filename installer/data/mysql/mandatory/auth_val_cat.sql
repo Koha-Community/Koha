@@ -1,51 +1,51 @@
-INSERT IGNORE INTO authorised_value_categories( category_name )
+INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
-    (''),
-    ('Asort1'),
-    ('Asort2'),
-    ('Bsort1'),
-    ('Bsort2'),
-    ('SUGGEST'),
-    ('SUGGEST_STATUS'),
-    ('SUGGEST_FORMAT'),
-    ('DAMAGED'),
-    ('LOST'),
-    ('REPORT_GROUP'),
-    ('REPORT_SUBGROUP'),
-    ('DEPARTMENT'),
-    ('TERM'),
-    ('ITEMTYPECAT'),
-    ('PAYMENT_TYPE'),
-    ('PA_CLASS'),
-    ('ROADTYPE');
+    ('', 1),
+    ('Asort1', 1),
+    ('Asort2', 1),
+    ('Bsort1', 1),
+    ('Bsort2', 1),
+    ('SUGGEST', 0),
+    ('SUGGEST_STATUS', 0),
+    ('SUGGEST_FORMAT', 0),
+    ('DAMAGED', 1),
+    ('LOST', 1),
+    ('REPORT_GROUP', 0),
+    ('REPORT_SUBGROUP', 0),
+    ('DEPARTMENT', 0),
+    ('TERM', 0),
+    ('ITEMTYPECAT', 0),
+    ('PAYMENT_TYPE', 0),
+    ('PA_CLASS', 0),
+    ('ROADTYPE', 0);
 
-INSERT IGNORE INTO authorised_value_categories( category_name )
+INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
-    ('branches'),
-    ('itemtypes'),
-    ('cn_source');
+    ('branches', 1),
+    ('itemtypes', 1),
+    ('cn_source', 1);
 
-INSERT IGNORE INTO authorised_value_categories( category_name )
+INSERT IGNORE INTO authorised_value_categories( category_name, is_system )
     VALUES
-    ('WITHDRAWN'),
-    ('RESTRICTED'),
-    ('NOT_LOAN'),
-    ('CCODE'),
-    ('LOC'),
-    ('BOR_NOTES'),
-    ('OPAC_SUG'),
-    ('SIP_MEDIA_TYPE'),
-    ('ORDER_CANCELLATION_REASON'),
-    ('RELTERMS'),
-    ('YES_NO'),
-    ('LANG'),
-    ('HINGS_UT'),
-    ('HINGS_PF'),
-    ('HINGS_C'),
-    ('HINGS_AS'),
-    ('HINGS_RD'),
-    ('STACK'),
-    ('CONTROL_NUM_SEQUENCE');
+    ('WITHDRAWN', 1),
+    ('RESTRICTED', 0),
+    ('NOT_LOAN', 1),
+    ('CCODE', 1),
+    ('LOC', 1),
+    ('BOR_NOTES', 1),
+    ('OPAC_SUG', 0),
+    ('SIP_MEDIA_TYPE', 0),
+    ('ORDER_CANCELLATION_REASON', 0),
+    ('RELTERMS', 0),
+    ('YES_NO', 0),
+    ('LANG', 0),
+    ('HINGS_UT', 0),
+    ('HINGS_PF', 0),
+    ('HINGS_C', 0),
+    ('HINGS_AS', 0),
+    ('HINGS_RD', 0),
+    ('STACK', 0),
+    ('CONTROL_NUM_SEQUENCE' ,0);
 
 -- UNIMARC specific?
 INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES

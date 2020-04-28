@@ -8,6 +8,18 @@ if( CheckVersion( $DBversion ) ) {
         |);
     }
 
+    $dbh->do(q|
+        UPDATE authorised_value_categories
+        SET is_system = 1
+        WHERE category_name IN ('LOC', 'LOST', 'WITHDRAWN', 'Bsort1', 'Bsort2', 'Asort1', 'Asort2', 'SUGGEST', 'DAMAGED', 'LOST', 'BOR_NOTES', 'CCODE', 'NOT_LOAN')
+    |);
+
+    $dbh->do(q|
+        UPDATE authorised_value_categories
+        SET is_system = 1
+        WHERE category_name IN ('branches', 'itemtypes', 'cn_source')
+    |);
+
     # Always end with this (adjust the bug info)
     NewVersion( $DBversion, 17355, "Description");
 }
