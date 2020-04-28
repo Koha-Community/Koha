@@ -30,11 +30,19 @@ __PACKAGE__->table("authorised_value_categories");
   is_nullable: 0
   size: 32
 
+=head2 is_system
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
   "category_name",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
+  "is_system",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -97,8 +105,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:59:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6vToj9pUcIv8Jio38rNE4g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-28 09:07:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EfBQNJN5wgpFPlWVP4U+qw
 
 sub koha_objects_class {
     'Koha::AuthorisedValueCategories';
