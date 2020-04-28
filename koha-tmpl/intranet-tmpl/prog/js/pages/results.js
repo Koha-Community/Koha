@@ -314,9 +314,9 @@ function verify_images() {
             var w = this.width;
             var h = this.height;
             if ((w == 1) || (h == 1)) {
-                $(this).parent().html('<span class="no-image">No cover image available</span>');
+                $(this).parent().html('<span class="no-image">'+__("No cover image available")+'</span>');
             } else if ((this.complete != null) && (!this.complete)) {
-                $(this).parent().html('<span class="no-image">No cover image available</span>');
+                $(this).parent().html('<span class="no-image">'+__("No cover image available")+'</span>');
             }
         }
     });
