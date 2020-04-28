@@ -476,7 +476,7 @@ sub build_authorities_query_compat {
 
         $m = exists $koha_to_index_name->{$m} ? $koha_to_index_name->{$m} : $m;
         push @indexes, $m;
-        warn "Unknown search field $m in marclist" unless (defined $mappings->{data}->{properties}->{$m} || $m eq '');
+        warn "Unknown search field $m in marclist" unless (defined $mappings->{data}->{properties}->{$m} || $m eq '' || $m eq 'match-heading');
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches

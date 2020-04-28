@@ -2497,8 +2497,8 @@ $op is specialUpdate or recordDelete, and is used to know what we want to do
 
 $server is the server that we want to update
 
-$record is the update MARC record if it's available. If it's not supplied
-and is needed, it'll be loaded from the database.
+$record is the updated MARC record. If it's not supplied
+and is needed it will be loaded from the database.
 
 =cut
 
@@ -2523,7 +2523,6 @@ sub ModZebra {
                     biblionumber => $biblionumber,
                     embed_items  => 1 });
             }
-            my $records = [$record];
             $indexer->update_index_background( [$biblionumber], [$record] );
         }
         elsif ( $op eq 'recordDelete' ) {
