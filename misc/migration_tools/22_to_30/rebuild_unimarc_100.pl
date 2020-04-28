@@ -56,7 +56,7 @@ sub MARCmodrecord {
             $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>"$string"));
         }
     if ($update){
-        &ModBiblioMarc($record,$biblionumber,'');
+        &ModBiblioMarc($record,$biblionumber);
         print "\r$biblionumber" unless ( $biblionumber % 100 );
     }
 

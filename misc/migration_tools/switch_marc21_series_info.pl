@@ -222,7 +222,7 @@ while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
     else {
         print ".";
     }
-    ModBiblioMarc( $biblio, $biblionumber, $framework );
+    ModBiblioMarc( $biblio, $biblionumber );
 }
 print "\n";
 

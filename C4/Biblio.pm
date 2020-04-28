@@ -285,7 +285,7 @@ sub AddBiblio {
             _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
 
             # now add the record
-            ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
+            ModBiblioMarc( $record, $biblionumber ) unless $defer_marc_save;
 
             # update OAI-PMH sets
             if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
@@ -378,7 +378,7 @@ sub ModBiblio {
     _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
 
     # update the MARC record (that now contains biblio and items) with the new record data
-    &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+    &ModBiblioMarc( $record, $biblionumber );
 
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
@@ -2982,7 +2982,7 @@ sub _koha_delete_biblio_metadata {
 
 =head2 ModBiblioMarc
 
-  &ModBiblioMarc($newrec,$biblionumber,$frameworkcode);
+  &ModBiblioMarc($newrec,$biblionumber);
 
 Add MARC XML data for a biblio to koha
 
@@ -2993,7 +2993,7 @@ Function exported, but should NOT be used, unless you really know what you're do
 sub ModBiblioMarc {
     # pass the MARC::Record to this function, and it will create the records in
     # the marcxml field
-    my ( $record, $biblionumber, $frameworkcode ) = @_;
+    my ( $record, $biblionumber ) = @_;
     if ( !$record ) {
         carp 'ModBiblioMarc passed an undefined record';
         return;
@@ -3003,12 +3003,6 @@ sub ModBiblioMarc {
     $record = $record->clone();
     my $dbh    = C4::Context->dbh;
     my @fields = $record->fields();
-    if ( !$frameworkcode ) {
-        $frameworkcode = "";
-    }
-    my $sth = $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
-    $sth->execute( $frameworkcode, $biblionumber );
-    $sth->finish;
     my $encoding = C4::Context->preference("marcflavour");
 
     # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode

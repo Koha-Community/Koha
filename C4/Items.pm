@@ -276,9 +276,6 @@ sub AddItemBatchFromMarc {
         $record->delete_field($item_field);
     }
 
-    # update the MARC biblio
- #   $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
-
     return (\@itemnumbers, \@errors);
 }
 

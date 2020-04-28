@@ -25,7 +25,7 @@ $sth->execute();
 while (my ($biblionumber,$biblioitemnumber,$frameworkcode)=$sth->fetchrow ){
     my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     C4::Biblio::_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
-    my $biblionumber = eval {ModBiblioMarc( $record, $biblionumber, $frameworkcode )};
+    my $biblionumber = eval {ModBiblioMarc( $record, $biblionumber )};
     if($@){
         print "Problem with biblionumber : $biblionumber\n";
         exit -1;

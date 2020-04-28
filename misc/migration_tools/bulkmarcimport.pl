@@ -445,7 +445,7 @@ RECORD: while (  ) {
                     $biblioitemnumber = Koha::Biblios->find( $biblionumber )->biblioitem->biblioitemnumber;
                 };
                 if ($update) {
-                    eval { ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) ) };
+                    eval { ModBiblio( $record, $biblionumber, $framework ) };
                     if ($@) {
                         warn "ERROR: Edit biblio $biblionumber failed: $@\n";
                         printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);
@@ -458,7 +458,7 @@ RECORD: while (  ) {
                 }
             } else {
                 if ($insert) {
-                    eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '', { defer_marc_save => 1 } ) };
+                    eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $framework, { defer_marc_save => 1 } ) };
                     if ($@) {
                         warn "ERROR: Adding biblio $biblionumber failed: $@\n";
                         printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ERROR" } ) if ($logfile);
@@ -480,7 +480,7 @@ RECORD: while (  ) {
             C4::Biblio::_strip_item_fields($clone_record, '');
             # This sets the marc fields if there was an error, and also calls
             # defer_marc_save.
-            ModBiblioMarc( $clone_record, $biblionumber, $framework );
+            ModBiblioMarc( $clone_record, $biblionumber );
             if ( $error_adding ) {
                 warn "ERROR: Adding items to bib $biblionumber failed: $error_adding";
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);

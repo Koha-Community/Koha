@@ -49,7 +49,7 @@ foreach ($record->field('995')) {
 	$record->delete_field($_);
 }
 if ($update){	
-	&ModBiblioMarc($record,'',$biblionumber);
+    &ModBiblioMarc($record,$biblionumber);
 	print "$biblionumber \n";	
 }
 

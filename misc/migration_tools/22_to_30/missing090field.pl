@@ -73,7 +73,7 @@ sub MARCmodbiblionumber{
 
 
     if ($update){
-        &ModBiblioMarc($record,$biblionumber,'');
+        &ModBiblioMarc($record,$biblionumber);
         print "\n modified : $biblionumber \n";
     }
     
