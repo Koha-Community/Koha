@@ -46,6 +46,7 @@
     [% END %]
 [% END %]
 [% IF ( Koha.Preference('OPACBaseURL') ) %]
+    <link rel="search" type="application/opensearchdescription+xml" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-search.pl?format=opensearchdescription" title="Search [% LibraryNameTitle | html %]">
     <link rel="unapi-server" type="application/xml" title="unAPI" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/unapi" />
 [% END %]
 [% PROCESS cssinclude %]
