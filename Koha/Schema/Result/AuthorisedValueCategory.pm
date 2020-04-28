@@ -108,6 +108,10 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-28 09:07:15
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EfBQNJN5wgpFPlWVP4U+qw
 
+__PACKAGE__->add_columns(
+    '+is_system' => { is_boolean => 1 },
+);
+
 sub koha_objects_class {
     'Koha::AuthorisedValueCategories';
 }
