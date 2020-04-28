@@ -907,7 +907,11 @@
                                     [% IF loop.first %]<a name="patron-attr-start-[% pa.type.code | html %]"></a>[% END %]
                                     [% form_id = 'patron-attr-' _ Math.int( Math.rand(1000000) ) %]
                                     <li data-category_code="[% pa.type.category_code | html %]">
-                                        <label for="[% form_id | html %]">[% pa.type.description | html %]: </label>
+                                        [% IF pa.type.mandatory && pa.type.opac_editable %]
+                                            <label for="[% form_id | html %]" class="required">[% pa.type.description | html %]: </label>
+                                        [% ELSE %]
+                                            <label for="[% form_id | html %]">[% pa.type.description | html %]: </label>
+                                        [% END %]
                                         [% IF pa.type.opac_editable %]
                                             <input type="hidden" name="patron_attribute_code" value="[% pa.type.code | html %]" />
                                             [% IF ( pa.type.authorised_value_category ) %]
@@ -927,6 +931,9 @@
                                                 </select>
                                             [% ELSE %]
                                                 <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
+                                            [% END %]
+                                            [% IF pa.type.mandatory %]
+                                                <span class="required">Required</span>
                                             [% END %]
                                             <a href="#" class="clear-attribute">Clear</a>
                                             [% IF ( pa.type.repeatable ) %]

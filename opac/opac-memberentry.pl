@@ -123,7 +123,7 @@ if ( $action eq 'create' ) {
 
     %borrower = DelEmptyFields(%borrower);
 
-    my @empty_mandatory_fields = CheckMandatoryFields( \%borrower, $action );
+    my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
     delete $borrower{'password2'};
     my $cardnumber_error_code;
@@ -259,7 +259,7 @@ elsif ( $action eq 'update' ) {
     $borrower{borrowernumber} = $borrowernumber;
 
     my @empty_mandatory_fields =
-      CheckMandatoryFields( \%borrower, $action );
+      ( CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
     # Send back the data to the template
@@ -407,6 +407,20 @@ sub CheckMandatoryFields {
     foreach my $key ( keys %$mandatory_fields ) {
         push( @empty_mandatory_fields, $key )
           unless ( defined( $borrower->{$key} ) && $borrower->{$key} );
+    }
+
+    return @empty_mandatory_fields;
+}
+
+sub CheckMandatoryAttributes{
+    my ( $borrower, $attributes ) = @_;
+
+    my @empty_mandatory_fields;
+
+    for my $attribute (@$attributes ) {
+        my $attr = Koha::Patron::Attribute::Types->find($attribute->{code});
+        push @empty_mandatory_fields, $attribute->{code}
+            if $attr && $attr->mandatory && $attribute->{attribute} =~ m|^\s*$|;
     }
 
     return @empty_mandatory_fields;
@@ -691,7 +705,8 @@ sub ParsePatronAttributes {
     }
 
     foreach my $code ( keys %{$delete_candidates} ) {
-        if ( Koha::Patron::Attributes->search({
+        if ( not $borrowernumber # self-registration
+            || Koha::Patron::Attributes->search({
                 borrowernumber => $borrowernumber, code => $code })->count > 0 )
         {
             push @attributes, { code => $code, attribute => '' }
