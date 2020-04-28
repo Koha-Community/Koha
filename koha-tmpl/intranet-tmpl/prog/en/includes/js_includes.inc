@@ -25,6 +25,9 @@
 [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
 <!-- koha core js -->
 [% Asset.js("js/staff-global.js") | $raw %]
+[% IF setdesk %]
+[% Asset.js("js/desk_selection.js") | $raw %]
+[% END %]
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]

@@ -8,6 +8,17 @@
     [% END %]
 [% END %]
 
+[% BLOCK options_for_desks %]
+                <option id="nodesk" value="">---</option>
+       [% FOREACH d IN desks %]
+            [% IF d.branchcode == branch %]
+                <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" >[% d.desk_name | html %]</option>
+            [% ELSE %]
+                <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled hidden>[% d.desk_name | html %]</option>
+            [% END%]
+        [% END %]
+    [% END %]
+
 [% BLOCK options_for_authorised_value_categories %]
     [% FOREACH avc IN authorised_value_categories %]
         [% IF avc.selected %]

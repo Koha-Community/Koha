@@ -73,7 +73,7 @@ sub GetLoggedInDeskName {
 
 [% Desks.ListForLibrary %]
 
-returns all desks existing at the library
+returns all desks existing at the current library
 
 =cut
 
@@ -85,6 +85,21 @@ sub ListForLibrary {
         { branchcode => $branch_limit },
         { order_by   => { '-asc' => 'desk_name' } }
     );
+}
+
+=head3 all
+
+[% Desks.all %]
+
+returns all desks existing at all libraries
+
+=cut
+
+
+sub all {
+
+    my ( $self ) = @_;
+    return Koha::Desks->search( )->unblessed;
 }
 
 1;

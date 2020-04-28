@@ -1,8 +1,12 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Desks %]
 [% USE Categories %]
 [% SET footerjs = 1 %]
+[% IF Desks.all %]
+    [% SET setdesk = 1 %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
     [% IF ( nopermission ) %]Access denied[% END %]
@@ -81,6 +85,18 @@
             [% END %]
         </select>
     </p>
+    [% IF Desks.all %]
+        <p>
+            <label for="desk">Desk:</label>
+            <select name="desk_id" id="desk_id" class="input" tabindex="3">
+                <option id="nodesk" value="">---</option>
+                    [% FOREACH d IN Desks.all %]
+                    <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled >[% d.desk_name | html %]</option>
+                    [% END %]
+            </select>
+        </p>
+</fieldset>
+[% END %]
 [% END %]
 
 <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->

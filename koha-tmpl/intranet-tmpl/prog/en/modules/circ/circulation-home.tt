@@ -1,7 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
-[% USE Desks %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,11 +31,6 @@
                     [% UNLESS IndependentBranches %]
                         <li>
                             <a class="circ-button" href="/cgi-bin/koha/circ/set-library.pl"><i class="fa fa-home"></i> Set library</a>
-                        </li>
-                    [% END %]
-                    [% IF Desks.ListForLibrary.count %]
-                        <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/selectdesk.pl"><i class="fa fa-location-arrow"></i> Set desk</a>
                         </li>
                     [% END %]
                     [% IF ( fast_cataloging ) %]

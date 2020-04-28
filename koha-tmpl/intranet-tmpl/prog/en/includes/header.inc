@@ -139,11 +139,6 @@
                         <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                     </li>
                     [% END %]
-                    [% IF Desks.ListForLibrary.count %]
-                    <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/selectdesk.pl">Set desk</a>
-                    </li>
-                    [% END %]
                     [% IF EnableSearchHistory %]
                     <li>
                         <a class="toplinks" href="/cgi-bin/koha/catalogue/search-history.pl">Search history</a>

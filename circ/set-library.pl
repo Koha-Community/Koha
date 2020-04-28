@@ -26,6 +26,7 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Koha;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
+use Koha::Desks;
 
 my $query = CGI->new();
 
@@ -42,7 +43,9 @@ my $sessionID = $query->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
 my $branch   = $query->param('branch' );
+my $desk_id = $query->param('desk_id');
 my $userenv_branch  = C4::Context->userenv->{'branch'}        || '';
+my $userenv_desk = C4::Context->userenv->{'desk_id'} || '';
 my @updated;
 
 # $session lddines here are doing the updating
@@ -58,8 +61,25 @@ if ( $branch and my $library = Koha::Libraries->find($branch) ) {
                 new_branch => $branch,
         };
     } # else branch the same, no update
+    if ( $desk_id && (!$userenv_desk or $userenv_desk ne $desk_id) ) {
+        my $desk = Koha::Desks->find( { desk_id => $desk_id } );
+        my $old_desk_name = '';
+        if ($userenv_desk) {
+            $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk })->desk_name;
+        }
+        $template->param( LoginDeskname => $desk->desk_name );
+        $template->param( LoginDeskid => $desk->desk_id );
+        $session->param( desk_name => $desk->desk_name );
+        $session->param( desk_id => $desk->desk_id );
+        $session->flush();
+        push @updated, {
+            updated_desk => 1,
+            old_desk => $old_desk_name,
+        };
+    }
 } else {
     $branch = $userenv_branch;  # fallback value
+    $desk_id = $userenv_desk;
 }
 
 $template->param(updated => \@updated) if (scalar @updated);
@@ -68,6 +88,7 @@ my @recycle_loop;
 foreach ($query->param()) {
     $_ or next;                   # disclude blanks
     $_ eq "branch"     and next;  # disclude branch
+    $_ eq "desk_id"    and next;  # disclude desk_id
     $_ eq "oldreferer" and next;  # disclude oldreferer
     push @recycle_loop, {
         param => $_,
@@ -86,6 +107,7 @@ if (scalar @updated and not scalar @recycle_loop) {
 $template->param(
     referer     => $referer,
     branch      => $branch,
+    desk_id     => $desk_id,
     recycle_loop=> \@recycle_loop,
 );
 

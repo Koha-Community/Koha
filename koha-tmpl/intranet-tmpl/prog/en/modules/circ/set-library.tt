@@ -1,5 +1,9 @@
 [% USE Branches %]
+[% USE Desks %]
 [% USE Koha %]
+[% IF Desks.all %]
+    [% SET setdesk = 1 %]
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Set library</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,6 +41,8 @@ Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch ) %]
         <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
+    [% ELSIF (update.updated_desk) %]
+        <li>Desk: [% update.old_desk or "?" | html %] &rArr; [% LoginDeskname or "?" | html %]</li>
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
@@ -63,11 +69,21 @@ Updated:<ul>
         <li><label for="branch">Choose library:</label>
         <select name="branch" id="branch">
             [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
-                        [% PROCESS options_for_yallah yallah => Branches.all( selected => branch ) %]
         </select></li>
     [% END %]
     </ol>
 </fieldset>
+[% IF Desks.all %]
+<fieldset class="rows">
+    <legend>Set Desk</legend>
+    <ol>
+        <li><label for="desk">Choose Desk:</label>
+        <select name="desk_id" id="desk_id">
+            [% PROCESS options_for_desks desks => Desks.all( selected => desk_id ) %]
+        </select></li>
+    </ol>
+</fieldset>
+[% END %]
 <fieldset class="action">
     <input type="submit" value="Submit" />
     <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' %]">Cancel</a>

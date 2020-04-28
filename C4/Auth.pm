@@ -1066,7 +1066,7 @@ sub checkauth {
                     C4::Context->_unset_userenv($sessionID);
                 }
                 my ( $borrowernumber, $firstname, $surname, $userflags,
-                    $branchcode, $branchname, $emailaddress );
+                    $branchcode, $branchname, $emailaddress, $desk_id, $desk_name );
 
                 if ( $return == 1 ) {
                     my $select = "
@@ -1110,6 +1110,11 @@ sub checkauth {
                         my $library = Koha::Libraries->find($branchcode);
                         $branchname = $library? $library->branchname: '';
                     }
+                    if ( $query->param('desk_id') ) {
+                        $desk_id = $query->param('desk_id');
+                        my $desk = Koha::Desks->find($desk_id);
+                        $desk_name = $desk ? $desk->desk_name : '';
+                    }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                     if ( $type ne 'opac' and C4::Context->boolean_preference('AutoLocation') ) {
 
@@ -1145,6 +1150,8 @@ sub checkauth {
                     $session->param( 'surname',      $surname );
                     $session->param( 'branch',       $branchcode );
                     $session->param( 'branchname',   $branchname );
+                    $session->param( 'desk_id',      $desk_id);
+                    $session->param( 'desk_name',     $desk_name);
                     $session->param( 'flags',        $userflags );
                     $session->param( 'emailaddress', $emailaddress );
                     $session->param( 'ip',           $session->remote_addr() );
@@ -1160,7 +1167,7 @@ sub checkauth {
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
                     $session->param('emailaddress'), $session->param('shibboleth'),
-                    $session->param('desk_id'),      $session->param('desk_name')
+                    $session->param('desk_id'), $session->param('desk_name')
                 );
 
             }

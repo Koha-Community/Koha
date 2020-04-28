@@ -1,5 +1,4 @@
 [% USE Branches %]
-[% USE Desks %]
 <div id="navmenu">
     <div id="navmenulist">
 
@@ -18,9 +17,6 @@
             [% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependentBranches ) %][% ELSE %]
                 <li><a href="/cgi-bin/koha/circ/set-library.pl">Set library</a></li>
             [% END %][% END %]
-            [% IF Desks.ListForLibrary.count %]
-                <li><a href="/cgi-bin/koha/circ/selectdesk.pl">Set desk</a></li>
-            [% END %]
             [% IF ( fast_cataloging ) %][% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
             [% END %][% END %]
