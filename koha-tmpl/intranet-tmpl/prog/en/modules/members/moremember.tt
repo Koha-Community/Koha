@@ -147,7 +147,7 @@
                                     [% ELSIF ( patron.is_going_to_expire ) %]
                                         <li>
                                             <span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-                                            Patron's card expires on [% expiry | $KohaDates %]
+                                            Patron's card expires on [% patron.dateexpiry | $KohaDates %]
                                             <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
                                         </li>
                                     [% END %]
