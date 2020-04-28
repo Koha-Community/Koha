@@ -33,6 +33,7 @@ sub get_link {
     my $auth_type = $heading->auth_type();
     my $authid;
     my $fuzzy = 0;
+    my $match_count;
 
     if ( $self->{'cache'}->{$search_form.$auth_type}->{'cached'} ) {
         $authid = $self->{'cache'}->{$search_form.$auth_type}->{'authid'};
@@ -42,6 +43,7 @@ sub get_link {
 
         # look for matching authorities
         my $authorities = $heading->authorities(1);    # $skipmetadata = true
+        $match_count = scalar @$authorities;
 
         if ( $behavior eq 'default' && $#{$authorities} == 0 ) {
             $authid = $authorities->[0]->{'authid'};
@@ -77,7 +79,7 @@ sub get_link {
         $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
         $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
     }
-    return $self->SUPER::_handle_auth_limit($authid), $fuzzy;
+    return $self->SUPER::_handle_auth_limit($authid), $fuzzy, $match_count;
 }
 
 sub update_cache {

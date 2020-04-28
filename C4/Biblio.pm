@@ -506,7 +506,7 @@ sub LinkBibHeadingsToAuthorities {
             next;
         }
 
-        my ( $authid, $fuzzy ) = $linker->get_link($heading);
+        my ( $authid, $fuzzy, $match_count ) = $linker->get_link($heading);
         if ($authid) {
             $results{ $fuzzy ? 'fuzzy' : 'linked' }
               ->{ $heading->display_form() }++;
@@ -526,7 +526,7 @@ sub LinkBibHeadingsToAuthorities {
                 if ( _check_valid_auth_link( $current_link, $field ) ) {
                     $results{'linked'}->{ $heading->display_form() }++;
                 }
-                else {
+                elsif ( !$match_count ) {
                     my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
                     my $marcrecordauth = MARC::Record->new();
                     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
