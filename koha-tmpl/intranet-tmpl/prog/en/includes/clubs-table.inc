@@ -64,7 +64,7 @@
                 </td>
                 [% UNLESS destination == 'holds' %]
                     <td class="actions">
-                        <div class="dropdown">
+                        <div class="btn-group dropup">
                             <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id | html %]" role="button" data-toggle="dropdown" href="#">
                                 Actions <b class="caret"></b>
                             </a>
