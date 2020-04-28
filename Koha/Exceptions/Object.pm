@@ -55,6 +55,10 @@ use Exception::Class (
         description => 'Invalid data passed',
         fields      => ['type', 'property', 'value'],
     },
+    'Koha::Exceptions::Object::NotInStorage' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => 'The object is not in storage yet',
+    },
 );
 
 sub full_message {

@@ -194,6 +194,34 @@ sub delete {
     return $self->_resultset->delete;
 }
 
+=head3 update
+
+=cut
+
+sub update {
+    my ($self, $params) = @_;
+
+    my $no_triggers = delete $params->{no_triggers};
+
+    if (
+        !$no_triggers
+        && ( Class::Inspector->function_exists( $self->object_class, 'update' )
+          or Class::Inspector->function_exists( $self->object_class, 'store' ) )
+      )
+    {
+        my $objects_updated;
+        $self->_resultset->result_source->schema->txn_do( sub {
+            while ( my $o = $self->next ) {
+                $o->update($params);
+                $objects_updated++;
+            }
+        });
+        return $objects_updated;
+    }
+
+    return $self->_resultset->update($params);
+}
+
 =head3 single
 
 my $object = Koha::Objects->search({}, { rows => 1 })->single
@@ -474,14 +502,14 @@ The autoload method is used call DBIx::Class method on a resultset.
 
 Important: If you plan to use one of the DBIx::Class methods you must provide
 relevant tests in t/db_dependent/Koha/Objects.t
-Currently count, is_paged, pager, update, result_class, single and slice are covered.
+Currently count, is_paged, pager, result_class, single and slice are covered.
 
 =cut
 
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count is_paged pager update result_class single slice );
+    my @known_methods = qw( count is_paged pager result_class single slice );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 

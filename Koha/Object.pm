@@ -208,7 +208,8 @@ A shortcut for set + store in one call.
 
 sub update {
     my ($self, $values) = @_;
-    return $self->set($values)->store();
+    Koha::Exceptions::Object::NotInStorage->throw unless $self->in_storage;
+    $self->set($values)->store();
 }
 
 =head3 $object->delete();
