@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw( none );
+use Class::Inspector;
 
 use Koha::Database;
 
@@ -169,6 +170,27 @@ sub search_related {
         eval "require $object_class";
         return _new_from_dbic( $object_class, $rs );
     }
+}
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    if ( Class::Inspector->function_exists( $self->object_class, 'delete' ) ) {
+        my $objects_deleted;
+        $self->_resultset->result_source->schema->txn_do( sub {
+            while ( my $o = $self->next ) {
+                $o->delete;
+                $objects_deleted++;
+            }
+        });
+        return $objects_deleted;
+    }
+
+    return $self->_resultset->delete;
 }
 
 =head3 single
@@ -451,14 +473,14 @@ The autoload method is used call DBIx::Class method on a resultset.
 
 Important: If you plan to use one of the DBIx::Class methods you must provide
 relevant tests in t/db_dependent/Koha/Objects.t
-Currently count, pager, update and delete are covered.
+Currently count, is_paged, pager, update, result_class, single and slice are covered.
 
 =cut
 
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count is_paged pager update delete result_class single slice );
+    my @known_methods = qw( count is_paged pager update result_class single slice );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
