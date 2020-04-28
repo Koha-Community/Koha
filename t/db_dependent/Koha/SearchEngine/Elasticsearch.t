@@ -21,6 +21,7 @@ use Test::More tests => 6;
 use Test::Exception;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Test::MockModule;
 
@@ -30,6 +31,9 @@ use List::Util qw( any );
 
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Search;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 subtest '_read_configuration() tests' => sub {
 
@@ -336,7 +340,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
-    my $records = [$marc_record_1, $marc_record_2];
+    my $records = [ $marc_record_1, $marc_record_2 ];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
@@ -616,7 +620,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric'),
     );
-    my $records = [$marc_record_1, $marc_record_2];
+    my $records = [ $marc_record_1, $marc_record_2 ];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
@@ -642,6 +646,12 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
 
+    my $builder = t::lib::TestBuilder->new;
+    my $auth_type = $builder->build_object({ class => 'Koha::Authority::Types', value =>{
+            auth_tag_to_report => '150'
+        }
+    });
+
     my @mappings = (
         {
             name => 'match',
@@ -652,57 +662,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
             sort => 0,
             marc_type => 'marc21',
             marc_field => '150(ae)',
-        },
-        {
-            name => 'heading',
-            type => 'string',
-            facet => 0,
-            suggestible => 0,
-            searchable => 1,
-            sort => 0,
-            marc_type => 'marc21',
-            marc_field => '150a',
-        },
-        {
-            name => 'heading',
-            type => 'string',
-            facet => 0,
-            suggestible => 0,
-            searchable => 1,
-            sort => 0,
-            marc_type => 'marc21',
-            marc_field => '150(ae)',
-        },
-        {
-            name => 'heading-main',
-            type => 'string',
-            facet => 0,
-            suggestible => 0,
-            searchable => 1,
-            sort => 0,
-            marc_type => 'marc21',
-            marc_field => '150a',
-        },
-        {
-            name => 'heading',
-            type => 'string',
-            facet => 0,
-            suggestible => 0,
-            searchable => 1,
-            sort => 0,
-            marc_type => 'marc21',
-            marc_field => '150',
-        },
-        {
-            name => 'match-heading',
-            type => 'string',
-            facet => 0,
-            suggestible => 0,
-            searchable => 1,
-            sort => 0,
-            marc_type => 'marc21',
-            marc_field => '150',
-        },
+        }
     );
 
     my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
@@ -735,7 +695,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
     $marc_record_2->append_fields(
         MARC::Field->new('150', '', '', a => 'Subject', v => 'Genresubdiv', z => 'Geosubdiv', x => 'Generalsubdiv', e => 'wrongsubdiv' ),
     );
-    my $records = [$marc_record_1, $marc_record_2];
+    my $records = [ $marc_record_1, $marc_record_2 ];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
@@ -752,3 +712,5 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
         "Second record match-heading should contain the correctly formatted heading without wrong subfield"
     );
 };
+
+$schema->storage->txn_rollback;
