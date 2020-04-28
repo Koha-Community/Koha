@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Exception;
+use Test::MockModule;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -817,6 +818,36 @@ subtest 'empty() tests' => sub {
     $empty = Koha::Patrons->empty;
     is( ref($empty), 'Koha::Patrons', 'without being instantiated, ->empty still returns a Koha::Patrons iterator' );
     is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Make sure no cities
+    warnings_are { Koha::Cities->delete }[],
+      "No warnings, no Koha::City->delete called as it doesn't exist";
+
+    # Mock Koha::City
+    my $mocked_city = Test::MockModule->new('Koha::City');
+    $mocked_city->mock(
+        'delete',
+        sub {
+            warn "delete called!";
+        }
+    );
+
+    # Add two cities
+    $builder->build_object( { class => 'Koha::Cities' } );
+    $builder->build_object( { class => 'Koha::Cities' } );
+
+    warnings_are { Koha::Cities->delete }
+        [ "delete called!", "delete called!" ],
+        "No warnings, no Koha::City->delete called as it doesn't exist";
 
     $schema->storage->txn_rollback;
 };
