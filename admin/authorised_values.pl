@@ -88,7 +88,7 @@ if ($op eq 'add_form') {
         );
     } else {
         $template->param(
-            category  => $category,
+            category_name  => $category,
             imagesets => C4::Koha::getImageSets(),
         );
     }
@@ -193,7 +193,17 @@ if ($op eq 'add_form') {
     }
 
     $op = 'list';
-    $template->param( delete_success => 1 );
+} elsif ($op eq 'delete_category') {
+    my $category_name = $input->param('category_name');
+    my $avc = Koha::AuthorisedValueCategories->find( $category_name );
+    my $deleted = eval {$avc->delete};
+    if ( $@ or not $deleted ) {
+        push @messages, {type => 'error', code => 'error_on_delete_category' };
+    } else {
+        push @messages, { type => 'message', code => 'success_on_delete_category' };
+    }
+
+    $op = 'list';
 }
 
 $template->param(
@@ -229,7 +239,7 @@ if ( $op eq 'list' ) {
 
     $template->param(
         loop     => \@loop_data,
-        category => $searchfield,
+        category => Koha::AuthorisedValueCategories->find($searchfield), # TODO Move this up and add a Koha::AVC->authorised_values method to replace call for avs_by_category
         categories => \@category_list,
     );
 

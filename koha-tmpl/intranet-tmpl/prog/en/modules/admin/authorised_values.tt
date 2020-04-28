@@ -32,7 +32,7 @@
         [% IF ( action_add_category ) %]New category[% END %]
     [% ELSIF ( loop ) %]
         <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
-        Authorized values for category [% category | html %]
+        Authorized values for category [% category_name | html %]
     [% ELSE %]
         Authorized values
     [% END %]
@@ -65,7 +65,7 @@
             <li>
                 <span class="label">Category</span>
                 <input type="hidden" name="op" value="add" />
-                <input type="hidden" name="category" value="[% category | html %]" /> [% category | html %]
+                <input type="hidden" name="category" value="[% category_name | html %]" /> [% category_name | html %]
             </li>
         <li>
             <label for="authorised_value">Authorized value: </label>
@@ -132,7 +132,7 @@
         [% END %]
         </fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="[% id | html %]" />
-        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category | url %]">Cancel</a></fieldset>
+        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category_name | url %]">Cancel</a></fieldset>
     </form>
 [% END %]
 
@@ -141,12 +141,12 @@
 <div id="toolbar" class="btn-toolbar">
     <a id="addcat" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
     [% IF ( searchfield ) %]
-        <a id="addauth" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category | html %]</a>
+        <a id="addauth" class="btn btn-default" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category.category_name | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category.category_name | html %]</a>
     [% END %]
 </div>
 
 [% IF ( searchfield ) %]
-    <h1>Authorized values for category [% category | html %]</h1>
+    <h1>Authorized values for category [% category.category_name | html %]</h1>
     [% PROCESS category_descriptions code_category = category %]
 [% ELSE %]
     <h1>Authorized values</h1>
@@ -169,6 +169,8 @@
             An error occurred when inserting this authorized value category. Perhaps the category name already exists.
         [% CASE 'error_on_delete' %]
             An error occurred when deleting this authorized value. Check the logs.
+        [% CASE 'error_on_delete_category' %]
+            An error occurred when deleting this authorized value category. Check the logs.
         [% CASE 'success_on_update' %]
             Authorized value updated successfully.
         [% CASE 'success_on_insert' %]
@@ -177,6 +179,8 @@
             Authorized value category added successfully.
         [% CASE 'success_on_delete' %]
             Authorized value deleted successfully.
+        [% CASE 'success_on_delete_category' %]
+            Authorized value category deleted successfully.
         [% CASE 'cat_already_exists' %]
             This authorized value category already exists.
         [% CASE 'invalid_category_name' %]
@@ -250,12 +254,19 @@
     </tbody></table>
     [% ELSE %]
         <div class="dialog message">
-            <p>There are no authorized values defined for [% category | html %]</p>
+            <p>There are no authorized values defined for [% category.category_name | html %]</p>
             <form action="/cgi-bin/koha/admin/authorised_values.pl" method="get">
                 <input type="hidden" name="op" value="add_form" />
-                <input type="hidden" name="category" value="[% category | html %]" />
+                <input type="hidden" name="category" value="[% category.category_name | html %]" />
                 <button type="submit"><i class="fa fa-plus"></i> Add a new authorized value</button>
             </form>
+            [% UNLESS category.is_system %]
+                <form id="delete_category" action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+                    <input type="hidden" name="op" value="delete_category" />
+                    <input type="hidden" name="category_name" value="[% category.category_name | html %]" />
+                    <button type="submit"><i class="fa fa-plus"></i> Delete category '[% category.category_name | html %]' </button>
+                </form>
+            [% END %]
         </div>
     [% END %]
 
@@ -326,6 +337,10 @@
                 $('#category').submit();
             });
             $(".library_limitation").tooltip();
+
+            $("#delete_category").on('submit', function(){
+                return confirm(_("Are you sure you want to delete this authorized value category?"));
+            });
         });
     </script>
 [% END %]
