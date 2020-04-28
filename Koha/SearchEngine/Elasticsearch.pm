@@ -28,6 +28,7 @@ use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 use Koha::Caches;
 use C4::Heading;
+use C4::AuthoritiesMarc;
 
 use Carp;
 use Clone qw(clone);
@@ -229,10 +230,10 @@ sub get_elasticsearch_mappings {
                 }
             }
         );
+        $mappings->{data}{properties}{ 'match-heading' } = _get_elasticsearch_field_config('search', 'text') if $self->index eq 'authorities';
         $all_mappings{$self->index} = $mappings;
     }
     $self->sort_fields(\%{$sort_fields{$self->index}});
-
     return $all_mappings{$self->index};
 }
 
@@ -522,8 +523,22 @@ sub marc_records_to_documents {
 
     my @record_documents;
 
+    my %auth_match_headings;
+    if( $self->index eq 'authorities' ){
+        my @auth_types = Koha::Authority::Types->search();
+        %auth_match_headings = map { $_->authtypecode => $_->auth_tag_to_report } @auth_types;
+    }
+
     foreach my $record (@{$records}) {
         my $record_document = {};
+
+        if ( $self->index eq 'authorities' ){
+            my $authtypecode = GuessAuthTypeCode( $record );
+            my $field = $record->field( $auth_match_headings{ $authtypecode } );
+            my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
+            push @{$record_document->{'match-heading'}}, $heading->search_form if $heading;
+        }
+
         my $mappings = $rules->{leader};
         if ($mappings) {
             $self->_process_mappings($mappings, $record->leader(), $record_document, {
@@ -575,13 +590,6 @@ sub marc_records_to_documents {
                                 }
                             );
                         }
-                        if ( @{$mappings} && grep { $_->[0] eq 'match-heading'} @{$mappings} ){
-                            # Used by the authority linker the match-heading field requires a specific syntax
-                            # that is specified in C4/Heading
-                            my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
-                            next unless $heading;
-                            push @{$record_document->{'match-heading'}}, $heading->search_form;
-                        }
                     }
 
                     my $subfields_join_mappings = $data_field_rules->{subfields_join};
@@ -603,13 +611,6 @@ sub marc_records_to_documents {
                                         field => $field
                                     }
                                 );
-                            }
-                            if ( grep { $_->[0] eq 'match-heading' } @{$subfields_join_mappings->{$subfields_group}} ){
-                                # Used by the authority linker the match-heading field requires a specific syntax
-                                # that is specified in C4/Heading
-                                my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
-                                next unless $heading;
-                                push @{$record_document->{'match-heading'}}, $heading->search_form;
                             }
                         }
                     }
