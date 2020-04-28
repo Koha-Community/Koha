@@ -100,6 +100,7 @@ CREATE TABLE `auth_tag_structure` (
 DROP TABLE IF EXISTS `authorised_value_categories`;
 CREATE TABLE `authorised_value_categories` (
   `category_name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `is_system` tinyint(1) default 0,
   PRIMARY KEY (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
