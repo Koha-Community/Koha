@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Exceptions::CannotDeleteDefault;
 
 use Koha::AuthorisedValueCategory;
 
@@ -34,6 +35,25 @@ Koha::AuthorisedValueCategories - Koha AuthorisedValueCategory Object set class
 =head2 Class Methods
 
 =cut
+
+=head3 delete
+
+Overridden delete method to prevent system default deletions
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my @set = $self->as_list;
+    for my $type (@set) {
+        if ( $type->is_system ) {
+            Koha::Exceptions::CannotDeleteDefault->throw;
+        }
+    }
+
+    return $self->SUPER::delete;
+}
 
 =head3 type
 

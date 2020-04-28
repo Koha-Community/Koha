@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 17;
+use Try::Tiny;
 
 use t::lib::TestBuilder;
 
@@ -20,7 +21,7 @@ Koha::AuthorisedValues->delete;
 Koha::AuthorisedValueCategories->delete;
 
 # insert
-Koha::AuthorisedValueCategory->new({ category_name => 'av_for_testing' })->store;
+Koha::AuthorisedValueCategory->new({ category_name => 'av_for_testing', is_system => 1 })->store;
 Koha::AuthorisedValueCategory->new({ category_name => 'aaav_for_testing' })->store;
 Koha::AuthorisedValueCategory->new({ category_name => 'restricted_for_testing' })->store;
 my $av1 = Koha::AuthorisedValue->new(
@@ -83,6 +84,28 @@ ok( $av1->id(), 'AV 1 is inserted' );
 ok( $av2->id(), 'AV 2 is inserted' );
 ok( $av3->id(), 'AV 3 is inserted' );
 ok( $av4->id(), 'AV 4 is inserted' );
+
+{ # delete is_system AV categories
+    try {
+        Koha::AuthorisedValueCategories->find('av_for_testing')->delete
+    }
+    catch {
+        ok(
+            $_->isa('Koha::Exceptions::CannotDeleteDefault'),
+            'A system AV category cannot be deleted'
+        );
+    };
+
+    try {
+        Koha::AuthorisedValueCategories->search->delete
+    }
+    catch {
+        ok(
+            $_->isa('Koha::Exceptions::CannotDeleteDefault'),
+            'system AV categories cannot be deleted'
+        );
+    };
+}
 
 is( $av3->opac_description, 'opac display value 3', 'Got correction opac description if lib_opac is set' );
 $av3->lib_opac('');
