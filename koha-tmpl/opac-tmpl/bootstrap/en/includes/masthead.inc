@@ -313,6 +313,7 @@
                                             <li><a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">Purchase suggestions</a></li>
                                         [% END %]
                                     [% END %]
+                                    <li><a href="/cgi-bin/koha/opac-library.pl">Libraries</a></li>
                                     [% Koha.Preference('OpacMoreSearches') | $raw %]
                                 </ul>
                             </div> <!-- /#moresearches -->
