@@ -5,15 +5,20 @@
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF ( opensearchdescription ) %]
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-   <ShortName>[% LibraryName | html %] Search</ShortName>
-   <Description>Search the [% LibraryName | html %]</Description>
-   <Tags>koha opac [% LibraryName | html %]</Tags>
-   <Contact>[% KohaAdminEmailAddress | html %]</Contact>
-   <Url type="application/rss+xml"
-        template="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?q={searchTerms}&amp;pw={startPage?}&amp;format=rss"/>
-</OpenSearchDescription>
-
+    <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+        <ShortName>[% LibraryNameTitle | html %]</ShortName>
+        <Description>Search the [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha library[% END %] catalog</Description>
+        <InputEncoding>UTF-8</InputEncoding>
+        <Image width="16" height="16" type="image/x-icon">
+            [% IF ( Koha.Preference('OpacFavicon') ) %]
+                [% Koha.Preference('OpacFavicon') | url %]
+            [% ELSE %]
+                [% Koha.Preference('OPACBaseURL') | url %][% interface | url %]/[% theme | url %]/images/favicon.ico
+            [% END %]
+        </Image>
+        <Url method="get" type="text/html" template="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-search.pl?q={searchTerms}" />
+        <Query role="example" searchTerms="cat" />
+    </OpenSearchDescription>
 [% ELSE %]
 
 [% IF ( rss ) %]
