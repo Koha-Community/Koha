@@ -289,10 +289,10 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        title = "<span id='title_" + oObj.itemnumber + "' class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                        let title = "<span id='title_" + oObj.itemnumber + "' class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                               + oObj.biblionumber
                               + "'>"
-                              + oObj.title.escapeHtml();
+                              + (oObj.title ? oObj.title.escapeHtml() : '' );
 
                         $.each(oObj.subtitle, function( index, value ) {
                                   title += " " + value.escapeHtml();
@@ -369,7 +369,7 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.homebranch.escapeHtml();
+                        return (oObj.homebranch ? oObj.homebranch.escapeHtml() : '' );
                     }
                 },
                 {
@@ -382,7 +382,7 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.branchname.escapeHtml();
+                        return (oObj.branchname ? oObj.branchname.escapeHtml() : '' );
                     }
                 },
                 {
@@ -663,10 +663,10 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                            let title = "<span class='strong'><a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
-                                  + oObj.title.escapeHtml();
+                                  + (oObj.title ? oObj.title.escapeHtml() : '' );
 
                             $.each(oObj.subtitle, function( index, value ) {
                                       title += " " + value.escapeHtml();
@@ -751,7 +751,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            return oObj.branchname.escapeHtml();
+                            return ( oObj.branchname ? oObj.branchname.escapeHtml() : '' );
                         }
                     },
                     {
