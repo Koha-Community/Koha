@@ -488,6 +488,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 course_items_homebranch_storages
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CourseItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "course_items_homebranch_storages",
+  "Koha::Schema::Result::CourseItem",
+  { "foreign.homebranch_storage" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 course_items_homebranches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CourseItem>
+
+=cut
+
+__PACKAGE__->has_many(
+  "course_items_homebranches",
+  "Koha::Schema::Result::CourseItem",
+  { "foreign.homebranch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 creator_batches
 
 Type: has_many
@@ -759,8 +789,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-01 09:42:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OK9rj4bv4KW5if0kLRDTSg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-29 16:09:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9f0Crr57ffdoe8syXgawng
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
