@@ -40,6 +40,8 @@
                 [% SWITCH message.error %]
                     [% CASE 'error_on_insert_patron' %]
                         <div class="dialog alert">Something went wrong when creating the patron. Check the logs.</div>
+                    [% CASE 'error_on_update_patron' %]
+                        <div class="dialog alert">Something went wrong when updating the patron. Check the logs.</div>
                     [% CASE %]Unhandled error: [% message.error %]
                 [% END %]
             [% END %]
