@@ -20475,6 +20475,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '19.11.05.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE account_debit_types SET description = REPLACE(description,'Rewewal','Renewal') WHERE description like '%Rewewal%'" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 25010: Fix typo in account_debit_type description)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
