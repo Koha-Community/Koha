@@ -437,6 +437,7 @@ if ( defined $sms ) {
 $nok = $nok || scalar(@errors);
 if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
+    my $success;
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
         delete $newdata{password2};
@@ -448,6 +449,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             push @messages, {error => 'error_on_insert_patron'};
             $op = "add";
         } else {
+            $success = 1;
             add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
             $newdata{'borrowernumber'} = $borrowernumber;
@@ -507,32 +509,6 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 
     } elsif ($op eq 'save') {
 
-        # Update or create our HouseboundRole if necessary.
-        my $housebound_role = Koha::Patron::HouseboundRoles->find($borrowernumber);
-        my ( $hsbnd_chooser, $hsbnd_deliverer ) = ( 0, 0 );
-        $hsbnd_chooser = 1 if $input->param('housebound_chooser');
-        $hsbnd_deliverer = 1 if $input->param('housebound_deliverer');
-        if ( $housebound_role ) {
-            if ( $hsbnd_chooser || $hsbnd_deliverer ) {
-                # Update our HouseboundRole.
-                $housebound_role
-                    ->housebound_chooser($hsbnd_chooser)
-                    ->housebound_deliverer($hsbnd_deliverer)
-                    ->store;
-            } else {
-                $housebound_role->delete; # No longer needed.
-            }
-        } else {
-            # Only create a HouseboundRole if patron has a role.
-            if ( $hsbnd_chooser || $hsbnd_deliverer ) {
-                $housebound_role = Koha::Patron::HouseboundRole->new({
-                    borrowernumber_id    => $borrowernumber,
-                    housebound_chooser   => $hsbnd_chooser,
-                    housebound_deliverer => $hsbnd_deliverer,
-                })->store;
-            }
-        }
-
         if ($NoUpdateLogin) {
             delete $newdata{'password'};
             delete $newdata{'userid'};
@@ -542,24 +518,60 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         $newdata{debarredcomment} = $newdata{debarred_comment};
         delete $newdata{debarred_comment};
         delete $newdata{password2};
-        $patron->set(\%newdata)->store if scalar(keys %newdata) > 1; # bug 4508 - avoid crash if we're not
-                                                                # updating any columns in the borrowers table,
-                                                                # which can happen if we're only editing the
-                                                                # patron attributes or messaging preferences sections
 
-        # should never raise an exception as password validity is checked above
-        my $password = $newdata{password};
-        if ( $password and $password ne '****' ) {
-            $patron->set_password({ password => $password });
+        eval {
+            $patron->set(\%newdata)->store if scalar(keys %newdata) > 1; # bug 4508 - avoid crash if we're not
+                                                                    # updating any columns in the borrowers table,
+                                                                    # which can happen if we're only editing the
+                                                                    # patron attributes or messaging preferences sections
+        };
+        if ( $@ ) {
+            warn "Patron modification failed! - $@"; # Maybe we must die instead of just warn
+            push @messages, {error => 'error_on_update_patron'};
+            $op = "modify";
+        } else {
+
+            $success = 1;
+            # Update or create our HouseboundRole if necessary.
+            my $housebound_role = Koha::Patron::HouseboundRoles->find($borrowernumber);
+            my ( $hsbnd_chooser, $hsbnd_deliverer ) = ( 0, 0 );
+            $hsbnd_chooser = 1 if $input->param('housebound_chooser');
+            $hsbnd_deliverer = 1 if $input->param('housebound_deliverer');
+            if ( $housebound_role ) {
+                if ( $hsbnd_chooser || $hsbnd_deliverer ) {
+                    # Update our HouseboundRole.
+                    $housebound_role
+                        ->housebound_chooser($hsbnd_chooser)
+                        ->housebound_deliverer($hsbnd_deliverer)
+                        ->store;
+                } else {
+                    $housebound_role->delete; # No longer needed.
+                }
+            } else {
+                # Only create a HouseboundRole if patron has a role.
+                if ( $hsbnd_chooser || $hsbnd_deliverer ) {
+                    $housebound_role = Koha::Patron::HouseboundRole->new({
+                        borrowernumber_id    => $borrowernumber,
+                        housebound_chooser   => $hsbnd_chooser,
+                        housebound_deliverer => $hsbnd_deliverer,
+                    })->store;
+                }
+            }
+
+            # should never raise an exception as password validity is checked above
+            my $password = $newdata{password};
+            if ( $password and $password ne '****' ) {
+                $patron->set_password({ password => $password });
+            }
+
+            add_guarantors( $patron, $input );
+            if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
+                C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
+            }
         }
+    }
 
-        add_guarantors( $patron, $input );
-        if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
-            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
-        }
-	}
-
-    if ( $patron ) {
+    if ( $success ) {
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             $patron->extended_attributes->filter_by_branch_limitations->delete;
             $patron->extended_attributes($extended_patron_attributes);
