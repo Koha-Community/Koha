@@ -702,7 +702,10 @@ sub DelCourseItem {
 
     return unless ($ci_id);
 
-    _RevertFields( ci_id => $ci_id );
+    my $course_item = Koha::Course::Items->find( $ci_id );
+    return unless $course_item;
+
+    _RevertFields( ci_id => $ci_id ) if $course_item->enabled eq 'yes';
 
     my $query = "
         DELETE FROM course_items
