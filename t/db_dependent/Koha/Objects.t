@@ -837,6 +837,7 @@ subtest 'delete() tests' => sub {
     $mocked_city->mock(
         'delete',
         sub {
+            shift->_result->delete;
             warn "delete called!";
         }
     );
