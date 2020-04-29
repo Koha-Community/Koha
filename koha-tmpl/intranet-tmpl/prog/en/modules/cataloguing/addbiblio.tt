@@ -442,7 +442,7 @@
      */
     function GetZ3950Terms(){
         var frameworkcode = document.getElementById("frameworkcode").value;
-        var strQuery = "&frameworkcode=" + frameworkcode;
+        var strQuery = "&frameworkcode=" + encodeURIComponent(frameworkcode);
         var mandatories = new Array();
         var mandatories_label = new Array();
         [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -459,7 +459,7 @@
         for(var i=0,len=mandatories.length; i<len ; i++){
             var field_value = document.getElementById(mandatories[i]).value;
             if( field_value ){
-                strQuery += "&"+mandatories_label[i]+"="+field_value;
+                strQuery += "&"+encodeURIComponent(mandatories_label[i])+"="+encodeURIComponent(field_value);
             }
         }
         return strQuery;
