@@ -132,15 +132,10 @@ subtest 'needs_install use case tests' => sub {
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
 
-    my @plugins = $plugins->GetPlugins( { all => 1 } );
-    foreach my $plugin (@plugins) {
-        $good_plugin = $plugin
-            if $plugin->{metadata}->{description} eq 'Test plugin';
-    }
-
     # mock Version before initializing the API class
     t::lib::Mocks::mock_preference('Version', undef);
     # initialize Koha::REST::V1 after mocking
+
     my $t      = Test::Mojo->new('Koha::REST::V1');
     my $routes = get_defined_routes($t);
 
@@ -153,6 +148,10 @@ subtest 'needs_install use case tests' => sub {
     );
 
     t::lib::Mocks::mock_preference('Version', '3.0.0');
+
+    $schema->resultset('PluginData')->delete;
+    $plugins->InstallPlugins;
+
     # re-initialize Koha::REST::V1 after mocking
     $t      = Test::Mojo->new('Koha::REST::V1');
     $routes = get_defined_routes($t);
