@@ -1101,7 +1101,7 @@ sub _fix_limit_special_cases {
             }
         }
         elsif ( $l =~ /^available$/ ) {
-            push @new_lim, 'onloan:false';
+            push @new_lim, 'available:true';
         }
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;

@@ -768,6 +768,26 @@ sub marc_records_to_documents {
                 $record_document->{'marc_format'} = 'base64ISO2709';
             }
         }
+
+        # Check if there is at least one available item
+        if ($self->index eq $BIBLIOS_INDEX) {
+            my $biblio = Koha::Biblios->find($record->field('001')->data);
+            my $items = $biblio->items;
+            my $available = 0;
+            while (my $item = $items->next) {
+                next if $item->onloan;
+                next if $item->notforloan;
+                next if $item->withdrawn;
+                next if $item->itemlost;
+                next if $item->damaged;
+
+                $available = 1;
+                last;
+            }
+
+            $record_document->{available} = $available ? \1 : \0;
+        }
+
         push @record_documents, $record_document;
     }
     return \@record_documents;
