@@ -64,7 +64,8 @@ sub build_tokens{
 #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a C4::TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
-    $self->parse_file($filename);
+    open(my $fh, "<:encoding(utf8)", $filename) || die "Cannot open $filename ($!)";
+    $self->parse_file($fh);
     return $self;
 }
 

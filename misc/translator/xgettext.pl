@@ -255,7 +255,7 @@ EOF
 ###############################################################################
 
 sub convert_translation_file {
-    open(my $INPUT, '<', $convert_from) || die "$convert_from: $!\n";
+    open(my $INPUT, '<:encoding(utf-8)', $convert_from) || die "$convert_from: $!\n";
     VerboseWarnings::set_input_file_name $convert_from;
     while (<$INPUT>) {
 	chomp;
@@ -367,7 +367,7 @@ usage_error('You cannot specify both --convert-from and --files-from')
 
 if (defined $output && $output ne '-') {
     print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
-        open($OUTPUT, '>:encoding(utf-8)', $output) || die "$output: $!\n";
+    open($OUTPUT, '>:encoding(utf-8)', $output) || die "$output: $!\n";
 } else {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open($OUTPUT, ">&STDOUT");
@@ -375,7 +375,7 @@ if (defined $output && $output ne '-') {
 
 if (defined $files_from) {
     print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;
-    open(my $INPUT, '<', $files_from) || die "$files_from: $!\n";
+    open(my $INPUT, '<:encoding(utf-8)', $files_from) || die "$files_from: $!\n";
     while (<$INPUT>) {
 	chomp;
 	my $input = /^\//? $_: "$directory/$_";
