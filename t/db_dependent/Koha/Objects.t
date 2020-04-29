@@ -802,7 +802,7 @@ subtest 'prefetch_whitelist() tests' => sub {
 
 subtest 'empty() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -812,6 +812,10 @@ subtest 'empty() tests' => sub {
 
     my $empty = Koha::Patrons->new->empty;
     is( ref($empty), 'Koha::Patrons', '->empty returns a Koha::Patrons iterator' );
+    is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
+
+    $empty = Koha::Patrons->empty;
+    is( ref($empty), 'Koha::Patrons', 'without being instantiated, ->empty still returns a Koha::Patrons iterator' );
     is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
 
     $schema->storage->txn_rollback;
