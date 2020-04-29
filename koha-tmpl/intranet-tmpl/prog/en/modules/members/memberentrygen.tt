@@ -57,6 +57,15 @@ legend:hover {
 
     <div class="main container-fluid">
         <div class="row">
+            [% IF messages %]
+                [% FOR message IN messages %]
+                    [% SWITCH message.error %]
+                        [% CASE 'error_on_insert_patron' %]
+                            <div class="dialog alert">Something went wrong when creating the patron. Check the logs.</div>
+                        [% CASE %]Unhandled error: [% message.error %]
+                    [% END %]
+                [% END %]
+            [% END %]
             [% IF ( opadd ) %]
                 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
             [% ELSE %]
