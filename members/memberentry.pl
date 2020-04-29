@@ -103,6 +103,7 @@ my @errors;
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
+my @messages;
 
 ## Deal with guarantor stuff
 $template->param( relationships => scalar $patron->guarantor_relationships ) if $patron;
@@ -439,6 +440,8 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             # FIXME Urgent error handling here, we cannot fail without relevant feedback
             # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
             warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
+            push @messages, {error => 'error_on_insert_patron'};
+            $op = "add";
         } else {
             add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
@@ -479,10 +482,10 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             }
         }
 
-        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+        if ($patron && C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
-        if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
+        if ($patron && C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
         }
 
@@ -492,7 +495,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         $hsbnd_chooser = 1 if $input->param('housebound_chooser');
         $hsbnd_deliverer = 1 if $input->param('housebound_deliverer');
         # Only create a HouseboundRole if patron has a role.
-        if ( $hsbnd_chooser || $hsbnd_deliverer ) {
+        if ( $patron && ( $hsbnd_chooser || $hsbnd_deliverer ) ) {
             Koha::Patron::HouseboundRole->new({
                 borrowernumber_id    => $borrowernumber,
                 housebound_chooser   => $hsbnd_chooser,
@@ -549,25 +552,28 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         add_guarantors( $patron, $input );
-        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
-        }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
         }
 	}
 
-    if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
-        # If we want to redirect to circulation.pl and need to check if the logged in user has the necessary permission
-        $destination = 'not_circ';
+    if ( $patron ) {
+        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+        }
+
+        if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
+            # If we want to redirect to circulation.pl and need to check if the logged in user has the necessary permission
+            $destination = 'not_circ';
+        }
+        print scalar( $destination eq "circ" )
+          ? $input->redirect(
+            "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber")
+          : $input->redirect(
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
+          );
+        exit; # You can only send 1 redirect!  After that, content or other headers don't matter.
     }
-    print scalar( $destination eq "circ" )
-      ? $input->redirect(
-        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber")
-      : $input->redirect(
-        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
-      );
-    exit; # You can only send 1 redirect!  After that, content or other headers don't matter.
 }
 
 if ($delete){
@@ -828,6 +834,7 @@ if ( C4::Context->preference('TranslateNotices') ) {
     $template->param( languages => $translated_languages );
 }
 
+$template->param( messages => \@messages );
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub  parse_extended_patron_attributes {
