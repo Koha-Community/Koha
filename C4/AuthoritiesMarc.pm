@@ -664,18 +664,19 @@ sub DelAuthority {
 
 =head2 ModAuthority
 
-  $authid= &ModAuthority($authid,$record,$authtypecode)
+  $authid= &ModAuthority($authid,$record,$authtypecode, [ { skip_merge => 1 ] )
 
 Modifies authority record, optionally updates attached biblios.
+The parameter skip_merge is optional and should be used with care.
 
 =cut
 
 sub ModAuthority {
-    my ( $authid, $record, $authtypecode ) = @_;
+    my ( $authid, $record, $authtypecode, $params ) = @_;
     my $oldrecord = GetAuthority($authid);
     #Now rewrite the $record to table with an add
     $authid = AddAuthority($record, $authid, $authtypecode);
-    merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record });
+    merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record }) if !$params->{skip_merge};
     logaction( "AUTHORITIES", "MODIFY", $authid, "authority BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
     return $authid;
 }
