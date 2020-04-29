@@ -478,7 +478,7 @@
                 clearTimeout(mainTimeout);
                 [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
                     var confirmStart = Date.now();
-                    confirmModal("", _("Would you like to print a receipt?"), _("Yes"), _("No"), function(result) {
+                    confirmModal("", _("Would you like to print a receipt?"), _("Print receipt and end session"), _("End session"), function(result) {
                         if ( result && (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
                             var win = window.open("/cgi-bin/koha/sco/printslip.pl?borrowernumber=[% borrowernumber | html %]&amp;print=qslip");
                             win.print();
