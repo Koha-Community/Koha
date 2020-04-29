@@ -250,6 +250,10 @@ an iterator).
 sub empty {
     my ($self) = @_;
 
+    unless (ref($self)) {
+        $self = $self->new;
+    }
+
     $self->_resultset()->set_cache([]);
 
     return $self;
