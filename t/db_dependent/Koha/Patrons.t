@@ -1692,7 +1692,7 @@ subtest 'BorrowersLog tests' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 111;
+    plan tests => 113;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -1737,6 +1737,11 @@ subtest 'Test Koha::Patrons::merge' => sub {
     is( Koha::Patrons->find($loser_1), undef, 'Loser 1 has been deleted' );
     is( Koha::Patrons->find($loser_2), undef, 'Loser 2 has been deleted' );
     is( ref Koha::Patrons->find($anonymous_patron), 'Koha::Patron', 'Anonymous Patron was not deleted' );
+
+    $anonymous_patron = Koha::Patrons->find($anonymous_patron);
+    $results = $anonymous_patron->merge_with( [ $keeper->id ] );
+    is( $results, undef, "Anonymous patron cannot have other patrons merged into it" );
+    is( Koha::Patrons->search( { borrowernumber => $keeper->id } )->count, 1, "Patron from attempted merge with AnonymousPatron still exists" );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
     $schema->storage->txn_rollback;
