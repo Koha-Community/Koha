@@ -28,34 +28,34 @@ our $debug;
 
 # Most fields are handled by the Transaction superclass
 my %fields = (
-	      security_inhibit => 0,
-	      due              => undef,
-	      renew_ok         => 0,
-	);
+          security_inhibit => 0,
+          due              => undef,
+          renew_ok         => 0,
+    );
 
 sub new {
     my $class = shift;;
     my $self = $class->SUPER::new();
     foreach my $element (keys %fields) {
-		$self->{_permitted}->{$element} = $fields{$element};
+        $self->{_permitted}->{$element} = $fields{$element};
     }
     @{$self}{keys %fields} = values %fields;
 #    $self->{'due'} = time() + (60*60*24*14); # two weeks hence
-	$debug and warn "new ILS::Transaction::Checkout : " . Dumper $self;
+    $debug and warn "new ILS::Transaction::Checkout : " . Dumper $self;
     return bless $self, $class;
 }
 
 sub do_checkout {
-	my $self = shift;
-	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
-	my $shelf          = $self->{item}->hold_shelf;
-	my $barcode        = $self->{item}->id;
-	my $patron_barcode = $self->{patron}->id;
+    my $self = shift;
+    siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
+    my $shelf          = $self->{item}->hold_shelf;
+    my $barcode        = $self->{item}->id;
+    my $patron_barcode = $self->{patron}->id;
         my $overridden_duedate; # usually passed as undef to AddIssue
-	$debug and warn "do_checkout: patron (" . $patron_barcode . ")";
+    $debug and warn "do_checkout: patron (" . $patron_barcode . ")";
     my $patron = Koha::Patrons->find( { cardnumber => $patron_barcode } );
     my $borrower = $patron->unblessed;
-	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
+    $debug and warn "do_checkout borrower: . " . Dumper $borrower;
     my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode,
         C4::Context->preference("AllowItemsOnHoldCheckoutSIP")
     );
@@ -126,20 +126,20 @@ sub do_checkout {
             $noerror = 0;
         }
     }
-	unless ($noerror) {
-		$debug and warn "cannot issue: " . Dumper($issuingimpossible) . "\n" . Dumper($needsconfirmation);
-		$self->ok(0);
-		return $self;
-	}
-	# can issue
-	$debug and warn "do_checkout: calling AddIssue(\$borrower,$barcode, $overridden_duedate, 0)\n"
-		# . "w/ \$borrower: " . Dumper($borrower)
-		. "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
+    unless ($noerror) {
+        $debug and warn "cannot issue: " . Dumper($issuingimpossible) . "\n" . Dumper($needsconfirmation);
+        $self->ok(0);
+        return $self;
+    }
+    # can issue
+    $debug and warn "do_checkout: calling AddIssue(\$borrower,$barcode, $overridden_duedate, 0)\n"
+        # . "w/ \$borrower: " . Dumper($borrower)
+        . "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
     my $issue = AddIssue( $borrower, $barcode, $overridden_duedate, 0 );
     $self->{due} = $self->duedatefromissue($issue, $itemnumber);
 
-	$self->ok(1);
-	return $self;
+    $self->ok(1);
+    return $self;
 }
 
 sub _can_we_issue {

@@ -68,9 +68,9 @@ sub add_field {
     my ($i, $ent);
 
     if (!defined($value)) {
-	siplog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
-	       $field_id);
-		$value = '';
+    siplog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
+           $field_id);
+        $value = '';
     }
     $value=~s/\r/ /g; # CR terminates a sip message
                       # Protect against them in sip text fields
@@ -80,7 +80,7 @@ sub add_field {
     $ent = sprintf("&#%d;", ord($field_delimiter));
 
     while (($i = index($value, $field_delimiter)) != ($[-1)) {
-		substr($value, $i, 1) = $ent;
+        substr($value, $i, 1) = $ent;
     }
 
     return $field_id . $value . $field_delimiter;
@@ -122,14 +122,14 @@ sub add_count {
     # If the field is unsupported, it will be undef, return blanks
     # as per the spec.
     if (!defined($count)) {
-		return ' ' x 4;
+        return ' ' x 4;
     }
 
     $count = sprintf("%04d", $count);
     if (length($count) != 4) {
-		siplog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
-	       $label, $count);
-		$count = ' ' x 4;
+        siplog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
+           $label, $count);
+        $count = ' ' x 4;
     }
     return $count;
 }

@@ -30,7 +30,7 @@ use base qw(Net::Server::PreFork);
 use constant LOG_SIP => "local6"; # Local alias for the logging facility
 
 #
-# Main	# not really, since package SIPServer
+# Main  # not really, since package SIPServer
 #
 # FIXME: Is this a module or a script?  
 # A script with no MAIN namespace?
@@ -75,7 +75,7 @@ foreach my $svc (keys %{$config->{listeners}}) {
 #
 if (defined($config->{'server-params'})) {
     while (my ($key, $val) = each %{$config->{'server-params'}}) {
-		push @parms, $key . '=' . $val;
+        push @parms, $key . '=' . $val;
     }
 }
 
@@ -125,17 +125,17 @@ sub process_request {
     $self->{service} = $config->find_service($sockaddr, $port, $proto);
 
     if (!defined($self->{service})) {
-		siplog("LOG_ERR", "process_request: Unknown recognized server connection: %s:%s/%s", $sockaddr, $port, $proto);
-		die "process_request: Bad server connection";
+        siplog("LOG_ERR", "process_request: Unknown recognized server connection: %s:%s/%s", $sockaddr, $port, $proto);
+        die "process_request: Bad server connection";
     }
 
     $transport = $transports{$self->{service}->{transport}};
 
     if (!defined($transport)) {
-		siplog("LOG_WARNING", "Unknown transport '%s', dropping", $service->{transport});
-		return;
+        siplog("LOG_WARNING", "Unknown transport '%s', dropping", $service->{transport});
+        return;
     } else {
-		&$transport($self);
+        &$transport($self);
     }
     return;
 }
@@ -201,27 +201,27 @@ sub raw_transport {
 }
 
 sub get_clean_string {
-	my $string = shift;
-	if (defined $string) {
-		siplog("LOG_DEBUG", "get_clean_string  pre-clean(length %s): %s", length($string), $string);
-		chomp($string);
-		$string =~ s/^[^A-z0-9]+//;
-		$string =~ s/[^A-z0-9]+$//;
-		siplog("LOG_DEBUG", "get_clean_string post-clean(length %s): %s", length($string), $string);
-	} else {
-		siplog("LOG_INFO", "get_clean_string called on undefined");
-	}
-	return $string;
+    my $string = shift;
+    if (defined $string) {
+        siplog("LOG_DEBUG", "get_clean_string  pre-clean(length %s): %s", length($string), $string);
+        chomp($string);
+        $string =~ s/^[^A-z0-9]+//;
+        $string =~ s/[^A-z0-9]+$//;
+        siplog("LOG_DEBUG", "get_clean_string post-clean(length %s): %s", length($string), $string);
+    } else {
+        siplog("LOG_INFO", "get_clean_string called on undefined");
+    }
+    return $string;
 }
 
 sub get_clean_input {
-	local $/ = "\012";
-	my $in = <STDIN>;
-	$in = get_clean_string($in);
-	while (my $extra = <STDIN>){
-		siplog("LOG_ERR", "get_clean_input got extra lines: %s", $extra);
-	}
-	return $in;
+    local $/ = "\012";
+    my $in = <STDIN>;
+    $in = get_clean_string($in);
+    while (my $extra = <STDIN>){
+        siplog("LOG_ERR", "get_clean_input got extra lines: %s", $extra);
+    }
+    return $in;
 }
 
 sub telnet_transport {
@@ -235,47 +235,47 @@ sub telnet_transport {
     siplog("LOG_DEBUG", "telnet_transport: timeout is $timeout");
 
     eval {
-	local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
-	local $| = 1;			# Unbuffered output
-	$/ = "\015";		# Internet Record Separator (lax version)
+    local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
+    local $| = 1;           # Unbuffered output
+    $/ = "\015";        # Internet Record Separator (lax version)
     # Until the terminal has logged in, we don't trust it
     # so use a timeout to protect ourselves from hanging.
 
-	while ($strikes--) {
-	    print "login: ";
-		alarm $timeout;
-		# $uid = &get_clean_input;
-		$uid = <STDIN>;
-	    print "password: ";
-	    # $pwd = &get_clean_input || '';
-		$pwd = <STDIN>;
-		alarm 0;
+    while ($strikes--) {
+        print "login: ";
+        alarm $timeout;
+        # $uid = &get_clean_input;
+        $uid = <STDIN>;
+        print "password: ";
+        # $pwd = &get_clean_input || '';
+        $pwd = <STDIN>;
+        alarm 0;
 
-		siplog("LOG_DEBUG", "telnet_transport 1: uid length %s, pwd length %s", length($uid), length($pwd));
-		$uid = get_clean_string ($uid);
-		$pwd = get_clean_string ($pwd);
-		siplog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
+        siplog("LOG_DEBUG", "telnet_transport 1: uid length %s, pwd length %s", length($uid), length($pwd));
+        $uid = get_clean_string ($uid);
+        $pwd = get_clean_string ($pwd);
+        siplog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
 
-	    if (exists ($config->{accounts}->{$uid})
-		&& ($pwd eq $config->{accounts}->{$uid}->{password})) {
-			$account = $config->{accounts}->{$uid};
-			if ( C4::SIP::Sip::MsgType::login_core($self,$uid,$pwd) ) {
+        if (exists ($config->{accounts}->{$uid})
+        && ($pwd eq $config->{accounts}->{$uid}->{password})) {
+            $account = $config->{accounts}->{$uid};
+            if ( C4::SIP::Sip::MsgType::login_core($self,$uid,$pwd) ) {
                 last;
             }
-	    }
-		siplog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
-		print("Invalid login$CRLF");
-	}
+        }
+        siplog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
+        print("Invalid login$CRLF");
+    }
     }; # End of eval
 
     if ($@) {
-		siplog("LOG_ERR", "telnet_transport: Login timed out");
-		die "Telnet Login Timed out";
+        siplog("LOG_ERR", "telnet_transport: Login timed out");
+        die "Telnet Login Timed out";
     } elsif (!defined($account)) {
-		siplog("LOG_ERR", "telnet_transport: Login Failed");
-		die "Login Failure";
+        siplog("LOG_ERR", "telnet_transport: Login Failed");
+        die "Login Failure";
     } else {
-		print "Login OK.  Initiating SIP$CRLF";
+        print "Login OK.  Initiating SIP$CRLF";
     }
 
     $self->{account} = $account;
