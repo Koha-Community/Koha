@@ -21863,6 +21863,50 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23081, "Set default to 0 for items.issues");
 }
 
+$DBversion = '19.12.00.081';
+if (CheckVersion($DBversion)) {
+    if (!column_exists('course_items', 'homebranch')) {
+        $dbh->do(q{
+            ALTER TABLE course_items
+            ADD COLUMN homebranch VARCHAR(10) NULL DEFAULT NULL AFTER ccode_storage
+        });
+    }
+
+    if (!foreign_key_exists('course_items', 'fk_course_items_homebranch')) {
+        $dbh->do(q{
+            ALTER TABLE course_items
+            ADD CONSTRAINT fk_course_items_homebranch
+              FOREIGN KEY (homebranch) REFERENCES branches (branchcode)
+              ON DELETE CASCADE ON UPDATE CASCADE
+        });
+    }
+
+    if (!column_exists('course_items', 'homebranch_enabled')) {
+        $dbh->do(q{
+            ALTER TABLE course_items
+            ADD COLUMN homebranch_enabled tinyint(1) NOT NULL DEFAULT 0 AFTER homebranch
+        });
+    }
+
+    if (!column_exists('course_items', 'homebranch_storage')) {
+        $dbh->do(q{
+            ALTER TABLE course_items
+            ADD COLUMN homebranch_storage VARCHAR(10) NULL DEFAULT NULL AFTER homebranch_enabled
+        });
+    }
+
+    if (!foreign_key_exists('course_items', 'fk_course_items_homebranch_storage')) {
+        $dbh->do(q{
+            ALTER TABLE course_items
+            ADD CONSTRAINT fk_course_items_homebranch_storage
+              FOREIGN KEY (homebranch_storage) REFERENCES branches (branchcode)
+              ON DELETE CASCADE ON UPDATE CASCADE
+        });
+    }
+
+    NewVersion( $DBversion, 22630, "Add course_items.homebranch");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
