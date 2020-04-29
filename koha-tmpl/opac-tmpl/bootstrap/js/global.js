@@ -82,7 +82,11 @@ function confirmModal(message, title, yes_label, no_label, callback) {
     }
 
     $("#bootstrap-confirm-box-modal .modal-header h4").text( title || "" );
-    $("#bootstrap-confirm-box-modal .modal-body").html( message || "" );
+    if( message && message != "" ){
+        $("#bootstrap-confirm-box-modal .modal-body").html( message || "" );
+    } else {
+        $("#bootstrap-confirm-box-modal .modal-body").remove();
+    }
     $("#bootstrap-confirm-box-modal-submit").text( yes_label || 'Confirm' );
     $("#bootstrap-confirm-box-modal-cancel").text( no_label || 'Cancel' );
     $("#bootstrap-confirm-box-modal").modal('show');
