@@ -846,7 +846,9 @@ subtest 'delete() tests' => sub {
     $builder->build_object( { class => 'Koha::Cities' } );
     $builder->build_object( { class => 'Koha::Cities' } );
 
-    warnings_are { Koha::Cities->delete }
+    my $cities = Koha::Cities->search;
+    $cities->next;
+    warnings_are { $cities->delete }
         [ "delete called!", "delete called!" ],
         "No warnings, no Koha::City->delete called as it doesn't exist";
 
