@@ -32,7 +32,7 @@ $(document).ready(function() {
                         resolvedName = row.status_alias.lib;
                     } else {
                         resolvedName = getStatusName(
-                            oData[0].capabilities[row.status].name,
+                            row.capabilities[row.status].name,
                             row
                         );
                     }
