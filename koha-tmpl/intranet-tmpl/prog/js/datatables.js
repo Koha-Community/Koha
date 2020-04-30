@@ -512,6 +512,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
     $.fn.api = function(options) {
         var settings = null;
         if(options) {
+            if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
+            options.criteria = options.criteria.toLowerCase();
             settings = $.extend(true, {}, dataTablesDefaults, {
                         'deferRender': true,
                         "paging": true,
@@ -556,7 +558,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 })
                                 .map(function(col) {
                                     var part = {};
-                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = {like: (data.columns[col.idx].search.value != '' ? data.columns[col.idx].search.value : filter)+'%'};
+                                    var value = data.columns[col.idx].search.value != '' ? data.columns[col.idx].search.value : filter;
+                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = options.criteria === 'exact'?value:{like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'')+value+(['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
                                     return part;
                                 });
 
@@ -572,7 +575,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     delete options.query_parameters;
                                 }
 
-                                dataSet._match = 'starts_with';
+                                dataSet._match = options.criteria;
 
                                 if(options.columns) {
                                     var order = data.order;
