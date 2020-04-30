@@ -484,7 +484,7 @@ sub build_tabs {
     $query .= qq{ LEFT JOIN authorised_values_branches ON ( id = av_id )} if $branch_limit;
     $query .= " WHERE category = ?";
     $query .= " AND ( branchcode = ? OR branchcode IS NULL )" if $branch_limit;
-    $query .= " GROUP BY lib ORDER BY lib, lib_opac";
+    $query .= " GROUP BY authorised_value,lib ORDER BY lib, lib_opac";
     my $authorised_values_sth = $dbh->prepare( $query );
 
     # in this array, we will push all the 10 tabs
