@@ -4,4 +4,4 @@ values
 ('email'),
 ('print'),
 ('sms'),
-('phone');
+('itiva');

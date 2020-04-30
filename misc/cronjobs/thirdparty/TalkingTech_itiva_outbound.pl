@@ -145,7 +145,7 @@ foreach my $type (@types) {
                 biblio      => $issues->{'biblionumber'},
                 biblioitems => $issues->{'biblionumber'},
             },
-            message_transport_type => 'phone',
+            message_transport_type => 'itiva',
         );
 
         die "No letter found for type $type!... dying\n" unless $letter;
@@ -155,7 +155,7 @@ foreach my $type (@types) {
             $message_id = C4::Letters::EnqueueLetter(
                 {   letter                 => $letter,
                     borrowernumber         => $issues->{'borrowernumber'},
-                    message_transport_type => 'phone',
+                    message_transport_type => 'itiva',
                 }
             );
         }
@@ -250,7 +250,7 @@ sub GetOverdueIssues {
                 JOIN overduerules USING (categorycode)
                 JOIN overduerules_transport_types USING ( overduerules_id )
                 WHERE ( overduerules.branchcode = borrowers.branchcode or overduerules.branchcode = '')
-                AND overduerules_transport_types.message_transport_type = 'phone'
+                AND overduerules_transport_types.message_transport_type = 'itiva'
                 AND ( (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay1
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay2
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay3 )
@@ -292,7 +292,7 @@ sub GetPredueIssues {
                 JOIN borrower_message_transport_preferences USING (borrower_message_preference_id)
                 JOIN message_attributes USING (message_attribute_id)
                 WHERE ( TO_DAYS( date_due ) - TO_DAYS( NOW() ) ) = days_in_advance
-                AND message_transport_type = 'phone'
+                AND message_transport_type = 'itiva'
                 AND message_name = 'Advance_Notice'
                 $patron_branchcode_filter
                 ";
@@ -323,7 +323,7 @@ sub GetWaitingHolds {
                 JOIN borrower_message_transport_preferences USING (borrower_message_preference_id)
                 JOIN message_attributes USING (message_attribute_id)
                 WHERE ( reserves.found = 'W' )
-                AND message_transport_type = 'phone'
+                AND message_transport_type = 'itiva'
                 AND message_name = 'Hold_Filled'
                 $patron_branchcode_filter
                 ";

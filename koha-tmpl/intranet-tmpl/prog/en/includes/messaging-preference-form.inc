@@ -79,31 +79,31 @@
       [% END %]
 
       [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]
-        [% IF ( messaging_preference.transport_phone ) %]
+        [% IF ( messaging_preference.transport_itiva ) %]
           <td>
           [% IF ( messaging_form_inactive ) %]
-              [% IF ( messaging_preference.transports_phone ) %]
+              [% IF ( messaging_preference.transports_itiva ) %]
                  <input type="checkbox"
-                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" checked="checked" disabled="disabled" />
+                 value="itiva" checked="checked" disabled="disabled" />
               [% ELSE %]
                  <input type="checkbox"
-                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" disabled="disabled" />
+                 value="itiva" disabled="disabled" />
               [% END %]
           [% ELSE %]
-              [% IF ( messaging_preference.transports_phone ) %]
+              [% IF ( messaging_preference.transports_itiva ) %]
                  <input type="checkbox"
-                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="itiva" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% ELSE %]
                  <input type="checkbox"
-                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
-                 value="phone" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+                 value="itiva" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
           </td>
