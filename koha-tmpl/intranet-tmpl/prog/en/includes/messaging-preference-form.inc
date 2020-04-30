@@ -7,7 +7,7 @@
     <tr><th></th>
         <th>Days in advance</th>
         [% IF Koha.Preference('SMSSendDriver') %]<th>SMS</th>[% END %]
-        [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]<th>Phone</th>[% END %]
+        [% IF Koha.Preference('TalkingTechItivaPhoneNotification') || Koha.Preference('PhoneNotification') %]<th>Phone</th>[% END %]
         <th>Email</th>
         <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
         <!-- <th>RSS</th> -->
@@ -104,6 +104,38 @@
                  id="itiva[% messaging_preference.message_attribute_id | html %]"
                  name="[% messaging_preference.message_attribute_id | html %]"
                  value="itiva" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+              [% END %]
+          [% END %]
+          </td>
+        [% ELSE %]
+          <td>-</td>
+        [% END %]
+      [% ELSIF Koha.Preference('PhoneNotification') %]
+        [% IF ( messaging_preference.transport_phone ) %]
+          <td>
+          [% IF ( messaging_form_inactive ) %]
+              [% IF ( messaging_preference.transports_phone ) %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 name="[% messaging_preference.message_attribute_id | html %]"
+                 value="phone" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 name="[% messaging_preference.message_attribute_id | html %]"
+                 value="phone" disabled="disabled" />
+              [% END %]
+          [% ELSE %]
+              [% IF ( messaging_preference.transports_phone ) %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 name="[% messaging_preference.message_attribute_id | html %]"
+                 value="phone" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="phone[% messaging_preference.message_attribute_id | html %]"
+                 name="[% messaging_preference.message_attribute_id | html %]"
+                 value="phone" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id | html %]" />
               [% END %]
           [% END %]
           </td>

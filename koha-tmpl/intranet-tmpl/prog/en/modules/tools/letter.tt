@@ -394,6 +394,8 @@
                             <div class="transport-types" style="clear:both">
                                 [% FOR mtt IN letters.$lang.templates.keys.sort %]
                                     [% SET letter = letters.$lang.templates.$mtt %]
+                                    [% NEXT IF letter.message_transport_type == "talkingtech" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                                    [% NEXT IF letter.message_transport_type == "phone" && !Koha.Preference('PhoneNotification') %]
                                     <h3>
                                         [% SWITCH letter.message_transport_type %]
                                             [% CASE 'email' %]
@@ -405,7 +407,9 @@
                                             [% CASE 'feed' %]
                                               Feed
                                             [% CASE 'itiva' %]
-                                              Phone
+                                              Phone ( Itiva )
+                                            [% CASE 'phone' %]
+                                                Phone
                                             [% CASE %]
                                               [% letter.message_transport_type | html %]
                                         [% END %]
@@ -413,9 +417,6 @@
                                     [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
                                         <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]" disabled="disabled">
                                             <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
-                                    [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-                                        <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]" disabled="disabled">
-                                            <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
                                     [% ELSE %]
                                         <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]">
                                     [% END %]

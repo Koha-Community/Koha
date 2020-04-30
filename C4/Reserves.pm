@@ -1856,6 +1856,7 @@ sub _koha_notify_reserve {
                ( $mtt eq 'email' and not $to_address ) # No email address
             or ( $mtt eq 'sms'   and not $patron->smsalertnumber ) # No SMS number
             or ( $mtt eq 'itiva' and C4::Context->preference('TalkingTechItivaPhoneNotification') ) # Notice is handled by TalkingTech_itiva_outbound.pl
+            or ( $mtt eq 'phone' and not $patron->phone ) # No phone number to call
         );
 
         &$send_notification($mtt, $letter_code);

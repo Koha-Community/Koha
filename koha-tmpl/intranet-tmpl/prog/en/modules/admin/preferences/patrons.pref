@@ -158,6 +158,14 @@ Patrons:
                yes: Enable
                no: Disable
          - patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported).
+         - <br/><i class="fa fa-exclamation-triangle"></i> If <code>TalkingTechItivaPhoneNotification</code> is enabled, <code>PhoneNotification</code> should be disabled.
+     -
+         - pref: PhoneNotification
+           choices:
+               yes: Enable
+               no: Disable
+         - patron phone notifications generation. A plugin will be required to process the phone notifications.
+         - <br/><i class="fa fa-exclamation-triangle"></i> If <code>PhoneNotification</code> is enabled, <code>TalkingTechItivaPhoneNotification</code> should be disabled.
      -
          - "Use the SMS::Send::"
          - pref: SMSSendDriver
