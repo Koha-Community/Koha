@@ -399,7 +399,7 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest item_circulation_status => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -436,5 +436,19 @@ subtest item_circulation_status => sub {
     $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
     $status = $sip_item->sip_circulation_status;
     is( $status, '10', "Item circulation status is in transit" );
+
+    $transfer->delete;
+
+    my $claim = Koha::Checkouts::ReturnClaim->new({
+        itemnumber     => $item->id,
+        borrowernumber => $patron->id,
+        created_by     => $patron->id,
+    })->store();
+
+    $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    $status = $sip_item->sip_circulation_status;
+    is( $status, '11', "Item circulation status is claimed returned" );
+
+    $claim->delete;
 };
 $schema->storage->txn_rollback;
