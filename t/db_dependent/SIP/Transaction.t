@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -20,6 +20,7 @@ use C4::SIP::ILS::Transaction::Checkin;
 
 use C4::Reserves;
 use Koha::CirculationRules;
+use Koha::Item::Transfer;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $schema = Koha::Database->new->schema;
@@ -395,5 +396,45 @@ subtest checkin_withdrawn => sub {
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '0');
     $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
     is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
+};
+
+subtest item_circulation_status => sub {
+    plan tests => 2;
+
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    my $status = $sip_item->sip_circulation_status;
+    is( $status, '03', "Item circulation status is available");
+
+    my $transfer = Koha::Item::Transfer->new({
+        itemnumber => $item->id,
+        datesent   => '2020-01-01',
+        frombranch => $library->branchcode,
+        tobranch   => $library2->branchcode,
+    })->store();
+
+    $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    $status = $sip_item->sip_circulation_status;
+    is( $status, '10', "Item circulation status is in transit" );
 };
 $schema->storage->txn_rollback;

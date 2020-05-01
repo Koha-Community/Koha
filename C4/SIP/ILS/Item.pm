@@ -83,10 +83,11 @@ sub new {
         return;
     }
     my $self = $item->unblessed;
-    $self->{      'id'       } = $item->barcode;     # to SIP, the barcode IS the id.
-    $self->{permanent_location}= $item->homebranch;
-    $self->{'collection_code'} = $item->ccode;
-    $self->{  'call_number'  } = $item->itemcallnumber;
+    $self->{_object}            = $item;
+    $self->{id}                 = $item->barcode; # to SIP, the barcode IS the id.
+    $self->{permanent_location} = $item->homebranch;
+    $self->{collection_code}    = $item->ccode;
+    $self->{call_number}        = $item->itemcallnumber;
 
     $self->{object} = $item;
 
@@ -257,7 +258,10 @@ sub title_id {
 
 sub sip_circulation_status {
     my $self = shift;
-    if ( $self->{borrowernumber} ) {
+    if ( $self->{_object}->get_transfer ) {
+        return '10'; # in transit between libraries
+    }
+    elsif ( $self->{borrowernumber} ) {
         return '04';    # charged
     }
     elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_shelf} } ) {
