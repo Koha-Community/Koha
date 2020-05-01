@@ -57,9 +57,6 @@
             [% IF ( library.branchfax ) %]
                 <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
             [% END %]
-            [% IF ( library.branchemail ) %]
-                <p>Email: <a href="mailto:[% library.branchemail | url %]" property="email">[% library.branchemail | html %]</a></p>
-            [% END %]
             [% IF ( library.branchurl ) %]
                 <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
             [% END %]
