@@ -265,6 +265,9 @@ sub sip_circulation_status {
     elsif ( Koha::Checkouts::ReturnClaims->search({ itemnumber => $self->{_object}->id, resolution => undef })->count ) {
         return '11';    # claimed returned
     }
+    elsif ( $self->{itemlost} ) {
+        return '12';    # lost
+    }
     elsif ( $self->{borrowernumber} ) {
         return '04';    # charged
     }

@@ -399,7 +399,7 @@ subtest checkin_withdrawn => sub {
 };
 
 subtest item_circulation_status => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -450,5 +450,10 @@ subtest item_circulation_status => sub {
     is( $status, '11', "Item circulation status is claimed returned" );
 
     $claim->delete;
+
+    $item->itemlost(1)->store();
+    $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+    $status = $sip_item->sip_circulation_status;
+    is( $status, '12', "Item circulation status is lost" );
 };
 $schema->storage->txn_rollback;
