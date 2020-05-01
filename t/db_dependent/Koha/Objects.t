@@ -995,7 +995,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                 $patrons_us->update({ surname => 'foo' }); # Koha::Patron->store is supposed to uppercase the surnames
                 is( $patrons_us->search({ surname => 'FOO' })->count, 2, 'Koha::Patron->store is hit' );
 
-                $patrons_us->update({ surname => 'foo', no_triggers => 1 }); # The surnames won't be uppercase as we won't hit Koha::Patron->store
+                $patrons_us->update({ surname => 'foo' }, { no_triggers => 1 }); # The surnames won't be uppercase as we won't hit Koha::Patron->store
                 is( $patrons_us->search({ surname => 'foo' })->count, 2, 'Koha::Patron->store is not hit');
 
             };

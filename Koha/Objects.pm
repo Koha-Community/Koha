@@ -199,9 +199,9 @@ sub delete {
 =cut
 
 sub update {
-    my ($self, $params) = @_;
+    my ($self, $fields, $options) = @_;
 
-    my $no_triggers = delete $params->{no_triggers};
+    my $no_triggers = $options->{no_triggers};
 
     if (
         !$no_triggers
@@ -212,14 +212,14 @@ sub update {
         my $objects_updated;
         $self->_resultset->result_source->schema->txn_do( sub {
             while ( my $o = $self->next ) {
-                $o->update($params);
+                $o->update($fields);
                 $objects_updated++;
             }
         });
         return $objects_updated;
     }
 
-    return $self->_resultset->update($params);
+    return $self->_resultset->update($fields);
 }
 
 =head3 single
