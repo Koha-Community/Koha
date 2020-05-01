@@ -21,5 +21,5 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     # Always end with this (adjust the bug info)
-    NewVersion( $DBversion, 17355, "Description");
+    NewVersion( $DBversion, 17355, "Add is_system to authorised_value_categories table");
 }
