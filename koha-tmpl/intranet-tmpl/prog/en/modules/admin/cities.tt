@@ -197,8 +197,8 @@
                     {
                         "data": function( row, type, val, meta ) {
 
-                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid='+ row.city_id +'"><i class="fa fa-pencil"></i> Edit</a>';
-                            result += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid='+ row.city_id +'"><i class="fa fa-trash"></i> Delete</a>';
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid='+ row.city_id +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid='+ row.city_id +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
 
                         },
