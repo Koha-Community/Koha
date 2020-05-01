@@ -845,7 +845,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $.ajax(options)
             .then(function(result) {
                     $.each(result,function( undef, macro ){
-                        var $li = $( '<li data-name="' + macro.name + '" data-id="' + macro.macro_id + '"><a href="#">'+ macro.macro_id + ' - ' + macro.name + '</a><ol class="macro-info"></ol></li>' );
+                        var $li = $( '<li data-name="' + macro.name + '" data-id="' + macro.macro_id + '"><a href="#">' + macro.name + '</a><ol class="macro-info"></ol></li>' );
                         if ( macro.macro_id == macroEditor.activeMacroId ) $li.addClass( 'active' );
                         $li.click( function() {
                             loadMacro(macro.name, macro.macro_id, macro.shared);
