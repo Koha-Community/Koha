@@ -236,7 +236,7 @@ $content_type.
 
 If applicable, $cookie can be undef, and it will not be sent.
 
-$content_type is one of the following: 'html', 'js', 'json', 'xml', 'rss', or 'atom'.
+$content_type is one of the following: 'html', 'js', 'json', 'opensearchdescription', 'xml', 'rss', or 'atom'.
 
 $status is an HTTP status message, like '403 Authentication Required'. It defaults to '200 OK'.
 
@@ -260,7 +260,8 @@ sub output_with_http_headers {
         # NOTE: not using application/atom+xml or application/rss+xml because of
         # Internet Explorer 6; see bug 2078.
         'rss'  => 'text/xml',
-        'atom' => 'text/xml'
+        'atom' => 'text/xml',
+        'opensearchdescription' => 'application/opensearchdescription+xml',
     );
 
     die "Unknown content type '$content_type'" if ( !defined( $content_type_map{$content_type} ) );
