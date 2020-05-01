@@ -101,7 +101,6 @@ Arrayref of C<MARC::Record>s.
 
 sub update_index {
     my ($self, $biblionums, $records) = @_;
-
     my $conf = $self->get_elasticsearch_params();
     my $elasticsearch = $self->get_elasticsearch();
     my $documents = $self->marc_records_to_documents($records);
@@ -112,7 +111,7 @@ sub update_index {
         my $document = $documents->[$i];
         push @body, {
             index => {
-                _id => $id
+                _id => "$id"
             }
         };
         push @body, $document;
