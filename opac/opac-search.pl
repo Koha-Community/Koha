@@ -1014,7 +1014,7 @@ $template->param(
     add_to_some_public_shelves  => $some_public_shelves,
 );
 
-my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
+my $content_type = ($format eq 'rss' or $format eq 'atom' or $format eq 'opensearchdescription') ? $format : 'html';
 
 # If GoogleIndicTransliteration system preference is On Set parameter to load Google's javascript in OPAC search screens
 if (C4::Context->preference('GoogleIndicTransliteration')) {
