@@ -16,20 +16,21 @@ use Template;
 use C4::SIP::ILS::Transaction;
 use C4::SIP::Sip qw(add_field);
 
-use C4::Debug;
-use C4::Context;
 use C4::Biblio;
-use C4::Items;
 use C4::Circulation;
+use C4::Context;
+use C4::Debug;
+use C4::Items;
 use C4::Members;
 use C4::Reserves;
-use Koha::Database;
 use Koha::Biblios;
+use Koha::Checkouts::ReturnClaims;
 use Koha::Checkouts;
+use Koha::Database;
 use Koha::DateUtils;
-use Koha::Patrons;
-use Koha::Items;
 use Koha::Holds;
+use Koha::Items;
+use Koha::Patrons;
 
 =encoding UTF-8
 
@@ -260,6 +261,9 @@ sub sip_circulation_status {
     my $self = shift;
     if ( $self->{_object}->get_transfer ) {
         return '10'; # in transit between libraries
+    }
+    elsif ( Koha::Checkouts::ReturnClaims->search({ itemnumber => $self->{_object}->id, resolution => undef })->count ) {
+        return '11';    # claimed returned
     }
     elsif ( $self->{borrowernumber} ) {
         return '04';    # charged
