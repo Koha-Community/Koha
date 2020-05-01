@@ -89,6 +89,15 @@ my $dbh = C4::Context->dbh;
 my $is_guarantor = $patron->guarantee_relationships->count;
 my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member);
 
+# Add warning if patron has pending suggestions
+$template->param(
+    pending_suggestions => scalar @{
+    C4::Suggestions::SearchSuggestion(
+            { suggestedby => $member, STATUS => 'ASKED' }
+        )
+    }
+);
+
 $template->param(
     patron        => $patron,
     ItemsOnIssues => $countissues,
@@ -104,14 +113,6 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
         csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
     );
 
-    # Add warning if patron has pending suggestions
-    $template->param(
-        pending_suggestions => scalar @{
-        C4::Suggestions::SearchSuggestion(
-                { suggestedby => $member, STATUS => 'ASKED' }
-            )
-        }
-    );
 } elsif ( $op eq 'delete_confirmed' ) {
     output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf( {
