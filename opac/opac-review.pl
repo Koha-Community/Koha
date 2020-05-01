@@ -97,11 +97,10 @@ if( !@errors && defined $review ) {
 $review = $clean;
 $review ||= $savedreview->review if $savedreview;
 $template->param(
-    'biblionumber'   => $biblionumber,
     'borrowernumber' => $borrowernumber,
     'review'         => $review,
     'reviewid'       => $reviewid || 0,
-    'title'          => $biblio->title,
+    'biblio'         => $biblio,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
