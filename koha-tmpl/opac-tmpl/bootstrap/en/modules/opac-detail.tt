@@ -1369,8 +1369,15 @@
     </script>
     [% Asset.js("js/verovio.js") | $raw %]
 [% END %]
-
+[% Asset.js("lib/emoji-picker/js/emoji-picker-all.min.js") | $raw %]
 <script>
+    window.emojiPicker = new EmojiPicker({
+      emojiable_selector: '[data-emojiable=true]',
+      assetsPath: '[% interface | html %]/lib/emoji-picker/img/',
+      popupButtonClasses: 'fa fa-smile-o'
+    });
+    window.emojiPicker.discover();
+
     var OPACPopupAuthorsSearch = "[% Koha.Preference('OPACPopupAuthorsSearch') | html %]";
     [% IF ( OpacHighlightedWords ) %]
         var q_array = new Array();  // holds search terms if available
