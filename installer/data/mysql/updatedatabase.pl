@@ -20911,7 +20911,7 @@ if( CheckVersion( $DBversion ) ) {
     if( $opacheader ){
         foreach my $lang ( @langs ) {
             # If there is a value in the opacheader preference, insert it into opac_news
-            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$langs[0]", $opacheader);
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$lang", $opacheader);
             push @detail, "Inserted opacheader contents into $lang news item...\n";
         }
     }
@@ -21925,16 +21925,20 @@ if( CheckVersion( $DBversion ) ) {
     my ($opacmainuserblock) = $dbh->selectrow_array( q|
         SELECT value FROM systempreferences WHERE variable='OpacMainUserBlock';
     |);
+
+    my @detail;
     if( $opacmainuserblock ){
         foreach my $lang ( @langs ) {
-            print "Inserting OpacMainUserBlock contents into $lang news item...\n";
             # If there is a value in the OpacMainUserBlock preference, insert it into opac_news
             $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "OpacMainUserBlock_$lang", $opacmainuserblock);
+            push @detail, "Inserting OpacMainUserBlock contents into $lang news item...\n";
         }
     }
     # Remove the OpacMainUserBlock system preference
     $dbh->do("DELETE FROM systempreferences WHERE variable='OpacMainUserBlock'");
-    NewVersion( $DBversion, 23794, "Move contents of OpacMainUserBlock preference to Koha news system");
+
+    unshift @detail, "Move contents of OpacMainUserBlock preference to Koha news system";
+    NewVersion( $DBversion, 23794, \@detail);
 }
 
 # SEE bug 13068
