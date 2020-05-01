@@ -452,6 +452,8 @@ function vShelfAdd(biblist) {
                 bibs.push("biblionumber=" + bibnums[i]);
             }
             return bibs.join("&");
+        } else {
+            showListsUpdate(MSG_NO_RECORD_SELECTED);
         }
     }
 }
