@@ -129,7 +129,7 @@
                     </div> <!-- /#library_info -->
 
                 [% ELSE %]
-                    <h2>Libraries</h2>
+                    <h2>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h2>
 
                     [% FOREACH library IN libraries %]
                         <h3 property="name">
