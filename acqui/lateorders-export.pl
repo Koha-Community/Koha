@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use Encode;
 
 use C4::Auth;
 use C4::Acquisition;
@@ -87,7 +88,8 @@ unless ( $csv_profile_id ) {
     print $input->header(
         -type       => 'text/csv',
         -attachment => 'lateorders.csv',
+        -charset    => 'UTF-8',
     );
-    print $csv;
+    print Encode::encode_utf8($csv);
     exit;
 }
