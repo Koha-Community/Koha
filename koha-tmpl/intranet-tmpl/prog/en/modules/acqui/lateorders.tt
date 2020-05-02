@@ -108,7 +108,7 @@
                         [% END %]
                    [% END %]
             </td>
-            <td>[% lateorder.quantity %]</td>
+            <td>[% lateorder.quantity | html %]</td>
             <td>
                 [% SET subtotal = (lateorder.quantity - lateorder.quantityreceived) * lateorder.rrp %]
                 [% SET total = total + subtotal %]
