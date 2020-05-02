@@ -2,7 +2,7 @@ $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
         INSERT IGNORE INTO export_format( profile, description, content, csv_separator, type, used_for ) VALUES
-        ("Late orders (csv profile)", "default CSV export for late orders", 'Title[% separator %]Author[% separator %]Publication year[% separator %]ISBN[% separator %]Quantity[% separator %]Number of claims
+        ("Late orders (CSV profile)", "Default CSV export for late orders", 'Title[% separator %]Author[% separator %]Publication year[% separator %]ISBN[% separator %]Quantity[% separator %]Number of claims
         [% FOR order IN orders ~%]
         [%~ SET biblio = order.biblio ~%]
         "[% biblio.title %]"[% separator ~%]

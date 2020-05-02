@@ -28,14 +28,14 @@ tables:
       multiline: [ content ]
       rows:
         - profile: "issues to claim"
-          description: "default CSV export for serial issue claims"
+          description: "Default CSV export for serial issue claims"
           content:
             - "SUPPLIER=aqbooksellers.name|TITLE=subscription.title|ISSUE NUMBER=serial.serialseq|LATE SINCE=serial.planneddate"
           csv_separator: ","
           type: sql
           used_for: late_issues
-        - profile: "Late orders (csv profile)"
-          description: "default CSV export for late orders"
+        - profile: "Late orders (CSV profile)"
+          description: "Default CSV export for late orders"
           content:
             - 'Title[% separator %]Author[% separator %]Publication year[% separator %]ISBN[% separator %]Quantity[% separator %]Number of claims'
             - '[% FOR order IN orders ~%]'
