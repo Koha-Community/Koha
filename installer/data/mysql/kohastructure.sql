@@ -3274,9 +3274,9 @@ CREATE TABLE aqorders_transfers (
 
 DROP TABLE IF EXISTS aqorders_claims;
 CREATE TABLE aqorders_claims (
-    id int(11) AUTO_INCREMENT,
-    ordernumber INT(11) NOT NULL,
-    claimed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id int(11) AUTO_INCREMENT, -- ID of the claims
+    ordernumber INT(11) NOT NULL, -- order linked to this claim
+    claimed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Date of the claims
     PRIMARY KEY (id),
     CONSTRAINT aqorders_claims_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
