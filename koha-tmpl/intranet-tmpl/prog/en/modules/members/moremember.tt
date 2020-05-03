@@ -259,6 +259,24 @@
                                                 </li>
                                             [% END %]
                                         [% END %]
+                                         <li id="patron-privacyguarantor">
+                                            <span class="label">Show checkouts to guarantor</span>
+                                            [% IF patron.privacy_guarantor_checkouts %]
+                                                Yes
+                                            [% ELSE %]
+                                                No
+                                            [% END %]
+                                        </li>
+
+                                        <li>
+                                            <span class="label">Show fines to guarantor</span>
+                                            [% IF patron.privacy_guarantor_fines %]
+                                                Yes
+                                            [% ELSE %]
+                                                No
+                                            [% END %]
+                                        </li>
+
                                         [% IF guarantees %]
                                             <li>
                                                 <span class="label">Guarantees:</span>
@@ -498,24 +516,6 @@
                                                     [% IF ( patron.privacy == 2 ) %]Never[% END %]
                                             </li>
                                         [% END %]
-
-                                        <li id="patron-privacyguarantor">
-                                            <span class="label">Show checkouts to guarantor</span>
-                                            [% IF patron.privacy_guarantor_checkouts %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </li>
-
-                                        <li>
-                                            <span class="label">Show fines to guarantor</span>
-                                            [% IF patron.privacy_guarantor_fines %]
-                                                Yes
-                                            [% ELSE %]
-                                                No
-                                            [% END %]
-                                        </li>
 
                                         [% IF ( patron.sort1 ) %]
                                             <li id="patron-sort1">
