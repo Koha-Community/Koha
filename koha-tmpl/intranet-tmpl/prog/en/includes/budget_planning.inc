@@ -1,7 +1,7 @@
 [%- BLOCK planning -%]
   [%- SWITCH plan -%]
-    [%- CASE 'MONTHS'    -%]<span>months</span>
-    [%- CASE 'BRANCHES'  -%]<span>libraries</span>
-    [%- CASE 'ITEMTYPES' -%]<span>item types</span>
+    [%- CASE 'MONTHS'    -%]<span>by months</span>
+    [%- CASE 'BRANCHES'  -%]<span>by libraries</span>
+    [%- CASE 'ITEMTYPES' -%]<span>by item types</span>
   [%- END -%]
 [%- END -%]
