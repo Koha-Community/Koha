@@ -51,7 +51,7 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = $field_number;
     my $res           = "
-    <script type=\"text/javascript\">
+    <script>
     
     
         function Clic$function_name(index) {

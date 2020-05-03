@@ -32,15 +32,13 @@ my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
     my $res = "
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Click$function_name(i) {
     q = document.getElementById('$params->{id}');
     window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+q.value,\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
 }
 
-//]]>
 </script>
 ";
     return $res;

@@ -34,7 +34,7 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = $field_number;
     my $res           = "
-    <script type=\"text/javascript\">
+    <script>
         function Clic$function_name(index) {
             window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a_bis.pl&index=\"+index,\"unimarc225a\",'width=500,height=400,toolbar=false,scrollbars=no');
         }

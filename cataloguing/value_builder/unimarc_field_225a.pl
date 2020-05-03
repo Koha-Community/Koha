@@ -58,11 +58,11 @@ sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $function_name = $field_number;
     my $res = "
-    <script type=\"text/javascript\">
+    <script>
     
     
         function Clic$function_name(index) {
-        // find the 010a value and the 210c. it will be used in the popup to find possibles collections
+        /* find the 010a value and the 210c. it will be used in the popup to find possibles collections */
             var isbn_found   = 0;
             var editor_found = 0;
             

@@ -29,7 +29,7 @@ use C4::Output;
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
     my $res           = "
-        <script type='text/javascript'>
+        <script>
             function Clic$field_number(i) {
                 var defaultvalue;
                 try {

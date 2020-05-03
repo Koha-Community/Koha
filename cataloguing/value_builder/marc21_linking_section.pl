@@ -41,7 +41,7 @@ my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
     my $res           = "
-  <script type='text/javascript'>
+  <script>
              function Click$function_name(event) {
                        defaultvalue=document.getElementById(event.data.id).value;
                  window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&index=\" + event.data.id + \"&result=\"+defaultvalue, 'tag_editor', 'width=900,height=700,toolbar=false,scrollbars=yes');

@@ -30,15 +30,13 @@ my $builder = sub {
     my $date = sprintf("%4d%02d%02d%02d%02d%04.1f",@a);
 
     my $res  = "
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Focus$function_name(event) {
     document.getElementById(event.data.id).value='$date';
     return 0;
 }
 
-//]]>
 </script>
 ";
     return $res;

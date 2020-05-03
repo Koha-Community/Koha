@@ -30,12 +30,10 @@ my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
     my $res="
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 function Click$function_name(i) {
     newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=macles.pl&index=\"+i,\"MACLES\",',toolbar=false,scrollbars=yes');
 }
-//]]>
 </script>
 ";
     return $res;

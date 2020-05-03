@@ -48,7 +48,7 @@ my $builder = sub {
     warn "Barcode type = $autoBarcodeType" if $DEBUG;
     if ((not $autoBarcodeType) or $autoBarcodeType eq 'OFF') {
 # don't return a value unless we have the appropriate syspref set
-        return q|<script type=\"text/javascript\"></script>|;
+        return q|<script></script>|;
     }
     if ($autoBarcodeType eq 'annual') {
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
@@ -68,14 +68,12 @@ my $builder = sub {
 END_OF_JS
 
     my $js  = <<END_OF_JS;
-    <script type="text/javascript">
-        //<![CDATA[
+    <script>
 
     function Click$function_name(id) {
         $scr
             return false;
     }
-    //]]>
     </script>
 END_OF_JS
     return $js;

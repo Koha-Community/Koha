@@ -45,7 +45,7 @@ CCC QW - returns first unused number CCC QWxx starting with CCC QW01
 my $builder = sub {
     my ( $params ) = @_;
     my $res="
-    <script type='text/javascript'>
+    <script>
         function Click$params->{id}() {
                 var code = document.getElementById('$params->{id}');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber-KU.pl&code=' + code.value;

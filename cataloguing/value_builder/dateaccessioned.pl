@@ -31,7 +31,7 @@ my $builder = sub {
 
     my $res  = <<END_OF_JS;
 <script>
-// from: cataloguing/value_builder/dateaccessioned.pl
+/* from: cataloguing/value_builder/dateaccessioned.pl */
 
 \$(document).ready(function(){
     \$("#$function_name").datepicker({
@@ -51,7 +51,7 @@ function Click$function_name(event) {
 }
 
 function set_to_today( id, force ) {
-    // The force parameter is used in Click but not in Focus !
+    /* The force parameter is used in Click but not in Focus ! */
     if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
     if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' || force ) {
         \$("#" + id).val("$date");

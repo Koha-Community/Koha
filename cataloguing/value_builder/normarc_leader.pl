@@ -31,8 +31,7 @@ sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
 my $res="
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Focus$function_name(subfield_managed) {
     if(!document.getElementById(\"$field_number\").value){
@@ -46,7 +45,6 @@ function Clic$function_name(i) {
 	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=normarc_leader.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
-//]]>
 </script>
 ";
 

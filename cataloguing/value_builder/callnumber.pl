@@ -42,7 +42,7 @@ In this case, a callnumber has this form : "PREFIX 0009678570".
 my $builder = sub {
     my ( $params ) = @_;
     my $res="
-    <script type='text/javascript'>
+    <script>
         function Blur$params->{id}() {
                 var code = document.getElementById('$params->{id}');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber.pl&code=' + code.value;

@@ -32,15 +32,13 @@ my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
     my $res           = "
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Click$function_name(event) {
     defaultvalue=document.getElementById(event.data.id).value;
     newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
-//]]>
 </script>
 ";
 

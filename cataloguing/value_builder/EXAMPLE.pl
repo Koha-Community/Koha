@@ -50,6 +50,9 @@ use C4::Output;
 # into the event data parameter; Focus e.g. uses that one again by looking at
 # the variable event.data.id.
 #
+# Comments in JavaScript must be multi-line style ( /* ... */ ) in case
+# the JavaScript block is collapsed by the template
+#
 # Do not use the perl variable $id to extract the field value. Use variable
 # event.data.id. This makes a difference when the field is cloned or has
 # been created dynamically (as in additem.js).
@@ -59,7 +62,7 @@ my $builder= sub {
     my $id = $params->{id};
 
     return qq|
-<script type="text/javascript">
+<script>
 function Focus$id(event) {
     if( \$('#'+event.data.id).val()=='' ) {
         \$('#'+event.data.id).val('EXAMPLE:');
@@ -68,14 +71,14 @@ function Focus$id(event) {
 
 function MouseOver$id(event) {
     return Focus$id(event);
-    // just redirecting it to Focus for the same effect
+    /* just redirecting it to Focus for the same effect */
 }
 
 function KeyPress$id(event) {
-    if( event.which == 64 ) { // at character
+    if( event.which == 64 ) { /* at character */
         var f= \$('#'+event.data.id).val();
         \$('#'+event.data.id).val( f + 'AT' );
-        return false; // prevents getting the @ character back too
+        return false; /* prevents getting the @ character back too */
     }
 }
 
@@ -92,7 +95,7 @@ function Change$id(event) {
 function Click$id(event) {
     var fieldvalue=\$('#'+event.data.id).val();
     window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=EXAMPLE.pl&index=\"+event.data.id+\"&result=\"+fieldvalue,\"tag_editor\",'width=700,height=700,toolbar=false,scrollbars=yes');
-    return false; // prevents scrolling
+    return false; /* prevents scrolling */
 }
 </script>|;
 };

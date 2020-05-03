@@ -37,8 +37,7 @@ my $builder = sub {
 	$nextnum = $branchcode.'_'.$nextnum;
 
     my $js  = <<END_OF_JS;
-<script type="text/javascript">
-//<![CDATA[
+<script>
 
 function Focus$function_name(id, force) {
     if (\$('#' + id).val() == '' || force) {
@@ -50,7 +49,6 @@ function Click$function_name(event) {
     Focus$function_name(event.data.id, 1);
     return false;
 }
-//]]>
 </script>
 END_OF_JS
     return $js;

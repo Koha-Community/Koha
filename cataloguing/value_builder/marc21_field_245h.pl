@@ -27,8 +27,7 @@ my $builder = sub {
     my $function_name = $params->{id};
 
     my $res  = "
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Blur$function_name(event) {
     var fieldValue = document.getElementById(event.data.id).value;
@@ -41,7 +40,6 @@ function Blur$function_name(event) {
     return 0;
 }
 
-//]]>
 </script>
 ";
     return $res;

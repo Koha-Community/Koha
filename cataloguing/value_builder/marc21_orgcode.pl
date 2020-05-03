@@ -30,8 +30,7 @@ my $builder = sub {
     my $library = Koha::Libraries->find( C4::Context->userenv->{'branch'} );
     my $org = $library->get_effective_marcorgcode;
     return <<"HERE";
-<script type=\"text/javascript\">
-//<![CDATA[
+<script>
 
 function Focus$params->{id}(event) {
     if( ! \$('#'+event.data.id).val() ) {
@@ -39,7 +38,6 @@ function Focus$params->{id}(event) {
     }
 }
 
-//]]>
 </script>
 HERE
 };
