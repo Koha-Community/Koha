@@ -45,7 +45,6 @@ To know on which branch this script have to display late order.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Bookseller qw( GetBooksellersWithLateOrders );
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
