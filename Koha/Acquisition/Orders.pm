@@ -40,7 +40,7 @@ my $late_orders = $orders->filter_by_lates($params);
 
 Filter an order set given different parameters.
 
-This is the équivalent method of the former GetLateOrders C4 subroutine
+This is the equivalent method of the former GetLateOrders C4 subroutine
 
 $params can be:
 
