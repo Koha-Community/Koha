@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -105,6 +105,17 @@ subtest 'under() tests' => sub {
       ->json_is('/error', 'System is under maintenance.');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'spec retrieval tests' => sub {
+
+    plan tests => 4;
+
+    $t->get_ok("/api/v1/")
+      ->status_is(200);
+
+    $t->get_ok("/api/v1/.html")
+      ->status_is(200);
 };
 
 sub create_user_and_session {
