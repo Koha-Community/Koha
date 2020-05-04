@@ -105,6 +105,17 @@
                             </div>
                         [% END %]
 
+                        [% IF ( patron.borrowernotes ) %]
+                             <div id="circnotes" class="circmessage">
+                                 <h4>Notes: </h4>
+                                     <ul><li>
+                                       <span class="circ-hlt">
+                                             [% patron.borrowernotes | $raw | html_line_break %]
+                                       </span>
+                                    </li></ul>
+                              </div>
+                        [% END %]
+
                         [% IF ( flagged ) %]
                             <div id="circmessages" class="circmessage attention">
                                 <ul>
