@@ -1069,6 +1069,32 @@ sub set_remote_address {
     }
 }
 
+=head3 https_enabled
+
+https_enabled should be called when checking if a HTTPS connection
+is used.
+
+Note that this depends on a HTTPS environmental variable being defined
+by the web server. This function may not return the expected result,
+if your web server or reverse proxies are not setting the correct
+X-Forwarded-Proto headers and HTTPS environmental variable.
+
+Note too that the HTTPS value can vary from web server to web server.
+We are relying on the convention of the value being "on" or "ON" here.
+
+=cut
+
+sub https_enabled {
+    my $https_enabled = 0;
+    my $env_https = $ENV{HTTPS};
+    if ($env_https){
+        if ($env_https =~ /^ON$/i){
+            $https_enabled = 1;
+        }
+    }
+    return $https_enabled;
+}
+
 1;
 
 =head3 needs_install
