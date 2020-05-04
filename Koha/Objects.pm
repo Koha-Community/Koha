@@ -196,6 +196,17 @@ sub delete {
 
 =head3 update
 
+    $object->update( $fields, [ { no_triggers => 0/1 } ] );
+
+This method overloads the DBIC inherited one so if code-level triggers exist
+(through the use of an overloaded I<update> or I<store> method in the Koha::Object
+based class) those are called in a loop on the resultset.
+
+If B<no_triggers> is passed and I<true>, then the DBIC update method is called
+directly. This feature is important for performance, in cases no code-level
+triggers are defined. The developer will explicitly ask for this and QA should
+catch wrong uses as well.
+
 =cut
 
 sub update {
