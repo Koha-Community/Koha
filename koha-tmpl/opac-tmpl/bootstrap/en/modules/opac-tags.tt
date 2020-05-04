@@ -1,7 +1,8 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
-
+[% USE AdditionalContents %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Tags &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]

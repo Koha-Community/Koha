@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% USE AdditionalContents %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Please confirm your registration &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -23,9 +25,7 @@
             <div class="row">
                 [% IF ( OpacNav ) %]
                     <div class="col-lg-2">
-                        <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
-                        </div>
+                        [% INCLUDE 'navigation.inc' %]
                     </div>
                     <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]

@@ -1,6 +1,17 @@
 [% USE raw %]
-<div id="opacnav">[% OpacNav | $raw %]</div>
+
+[% IF ( OpacNav ) %]
+    <div id="opacnav">
+        [% PROCESS koha_news_block news => OpacNav %]
+    </div>
+[% END %]
+
 [% IF IsPatronPage %]
     <div id="usermenu">[% INCLUDE usermenu.inc %]</div>
 [% END %]
-<div id="opacnavbottom">[% OpacNavBottom | $raw %]</div>
+
+[% IF ( OpacNavBottom ) %]
+    <div id="opacnavbottom">
+        [% OpacNavBottom | $raw %]
+    </div>
+[% END %]

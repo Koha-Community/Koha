@@ -5,8 +5,8 @@
 [% USE AdditionalContents %]
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-[% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
-[% SET OpacCustomSearch = AdditionalContents.get( location => "OpacCustomSearch", lang => lang, library => branchcode, blocktitle => 0 ) %]
+[% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
+[% SET OpacCustomSearch = AdditionalContents.get( location => "OpacCustomSearch", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
 
 <button id="scrolltocontent">Skip to main content</button>

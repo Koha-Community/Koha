@@ -20,6 +20,8 @@
         <span>(There was a problem checking in this item, please see library staff for assistance)</span>
     [% END %]
 [% END %]
+[% PROCESS 'html_helpers.inc' %]
+[% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <title>Self check-in &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %]</title>

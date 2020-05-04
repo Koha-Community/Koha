@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF ( GetAvailability ) %]

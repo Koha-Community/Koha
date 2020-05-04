@@ -436,7 +436,7 @@
             <option value="slip">Slip</option>
         [% END %]
     [% ELSE %]
-        [% FOREACH l IN [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText' ] %]
+        [% FOREACH l IN [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText' ] %]
             [% IF l == location %]
                 <option value="[% l | html %]" selected="selected">[% l | html %]</option>
             [% ELSE %]

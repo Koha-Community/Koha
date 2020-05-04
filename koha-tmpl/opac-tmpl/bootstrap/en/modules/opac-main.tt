@@ -6,6 +6,7 @@
 [% USE Price %]
 [% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
+[% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode, blocktitle => 0 ) %]
 [% SET OpacNavRight = AdditionalContents.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
 [% SET OpacMainUserBlock = AdditionalContents.get( location => "OpacMainUserBlock", lang => lang, library => branchcode ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
