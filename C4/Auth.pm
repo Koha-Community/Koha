@@ -230,6 +230,7 @@ sub get_template_and_user {
                 -value    => '',
                 -expires  => '',
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
 
             $template->param(
@@ -826,6 +827,7 @@ sub checkauth {
             -value    => '',
             -expires  => '',
             -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
         );
         $loggedin = 1;
     }
@@ -926,7 +928,8 @@ sub checkauth {
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => $session->id,
-                -HttpOnly => 1
+                -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             $session->param( 'lasttime', time() );
             unless ( $sessiontype && $sessiontype eq 'anon' ) {    #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
@@ -955,7 +958,8 @@ sub checkauth {
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
             -value    => $session->id,
-            -HttpOnly => 1
+            -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
         );
         my $pki_field = C4::Context->preference('AllowPKIAuth');
         if ( !defined($pki_field) ) {
@@ -1126,7 +1130,8 @@ sub checkauth {
                             $cookie = $query->cookie(
                                 -name     => 'CGISESSID',
                                 -value    => '',
-                                -HttpOnly => 1
+                                -HttpOnly => 1,
+                                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
                             );
                             $info{'wrongip'} = 1;
                         }
@@ -1207,7 +1212,8 @@ sub checkauth {
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
-                -HttpOnly => 1
+                -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
         }
 
@@ -1474,6 +1480,7 @@ sub check_api_auth {
                     -name     => 'CGISESSID',
                     -value    => $session->id,
                     -HttpOnly => 1,
+                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
                 );
                 $session->param( 'lasttime', time() );
                 my $flags = haspermission( $userid, $flagsrequired );
@@ -1528,6 +1535,7 @@ sub check_api_auth {
                 -name     => 'CGISESSID',
                 -value    => $sessionID,
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             if ( $return == 1 ) {
                 my (
