@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 27;
+use Test::More tests => 33;
 use Test::MockModule;
 
 BEGIN {
@@ -63,3 +63,19 @@ is(C4::Context->interface, 'opac', 'interface still opac');
 is( C4::Context->interface( 'SiP' ), 'sip', 'interface SiP' );
 is( C4::Context->interface( 'COMMANDLINE' ), 'commandline', 'interface commandline uc' );
 is( C4::Context->interface( 'CRON' ), 'cron', 'interface cron uc' );
+
+{
+    local %ENV = %ENV;
+    delete $ENV{HTTPS};
+    is( C4::Context->https_enabled, 0, "Undefined HTTPS env returns 0");
+    $ENV{HTTPS} = '1';
+    is( C4::Context->https_enabled, 0, "Invalid 1 HTTPS env returns 0");
+    $ENV{HTTPS} = 'off';
+    is( C4::Context->https_enabled, 0, "off HTTPS env returns 0");
+    $ENV{HTTPS} = 'OFF';
+    is( C4::Context->https_enabled, 0, "OFF HTTPS env returns 0");
+    $ENV{HTTPS} = 'on';
+    is( C4::Context->https_enabled, 1, "on HTTPS env returns 1");
+    $ENV{HTTPS} = 'ON';
+    is( C4::Context->https_enabled, 1, "ON HTTPS env returns 1");
+}

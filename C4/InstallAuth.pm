@@ -267,6 +267,7 @@ sub checkauth {
                 -name     => 'CGISESSID',
                 -value    => $session->id,
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             $loggedin = 1;
             $userid   = $session->param('cardnumber');
@@ -307,6 +308,7 @@ sub checkauth {
                 -name     => 'CGISESSID',
                 -value    => $sessionID,
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             if ( $return == 2 ) {
 
@@ -352,7 +354,8 @@ sub checkauth {
                 -name    => 'CGISESSID',
                 -value   => '',
                 -HttpOnly => 1,
-                -expires => ''
+                -expires => '',
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
         }
         if ($envcookie) {
@@ -394,7 +397,8 @@ sub checkauth {
         -name    => 'CGISESSID',
         -value   => $sessionID,
         -HttpOnly => 1,
-        -expires => ''
+        -expires => '',
+        -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
     );
     print $query->header(
         -type    => 'text/html; charset=utf-8',
