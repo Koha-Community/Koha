@@ -91,6 +91,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-04 08:25:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YHD9b6rUAPUM5HzFg4k9Wg
 
+sub koha_object_class {
+    'Koha::Acquisition::Order::Claim';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Order::Claims';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
