@@ -143,7 +143,7 @@ __PACKAGE__->table("aqorders");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: 'current_timestamp()'
+  default_value: current_timestamp
   is_nullable: 0
 
 =head2 rrp
@@ -660,8 +660,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-17 14:58:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B/pTQKIu8guDBN3uLBkI6Q
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-04 08:25:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pf6reFaSldsjIA6XThbDFA
 
 __PACKAGE__->belongs_to(
   "basket",
