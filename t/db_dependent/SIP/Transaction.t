@@ -209,7 +209,7 @@ subtest cancel_hold => sub {
 };
 
 subtest do_hold => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_1 = $builder->build_object(
@@ -265,7 +265,9 @@ subtest do_hold => sub {
     my $hold = $transaction->do_hold();
     is( $item->biblio->holds->count(), 2, "Bib has 2 holds" );
 
-    is( $patron_2->holds->next->priority, 2, 'Hold placed from SIP should have a correct priority of 2');
+    my $THE_hold = $patron_2->holds->next;
+    is( $THE_hold->priority, 2, 'Hold placed from SIP should have a correct priority of 2');
+    is( $THE_hold->branchcode, $patron_2->branchcode, 'Hold placed from SIP should have the branchcode set' );
 };
 
 subtest do_checkin => sub {

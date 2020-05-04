@@ -454,7 +454,7 @@ subtest 'Holds test' => sub {
 
 subtest 'Holds test for branch transfer limits' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -536,11 +536,15 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, undef, "Item hold, Item can be transferred" );
+    my $hold = Koha::Holds->search({ itemnumber => $item->{itemnumber}, borrowernumber => $patron->{borrowernumber} })->next;
+    is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     Koha::Holds->search()->delete();
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, undef, "Record hold, Item con be transferred" );
+    $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}, borrowernumber => $patron->{borrowernumber} })->next;
+    is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     $schema->storage->txn_rollback;
 };
