@@ -2,6 +2,7 @@
     /* Localization of the timepicker plugin */
     jQuery(function($){
         $.timepicker.regional[''] = {
+            timeFormat: "[% IF Koha.Preference('TimeFormat') == '12hr' %]hh:mm TT[% ELSE %]HH:mm[% END %]",
             currentText: _("Now"),
             closeText: _("Done"),
             amNames: [_("AM"), _("A")],
