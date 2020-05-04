@@ -162,6 +162,12 @@
 
         </li>
         <li>
+         <span class="label">Reason:</span>
+            [% IF ( reason ) %]
+                [% AuthorisedValues.GetByCode( 'SUGGEST', reason, 0 ) | html %]
+            [% END %]
+        </li>
+        <li>
           <table>
             <thead><tr><th>&nbsp;</th><th>Date</th><th>By</th></tr></thead>
             <tbody>
