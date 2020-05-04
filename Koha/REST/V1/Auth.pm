@@ -76,6 +76,9 @@ sub under {
             # Requesting a token shouldn't go through the API authenticaction chain
             $status = 1;
         }
+        elsif ( $namespace eq '' or $namespace eq '.html' ) {
+            $status = 1;
+        }
         else {
             $status = authenticate_api_request($c, { is_public => $is_public });
         }
