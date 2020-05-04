@@ -122,10 +122,6 @@ jQuery(function($){
         showMonthAfterYear: false,
         yearSuffix: ''};
     $.datepicker.setDefaults($.datepicker.regional['']);
-    $.timepicker.regional[''] = {
-        timeFormat: "[% IF Koha.Preference('TimeFormat') == '12hr' %]hh:mm TT[% ELSE %]HH:mm[% END %]",
-    };
-    $.timepicker.setDefaults($.timepicker.regional['']);
 });
 
 /*  jQuery Validator plugin custom method
