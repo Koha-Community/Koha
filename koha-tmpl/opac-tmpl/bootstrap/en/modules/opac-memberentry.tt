@@ -372,21 +372,29 @@
 
                                     [% UNLESS hidden.defined('sex') %]
                                         <li class="lradio">
-                                            <label for="sex-female" class="radio inline">Female:</label>
+                                            <label for="sex-female" class="radio inline"><span class="patronsex-female">Female:</span></label>
                                             [% IF borrower.sex == 'F' %]
                                                 <input type="radio" name="borrower_sex" id="sex-female" value="F" checked="checked" />
                                             [% ELSE %]
                                                 <input type="radio" name="borrower_sex" id="sex-female" value="F" />
                                             [% END %]
 
-                                            <label for="sex-male" class="radio inline">Male:</label>
+                                            <label for="sex-male" class="radio inline"><span class="patronsex-male">Male:</span></label>
                                             [% IF borrower.sex == 'M' %]
                                                 <input type="radio" name="borrower_sex" id="sex-male" value="M" checked="checked" />
                                             [% ELSE %]
                                                 <input type="radio" name="borrower_sex" id="sex-male" value="M" />
                                             [% END %]
 
-                                            <label for="sex-none" class="radio inline">None specified: </label>
+                                            <label for="sex-other" class="radio inline"><span class="patronsex-other">Other:</span></label>
+                                            [% IF borrower.sex == 'O' %]
+                                                <input type="radio" name="borrower_sex" id="sex-other" value="O" checked="checked" />
+                                            [% ELSE %]
+                                                <input type="radio" name="borrower_sex" id="sex-other" value="O" />
+                                            [% END %]
+
+
+                                            <label for="sex-none" class="radio inline"><span class="patronsex-none">None specified / Prefer not to say:</span></label>
                                             [% IF borrower.sex == '' %]
                                                 <input type="radio" name="borrower_sex" id="sex-none" value="" checked="checked" />
                                             [% ELSE %]

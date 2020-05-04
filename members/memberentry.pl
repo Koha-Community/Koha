@@ -650,6 +650,8 @@ if(!defined($data{'sex'})){
     $template->param( female => 1);
 } elsif ($data{'sex'} eq 'M'){
     $template->param(  male => 1);
+} elsif ($data{'sex'} eq 'O') {
+    $template->param( other => 1);
 } else {
     $template->param(  none => 1);
 }

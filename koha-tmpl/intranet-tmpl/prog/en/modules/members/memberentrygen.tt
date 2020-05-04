@@ -379,24 +379,30 @@ legend:hover {
                                                     <li class="radio">
                                                         [% UNLESS ( opduplicate ) %]
                                                             [% IF ( female ) %]
-                                                                <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" checked="checked" /> Female</label>
+                                                                <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" checked="checked" /><span class="patronsex-female"> Female</span></label>
                                                             [% ELSE %]
-                                                                <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" /> Female</label>
+                                                                <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" /><span class="patronsex-female"> Female</span></label>
                                                             [% END %]
                                                             [% IF ( male ) %]
-                                                                <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" checked="checked" /> Male</label>
+                                                                <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" checked="checked" /><span class="patronsex-male"> Male</span></label>
                                                             [% ELSE %]
-                                                                <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" /> Male</label>
+                                                                <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" /><span class="patronsex-male"> Male</span></label>
+                                                            [% END %]
+                                                            [% IF ( other ) %]
+                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" checked="checked" /><span class="patronsex-other"> Other</span></label>
+                                                            [% ELSE %]
+                                                                <label for="sex-other"><input type="radio" name="sex" id="sex-other" value="O" /><span class="patronsex-other"> Other</span></label>
                                                             [% END %]
                                                             [% IF ( none ) %]
-                                                                <label for="sex-none"><input type="radio" name="sex" id="sex-none" value=""  checked="checked" /> None specified</label>
+                                                                <label for="sex-none"><input type="radio" name="sex" id="sex-none" value=""  checked="checked" /><span class="patronsex-none"> None specified / Prefer not to say</span></label>
                                                             [% ELSE %]
-                                                                <label for="sex-none"><input type="radio" name="sex" id="sex-none" value="" /> None specified</label>
+                                                                <label for="sex-none"><input type="radio" name="sex" id="sex-none" value="" /><span class="patronsex-none"> None specified / Prefer not to say</span></label>
                                                             [% END %]
                                                         [% ELSE %]
-                                                            <label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
-                                                            <label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
-                                                            <label for="sex-none">None specified </label><input type="radio" name="sex" id="sex-none" value="" checked="checked" />
+                                                            <label for="sex-female"><span class="patronsex-female">Female </span></label><input type="radio" name="sex" id="sex-female" value="F" />
+                                                            <label for="sex-male"><span class="patronsex-male">Male </span></label><input type="radio" name="sex" id="sex-male" value="M" />
+                                                            <label for="sex-other"><span class="patronsex-other">Other </span></label><input type="radio" name="sex" id="sex-other" value="O" />
+                                                            <label for="sex-none"><span class="patronsex-none">None specified / Prefer not to say </span></label><input type="radio" name="sex" id="sex-none" value="" checked="checked" />
                                                         [% END # /UNLESS ( opduplicate )%]
                                                     </li>
                                                 [% END # /UNLESS nosex %]
@@ -1603,7 +1609,7 @@ legend:hover {
                 }
                 $(toggle_from).each(function() {
                     var input_label = $(this).attr('for');
-                    if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' ) {
+                    if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' || input_label == 'sex-other' ) {
                         $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
                         return;
                     }
