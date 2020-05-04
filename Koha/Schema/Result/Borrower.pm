@@ -742,6 +742,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 advanced_editor_macros
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AdvancedEditorMacro>
+
+=cut
+
+__PACKAGE__->has_many(
+  "advanced_editor_macros",
+  "Koha::Schema::Result::AdvancedEditorMacro",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 api_keys
 
 Type: has_many
@@ -1688,8 +1703,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-01 09:42:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1G8678sy3UnvmJffzcU/Hg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-04 07:27:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JMF49k5YH+pq7U3kVSgQRQ
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
