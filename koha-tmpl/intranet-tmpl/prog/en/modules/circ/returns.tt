@@ -161,9 +161,8 @@
                                     <h3>This item has been claimed as returned by:</h3>
                                     <ul>
                                         [% FOREACH rc IN ReturnClaims %]
-                                            [% SET patron = rc.patron %]
                                             <li>
-                                                [% INCLUDE 'patron-title.inc' hide_patron_infos_if_needed=1 invert_name=1 %]
+                                                [% INCLUDE 'patron-title.inc' patron=rc.patron hide_patron_infos_if_needed=1 invert_name=1 %]
                                             </li>
                                         [% END %]
                                     </ul>
