@@ -21,7 +21,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>[% IF ( Supplier ) %][% Supplier | html %] : [% END %]Late orders</h1>
+<h1>[% IF bookseller_filter %][% bookseller_filter.name | html %] : [% END %]Late orders</h1>
 <div id="acqui_lateorders">
 
 [% IF error_claim %]
@@ -36,11 +36,11 @@
 [% IF info_claim %]
     <div class="dialog message">Email has been sent.</div>
 [% END %]
-[% IF lateorders.count %]
+[% IF lateorders.size %]
 <form action="lateorders.pl" name="claim" method="post">
   <input type="hidden" name="op" value="send_alert" />
   <input type="hidden" name="delay" value="[% delay | html %]" />
-  <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+  <input type="hidden" name="booksellerid" value="[% bookseller_filter.id | html %]" />
 	[% IF ( letters ) %]
 	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
 	  [% FOREACH letter IN letters %]
@@ -53,7 +53,7 @@
     <table id="late_orders">
       <thead>
         <tr>
-            [% IF Supplier %]
+            [% IF bookseller_filter %]
                 <th><a id="CheckAll" href="#">Check all</a><br /><a id="CheckNone" href="#">Uncheck all</a></th>
             [% ELSE %]
                 <th></th>
@@ -225,14 +225,17 @@
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 
-	<li><label for="booksellerid">Vendor:</label>
-		<select id="booksellerid" size="1" tabindex="" name="booksellerid">
+    <li><label for="booksellerid">Vendor:</label>
+        <select id="booksellerid" tabindex="" name="booksellerid">
             <option value=""></option>
-			[% FOREACH SUPPLIER_LOO IN SUPPLIER_LOOP %]
-                [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id | html %]" selected="selected">[% SUPPLIER_LOO.name | html %]</option>
-                [% ELSE %]<option value="[% SUPPLIER_LOO.id | html %]">[% SUPPLIER_LOO.name | html %]</option>[% END %]
-        	[% END %]
-		</select>
+            [% FOREACH bookseller IN booksellers %]
+                [% IF bookseller.id == bookseller_filter.id %]
+                    <option value="[% bookseller.id | html %]" selected="selected">[% bookseller.name | html %]</option>
+                [% ELSE %]
+                    <option value="[% bookseller.id | html %]">[% bookseller.name | html %]</option>
+                [% END %]
+            [% END %]
+        </select>
 </ol>
     <fieldset class="action"><input type="submit" value="Filter" /></fieldset>
 </fieldset>

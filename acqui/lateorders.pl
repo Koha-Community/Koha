@@ -68,7 +68,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
-my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
+my $booksellerid = $input->param('booksellerid');
 my $delay        = $input->param('delay') // 0;
 
 # Get the "date from" param if !defined is today
@@ -133,23 +133,9 @@ push @parameters, $estimateddeliverydateto_dt
     ? $estimateddeliverydateto_dt->ymd()
     : undef;
 
-my %supplierlist = GetBooksellersWithLateOrders(@parameters);
-
-my (@sloopy);	# supplier loop
-foreach( sort { $supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist ) {
-	push @sloopy, (($booksellerid and $booksellerid eq $_ )            ?
-					{id=>$_, name=>$supplierlist{$_}, selected=>1} :
-					{id=>$_, name=>$supplierlist{$_}} )            ;
-}
-$template->param(SUPPLIER_LOOP => \@sloopy);
-
-$template->param(Supplier=>$supplierlist{$booksellerid}) if ($booksellerid);
-$template->param(booksellerid=>$booksellerid) if ($booksellerid);
-
-my $lateorders = Koha::Acquisition::Orders->filter_by_lates(
+my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
     {
         delay        => $delay,
-        booksellerid => $booksellerid,
         (
             $estimateddeliverydatefrom_dt
             ? ( estimated_from => $estimateddeliverydatefrom_dt )
@@ -160,14 +146,26 @@ my $lateorders = Koha::Acquisition::Orders->filter_by_lates(
             ? ( estimated_to => $estimateddeliverydateto_dt )
             : ()
         )
+    },
+)->as_list;
+
+my $booksellers = Koha::Acquisition::Booksellers->search(
+    {
+        id => {
+            -in => map { $_->basket->booksellerid } @lateorders
+        },
     }
 );
+
+@lateorders = grep { $_->basket->booksellerid eq $booksellerid } @lateorders if $booksellerid;
 
 my $letters = GetLetters({ module => "claimacquisition" });
 
 $template->param(ERROR_LOOP => \@errors) if (@errors);
 $template->param(
-    lateorders => $lateorders,
+    lateorders => \@lateorders,
+    booksellers => $booksellers,
+    bookseller_filter => ( $booksellerid ? $booksellers->find($booksellerid) : undef),
 	delay => $delay,
     letters => $letters,
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
