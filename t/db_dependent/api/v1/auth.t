@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 use Test::Warn;
 
@@ -124,6 +124,17 @@ subtest 'CORS support' => sub {
     t::lib::Mocks::mock_preference('AccessControlAllowOrigin','*');
     $t->get_ok("/api/v1/patrons")
       ->header_is( 'Access-control-allow-origin', '*', 'Header set' );
+};
+
+subtest 'spec retrieval tests' => sub {
+
+    plan tests => 4;
+
+    $t->get_ok("/api/v1/")
+      ->status_is(200);
+
+    $t->get_ok("/api/v1/.html")
+      ->status_is(200);
 };
 
 sub create_user_and_session {
