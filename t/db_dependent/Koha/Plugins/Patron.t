@@ -69,7 +69,7 @@ subtest 'check_password hook tests' => sub {
 
     throws_ok { $patron->store } 'Koha::Exceptions::Password::Plugin',
       'Exception raised for adding patron with bad password';
-    $patron->password('1234');
+    $patron->password('12345678');
     ok( $patron->store, 'Patron created with good password' );
 
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', '0' );
