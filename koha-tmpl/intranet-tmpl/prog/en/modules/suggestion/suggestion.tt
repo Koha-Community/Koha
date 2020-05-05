@@ -442,11 +442,7 @@
         <li><label for="branchcode">Library:</label>
             <select name="branchcode" id="branchcode">
                 <option value="">Any</option>
-                [% IF branchfilter %]
-                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
-                [% ELSE %]
-                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-                [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter || branchcode ) %]
             </select>
         </li>
         <li><label for="budgetid">Fund:</label>
@@ -512,12 +508,8 @@
 
 <label for="branchcode">Viewing suggestions for library:</label>
 <select name="branchcode" id="branchcode">
-    <option value="">Any</option>
-    [% IF branchfilter %]
-        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
-    [% ELSE %]
-        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-    [% END %]
+    <option value="__ANY__">Any</option>
+    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter || branchcode ) %]
 </select>
 
 
@@ -1035,11 +1027,13 @@
                 [% END %]
 
                 $("#branchcode").on('change',function(){
+                [%# Modify the hidden input in the filters block from the library %]
+                [%# dropdown list at the top of suggestion list %]
                     let branchcode = $(this).val();
-                    if( branchcode == '' ){ branchcode = "__ANY__" }
                     $('input[name="branchcode"]').val( branchcode );
                     $('form[name="suggestionfilter"]').submit();
                 });
+
                 $(".checkall").click(function(e){
                     e.preventDefault();
                     $(this).parents('form').checkCheckboxes();
