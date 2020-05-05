@@ -20494,6 +20494,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20754: Remove double accepted list shares)\n";
 }
 
+$DBversion = '19.11.05.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE borrower_modifications MODIFY changed_fields MEDIUMTEXT DEFAULT NULL" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 25086: Set changed_fields column of borrower_modifications as nullable)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
