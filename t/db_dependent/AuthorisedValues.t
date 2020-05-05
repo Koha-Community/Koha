@@ -17,8 +17,7 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-Koha::AuthorisedValues->delete;
-Koha::AuthorisedValueCategories->delete;
+my @existing_categories = Koha::AuthorisedValues->new->categories;
 
 # insert
 Koha::AuthorisedValueCategory->new({ category_name => 'av_for_testing', is_system => 1 })->store;
@@ -137,14 +136,15 @@ my $limits = $av1->library_limits->as_list;
 is( @$limits, 2, 'library_limits functions correctly both as setter and getter' );
 
 my @categories = Koha::AuthorisedValues->new->categories;
-is( @categories, 3, 'There should have 2 categories inserted' );
+is( @categories, @existing_categories+3, 'There should have 3 categories inserted' );
 is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
 subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
     plan tests => 5;
-    my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
-    $loc_cat->delete if $loc_cat;
+
+    my $test_cat = Koha::AuthorisedValueCategories->find('TEST');
+    $test_cat->delete if $test_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
     $mss->delete if $mss;
     $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ' } );
@@ -153,15 +153,15 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
     $mss->delete if $mss;
     $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => '5', frameworkcode => '' } );
     $mss->delete if $mss;
-    Koha::AuthorisedValueCategory->new( { category_name => 'LOC' } )->store;
+    Koha::AuthorisedValueCategory->new( { category_name => 'TEST' } )->store;
     Koha::AuthorisedValueCategory->new( { category_name => 'ANOTHER_4_TESTS' } )->store;
-    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => '', authorised_value => 'LOC', kohafield => 'items.location' } )->store;
-    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ', authorised_value => 'LOC', kohafield => 'items.location' } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => '', authorised_value => 'TEST', kohafield => 'items.location' } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ', authorised_value => 'TEST', kohafield => 'items.location' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'd', frameworkcode => '', authorised_value => 'ANOTHER_4_TESTS', kohafield => 'items.another_field' } )->store;
     Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => '5', frameworkcode => '', authorised_value => 'restricted_for_testing', kohafield => 'items.restricted' } )->store;
-    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_1' } )->store;
-    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_2' } )->store;
-    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_3' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_1' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_2' } )->store;
+    Koha::AuthorisedValue->new( { category => 'TEST', authorised_value => 'location_3' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'an_av' } )->store;
     Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'another_av' } )->store;
     subtest 'search_by_marc_field' => sub {
