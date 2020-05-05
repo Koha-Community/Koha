@@ -349,7 +349,7 @@
         <span>
             <xsl:attribute name="class">lang_code-<xsl:value-of select="translate(., ' .-;|#', '_')"/></xsl:attribute>
             <xsl:call-template name="languageCodeText">
-        <xsl:with-param name="code" select="translate(., ' .-;|#', '')"/>
+        <xsl:with-param name="code" select="."/>
             </xsl:call-template>
             <xsl:if test="position() != last()">
             <span class="separator"><xsl:text>, </xsl:text></span>
