@@ -183,6 +183,15 @@
                 },
                 'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "order": [[ 1, "asc" ]],
+                "columnDefs": [ {
+                    "targets": [0,1,2,3,4],
+                    "render": function (data, type, row, meta) {
+                        if ( type == 'display' ) {
+                            return $('<div />').text(data).html();
+                        }
+                        return data;
+                    }
+                } ],
                 "columns": [
                     {
                         "data": "city_id",
