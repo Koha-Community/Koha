@@ -218,7 +218,7 @@ sub check_password {
     my ( $self, $args ) = @_;
 
     my $password = $args->{'password'};
-    if ( $password && $password =~ m/^\d{8}$/ ) {
+    if ( $password && $password =~ m/^\d{4}$/ ) {
         return { error => 0 };
     }
     else {

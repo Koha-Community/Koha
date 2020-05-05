@@ -44,13 +44,14 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'check_password hook tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
 
+    # Test Plugin enforces a 4 digit numeric pin for passwords
     my $plugin = Koha::Plugin::Test->new->enable;
 
     my $library  = $builder->build( { source => 'Branch' } );
@@ -63,17 +64,24 @@ subtest 'check_password hook tests' => sub {
             surname      => 'surname for patron1',
             firstname    => 'firstname for patron1',
             userid       => 'a_nonexistent_userid_1',
-            password     => "exploder",
         }
     );
 
+    # store hook (add action)
+    $patron->password('exploder');
     throws_ok { $patron->store } 'Koha::Exceptions::Password::Plugin',
-      'Exception raised for adding patron with bad password';
-    $patron->password('12345678');
+      'Plugin Exception raised for adding patron with bad password';
+    $patron->password('1234');
     ok( $patron->store, 'Patron created with good password' );
 
+    $patron->discard_changes;
+    $patron->password('87654321');
+    $patron->store;
+    isnt($patron->password, '87654321', 'Koha::Patron->store silently drops changes to password');
+
+    # set_password hook (update action)
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', '0' );
-    t::lib::Mocks::mock_preference( 'minPasswordLength', '3' );
+    t::lib::Mocks::mock_preference( 'minPasswordLength', '4' ); # Testing Plugin validation, not internal validation
     throws_ok { $patron->set_password({ password => 'explosion' }) } 'Koha::Exceptions::Password::Plugin',
       'Exception raised for update patron password with bad string';
     ok( $patron->set_password({ password => '4321' }), 'Patron password updated with good string' );
