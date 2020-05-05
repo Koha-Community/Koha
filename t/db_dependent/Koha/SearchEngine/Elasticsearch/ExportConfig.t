@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 18;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -40,8 +40,9 @@ my $search_field = Koha::SearchFields->find_or_create(
         name    => 'title',
         label   => 'Title',
         type    => 'string',
-        weight  => 17
-
+        weight  => 17,
+        staff_client => 0,
+        opac         => 1,
     },
     { key => 'name' } );
 
@@ -92,6 +93,8 @@ my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings();
 is( $mappings->{biblios}{title}{type}, 'string', 'Title is of type string');
 is( $mappings->{biblios}{title}{label}, 'Title', 'title has label Title');
 is( $mappings->{biblios}{title}{facet_order}, undef, 'Facet order is undef');
+is( $mappings->{biblios}{title}{opac}, 1, 'title is opac searchable');
+is( $mappings->{biblios}{title}{staff_client}, 0, 'title is not staff searchable');
 
 is(scalar(@{ $mappings->{biblios}{title}{mappings} }), 3, 'Title has 3 mappings');
 
