@@ -519,7 +519,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         "paging": true,
                         'serverSide': true,
                         'searching': true,
-                        'pagingType': 'full',
+                        'pagingType': 'full_numbers',
                         'ajax': {
                             'type': 'GET',
                             'cache': true,
