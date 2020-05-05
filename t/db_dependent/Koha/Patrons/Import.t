@@ -446,11 +446,11 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $categorycode = $builder->build({ source => "Category", value => { category_type => 'A'  } })->{categorycode};
     my $staff_categorycode = $builder->build({ source => "Category", value => { category_type => 'S'  } })->{categorycode};
     my $csv_headers  = 'surname,userid,branchcode,categorycode,password';
-    my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest1";
-    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1";
+    my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest11";
+    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1234";
     my $csv_blank_password = "Worel,ErnestP,$branchcode,$categorycode,";
     my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
-    my $csv_staff_password_change = "Worrell,ErnestP,$branchcode,$staff_categorycode,Vern1";
+    my $csv_staff_password_change = "Worrell,ErnestP,$branchcode,$staff_categorycode,Vern1234";
 
     #Make the test files for importing
     my $filename_1 = make_csv($temp_dir, $csv_headers, $csv_password);

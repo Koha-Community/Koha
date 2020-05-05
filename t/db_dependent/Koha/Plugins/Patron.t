@@ -73,6 +73,7 @@ subtest 'check_password hook tests' => sub {
     ok( $patron->store, 'Patron created with good password' );
 
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', '0' );
+    t::lib::Mocks::mock_preference( 'minPasswordLength', '3' );
     throws_ok { $patron->set_password({ password => 'explosion' }) } 'Koha::Exceptions::Password::Plugin',
       'Exception raised for update patron password with bad string';
     ok( $patron->set_password({ password => '4321' }), 'Patron password updated with good string' );
