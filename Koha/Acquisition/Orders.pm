@@ -130,6 +130,41 @@ sub filter_by_lates {
     );
 }
 
+=head3 filter_by_current
+
+    $orders->filter_by_current
+
+Return the orders of the set that have not been cancelled.
+
+=cut
+
+sub filter_by_current {
+    my ($self) = @_;
+    return $self->search(
+        {
+            datecancellationprinted => [ undef, '0000-00-00' ]
+        }
+    );
+}
+
+=head3 filter_by_cancelled
+
+    $orders->filter_by_cancelled
+
+Return the orders of the set that have been cancelled.
+
+=cut
+
+sub filter_by_cancelled {
+    my ($self) = @_;
+    return $self->search(
+        {
+            datecancellationprinted =>
+              [ { '!=' => [ -and => ( undef, '0000-00-00' ) ] } ]
+        }
+    );
+}
+
 =head2 Internal methods
 
 =head3 _type (internal)

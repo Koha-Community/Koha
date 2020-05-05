@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -533,6 +533,54 @@ subtest 'filter_by_late' => sub {
         }
     );
     is( $late_orders->count, 1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_current & filter_by_cancelled' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    my $now        = dt_from_string;
+    my $order_1 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                datecancellationprinted => undef,
+            }
+        }
+    );
+    my $order_2 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                datecancellationprinted => undef,
+            }
+        }
+    );
+    my $order_3 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                datecancellationprinted => dt_from_string,
+            }
+        }
+    );
+
+    my $orders = Koha::Acquisition::Orders->search(
+        {
+            ordernumber => {
+                -in => [
+                    $order_1->ordernumber, $order_2->ordernumber,
+                    $order_3->ordernumber,
+                ]
+            }
+        }
+    );
+
+    is( $orders->filter_by_current->count, 2);
+    is( $orders->filter_by_cancelled->count, 1);
+
 
     $schema->storage->txn_rollback;
 };
