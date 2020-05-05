@@ -203,8 +203,8 @@ This method overloads the DBIC inherited one so if code-level triggers exist
 based class) those are called in a loop on the resultset.
 
 If B<no_triggers> is passed and I<true>, then the DBIC update method is called
-directly. This feature is important for performance, in cases no code-level
-triggers are defined. The developer will explicitly ask for this and QA should
+directly. This feature is important for performance, in cases where no code-level
+triggers should be triggered. The developer will explicitly ask for this and QA should
 catch wrong uses as well.
 
 =cut
