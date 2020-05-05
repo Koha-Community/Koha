@@ -401,5 +401,5 @@ It\'s too late to renew this item.
 Your total unpaid fines are too high.
 [% END %]
 [% ELSE %]
-The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due %]
+The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
 [% END %]", 'email');
