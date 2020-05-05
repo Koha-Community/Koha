@@ -341,31 +341,9 @@ $template->param (
 	z3950_search_params		=> C4::Search::z3950_search_args($biblio),
 	C4::Search::enabled_staff_search_views,
     searchid                => scalar $query->param('searchid'),
-    biblio                  => $biblio_object->unblessed,
+    biblio                  => $biblio_object,
 );
 
-my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);
-my @deletedorders_using_biblio;
-my @orders_using_biblio;
-
-foreach my $myorder (@allorders_using_biblio) {
-    my $basket = $myorder->{'basketno'};
-    if ((defined $myorder->{'datecancellationprinted'}) and  ($myorder->{'datecancellationprinted'} ne '0000-00-00') ){
-        push @deletedorders_using_biblio, $myorder;
-    }
-    else {
-        push @orders_using_biblio, $myorder;
-    }
-}
-
-my $count_orders_using_biblio = scalar @orders_using_biblio ;
-$template->param (countorders => $count_orders_using_biblio);
-
-my $count_deletedorders_using_biblio = scalar @deletedorders_using_biblio ;
-$template->param (countdeletedorders => $count_deletedorders_using_biblio);
-
-$biblio = Koha::Biblios->find( $biblionumber );
-my $holds = $biblio->holds;
-$template->param( holdcount => $holds->count );
+$template->param( holdcount => $biblio_object->holds->count );
 
 output_html_with_http_headers $query, $cookie, $template->output;

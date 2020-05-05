@@ -554,16 +554,4 @@ if ($StaffDetailItemSelection) {
 
 $template->param(biblio => $biblio);
 
-my $orders =
-  Koha::Acquisition::Orders->search( { biblionumber => $biblionumber } );
-
-$template->param(
-    countorders => $orders->search( {
-        datecancellationprinted => [ undef, '0000-00-00' ]
-    } )->count,
-    countdeletedorders => $orders->search( {
-        datecancellationprinted => [ { '!=' => [ -and => ( undef, '0000-00-00' ) ] } ]
-    } )->count,
-) if $orders->count;
-
 output_html_with_http_headers $query, $cookie, $template->output;
