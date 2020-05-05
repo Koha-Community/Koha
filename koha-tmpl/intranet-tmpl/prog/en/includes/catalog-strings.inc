@@ -1,3 +1,4 @@
+[% USE Context %]
 <!-- catalog-strings.inc -->
 <script>
     /* Strings for translation */
@@ -17,8 +18,11 @@
     var biblionumber = [% biblionumber | html %];
     var count = [% count | html %];
     var holdcount = [% holdcount | html %];
-    var countorders = [% countorders | html %];
-    var countdeletedorders = [% countdeletedorders | html %];
+    [% SET orders = biblio.orders %]
+    [% SET current   = Context.Scalar(orders, "filter_by_current") %]
+    [% SET cancelled = Context.Scalar(orders, "filter_by_cancelled") %]
+    var countorders = [% current.count || 0 | html %];
+    var countdeletedorders = [% cancelled.count || 0 | html %];
 
     /* provide Z3950 search points */
     function GetZ3950Terms(){
