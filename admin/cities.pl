@@ -27,7 +27,7 @@ use C4::Output;
 use Koha::Cities;
 
 my $input       = new CGI;
-my $searchfield = $input->param('city_name') // q||;
+my $city_name   = $input->param('city_name') // q||;
 my $cityid      = $input->param('cityid');
 my $op          = $input->param('op') || 'list';
 my @messages;
@@ -84,8 +84,8 @@ if ( $op eq 'add_form' ) {
             push @messages, { type => 'message', code => 'success_on_insert' };
         }
     }
-    $searchfield = q||;
-    $op          = 'list';
+    $city_name = q||;
+    $op        = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
     my $city = Koha::Cities->find($cityid);
     $template->param( city => $city, );
@@ -101,9 +101,16 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 
+if ( $op eq 'list' ) {
+    my $filter = {};
+    $filter->{city_name} = { -like => '%'.$city_name.'%' }
+        if $city_name;
+    $template->param( cities_count => Koha::Cities->search($filter)->count );
+}
+
 $template->param(
     cityid      => $cityid,
-    searchfield => $searchfield,
+    city_name_filter => $city_name,
     messages    => \@messages,
     op          => $op,
 );

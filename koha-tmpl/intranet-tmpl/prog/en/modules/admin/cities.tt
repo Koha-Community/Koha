@@ -129,22 +129,28 @@
     </div>
 
     <h2>Cities</h2>
-    [% IF searchfield %]
-        Searching: [% searchfield | html %]
+    [% IF city_name_filter %]
+        Searching: [% city_name_filter | html %]
     [% END %]
 
-    <table id="table_cities">
-        <thead>
-            <tr>
-                <th>City ID</th>
-                <th>City</th>
-                <th>State</th>
-                <th>ZIP/Postal code</th>
-                <th>Country</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    </table>
+    [% IF cities_count > 0 %]
+        <table id="table_cities">
+            <thead>
+                <tr>
+                    <th>City ID</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZIP/Postal code</th>
+                    <th>Country</th>
+                    <th data-class-name="actions">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    [% ELSE %]
+        <div class="dialog message">
+            There are no cities defined. <a href="/cgi-bin/koha/admin/cities.pl?op=add_form">Create a new city</a>.
+        </div>
+    [% END %]
 [% END %]
 
             </main>
@@ -162,12 +168,21 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            var cities_table_url = '/api/v1/cities';
+            var cities_table_url = '/api/v1/cities?';
+        [% IF city_name_filter %]
+            var city_name_filter = {
+                'name': {
+                    "like": '%[%- city_name_filter | html -%]%'
+                }
+            };
+            cities_table_url += 'q='+ encodeURI(JSON.stringify(city_name_filter));
+        [% END %]
             var cities_table = $("#table_cities").api({
                 "ajax": {
                     "url": cities_table_url
                 },
                 'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "order": [[ 1, "asc" ]],
                 "columns": [
                     {
                         "data": "city_id",
@@ -197,7 +212,7 @@
                     {
                         "data": function( row, type, val, meta ) {
 
-                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid='+ row.city_id +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid='+ row.city_id +'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
                             result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid='+ row.city_id +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
                             return result;
 
