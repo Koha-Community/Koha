@@ -52,6 +52,28 @@ function suffixOf (s, tok) {
     return s.substring(index + 1);
 }
 
+$("body").on("keypress", ".noEnterSubmit", function(e){
+    return checkEnter(e);
+});
+
+// http://jennifermadden.com/javascript/stringEnterKeyDetector.html
+function checkEnter(e){ //e is event object passed from function invocation
+    var characterCode; // literal character code will be stored in this variable
+    if(e && e.which){ //if which property of event object is supported (NN4)
+        characterCode = e.which; //character code is contained in NN4's which property
+    } else {
+        characterCode = e.keyCode; //character code is contained in IE's keyCode property
+    }
+    if( characterCode == 13 //if generated character code is equal to ascii 13 (if enter key)
+        && e.target.nodeName == "INPUT"
+        && e.target.type != "submit" // Allow enter to submit using the submit button
+    ){
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // Adapted from https://gist.github.com/jnormore/7418776
 function confirmModal(message, title, yes_label, no_label, callback) {
     $("#bootstrap-confirm-box-modal").data('confirm-yes', false);
