@@ -297,7 +297,7 @@ if ($barcode) {
     # Block return if multi-part and confirm has not been received
     my $needs_confirm = 0;
     if ( C4::Context->preference("CircConfirmItemParts") ) {
-        if ( $item->materials > 0 && !$query->param('multiple_confirm') ) {
+        if ( $item->materials && !$query->param('multiple_confirm') ) {
                 $needs_confirm = 1;
         }
     }
