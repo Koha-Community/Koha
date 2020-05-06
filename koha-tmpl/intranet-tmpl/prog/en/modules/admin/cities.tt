@@ -175,7 +175,7 @@
                     "like": '%[%- city_name_filter | html -%]%'
                 }
             };
-            cities_table_url += 'q='+ encodeURI(JSON.stringify(city_name_filter));
+            cities_table_url += 'q='+ encodeURIComponent(JSON.stringify(city_name_filter));
         [% END %]
             var cities_table = $("#table_cities").api({
                 "ajax": {
