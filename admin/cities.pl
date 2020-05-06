@@ -27,7 +27,7 @@ use C4::Output;
 use Koha::Cities;
 
 my $input       = new CGI;
-my $city_name   = $input->param('city_name') // q||;
+my $city_name_filter = $input->param('city_name_filter') // q||;
 my $cityid      = $input->param('cityid');
 my $op          = $input->param('op') || 'list';
 my @messages;
@@ -51,7 +51,6 @@ if ( $op eq 'add_form' ) {
 
     $template->param( city => $city, );
 } elsif ( $op eq 'add_validate' ) {
-    my $cityid       = $input->param('cityid');
     my $city_name    = $input->param('city_name');
     my $city_state   = $input->param('city_state');
     my $city_zipcode = $input->param('city_zipcode');
@@ -102,15 +101,12 @@ if ( $op eq 'add_form' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $filter = {};
-    $filter->{city_name} = { -like => '%'.$city_name.'%' }
-        if $city_name;
-    $template->param( cities_count => Koha::Cities->search($filter)->count );
+    $template->param( cities_count => Koha::Cities->search->count );
 }
 
 $template->param(
     cityid      => $cityid,
-    city_name_filter => $city_name,
+    city_name_filter => $city_name_filter,
     messages    => \@messages,
     op          => $op,
 );

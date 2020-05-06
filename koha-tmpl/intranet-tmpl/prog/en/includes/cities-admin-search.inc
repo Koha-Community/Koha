@@ -5,7 +5,7 @@
 	<div id="city_search" class="residentsearch">
     <p class="tip">City search:</p>
 	<form action="[% script_name | html %]" method="post">
-        <input class="head-searchbox" type="text" name="city_name" value="[% searchfield | html %]" size="40" />
+        <input class="head-searchbox" type="text" name="city_name_filter" value="[% city_name_filter | html %]" size="40" />
 		<input type="submit" name="submit" value="OK" class="submit" />
 	</form>
 	</div>
