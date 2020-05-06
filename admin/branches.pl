@@ -147,6 +147,9 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 }
 
+$template->param( libraries_count => Koha::Libraries->search->count )
+    if $op eq 'list';
+
 $template->param(
     messages => \@messages,
     op       => $op,
