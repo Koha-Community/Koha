@@ -26,7 +26,7 @@ use C4::Circulation;
 use C4::Auth;
 use C4::Output;
 use Koha::RecordProcessor;
-
+use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
 
 my $query = new CGI;
@@ -167,6 +167,7 @@ my $resultsarray = \@results;
 # my $itemsarray=\@items;
 
 $template->param(
+    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records', opac_option => 1 }) ],
     bib_list => $bib_list,
     BIBLIO_RESULTS => $resultsarray,
 );
