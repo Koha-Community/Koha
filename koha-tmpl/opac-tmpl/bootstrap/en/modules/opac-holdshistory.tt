@@ -1,0 +1,184 @@
+[% USE raw %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your holds history</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+    <style>
+
+        .controls .paginate_button {
+            font-family: 'FontAwesome';
+            text-decoration: none;
+        }
+
+        .controls .paginate_button:not(.disabled) {
+            cursor: pointer;
+        }
+
+        .controls .paginate_button.disabled {
+            color: grey;
+        }
+
+        .controls .previous:before {
+            content: "\f104";
+            padding-right: .5em;
+        }
+
+        .controls .next:after {
+            content: "\f105";
+            padding-left: .5em;
+        }
+    </style>
+[% END %]
+</head>
+[% INCLUDE 'bodytag.inc' bodyid='opac-holdshistory' %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Your holds history</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-10 order-1">
+                <div id="userholdshistory">
+                    <h3>Holds history</h3>
+
+                    [% IF !holds %]
+                        You have never placed a hold from this library.
+                    [% ELSE %]
+                        <div id="opac-user-holdsrec">
+                            <div id="tabs-container" style="overflow:auto">
+                                <div class="controls">
+                                    <div class="resultscontrol resort">
+                                        <form id="sortform" action="/cgi-bin/koha/opac-holdshistory.pl" method="get">
+                                            [% IF ( unlimit ) %]<input type="hidden" name="unlimit" value="1" />[% END %]
+                                            <select name="sort" id="sort">
+                                                [% IF ( sort == 'reservedate' ) %]<option value="reservedate" selected="selected">Order by date</option>[% ELSE %]<option value="reservedate">Order by date</option>[% END %]
+                                                [% IF ( sort == 'biblio.title' ) %]<option value="biblio.title" selected="selected">Order by title</option>[% ELSE %]<option value="biblio.title">Order by title</option>[% END %]
+                                                [% IF ( sort == 'biblio.author' ) %]<option value="biblio.author" selected="selected">Order by author</option>[% ELSE %]<option value="biblio.author">Order by author</option>[% END %]
+                                            </select>
+                                            <input type="submit" value="Go" id="sortsubmit" class="submit clearfix" />
+                                        </form>
+                                    </div>
+
+                                    [% UNLESS unlimit %]
+                                        <p>
+                                            Showing 50 items. <a href="/cgi-bin/koha/opac-holdshistory.pl?unlimit=1[% IF ( sort ) %]&amp;sort=[% sort | url %][% END %]">Show all items</a>
+                                        </p>
+                                    [% ELSE %]
+                                        <p>
+                                            Showing all items. <a href="/cgi-bin/koha/opac-holdshistory.pl[% IF ( sort ) %]?sort=[% sort | url %][% END %]">Show 50 items</a>
+                                        </p>
+                                    [% END %]
+                                </div>
+                                <table id="table_holdshistory" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                        <th class="anti-the">Title</th>
+                                        <th>Author</th>
+                                        <th>Barcode</th>
+                                        <th>Library</th>
+                                        <th class="title-string">Hold date</th>
+                                        <th class="title-string">Expiration date</th>
+                                        <th class="title-string">Waiting date</th>
+                                        <th class="title-string">Cancellation date</th>
+                                        [% IF show_itemtype_column %]
+                                        <th>Requested item type</th>
+                                        [% END %]
+                                        <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    [% FOREACH hold IN holds %]
+                                        <tr>
+                                        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=hold.biblio %]</a></td>
+                                        <td>[% hold.biblio.author | html %]</td>
+                                        <td>[% hold.item.barcode | html %]</td>
+                                        <td>[% Branches.GetName( hold.branchcode ) | html %]</td>
+                                        <td><span title="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</span></td>
+                                        <td>
+                                            [% IF hold.expirationdate %]
+                                                <span title="[% hold.expirationdate | html %]">[% hold.expirationdate | $KohaDates %]</span>
+                                            [% ELSE %]
+                                                <span title="0000-00-00"></span>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF hold.waitingdate %]
+                                                <span title="[% hold.waitingdate | html %]">[% hold.waitingdate | $KohaDates %]</span>
+                                            [% ELSE %]
+                                                <span title="0000-00-00"></span>
+                                            [% END %]
+                                        </td>
+                                        <td>
+                                            [% IF hold.cancellationdate %]
+                                                <span title="[% hold.cancellationdate | html %]">[% hold.cancellationdate | $KohaDates %]</span>
+                                            [% ELSE %]
+                                                <span title="0000-00-00"></span>
+                                            [% END %]
+                                        </td>
+                                        [% IF show_itemtype_column %]
+                                            <td>
+                                            [% IF hold.itemtype %]
+                                                [% ItemTypes.GetDescription( hold.itemtype ) | html %]
+                                            [% ELSE %]
+                                                <span>Any item type</span>
+                                            [% END %]
+                                            </td>
+                                        [% END %]
+                                        <td>
+                                        [% IF hold.found == 'F' %]
+                                            Fulfilled
+                                        [% ELSIF hold.cancellationdate %]
+                                            Cancelled
+                                        [% ELSIF hold.found == 'W' %]
+                                            Waiting
+                                        [% ELSIF hold.found == 'T' %]
+                                            In transit
+                                        [% ELSE %]
+                                            Pending
+                                        [% END %]
+                                        </td>
+                                        </tr>
+                                    [% END %]
+                                    </tbody>
+                                </table>
+                            </div> <!-- / .tabs-container -->
+                        </div> <!-- / .opac-user-holdsrec -->
+                    [% END # / IF old_holds_count %]
+                </div> <!-- / .userholdshistory -->
+            </div> <!-- / .span10 -->
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script>
+    $(document).ready(function() {
+        $('#sort').change(function() {
+            $('#sortform').submit();
+        });
+        var table = $("table_holdshistory").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "aaSorting": [[4, 'desc']],
+            "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+            "aoColumnDefs": [
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            ]
+        }));
+    });
+</script>
+[% END %]

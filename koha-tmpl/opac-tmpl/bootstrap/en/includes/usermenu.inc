@@ -74,6 +74,15 @@
                 [% END %]
             [% END # / opacreadinghistory %]
 
+            [% IF Koha.Preference('OPACHoldsHistory') == 1 %]
+                [% IF ( holdshistoryview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-holdshistory.pl">your holds history</a></li>
+            [% END %]
+
             [% IF Koha.Preference( 'suggestion' ) == 1 %]
                 [% IF ( suggestionsview ) %]
                     <li class="active">
