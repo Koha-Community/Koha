@@ -124,7 +124,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CataloguingLog','1',NULL,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.','YesNo'),
 ('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has borrowed that item in the past?','Choice'),
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),
-('CircConfirmParts', '0', NULL, 'Require staff to confirm that all parts of an item are present at checkin/checkout.', 'Yes/No'),
+('CircConfirmItemParts', '0', NULL, 'Require staff to confirm that all parts of an item are present at checkin/checkout.', 'Yes/No'),
 ('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specify the agency that controls the circulation and fines policy','Choice'),
 ('CircSidebar','0',NULL,'Activate or deactivate the navigation sidebar on all Circulation pages','YesNo'),
 ('CirculateILL','0','','If enabled, it is possible to circulate ILL items from within ILL','YesNo'),
