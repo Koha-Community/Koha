@@ -17,6 +17,38 @@ package Koha::Template::Plugin::ColumnsSettings;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+=head1 NAME
+
+Koha::Template::Plugin::ColumnsSettings
+
+=head2 SYNOPSYS
+
+    [% USE ColumnsSettings %]
+
+    . . .
+
+    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+        <th id="column" data-colname="column">Column title</th>
+    [% END %]
+
+    . . .
+
+    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+        <td>[% row.column %]</td>
+    [% END %]
+
+    . . .
+
+    <script>
+        var columns_settings = [% ColumnsSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
+        var table = KohaTable("id", { "bAutoWidth": false }, columns_settings );
+    </script>
+
+This plugin allows to get the column configuration for a table. It should be used both in table markup
+and as the input for datatables visibility settings to take full effect.
+
+=cut
+
 use Modern::Perl;
 
 use Template::Plugin;
@@ -28,16 +60,17 @@ use JSON qw( to_json );
 use C4::Context qw( config );
 use C4::Utils::DataTables::ColumnsSettings;
 
-=pod
+=head1 FUNCTIONS
 
-This plugin allows to get the column configuration for a table.
+=head2 GetColumns
 
-First, include the line '[% USE Tables %]' at the top
-of the template to enable the plugin.
+    <script>
+        var columns_settings = [% ColumnsSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
+        var table = KohaTable("id", { "bAutoWidth": false }, columns_settings );
+    </script>
 
-To use, call ColumnsSettings.GetColumns with the module, the page and the table where the template is called.
-
-For example: [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'holdst' ) %]
+Used to get the full column settings configuration for datatables, usually requires a format of 'json' to pass into
+datatables instantiator.
 
 =cut
 
@@ -51,6 +84,17 @@ sub GetColumns {
         ? to_json( $columns )
         : $columns
 }
+
+=head2 is_hidden
+
+    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+        <th id="column" data-colname="column">Column title</th>
+    [% END %]
+
+Used to fetch an individual columns display status so we can fully hide a column in the markup for cases where
+it may contain confidential information and should be fully hidden rather than just hidden from display.
+
+=cut
 
 sub is_hidden {
     my ( $self, $module, $page, $table, $column_name ) = @_;
