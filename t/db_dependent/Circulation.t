@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 48;
+use Test::More tests => 51;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -3542,6 +3542,57 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
     is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
     $itemtype->rentalcharge_daily('0')->store;
+};
+
+subtest 'CanBookBeIssued & CircConfirmItemParts' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('CircConfirmItemParts', 1);
+
+    my $library =
+      $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    )->store;
+
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => {
+                notforloan         => 0,
+                rentalcharge       => 0,
+                rentalcharge_daily => 0
+            }
+        }
+    );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                homebranch       => $library->id,
+                holdingbranch    => $library->id,
+                notforloan       => 0,
+                itemlost         => 0,
+                withdrawn        => 0,
+                itype            => $itemtype->id,
+                biblionumber     => $biblioitem->{biblionumber},
+                biblioitemnumber => $biblioitem->{biblioitemnumber},
+                materials        => 'includes DVD',
+            }
+        }
+    )->store;
+
+    my ( $issuingimpossible, $needsconfirmation );
+    my $dt_from = dt_from_string();
+    my $dt_due = $dt_from->clone->add( days => 3 );
+
+    ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
+    is_deeply( $needsconfirmation, { additional_materials => 'includes DVD' }, 'Item needs confirmation of additional parts' );
 };
 
 subtest 'Do not return on renewal (LOST charge)' => sub {
