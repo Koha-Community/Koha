@@ -42,6 +42,9 @@
       var n = input.length - max;
       return _("Please delete %d character(s)").format(n);
     },
+    formatResult: function(item) {
+        return $('<div>', {title: item.element[0].title}).text(item.text);
+    },
     formatSelectionTooBig: function (limit) {
       return _("You can only select %s item(s)").format(limit);
     },
