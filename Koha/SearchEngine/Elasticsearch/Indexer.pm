@@ -287,7 +287,7 @@ sub delete_index {
     my ($self, $biblionums) = @_;
 
     my $elasticsearch = $self->get_elasticsearch();
-    my @body = map { { delete => { _id => $_ } } } @{$biblionums};
+    my @body = map { { delete => { _id => "$_" } } } @{$biblionums};
     my $result = $elasticsearch->bulk(
         index => $self->index_name,
         type => 'data',

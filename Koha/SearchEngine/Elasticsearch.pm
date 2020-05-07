@@ -64,8 +64,6 @@ Koha::SearchEngine::Elasticsearch - Base module for things using elasticsearch
 
 The name of the index to use, generally 'biblios' or 'authorities'.
 
-=back
-
 =item index_name
 
 The Elasticsearch index name with Koha instance prefix.
