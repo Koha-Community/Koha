@@ -79,29 +79,34 @@
        </li>
        <li><label for="repeatable">Repeatable: </label>
             [% IF attribute_type %]
-                [% IF attribute_type.repeatable %]
+                [% IF attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]
                     <input type="checkbox" id="repeatable" name="repeatable" checked="checked" disabled="disabled" />
+                    <input type="hidden" name="repeatable" value="1" />
+                [% ELSIF attribute_type.repeatable %]
+                    <input type="checkbox" id="repeatable" name="repeatable" checked="checked" />
                 [% ELSE %]
-                    <input type="checkbox" id="repeatable" name="repeatable" disabled="disabled" />
+                    <input type="checkbox" id="repeatable" name="repeatable" />
                 [% END %]
             [% ELSE %]
                 <input type="checkbox" id="repeatable" name="repeatable" />
             [% END %]
-            <span>Check to let a patron record have multiple values of this attribute.
-                  This setting cannot be changed after an attribute is defined.</span>
+            <span>Check to let a patron record have multiple values of this attribute.</span>
        </li>
        <li><label for="unique_id">Unique identifier: </label>
             [% IF attribute_type %]
                 [% IF attribute_type.unique_id %]
-                    <input type="checkbox" id="unique_id" name="unique_id" checked="checked" disabled="disabled" />
+                    <input type="checkbox" id="unique_id" name="unique_id" checked="checked" />
+                [% ELSIF can_be_set_to_unique %]
+                    <input type="checkbox" id="unique_id" name="unique_id" />
                 [% ELSE %]
                     <input type="checkbox" id="unique_id" name="unique_id" disabled="disabled" />
+                    <input type="hidden" name="unique_id" value="0" />
                 [% END %]
             [% ELSE %]
                 <input type="checkbox" id="unique_id" name="unique_id" />
             [% END %]
             <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
-                  cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
+                  cannot be given to a different record.</span>
        </li>
        <li><label for="opac_display">Display in OPAC: </label>
           [% IF attribute_type AND attribute_type.opac_display %]

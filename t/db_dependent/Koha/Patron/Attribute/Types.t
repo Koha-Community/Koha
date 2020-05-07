@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -67,6 +67,106 @@ subtest 'new() tests' => sub {
         2, 'Two objects created' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'store' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Create 2 attribute types without restrictions:
+    # Repeatable and can have the same values
+    my $attr_type_1 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { repeatable => 1, unique_id => 0 }
+        }
+    );
+    my $attr_type_2 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attribute::Types',
+            value => { repeatable => 1, unique_id => 0 }
+        }
+    );
+
+    # Patron 1 has twice the attribute 1 and attribute 2
+    # Patron 2 has attribute 1 and attribute 2="42"
+    # Patron 3 has attribute 2="42"
+    # Attribute 1 cannot remove repeatable
+    # Attribute 2 cannot set unique_id
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $attribute_111 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                code           => $attr_type_1->code
+            }
+        }
+    );
+    my $attribute_112 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_1->borrowernumber,
+                code           => $attr_type_1->code
+            }
+        }
+    );
+
+    my $attribute_211 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_2->borrowernumber,
+                code           => $attr_type_1->code
+            }
+        }
+    );
+    my $attribute_221 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_2->borrowernumber,
+                code           => $attr_type_2->code,
+                attribute      => '42',
+            }
+        }
+    );
+
+    my $attribute_321 = $builder->build_object(
+        {
+            class => 'Koha::Patron::Attributes',
+            value => {
+                borrowernumber => $patron_3->borrowernumber,
+                code           => $attr_type_2->code,
+                attribute      => '42',
+            }
+        }
+    );
+
+    throws_ok {
+        $attr_type_1->repeatable(0)->store;
+    }
+    'Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty', "";
+
+    $attribute_112->delete;
+    ok($attr_type_1->set({ unique_id => 1, repeatable => 0 })->store);
+
+    throws_ok {
+        $attr_type_2->unique_id(1)->store;
+    }
+    'Koha::Exceptions::Patron::Attribute::Type::CannotChangeProperty', "";
+
+    $attribute_321->attribute(43)->store;
+    ok($attr_type_2->set({ unique_id => 1, repeatable => 0 })->store);
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'library_limits() tests' => sub {

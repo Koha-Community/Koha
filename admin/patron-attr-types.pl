@@ -142,13 +142,14 @@ sub add_update_attribute_type {
             {
                 code        => $code,
                 description => $description,
-                repeatable  => $repeatable,
-                unique_id   => $unique_id,
             }
         );
     }
+
     $attr_type->set(
         {
+            repeatable                => $repeatable,
+            unique_id                 => $unique_id,
             opac_display              => $opac_display,
             opac_editable             => $opac_editable,
             staff_searchable          => $staff_searchable,
@@ -219,12 +220,29 @@ sub edit_attribute_type_form {
     my $code = shift;
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
-    $template->param(attribute_type => $attr_type);
 
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
+
+    my $can_be_set_to_nonrepeatable = 1;
+    if ( $attr_type->repeatable == 1 ) {
+        $attr_type->repeatable(0);
+        eval {$attr_type->check_repeatables};
+        $can_be_set_to_nonrepeatable = 0 if $@;
+        $attr_type->repeatable(1);
+    }
+    my $can_be_set_to_unique = 1;
+    if ( $attr_type->unique_id == 0 ) {
+        $attr_type->unique_id(1);
+        eval {$attr_type->check_unique_ids};
+        $can_be_set_to_unique = 0 if $@;
+        $attr_type->unique_id(0);
+    }
     $template->param(
+        attribute_type => $attr_type,
         attribute_type_form => 1,
         edit_attribute_type => 1,
+        can_be_set_to_nonrepeatable => $can_be_set_to_nonrepeatable,
+        can_be_set_to_unique => $can_be_set_to_unique,
         confirm_op => 'edit_attribute_type_confirmed',
         categories => $patron_categories,
     );
