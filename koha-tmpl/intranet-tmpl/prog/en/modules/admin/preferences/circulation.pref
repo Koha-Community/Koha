@@ -527,10 +527,11 @@ Circulation:
                   no: "Don't trap"
             - items that are not for loan but holdable ( notforloan < 0 ) to fill holds.
         -
-            - Never trap items with a 'not for loan' value of
+            - Never trap items with 'not for loan' values of
             - pref: SkipHoldTrapOnNotForLoanValue
               class: integer
             - to fill holds.
+            - "(list of not for loan values separated with a pipe '|')"
         -
             - pref: HoldsAutoFill
               choices:
