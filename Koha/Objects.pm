@@ -118,9 +118,21 @@ sub find_or_create {
     return $object;
 }
 
-=head3 Koha::Objects->search();
+=head3 search
 
-my @objects = Koha::Objects->search($params);
+    # list context
+    my @objects = Koha::Objects->search([$params, $attributes]);
+    # scalar context
+    my $objects = Koha::Objects->search([$params, $attributes]);
+    while (my $object = $objects->next) {
+        do_stuff($object);
+    }
+
+This B<instantiates> the I<Koha::Objects> class, and generates a resultset
+based on the query I<$params> and I<$attributes> that are passed (like in DBIC).
+
+In B<list context> it returns an array of I<Koha::Object> objects.
+In B<scalar context> it returns an iterator.
 
 =cut
 
