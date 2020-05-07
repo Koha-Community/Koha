@@ -284,10 +284,16 @@ if ($loggedinuser) {
         my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
         my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
-        if ( $xslfile ) {
+        if ($xslfile) {
+            my $variables = {
+                anonymous_session => ($loggedinuser) ? 0 : 1
+            };
             $tag->{XSLTBloc} = XSLTParse4Display(
-                    $tag->{ biblionumber }, $record, "OPACXSLTResultsDisplay",
-                    1, $hidden_items, $sysxml, $xslfile, $lang
+                $tag->{biblionumber},     $record,
+                "OPACXSLTResultsDisplay", 1,
+                $hidden_items,            $sysxml,
+                $xslfile,                 $lang,
+                $variables
             );
         }
 

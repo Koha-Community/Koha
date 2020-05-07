@@ -316,9 +316,17 @@ if ( $op eq 'view' ) {
                 });
                 $record_processor->process($record);
 
-                if ( $xslfile ) {
-                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "OPACXSLTListsDisplay",
-                                                                1, undef, $sysxml, $xslfile, $lang);
+                if ($xslfile) {
+                    my $variables = {
+                        anonymous_session => ($loggedinuser) ? 0 : 1
+                    };
+                    $this_item->{XSLTBloc} = XSLTParse4Display(
+                        $biblionumber,          $record,
+                        "OPACXSLTListsDisplay", 1,
+                        undef,                  $sysxml,
+                        $xslfile,               $lang,
+                        $variables
+                    );
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
