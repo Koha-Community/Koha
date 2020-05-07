@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -69,4 +69,30 @@ subtest 'create_index() tests' => sub {
         Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED(),
         'Dropping the index'
     );
+};
+
+
+subtest 'update_index() tests' => sub {
+    plan tests => 2;
+    my $kse = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
+    $kse->mock( 'marc_records_to_documents', sub {
+            my ($self, $params ) = @_;
+            return [1];
+    });
+
+    my $indexer;
+    ok(
+        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
+        'Creating a new indexer object'
+    );
+
+    my $searcher = $indexer->get_elasticsearch();
+    my $se = Test::MockModule->new( ref $searcher );
+    $se->mock( 'bulk', sub {
+            my ($self, %params ) = @_;
+            return $params{body};
+    });
+
+    my $bibnumber_array = $indexer->update_index([13],["faked"]);
+    is( $bibnumber_array->[0]->{index}->{_id},"13", "We should get a string matching the bibnumber");
 };
