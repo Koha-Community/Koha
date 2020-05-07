@@ -236,7 +236,7 @@
 
                                     [% IF ( INVALID_DATE ) %]
                                         <p>
-                                          <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates as_due_date => 1 %]" />
+                                          <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" />
                                             <label for="duedatespec">Due date</label>
                                         </p>
                                     [% ELSE %]
