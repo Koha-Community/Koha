@@ -975,13 +975,13 @@
                                         [% END %]
                                     [% END # / FOREACH reviews %]
                                 [% ELSE %]
-                                    <p>There are no comments for this item.</p>
+                                    <p>There are no comments on this title.</p>
                                 [% END # / IF reviews %]
 
                                 [% IF ( loggedinusername ) %]
                                     [% UNLESS ( loggedincommenter ) %]
                                        <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]'); return false;">
-                                            Post your comments on this item.
+                                            Post your comments on this title.
                                         </a></div>
                                     [% END %]
                                 [% ELSE %]
