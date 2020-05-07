@@ -488,7 +488,7 @@ sub _process_mappings {
                 # Pass each value to current callback which returns a list
                 # (scalar is fine too) resulting either in a list or
                 # a list of lists that will be flattened by perl.
-                # The next callback will recieve the possibly expanded list of values.
+                # The next callback will receive the possibly expanded list of values.
                 $values = [ map { $callback->($_) } @{$values} ];
             }
         }

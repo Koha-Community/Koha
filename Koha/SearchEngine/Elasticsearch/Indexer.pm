@@ -118,7 +118,7 @@ sub update_index {
             body => \@body
         );
         if ($response->{errors}) {
-            carp "One or more ElasticSearch errors occured when indexing documents";
+            carp "One or more ElasticSearch errors occurred when indexing documents";
         }
     }
     return $response;
