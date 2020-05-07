@@ -406,7 +406,7 @@ if ($op eq 'save' || $op eq 'insert'){
           eval {$attribute->check_unique_id};
           if ( $@ ) {
               push @errors, "ERROR_extended_unique_id_failed";
-              my $attr_type = Koha::Patron::Attribute::Types->find($attr->code);
+              my $attr_type = Koha::Patron::Attribute::Types->find($attr->{code});
               $template->param(
                   ERROR_extended_unique_id_failed_code => $attr->{code},
                   ERROR_extended_unique_id_failed_value => $attr->{attribute},
