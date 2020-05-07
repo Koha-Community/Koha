@@ -196,7 +196,8 @@ sub delete {
 
 =head3 update
 
-    $object->update( $fields, [ { no_triggers => 0/1 } ] );
+    my $objects = Koha::Objects->new; # or Koha::Objects->search
+    $objects->update( $fields, [ { no_triggers => 0/1 } ] );
 
 This method overloads the DBIC inherited one so if code-level triggers exist
 (through the use of an overloaded I<update> or I<store> method in the Koha::Object

@@ -65,7 +65,7 @@ subtest 'can_any_reset_password() tests' => sub {
     $schema->storage->txn_begin;
 
     # Make sure all existing categories have reset_password set to 0
-    Koha::Patron::Categories->update({ reset_password => 0 });
+    Koha::Patron::Categories->search->update({ reset_password => 0 });
 
     ok( !Koha::Template::Plugin::Categories->new->can_any_reset_password, 'No category is allowed to reset password' );
 
