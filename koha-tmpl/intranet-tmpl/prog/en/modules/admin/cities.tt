@@ -186,7 +186,7 @@
                     "targets": [0,1,2,3,4],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
-                            return $('<div />').text(data).html();
+                            return data.escapeHtml();
                         }
                         return data;
                     }

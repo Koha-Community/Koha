@@ -26,6 +26,13 @@ String.prototype.escapeHtml = function() {
     });
 };
 
+/*
+ * Void method for numbers, for consistency
+ */
+Number.prototype.escapeHtml = function() {
+    return this;
+};
+
 // http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
 $.fn.tabIndex = function () {
     return $(this).parent().children('div').index(this);
