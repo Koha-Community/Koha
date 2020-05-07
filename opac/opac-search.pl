@@ -649,6 +649,8 @@ if (C4::Context->preference('OpacHiddenItemsExceptions')){
     $search_context->{'category'} = $patron ? $patron->categorycode : q{};
 }
 
+my $variables = { anonymous_session => ($borrowernumber) ? 0 : 1 };
+
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
@@ -661,12 +663,12 @@ for (my $i=0;$i<@servers;$i++) {
                 # we want as specified by $offset and $results_per_page,
                 # we need to set the offset parameter of searchResults to 0
                 my @group_results = searchResults( $search_context, $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
-                                                   $group->{"RECORDS"});
+                                                   $group->{"RECORDS"}, $variables);
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
         } else {
             @newresults = searchResults( $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
-                                        $results_hashref->{$server}->{"RECORDS"});
+                                        $results_hashref->{$server}->{"RECORDS"}, $variables);
         }
         $hits = 0 unless @newresults;
 

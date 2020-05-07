@@ -1833,7 +1833,7 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, $marcresults ) = @_;
+    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, $marcresults, $xslt_variables ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
 
@@ -2236,7 +2236,7 @@ sub searchResults {
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
         if (!$scan && $xslfile) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang);
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang, $xslt_variables);
         }
 
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either

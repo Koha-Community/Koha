@@ -170,11 +170,16 @@ my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
 my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
 if ( $xslfile ) {
+
+    my $variables = {
+        anonymous_session => ($borrowernumber) ? 0 : 1
+    };
+
     $template->param(
         XSLTBloc => XSLTParse4Display(
-                        $biblionumber, $record, "OPACXSLTDetailsDisplay",
-                        1, undef, $sysxml, $xslfile, $lang
-                    )
+            $biblionumber, $record, "OPACXSLTDetailsDisplay", 1, undef,
+            $sysxml, $xslfile, $lang, $variables
+        )
     );
 }
 
