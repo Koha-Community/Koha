@@ -222,8 +222,6 @@
         var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         $(document).ready(function() {
 
-            const to_html = (x) => $('<div/>').text(x).html();
-
             var libraries_url = '/api/v1/libraries';
             var libraries = $("#libraries").api({
                 "ajax": {
@@ -234,7 +232,12 @@
                     "targets": [0,1,3,4,7,8,9,10,11,12,13,14,15],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
-                            return to_html(data);
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            }
+                            else {
+                                return "";
+                            }
                         }
                         return data;
                     }
@@ -253,27 +256,27 @@
                     {
                         "data": function( row, type, val, meta ) {
                             const library_info = [];
-                            if ( row.address1 != null ) library_info.push(to_html(row.address1));
-                            if ( row.address2 != null ) library_info.push(to_html(row.address2));
-                            if ( row.address3 != null ) library_info.push(to_html(row.address3));
+                            if ( row.address1 != null ) library_info.push(row.address1.escapeHtml());
+                            if ( row.address2 != null ) library_info.push(row.address2.escapeHtml());
+                            if ( row.address3 != null ) library_info.push(row.address3.escapeHtml());
                             // geographical_location = city, state postal_code
                             const locations = [];
-                            if ( row.city != null ) locations.push(to_html(row.city));
-                            if ( row.state != null ) locations.push(to_html(row.state));
+                            if ( row.city != null ) locations.push(row.city.escapeHtml());
+                            if ( row.state != null ) locations.push(row.state.escapeHtml());
                             const geographical_location = locations.join(', ');
                             if ( geographical_location != '' && row.postal_code != null) {
-                                library_info.push(geographical_location+' '+to_html(row.postal_code));
+                                library_info.push(geographical_location+' '+row.postal_code.escapeHtml());
                             }
                             else {
                                 library_info.push(geographical_location);
                             }
-                            if ( row.country != null ) library_info.push(to_html(row.country));
-                            if ( row.phone != null ) library_info.push(_("Ph: ") + to_html(row.phone));
-                            if ( row.fax != null ) library_info.push(_("Fax: ") + to_html(row.fax));
-                            if ( row.email != null ) library_info.push('<a href="mailto:'+encodeURIComponent(row.email)+'">'+to_html(row.email)+'</a>');
-                            if ( row.url != null ) library_info.push('<a href="'+encodeURIComponent(row.url)+'">'+to_html(row.url)+'</a>');
-                            if ( row.opac_info != null ) library_info.push(_("OPAC Info") + ': <div>'+to_html(row.opac_info)+'</div>');
-                            if ( row.notes != null ) library_info.push(_("Notes")+': '+to_html(row.notes));
+                            if ( row.country != null ) library_info.push(row.country.escapeHtml());
+                            if ( row.phone != null ) library_info.push(_("Ph: ") + row.phone.escapeHtml());
+                            if ( row.fax != null ) library_info.push(_("Fax: ") + row.fax.escapeHtml());
+                            if ( row.email != null ) library_info.push('<a href="mailto:'+encodeURIComponent(row.email)+'">'+row.email.escapeHtml()+'</a>');
+                            if ( row.url != null ) library_info.push('<a href="'+encodeURIComponent(row.url)+'">'+row.url.escapeHtml()+'</a>');
+                            if ( row.opac_info != null ) library_info.push(_("OPAC Info") + ': <div>'+row.opac_info.escapeHtml()+'</div>');
+                            if ( row.notes != null ) library_info.push(_("Notes")+': '+row.notes.escapeHtml());
                             return library_info.join('<br/>');
                         },
                         "searchable": false,
@@ -302,9 +305,9 @@
 
                             var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode='+encodeURIComponent(row.library_id)+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
                             result += '<form action="/cgi-bin/koha/admin/branches.pl" method="post">';
-                            result += '<input type="hidden" name="branchcode" value="'+to_html(row.library_id)+'" />'+"\n";
+                            result += '<input type="hidden" name="branchcode" value="'+row.library_id.escapeHtml()+'" />'+"\n";
                             result += '<input type="hidden" name="op" value="delete_confirm" />';
-                            result += '<button type="submit" id="delete_library_'+to_html(row.library_id)+'" class="btn btn-default btn-xs" role="button"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</button></form>';
+                            result += '<button type="submit" id="delete_library_'+row.library_id.escapeHtml()+'" class="btn btn-default btn-xs" role="button"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</button></form>';
 
                             return result;
 
