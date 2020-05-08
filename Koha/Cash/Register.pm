@@ -178,7 +178,7 @@ sub make_default {
         sub {
             my $registers =
               Koha::Cash::Registers->search( { branch => $self->branch } );
-            $registers->update( { branch_default => 0 } );
+            $registers->update( { branch_default => 0 }, { no_triggers => 1 } );
             $self->set( { branch_default => 1 } );
             $self->SUPER::store;
         }
