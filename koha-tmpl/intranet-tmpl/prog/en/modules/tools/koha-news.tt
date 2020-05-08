@@ -4,6 +4,12 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
+<style>
+.CodeMirror {
+    resize: vertical;
+}
+</style>
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( opac_news_count ) %]
@@ -206,6 +212,8 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/d3c3/d3.min.js") | $raw %]
+    [% Asset.js("lib/d3c3/c3.min.js") | $raw %]
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script>
@@ -292,9 +300,17 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% END %]
+    [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
     [% INCLUDE 'str/tinymce_i18n.inc' %]
     <script>
+        [% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
+        var editor = CodeMirror.fromTextArea(document.getElementById('content'), {
+            lineNumbers: true,
+            mode: "text/html",
+            lineWrapping: true
+        });
+        [% ELSE %]
         tinyMCE.init({
             verify_html: false,
             force_br_newlines : false,
@@ -311,6 +327,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
             ],
         });
+        [% END %]
     </script>
 [% END %]
 
