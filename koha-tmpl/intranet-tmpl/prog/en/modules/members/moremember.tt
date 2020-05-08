@@ -763,17 +763,15 @@
                                 <li>
                                     [% IF ( patron.return_claims.count ) %]
                                         <a href="#return-claims" id="return-claims-tab">
-                                            <span id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
-                                            /
-                                            <span id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
                                             Claim(s)
+                                            <span title="Resolved claims" class="label label-success" id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                                            <span title="Unresolved claims" class="label label-warning" id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
                                         </a>
                                     [% ELSE %]
                                         <a href="#return-claims" id="return-claims-tab">
-                                            <span id="return-claims-count-resolved">0</span>
-                                            /
-                                            <span id="return-claims-count-unresolved">0</span>
                                             Claim(s)
+                                            <span title="Resolved claims" class="label label-success" id="return-claims-count-resolved">0</span>
+                                            <span title="Unresolved claims" class="label label-success" id="return-claims-count-unresolved">0</span>
                                         </a>
                                     [% END %]
                                 </li>
