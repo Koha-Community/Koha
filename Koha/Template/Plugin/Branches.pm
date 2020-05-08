@@ -113,17 +113,25 @@ sub pickup_locations {
             $patron = Koha::Patrons->find($patron);
         }
 
-        if($item) {
-            $item = Koha::Items->find($item) unless ref($item) eq 'Koha::Item';
-            @libraries = map { $_->unblessed } $item->pickup_locations( {patron => $patron} ) if defined $item;
-        } elsif($biblio) {
-            $biblio = Koha::Biblios->find($biblio) unless ref($biblio) eq 'Koha::Biblio';
-            @libraries = map { $_->unblessed } $biblio->pickup_locations( {patron => $patron} ) if defined $biblio;
+        if ($item) {
+            $item = Koha::Items->find($item)
+              unless ref($item) eq 'Koha::Item';
+            @libraries = @{ $item->pickup_locations( { patron => $patron } ) }
+              if defined $item;
         }
-
+        elsif ($biblio) {
+            $biblio = Koha::Biblios->find($biblio)
+              unless ref($biblio) eq 'Koha::Biblio';
+            @libraries = @{ $biblio->pickup_locations( { patron => $patron } ) }
+              if defined $biblio;
+        }
     }
 
-    @libraries = Koha::Libraries->pickup_locations() unless @libraries;
+    @libraries = Koha::Libraries->search( { pickup_location => 1 },
+        { order_by => ['branchname'] } )->as_list
+      unless @libraries;
+
+    @libraries = map { $_->unblessed } @libraries;
 
     for my $l (@libraries) {
         if ( defined $selected and $l->{branchcode} eq $selected
