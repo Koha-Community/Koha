@@ -859,7 +859,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Koha::Exceptions::Object::NotInstantiated',
                     'Exception thrown if not instantiated class';
 
-                is( "$@", 'Tried to access the \'update\' method, but Koha::Patrons is not instantiated', 'Exception stringified correctly' );
+                is( "$@", 'Tried to access the \'update\' method, but Koha::Cities is not instantiated', 'Exception stringified correctly' );
 
             };
         };
