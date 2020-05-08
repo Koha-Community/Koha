@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
+<!DOCTYPE stylesheet>
 
 <xsl:stylesheet version="1.0" 
   xmlns:marc="http://www.loc.gov/MARC21/slim" 
