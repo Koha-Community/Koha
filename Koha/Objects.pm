@@ -24,6 +24,7 @@ use List::MoreUtils qw( none );
 use Class::Inspector;
 
 use Koha::Database;
+use Koha::Exceptions::Object;
 
 =head1 NAME
 
@@ -225,6 +226,11 @@ catch wrong uses as well.
 sub update {
     my ($self, $fields, $options) = @_;
 
+    Koha::Exceptions::Object::NotInstantiated->throw(
+        method => 'update',
+        class  => $self
+    ) unless ref $self;
+
     my $no_triggers = $options->{no_triggers};
 
     if (
@@ -325,9 +331,10 @@ an iterator).
 sub empty {
     my ($self) = @_;
 
-    unless (ref($self)) {
-        $self = $self->new;
-    }
+    Koha::Exceptions::Object::NotInstantiated->throw(
+        method => 'empty',
+        class  => $self
+    ) unless ref $self;
 
     $self->_resultset()->set_cache([]);
 
