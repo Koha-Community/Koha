@@ -120,7 +120,8 @@ sub build_tabs {
                         my %subfield_data;
                         $subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
                         if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
-                          $subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+                            $subfield_data{marc_value} = $subf[$i][1];
+                            $subfield_data{is_url} = 1;
                         } else {
                           $subfield_data{marc_value}=$subf[$i][1];
                         }
