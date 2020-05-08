@@ -292,7 +292,7 @@ subtest 'pickup_locations' => sub {
                 }
             }
         );
-        my @pl = $item->pickup_locations( { patron => $patron} );
+        my @pl = @{ $item->pickup_locations( { patron => $patron} ) };
         my $ha_value=$ha==3?'holdgroup':($ha==2?'any':'homebranch');
 
         foreach my $pickup_location (@pl) {

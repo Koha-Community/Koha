@@ -205,10 +205,11 @@ sub can_be_transferred {
 
 =head3 pickup_locations
 
-@pickup_locations = $biblio->pickup_locations( {patron => $patron } )
+    my $pickup_locations = $biblio->pickup_locations( {patron => $patron } );
 
-Returns possible pickup locations for this biblio items, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
-and if item can be transferred to each pickup location.
+Returns an I<arrayref> of possible pickup locations for this biblio's items,
+according to patron's home library (if patron is defined and holds are allowed
+only from hold groups) and if item can be transferred to each pickup location.
 
 =cut
 
@@ -219,14 +220,14 @@ sub pickup_locations {
 
     my @pickup_locations;
     foreach my $item_of_bib ($self->items->as_list) {
-        push @pickup_locations, $item_of_bib->pickup_locations( {patron => $patron} );
+        push @pickup_locations, @{ $item_of_bib->pickup_locations( {patron => $patron} ) };
     }
 
     my %seen;
     @pickup_locations =
       grep { !$seen{ $_->branchcode }++ } @pickup_locations;
 
-    return wantarray ? @pickup_locations : \@pickup_locations;
+    return \@pickup_locations;
 }
 
 =head3 hidden_in_opac

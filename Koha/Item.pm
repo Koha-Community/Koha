@@ -551,8 +551,8 @@ sub pickup_locations {
 
     my @libs;
     if(defined $patron) {
-        return @libs if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        return @libs if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
+        return \@libs if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
+        return \@libs if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
     }
 
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
@@ -581,7 +581,7 @@ sub pickup_locations {
         }
     }
 
-    return wantarray ? @pickup_locations : \@pickup_locations;
+    return \@pickup_locations;
 }
 
 =head3 article_request_type
