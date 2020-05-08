@@ -88,7 +88,7 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
                          days.  Defaults to 14 days if no days specified.
    --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
                          Defaults to 30 days if no days specified.
-    --all-restrictions   purge all expired patrons restrictions.
+   --all-restrictions   purge all expired patrons restrictions.
    --del-exp-selfreg  Delete expired self registration accounts
    --del-unv-selfreg  DAYS  Delete unverified self registrations older than DAYS
    --unique-holidays DAYS  Delete all unique holidays older than DAYS
@@ -129,6 +129,7 @@ my $pZ3950;
 my $pListShareInvites;
 my $pDebarments;
 my $allDebarments;
+my $return_claims = C4::Context->preference('CleanUpDatabaseReturnClaims');
 my $pExpSelfReg;
 my $pUnvSelfReg;
 my $fees_days;
@@ -524,6 +525,18 @@ if ($pStatistics) {
           ? sprintf( "Done with purging %d statistics", $count )
           : sprintf( "%d statistics would have been removed", $count );
     }
+}
+
+if ($return_claims) {
+    print "Purging return claims older than $return_claims days.\n" if $verbose;
+    $sth = $dbh->prepare(
+        q{
+            DELETE FROM return_claims
+            WHERE resolved_on < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+        }
+    );
+    $sth->execute($return_claims);
+    print "Done with purging return claims.\n" if $verbose;
 }
 
 if ($pDeletedCatalog) {

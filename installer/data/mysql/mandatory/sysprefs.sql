@@ -139,6 +139,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ClaimReturnedChargeFee', 'ask', 'ask|charge|no_charge', 'Controls whether or not a lost item fee is charged for return claims', 'Choice'),
 ('ClaimReturnedLostValue', '', '', 'Sets the LOST AV value that represents "Claims returned" as a lost value', 'Free'),
 ('ClaimReturnedWarningThreshold', '', '', 'Sets the number of return claims past which the librarian will be warned the patron has many return claims', 'Integer'),
+('CleanUpDatabaseReturnClaims', '', '', 'Sets the age of resolved return claims to delete from the database for cleanup_database.pl', 'Integer' ),
 ('CoceHost', '', NULL, 'Coce server URL', 'Free'),
 ('CoceProviders', '', 'aws,gb,ol', 'Coce providers', 'multiple'),
 ('COinSinOPACResults','1','','If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','YesNo'),

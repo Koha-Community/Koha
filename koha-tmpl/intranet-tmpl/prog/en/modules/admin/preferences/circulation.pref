@@ -1265,3 +1265,9 @@ Circulation:
             - pref: ClaimReturnedWarningThreshold
               class: integer
             - items.
+        -
+            - Remove resolved return claims older than
+            - pref: CleanUpDatabaseReturnClaims
+              class: integer
+            - days.
+            - <span class="hint">This system preference is used by the cleanup_database.pl cronjob.</span>
