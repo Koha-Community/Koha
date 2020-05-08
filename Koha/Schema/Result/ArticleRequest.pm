@@ -110,14 +110,14 @@ __PACKAGE__->table("article_requests");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 updated_on
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  is_nullable: 1
+  default_value: current_timestamp
+  is_nullable: 0
 
 =cut
 
@@ -161,14 +161,14 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
-    is_nullable => 0,
+    is_nullable => 1,
   },
   "updated_on",
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    is_nullable => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
   },
 );
 
@@ -257,8 +257,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BOBB3vld8wY75u45YldoEg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-08 21:24:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wq5gLdFKq+fm8bM5pnrgaQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

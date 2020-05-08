@@ -40,7 +40,7 @@ __PACKAGE__->table("borrower_modifications");
 =head2 changed_fields
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 borrowernumber
 
@@ -434,7 +434,7 @@ __PACKAGE__->add_columns(
   "verification_token",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "changed_fields",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "cardnumber",
@@ -610,8 +610,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-22 16:54:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jkZUTN+mGIdp8ySV0BYNTw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-08 21:24:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fJn9Z9CV3JKWYLqcsfIAaA
 
 sub koha_object_class {
     'Koha::Patron::Modification';
