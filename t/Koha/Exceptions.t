@@ -179,9 +179,7 @@ subtest 'Koha::Exceptions::Patron::Relationship tests' => sub {
 
 subtest 'Koha::Exceptions::Object::NotInstantiated tests' => sub {
 
-    plan tests => 5;
-
-    use_ok('Koha::Exceptions::Object::NotInstantiated');
+    plan tests => 4;
 
     throws_ok
         { Koha::Exceptions::Object::NotInstantiated->throw(
