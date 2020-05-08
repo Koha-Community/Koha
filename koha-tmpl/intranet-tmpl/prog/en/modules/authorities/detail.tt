@@ -79,7 +79,11 @@
                 <label class="labelsubfield">&nbsp;
                 [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield | html %]</b>[% END %]
                 <span title="[% subfiel.long_desc | html %]" class="desc">[% subfiel.short_desc | html %]</span></label>
-                [% subfiel.marc_value | html %]
+                [% IF ( subfiel.is_url ) %]
+                    <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                [% ELSE %]
+                    [% subfiel.marc_value | html %]
+                [% END %]
                 [% IF ( subfiel.link ) %]
                     <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | uri %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
                         <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
