@@ -772,7 +772,7 @@ subtest 'Return same values as DBIx::Class' => sub {
 
             subtest 'Koha::Objects->update' => sub {
 
-                plan tests => 4;
+                plan tests => 6;
 
                 my ( $r_us, $e_us, $r_them, $e_them );
 
@@ -853,6 +853,14 @@ subtest 'Return same values as DBIx::Class' => sub {
 
                 ok( $r_us == 2 && $r_them == 2, '->update should return the number of updated cities' );
                 ok(!defined($e_us) && !defined($e_them));
+
+                throws_ok
+                    { Koha::Cities->update({ city_country => 'Castalia' }); }
+                    'Koha::Exceptions::Object::NotInstantiated',
+                    'Exception thrown if not instantiated class';
+
+                is( "$@", 'Tried to access the \'update\' method, but Koha::Patrons is not instantiated', 'Exception stringified correctly' );
+
             };
         };
 
@@ -1090,9 +1098,12 @@ subtest 'empty() tests' => sub {
     is( ref($empty), 'Koha::Patrons', '->empty returns a Koha::Patrons iterator' );
     is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
 
-    $empty = Koha::Patrons->empty;
-    is( ref($empty), 'Koha::Patrons', 'without being instantiated, ->empty still returns a Koha::Patrons iterator' );
-    is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
+    throws_ok
+        { Koha::Patrons->empty; }
+        'Koha::Exceptions::Object::NotInstantiated',
+        'Exception thrown if not instantiated class';
+
+    is( "$@", 'Tried to access the \'empty\' method, but Koha::Patrons is not instantiated', 'Exception stringified correctly' );
 
     $schema->storage->txn_rollback;
 };
