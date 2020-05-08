@@ -2397,6 +2397,8 @@ sub _FixOverduesOnReturn {
             if ($exemptfine) {
                 my $amountoutstanding = $accountline->amountoutstanding;
 
+                return if $amountoutstanding <= 0;
+
                 my $account = Koha::Account->new({patron_id => $borrowernumber});
                 my $credit = $account->add_credit(
                     {
