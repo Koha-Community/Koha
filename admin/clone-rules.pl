@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Koha;
 use C4::Debug;
+use Koha::CirculationRules;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -90,6 +91,16 @@ if ($frombranch && $tobranch) {
     $query = "DROP TABLE tmpissuingrules";
     $sth = $dbh->prepare($query);
     $res = $sth->execute();
+
+    # For already moved rules, maxissueqty and maxonsiteissueqty
+    Koha::CirculationRules->search({branchcode => $tobranch})->delete;
+    my $rules = Koha::CirculationRules->search({ branchcode => $frombranch eq '*' ? undef : $frombranch });
+    while ( my $rule = $rules->next ) {
+        my $cloned_rule = $rule->unblessed;
+        $cloned_rule->{branchcode} = $tobranch;
+        delete $cloned_rule->{id};
+        Koha::CirculationRule->new( $cloned_rule )->store;
+    }
 
     $template->param(result => "1");
     $template->param(error  => $error);
