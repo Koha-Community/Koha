@@ -113,38 +113,80 @@ subtest 'pickup_locations() tests' => sub {
 
     plan tests => 8;
 
-    my $library_1 = { branchcode => 'A' };
-    my $library_2 = { branchcode => 'B' };
-    my $library_3 = { branchcode => 'C' };
-    my @library_array = ( $library_1, $library_2, $library_3 );
+    $schema->storage->txn_begin;
 
-    my $libraries = Test::MockModule->new('Koha::Libraries');
-    $libraries->mock(
-        'pickup_locations',
-        sub {
-            my $result = clone(\@library_array);
-            return @$result;
-        }
-    );
+    Koha::Libraries->search->update({ pickup_location => 0 });
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
 
     my $plugin           = Koha::Template::Plugin::Branches->new();
     my $pickup_locations = $plugin->pickup_locations();
 
     is( scalar @{$pickup_locations}, 3, 'Libraries count is correct' );
-    for my $library ( @{$pickup_locations} ) {
-        ok( ( any { $_->{branchcode} eq $library->{branchcode} } @library_array ),
-            'Library ' . $library->{branchcode} . ' in results' );
-    }
 
-    $pickup_locations = $plugin->pickup_locations({ selected => $library_2->{branchcode} });
-    my @selected = grep { exists $_->{selected} } @{ $pickup_locations };
-    is( scalar @selected, 1, '(param) Only one is selected' );
-    is( $selected[0]->{branchcode}, $library_2->{branchcode}, '(param) The selected one is the right one' );
+    $pickup_locations = $plugin->pickup_locations({ search_params => { item => undef }});
+    is( scalar @{$pickup_locations}, 3, 'item parameter not a ref, fallback to general search' );
 
-    t::lib::Mocks::mock_userenv({ branchcode => $library_3->{branchcode} });
-    $pickup_locations = $plugin->pickup_locations();
-    @selected = grep { exists $_->{selected} } @{ $pickup_locations };
-    is( scalar @selected, 1, '(userenv) Only one is selected' );
-    is( $selected[0]->{branchcode}, $library_3->{branchcode}, '(userenv) The selected one is the right one' );
+    $pickup_locations = $plugin->pickup_locations({ search_params => { biblio => undef }});
+    is( scalar @{$pickup_locations}, 3, 'biblio parameter not a ref, fallback to general search' );
 
+    my $item_class = Test::MockModule->new('Koha::Item');
+    $item_class->mock(
+        'pickup_locations',
+        sub {
+            return [$library_1];
+        }
+    );
+
+    my $item   = $builder->build_sample_item();
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    $pickup_locations = $plugin->pickup_locations(
+        { search_params => { item => $item, patron => Koha::Patron->new } } );
+
+    is( scalar @{$pickup_locations}, 1, 'Only the library returned by $item->pickup_locations is returned' );
+    is( $pickup_locations->[0]->{branchcode}, $library_1->branchcode, 'Not cheating' );
+
+    my $biblio_class = Test::MockModule->new('Koha::Biblio');
+    $biblio_class->mock(
+        'pickup_locations',
+        sub {
+            return [$library_2];
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio();
+
+    $pickup_locations = $plugin->pickup_locations(
+        { search_params => { biblio => $biblio, patron => Koha::Patron->new } } );
+
+    is( scalar @{$pickup_locations}, 1, 'Only the library returned by $biblio->pickup_locations is returned' );
+    is( $pickup_locations->[0]->{branchcode}, $library_2->branchcode, 'Not cheating' );
+
+    subtest 'selected tests' => sub {
+
+        plan tests => 4;
+
+        t::lib::Mocks::mock_userenv({ branchcode => $library_2->branchcode });
+
+        $pickup_locations = $plugin->pickup_locations();
+
+        is( scalar @{$pickup_locations}, 3, 'Libraries count is correct' );
+        foreach my $pickup_location (@{ $pickup_locations }) {
+            next unless exists $pickup_location->{selected} and $pickup_location->{selected} == 1;
+            is( $pickup_location->{branchcode}, $library_2->branchcode, 'The right library is marked as selected' );
+        }
+
+        $pickup_locations = $plugin->pickup_locations({ selected => $library_3->branchcode });
+
+        is( scalar @{$pickup_locations}, 3, 'Libraries count is correct' );
+        foreach my $pickup_location (@{ $pickup_locations }) {
+            next unless exists $pickup_location->{selected} and $pickup_location->{selected} == 1;
+            is( $pickup_location->{branchcode}, $library_3->branchcode, 'The right library is marked as selected' );
+        }
+    };
+
+    $schema->storage->txn_rollback;
 };
