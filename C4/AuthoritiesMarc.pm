@@ -29,7 +29,7 @@ use C4::Charset;
 use C4::Log;
 use Koha::MetadataRecord::Authority;
 use Koha::Authorities;
-use Koha::Authority::MergeRequest;
+use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 use Koha::Authority;
 use Koha::Libraries;
@@ -649,6 +649,11 @@ sub DelAuthority {
     my $authid = $params->{authid} || return;
     my $skip_merge = $params->{skip_merge};
     my $dbh = C4::Context->dbh;
+
+    # Remove older pending merge requests for $authid to itself. (See bug 22437)
+    my $condition = { authid => $authid, authid_new => [undef, 0, $authid], done => 0 };
+    Koha::Authority::MergeRequests->search($condition)->delete;
+
     merge({ mergefrom => $authid }) if !$skip_merge;
     $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
     logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
