@@ -55,6 +55,11 @@ use Exception::Class (
         description => 'Invalid data passed',
         fields      => ['type', 'property', 'value'],
     },
+    'Koha::Exceptions::Object::NotInstantiated' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => 'Tried to access a method on an uninstantiated object',
+        fields      => ['class','method']
+    },
     'Koha::Exceptions::Object::NotInStorage' => {
         isa         => 'Koha::Exceptions::Object',
         description => 'The object is not in storage yet',
@@ -75,6 +80,9 @@ sub full_message {
         }
         elsif ( $self->isa('Koha::Exceptions::Object::ReadOnlyProperty') ) {
             $msg = sprintf("Invalid attempt to change readonly property: %s", $self->property );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Object::NotInstantiated') ) {
+            $msg = sprintf("Tried to access the '%s' method, but %s is not instantiated", $self->method, $self->class );
         }
     }
 

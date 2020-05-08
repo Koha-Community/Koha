@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockObject;
 use Test::Exception;
 
@@ -173,6 +173,28 @@ subtest 'Koha::Exceptions::Patron::Relationship tests' => sub {
     throws_ok
         { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( "Manual message exception" ) }
         'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
+
+subtest 'Koha::Exceptions::Object::NotInstantiated tests' => sub {
+
+    plan tests => 5;
+
+    use_ok('Koha::Exceptions::Object::NotInstantiated');
+
+    throws_ok
+        { Koha::Exceptions::Object::NotInstantiated->throw(
+            method => 'brain_explode', class => 'Koha::JD' ); }
+        'Koha::Exceptions::Object::NotInstantiated',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'Tried to access the \'brain_explode\' method, but Koha::JD is not instantiated', 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Object::NotInstantiated->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Object::NotInstantiated',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
