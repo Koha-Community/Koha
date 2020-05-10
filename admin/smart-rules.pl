@@ -570,7 +570,7 @@ my $definedbranch = $all_rules->count ? 1 : 0;
 my $rules = {};
 while ( my $r = $all_rules->next ) {
     $r = $r->unblessed;
-    $rules->{ $r->{categorycode} }->{ $r->{itemtype} }->{ $r->{rule_name} } = $r->{rule_value};
+    $rules->{ $r->{categorycode} // '' }->{ $r->{itemtype} // '' }->{ $r->{rule_name} } = $r->{rule_value};
 }
 
 $template->param(show_branch_cat_rule_form => 1);
