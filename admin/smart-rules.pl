@@ -271,7 +271,7 @@ elsif ($op eq 'add') {
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = '' if $no_auto_renewal_after =~ /^\s*$/;
     my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || '';
-    $no_auto_renewal_after_hard_limit = eval { dt_from_string( $input->param('no_auto_renewal_after_hard_limit') ) } if ( $no_auto_renewal_after_hard_limit );
+    $no_auto_renewal_after_hard_limit = eval { dt_from_string( $no_auto_renewal_after_hard_limit ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = strip_non_numeric($input->param('reservesallowed'));
     my $holds_per_record = strip_non_numeric($input->param('holds_per_record'));
