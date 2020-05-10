@@ -260,8 +260,8 @@ elsif ($op eq 'add') {
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
     my $chargeperiod_charge_at = $input->param('chargeperiod_charge_at');
-    my $maxissueqty  = strip_non_numeric($input->param('maxissueqty'));
-    my $maxonsiteissueqty  = strip_non_numeric($input->param('maxonsiteissueqty'));
+    my $maxissueqty = strip_non_numeric( scalar $input->param('maxissueqty') );
+    my $maxonsiteissueqty = strip_non_numeric( scalar $input->param('maxonsiteissueqty') );
     my $renewalsallowed  = $input->param('renewalsallowed');
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
@@ -270,17 +270,17 @@ elsif ($op eq 'add') {
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = '' if $no_auto_renewal_after =~ /^\s*$/;
     my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || '';
-    $no_auto_renewal_after_hard_limit = eval { dt_from_string( $no_auto_renewal_after_hard_limit ) } if ( $no_auto_renewal_after_hard_limit );
+    $no_auto_renewal_after_hard_limit = eval { dt_from_string( scalar $no_auto_renewal_after_hard_limit ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
-    my $reservesallowed  = strip_non_numeric($input->param('reservesallowed'));
-    my $holds_per_record = strip_non_numeric($input->param('holds_per_record'));
-    my $holds_per_day    = strip_non_numeric($input->param('holds_per_day'));
+    my $reservesallowed  = strip_non_numeric( scalar $input->param('reservesallowed') );
+    my $holds_per_record = strip_non_numeric( scalar $input->param('holds_per_record') );
+    my $holds_per_day    = strip_non_numeric( scalar $input->param('holds_per_day') );
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     my $issuelength  = $input->param('issuelength');
     $issuelength = $issuelength eq q{} ? undef : $issuelength;
     my $lengthunit  = $input->param('lengthunit');
     my $hardduedate = $input->param('hardduedate') || undef;
-    $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) } if ( $hardduedate );
+    $hardduedate = eval { dt_from_string( scalar $hardduedate ) } if ( $hardduedate );
     $hardduedate = output_pref( { dt => $hardduedate, dateonly => 1, dateformat => 'iso' } ) if ( $hardduedate );
     my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount');
@@ -335,13 +335,13 @@ elsif ($op eq 'add') {
 }
 elsif ($op eq "set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty   = strip_non_numeric($input->param('patron_maxissueqty'));
+    my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
     $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $holdallowed   = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
     my $returnbranch  = $input->param('returnbranch');
-    my $max_holds = strip_non_numeric($input->param('max_holds'));
+    my $max_holds = strip_non_numeric( scalar $input->param('max_holds') );
     $holdallowed =~ s/\s//g;
     $holdallowed = undef if $holdallowed !~ /^\d+/;
 
@@ -401,7 +401,7 @@ elsif ($op eq "set-branch-defaults") {
 }
 elsif ($op eq "add-branch-cat") {
     my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty = strip_non_numeric($input->param('patron_maxissueqty'));
+    my $patron_maxissueqty = strip_non_numeric( scalar $input->param('patron_maxissueqty') );
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
     $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $max_holds = $input->param('max_holds');
