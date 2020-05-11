@@ -20511,6 +20511,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23081: Set default to 0 for items.issues)\n";
 }
 
+$DBversion = '19.11.05.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+            INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            ('TrapHoldsOnOrder','1',NULL,'If enabled, Koha will trap holds for on order items ( notforloan < 0 )','YesNo')
+             });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 25184: Items with a negative notforloan status should not be captured for holds)\n";
+}
+
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
