@@ -1,0 +1,151 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Your recalls history &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
+</head>
+[% INCLUDE 'bodytag.inc' bodyid='opac-recalls' bodyclass='scrollto' %]
+[% INCLUDE 'masthead.inc' %]
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Your recalls history</a></li>
+    </ul>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="recalls" class="maincontent">
+                    <h2>Recalls history</h2>
+                    [% IF Koha.Preference('UseRecalls') %]
+                        [% IF RECALLS.count %]
+                            <div id="opac-user-recalls">
+                                <table id="recalls-table" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="anti-the">Title</th>
+                                            <th class="psort title-string">Placed on</th>
+                                            <th class="title-string">Expires on</th>
+                                            <th>Pickup location</th>
+                                            <th>Status</th>
+                                            <th>Due date</th>
+                                            <th class="nosort">&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH RECALL IN RECALLS %]
+                                            <tr>
+                                                <td class="title">
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RECALL.biblionumber | html %]">
+                                                         [% RECALL.biblio.title | html %]
+                                                         [% FOREACH s IN RECALL.biblio.subtitle %]
+                                                            [% s | html %]
+                                                         [% END %]
+                                                    </a>
+                                                    [% RECALL.biblio.author | html %]
+                                                </td>
+                                                <td class="recalldate">
+                                                    <span title="[% RECALL.recalldate | html %]">
+                                                        <span class="tdlabel">Recall date:</span>
+                                                            [% RECALL.recalldate | $KohaDates %]
+                                                    </span>
+                                                </td>
+                                                <td class="expirationdate">
+                                                        [% IF ( RECALL.expirationdate ) %]
+                                                            <span title="[% RECALL.expirationdate | html %]">
+                                                                <span class="tdlabel">Expiration:</span>
+                                                                [% RECALL.expirationdate | $KohaDates %]
+                                                            </span>
+                                                        [% ELSIF ( !RECALL.old ) %]
+                                                            <span title="0000-00-00">
+                                                                <span class="tdlabel">Expiration:</span>
+                                                                    Never expires
+                                                                </span>
+                                                        [% ELSE %]
+                                                            <span title="0000-00-00">-</span>
+                                                        [% END %]
+                                                    </td>
+                                                    <td class="branch">
+                                                        <span class="tdlabel">Pick up location:</span>
+                                                        [% RECALL.library.branchname | html %]
+                                                    </td>
+                                                    <td class="status">
+                                                        <span class="tdlabel">Status:</span>
+                                                        [% IF ( RECALL.in_transit ) %]
+                                                            In transit to [% RECALL.library.branchname | html %]
+                                                        [% ELSIF ( RECALL.waiting ) %]
+                                                            Ready for pickup
+                                                        [% ELSIF ( RECALL.overdue ) %]
+                                                            Overdue to be returned
+                                                        [% ELSIF ( RECALL.expired ) %]
+                                                            Expired on [% RECALL.expirationdate | $KohaDates %]
+                                                        [% ELSIF ( RECALL.cancelled ) %]
+                                                            Cancelled on [% RECALL.cancellationdate | $KohaDates %]
+                                                        [% ELSIF ( RECALL.finished ) %]
+                                                            Fulfilled
+                                                        [% ELSE %]
+                                                            Requested
+                                                        [% END %]
+                                                    </td>
+                                                    <td class="due_date">
+                                                        <span class="tdlabel">Due date</span>
+                                                        [% IF ( RECALL.requested ) %]
+                                                            Due to be returned by [% RECALL.checkout.date_due | $KohaDates %]
+                                                        [% ELSIF ( RECALL.waiting and RECALL.expirationdate ) %]
+                                                            Pick up by [% RECALL.expirationdate | $KohaDates %]
+                                                        [% ELSE %]
+                                                            -
+                                                        [% END %]
+                                                    </td>
+
+                                                    <td class="cancelrecall">
+                                                        [% IF ( RECALL.requested or RECALL.overdue ) %]
+                                                            <form action="/cgi-bin/koha/opac-recall.pl" method="post">
+                                                                <input type="hidden" name="op" value="cancel">
+                                                                <input type="hidden" name="recall_id" value="[% RECALL.recall_id | html %]">
+                                                                <input type="hidden" name="biblionumber" value="[% RECALL.biblionumber | html %]">
+                                                                <input type="submit" name="submit" class="btn btn-danger cancel_recall" value="Cancel">
+                                                            </form>
+                                                        [% END %]
+                                                    </td>
+                                                [% END %]
+                                            </tr>
+                                        </tbody>
+                                    <table>
+                                </div>
+                            [% ELSE %]
+                                No recalls have been made.
+                            [% END # / # RECALLS.count %]
+                        [% ELSE %]
+                            Recalls have not been enabled. Please contact your library.
+                        [% END %]
+                        </div> <!-- /#recalls -->
+                    </div> <!-- /.span10 -->
+            </div> <!-- /.row-fluid -->
+        </div> <!-- /.container-fluid -->
+</div> <!-- /#main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/JavaScript">
+        //<![CDATA[
+            $(document).ready(function(){
+                $(".cancel_recall").click(function(){
+                    return confirmDelete(_("Are you sure you want to remove this recall?"));
+                });
+                $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "aoColumnDefs": [
+                        { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    ]
+                }));
+            });
+    </script>
+[% END %]

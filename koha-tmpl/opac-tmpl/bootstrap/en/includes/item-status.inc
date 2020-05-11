@@ -39,6 +39,7 @@
             <span class="item-status checkedout">Checked out</span>
         [% END %]
     [% END %]
+    [% IF item.avail_for_recall %]<a href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% item.biblionumber | uri %]" class="btn btn-default btn-xs">Recall</a>[% END %]
 [% END %]
 
 [% IF NOT ( item.isa('Koha::Item') ) AND item.transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]

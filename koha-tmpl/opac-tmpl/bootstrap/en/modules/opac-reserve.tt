@@ -201,6 +201,8 @@
                                     [% END %]
                                     [% IF ( bibitemloo.already_reserved ) %]
                                         <div class="alert alert-warning">You have already requested this title.</div>
+                                    [% ELSIF ( bibitemloo.recall ) %]
+                                        <div class="alert alert-warning">You have already placed a recall on this title.</div>
                                     [% ELSE %]
                                         [% IF ( bibitemloo.already_patron_possession ) %]
                                             <div class="alert alert-warning">This title cannot be requested because it's already in your possession.</div>

@@ -17,6 +17,10 @@
         [% END # / UNLESS items.norequests %]
     [% END # / OPACHoldRequests %]
 
+    [% IF Koha.Preference('UseRecalls') %]
+        <span class="actions"><a class="btn btn-link recall" href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark-o" aria-hidden="true"></i> Place recall</a></span>
+    [% END %]
+
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
         [% IF items.artreqpossible %]
             <span class="actions"><a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% items.biblionumber | uri %]" class="btn btn-link btn-sm"><i class="fa fa-file-text" aria-hidden="true"></i> Request article</a></span>

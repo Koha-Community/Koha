@@ -730,16 +730,17 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     }
 
      my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
-      if( $reserve_status eq "Waiting"){ $itm->{'waiting'} = 1; }
+     my $recall_status = Koha::Recalls->search({ itemnumber => $itm->{itemnumber}, status => 'W', old => undef });
+      if( $reserve_status eq "Waiting" or $recall_status->count ){ $itm->{'waiting'} = 1; }
       if( $reserve_status eq "Reserved"){ $itm->{'onhold'} = 1; }
-    
+
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
         $itm->{transfertwhen} = $transfertwhen;
         $itm->{transfertfrom} = $transfertfrom;
         $itm->{transfertto}   = $transfertto;
      }
-    
+
     if ( C4::Context->preference('OPACAcquisitionDetails') ) {
         $itm->{on_order} = 1
           if grep { $_ eq $itm->{itemnumber} } @itemnumbers_on_order;

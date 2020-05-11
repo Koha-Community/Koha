@@ -633,6 +633,10 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{holdable} &&= $status eq 'OK';
     $biblioLoopIter{already_patron_possession} = $status eq 'alreadypossession';
 
+    if ( CanBookBeReserved( $borrowernumber, $biblioNum )->{status} eq 'recall' ){
+        $biblioLoopIter{recall} = 1;
+    }
+
     # For multiple holds per record, if a patron has previously placed a hold,
     # the patron can only place more holds of the same type. That is, if the
     # patron placed a record level hold, all the holds the patron places must

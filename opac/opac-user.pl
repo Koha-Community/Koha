@@ -306,6 +306,14 @@ if ( $pending_checkouts->count ) { # Useless test
                     $issue->{biblionumber} ? $my_summary_html =~ s/{BIBLIONUMBER}/$issue->{biblionumber}/g : $my_summary_html =~ s/{BIBLIONUMBER}//g;
                     $issue->{MySummaryHTML} = $my_summary_html;
                 }
+
+        my @maybe_recalls = Koha::Recalls->search({ biblionumber => $issue->{biblionumber}, itemnumber => [ undef, $issue->{itemnumber} ], old => undef });
+        foreach my $recall ( @maybe_recalls ) {
+            if ( $recall->checkout and $recall->checkout->issue_id == $issue->{issue_id} ) {
+                $issue->{recall} = 1;
+                last;
+            }
+        }
     }
 }
 my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
@@ -327,10 +335,12 @@ $template->param( show_barcode => 1 ) if $show_barcode;
 
 # now the reserved items....
 my $reserves = Koha::Holds->search( { borrowernumber => $borrowernumber } );
+my $recalls = Koha::Recalls->search({ borrowernumber => $borrowernumber, old => undef });
 
 $template->param(
     RESERVES       => $reserves,
     showpriority   => $show_priority,
+    RECALLS        => $recalls,
 );
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
