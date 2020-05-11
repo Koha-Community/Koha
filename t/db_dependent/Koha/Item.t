@@ -431,7 +431,7 @@ subtest 'deletion' => sub {
     }
 
     { # last_item_for_hold
-        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber, $item->biblionumber );
+        C4::Reserves::AddReserve({ branchcode => $patron->branchcode, borrowernumber => $patron->borrowernumber, biblionumber => $item->biblionumber });
         is( $item->safe_to_delete, 'last_item_for_hold', 'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio' );
 
         # With another item attached to the biblio, the item can be deleted

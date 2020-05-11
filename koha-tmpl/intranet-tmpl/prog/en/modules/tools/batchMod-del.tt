@@ -258,7 +258,7 @@
                     [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record wich biblio-level hold on it") %]
                     [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ can_be_deleted _ ')' %]
                     [% END %]
-                    [% cannot_delete_reason %]
+                    [% cannot_delete_reason | html %]
                 </td>
             </tr>
             [% END %]
