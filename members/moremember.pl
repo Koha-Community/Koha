@@ -273,6 +273,8 @@ $template->param(
     files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
     #debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     has_modifications         => $has_modifications,
+    recalls         => $patron->recalls,
+    specific_patron => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -77,6 +77,15 @@ if ( $query->param('print_slip') ) {
     );
 }
 
+# print a recall slip
+if ( $query->param('recall_slip') ) {
+    $template->param(
+        recall_slip => 1,
+        recall_id => scalar $query->param('recall_id'),
+    );
+}
+
+
 #####################
 #Global vars
 my $userenv = C4::Context->userenv;
@@ -164,6 +173,24 @@ if ( $query->param('reserve_id') ) {
     }
 }
 
+if ( $query->param('recall_id') ) {
+    my $recall = Koha::Recalls->find( scalar $query->param('recall_id') );
+    my $itemnumber = $query->param('itemnumber');
+    my $return_branch = $query->param('returnbranch');
+
+    my $expirationdate = $recall->calc_expirationdate;
+    my $item;
+    if ( !$recall->item_level_recall ) {
+        $item = Koha::Items->find( $itemnumber );
+    }
+
+    if ( $recall->branchcode ne $return_branch ) {
+        $recall->start_transfer({ item => $item }) if !$recall->in_transit;
+    } else {
+        $recall->set_waiting({ item => $item }) if !$recall->waiting;
+    }
+}
+
 my $borrower;
 my $returned = 0;
 my $messages;
@@ -223,6 +250,10 @@ if ($transit) {
     my $transfer = Koha::Item::Transfers->find($transit);
     if ( $canceltransfer ) {
         $transfer->cancel({ reason => 'Manual', force => 1});
+        my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
+        if ( defined $recall_transfer_deleted ) {
+            $recall_transfer_deleted->revert_transfer;
+        }
         $template->param( transfercancelled => 1);
     } else {
         $transfer->transit;
@@ -231,6 +262,10 @@ if ($transit) {
     my $item = Koha::Items->find($itemnumber);
     my $transfer = $item->get_transfer;
     $transfer->cancel({ reason => 'Manual', force => 1});
+    my $recall_transfer_deleted = Koha::Recalls->find({ itemnumber => $itemnumber, status => 'T' });
+    if ( defined $recall_transfer_deleted ) {
+        $recall_transfer_deleted->revert_transfer;
+    }
     if($dest eq "ttr"){
         print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");
         exit;
@@ -359,6 +394,7 @@ $template->param( inputloop => \@inputloop );
 my $found    = 0;
 my $waiting  = 0;
 my $reserved = 0;
+my $recalled = 0;
 
 # new op dev : we check if the document must be returned to his homebranch directly,
 #  if the document is transferred, we have warning message .
@@ -417,7 +453,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 #
 # reserve found and item arrived at the expected branch
 #
-if ( $messages->{'ResFound'}) {
+if ( $messages->{'ResFound'} ) {
     my $reserve    = $messages->{'ResFound'};
     my $patron = Koha::Patrons->find( $reserve->{borrowernumber} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
@@ -467,6 +503,40 @@ if ( $messages->{'ResFound'}) {
         reserve_id     => $reserve->{reserve_id},
         bormessagepref => $holdmsgpreferences->{'transports'},
     );
+}
+
+if ( $messages->{RecallFound} ) {
+    my $recall = $messages->{RecallFound};
+    if ( dt_from_string( $recall->timestamp ) == dt_from_string ) {
+        # we just updated this recall
+        $template->param( recall => $recall );
+    } else {
+        my $transferbranch = $messages->{RecallNeedsTransfer};
+        my $transfertodo = ( !$transferbranch or $transferbranch eq $recall->library->branchcode ) ? undef : 1;
+        $template->param(
+            found => 1,
+            recall => $recall,
+            recalled => $recall->waiting ? 0 : 1,
+            transfertodo => $transfertodo,
+            waitingrecall => $recall->waiting ? 1 : 0,
+        );
+    }
+}
+
+if ( $messages->{TransferredRecall} ) {
+    my $recall = $messages->{TransferredRecall};
+
+    # confirm transfer has arrived at the branch
+    my $transfer = Koha::Item::Transfers->search({ datearrived => { '!=' => undef }, itemnumber => $recall->itemnumber }, { order_by => { -desc => 'datearrived' } })->next;
+
+    # if transfer has completed, show popup to confirm as waiting
+    if ( defined $transfer and $transfer->tobranch eq $recall->branchcode ) {
+        $template->param(
+            found => 1,
+            recall => $recall,
+            recalled => 1,
+        );
+    }
 }
 
 # Error Messages
@@ -550,6 +620,12 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'ReturnClaims' ) {
         $template->param( ReturnClaims => $messages->{ReturnClaims} );
+    } elsif ( $code eq 'RecallFound' ) {
+        ;
+    } elsif ( $code eq 'RecallNeedsTransfer' ) {
+        ;
+    } elsif ( $code eq 'TransferredRecall' ) {
+        ;
     } else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
         # This forces the issue of staying in sync w/ Circulation.pm

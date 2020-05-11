@@ -8,6 +8,8 @@
 <title>Transfers print receipt &rsaquo; Circulation &rsaquo; Koha</title>
 [% ELSIF ( caller == 'members' ) %]
 <title>Print receipt for [% borrowernumber | html %] &rsaquo; Patrons &rsaquo; Koha</title>
+[% ELSIF ( caller == 'recall' ) %]
+<title>Recall print receipt &rsaquo; Circulation &rsqaquo; Koha</title>
 [% ELSIF ( title ) %][%# FIXME title is never defined %]
 <title>[% title | html %] &rsaquo; Patrons &rsaquo; Koha</title>
 [% END %]

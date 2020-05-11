@@ -209,6 +209,27 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         $materials = $descriptions->{lib} // $c->{materials};
     }
     my @subtitles = split(/ \| /, $c->{'subtitle'} // '' );
+
+    my $item = Koha::Items->find( $c->{itemnumber} );
+    my $recalled = 0;
+    my $recall = undef;
+    $recall = $item->check_recalls if $item->can_be_waiting_recall;
+    if ( defined $recall ) {
+        if ( $recall->item_level_recall ) {
+            if ( $recall->itemnumber == $c->{itemnumber} ) {
+                # item-level recall on this item
+                $recalled = 1;
+            } else {
+                $recalled = 0;
+            }
+        } else {
+            # biblio-level recall, but don't want to mark recalled if the recall has been allocated a different item
+            if ( !$recall->waiting ) {
+                $recalled = 1;
+            }
+        }
+    }
+
     my $checkout = {
         DT_RowId             => $c->{itemnumber} . '-' . $c->{borrowernumber},
         title                => $c->{title},
@@ -281,6 +302,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
             cardnumber => $c->{cardnumber},
         },
         issued_today => !$c->{not_issued_today},
+        recalled => $recalled,
     };
 
     if ( $c->{not_issued_today} ) {

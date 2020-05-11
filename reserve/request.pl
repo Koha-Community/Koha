@@ -332,6 +332,10 @@ if (   ( $findborrower && $borrowernumber_hold || $findclub && $club_hold )
                     $template->param( $canReserve->{status} => 1);
                     $biblioloopiter{ $canReserve->{status} } = 1;
                 }
+                elsif ( $canReserve->{status} eq 'recall' ) {
+                    $template->param( $canReserve->{status} => 1 );
+                    $biblioloopiter{ $canReserve->{status} } = 1;
+                }
                 else {
                     $biblioloopiter{ $canReserve->{status} } = 1;
                 }

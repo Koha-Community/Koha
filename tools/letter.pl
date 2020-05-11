@@ -249,7 +249,7 @@ sub add_form {
             {value => 'items.fine',    text => 'items.fine'},
             add_fields('borrowers');
         if ($module eq 'circulation') {
-            push @{$field_selection}, add_fields('additional_contents');
+            push @{$field_selection}, add_fields('additional_contents', 'recalls');
 
         }
 

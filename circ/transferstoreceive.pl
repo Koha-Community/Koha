@@ -109,6 +109,13 @@ while ( my $library = $libraries->next ) {
             if ( my $first_hold = $holds->next ) {
                 $getransf{patron} = Koha::Patrons->find( $first_hold->borrowernumber );
             }
+
+            # check for a recall for this transfer
+            my $recall = $item->recall;
+            if ( defined $recall ) {
+                $getransf{recall} = $recall;
+            }
+
             push( @transferloop, \%getransf );
         }
 

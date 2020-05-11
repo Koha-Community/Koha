@@ -46,6 +46,14 @@
             [% IF Koha.Preference('OnSiteCheckouts') %]
                 <li><a href="/cgi-bin/koha/circ/on-site_checkouts.pl">Pending on-site checkouts</a></li>
             [% END %]
+
+            [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]
+                <li><a href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls">Recalls queue</a></li>
+                <li><a href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting">Recalls to pull</a></li>
+                <li><a href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned">Overdue recalls</a></li>
+                <li><a href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup">Recalls awaiting pickup</a></li>
+                <li><a href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls">Old recalls</a></li>
+            [% END %]
         </ul>
 
     </div>

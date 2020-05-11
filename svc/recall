@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+
+# Copyright 2020 Aleisha Amohia <aleisha@catalyst.net.nz>
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use CGI;
+use JSON qw(encode_json);
+
+use C4::Context;
+use C4::Auth qw(check_cookie_auth);
+use C4::Output qw(output_with_http_headers);
+use C4::Circulation qw(AddReturn);
+use Koha::Recalls;
+
+my $input = new CGI;
+my $json = encode_json({ success => 0 });
+
+my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { recall => 'manage_recalls' } );
+
+if ( $auth_status ne "ok" ) {
+    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit 0;
+}
+
+my $recall_id = $input->param('recall_id');
+my $recall = Koha::Recalls->find( $recall_id );
+unless ( $recall ) {
+    my $json = encode_json({ success => 0 });
+    output_with_http_headers( $input, undef, $json, "json" );
+    exit;
+}
+
+my $op = $input->param('action');
+
+if ( $op eq 'cancel' ) {
+    # cancel recall
+    $recall->set_cancelled;
+    if ( $recall->cancelled ){
+        $json = encode_json({ success => 1 });
+    }
+
+} elsif ( $op eq 'expire' ) {
+    # expire recall
+    $recall->set_expired({ interface => 'INTRANET' });
+    if ( $recall->expired ){
+        $json = encode_json({ success => 1 });
+    }
+
+} elsif ( $op eq 'revert' ) {
+    # revert recall waiting status
+    $recall->revert_waiting;
+    if ( $recall->requested ){
+        $json = encode_json({ success => 1 });
+    }
+
+} elsif ( $op eq 'overdue' ) {
+    # mark recall as overdue
+    $recall->set_overdue({ interface => 'INTRANET' });
+    if ( $recall->overdue ){
+        $json = encode_json({ success => 1 });
+    }
+
+} elsif ( $op eq 'transit' ) {
+    # cancel recall and return item to home library
+    if ( $recall->in_transit ) {
+        C4::Items::ModItemTransfer( $recall->item->itemnumber, $recall->item->holdingbranch, $recall->item->homebranch, 'CancelRecall' );
+    }
+    $recall->set_cancelled;
+    if ( $recall->cancelled ){
+        $json = encode_json({ success => 1 });
+    }
+}
+
+output_with_http_headers( $input, undef, $json, "json" );

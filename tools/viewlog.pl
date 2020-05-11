@@ -189,6 +189,15 @@ if ($do_it) {
             }
         }
 
+        # get recall information
+        if ( $log->module eq "RECALLS" ) {
+            if ( $log->object ) {
+                my $recall = Koha::Recalls->find( $log->object );
+                if ( $recall && $output eq 'screen' ) {
+                    $result->{recall} = $recall;
+                }
+            }
+        }
         push @data, $result;
     }
     if ( $output eq "screen" ) {

@@ -164,6 +164,9 @@
                             [% ELSIF error == "onsite_checkout" %]
                                 <p>Item cannot be renewed because it's an onsite checkout</p>
 
+                            [% ELSIF error == 'recalled' %]
+                                <p>This item has been recalled.</p>
+
                             [% ELSE %]
 
                                 [% error | html %]

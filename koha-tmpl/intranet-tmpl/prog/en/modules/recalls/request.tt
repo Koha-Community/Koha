@@ -1,0 +1,63 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Confirm recalls &rsaquo; Recalls &rsaquo; Koha</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="recalls-request" class="catalog">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo;
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a> &rsaquo;
+    Confirm recalls on [% biblio.title | html %]
+</div>
+
+<div class="main container-fluid">
+<div class="row">
+<div class="col-sm-10 col-sm-push-2">
+<main>
+
+    <h1>Existing recalls</h1>
+
+    [% IF Koha.Preference('UseRecalls') %]
+        [% IF recalls.count %]
+            <form method="post" action="/cgi-bin/koha/recalls/request.pl">
+                <input type="hidden" name="op" value="cancel_multiple_recalls">
+                <input type="checkbox" id="select_all"> <span id="select_all_text">Select all</span>
+                [% INCLUDE 'recalls.inc' %]
+                <fieldset class="action">
+                    <button type="submit" id="cancel_selected" class="btn btn-default btn-sm">Cancel selected recalls</button>
+                </fieldset>
+            </form>
+        [% ELSE %]
+            <div class="dialog message">No recalls have been made.</div>
+        [% END %]
+    [% ELSE %]
+        <div class="dialog message">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
+    [% END %]
+
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'biblio-view-menu.inc' %]
+    </aside>
+</div> <!-- .col-sm-2.col-sm-pull-10 -->
+
+</div> <!-- /.row -->
+</div> <!-- /.main.container-fluid -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/recalls.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -175,6 +175,9 @@
     [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
         [% IF illview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/ill-requests.pl?borrowernumber=[% patron.borrowernumber | uri %]">ILL requests history</a></li>
     [% END %]
+    [% IF Koha.Preference('UseRecalls') && CAN_user_recalls %]
+        [% IF recallsview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/recallshistory.pl?borrowernumber=[% patron.borrowernumber | uri %]">Recalls history</a></li>
+    [% END %]
 </ul></div>
 
 <!-- Modal -->

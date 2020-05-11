@@ -495,14 +495,22 @@ Note that permanent location is a code, and location may be an authval.
                                 <span class="holdonitem">There is an item level hold on this item (priority = [% hold.priority | html %]).</span>
                             [% END %]
                         [% END %]
-                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold ) %]
-                            <span class="available">Available</span>
+
+                        [% IF item.recalled %]
+                            [% IF item.recall.waitingdate %]
+                                Waiting at [% Branches.GetName( item.recall.branchcode ) | html %] since [% item.recall.waitingdate | $KohaDates %]
+                            [% ELSE %]
+                                Item recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.recall.borrowernumber | uri %]">[% item.recall.patron.firstname | html %] [% item.recall.patron.surname | html %] ([% item.recall.patron.cardnumber | html %])</a> on [% item.recall.recalldate | $KohaDates %]
+                            [% END %]
+                        [% END %]
+
+                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold || item.recalled ) %]
+                            Available
                         [% END %]
 
                         [% IF ( item.restricted ) %]
                             <span class="restricted">([% item.restrictedvalue | html %])</span>
                         [% END %]
-
                     </td>
                     <td class="datelastseen" data-order="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</td>
                     <td class="dateaccessioned" data-order="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</td>
@@ -1030,6 +1038,7 @@ Note that permanent location is a code, and location may be an authval.
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
+    [% Asset.js("js/recalls.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
     [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
     <script>

@@ -741,6 +741,14 @@
                                     </a>
                                 </li>
                             [% END %]
+
+                            [% IF Koha.Preference('UseRecalls') %]
+                                <li>
+                                    <a href="#recalls" id="recalls-tab">
+                                        [% recalls.count | html %] Recalls
+                                    </a>
+                                </li>
+                            [% END %]
                         </ul>
 
                         [% INCLUDE "checkouts-table.inc" %]
@@ -760,6 +768,12 @@
                         [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
                             <div id="clubs-tab">
                                 Loading...
+                            </div>
+                        [% END %]
+
+                        [% IF Koha.Preference('UseRecalls') %]
+                            <div id="recalls">
+                                [% INCLUDE 'recalls.inc' %]
                             </div>
                         [% END %]
 
@@ -897,6 +911,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/recalls.js") | $raw %]
     <script>
 
         columns_settings_issues_table = [% TablesSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]

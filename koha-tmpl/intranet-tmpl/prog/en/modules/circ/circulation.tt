@@ -233,6 +233,15 @@
                                         Please confirm that the accompanying materials are present: [% ADDITIONAL_MATERIALS | html %]
                                     </li>
                                 [% END %]
+
+                                [% IF RECALLED %]
+                                    [% IF RECALLED.waiting %]
+                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> ([% RECALLED.item.barcode | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.borrowernumber | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.branchcode ) | html %] since [% RECALLED.waitingdate | $KohaDates %]</li>
+                                    [% ELSIF RECALLED.requested or RECALLED.overdue %]
+                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> [% IF RECALLED.item %]([% RECALLED.item.barcode | html %])[% END %] has been recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.borrowernumber | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.branchcode ) | html %] since [% RECALLED.recalldate | $KohaDates %]</li>
+                                    [% END %]
+                                [% END %]
+
                             </ul>
 
                             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
@@ -282,6 +291,21 @@
                                         </p>
                                     [% END %]
 
+                                    [% IF ( RECALLED ) %]
+                                        <p>
+                                            <label for="cancelrecall">Cancel recall</label>
+                                            <input type="radio" value="cancel" name="cancel_recall" id="cancelrecall" />
+                                            <input type="hidden" value="[% RECALLED.recall_id | html %]" name="recall_id" />
+                                        </p>
+                                        [% IF RECALLED.waiting %]
+                                            <p>
+                                                <label for="revertrecall">Revert waiting status</label>
+                                                <input type="radio" value="revert" name="cancel_recall" id="revertrecall" checked="checked"/>
+                                                <input type="hidden" value="[% RECALLED.recall_id | html %]" name="recall_id" />
+                                            </p>
+                                        [% END %]
+                                    [% END %]
+
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="issueconfirmed" value="1" />
@@ -322,6 +346,12 @@
                                 </form>
                             [% END %]
 
+                            [% IF ( RECALLED ) %]
+                                <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+                                    <button class="print" type="submit" onclick="Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% RECALLED.recall_id | html %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+                                </form>
+                            [% END %]
+
                             <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
                                 [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -339,7 +369,7 @@
                                 [% END %]
                             </form>
 
-                            [% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
+                            [% IF ( RESERVED || ISSUED_TO_ANOTHER || RECALLED ) && (CAN_user_reserveforothers_place_holds ) %]
                                 [% UNLESS noissues %]
                                     <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber | html %]&borrowernumber=[% patron.borrowernumber | html %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
                                 [% END %]
@@ -460,6 +490,10 @@
 
                                 [% IF ( USERBLOCKEDOVERDUE ) %]
                                     <li>Checkouts are BLOCKED because patron has overdue items.</li>
+                                [% END %]
+
+                                [% IF ( RECALLED_INTRANSIT ) %]
+                                    <li>Item has been recalled and is in transit for pickup at [% Branches.GetName( RECALLED_INTRANSIT ) | html %].</li>
                                 [% END %]
                                 </ul>
 
@@ -770,6 +804,14 @@
                             [% END %]
                         </li>
 
+                        [% IF Koha.Preference('UseRecalls') %]
+                            <li>
+                                <a href="#recalls" id="recalls-tab">
+                                    [% recalls.count | html %] Recalls
+                                </a>
+                            </li>
+                        [% END %]
+
                         [% IF Koha.Preference('ArticleRequests') %]
                             [% SET current_article_requests = Context.Scalar( Context.Scalar( patron, 'article_requests' ), 'filter_by_current' ) %]
                             <li>
@@ -896,6 +938,12 @@
                             <p>Patron has nothing on hold.</p>
                         [% END # /IF holds_count %]
                     </div> <!-- /#reserves -->
+
+                    [% IF Koha.Preference('UseRecalls') %]
+                        <div id="recalls">
+                            [% INCLUDE 'recalls.inc' %]
+                        </div>
+                    [% END %]
 
                     [% IF Koha.Preference('ClaimReturnedLostValue') %]
                         [% INCLUDE 'patron-return-claims.inc' %]
@@ -1065,6 +1113,7 @@
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/recalls.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

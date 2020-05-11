@@ -85,6 +85,18 @@
                         <a class="circ-button" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa fa-line-chart"></i> Hold ratios</a>
                     </li>
                 </ul>
+
+                [% IF Koha.Preference('UseRecalls') and CAN_user_recalls %]
+                    <h3>Recalls</h3>
+
+                    <ul class="buttons-list">
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_queue.pl" title="All active recalls"><i class="fa fa-tasks"></i> Recalls queue</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_to_pull.pl" title="Recalls that could be filled but have not been set waiting"><i class="fa fa-hand-grab-o"></i> Recalls to pull</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_overdue.pl" title="Recalled items that are overdue to be returned"><i class="fa fa-clock-o"></i> Overdue recalls</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_waiting.pl" title="Recalled items awaiting pickup"><i class="fa fa-calendar"></i> Recalls awaiting pickup</a></li>
+                        <li><a class="circ-button" href="/cgi-bin/koha/recalls/recalls_old_queue.pl" title="Inactive recalls"><i class="fa fa-tasks"></i> Old recalls</a></li>
+                    </ul>
+                [% END %]
             </div>
 
             <!-- Add the extra clearfix for only the required viewport -->

@@ -401,6 +401,12 @@ foreach my $item (@items) {
         $item->{cover_images} = $item_object->cover_images;
     }
 
+    my $recall = Koha::Recalls->find({ itemnumber => $item->{itemnumber}, old => undef });
+    if ( defined $recall ) {
+        $item->{recalled} = 1;
+        $item->{recall} = $recall;
+    }
+
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
         if ($itembranchcode and $itembranchcode eq $currentbranch) {
             push @itemloop, $item;

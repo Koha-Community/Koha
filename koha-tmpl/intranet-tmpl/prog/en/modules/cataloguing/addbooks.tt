@@ -152,6 +152,7 @@
                                             [% IF ( resultsloo.onloancount ) %] Checked out ([% resultsloo.onloancount | html %]),<br /> [% END %]
                                             [% IF ( resultsloo.withdrawncount ) %] Withdrawn ([% resultsloo.withdrawncount | html %]),<br /> [% END %]
                                             [% IF ( resultsloo.itemlostcount ) %] Lost ([% resultsloo.itemlostcount | html %])<br />[% END %]
+                                            [% IF ( resultsloo.recalledcount ) %] Waiting to fill recall ([% resultsloo.recalled | html %])[% END %]
                                             [% IF ( resultsloo.onholdcount ) %] Waiting on hold ([% resultsloo.onholdcount | html %])[% END %]
                                         </span>
                                         <span class="notforloan">

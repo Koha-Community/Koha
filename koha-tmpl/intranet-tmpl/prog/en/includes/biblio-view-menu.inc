@@ -41,5 +41,8 @@
 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio_object_id | url  %]" >Checkout history</a></li>
 [% IF ( CAN_user_tools_view_system_logs ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=[% biblio_object_id | url  %]&amp;object_type=biblio">Modification log</a> </li>[% END %]
 [% IF ( CAN_user_stockrotation_manage_rota_items && Koha.Preference('StockRotation') ) %][% IF ( stockrotationview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/catalogue/stockrotation.pl?biblionumber=[% biblio_object_id | uri %]">Rota</a> </li>[% END %]
+    [% IF ( Koha.Preference('UseRecalls') && CAN_user_recalls ) %]
+        [% IF ( recallsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/recalls/request.pl?biblionumber=[% biblio_object_id | url %]">Recalls ([% Biblio.RecallsCount( biblio_object_id ) | html %])</a></li>
+    [% END %]
 </ul>
 </div>

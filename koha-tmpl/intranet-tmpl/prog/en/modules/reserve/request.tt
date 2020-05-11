@@ -375,7 +375,7 @@
                     </div>
                 [% END %]
 
-                [% IF ( no_reserves_allowed || exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
+                [% IF ( no_reserves_allowed || exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted || recall ) %]
                     <div class="dialog alert">
 
                         [% UNLESS ( multi_hold ) %]
@@ -397,6 +397,8 @@
                                     <li> <strong>No items are available</strong> to be placed on hold.</li>
                                 [% ELSIF ( maxreserves ) %]
                                     <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> has too many holds.</li>
+                                [% ELSIF ( recall ) %]
+                                    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a> has <strong>already placed a recall</strong> on this item.</li>
                                 [% END # /IF exceeded_maxreserves %]
                             </ul>
                         [% ELSE # UNLESS multi_hold %]

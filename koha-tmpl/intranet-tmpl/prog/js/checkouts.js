@@ -368,6 +368,10 @@ $(document).ready(function() {
                             onsite_checkout += " <span class='onsite_checkout'>(" + __("On-site checkout") + ")</span>";
                         }
 
+                        if ( oObj.recalled == 1 ) {
+                             title += " - <span class='circ-hlt item-recalled'>This item has been recalled and the due date updated.</span>";
+                        }
+
                         title += " "
                               + "<a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
                               + oObj.biblionumber
@@ -461,6 +465,13 @@ $(document).ready(function() {
 
                         if ( oObj.can_renew ) {
                             // Do nothing
+                        } else if ( oObj.can_renew_error == "recalled" ) {
+                            msg += "<span>"
+                                    + "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + RECALLED + "</a>"
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed-recalled";
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
                             msg += "<span>"
                                     +"<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>"
@@ -591,7 +602,9 @@ $(document).ready(function() {
                     "bSortable": false,
                     "bVisible": AllowCirculate ? true : false,
                     "mDataProp": function ( oObj ) {
-                        if ( oObj.can_renew_error == "on_reserve" ) {
+                        if ( oObj.can_renew_error == "recalled" ) {
+                            return "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>";
+                        } else if ( oObj.can_renew_error == "on_reserve" ) {
                             return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
                         } else if ( oObj.materials ) {
                             return "<input type='checkbox' class='confirm' id='confirm_" + oObj.itemnumber + "' name='confirm' value='" + oObj.itemnumber + "' data-materials='" + oObj.materials.escapeHtml() + "'></input>";
