@@ -20011,6 +20011,14 @@ if ( CheckVersion($DBversion) ) {
         );
     }
 
+    # Catch LOST_RETURNED cases from original bug 22563 update
+    $dbh->do(
+        qq{
+            UPDATE accountlines
+            SET accounttype = 'LOST_RETURN'
+            WHERE accounttype = 'LOST_RETURNED'
+    });
+
     # Linking credit_type_code in accountlines to code in account_credit_types
     unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_credit_type' ) ) {
         $dbh->do(
