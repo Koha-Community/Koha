@@ -34,6 +34,7 @@ use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::RecordProcessor;
 use YAML;
 use URI::Escape;
 use Business::ISBN;
@@ -1846,6 +1847,10 @@ sub searchResults {
         $is_opac       = 1;
     }
 
+    my $record_processor = Koha::RecordProcessor->new({
+        filters => 'ViewPolicy'
+    });
+
     #Build branchnames hash
     my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
 
@@ -2236,6 +2241,12 @@ sub searchResults {
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
         if (!$scan && $xslfile) {
+            $record_processor->options({
+                frameworkcode => $fw,
+                interface     => $search_context->{'interface'}
+            });
+
+            $record_processor->process($marcrecord);
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang, $xslt_variables);
         }
 
