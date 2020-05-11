@@ -1618,7 +1618,7 @@ sub _koha_new_item {
             $item->{'location'},
             $item->{'permanent_location'},
             $item->{'onloan'},
-            $item->{'issues'},
+            $item->{'issues'}//0,
             $item->{'renewals'},
             $item->{'reserves'},
             $item->{'items.cn_source'},
