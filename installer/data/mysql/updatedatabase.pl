@@ -20755,6 +20755,8 @@ if( CheckVersion( $DBversion ) ) {
           credit_type_code = 'LOST_FOUND'
         WHERE
           credit_type_code = 'LOST_RETURN'
+        OR
+          credit_type_code = 'LOST_RETURNED'
     });
 
     # Migrate LOST + RETURNED to LOST + FOUND
@@ -20770,6 +20772,11 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     # Drop LOST_RETURNED credit type
+    $dbh->do(qq{
+        DELETE FROM account_credit_types WHERE code = 'LOST_RETURNED'
+    });
+
+    # Drop LOST_RETURN credit type
     $dbh->do(qq{
         DELETE FROM account_credit_types WHERE code = 'LOST_RETURN'
     });
