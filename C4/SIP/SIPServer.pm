@@ -105,10 +105,6 @@ sub process_request {
     $self->{account} = undef;  # Clear out the account from the last request, it may be different
     $self->{logger} = set_logger( Koha::Logger->get( { interface => 'sip' } ) );
 
-    # Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
-    Log::Log4perl::MDC->put( "accountid", undef );
-    Log::Log4perl::MDC->put( "peeraddr",  undef );
-
     my $sockname = getsockname(STDIN);
 
     # Check if socket connection is IPv6 before resolving address
@@ -182,10 +178,6 @@ sub raw_transport {
             }
         )
     );
-
-    # Set MDCs after properly authenticating
-    Log::Log4perl::MDC->put( "accountid", $self->{account}->{id} );
-    Log::Log4perl::MDC->put( "peeraddr",  $self->{server}->{peeraddr} );
 
     siplog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
         $self->{account}->{id},
