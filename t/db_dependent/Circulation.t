@@ -2506,7 +2506,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 };
 
 subtest '_FixOverduesOnReturn' => sub {
-    plan tests => 12;
+    plan tests => 14;
 
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
     t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
@@ -2570,8 +2570,8 @@ subtest '_FixOverduesOnReturn' => sub {
     is( ref $credit, "Koha::Account::Line", "Found matching credit for fine forgiveness" );
     is( $credit->amount + 0, -99, "Credit amount is set correctly" );
     is( $credit->amountoutstanding + 0, 0, "Credit amountoutstanding is correctly set to 0" );
-    $offset->delete;
 
+    # Bug 25417 - Only forgive fines where there is an amount oustanding to forgive
     $accountline->set(
         {
             debit_type_code    => 'OVERDUE',
@@ -2579,12 +2579,15 @@ subtest '_FixOverduesOnReturn' => sub {
             amountoutstanding => 0.00,
         }
     )->store();
+    $offset->delete;
 
     C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, 1, 'RETURNED' );
 
     $accountline->_result()->discard_changes();
     $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
     is( $offset, undef, "No offset created when trying to forgive fine with no outstanding balance" );
+    isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');
+    is( $accountline->status, 'RETURNED', 'Passed status has been used to set as RETURNED )');
 };
 
 subtest '_FixAccountForLostAndReturned returns undef if patron is deleted' => sub {
