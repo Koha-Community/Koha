@@ -22047,6 +22047,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24163, "Define a default CSV profile for late orders");
 }
 
+$DBversion = '19.12.00.087';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('TrapHoldsOnOrder','1',NULL,'If enabled, Koha will trap holds for on order items ( notforloan < 0 )','YesNo't c)
+    });
+
+    NewVersion( $DBversion, 25184, "Items with a negative notforloan status should not be captured for holds");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
