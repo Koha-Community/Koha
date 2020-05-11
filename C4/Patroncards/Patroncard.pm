@@ -93,8 +93,8 @@ sub draw_barcode {
     my $barcode_width_scale = $self->{'barcode_width_scale'};
 
     _draw_barcode(      $self,
-                        llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->[0]->{'llx'},
-                        lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->[0]->{'lly'},
+                        llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->[0]->{'llx'} * $self->{'unitvalue'},
+                        lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->[0]->{'lly'} * $self->{'unitvalue'},
                         width   => $self->{'width'} * $barcode_width_scale,
                         y_scale_factor  => $self->{'height'} * $barcode_height_scale,
                         barcode_type    => $self->{'layout'}->{'barcode'}->[0]->{'type'},
@@ -375,8 +375,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         }
         eval {
             PDF::Reuse::Barcode::Code39(
-                x                   => $params{'llx'} * $self->{'unitvalue'},
-                y                   => $params{'lly'} * $self->{'unitvalue'},
+                x                   => $params{'llx'},
+                y                   => $params{'lly'},
                 value               => "*$params{barcode_data}*",
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
@@ -395,8 +395,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
         eval {
             PDF::Reuse::Barcode::COOP2of5(
-                x                   => $params{'llx'}* $self->{'unitvalue'},
-                y                   => $params{'lly'}* $self->{'unitvalue'},
+                x                   => $params{'llx'},
+                y                   => $params{'lly'},
                 value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
@@ -413,8 +413,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
         eval {
             PDF::Reuse::Barcode::Industrial2of5(
-                x                   => $params{'llx'}* $self->{'unitvalue'} ,
-                y                   => $params{'lly'}* $self->{'unitvalue'},
+                x                   => $params{'llx'},
+                y                   => $params{'lly'},
                 value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
