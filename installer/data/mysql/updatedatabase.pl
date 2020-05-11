@@ -19001,7 +19001,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE
           accountlines
         SET
-          accounttype = 'LOST_RETURNED'
+          accounttype = 'LOST_RETURN'
         WHERE
           accounttype = 'CR';
     });
