@@ -513,6 +513,16 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     }
     is ($allavailable, 'true', 'All records have at least one item available');
 
+    my $mocked_xslt = Test::MockModule->new('Koha::XSLT_Handler');
+    $mocked_xslt->mock( 'transform', sub {
+        my ($self, $xml) = @_;
+        return $xml;
+    });
+
+    @newresults = searchResults({'interface'=>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
+        $results_hashref->{'biblioserver'}->{"RECORDS"}, { anonymous_session => 1 });
+
+    like( $newresults[0]->{XSLTResultsRecord}, qr/<variable name="anonymous_session">1<\/variable>/, "Variable injected correctly" );
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
@@ -971,7 +981,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 112;
+    plan tests => 113;
     run_marc21_search_tests();
 };
 
