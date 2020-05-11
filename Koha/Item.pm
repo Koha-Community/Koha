@@ -532,7 +532,7 @@ sub can_be_transferred {
 
 =head3 pickup_locations
 
-@pickup_locations = $item->pickup_locations( {patron => $patron } )
+$pickup_locations = $item->pickup_locations( {patron => $patron } )
 
 Returns possible pickup locations for this item, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
 and if item can be transferred to each pickup location.
