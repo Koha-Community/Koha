@@ -503,6 +503,54 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
 
     like( $newresults[0]->{XSLTResultsRecord}, qr/<variable name="anonymous_session">1<\/variable>/, "Variable injected correctly" );
 
+    my $biblio_id = $newresults[0]->{biblionumber};
+    my $fw = C4::Biblio::GetFrameworkCode($biblio_id);
+
+    my $dbh = C4::Context->dbh;
+    # Hide subfield 'p' in OPAC
+    $dbh->do(qq{
+        UPDATE marc_subfield_structure
+        SET hidden=4
+        WHERE frameworkcode='$fw' AND
+              tagfield=952 AND
+              tagsubfield='p';
+    });
+
+    # Hide subfield 'y' in Staff
+    $dbh->do(qq{
+        UPDATE marc_subfield_structure
+        SET hidden=-7
+        WHERE frameworkcode='$fw' AND
+              tagfield=952 AND
+              tagsubfield='y';
+    });
+
+    Koha::Caches->get_instance->flush_all;
+
+    @newresults = searchResults(
+        { 'interface' => 'opac' },
+        $query_desc,
+        $results_hashref->{'biblioserver'}->{'hits'},
+        17,
+        0,
+        0,
+        $results_hashref->{'biblioserver'}->{"RECORDS"}
+    );
+
+    unlike( $newresults[0]->{XSLTResultsRecord}, qr/<subfield code="p">TEST11111<\/subfield>/, '952\$p hidden in OPAC' );
+
+    @newresults = searchResults(
+        { 'interface' => 'intranet' },
+        $query_desc,
+        $results_hashref->{'biblioserver'}->{'hits'},
+        17,
+        0,
+        0,
+        $results_hashref->{'biblioserver'}->{"RECORDS"}
+    );
+
+    unlike( $newresults[0]->{XSLTResultsRecord}, qr/<subfield code="y">Books<\/subfield>/, '952\$y hidden on staff interface' );
+
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
@@ -852,7 +900,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 85;
+    plan tests => 87;
     run_marc21_search_tests();
 };
 
