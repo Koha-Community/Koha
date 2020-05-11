@@ -2430,11 +2430,9 @@ sub _FixOverduesOnReturn {
             return 0 unless $accountlines->count; # no warning, there's just nothing to fix
 
             my $accountline = $accountlines->next;
-            if ($exemptfine) {
-                my $amountoutstanding = $accountline->amountoutstanding;
 
-                return if $amountoutstanding <= 0;
-
+            my $amountoutstanding = $accountline->amountoutstanding;
+            if ($exemptfine && ($amountoutstanding != 0)) {
                 my $account = Koha::Account->new({patron_id => $borrowernumber});
                 my $credit = $account->add_credit(
                     {
