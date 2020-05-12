@@ -492,7 +492,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     }
     is ($allavailable, 'true', 'All records have at least one item available');
 
-    use Test::MockModule;
     my $mocked_xslt = Test::MockModule->new('Koha::XSLT::Base');
     $mocked_xslt->mock( 'transform', sub {
         my ($self, $xml) = @_;
