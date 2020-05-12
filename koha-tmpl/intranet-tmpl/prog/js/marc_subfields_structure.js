@@ -1,10 +1,16 @@
+/* global dataTablesDefaults */
 $(document).ready(function() {
     $('#subfieldtabs').tabs();
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function() {
         populateHiddenCheckboxes($(this).attr('id').split('-')[1]);
     });
-
+    $("#table_marcsubfieldstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "columnDefs": [
+            { 'sortable': false, 'targets': [ 'NoSort' ] }
+        ],
+        paginate: false
+    }));
 });
 
 /* Function to enable/disable hidden values checkboxes when Flag is (de)selected */
