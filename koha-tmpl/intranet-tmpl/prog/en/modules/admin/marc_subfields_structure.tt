@@ -266,13 +266,16 @@
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
 <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
 
-<table>
+<table id="table_marcsubfieldstructure">
+    <thead>
 <tr>
     <th>Subfield</th>
     <th>Text</th>
     <th>Constraints</th>
-    <th>Actions</th>
+    <th class="NoSort">Actions</th>
 </tr>
+    </thead>
+    <tbody>
 [% FOREACH loo IN loop %]
 <tr>
     <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
@@ -307,6 +310,7 @@
     </td>
 </tr>
 [% END %]
+    </tbody>
 </table>
 
 <form action="[% script_name | html %]" method="get">
@@ -331,6 +335,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/marc_subfields_structure.js") | $raw %]
 [% END %]
