@@ -2019,7 +2019,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
     t::lib::Mocks::mock_preference('finesMode', 'production');
@@ -2112,7 +2112,49 @@ subtest 'AddReturn | is_overdue' => sub {
         AddReturn( $item->{barcode}, $library->{branchcode} );
         is( int( $patron->account->balance() ),
             17, "Should have a single 10 days overdue fine and lost charge" );
-      }
+
+        # Cleanup
+        Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+    };
+
+    subtest 'bug 25417 | backdated return + exemptfine' => sub {
+
+        plan tests => 6;
+
+        t::lib::Mocks::mock_preference('CalculateFinesOnBackdate', 1);
+
+        my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $one_day_ago );    # date due was 1d ago
+
+        # Fake fines cronjob on this checkout
+        my ($fine) =
+          CalcFine( $item, $patron->categorycode, $library->{branchcode},
+            $one_day_ago, $now );
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => $fine,
+                due            => output_pref($one_day_ago)
+            }
+        );
+        is( int( $patron->account->balance() ),
+            1, "Overdue fine of 1 day overdue" );
+
+        # Backdated return (dropbox mode example - charge should exist but be zero)
+        AddReturn( $item->{barcode}, $library->{branchcode}, 1, $one_day_ago );
+        is( int( $patron->account->balance() ),
+            0, "Overdue fine should be annulled" );
+        my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
+        is( $lines->count, 1, "Overdue fine accountlines still exists");
+        my $line = $lines->next;
+        is($line->amount+0,0, "Overdue fine amount has been reduced to 0");
+        is($line->amountoutstanding+0,0, "Overdue fine amount outstanding has been reduced to 0");
+        is($line->status,'RETURNED', "Overdue fine was fixed");
+
+        # Cleanup
+        Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+    };
 };
 
 subtest '_FixAccountForLostAndReturned' => sub {
@@ -2571,7 +2613,7 @@ subtest '_FixOverduesOnReturn' => sub {
     is( $credit->amount + 0, -99, "Credit amount is set correctly" );
     is( $credit->amountoutstanding + 0, 0, "Credit amountoutstanding is correctly set to 0" );
 
-    # Bug 25417 - Only forgive fines where there is an amount oustanding to forgive
+    # Bug 25417 - Only forgive fines where there is an amount outstanding to forgive
     $accountline->set(
         {
             debit_type_code    => 'OVERDUE',
