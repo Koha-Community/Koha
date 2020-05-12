@@ -171,7 +171,7 @@
         </li>
     [% END %]
 [% END %]
-[% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li id="media_tab"><a href="#html5media">Play media</a></li>[% END %][% END %]
+[% IF HTML5MediaEnabled && HTML5MediaSets.size %]<li id="media_tab"><a href="#html5media">Play media</a></li>[% END %]
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
@@ -697,10 +697,15 @@
 <div id="html5media">
           [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
             <p>
-              <[% HTML5MediaParent | html %] controls preload=none>
-                <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | html %]"[% HTML5MediaSet.typeblock | html %] />
-                [[% HTML5MediaParent | html %] tag not supported by your browser.]
-              </[% HTML5MediaParent | html %]>
+                [% IF HTML5MediaSet.is_youtube %]
+                    <iframe id="player" type="text/html" width="640" height="360"
+                        src="[% HTML5MediaSet.srcblock %]" frameborder="0"></iframe>
+                [% ELSE %]
+                  <[% HTML5MediaParent | html %] controls preload=none>
+                    <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
+                    [[% HTML5MediaParent | html %] tag not supported by your browser.]
+                  </[% HTML5MediaParent | html %]>
+                [% END %]
             </p>
           [% END %]
 </div>

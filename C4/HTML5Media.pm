@@ -51,7 +51,7 @@ sub gethtml5media {
     my $HTML5MediaYouTube    = C4::Context->preference("HTML5MediaYouTube");
     my $marcflavour          = C4::Context->preference("marcflavour");
     foreach my $HTML5Media_field (@HTML5Media_fields) {
-    my $isyoutube            = 0;
+        my $is_youtube            = 0;
         my %HTML5Media;
         # protocol
         if ( $HTML5Media_field->indicator(1) eq '1' ) {
@@ -100,18 +100,14 @@ sub gethtml5media {
             $HTML5Media{srcblock} = $HTML5Media_field->subfield('u');
             if (grep /youtu\.?be/, $HTML5Media_field->subfield('u') ) {
                 if ($HTML5MediaYouTube == 1) {
-                    require WWW::YouTube::Download;
-                    import  WWW::YouTube::Download qw(playback_url);
-                    my $youtube           = WWW::YouTube::Download->new;
-                    eval {
-                        $HTML5Media{srcblock} = $youtube->playback_url(
-                            $HTML5Media_field->subfield('u'), {
-                                'fmt' => '43' #webm is the only format compatible to all modern browsers. maybe check for available qualities
-                            }
-                        );
-                    };
-                    if ($@) { warn $@; }
-                    else  { $isyoutube = 1;}
+                    my $url = $HTML5Media_field->subfield('u');
+                    # Credit for regex goes to https://stackoverflow.com/questions/3452546/how-do-i-get-the-youtube-video-id-from-a-url
+                    next unless $url =~ m{^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*};
+                    my $video_id = $2;
+                    next unless length($video_id) == 11; # Youtube video ids are 11 chars length
+                    $HTML5Media{srcblock} = sprintf '%s://www.youtube.com/embed/%s', $HTML5Media{protocol}, $video_id;
+                    $HTML5Media{is_youtube} = 1;
+                    $is_youtube = 1;
                 }
                else {
                    next; # do not embed youtube videos
@@ -145,12 +141,13 @@ sub gethtml5media {
         else {
             $HTML5Media{extension} = ($HTML5Media{srcblock} =~ m/([^.]+)$/)[0];
         }
-        if ( ( !grep /\Q$HTML5Media{extension}\E/, @HTML5MediaExtensions ) && ( $isyoutube != 1) ) {
+        if ( ( !grep /\Q$HTML5Media{extension}\E/, @HTML5MediaExtensions ) && ( $is_youtube != 1) ) {
             next; # not a specified media file
         }
         # youtube
-        if ($isyoutube == 1) {
-                $HTML5Media{mime} = 'video/webm';
+        if ($is_youtube == 1) {
+            $HTML5Media{mime} = 'video/webm';
+            $HTML5Media{type} = 'video';
         }
         # mime
         if ( $HTML5Media_field->subfield('c') ) {
