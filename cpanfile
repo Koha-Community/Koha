@@ -176,6 +176,5 @@ recommends 'Text::CSV::Unicode', '0.40';
 recommends 'Text::Unidecode', '0.04';
 recommends 'Time::Fake', '0.11';
 recommends 'UNIVERSAL::require', '0.13';
-recommends 'WWW::YouTube::Download', '0.56';
 recommends 'WebService::ILS', '0.17';
 recommends 'XML::Writer', '0.614';
