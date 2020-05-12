@@ -23,8 +23,6 @@ override_dh_auto_install:
 	rm $(TMP)/var/log/koha/README
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
-	ln -s /usr/share/tinymce/www \
-              $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
 	install -d $(TMP)/etc/apache2/sites-available
 	install -d $(TMP)/etc/apache2/sites-enabled
 	install -d $(TMP)/etc/apache2/conf.d
