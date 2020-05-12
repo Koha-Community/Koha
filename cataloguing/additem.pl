@@ -769,6 +769,7 @@ if ($op eq "additem") {
     }
     $nextop="additem";
 } elsif ($op eq "delinkitem"){
+
     my $analyticfield = '773';
 	if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC'){
         $analyticfield = '773';
@@ -782,6 +783,13 @@ if ($op eq "additem") {
         }
     }
 	my $modbibresult = ModBiblio($record, $biblionumber,'');
+}
+
+# update OAI-PMH sets
+if ($op) {
+    if (C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    }
 }
 
 #

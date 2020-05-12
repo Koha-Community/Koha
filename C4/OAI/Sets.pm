@@ -609,6 +609,13 @@ sub UpdateOAISetsBiblio {
 
     return unless($biblionumber and $record);
 
+    if (C4::Context->preference('OAI-PMH:AutoUpdateSetsEmbedItemData')) {
+        C4::Biblio::EmbedItemsInMarcBiblio({
+            marc_record  => $record,
+            biblionumber => $biblionumber
+        });
+    }
+
     my $sets_biblios;
     my @sets = CalcOAISetsBiblio($record);
     foreach (@sets) {
