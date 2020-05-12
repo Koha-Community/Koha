@@ -22057,6 +22057,41 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25184, "Items with a negative notforloan status should not be captured for holds");
 }
 
+$DBversion = '19.12.00.088';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        UPDATE letter SET
+        name = REPLACE(name, "notification on auto renewing", "Notification of automatic renewal"),
+        title = REPLACE(title, "Auto renewals", "Automatic renewal notice"),
+        content = REPLACE(content, "You have reach the maximum of checkouts possible.", "You have reached the maximum number of checkouts possible.")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+    $dbh->do(q{
+        UPDATE letter SET
+        content = REPLACE(content, "You have overdues.", "You have overdue items.")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+    $dbh->do(q{
+        UPDATE letter SET
+        content = REPLACE(content, "It's too late to renew this checkout.", "It's too late to renew this item.")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+    $dbh->do(q{
+        UPDATE letter SET
+        content = REPLACE(content, "You have too much unpaid fines.", "Your total unpaid fines are too high.")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+    $dbh->do(q{
+        UPDATE letter SET
+        content = REPLACE(content, "The following item [% biblio.title %] has correctly been renewed and is now due [% checkout.date_due %]", "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due as_due_date => 1 %]
+")
+        WHERE code = 'AUTO_RENEWALS';
+    });
+
+    NewVersion( $DBversion, 24378, "Fix some grammatical errors in default auto renewal notice");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
