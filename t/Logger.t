@@ -26,7 +26,7 @@ use Test::More tests => 1;
 use Test::Warn;
 
 subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
-    plan tests => 6;
+    plan tests => 10;
 
     my $ret;
     t::lib::Mocks::mock_config('log4perl_conf', undef);
@@ -52,7 +52,7 @@ HERE
     ok( $@, 'Logger did not init correctly without permission');
 
     system("chmod 700 $log");
-    my $logger= Koha::Logger->get({ interface => 'intranet' });
+    my $logger = Koha::Logger->get( { interface => 'intranet' } );
     is( exists $logger->{logger}, 1, 'Log4perl config found');
     is( $logger->warn('Message 1'), 1, '->warn returned a value' );
     warning_is { $ret = $logger->catastrophe }
@@ -60,6 +60,17 @@ HERE
                "Undefined method raises warning";
     is( $ret, undef, "'catastrophe' method undefined");
 
+    Koha::Logger->put_mdc( 'foo', 'bar' );
+    is( Koha::Logger->get_mdc( 'foo' ), 'bar', "MDC value via put_mdc is correct" );
+
+    Koha::Logger->put_mdc( 'foo', undef );
+    is( Koha::Logger->get_mdc( 'foo' ), undef, "Updated MDC value to undefined via put_mdc is correct" );
+
+    Koha::Logger->put_mdc( 'foo', 'baz' );
+    is( Koha::Logger->get_mdc( 'foo' ), 'baz', "Updated MDC value via put_mdc is correct" );
+
+    Koha::Logger->clear_mdc();
+    is( Koha::Logger->get_mdc( 'foo' ), undef, "MDC value was cleared by clear_mdc" );
 };
 
 sub mytempfile {

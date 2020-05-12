@@ -70,6 +70,49 @@ sub get {
     return $self;
 }
 
+=head2 put_mdc
+
+my $foo = $logger->put_mdc('foo', $foo );
+
+put_mdc sets global thread specific data that can be access later when generating log lines
+via the "%X{key}" placeholder in Log::Log4perl::Layout::PatternLayouts.
+
+=cut
+
+sub put_mdc {
+    my ( $self, $key, $value ) = @_;
+
+    Log::Log4perl::MDC->put( $key, $value );
+}
+
+=head2 get_mdc
+
+my $foo = $logger->get_mdc('foo');
+
+Retrieves the stored mdc value from the stored map.
+
+=cut
+
+sub get_mdc {
+    my ( $self, $key ) = @_;
+
+    return Log::Log4perl::MDC->get( $key );
+}
+
+=head2 clear_mdc
+
+$logger->clear_mdc();
+
+Removes *all* stored key/value pairs from the MDC map.
+
+=cut
+
+sub clear_mdc {
+    my ( $self, $key ) = @_;
+
+    return Log::Log4perl::MDC->remove( $key );
+}
+
 =head1 INTERNALS
 
 =head2 AUTOLOAD
