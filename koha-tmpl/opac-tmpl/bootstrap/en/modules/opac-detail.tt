@@ -627,7 +627,7 @@
                             <li id="tab_images"><a href="#images">Images</a></li>
                         [% END %]
 
-                        [% IF ( HTML5MediaEnabled && HTML5MediaSets ) %]
+                        [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
                             [% IF ( defaulttab == 'media' ) %]<li id="tab_html5media" class="ui-tabs-active">[% ELSE %]<li id="tab_html5media">[% END %]<a href="#html5media">Play media</a></li>
                         [% END %]
 
@@ -1034,11 +1034,16 @@
                             <div id="html5media">
                               [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
                                 <p>
-                                  [% SET ctrl_preload = ' controls preload=none' #translatability %]
-                                  <[% HTML5MediaParent _ ctrl_preload | html %] >
-                                    <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | html %]" [% HTML5MediaSet.typeblock | html %] />
-                                    <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
-                                  </[% HTML5MediaParent | html %]>
+                                    [% IF HTML5MediaSet.is_youtube %]
+                                        <iframe id="player" type="text/html" width="640" height="360"
+                                            src="[% HTML5MediaSet.srcblock %]" frameborder="0"></iframe>
+                                    [% ELSE %]
+                                        [% SET ctrl_preload = ' controls preload=none' #translatability %]
+                                        <[% HTML5MediaParent _ ctrl_preload | html %] >
+                                          <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | html %]" [% HTML5MediaSet.typeblock | html %] />
+                                          <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
+                                        </[% HTML5MediaParent | html %]>
+                                    [% END %]
                                 </p>
                               [% END %]
                             </div>
