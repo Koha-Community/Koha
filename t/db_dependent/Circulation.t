@@ -2349,7 +2349,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference('MarkLostItemsAsReturned', 'batchmod|moredetail|cronjob|additem|pendingreserves|onpayment');
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
@@ -2385,6 +2385,7 @@ subtest 'AddReturn | is_overdue' => sub {
 
     my $now   = dt_from_string;
     my $one_day_ago   = $now->clone->subtract( days => 1 );
+    my $two_days_ago  = $now->clone->subtract( days => 2 );
     my $five_days_ago = $now->clone->subtract( days => 5 );
     my $ten_days_ago  = $now->clone->subtract( days => 10 );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
@@ -2449,9 +2450,9 @@ subtest 'AddReturn | is_overdue' => sub {
         Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
     };
 
-    subtest 'bug 25417 | backdated return + exemptfine' => sub {
+    subtest 'bug 8338 | backdated return resulting in zero amount fine' => sub {
 
-        plan tests => 6;
+        plan tests => 17;
 
         t::lib::Mocks::mock_preference('CalculateFinesOnBackdate', 1);
 
@@ -2473,19 +2474,102 @@ subtest 'AddReturn | is_overdue' => sub {
         is( int( $patron->account->balance() ),
             1, "Overdue fine of 1 day overdue" );
 
-        # Backdated return (dropbox mode example - charge should exist but be zero)
+        # Backdated return (dropbox mode example - charge should be removed)
         AddReturn( $item->{barcode}, $library->{branchcode}, 1, $one_day_ago );
         is( int( $patron->account->balance() ),
             0, "Overdue fine should be annulled" );
         my $lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
-        is( $lines->count, 1, "Overdue fine accountlines still exists");
+        is( $lines->count, 0, "Overdue fine accountline has been removed");
+
+        $issue = AddIssue( $patron->unblessed, $item->{barcode}, $two_days_ago );    # date due was 2d ago
+
+        # Fake fines cronjob on this checkout
+        ($fine) =
+          CalcFine( $item, $patron->categorycode, $library->{branchcode},
+            $two_days_ago, $now );
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => $fine,
+                due            => output_pref($one_day_ago)
+            }
+        );
+        is( int( $patron->account->balance() ),
+            2, "Overdue fine of 2 days overdue" );
+
+        # Payment made against fine
+        $lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
+        my $debit = $lines->next;
+        my $credit = $patron->account->add_credit(
+            {
+                amount    => 2,
+                type      => 'PAYMENT',
+                interface => 'test',
+            }
+        );
+        $credit->apply(
+            { debits => [ $debit ], offset_type => 'Payment' } );
+
+        is( int( $patron->account->balance() ),
+            0, "Overdue fine should be paid off" );
+        $lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber });
+        is ( $lines->count, 2, "Overdue (debit) and Payment (credit) present");
         my $line = $lines->next;
-        is($line->amount+0,0, "Overdue fine amount has been reduced to 0");
-        is($line->amountoutstanding+0,0, "Overdue fine amount outstanding has been reduced to 0");
-        is($line->status,'RETURNED', "Overdue fine was fixed");
+        is( $line->amount+0, 2, "Overdue fine amount remains as 2 days");
+        is( $line->amountoutstanding+0, 0, "Overdue fine amountoutstanding reduced to 0");
+
+        # Backdated return (dropbox mode example - charge should be removed)
+        AddReturn( $item->{barcode}, $library->{branchcode}, undef, $one_day_ago );
+        is( int( $patron->account->balance() ),
+            -1, "Refund credit has been applied" );
+        $lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber }, { order_by => { '-asc' => 'accountlines_id' }});
+        is( $lines->count, 3, "Overdue (debit), Payment (credit) and Refund (credit) are all present");
+
+        $line = $lines->next;
+        is($line->amount+0,1, "Overdue fine amount has been reduced to 1");
+        is($line->amountoutstanding+0,0, "Overdue fine amount outstanding remains at 0");
+        is($line->status,'RETURNED', "Overdue fine is fixed");
+        $line = $lines->next;
+        is($line->amount+0,-2, "Original payment amount remains as 2");
+        is($line->amountoutstanding+0,0, "Original payment remains applied");
+        $line = $lines->next;
+        is($line->amount+0,-1, "Refund amount correctly set to 1");
+        is($line->amountoutstanding+0,-1, "Refund amount outstanding unspent");
 
         # Cleanup
         Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+    };
+
+    subtest 'bug 25417 | backdated return + exemptfine' => sub {
+
+        plan tests => 2;
+
+        t::lib::Mocks::mock_preference('CalculateFinesOnBackdate', 1);
+
+        my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $one_day_ago );    # date due was 1d ago
+
+        # Fake fines cronjob on this checkout
+        my ($fine) =
+          CalcFine( $item, $patron->categorycode, $library->{branchcode},
+            $one_day_ago, $now );
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => $fine,
+                due            => output_pref($one_day_ago)
+            }
+        );
+        is( int( $patron->account->balance() ),
+            1, "Overdue fine of 1 day overdue" );
+
+        # Backdated return (dropbox mode example - charge should no longer exist)
+        AddReturn( $item->{barcode}, $library->{branchcode}, 1, $one_day_ago );
+        is( int( $patron->account->balance() ),
+            0, "Overdue fine should be annulled" );
     };
 };
 
