@@ -151,16 +151,16 @@ check_apache_config()
 {
 
     # Check that mpm_itk is installed and enabled
-    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_itk'; then
+    if ! /usr/sbin/apachectl -M | grep -q 'mpm_itk'; then
         # Check Apache version
         APACHE_DISABLE_MPM_MSG=""
         if /usr/sbin/apache2ctl -v | grep -q "Server version: Apache/2.4"; then
             # mpm_event or mpm_worker need to be disabled first. mpm_itk depends
             # on mpm_prefork, which is enabled if needed. See
             # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=734865
-            if /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_event'; then
+            if /usr/sbin/apachectl -M | grep -q 'mpm_event'; then
                 APACHE_DISABLE_MPM_MSG=" sudo a2dismod mpm_event ;"
-            elif /usr/sbin/apachectl -M 2> /dev/null | grep -q 'mpm_worker'; then
+            elif /usr/sbin/apachectl -M | grep -q 'mpm_worker'; then
                 APACHE_DISABLE_MPM_MSG=" sudo a2dismod mpm_worker ;"
             # else mpm_prefork: a2enmod mpm_itk works
             fi
@@ -179,7 +179,7 @@ EOM
     fi
 
     # Check that mod_rewrite is installed and enabled.
-    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'rewrite_module'; then
+    if ! /usr/sbin/apachectl -M | grep -q 'rewrite_module'; then
         cat 1>&2  <<EOM
 
 Koha requires mod_rewrite to be enabled within Apache in order to run.
@@ -192,7 +192,7 @@ EOM
 
     # Check that the CGI module is installed and enabled
     # (Apache 2.4 may not have it by default.)
-    if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'cgi_module'; then
+    if ! /usr/sbin/apachectl -M | grep -q 'cgi_module'; then
         cat 1>&2 << EOM
 Koha requires mod_cgi to be enabled within Apache in order to run.
 Typically this can be enabled with:
@@ -204,7 +204,7 @@ EOM
 
     # Check that mod_ssl is installed and enabled.
     if [ "$CLO_LETSENCRYPT" = "yes" ]; then
-        if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q 'ssl_module'; then
+        if ! /usr/sbin/apachectl -M | grep -q 'ssl_module'; then
             cat 1>&2  <<EOM
 
 Koha requires mod_ssl to be enabled within Apache in order to run with --letsencrypt.
