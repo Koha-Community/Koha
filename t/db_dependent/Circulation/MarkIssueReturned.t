@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -27,8 +27,10 @@ use C4::Circulation;
 use C4::Context;
 use Koha::Checkouts;
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Old::Checkouts;
 use Koha::Patrons;
+use Koha::Patron::Debarments;
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -187,4 +189,38 @@ subtest 'Manually pass a return date' => sub {
     }
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'AutoRemoveOverduesRestrictions' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 1);
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+    my $item_1 = $builder->build_sample_item;
+    my $item_2 = $builder->build_sample_item;
+    my $item_3 = $builder->build_sample_item;
+    my $five_days_ago = dt_from_string->subtract( days => 5 );
+    my $checkout_1 = AddIssue( $patron->unblessed, $item_1->barcode, $five_days_ago ); # overdue
+    my $checkout_2 = AddIssue( $patron->unblessed, $item_2->barcode, $five_days_ago ); # overdue
+    my $checkout_3 = AddIssue( $patron->unblessed, $item_3->barcode ); # not overdue
+
+    Koha::Patron::Debarments::AddUniqueDebarment(
+        {
+            borrowernumber => $patron->borrowernumber,
+            type           => 'OVERDUES',
+            comment => "OVERDUES_PROCESS simulation",
+        }
+    );
+
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_1->itemnumber );
+
+    my $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
+    is( $debarments->[0]->{type}, 'OVERDUES', 'OVERDUES debarment is not removed if patron still has overdues' );
+
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item_2->itemnumber );
+
+    $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
+    is( scalar @$debarments, 0, 'OVERDUES debarment is removed if patron does not have overdues' );
 };
