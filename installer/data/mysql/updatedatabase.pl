@@ -20909,7 +20909,7 @@ if( CheckVersion( $DBversion ) ) {
     # get list of installed translations
     require C4::Languages;
     my @langs;
-    my $tlangs = C4::Languages::getTranslatedLanguages();
+    my $tlangs = C4::Languages::getTranslatedLanguages('opac','bootstrap');
 
     foreach my $language ( @$tlangs ) {
         foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
@@ -20927,7 +20927,7 @@ if( CheckVersion( $DBversion ) ) {
         foreach my $lang ( @langs ) {
             # If there is a value in the opacheader preference, insert it into opac_news
             $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$lang", $opacheader);
-            push @detail, "Inserted opacheader contents into $lang news item...\n";
+            push @detail, "Inserted opacheader contents into $lang news item...";
         }
     }
     # Remove the opacheader system preference
@@ -21928,7 +21928,7 @@ if( CheckVersion( $DBversion ) ) {
     # get list of installed translations
     require C4::Languages;
     my @langs;
-    my $tlangs = C4::Languages::getTranslatedLanguages();
+    my $tlangs = C4::Languages::getTranslatedLanguages('opac','bootstrap');
 
     foreach my $language ( @$tlangs ) {
         foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
