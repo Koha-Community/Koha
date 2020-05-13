@@ -21946,7 +21946,7 @@ if( CheckVersion( $DBversion ) ) {
         foreach my $lang ( @langs ) {
             # If there is a value in the OpacMainUserBlock preference, insert it into opac_news
             $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "OpacMainUserBlock_$lang", $opacmainuserblock);
-            push @detail, "Inserting OpacMainUserBlock contents into $lang news item...\n";
+            push @detail, "Inserting OpacMainUserBlock contents into $lang news item...";
         }
     }
     # Remove the OpacMainUserBlock system preference
