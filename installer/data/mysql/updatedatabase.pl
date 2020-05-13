@@ -19998,6 +19998,14 @@ if ( CheckVersion($DBversion) ) {
         }
     );
 
+    # Catch LOST_RETURNED cases from original bug 22563 update
+    $dbh->do(
+        qq{
+            UPDATE accountlines
+            SET accounttype = 'LOST_RETURN'
+            WHERE accounttype = 'LOST_RETURNED'
+    });
+
     # Adding credit_type_code to accountlines
     unless ( column_exists('accountlines', 'credit_type_code') ) {
         $dbh->do(
