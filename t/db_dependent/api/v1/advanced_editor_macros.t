@@ -95,19 +95,19 @@ subtest 'list() tests' => sub {
         plan tests => 15;
         $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_2->name)
           ->status_is(200)
-          ->json_has( [ $macro_2 ] );
+          ->json_is( [ $macro_2->to_api ] );
         $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_3->name)
           ->status_is(200)
-          ->json_has( [ ] );
-        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_text=delete 100")
+          ->json_is( [ ] );
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_text=delete%20100")
           ->status_is(200)
-          ->json_has( [ $macro_1, $macro_2, $macro_4 ] );
+          ->json_is( [ $macro_1->to_api, $macro_2->to_api, $macro_4->to_api ] );
         $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?patron_id=" . $patron_1->borrowernumber)
           ->status_is(200)
-          ->json_has( [ $macro_1, $macro_2 ] );
+          ->json_is( [ $macro_1->to_api, $macro_2->to_api ] );
         $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?shared=1")
           ->status_is(200)
-          ->json_has( [ $macro_2, $macro_4 ] );
+          ->json_is( [ $macro_2->to_api, $macro_4->to_api ] );
     };
 
     # Warn on unsupported query parameter
