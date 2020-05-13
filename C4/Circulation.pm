@@ -2441,9 +2441,12 @@ sub _FixOverduesOnReturn {
             return 0 unless $accountlines->count; # no warning, there's just nothing to fix
 
             my $accountline = $accountlines->next;
+            my $payments = $accountline->credits;
 
             my $amountoutstanding = $accountline->amountoutstanding;
-            if ($exemptfine && ($amountoutstanding != 0)) {
+            if ( $accountline->amount == 0 && $payments->count == 0 ) {
+                $accountline->delete;
+            } elsif ($exemptfine && ($amountoutstanding != 0)) {
                 my $account = Koha::Account->new({patron_id => $borrowernumber});
                 my $credit = $account->add_credit(
                     {
@@ -2459,15 +2462,15 @@ sub _FixOverduesOnReturn {
                 $credit->apply({ debits => [ $accountline ], offset_type => 'Forgiven' });
 
                 $accountline->status('FORGIVEN');
+                $accountline->store();
 
                 if (C4::Context->preference("FinesLog")) {
                     &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
                 }
             } else {
                 $accountline->status($status);
+                $accountline->store();
             }
-
-            return $accountline->store();
         }
     );
 
