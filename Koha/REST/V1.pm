@@ -40,8 +40,6 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
-    $self->log( Koha::Logger->get({ interface => 'api' }) );
-
     $self->hook(
         before_dispatch => sub {
             my $c = shift;
@@ -62,7 +60,6 @@ sub startup {
     $self->types->type( marcxml => 'application/marcxml+xml' );
     $self->types->type( mij     => 'application/marc-in-json' );
     $self->types->type( marc    => 'application/marc' );
-
 
     my $secret_passphrase = C4::Context->config('api_secret_passphrase');
     if ($secret_passphrase) {

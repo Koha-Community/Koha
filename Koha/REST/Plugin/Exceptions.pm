@@ -69,7 +69,8 @@ sub register {
 
             my $message = "$method $path: unhandled exception $type\<\<$exception_string\>\>";
 
-            $c->app->log->error("$message");
+            my $logger = Koha::Logger->get({ interface => 'api' });
+            $logger->error("$message");
 
             $c->render(
                 status  => 500,
