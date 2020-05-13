@@ -373,7 +373,7 @@ subtest 'claim*' => sub {
     my $claim_1 = $order->claim;
     my $claim_2 = $order->claim;
 
-    $claim_1->claimed_on($now->clone->subtract(days => 1))->store;
+    $claim_2->claimed_on($now->clone->subtract(days => 1))->store;
 
     is( $order->claims->count, 2, '->claims should return the correct number of claims');
     is( $order->claims_count, 2, '->claims_count should return the correct number of claims');
