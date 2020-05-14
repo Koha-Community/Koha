@@ -160,18 +160,11 @@ sub api_routes {
 
     my $spec = qq{
 {
-  "/patrons/{patron_id}/bother": {
-    "put": {
-      "x-mojo-to": "Koha::Plugin::Test#bother",
+  "/patrons/bother": {
+    "get": {
+      "x-mojo-to": "Test::Controller#bother",
       "operationId": "BotherPatron",
       "tags": ["patrons"],
-      "parameters": [{
-        "name": "patron_id",
-        "in": "path",
-        "description": "Internal patron identifier",
-        "required": true,
-        "type": "integer"
-      }],
       "produces": [
         "application/json"
       ],
@@ -188,22 +181,58 @@ sub api_routes {
                 }
           }
         },
-        "404": {
+        "401": {
           "description": "An error occurred",
           "schema": {
               "type": "object",
-                "properties": {
-                  "error": {
-                    "description": "An explanation for the error",
-                    "type": "string"
-                  }
+              "properties": {
+                "error": {
+                  "description": "An explanation for the error",
+                  "type": "string"
                 }
+              }
           }
         }
       },
       "x-koha-authorization": {
         "permissions": {
           "borrowers": "1"
+        }
+      }
+    }
+  },
+  "/public/patrons/bother": {
+    "get": {
+      "x-mojo-to": "Test::Controller#bother",
+      "operationId": "PubliclyBotherPatron",
+      "tags": ["patrons"],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A bothered patron",
+          "schema": {
+              "type": "object",
+              "properties": {
+                "bothered": {
+                  "description": "If the patron has been bothered",
+                  "type": "boolean"
+                }
+              }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "An explanation for the error",
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }
