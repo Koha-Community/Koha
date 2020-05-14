@@ -1,4 +1,4 @@
-#!/USr/bin/perl
+#!/usr/bin/perl
 
 # Database Updater
 # This script checks for required updates to the database.
