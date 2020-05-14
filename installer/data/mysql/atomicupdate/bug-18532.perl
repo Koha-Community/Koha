@@ -29,29 +29,6 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do( qq{
-        insert ignore into borrower_message_preferences (categorycode, message_attribute_id, days_in_advance, wants_digest)
-        select 	c.categorycode, 7, NULL, 1
-        from    categories c
-        left join
-                borrower_message_preferences p
-        on      c.categorycode = p.categorycode
-                and p.message_attribute_id = 7
-        where   p.categorycode is null
-
-    });
-
-    $dbh->do( qq{
-        insert ignore into borrower_message_preferences (borrowernumber, message_attribute_id, days_in_advance, wants_digest)
-        select 	b.borrowernumber, 7, NULL, 1
-        from    borrowers b
-        left join
-                borrower_message_preferences p
-        on      b.borrowernumber = p.borrowernumber
-                and p.message_attribute_id = 7
-        where   p.borrowernumber is null
-    });
-
-    $dbh->do( qq{
         insert into borrower_message_transport_preferences (borrower_message_preference_id, message_transport_type)
         select  p.borrower_message_preference_id, 'email'
         from    borrower_message_preferences p
@@ -61,6 +38,11 @@ if( CheckVersion( $DBversion ) ) {
         where   p.message_attribute_id = 7
                 and t.borrower_message_preference_id is null;
     });
+
+     $dbh->do(q{
+         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+         VALUES ('AutoRenewalNotices','cron','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice')
+     });
 
     NewVersion( $DBversion, 18532, 'Messaging preferences for auto renewals' );
 }

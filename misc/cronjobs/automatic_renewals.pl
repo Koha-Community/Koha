@@ -43,6 +43,8 @@ and the renewal isn't premature (No Renewal before) the issue is renewed.
 
 =item B<-s|--send-notices>
 
+DEPRECATED: The system preference AutoRenewalNotices should be used to determine
+whether notices are sent or not
 Send AUTO_RENEWALS notices to patrons if the auto renewal has been done.
 
 =item B<-v|--verbose>
@@ -53,14 +55,10 @@ Print report to standard out.
 
 Without this parameter no changes will be made
 
-=item B<-d|--digest>
-
-Flag to indicate that this script should process digest messages.
-
 =item B<-b|--digest-per-branch>
 
 Flag to indicate that generation of message digests should be
-performed separately for each branch. Needs --digest option.
+performed separately for each branch.
 
 A patron could potentially have loans at several different branches
 There is no natural branch to set as the sender on the aggregated
@@ -89,17 +87,31 @@ use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
 
-my ( $help, $send_notices, $verbose, $confirm, $digest, $digest_per_branch );
+my ( $help, $send_notices, $verbose, $confirm, $digest_per_branch );
 GetOptions(
     'h|help' => \$help,
     's|send-notices' => \$send_notices,
     'v|verbose'    => \$verbose,
     'c|confirm'     => \$confirm,
-    'd|digest|' => \$digest,
     'b|digest-per-branch' => \$digest_per_branch,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
+
+my $send_notices_pref = C4::Context->preference('AutoRenewalNotices')
+if ( $send_notices_pref = 'cron' ) {
+    warn <<'END_WARN';
+
+The "AutoRenewalNotices" syspref is set to 'Follow the cron switch'.
+The send_notices switch for this script is deprecated, you should either set the preference
+to 'Never send emails' or 'Follow patron messaging preferences'
+
+END_WARN
+} else {
+    # If not following cron then we should not send if set to never
+    # and always send any generated according to preferences if following those
+    $send_notices = $send_notices_pref eq 'never' ? 0 : 1;
+}
 
 # Since advance notice options are not visible in the web-interface
 # unless EnhancedMessagingPreferences is on, let the user know that
@@ -128,10 +140,9 @@ my %report;
 while ( my $auto_renew = $auto_renews->next ) {
     print "examining item '" . $auto_renew->itemnumber . "' to auto renew\n" if $verbose;
 
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $auto_renew->borrowernumber,
-                                                                                   message_name   => 'auto_renewals' } );
-
-    next if !$digest && $borrower_preferences && $borrower_preferences->{'wants_digest'};
+    my $borrower_preferences;
+    $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $auto_renew->borrowernumber,
+                                                                                   message_name   => 'auto_renewals' } ) if $send_notices_pref eq 'preferences';
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
