@@ -95,6 +95,31 @@
     </form>
 [% END %]
 
+[% BLOCK form_browse %]
+    [% IF uploadcategories %]
+    <form method="post" id="browsefile" action="/cgi-bin/koha/tools/upload.pl" enctype="multipart/form-data">
+        [% PROCESS plugin_pars %]
+        <input type="hidden" name="op" value="browse"/>
+        <fieldset class="rows">
+        <legend>Search uploads by category</legend>
+        <ol>
+            <li>
+                <label for="browsecategory">Category: </label>
+                <select id="browsecategory" name="browsecategory">
+                [% FOREACH cat IN uploadcategories %]
+                    <option value="[% cat.code | html %]">[% cat.name | html %]</option>
+                [% END %]
+                </select>
+            </li>
+        </ol>
+        <fieldset class="action">
+            <button id="browsebutton" class="submit">Search</button>
+        </fieldset>
+        </fieldset>
+    </form>
+    [% END %]
+[% END %]
+
 [% BLOCK form_search %]
     <form method="post" id="searchfile" action="/cgi-bin/koha/tools/upload.pl" enctype="multipart/form-data">
         [% PROCESS plugin_pars %]
@@ -222,6 +247,7 @@
 [% PROCESS submitter %]
 [% IF mode == 'new' || mode == 'deleted' %]
     [% PROCESS form_new %]
+    [% PROCESS form_browse %]
     [% PROCESS form_search %]
     [% PROCESS closer %]
 [% ELSIF mode == 'report' %]
