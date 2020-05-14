@@ -75,8 +75,6 @@ sub get {
             error => "This macro is shared, you must access it via advanced_editor/macros/shared"
         });
     }
-    warn $macro->borrowernumber;
-    warn $patron->borrowernumber;
     if( $macro->borrowernumber != $patron->borrowernumber ){
         return $c->render( status => 403, openapi => {
             error => "You do not have permission to access this macro"

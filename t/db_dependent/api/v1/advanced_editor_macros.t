@@ -56,6 +56,7 @@ subtest 'list() tests' => sub {
             name => 'Test1',
             macro => 'delete 100',
             borrowernumber => $patron_1->borrowernumber,
+            shared => 0,
         }
     });
     my $macro_2 = $builder->build_object({ class => 'Koha::AdvancedEditorMacros', value =>
@@ -63,7 +64,7 @@ subtest 'list() tests' => sub {
             name => 'Test2',
             macro => 'delete 100',
             borrowernumber => $patron_1->borrowernumber,
-            shared=> 1,
+            shared => 1,
         }
     });
     my $macro_3 = $builder->build_object({ class => 'Koha::AdvancedEditorMacros', value =>
@@ -71,6 +72,7 @@ subtest 'list() tests' => sub {
             name => 'Test3',
             macro => 'delete 100',
             borrowernumber => $patron_2->borrowernumber,
+            shared => 0,
         }
     });
     my $macro_4 = $builder->build_object({ class => 'Koha::AdvancedEditorMacros', value =>
