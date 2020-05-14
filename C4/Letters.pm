@@ -965,7 +965,7 @@ sub EnqueueLetter {
 INSERT INTO message_queue
 ( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type, delivery_note )
 VALUES
-( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      NOW(),       ?,          ?,            ?,           ?,              ? )
+( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      CAST(NOW() AS DATE),       ?,          ?,            ?,           ?,              ? )
 ENDSQL
 
     my $sth    = $dbh->prepare($statement);
