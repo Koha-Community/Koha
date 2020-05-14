@@ -269,6 +269,7 @@ is_plack_running()
     local instancename=$1
 
     if start-stop-daemon --pidfile "/var/run/koha/${instancename}/plack.pid" \
+            --user="$instancename-koha" \
             --status ; then
         return 0
     else
@@ -292,6 +293,7 @@ is_z3950_running()
     local instancename=$1
 
     if start-stop-daemon --pidfile "/var/run/koha/${instancename}/z3950-responder.pid" \
+            --user="$instancename-koha" \
             --status ; then
         return 0
     else
