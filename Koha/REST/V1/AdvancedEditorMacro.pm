@@ -21,11 +21,13 @@ use Koha::AdvancedEditorMacros;
 
 use Try::Tiny;
 
+=head1 Name
+
+Koha::REST::V1::AdvancedEditorMacro
+
 =head1 API
 
-=head2 Class Methods
-
-=cut
+=head2 Methods
 
 =head3 list
 
@@ -37,19 +39,20 @@ sub list {
     my $c = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
     return try {
-        my $macros_set = Koha::AdvancedEditorMacros->search({ -or => { shared => 1, borrowernumber => $patron->borrowernumber } });
-        my $macros = $c->objects->search( $macros_set, \&_to_model, \&_to_api );
-        return $c->render( status => 200, openapi => $macros );
+        my $macros_set = Koha::AdvancedEditorMacros->search(
+            {
+                -or =>
+                  { shared => 1, borrowernumber => $patron->borrowernumber }
+            }
+        );
+        my $macros = $c->objects->search( $macros_set );
+        return $c->render(
+            status  => 200,
+            openapi => $macros
+        );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs. $_"} );
-        }
+        $c->unhandled_exception($_);
     };
 
 }
@@ -123,15 +126,17 @@ sub add {
     }
 
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new( _to_model( $c->validation->param('body') ) );
-        $macro->store;
+        my $macro = Koha::AdvancedEditorMacro->new_from_api( $c->validation->param('body') );
+        $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
             openapi => $macro->to_api
         );
     }
-    catch { handle_error($_) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add_shared
@@ -148,15 +153,17 @@ sub add_shared {
                            openapi => { error => "To create private macros you must use advancededitor" } );
     }
     return try {
-        my $macro = Koha::AdvancedEditorMacro->new( _to_model( $c->validation->param('body') ) );
-        $macro->store;
+        my $macro = Koha::AdvancedEditorMacro->new_from_api( $c->validation->param('body') );
+        $macro->store->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
             openapi => $macro->to_api
         );
     }
-    catch { handle_error($_) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 update
@@ -188,11 +195,13 @@ sub update {
 
     return try {
         my $params = $c->req->json;
-        $macro->set( _to_model($params) );
-        $macro->store();
+        $macro->set_from_api( $params );
+        $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $macro->to_api );
     }
-    catch { handle_error($_) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 update_shared
@@ -218,11 +227,13 @@ sub update_shared {
 
     return try {
         my $params = $c->req->json;
-        $macro->set( _to_model($params) );
-        $macro->store();
+        $macro->set_from_api( $params );
+        $macro->store->discard_changes;
         return $c->render( status => 200, openapi => $macro->to_api );
     }
-    catch { handle_error($_) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 delete
@@ -253,9 +264,11 @@ sub delete {
 
     return try {
         $macro->delete;
-        return $c->render( status => 200, openapi => "" );
+        return $c->render( status => 204, openapi => q{} );
     }
-    catch { handle_error($_) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 delete_shared
@@ -280,114 +293,11 @@ sub delete_shared {
 
     return try {
         $macro->delete;
-        return $c->render( status => 200, openapi => "" );
+        return $c->render( status => 204, openapi => q{} );
     }
-    catch { handle_error($_,$c) };
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
-
-=head3 _handle_error
-
-Helper function that passes exception or error
-
-=cut
-
-sub _handle_error {
-    my ($err,$c) = @_;
-    if ( $err->isa('DBIx::Class::Exception') ) {
-        return $c->render( status  => 500,
-                           openapi => { error => $err->{msg} } );
-    }
-    else {
-        return $c->render( status => 500,
-            openapi => { error => "Something went wrong, check the logs."} );
-    }
-};
-
-
-=head3 _to_api
-
-Helper function that maps a hashref of Koha::AdvancedEditorMacro attributes into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $macro = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::AdvancedEditorMacro::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::AdvancedEditorMacro::to_api_mapping->{$column};
-        if (    exists $macro->{ $column }
-             && defined $mapped_column )
-        {
-            # key /= undef
-            $macro->{ $mapped_column } = delete $macro->{ $column };
-        }
-        elsif (    exists $macro->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef => to be deleted
-            delete $macro->{ $column };
-        }
-    }
-
-    return $macro;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::AdvancedEditorMacros
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $macro = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::AdvancedEditorMacro::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::AdvancedEditorMacro::to_model_mapping->{$attribute};
-        if (    exists $macro->{ $attribute }
-             && defined $mapped_attribute )
-        {
-            # key /= undef
-            $macro->{ $mapped_attribute } = delete $macro->{ $attribute };
-        }
-        elsif (    exists $macro->{ $attribute }
-                && !defined $mapped_attribute )
-        {
-            # key == undef => to be deleted
-            delete $macro->{ $attribute };
-        }
-    }
-
-    if ( exists $macro->{shared} ) {
-        $macro->{shared} = ($macro->{shared}) ? 1 : 0;
-    }
-
-
-    return $macro;
-}
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    id                  => 'macro_id',
-    macro               => 'macro_text',
-    borrowernumber      => 'patron_id',
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    macro_id         => 'id',
-    macro_text       => 'macro',
-    patron_id        => 'borrowernumber',
-};
 
 1;

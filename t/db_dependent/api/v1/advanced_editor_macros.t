@@ -151,7 +151,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/shared/" . $macro_1->id )
       ->status_is( 200, 'Can get a shared macro via shared endpoint' )
-      ->json_is( '' => Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro_1->TO_JSON ), 'Macro correctly retrieved' );
+      ->json_is( $macro_1->to_api );
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_2->id )
       ->status_is( 403, 'Cannot access another users macro' )
@@ -159,7 +159,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_3->id )
       ->status_is( 200, 'Can get your own private macro' )
-      ->json_is( '' => Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro_3->TO_JSON ), 'Macro correctly retrieved' );
+      ->json_is( $macro_3->to_api );
 
     my $non_existent_code = $macro_1->id;
     $macro_1->delete;
@@ -202,7 +202,7 @@ subtest 'add() tests' => sub {
         class => 'Koha::AdvancedEditorMacros',
         value => { shared => 0 }
     });
-    my $macro_values     = Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro->TO_JSON );
+    my $macro_values = $macro->to_api;
     delete $macro_values->{macro_id};
     $macro->delete;
 
@@ -317,7 +317,7 @@ subtest 'update() tests' => sub {
     });
     my $macro_id = $macro->id;
     my $macro_2_id = $macro_2->id;
-    my $macro_values     = Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro->TO_JSON );
+    my $macro_values = $macro->to_api;
     delete $macro_values->{macro_id};
 
     # Unauthorized attempt to update
@@ -448,7 +448,7 @@ subtest 'delete() tests' => sub {
       ->status_is(403, "Cannot delete macro without permission");
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id")
-      ->status_is(200, 'Can delete macro with permission');
+      ->status_is( 204, 'Can delete macro with permission');
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id")
       ->status_is(403, 'Cannot delete other users macro with permission');
@@ -469,7 +469,7 @@ subtest 'delete() tests' => sub {
     $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id")
       ->status_is(403, 'Cannot delete other users shared macro with permission on private endpoint');
     $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_2_id")
-      ->status_is(200, 'Can delete other users shared macro with permission');
+      ->status_is(204, 'Can delete other users shared macro with permission');
 
 };
 
