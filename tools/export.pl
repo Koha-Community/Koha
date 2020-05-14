@@ -196,6 +196,22 @@ if ( $op eq "export" ) {
             @record_ids = grep $record_ids{$_}, @filter_record_ids;
         }
 
+        my $export_items_bundle_contents = $query->param('export_items_bundle_contents');
+        if ($export_items_bundle_contents and $record_type eq 'bibs') {
+            my $schema = Koha::Database->new->schema;
+            my $items_bundle_rs = $schema->resultset('ItemBundle');
+            foreach my $itemnumber (@itemnumbers) {
+                my @item_bundle_items = $items_bundle_rs->search({ host => $itemnumber });
+                foreach my $item_bundle_item (@item_bundle_items) {
+                    my $biblionumber = $item_bundle_item->item->get_column('biblionumber');
+                    my $itemnumber = $item_bundle_item->get_column('item');
+                    push @record_ids, $biblionumber;
+                    push @itemnumbers, $itemnumber;
+                }
+            }
+            @record_ids = uniq @record_ids;
+        }
+
         print CGI->new->header(
             -type       => 'application/octet-stream',
             -charset    => 'utf-8',
