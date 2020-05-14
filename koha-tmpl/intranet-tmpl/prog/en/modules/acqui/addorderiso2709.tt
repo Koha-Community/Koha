@@ -2,7 +2,6 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
-[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records
 [% IF ( batch_details ) %]
@@ -13,6 +12,19 @@
 </title>
 <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
+[%# As long as cataloging plugins rely on <script> tags added inline, JS must be in the header %]
+[% Asset.js("js/acquisitions-menu.js") | $raw %]
+[% INCLUDE 'datatables.inc' %]
+[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+[% Asset.js("js/acq.js") | $raw %]
+[% Asset.js("js/funds_sorts.js") | $raw %]
+[% Asset.js("js/addorderiso2709.js") | $raw %]
+<script>
+    var ERR_NO_RECORD_SELECTED = _("There is no record selected");
+    var ERR_INVALID_QUANTITY = _("quantity values are not filled in or are not numbers");
+    var ERR_FUNDS_MISSING = _("Some budgets are not defined in item records");
+    var MSG_LOADING = _("Loading");
+</script>
 </head>
 
 <body id="acq_addorderiso2709" class="acq">
@@ -431,21 +443,5 @@
                 [% END %]
             </div> [% # /div.col-sm-6 %]
        </div> [% # /div.row %]
-
-
-[% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") | $raw %]
-    [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    [% Asset.js("js/acq.js") | $raw %]
-    [% Asset.js("js/funds_sorts.js") | $raw %]
-    [% Asset.js("js/addorderiso2709.js") | $raw %]
-    <script>
-        var ERR_NO_RECORD_SELECTED = _("There is no record selected");
-        var ERR_INVALID_QUANTITY = _("quantity values are not filled in or are not numbers");
-        var ERR_FUNDS_MISSING = _("Some budgets are not defined in item records");
-        var MSG_LOADING = _("Loading");
-    </script>
-[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
