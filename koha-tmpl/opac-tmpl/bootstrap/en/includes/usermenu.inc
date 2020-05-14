@@ -1,8 +1,7 @@
 [% USE Koha %]
 [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
     <div id="menu">
-        <h4><a href="#" class="menu-collapse-toggle">Your account menu</a></h4>
-        <ul class="menu-collapse">
+        <ul>
             [% IF ( userview ) %]
                 <li class="active">
             [% ELSE %]

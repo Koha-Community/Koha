@@ -1,4 +1,4 @@
-<div id="overdrive-login" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="overdrive-login-label" aria-hidden="true">
+<div id="overdrive-login" class="modal" tabindex="-1" role="dialog" aria-labelledby="overdrive-login-label" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="overdrive-login-label">Login</h3>

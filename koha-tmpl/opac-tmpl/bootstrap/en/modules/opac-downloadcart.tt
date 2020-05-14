@@ -6,9 +6,9 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-downloadcart' bodyclass='popup' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="userdownloadcart">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
+                    <div id="userdownloadcart" class="maincontent">
                         <h1>Download cart</h1>
                         <form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
                             <select name="format" id="format">
@@ -30,7 +30,7 @@
                         <p><a class="close" href="#">Close this window</a></p>
                     </div> <!-- / #userdownloadcart -->
                 </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]

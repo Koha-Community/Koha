@@ -8,20 +8,28 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Updates to your record</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">Updates to your record</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row">
+                <div class="col-lg-2">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                     </div>
                 </div>
-                <div class="span10">
+                <div class="col-10 order-first order-lg-2">
                     <div id="update-submitted" class="maincontent">
                         <div class="alert alert-success">
                             <h3>Thank you</h3>
@@ -32,10 +40,10 @@
                           [% END %]
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div> <!-- /.col-10 -->
+            </div> <!-- /.row -->
+        </div> <!-- /.container-fluid -->
+    </div> <!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %][% END %]

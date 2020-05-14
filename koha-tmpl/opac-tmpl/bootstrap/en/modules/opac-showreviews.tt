@@ -11,22 +11,28 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Recent comments</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Recent comments</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                    <div id="showreviews" class="searchresults maincontent">
                         <h3>Recent comments <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink" aria-label="Subscribe to recent comments"><i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to recent comments"></i></a></h3>
@@ -183,18 +189,18 @@
                             </div>
                         [% END # / IF PAGE_NUMBERS %]
                     </div> <!-- / #showreviews -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script>
-    //<![CDATA[
-        $(document).ready(function(){
-            [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-        });
-    //]]>
-</script>
+    [% IF ( GoogleJackets ) %]
+        <script>
+            $(document).ready(function(){
+                KOHA.Google.GetCoverFromIsbn();
+            });
+        </script>
+    [% END %]
 [% END %]

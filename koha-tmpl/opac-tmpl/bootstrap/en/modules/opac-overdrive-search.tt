@@ -11,19 +11,25 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">OverDrive search for '[% q | html %]'</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">OverDrive search for '[% q | html %]'</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row">
+                <div class="col-lg-2">
                     [% IF ( OpacNav || OpacNavBottom ) %]
                         [% INCLUDE 'navigation.inc' %]
                     [% END %]
                 </div>
-                <div class="span10">
+                <div class="col-lg-10 order-first order-md-first order-lg-2">
                     <div id="overdrive-results-content" class="maincontent searchresults">
                         <h1>OverDrive search for '[% q | html %]'</h1>
                             <div id="breadcrumbs">
@@ -31,8 +37,8 @@
                             </div>
 
                             <div id="top-pages">
-                                <div class="pagination pagination-small">
-                                </div>
+                                <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
+                                </nav>
                             </div>
 
                             <table id="overdrive-results-list" class="table table-striped">
@@ -41,13 +47,13 @@
                             </table>
 
                             <div id="bottom-pages">
-                                <div class="pagination pagination-small">
-                                </div>
+                                <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
+                                </nav>
                             </div>
 
                     </div> <!-- / #overdrive-results-content -->
                 </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
@@ -60,152 +66,152 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("js/overdrive.js") | $raw %]
-<script>
-var OD_password_required = [% IF Koha.Preference('OverDrivePasswordRequired') %]1[% ELSE %]0[% END %];
-var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) | html %]";
-var results_per_page = [% OPACnumSearchResults | html %];
+    [% Asset.js("js/overdrive.js") | $raw %]
+    <script>
+        var OD_password_required = [% IF Koha.Preference('OverDrivePasswordRequired') %]1[% ELSE %]0[% END %];
+        var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) | html %]";
+        var results_per_page = [% OPACnumSearchResults | html %];
 
-function fetch_availability( prod, $tr ) {
-    var $availability_summary = $( '<span class="results_summary availability"></span>' );
-    $tr.find( '.mediatype' ).after( $availability_summary );
-    $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + _("Loading...") );
+        function fetch_availability( prod, $tr ) {
+            var $availability_summary = $( '<span class="results_summary availability"></span>' );
+            $tr.find( '.mediatype' ).after( $availability_summary );
+            $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + _("Loading...") );
 
-    KOHA.OverDrive.Get(
-        prod.links.availability.href,
-        {},
-        function ( data ) {
-            if ( data.error ) return;
+            KOHA.OverDrive.Get(
+                prod.links.availability.href,
+                {},
+                function ( data ) {
+                    if ( data.error ) return;
 
-            $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><strong>' + _("Items available:") + ' </strong>' +  data.copiesAvailable + " " + _("out of") + ' ' + data.copiesOwned + '</span>' );
+                    $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Items available:") + ' </b>' +  data.copiesAvailable + " " + _("out of") + ' ' + data.copiesOwned + '</span>' );
 
-            if ( data.numberOfHolds ) {
-                $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
-            }
+                    if ( data.numberOfHolds ) {
+                        $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
+                    }
 
-            $tr.find( '.info' ).each(function() {
-                KOHA.OverDriveCirculation.add_actions(this, data.id, data.copiesAvailable);
-            });
-        }
-    );
-}
-
-function search( offset ) {
-    $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
-
-    KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, results_per_page, offset, function( data ) {
-        if ( data.error ) {
-            $( '#overdrive-status' ).html( '<strong class="unavailable">' + _("Error searching OverDrive collection.") + '</strong>' );
-            return;
+                    $tr.find( '.info' ).each(function() {
+                        KOHA.OverDriveCirculation.add_actions(this, data.id, data.copiesAvailable);
+                    });
+                }
+            );
         }
 
-        if ( !data.totalItems ) {
-            $( '#overdrive-status' ).html( '<strong>' + _("No results found in the library's OverDrive collection.") + '</strong>' );
-            return;
-        }
+        function search( offset ) {
+            $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
 
-        $( '#overdrive-results-list tbody' ).empty();
+            KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, results_per_page, offset, function( data ) {
+                if ( data.error ) {
+                    $( '#overdrive-status' ).html( '<strong class="unavailable">' + _("Error searching OverDrive collection.") + '</strong>' );
+                    return;
+                }
 
-        $( '#overdrive-status' ).html( '<strong>' + _("Found") + ' ' + data.totalItems + ' ' + _("results in the library's OverDrive collection.") + '</strong>' );
+                if ( !data.totalItems ) {
+                    $( '#overdrive-status' ).html( '<strong>' + _("No results found in the library's OverDrive collection.") + '</strong>' );
+                    return;
+                }
 
-        for ( var i = 0; data.products[i]; i++ ) {
-            var prod = data.products[i];
-            var results = [];
+                $( '#overdrive-results-list tbody' ).empty();
 
-            results.push( '<tr>' );
+                $( '#overdrive-status' ).html( '<strong>' + _("Found") + ' ' + data.totalItems + ' ' + _("results in the library's OverDrive collection.") + '</strong>' );
 
-            results.push( '<td class="info"><a class="title" href="', prod.contentDetails[0].href, '">' );
-            results.push( prod.title );
-            if ( prod.subtitle ) results.push( ', ', prod.subtitle );
-            results.push( '</a>' );
-            if ( prod.primaryCreator ) results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
-            results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
+                for ( var i = 0; data.products[i]; i++ ) {
+                    var prod = data.products[i];
+                    var results = [];
 
-            if ( prod.starRating ) {
-                var rating_value = Math.round( prod.starRating );
-                results.push( '<div class="results_summary ratings">' );
-                results.push( '<div class="br-wrapper br-theme-fontawesome-stars">');
-                results.push( '<div class="br-widget br-readonly">');
-                for ( var rating = 1; rating <= 5; rating++ ) {
+                    results.push( '<tr>' );
 
-                    results.push( '<a href="#"' );
-                    if( rating == rating_value ){
-                        results.push( ' class="br-selected br-current"></a>' );
-                    } else if( rating_value > rating ){
-                        results.push( ' class="br-selected"></a>' );
+                    results.push( '<td class="info"><a class="title" href="', prod.contentDetails[0].href, '">' );
+                    results.push( prod.title );
+                    if ( prod.subtitle ) results.push( ', ', prod.subtitle );
+                    results.push( '</a>' );
+                    if ( prod.primaryCreator ) results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
+                    results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
+
+                    if ( prod.starRating ) {
+                        var rating_value = Math.round( prod.starRating );
+                        results.push( '<div class="results_summary ratings">' );
+                        results.push( '<div class="br-wrapper br-theme-fontawesome-stars">');
+                        results.push( '<div class="br-widget br-readonly">');
+                        for ( var rating = 1; rating <= 5; rating++ ) {
+
+                            results.push( '<a href="#"' );
+                            if( rating == rating_value ){
+                                results.push( ' class="br-selected br-current"></a>' );
+                            } else if( rating_value > rating ){
+                                results.push( ' class="br-selected"></a>' );
+                            } else {
+                                results.push( '></a>');
+                            }
+                        }
+                        results.push( '</div>' );
+                        results.push( '</div>' );
+                        results.push( '</div>' );
+                    }
+
+                    results.push( '</td>' );
+
+                    results.push( '<td>' );
+                    if ( prod.images.thumbnail ) {
+                        results.push( '<a href="', prod.contentDetails[0].href, '">' );
+                        results.push( '<img class="thumbnail" src="', prod.images.thumbnail.href, '" />' );
+                        results.push( '</a>' );
+                    }
+                    results.push( '</td>' );
+
+                    results.push( '</tr>' );
+                    var $tr = $( results.join( '' ));
+                    $( '#overdrive-results-list tbody' ).append( $tr );
+
+                    fetch_availability( prod, $tr );
+                }
+
+                $( '#overdrive-results-list tr:odd' ).addClass( 'highlight' );
+
+                var pages = [];
+                var cur_page = offset / results_per_page;
+                var max_page = Math.floor( data.totalItems / results_per_page );
+
+                if ( cur_page != 0 ) {
+                    pages.push( '<li class="page-item"><a class="page-link od-nav" href="#" data-offset="' + (offset - results_per_page) + '">&laquo; ' + _("Previous") + '</a></li>' );
+                }
+
+                for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
+                    if ( page == cur_page ) {
+                        pages.push( ' <li class="page-item disabled"><a class="page-link" href="#">' + ( page + 1 ) + '</a></li>' );
                     } else {
-                        results.push( '></a>');
+                        pages.push( ' <li class="page-item"><a class="page-link od-nav" href="#" data-offset="' + ( page * results_per_page ) + '">' + ( page + 1 ) + '</a></li>' );
                     }
                 }
-                results.push( '</div>' );
-                results.push( '</div>' );
-                results.push( '</div>' );
-            }
 
-            results.push( '</td>' );
+                if ( cur_page < max_page ) {
+                    pages.push( ' <li class="page-item"><a class="page-link od-nav" href="#" data-offset="' + (offset + results_per_page) + '">' + _("Next") + ' &raquo;</a></li>' );
+                }
 
-            results.push( '<td>' );
-            if ( prod.images.thumbnail ) {
-                results.push( '<a href="', prod.contentDetails[0].href, '">' );
-                results.push( '<img class="thumbnail" src="', prod.images.thumbnail.href, '" />' );
-                results.push( '</a>' );
-            }
-            results.push( '</td>' );
+                if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul class="pagination">' + pages.join( '' ) + '</ul>');
 
-            results.push( '</tr>' );
-            var $tr = $( results.join( '' ));
-            $( '#overdrive-results-list tbody' ).append( $tr );
-
-            fetch_availability( prod, $tr );
+            } );
         }
 
-        $( '#overdrive-results-list tr:odd' ).addClass( 'highlight' );
+        $( document ).ready( function() {
+            $( '#breadcrumbs p' )
+                .append( ' ' )
+                .append( '<span id="overdrive-status"></span>' );
 
-        var pages = [];
-        var cur_page = offset / results_per_page;
-        var max_page = Math.floor( data.totalItems / results_per_page );
+            $( document ).on( 'click', 'a.od-nav', function() {
+                search( $( this ).data( 'offset' ) );
+                return false;
+            });
 
-        if ( cur_page != 0 ) {
-            pages.push( '<li><a class="od-nav" href="#" data-offset="' + (offset - results_per_page) + '">&laquo; ' + _("Previous") + '</a></li>' );
-        }
-
-        for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
-            if ( page == cur_page ) {
-                pages.push( ' <li class="active"><a href="#">' + ( page + 1 ) + '</a></li>' );
-            } else {
-                pages.push( ' <li><a class="od-nav" href="#" data-offset="' + ( page * results_per_page ) + '">' + ( page + 1 ) + '</a></li>' );
-            }
-        }
-
-        if ( cur_page < max_page ) {
-            pages.push( ' <li><a class="od-nav" href="#" data-offset="' + (offset + results_per_page) + '">' + _("Next") + ' &raquo;</a></li>' );
-        }
-
-        if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
-
-    } );
-}
-
-$( document ).ready( function() {
-    $( '#breadcrumbs p' )
-        .append( ' ' )
-        .append( '<span id="overdrive-status"></span>' );
-
-    $( document ).on( 'click', 'a.od-nav', function() {
-        search( $( this ).data( 'offset' ) );
-        return false;
-    });
-
-    [% IF ( overdrive_error ) %]
-    KOHA.OverDriveCirculation.display_error("#breadcrumbs", "[% overdrive_error.dquote | html %]");
-    [% END %]
-    [% IF ( loggedinusername and Koha.Preference('OverDriveCirculation') ) %]
-    KOHA.OverDriveCirculation.with_account_details("#breadcrumbs", function() {
-        search( 0 );
-    });
-    [% ELSE %]
-        search( 0 );
-    [% END %]
-} );
-</script>
+            [% IF ( overdrive_error ) %]
+                KOHA.OverDriveCirculation.display_error("#breadcrumbs", "[% overdrive_error.dquote | html %]");
+            [% END %]
+            [% IF ( loggedinusername and Koha.Preference('OverDriveCirculation') ) %]
+                KOHA.OverDriveCirculation.with_account_details("#breadcrumbs", function() {
+                    search( 0 );
+                });
+            [% ELSE %]
+                search( 0 );
+            [% END %]
+        });
+    </script>
 [% END %]

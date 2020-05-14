@@ -8,36 +8,42 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Register a new account</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Register a new account</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav ) %]
-                    <div class="span2">
-                        <div id="opacnav">
+                    <div class="col-lg-2">
+                        <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
-                    <div id="reistration-confirmation-pending" class="maincontent">
+                    <div id="registration-confirmation-pending" class="maincontent">
                         <div id="confirmation-pending" class="alert alert-info">
                             <h1>Please confirm your registration</h1>
 
                             <p>A confirmation email will be sent shortly to the email address <strong>[% email | html %]</strong>.</p>
 
                             <p>Your account will not be activated until you follow the link provided in the confirmation email.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        </div> <!-- /#confirmation-pending -->
+                    </div> <!-- /#registration-confirmation-pending -->
+                </div> <!-- /.col/10 -->
+            </div> <!-- /.row -->
+        </div> <!-- /.container-fluid -->
+    </div> <!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %][% END %]

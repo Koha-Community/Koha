@@ -1,3 +1,82 @@
+/* Bootstrap variable customizations */
+$headings-color: #727272;
+$headings-font-weight: 600;
+$enable-gradients: false;
+
+$info:#2679cc;
+$danger: rgb(185, 32, 32);
+
+$font-size-base: 1rem;
+$h1-font-size: $font-size-base * 1.5;
+$h2-font-size: $font-size-base * 1.4;
+$h3-font-size: $font-size-base * 1.3;
+$h4-font-size: $font-size-base * 1.2;
+$h5-font-size: $font-size-base * 1.1;
+$h6-font-size: $font-size-base;
+
+$input-btn-focus-width: 1px;
+$input-btn-focus-color: #85CA11;
+$input-btn-focus-box-shadow: 0 1px 1px $input-btn-focus-width $input-btn-focus-color;
+
+$color: #999999;
+$links: #0076B2;
+$links-hover: #005580;
+$footer-height: 45px;
+
+$sci-link-color: #0076B6;
+$sci-heading-color: #727272;
+
+@mixin shadowed {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
+}
+
+@mixin border-radius-all($radius: 3px) {
+    border-radius: $radius;
+}
+
+
+/* Bootstrap imports */
+@import "../../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../../node_modules/bootstrap/scss/mixins";
+@import "../../../../../node_modules/bootstrap/scss/alert";
+// @import "../../../../../node_modules/bootstrap/scss/badge";
+@import "../../../../../node_modules/bootstrap/scss/breadcrumb";
+@import "../../../../../node_modules/bootstrap/scss/button-group";
+@import "../../../../../node_modules/bootstrap/scss/buttons";
+// @import "../../../../../node_modules/bootstrap/scss/card";
+// @import "../../../../../node_modules/bootstrap/scss/carousel";
+@import "../../../../../node_modules/bootstrap/scss/close";
+// @import "../../../../../node_modules/bootstrap/scss/code";
+@import "../../../../../node_modules/bootstrap/scss/custom-forms";
+@import "../../../../../node_modules/bootstrap/scss/dropdown";
+@import "../../../../../node_modules/bootstrap/scss/forms";
+@import "../../../../../node_modules/bootstrap/scss/grid";
+// @import "../../../../../node_modules/bootstrap/scss/images";
+@import "../../../../../node_modules/bootstrap/scss/input-group";
+// @import "../../../../../node_modules/bootstrap/scss/jumbotron";
+// @import "../../../../../node_modules/bootstrap/scss/list-group";
+// @import "../../../../../node_modules/bootstrap/scss/media";
+@import "../../../../../node_modules/bootstrap/scss/modal";
+@import "../../../../../node_modules/bootstrap/scss/navbar";
+@import "../../../../../node_modules/bootstrap/scss/nav";
+@import "../../../../../node_modules/bootstrap/scss/pagination";
+// @import "../../../../../node_modules/bootstrap/scss/popover";
+@import "../../../../../node_modules/bootstrap/scss/print";
+// @import "../../../../../node_modules/bootstrap/scss/progress";
+@import "../../../../../node_modules/bootstrap/scss/reboot";
+@import "../../../../../node_modules/bootstrap/scss/root";
+// @import "../../../../../node_modules/bootstrap/scss/spinners";
+@import "../../../../../node_modules/bootstrap/scss/tables";
+// @import "../../../../../node_modules/bootstrap/scss/toasts";
+// @import "../../../../../node_modules/bootstrap/scss/tooltip";
+@import "../../../../../node_modules/bootstrap/scss/transitions";
+@import "../../../../../node_modules/bootstrap/scss/type";
+@import "../../../../../node_modules/bootstrap/scss/utilities";
+
+/* Koha imports */
+@import "fonts";
+
 // Sticky footer styles
 html,
 body {
@@ -7,12 +86,657 @@ body {
 
 body {
     background: #FCF9FC none;
-    font-family: sans-serif;
-    font-size: 16px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+a {
+    &:link,
+    &:visited {
+        color: $links;
+
+        &.btn {
+            color: #FFF;
+
+            &.btn-link {
+                color: $links;
+
+                &.disabled {
+                    color: #333;
+                }
+            }
+        }
+    }
+}
+
+a,
+button {
+    &:hover,
+    &:active {
+        color: $links-hover;
+
+        &.btn {
+            color: #FFF;
+
+            &.btn-link {}
+        }
+    }
+
+    &.btn-link {
+
+        &:focus,
+        &:hover {
+            // border: 1px solid $input-btn-focus-color;
+            box-shadow: none;
+            text-decoration: none;
+        }
+    }
+}
+
+caption {
+    caption-side: top;
+    color: #727272;
+    font-size: 110%;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+}
+
+h1 {
+    &#libraryname {
+        background: transparent url( "../images/logo-koha.png" ) no-repeat scroll 0%;
+        border: 0;
+        float: left !important;
+        margin: 0;
+        padding: 0;
+        width: 120px;
+
+        a {
+            border: 0;
+            cursor: pointer;
+            display: block;
+            height: 0 !important;
+            margin: 0;
+            overflow: hidden;
+            padding: 40px 0 0;
+            text-decoration: none;
+            width: 120px;
+        }
+    }
+}
+
+.dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+
+.fa {
+    &.fa-icon-black,
+    &.fa-icon-white {
+        color: #000;
+    }
+
+    &.danger {
+        color: #C00;
+    }
+}
+
+.navbar-nav {
+    margin-right: 0;
+
+    & > li {
+        & > a {
+            color: #777777;
+            font-weight: bold;
+        }
+
+        & > .dropdown-menu {
+            &.dropdown-menu-right {
+                &::after {
+                    left: unset;
+                    right: 10px;
+                }
+
+                &::before {
+                    left: unset;
+                    right: 9px;
+                }
+            }
+        }
+    }
+
+}
+
+.main {
+    background-color: #FFF;
+    border: 1px solid #F0F3F3;
+    margin: 15px;
+    padding: 1rem 0;
+}
+
+.alert {
+    &.alert-info,
+    &.alert-warning {
+        color: #000;
+    }
+}
+
+.btn-primary,
+.btn-primary:link,
+.btn-primary:visited {
+    $base-bg: #77b50f;
+    background-color: $base-bg;
+    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+    background-position: 0;
+    border: 1px solid darken( $base-bg, 5% );
+    font-family: 'NotoSans';
+
+    &:hover,
+    &:active,
+    &:focus {
+        $base-bg: darken( $base-bg, 2);
+        background-color: $base-bg;
+        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+        border-color: darken($base-bg, 5%);
+        box-shadow: 0 0 0 1px lighten(saturate($base-bg, 0.5), 4);
+    }
+}
+
+.btn-danger,
+.btn-danger:link,
+.btn-danger:visited {
+    $base-bg: #B92020;
+    background-color: $base-bg;
+    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+    background-position: 0;
+    border: 1px solid darken( $base-bg, 5% );
+    font-family: 'NotoSans';
+
+    &:hover,
+    &:active,
+    &:focus {
+        $base-bg: darken( $base-bg, 2);
+        background-color: $base-bg;
+        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+    }
+}
+
+input[type="text"],
+input[type="password"],
+select,
+textarea,
+.form-control {
+    &:focus {
+        border-color: #85ca11;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(194,228,136,.6)
+    }
+}
+
+[class^="icon-"] {
+    vertical-align: 0;
+}
+[class*=" icon-"] {
+    vertical-align: 0;
+}
+
+/* jQuery UI standard tabs */
+.ui-tabs-nav .ui-tabs-active a,
+.ui-tabs-nav a:hover,
+.ui-tabs-nav a:focus,
+.ui-tabs-nav a:active,
+.ui-tabs-nav span.a {
+    background: none repeat scroll 0 0 transparent;
+    outline: 0 none;
+}
+
+.ui-widget,
+.ui-widget a,
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: 'NotoSans';
+    font-size: inherit;
+}
+
+ul {
+    &.ui-tabs-nav {
+        li {
+            list-style: none;
+        }
+    }
+}
+
+.ui-tabs {
+    .ui-tabs-nav {
+        li {
+            background: #F0F3F3 none;
+            border-color: #D8D8D8;
+            margin-right: .4em;
+
+            &.ui-tabs-active {
+                background-color: #FFF;
+                border: 1px solid #D8D8D8;
+                border-bottom: 0;
+
+                a {
+                    color: #727272;
+                    font-weight: bold;
+                }
+
+                &.ui-state-hover {
+                    background: #FFF none;
+                    &.ui-state-active {
+                        background: #FFF none;
+                    }
+                }
+            }
+
+            &.ui-state-default.ui-state-hover {
+                background: #F3F3F3 none;
+            }
+        }
+    }
+
+    .ui-tabs-panel {
+        border: 1px solid #D8D8D8;
+        margin-bottom: 1em;
+    }
+
+    &.ui-widget-content {
+        background: transparent none;
+        border: 0;
+    }
+
+    .ui-state-default {
+        a {
+            &:link {
+                color: #006699;
+            }
+
+            &:visited {
+                color: #006699;
+            }
+        }
+    }
+
+    .ui-state-hover a {
+        &:link {
+            color: #990033;
+        }
+
+        &:visited {
+            color: #990033;
+        }
+    }
+}
+
+.ui-tabs-nav {
+    &.ui-widget-header {
+        background: none;
+        border: 0;
+    }
+}
+
+.ui-corner-top {
+    border-radius: 0px;
+}
+
+.statictabs {
+    ul {
+        background: none repeat scroll 0 0 transparent;
+        border: 0 none;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        color: #222222;
+        font-size: 100%;
+        font-weight: bold;
+        line-height: 1.3;
+        list-style: none outside none;
+        margin: 0;
+        outline: 0 none;
+        padding: .2em .2em 0;
+        text-decoration: none;
+
+        &::before {
+            content: "";
+            display: table;
+        }
+
+        &::after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+    }
+
+    li {
+        background: none repeat scroll 0 0 #E6F0F2;
+        border: 1px solid #B9D8D9;
+        border-bottom: 0 none !important;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        color: #555555;
+        float: left;
+        font-weight: normal;
+        list-style: none outside none;
+        margin-bottom: 0;
+        margin-right: .4em;
+        padding: 0;
+        position: relative;
+        top: 1px;
+        white-space: nowrap;
+
+        &.active {
+            background-color: #FFFFFF;
+            color: #212121;
+            font-weight: normal;
+            padding-bottom: 1px;
+
+            a {
+                background: none repeat scroll 0 0 transparent;
+                color: #000000;
+                cursor: text;
+                font-weight: bold;
+                outline: 0 none;
+            }
+        }
+
+        a {
+            color: #004D99;
+            cursor: pointer;
+            float: left;
+            padding: .5em 1em;
+            text-decoration: none;
+
+            &:hover {
+                background-color: #EDF4F5;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+                color: #538200;
+            }
+        }
+    }
+
+    .tabs-container {
+        background: none repeat scroll 0 0 transparent;
+        border: 1px solid #B9D8D9;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        color: #222222;
+        display: block;
+        padding: 1em 1.4em;
+    }
+}
+
+/* End jQueryUI tab styles */
+
+/* jQuery UI Datepicker */
+
+.ui-datepicker {
+    @include shadowed;
+    table {
+        border: 0;
+        border-collapse: collapse;
+        font-size: .9em;
+        margin: 0 0 .4em;
+        width: 100%;
+    }
+
+    th {
+        background: transparent none;
+        border: 0;
+        font-weight: bold;
+        padding: .7em .3em;
+        text-align: center;
+    }
+}
+
+.ui-datepicker-trigger {
+    margin: 0 3px;
+    vertical-align: middle;
+}
+
+/* End jQueryUI datepicker styles */
+
+
+/* jQueryUI Core */
+
+.ui-widget-content {
+    background: #FFFFFF none;
+    border: 1px solid #AAA;
+    color: #222222;
+
+    a:link,
+    a:visited {
+        color: $links;
+    }
+    a:hover,
+    a:active {
+        color: $links-hover;
+    }
+}
+
+.ui-widget-header {
+    background: #E6F0F2 none;
+    border: 1px solid #AAA;
+    color: #222222;
+    font-weight: bold;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    background: #F4F8F9 none;
+    border: 1px solid #AAA;
+    color: #555555;
+    font-weight: normal;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+    background: #E6F0F2 none;
+    border: 1px solid #AAA;
+    color: #212121;
+    font-weight: normal;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+    background: #FFFFFF none;
+    border: 1px solid #AAAAAA;
+    color: #212121;
+    font-weight: normal;
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+    background: #FBF9EE;
+    border: 1px solid #FCEFA1;
+    color: #363636;
+}
+
+.ui-state-error,
+.ui-widget-content .ui-state-error,
+.ui-widget-header .ui-state-error {
+    background: #FEF1EC;
+    border: 1px solid #CD0A0A;
+    color: #CD0A0A;
+}
+
+/* end jQueryUI core */
+
+.close {
+    color: #0088CC;
+    filter: none;
+    float: none;
+    font-size: inherit;
+    font-weight: normal;
+    opacity: inherit;
+    position: inherit;
+    right: auto;
+    text-shadow: none;
+    top: auto;
+}
+
+.close:hover {
+    color: #005580;
+    filter: inherit;
+    font-size: inherit;
+    opacity: inherit;
+}
+
+/* Redefine a new style for Bootstrap's class "close" since we use that already */
+/* Use <a class="closebtn" href="#">&times;</a> */
+
+.modal-header .closebtn {
+    margin-top: 2px;
+}
+
+.closebtn {
+    color: #000000;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    opacity: .2;
+    text-shadow: 0 1px 0 #FFFFFF;
+
+    &:hover {
+        color: #000000;
+        cursor: pointer;
+        opacity: .4;
+        text-decoration: none;
+    }
+}
+
+button {
+    &.btn-link {
+        color: $links;
+        &:focus,
+        &:hover {
+            color: $links-hover;
+            text-decoration: none;
+        }
+    }
+
+    &.closebtn {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    &.remove {
+        &:hover {
+            color: #900;
+
+            i {
+                &.fa {
+                    color: #c60000;
+                }
+            }
+        }
+    }
+}
+
+.btn-default {
+    color: #212529;
+    background-color: #666666;
+    border-color: #666666;
+}
+
+.btn-link {
+    &.btn-lg {
+        font-size: 100%;
+    }
+}
+
+.btn.disabled,
+.btn[disabled] {
+    &:hover {
+        color: #333;
+        filter: alpha(opacity=65);
+        opacity: 0.65;
+    }
+    i {
+        &.fa,
+        &.fa:hover {
+            color: #333;
+            filter: alpha(opacity=65);
+            opacity: 0.65;
+        }
+    }
+}
+
+.modal {
+    form {
+        margin: 0;
+    }
+}
+
+.nav-link {
+    &.active {
+        font-weight: bold;
+    }
+}
+
+.tab-content {
+    padding: 15px 0;
+}
+
+#logo {
+    background: transparent url( "../images/koha-green-logo.png" ) no-repeat scroll 0%;
+    border: 0;
+    float: left !important;
+    margin: 0;
+    padding: 0;
+    width: 100px;
+
+    a {
+        border: 0;
+        cursor: pointer;
+        display: block;
+        height: 0 !important;
+        margin: 0;
+        overflow: hidden;
+        padding: 40px 0 0;
+        text-decoration: none;
+        width: 100px;
+        &:focus {
+            background-color: transparent;
+        }
+    }
+}
+
+#changelanguage {
+    background-color: #FFF;
+    border-top: 1px solid #EEE;
+    padding: 0 1rem;
+    flex-shrink: 0;
+
+    .navbar-text {
+        font-weight: bold;
+    }
 }
 
 .fonts-loaded {
-    body {
+    body,
+    button,
+    input,
+    optgroup,
+    option,
+    select,
+    textarea {
         font-family: "NotoSans";
     }
 }
@@ -204,10 +928,31 @@ body {
     }
 }
 
+.dropdown-menu {
+    border-radius: 0px;
+    > li {
+        > a {
+            font-size: 90%;
+            &:hover {
+                background: #85ca11 none;
+            }
+            &:focus {
+            background: #85ca11 none;
+            }
+        }
+    }
+}
+
 #koha_url {
     p {
         color: #666666;
         float: right;
         margin: 0;
     }
+}
+
+#wrapper {
+    flex: 1 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
 }

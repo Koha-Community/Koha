@@ -9,14 +9,14 @@
 
     <div class="main">
         <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a></li>
             <li><a href="#">[% IF ( typeissue ) %]Subscribe to a subscription alert [% ELSIF ( typeissuecancel ) %] Unsubscribe from a subscription alert [% END %]</a></li>
         </ul>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
                     <div id="useralertsubscribe" class="maincontent">
                         [% IF ( typeissue ) %]
                             <h1>Subscribe to a subscription alert</h1>
@@ -28,7 +28,7 @@
                                 <input type="hidden" name="referer" value="[% referer | html %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="alert_confirmed">
-                                <input type="submit" class="btn" value="Yes">
+                                <input type="submit" class="btn btn-primary" value="Yes">
                                 <a class="cancel" href="opac-serial-issues.pl?biblionumber=[% biblionumber | html %]" >No</a>
                             </form>
                         [% END %]
@@ -42,13 +42,13 @@
                                 <input type="hidden" name="referer" value="[% referer | html %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="cancel_confirmed">
-                                <input type="submit" value="Yes" class="btn">
+                                <input type="submit" value="Yes" class="btn btn-primary">
                                 <a href="opac-serial-issues.pl?biblionumber=[% biblionumber | uri %]" class="cancel">No</a>
                             </form>
                         [% END %]
                     </div> <!-- / #useralertsubscribe -->
                 </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

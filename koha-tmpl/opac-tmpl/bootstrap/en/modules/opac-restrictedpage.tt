@@ -20,29 +20,35 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a></li>
-        [% IF Koha.Preference('RestrictedPageTitle') %]
-            <li> <span class="divider">&rsaquo;</span> [% Koha.Preference('RestrictedPageTitle') | html %]</li>
-        [% END %]
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+               <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            [% IF Koha.Preference('RestrictedPageTitle') %]
+                <li class="breadcrumb-item active" aria-current="page">
+                    [% Koha.Preference('RestrictedPageTitle') | html %]
+                </li>
+            [% END %]
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="restrictedcontent" class="maincontent">
                     [% IF Koha.Preference('RestrictedPageTitle') %]
                         <h1>[% Koha.Preference('RestrictedPageTitle') | html %]</h1>
                     [% END %]
                     [% Koha.Preference('RestrictedPageContent') | $raw %]
                 </div>
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 

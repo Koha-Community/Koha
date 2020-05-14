@@ -87,7 +87,7 @@
                             </select></li>
                 <li>
                     <input type="hidden" name="do_it" value="1" />
-                    <input type="submit" class="btn" value="Submit" />
+                    <input type="submit" class="btn btn-primary" value="Submit" />
                 </li>
             </ul>
     </form>

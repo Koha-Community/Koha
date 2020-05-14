@@ -9,33 +9,34 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a>
-        <span class="divider">&rsaquo;</span></li>
-
-        <li><a href="#">Browse search</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Browse search</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference('OpacBrowseSearch') %]
-        [% IF ( OpacNav || OpacNavBottom ) %]
-
-            <div class="span2">
-                <div id="navigation">
-                [% INCLUDE 'navigation.inc' %]
+        <div class="row">
+            [% IF ( OpacNav || OpacNavBottom ) %]
+                <div class="col-lg-2">
+                    <div id="navigation">
+                    [% INCLUDE 'navigation.inc' %]
+                    </div>
                 </div>
-            </div>
-        [% END %]
-
-        [% IF ( OpacNav ) %]
-
-            <div class="span10">
-            [% ELSE %]
-
-            <div class="span12">
             [% END %]
 
+            [% IF ( OpacNav ) %]
+                <div class="col-10 order-first order-md-first order-lg-2">
+            [% ELSE %]
+                <div class="col order-first order-md-first order-lg-2">
+            [% END %]
+
+            [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference('OpacBrowseSearch') %]
                 <div id="browse-search" class="maincontent">
                     <h1>Browse search</h1>
 
@@ -60,16 +61,16 @@
                     <p id="browse-suggestionserror" class="error hidden">
                     An error occurred, please try again.</p>
 
-                    <div id="browse-resultswrapper" class="hidden">
-                        <ul id="browse-searchresults" class="span3" start="-1" aria-live="polite">
+                    <div id="browse-resultswrapper" class="d-none">
+                        <ul id="browse-searchresults" start="-1" aria-live="polite">
                             <li class="loading hidden"><img src="[% interface | html %]/[% theme |html %]/images/loading.gif" alt=""> Loading</li>
 
                             <li class="no-results hidden">Sorry, there are no results, try a different search term.</li>
                         </ul>
 
-                        <h3 id="browse-selection" class="span9"></h3>
+                        <h3 id="browse-selection"></h3>
 
-                        <div id="browse-selectionsearch" class="span9 hidden">
+                        <div id="browse-selectionsearch" class="d-none">
                             <div class="loading hidden">
                                 <img src="[% interface | html %]/[% theme | html %]/images/loading.gif" alt=""> Loading
                             </div>
@@ -78,17 +79,18 @@
 
                             <ol aria-live="polite"></ol>
                         </div>
-                    </div><!-- / .results-wrapper -->
-                </div><!-- / .userbrowser -->
-            </div><!-- / .span10 -->
-    [% ELSE %]
-        <h3>This feature is not enabled</h3>
-    [% END %]
-        </div><!-- / .row-fluid -->
+                    </div><!-- / #browse-resultswrapper -->
+                </div><!-- /#browse-search -->
+            [% ELSE %]
+                <h3>This feature is not enabled</h3>
+            [% END %]
+
+            </div><!-- / .col/col-10 -->
+        </div><!-- / .row -->
     </div><!-- / .container-fluid -->
 </div><!-- / .main -->
+
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("/js/browse.js") | $raw %]
-</script>
+    [% Asset.js("/js/browse.js") | $raw %]
 [% END %]

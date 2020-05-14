@@ -1,7 +1,6 @@
 /* global enquire readCookie updateBasket delCookie */
 enquire.register("screen and (max-width:608px)", {
     match : function() {
-        $("#masthead_search").insertAfter("#select_library");
         if($("body.scrollto").length > 0){
             $("body.scrollto").animate({
                 scrollTop: $(".maincontent").offset().top

@@ -15,20 +15,29 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Your purchase suggestions</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">Your purchase suggestions</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row">
+                <div class="col col-lg-2 order-2 order-lg-1">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                     </div>
                 </div>
-                <div class="span10">
+                <div class="col-md-12 col-lg-10 order-1">
+
                     <div id="usersuggestions" class="maincontent">
                         [% IF ( op_add ) %]
                             [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
@@ -209,14 +218,14 @@
                                     <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone | html %]" />
                                     [% IF need_confirm # Confirm that we want a duplicate %]
                                         <input type="hidden" name="op" value="add_confirm" />
-                                        <input type="submit" class="btn" value="Confirm your suggestion" />
+                                        <input type="submit" class="btn btn-primary" value="Confirm your suggestion" />
                                     [% ELSIF biblionumber # Create from an existing title %]
                                         <input type="hidden" name="op" value="add_confirm" />
                                         <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                        <input type="submit" class="btn" value="Submit your suggestion" />
+                                        <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                                     [% ELSE # Not created from an existing title, search for possible duplicate %]
                                         <input type="hidden" name="op" value="add_validate" />
-                                        <input type="submit" class="btn" value="Submit your suggestion" />
+                                        <input type="submit" class="btn btn-primary" value="Submit your suggestion" />
                                     [% END %]
                                     <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
                                 </fieldset>
@@ -257,28 +266,32 @@
 
                             [% IF ( suggestions_loop ) %]
                                 [% SET can_delete_suggestion = 0 %]
-                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" method="get">
-                                    <fieldset>
-                                        <label for="title">Search for:</label>
-                                        <input type="text" name="title" id="title" value="[% title | html %]" />
+                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
+                                    <div class="form-row">
+                                        <div class="col-auto my-1">
+                                            <label class="sr-only" for="title">Search for:</label>
+                                            <input class="form-control form-control-sm" type="text" name="title" placeholder="Search suggestions" id="title" value="[% title | html %]" />
+                                        </div>
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
-                                                <label for="suggested_by_anyone">Suggested by:</label>
-                                                <div class="input-append">
-                                                    <select name="suggested_by_anyone" id="suggested_by_anyone">
+                                                <div class="col-auto my-1">
+                                                    <label class="sr-only" for="suggested_by_anyone">Suggested by:</label>
+                                                    <select class="form-control form-control-sm" name="suggested_by_anyone" id="suggested_by_anyone">
                                                         [% IF suggested_by_anyone %]
-                                                            <option value="0">Me</option>
-                                                            <option value="1" selected="selected">Anyone</option>
+                                                            <option value="0">Suggested by me</option>
+                                                            <option value="1" selected="selected">Suggested by anyone</option>
                                                         [% ELSE %]
-                                                            <option value="0" selected="selected">Me</option>
-                                                            <option value="1">Anyone</option>
+                                                            <option value="0" selected="selected">Suggested by me</option>
+                                                            <option value="1">Suggested by anyone</option>
                                                         [% END %]
                                                     </select>
-                                                    <button type="submit" class="btn">Go</button>
+                                                </div>
+                                                <div class="col-auto my-1">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Go</button>
                                                 </div>
                                             [% END %]
                                         [% END %]
-                                    </fieldset>
+                                    </div>
                                 </form>
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     <input type="hidden" name="op" value="delete_confirm" />
@@ -425,8 +438,8 @@
 
                         [% END # IF op_else %]
                     </div> <!-- / #usersuggestions -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg-10 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
@@ -452,6 +465,7 @@
     $(function() {
         $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "order": [[ 1, "asc" ]],
+            "autoWidth": false,
             "columnDefs": [
               [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %]
             ],
@@ -465,8 +479,8 @@
                 null
             ]
         }));
-        [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
-        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
+        [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
         $("#CheckAll").click(function(){
             $(".checkboxed").checkCheckboxes();
             enableCheckboxActions();

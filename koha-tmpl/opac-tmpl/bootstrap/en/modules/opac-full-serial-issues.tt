@@ -55,15 +55,23 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Full subscription history</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Details for [% bibliotitle | html %]</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Full subscription history</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row">
+                <div class="col-lg-2">
                     <div id="searchfacetscontainer">
                         <div id="search-facets">
                             <form action="/cgi-bin/koha/opac-serial-issues.pl" id="filterform">
@@ -76,7 +84,7 @@
                                     <select id="subscriptionidfilter" name="subscriptionfilter" disabled="disabled"></select>
                                 </li>
                                 <li class="action">
-                                    <input type="reset" id="reset" class="btn btn-default" value="Clear" />
+                                    <input type="reset" id="reset" class="btn btn-primary" value="Clear" />
                                 </li>
                             </ul>
                             </form>
@@ -85,8 +93,8 @@
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' %]
                     </div>
-                </div> <!-- / .span2 -->
-                <div class="span10">
+                </div> <!-- / .col-lg-2 -->
+                <div class="col-10 order-first order-md-first order-lg-2">
                     <div id="fullserialissues" class="maincontent">
                         [% UNLESS ( popup ) %]
                             <h2>Full subscription history for [% bibliotitle | html %]</h2>
@@ -172,16 +180,15 @@
                             </div> <!-- / .yeardata tabsub -->
                         [% END # / FOREACH year %]
                     </div> <!-- / #fullserialissues -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-10 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-    //<![CDATA[
+    [% INCLUDE 'datatables.inc' %]
+    <script>
         $(document).ready(function(){
             showlayer([% yearmin | html %]);
             $("a.tabsubs:first").addClass("currentsubtab");
@@ -235,7 +242,6 @@
         }
 
         // Filter by Library
-
         function filterByLibrary() {
 
             selectedStatus = $("#libraryfilter").val();
@@ -297,7 +303,6 @@
         // Clears filters : reset everything
         // (Though preserves the selected library if the keeplibrary parameter is set to true)
         function clearFilters(keeplibrary) {
-
             // Show all content
             $("table.subscriptionstclass tbody tr").show();
 
@@ -312,6 +317,7 @@
             $("#libraryfilter option[value=all]").attr("selected", "selected");
             }
         }
+
         function showlayer(numlayer){
             $(".yeardata").each(function(){
                 ong = $(this).attr("id");
@@ -324,6 +330,5 @@
             });
             clearFilters();
         }
-    //]]>
-</script>
+    </script>
 [% END %]

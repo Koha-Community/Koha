@@ -8,35 +8,39 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Subject cloud</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Subject cloud</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
+                    <div class="col-10 order-first order-md-first order-lg-2">
+                [% ELSE %]
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
 
-                [% IF ( OpacNav ||  OpacNavBottom ) %]
-                    <div class="span7">
-                [% ELSE %]
-                    <div class="span9">
-                [% END %]
                     <div id="subjectcloud" class="maincontent">
-                        <h1>Subject cloud</h1>
+                        <h2>Subject cloud</h2>
                             [% IF Koha.Preference( 'OpacCloud' ) == 1 %]
                                 [% IF ( LOOP ) %]
                                     <p>This &quot;cloud&quot; shows the most used topics in our catalog. Click on any subject below to see the items in our collection.</p>
                                     <fieldset>
                                         <legend>Show</legend>
                                         <form class="form-inline" action="/cgi-bin/koha/opac-tags_subject.pl" method="post">
-                                            <p>up to <input type="text" name="number" value="[% number | html %]" size="4" maxlength="4" /> subjects <input type="submit" class="btn" value="OK" /></p>
+                                            <p>up to <input type="text" name="number" value="[% number | html %]" size="4" maxlength="4" /> subjects <input type="submit" class="btn btn-primary" value="OK" /></p>
                                         </form>
                                     </fieldset>
 
@@ -52,8 +56,9 @@
                                 </div>
                             [% END # / IF OpacCloud %]
                     </div> <!-- / #subjectcloud -->
-                </div> <!-- / .span7/9 -->
-            </div> <!-- / .row-fluid -->
+
+                </div> <!-- / .col-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

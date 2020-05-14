@@ -201,7 +201,7 @@
             [% UNLESS ( all_holds_waiting ) %]
                 <div>
                     <form class="form-inline" id="suspend_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                        <button type="submit" id="suspend_all_submit" class="btn"><i class="fa fa-pause" aria-hidden="true"></i> Suspend all holds</button>
+                        <button type="submit" id="suspend_all_submit" class="btn btn-primary"><i class="fa fa-pause" aria-hidden="true"></i> Suspend all holds</button>
                         <input type="hidden" name="suspend" value="1" />
 
                         [% IF AutoResumeSuspendedHolds %]
@@ -214,7 +214,7 @@
                 <br/>
                 <div>
                     <form id="resume_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                        <button type="submit" id="resume_all_submit" class="btn"><i class="fa fa-play" aria-hidden="true"></i> Resume all suspended holds</button>
+                        <button type="submit" id="resume_all_submit" class="btn btn-primary"><i class="fa fa-play" aria-hidden="true"></i> Resume all suspended holds</button>
                         <input type="hidden" name="suspend" value="0" />
                     </form>
                 </div>

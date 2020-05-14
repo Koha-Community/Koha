@@ -9,24 +9,32 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% patron.firstname | html %] [% patron.surname | html %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your consents</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% patron.firstname | html %] [% patron.surname | html %]</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="#">Your consents</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-lg-10 order-first order-md-first order-lg-2">
                 <div id="patronconsents" class="maincontent">
 
                     [% IF Koha.Preference('GDPR_Policy') %]
-                    <div class="alert">
+                    <div class="alert alert-warning">
                             <p>In order to keep you logged in, we need your consent to process personal data as specified in the EU General Data Protection Regulation of May 25, 2018.</p>
                             <p>Please save your consent below or log out. Thank you!</p>
                     </div>
@@ -51,41 +59,43 @@
                                     [% END %]
                                 </li></ul>
                             </fieldset>
-                            <fieldset class="action"><input id="saveconsent" type="submit" value="Save" class="btn" /></fieldset>
+                            <fieldset class="action">
+                                <input id="saveconsent" type="submit" value="Save" class="btn btn-primary" />
+                            </fieldset>
                         [% END %]
 
                     </form>
 
                 </div> <!-- / #userpasswd -->
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col-lg-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script type="text/javascript">
-    var consent = null;
-    $(document).ready(function() {
-        [% IF gdpr_proc_consent %]
-            consent=1;
-            $("input[type='radio'][value='agreed']").prop('checked',true);
-            $(".alert").hide();
-        [% ELSIF gdpr_proc_refusal %]
-            consent=0;
-            $("input[type='radio'][value='disagreed']").prop('checked',true);
-        [% ELSE %]
-        [% END %]
-        $("#saveconsent").prop('disabled', true);
+    <script>
+        var consent = null;
+        $(document).ready(function() {
+            [% IF gdpr_proc_consent %]
+                consent=1;
+                $("input[type='radio'][value='agreed']").prop('checked',true);
+                $(".alert").hide();
+            [% ELSIF gdpr_proc_refusal %]
+                consent=0;
+                $("input[type='radio'][value='disagreed']").prop('checked',true);
+            [% ELSE %]
+            [% END %]
+            $("#saveconsent").prop('disabled', true);
 
-        $("input[type='radio']").click(function() {
-            var radio = $(this).val();
-            if(radio=='agreed' && (consent==null || consent==0)) $("#saveconsent").prop('disabled', false);
-            if(radio=='disagreed' && (consent==null || consent==1)) $("#saveconsent").prop('disabled', false);
-            if(radio=='agreed') $(".alert").hide();
-            if(radio=='disagreed') $(".alert").show();
+            $("input[type='radio']").click(function() {
+                var radio = $(this).val();
+                if(radio=='agreed' && (consent==null || consent==0)) $("#saveconsent").prop('disabled', false);
+                if(radio=='disagreed' && (consent==null || consent==1)) $("#saveconsent").prop('disabled', false);
+                if(radio=='agreed') $(".alert").hide();
+                if(radio=='disagreed') $(".alert").show();
+            });
+
         });
-
-    });
-</script>
+    </script>
 [% END %]

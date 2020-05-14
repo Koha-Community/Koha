@@ -11,23 +11,31 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">[% summary.mainentry | html %][% IF authtypetext %] ([% authtypetext | html %])[% END %]</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col col-lg-2 order-2 order-lg-1">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-lg-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="userauthdetails" class="maincontent">
                         <div id="views">
@@ -147,8 +155,8 @@
                             </div>
                         </div>
                     </div> <!-- / .#userauthdetails -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
@@ -158,22 +166,20 @@
     [% Asset.js("lib/jquery/plugins/jquery.jstree.js") | $raw %]
 [% END %]
 <script>
-    //<![CDATA[
-        $(document).ready(function() {
-            $('#authdescriptions').tabs();
-            [% IF ( displayhierarchy ) %]
-                var current_nodes = [];
-                $('.currentauth').each(function() {
-                    current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
-                    });
-                $('#hierarchies').jstree({
-                        "plugins": [ "themes", "html_data"],
-                        "themes": { "theme": "classic",
-                                    "icons": false },
-                        "core": { "initially_open": current_nodes }
-                    });
-            [% END %]
-        });
-    //]]>
+    $(document).ready(function() {
+        $('#authdescriptions').tabs();
+        [% IF ( displayhierarchy ) %]
+            var current_nodes = [];
+            $('.currentauth').each(function() {
+                current_nodes.push('#' + $(this).parent().parents('li:first').attr('id'));
+                });
+            $('#hierarchies').jstree({
+                    "plugins": [ "themes", "html_data"],
+                    "themes": { "theme": "classic",
+                                "icons": false },
+                    "core": { "initially_open": current_nodes }
+                });
+        [% END %]
+    });
 </script>
 [% END %]

@@ -1,6 +1,5 @@
 [% USE Koha %]
 <script>
-    //<![CDATA[
         var debug    = "[% debug | html %]";
         var dformat  = "[% dateformat | html %]";
         var sentmsg = 0;
@@ -96,5 +95,4 @@
                 }
             }
         });
-    //]]>
 </script>

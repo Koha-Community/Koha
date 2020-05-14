@@ -11,187 +11,198 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Request article</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Request article</a>
+            </li>
+        </ul>
+    </nav>
 
-    <div class="container">
-        [% IF biblio.can_article_request( patron ) %]
-            [% SET article_request_type = biblio.article_request_type( patron ) %]
+    <div class="container-fluid maincontent">
+        <div class="row">
+            <div class="col">
+                [% IF biblio.can_article_request( patron ) %]
+                    [% SET article_request_type = biblio.article_request_type( patron ) %]
 
-            [% IF article_request_type == 'yes' %]       [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFields') %]           [% END %]
-            [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
-            [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
+                    [% IF article_request_type == 'yes' %]       [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFields') %]           [% END %]
+                    [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
+                    [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
 
-            <h3>Place article request for [% biblio.title | html %]</h3>
+                    <h3>Place article request for [% biblio.title | html %]</h3>
 
-            <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
-                <input type="hidden" name="action" value="create" />
-                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
+                    <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
+                        <input type="hidden" name="action" value="create" />
+                        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblio.biblionumber | html %]" />
 
-                <fieldset class="rows">
-                    <ul>
-                        <li>
-                            [% IF mandatory_fields.search('title') %]
-                                <label for="title" class="required">Title:</label>
-                                <input type="text" required="required" name="title" id="title" size="50"/>
-                            [% ELSE %]
-                                <label for="title">Title:</label>
-                                <input type="text" name="title" id="title" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('author') %]
-                                <label for="author" class="required">Author:</label>
-                                <input type="text" required="required" name="author" id="author" size="50"/>
-                            [% ELSE %]
-                                <label for="author">Author:</label>
-                                <input type="text" name="author" id="author" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('volume') %]
-                                <label for="volume" class="required">Volume:</label>
-                                <input type="text" required="required" name="volume" id="volume" size="50"/>
-                            [% ELSE %]
-                                <label for="volume">Volume:</label>
-                                <input type="text" name="volume" id="volume" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('issue') %]
-                                <label for="issue" class="required">Issue:</label>
-                                <input type="text" required="required" name="issue" id="issue" size="50"/>
-                            [% ELSE %]
-                                <label for="issue">Issue:</label>
-                                <input type="text" name="issue" id="issue" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('date') %]
-                                <label for="date" class="required">Date:</label>
-                                <input type="text" required="required" name="date" id="date" size="50"/>
-                            [% ELSE %]
-                                <label for="date">Date:</label>
-                                <input type="text" name="date" id="date" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('pages') %]
-                                <label for="pages" class="required">Pages:</label>
-                                <input type="text" required="required" name="pages" id="pages" size="50"/>
-                            [% ELSE %]
-                                <label for="pages">Pages:</label>
-                                <input type="text" name="pages" id="pages" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            [% IF mandatory_fields.search('chapters') %]
-                                <label for="chapters" class="required">Chapters:</label>
-                                <input type="text" required="required" name="chapters" id="chapters" size="50"/>
-                            [% ELSE %]
-                                <label for="chapters">Chapters:</label>
-                                <input type="text" name="chapters" id="chapters" size="50"/>
-                            [% END %]
-                        </li>
-
-                        <li>
-                            <label for="patron_notes">Notes:</label>
-                            <input type="text" name="patron_notes" id="patron_notes" size="50"/>
-                        </li>
-
-                        <li>
-                            <label for="branchcode">Pickup library:</label>
-                            <select name="branchcode" id="branchcode" required="required">
-                                [% FOREACH b IN Branches.all %]
-                                    [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
-                                        <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
+                        <fieldset class="rows">
+                            <ul>
+                                <li>
+                                    [% IF mandatory_fields.search('title') %]
+                                        <label for="title" class="required">Title:</label>
+                                        <input type="text" required="required" name="title" id="title" size="50"/>
                                     [% ELSE %]
-                                        <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                                        <label for="title">Title:</label>
+                                        <input type="text" name="title" id="title" size="50"/>
                                     [% END %]
-                                [% END %]
-                            </select>
-                        </li>
-                    </ul>
-                </fieldset>
+                                </li>
 
-                [% IF article_request_type != 'bib_only' %]
-                    <table class="copiesrow table table-bordered table-striped">
-                        <caption>Select a specific item:</caption>
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Item type</th>
-                                <th>Barcode</th>
-                                <th>Home library</th>
-                                <th>Call number</th>
-                                <th>Enumeration</th>
-                            </tr>
-                        </thead>
+                                <li>
+                                    [% IF mandatory_fields.search('author') %]
+                                        <label for="author" class="required">Author:</label>
+                                        <input type="text" required="required" name="author" id="author" size="50"/>
+                                    [% ELSE %]
+                                        <label for="author">Author:</label>
+                                        <input type="text" name="author" id="author" size="50"/>
+                                    [% END %]
+                                </li>
 
-                        <tbody>
-                            [% FOREACH item IN biblio.items %]
-                                [% IF item.can_article_request( patron ) %]
-                                    <tr>
-                                        <td>
-                                            [% IF article_request_type == 'item_only' && !checked %]
-                                                [% SET checked = 1 %]
-                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" checked="checked" />
+                                <li>
+                                    [% IF mandatory_fields.search('volume') %]
+                                        <label for="volume" class="required">Volume:</label>
+                                        <input type="text" required="required" name="volume" id="volume" size="50"/>
+                                    [% ELSE %]
+                                        <label for="volume">Volume:</label>
+                                        <input type="text" name="volume" id="volume" size="50"/>
+                                    [% END %]
+                                </li>
+
+                                <li>
+                                    [% IF mandatory_fields.search('issue') %]
+                                        <label for="issue" class="required">Issue:</label>
+                                        <input type="text" required="required" name="issue" id="issue" size="50"/>
+                                    [% ELSE %]
+                                        <label for="issue">Issue:</label>
+                                        <input type="text" name="issue" id="issue" size="50"/>
+                                    [% END %]
+                                </li>
+
+                                <li>
+                                    [% IF mandatory_fields.search('date') %]
+                                        <label for="date" class="required">Date:</label>
+                                        <input type="text" required="required" name="date" id="date" size="50"/>
+                                    [% ELSE %]
+                                        <label for="date">Date:</label>
+                                        <input type="text" name="date" id="date" size="50"/>
+                                    [% END %]
+                                </li>
+
+                                <li>
+                                    [% IF mandatory_fields.search('pages') %]
+                                        <label for="pages" class="required">Pages:</label>
+                                        <input type="text" required="required" name="pages" id="pages" size="50"/>
+                                    [% ELSE %]
+                                        <label for="pages">Pages:</label>
+                                        <input type="text" name="pages" id="pages" size="50"/>
+                                    [% END %]
+                                </li>
+
+                                <li>
+                                    [% IF mandatory_fields.search('chapters') %]
+                                        <label for="chapters" class="required">Chapters:</label>
+                                        <input type="text" required="required" name="chapters" id="chapters" size="50"/>
+                                    [% ELSE %]
+                                        <label for="chapters">Chapters:</label>
+                                        <input type="text" name="chapters" id="chapters" size="50"/>
+                                    [% END %]
+                                </li>
+
+                                <li>
+                                    <label for="patron_notes">Notes:</label>
+                                    <input type="text" name="patron_notes" id="patron_notes" size="50"/>
+                                </li>
+
+                                <li>
+                                    <label for="branchcode">Pickup library:</label>
+                                    <select name="branchcode" id="branchcode" required="required">
+                                        [% FOREACH b IN Branches.all %]
+                                            [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
+                                                <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                                             [% ELSE %]
-                                                <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" />
+                                                <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                                             [% END %]
-                                        </td>
-                                        <td>
-                                            [% ItemTypes.GetDescription( item.itype ) | html %]
-                                        </td>
-                                        <td>
-                                            [% item.barcode | html %]
-                                        </td>
-                                        <td>
-                                            [% Branches.GetName( item.homebranch ) | html %]
-                                        </td>
-                                        <td>
-                                            [% item.itemcallnumber | html %]
-                                        </td>
-                                        <td>
-                                            [% item.enumchron | html %]
-                                        </td>
+                                        [% END %]
+                                    </select>
+                                </li>
+                            </ul>
+                        </fieldset>
+
+                        [% IF article_request_type != 'bib_only' %]
+                            <table class="copiesrow table table-bordered table-striped">
+                                <caption>Select a specific item:</caption>
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>Item type</th>
+                                        <th>Barcode</th>
+                                        <th>Home library</th>
+                                        <th>Call number</th>
+                                        <th>Enumeration</th>
                                     </tr>
-                                [% END %]
-                            [% END %]
+                                </thead>
 
-                            [% IF article_request_type != 'item_only' %]
-                                <tr>
-                                    <td>
-                                        <input type="radio" name="itemnumber" value="" checked="checked"/>
-                                    </td>
-                                    <td colspan="6">
-                                        Any item
-                                    </td>
-                                </tr>
-                            [% END %]
-                        </tbody>
-                    </table>
+                                <tbody>
+                                    [% FOREACH item IN biblio.items %]
+                                        [% IF item.can_article_request( patron ) %]
+                                            <tr>
+                                                <td>
+                                                    [% IF article_request_type == 'item_only' && !checked %]
+                                                        [% SET checked = 1 %]
+                                                        <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" checked="checked" />
+                                                    [% ELSE %]
+                                                        <input type="radio" name="itemnumber" value="[% item.itemnumber | html %]" />
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                    [% ItemTypes.GetDescription( item.itype ) | html %]
+                                                </td>
+                                                <td>
+                                                    [% item.barcode | html %]
+                                                </td>
+                                                <td>
+                                                    [% Branches.GetName( item.homebranch ) | html %]
+                                                </td>
+                                                <td>
+                                                    [% item.itemcallnumber | html %]
+                                                </td>
+                                                <td>
+                                                    [% item.enumchron | html %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                    [% END %]
+
+                                    [% IF article_request_type != 'item_only' %]
+                                        <tr>
+                                            <td>
+                                                <input type="radio" name="itemnumber" value="" checked="checked"/>
+                                            </td>
+                                            <td colspan="6">
+                                                Any item
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        [% END %]
+
+                        <input type="submit" class="btn btn-primary" value="Place request" />
+                    </form>
+                [% ELSE %]
+                    <h1 class="title">[% biblio.title | html %]</h1>
+                    <div class="alert alert-info">
+                        No article requests can be made for this record.
+                    </div>
                 [% END %]
-
-                <input type="submit" class="btn" value="Place request" />
-            </form>
-        [% ELSE %]
-            <h1 class="title">[% biblio.title | html %]</h1>
-            <div class="alert alert-info">
-                No article requests can be made for this record.
-            </div>
-        [% END %]
-
-    </div> <!-- / .container -->
+            </div> <!-- /.col -->
+        </div> <!-- /.row -->
+    </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]

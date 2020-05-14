@@ -6,14 +6,14 @@
 [% INCLUDE 'bodytag.inc' bodyid='comment' bodyclass='popup' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
                     <div id="userreview" class="maincontent">
                         [% IF ( cgi_debug ) %]
                             <div class="debug">CGI debug is on.</div>
                         [% END %]
                         [% IF ( ERRORS ) %]
-                            <div class="alert">
+                            <div class="alert alert-warning">
                                 [% FOREACH ERROR IN ERRORS %]
                                     [% IF ( ERROR.nobiblio ) %]
                                         <p>Error: we cannot find this bibliographic record.</p>
@@ -49,26 +49,26 @@
                             </fieldset>
                             <p>Note: Your comment must be approved by a librarian. </p>
                             <fieldset class="action">
-                                <input type="submit" class="btn" value="Submit and close this window" />
+                                <input type="submit" class="btn btn-primary" value="Submit and close this window" />
                                 <a class="cancel close" href="#">Cancel</a>
                             </fieldset>
                         </form>
                     </div> <!-- / #usersendshelfform -->
                 </div> <!-- / .span12 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]
 [% BLOCK jsinclude %]
 <script>
-    //<![CDATA[
+
          $(document).ready(function() {
             [% IF WINDOW_CLOSE %]
                 opener.location.reload();
                 window.close();
             [% END %]
         });
-    //]]>
+
 </script>
 [% END %]

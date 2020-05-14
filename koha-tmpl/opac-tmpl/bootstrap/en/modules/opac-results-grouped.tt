@@ -19,43 +19,47 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li>
-                [% IF ( searchdesc ) %]
-                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</a>
-                [% ELSE %]
-                    <a href="#">You did not specify any search criteria.</a>
-                [% END %]
-            </li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    [% IF ( searchdesc ) %]
+                        <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</a>
+                    [% ELSE %]
+                        <a href="#">You did not specify any search criteria.</a>
+                    [% END %]
+                </li>
+            </ul>
+        </nav>
 
         [% IF ( query_error ) %]
             <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="alert">
+                <div class="row">
+                    <div class="col order-first order-md-first order-lg-2">
+                        <div class="alert alert-warning">
                             <h4>Error:</h4>
                             <p>[% query_error | html %]</p>
                         </div>
                     </div> <!-- / .span12 -->
-                </div> <!-- / .row-fluid -->
+                </div> <!-- / .row -->
             </div> <!-- / .container-fluid -->
         [% END %]
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( opacfacets && total ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="facetcontainer">
                             <!-- FACETS START -->
                             [% INCLUDE 'opac-facets.inc' %]
                             <!-- FACETS END -->
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="grouped-results" class="maincontent">
                         <!-- Search Results Table -->
@@ -278,95 +282,93 @@
                             </div>
                         [% END %]
                     </div> <!-- / #grouped-results -->
-                </div> <!-- /.span10/12 -->
-            </div> <!-- / .row-fluid -->
+
+                </div> <!-- /.col-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div><!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-<script>
-//<![CDATA[
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    <script>
+        var q_array = new Array();  // will hold the search terms, if possible
+        $(document).ready(function(){
+            [% IF ( OpacHighlightedWords ) %]
+                $('a.title').each(function() {
+                    $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
+                });
+            [% END %]
 
-var q_array = new Array();  // will hold the search terms, if possible
-
-$(document).ready(function(){
-    [% IF ( OpacHighlightedWords ) %]
-        $('a.title').each(function() {
-            $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
+            $('#sort_by').change(function() {
+                $('#bookbag_form').submit();
+            });
+            $("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">" + _("Clear all") + "</a>");
+            $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">" + _("Select all") + "</a>");
+            $("span.addto").html("<label for=\"addto\">" + _("Add to: ") + "</label><select name=\"addto\" id=\"addto\"><option value=\"\"></option>[% IF Koha.Preference( 'opacbookbag' ) == 1 %]<option value=\"addtocart\">" + _("Cart") + "</option>[% END %][% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %]<optgroup label=\"" + _("Lists:") + "\">[% IF ( barshelves ) %][% FOREACH barshelvesloo IN barshelvesloop %][% IF ( category == 1 ) %]<option id=\"s[% barshelvesloo.shelfnumber | html %]\" value=\"addtolist\">[% barshelvesloo.shelfname | html %]</option>[% END %][% END %][% END %]<option value=\"newlist\">" + _("[ New list ]") + "</option></optgroup>[% ELSE %]<option value=\"newlist\">" + _("List") + "</option>[% END %][% END %]</select> <input type=\"submit\" class=\"submit\" value=\"" + _("Save") + "\" />");
+            $("#addto").change(function(){
+                cartList();
+            });
+            $(".addto").find("input:submit").click(function(){
+                cartList();
+                return false;
+            });
+            function cartList(){
+                    if($("#addto").find("option:selected").attr("value") == "addtolist"){
+                    var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+                    [% IF ( loggedinusername ) %]if (vShelfAdd()) {
+                    Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
+                    }[% ELSE %] alert(_("You must be logged in to create or add to Lists")); [% END %]
+                    return false;
+                } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+                    [% IF ( loggedinusername ) %]if (vShelfAdd()) {
+                    Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
+                    }[% ELSE %] alert(_("You must be logged in to create or add to Lists")); [% END %]
+                    return false;
+                }
+                if($("#addto").find("option:selected").attr("value") == "addtocart"){
+                    addMultiple();
+                    return false;
+                }
+            }
+            $("#CheckAll").click(function(){
+                $("#bookbag_form").checkCheckboxes();
+                return false;
+            });
+            $("#CheckNone").click(function(){
+                $("#bookbag_form").unCheckCheckboxes();
+                return false;
+            });
+            [% IF ( query_desc ) %]
+            var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+            q_array = query_desc.split(" ");
+            // ensure that we don't have "" at the end of the array, which can
+            // break the highlighter
+            while (q_array.length > 0 && q_array[q_array.length-1] == "") {
+                q_array = q_array.splice(0,-1);
+            }
+            highlightOn();
+            $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+            $("#highlight_toggle_off").show().click(function() {highlightOff();});
+            [% END %]
         });
-    [% END %]
 
-    $('#sort_by').change(function() {
-        $('#bookbag_form').submit();
-    });
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">" + _("Clear all") + "</a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">" + _("Select all") + "</a>");
-    $("span.addto").html("<label for=\"addto\">" + _("Add to: ") + "</label><select name=\"addto\" id=\"addto\"><option value=\"\"></option>[% IF Koha.Preference( 'opacbookbag' ) == 1 %]<option value=\"addtocart\">" + _("Cart") + "</option>[% END %][% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %]<optgroup label=\"" + _("Lists:") + "\">[% IF ( barshelves ) %][% FOREACH barshelvesloo IN barshelvesloop %][% IF ( category == 1 ) %]<option id=\"s[% barshelvesloo.shelfnumber | html %]\" value=\"addtolist\">[% barshelvesloo.shelfname | html %]</option>[% END %][% END %][% END %]<option value=\"newlist\">" + _("[ New list ]") + "</option></optgroup>[% ELSE %]<option value=\"newlist\">" + _("List") + "</option>[% END %][% END %]</select> <input type=\"submit\" class=\"submit\" value=\"" + _("Save") + "\" />");
-    $("#addto").change(function(){
-        cartList();
-    });
-    $(".addto").find("input:submit").click(function(){
-        cartList();
-        return false;
-    });
-    function cartList(){
-            if($("#addto").find("option:selected").attr("value") == "addtolist"){
-            var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
-            [% IF ( loggedinusername ) %]if (vShelfAdd()) {
-            Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
-            }[% ELSE %] alert(_("You must be logged in to create or add to Lists")); [% END %]
-            return false;
-        } else if($("#addto").find("option:selected").attr("value") == "newlist"){
-            [% IF ( loggedinusername ) %]if (vShelfAdd()) {
-            Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
-            }[% ELSE %] alert(_("You must be logged in to create or add to Lists")); [% END %]
-            return false;
+        function highlightOff() {
+            $("td").removeHighlight();
+            $(".highlight_toggle").toggle();
         }
-        if($("#addto").find("option:selected").attr("value") == "addtocart"){
-            addMultiple();
-            return false;
-         }
-    }
-    $("#CheckAll").click(function(){
-        $("#bookbag_form").checkCheckboxes();
-        return false;
-    });
-    $("#CheckNone").click(function(){
-        $("#bookbag_form").unCheckCheckboxes();
-        return false;
-    });
-    [% IF ( query_desc ) %]
-    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
-    q_array = query_desc.split(" ");
-    // ensure that we don't have "" at the end of the array, which can
-    // break the highlighter
-    while (q_array.length > 0 && q_array[q_array.length-1] == "") {
-        q_array = q_array.splice(0,-1);
-    }
-    highlightOn();
-    $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
-    $("#highlight_toggle_off").show().click(function() {highlightOff();});
-    [% END %]
-});
+        function highlightOn() {
+            var x;
+            for (x in q_array) {
+                q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
+                q_array[x] = q_array[x].toLowerCase();
+                var myStopwords = "[% Koha.Preference('NotHighlightedWords') | html %]".toLowerCase().split('|');
+                if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
+                    $("td").highlight(q_array[x]);
+                }
+            }
+            $(".highlight_toggle").toggle();
+        }
 
-function highlightOff() {
-    $("td").removeHighlight();
-    $(".highlight_toggle").toggle();
-}
-function highlightOn() {
-    var x;
-    for (x in q_array) {
-        q_array[x] = q_array[x].replace(/\w*:([\w])/, "$1");
-        q_array[x] = q_array[x].toLowerCase();
-        var myStopwords = "[% Koha.Preference('NotHighlightedWords') | html %]".toLowerCase().split('|');
-        if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
-            $("td").highlight(q_array[x]);
-        }
-    }
-    $(".highlight_toggle").toggle();
-}
-//]]>
-</script>
+    </script>
 [% END %]

@@ -7,27 +7,33 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Error [% errno | html %]</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Error [% errno | html %]</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                   <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="errormsg[% errno | html %]">
                         <h3>Sorry, the requested page is not available</h3>
                         <h4>Error [% errno | html %]</h4>
-                        <h3>This message can have the following reason(s):</h3>
+                        <h5>This message can have the following reason(s):</h5>
                         <ul>
                             [% IF ( errno == 400 ) %]
                                 <li>The link is broken and the page does not exist.</li>
@@ -55,7 +61,7 @@
                                 <li>An error occurred while processing your request.</li>
                             [% END %]
                         </ul>
-                        <h3>What's next?</h3>
+                        <h4>What's next?</h4>
                         <ul>
                             [% IF ( errno == 401 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                 <li>Please log in to the catalog and try again. <a href="/cgi-bin/koha/opac-user.pl">Login page</a></li>
@@ -64,14 +70,14 @@
                             <li>You can search our catalog using the search form at the top of this page.</li>
                             <li><a href="/cgi-bin/koha/opac-main.pl">Return to the catalog home page.</a></li>
                         </ul>
-                        <h3>Report issues and broken links</h3>
+                        <h4>Report issues and broken links</h4>
                         <ul>
                             <li>To report this error, please contact the Koha Administrator.
                                     <a href="mailto:[% admin | uri %]">Send email</a>.</li>
                         </ul>
                     </div> <!-- / #errormsg[% errno | html %] -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

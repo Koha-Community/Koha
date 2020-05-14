@@ -8,66 +8,79 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Browse our catalog</a>
+                </li>
+            </ul>
+        </nav>
+
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
+                    <div class="col-10 order-first order-md-first order-lg-2">
+                [% ELSE %]
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
 
-                [% IF ( OpacNav ) %]<div class="span10">[% ELSE %]<div class="span12">[% END %]
+                    <div id="userbrowser" class="maincontent">
+                        <h2>Browse our catalog</h2>
 
-                <div id="userbrowser" class="maincontent">
-                    <h1>Browse our catalog</h1>
-
-                    [% IF ( have_hierarchy ) %]
-                        <ul>
-                            <li>
-                                [% description | html %] <a href="opac-browser.pl">Top level</a>
-                            </li>
-                            <li style="list-style-type: none;">
-                                <ul>
-                                    [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
-                                        <li>
-                                            <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level | uri %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description | html %]</a>
-                                        </li>
+                        [% IF ( have_hierarchy ) %]
+                            <ul>
+                                <li>
+                                    [% description | html %] <a href="opac-browser.pl">Top level</a>
+                                </li>
+                                <li style="list-style-type: none;">
+                                    <ul>
+                                        [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
+                                            <li>
+                                                <a href="opac-browser.pl?level=[% HIERARCHY_LOO.level | uri %]&amp;filter=[% HIERARCHY_LOO.classification |uri %]">[% HIERARCHY_LOO.description | html %]</a>
+                                            </li>
+                                            <li style="list-style-type: none;">
+                                        [% END %]
                                         <li style="list-style-type: none;">
+                                            <table class="table table-bordered table-striped">
+                                                <tr>
+                                                    [% FOREACH LEVEL_LOO IN LEVEL_LOOP %]
+                                                        <td>
+                                                            <p>
+                                                                [% IF ( LEVEL_LOO.endnode ) %]
+                                                                    <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
+                                                                [% ELSE %]
+                                                                    <a href="opac-browser.pl?level=[% LEVEL_LOO.level | uri %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
+                                                                [% END %]
+                                                            </p>
+                                                            <p style="font-size:0.75em"><em>([% LEVEL_LOO.number | html %] biblios)</em></p>
+                                                        </td>
+                                                    [% IF ( LEVEL_LOO.count3 ) %]</tr><tr>[% END %]
+                                                    [% END %]
+                                                </tr>
+                                            </table>
+                                        </li>
+                                    [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
+                                        </ul></li>
                                     [% END %]
-                                    <li style="list-style-type: none;">
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                [% FOREACH LEVEL_LOO IN LEVEL_LOOP %]
-                                                    <td>
-                                                        <p>
-                                                            [% IF ( LEVEL_LOO.endnode ) %]
-                                                                <a href="opac-search.pl?q=Dewey-classification:[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
-                                                            [% ELSE %]
-                                                                <a href="opac-browser.pl?level=[% LEVEL_LOO.level | uri %]&amp;filter=[% LEVEL_LOO.classification |uri %]">[% LEVEL_LOO.description | html %]</a>
-                                                            [% END %]
-                                                        </p>
-                                                        <p style="font-size:0.75em"><em>([% LEVEL_LOO.number | html %] biblios)</em></p>
-                                                    </td>
-                                                [% IF ( LEVEL_LOO.count3 ) %]</tr><tr>[% END %]
-                                                [% END %]
-                                            </tr>
-                                        </table>
-                                    </li>
-                                [% FOREACH HIERARCHY_LOO IN HIERARCHY_LOOP %]
-                                    </ul></li>
-                                [% END %]
-                                </ul>
-                            </li>
-                        </ul>
-                    [% ELSE %]
-                        <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha-community.org/wiki/Opac_browse_feature">Koha Wiki</a> for more information on what it does and how to configure it.</div>
-                    [% END # / IF have_hierarchy %]
+                                    </ul>
+                                </li>
+                            </ul>
+                        [% ELSE %]
+                            <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha-community.org/wiki/Opac_browse_feature">Koha Wiki</a> for more information on what it does and how to configure it.</div>
+                        [% END # / IF have_hierarchy %]
 
                     </div> <!-- / .userbrowser -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+
+                </div> <!-- / .col-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

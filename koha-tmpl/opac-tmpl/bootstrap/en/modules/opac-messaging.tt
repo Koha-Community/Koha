@@ -8,235 +8,247 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your messaging settings</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="IsPatronPage">
+                <a href="#">Your messaging settings</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
-                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
-                <div id="usermessaging" class="maincontent">
-                    <h3>Your messaging settings</h3>
-                    [% IF ( settings_updated ) %]
-                        <div class="alert alert-success"><h4>Settings updated</h4></div>
-                    [% END %]
-                    <form action="/cgi-bin/koha/opac-messaging.pl" method="post" name="opacmessaging">
-                        <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                        <input type="hidden" name="modify" value="yes" />
+            <div class="col-md-12 col-lg-10 order-1">
 
-                            <table class="table table-bordered table-condensed table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>&nbsp;</th>
-                                        <th>Days in advance</th>
-                                        [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
-                                        [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
-                                        <th>Email</th>
-                                        <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                [% FOREACH messaging_preference IN messaging_preferences %]
-                                    <tr>
-                                        <td>[% IF ( messaging_preference.Item_Due ) %]Item due
-                                              [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
-                                              [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming events
-                                              [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
-                                              [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
-                                              [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
-                                              [% ELSE %]Unknown [% END %]</td>
-                                        [% IF ( messaging_preference.takes_days ) %]
-                                            <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
-                                            [% FOREACH select_day IN messaging_preference.select_days %]
-                                                [% IF ( select_day.selected ) %]
-                                                    <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
+                    <div id="usermessaging" class="maincontent">
+                        <h3>Your messaging settings</h3>
+                        [% IF ( settings_updated ) %]
+                            <div class="alert alert-success"><h4>Settings updated</h4></div>
+                        [% END %]
+                        <form action="/cgi-bin/koha/opac-messaging.pl" method="post" name="opacmessaging">
+                            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                            <input type="hidden" name="modify" value="yes" />
+
+                                <table class="table table-bordered table-condensed table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>&nbsp;</th>
+                                            <th>Days in advance</th>
+                                            [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
+                                            [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
+                                            <th>Email</th>
+                                            <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    [% FOREACH messaging_preference IN messaging_preferences %]
+                                        <tr>
+                                            <td>[% IF ( messaging_preference.Item_Due ) %]Item due
+                                                [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
+                                                [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming events
+                                                [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
+                                                [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
+                                                [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
+                                                [% ELSE %]Unknown [% END %]</td>
+                                            [% IF ( messaging_preference.takes_days ) %]
+                                                <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
+                                                [% FOREACH select_day IN messaging_preference.select_days %]
+                                                    [% IF ( select_day.selected ) %]
+                                                        <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                                </select></td>
+                                            [% ELSE %]
+                                                <td>-</td>
+                                            [% END %]
+                                            [% IF ( SMSSendDriver ) %]
+                                                [% IF ( messaging_preference.transport_sms ) %]
+                                                    <td>
+                                                        [% IF ( messaging_preference.transports_sms ) %]
+                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                        [% END %]
+                                                    </td>
                                                 [% ELSE %]
-                                                    <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                                    <td>-</td>
                                                 [% END %]
                                             [% END %]
-                                            </select></td>
-                                        [% ELSE %]
-                                            <td>-</td>
-                                        [% END %]
-                                        [% IF ( SMSSendDriver ) %]
-                                            [% IF ( messaging_preference.transport_sms ) %]
+                                            [% IF ( TalkingTechItivaPhone ) %]
+                                                [% IF ( messaging_preference.transport_phone ) %]
                                                 <td>
-                                                    [% IF ( messaging_preference.transports_sms ) %]
-                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
+                                                [% IF ( messaging_preference.transports_phone ) %]
+                                                <input type="checkbox"
+                                                            id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                            name="[% messaging_preference.message_attribute_id | html %]"
+                                                            value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                [% ELSE %]
+                                                <input type="checkbox"
+                                                            id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                            name="[% messaging_preference.message_attribute_id | html %]"
+                                                            value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                [% END %]
+                                                </td>
+                                                [% ELSE %]
+                                                    <td>-</td>
+                                                [% END %]
+                                            [% END %]
+
+                                            [% IF ( messaging_preference.transport_email ) %]
+                                                <td>
+                                                    [% IF ( messaging_preference.transports_email ) %]
+                                                        <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                        <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
                                                 <td>-</td>
                                             [% END %]
-                                        [% END %]
-                                        [% IF ( TalkingTechItivaPhone ) %]
-                                            [% IF ( messaging_preference.transport_phone ) %]
-                                            <td>
-                                              [% IF ( messaging_preference.transports_phone ) %]
-                                              <input type="checkbox"
-                                                         id="phone[% messaging_preference.message_attribute_id | html %]"
-                                                         name="[% messaging_preference.message_attribute_id | html %]"
-                                                         value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                              [% ELSE %]
-                                              <input type="checkbox"
-                                                         id="phone[% messaging_preference.message_attribute_id | html %]"
-                                                         name="[% messaging_preference.message_attribute_id | html %]"
-                                                         value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                              [% END %]
-                                            </td>
-                                            [% ELSE %]
-                                                <td>-</td>
-                                            [% END %]
-                                        [% END %]
 
-                                        [% IF ( messaging_preference.transport_email ) %]
-                                            <td>
-                                                [% IF ( messaging_preference.transports_email ) %]
-                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                                [% END %]
-                                            </td>
-                                        [% ELSE %]
-                                            <td>-</td>
-                                        [% END %]
-
-                                        [% IF ( messaging_preference.has_digest ) %]
-                                            <td>
-                                                [% IF ( messaging_preference.digest ) %]
-                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
-                                                [% END %]
-                                            </td>
-                                        [% ELSE %]
-                                        <td>-</td>
-                                        [% END %]
-
-                                    </tr>
-                                [% END # / FOREACH messaging_preferences%]
-                            </tbody>
-                        </table>
-
-                        <fieldset class="rows">
-                            [% IF ( SMSSendDriver ) %]
-                                <ol><li><label>Notice:</label>Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions.</li></ol>
-                                <ol><li>
-                                    <label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" pattern="^\+?[1-9]\d{1,14}$" />
-                                    <em>Please enter numbers only. <strong>(123) 456-7890</strong> would be entered as <strong>1234567890</strong>.</em>
-                                </li></ol>
-                            [% END %]
-
-                            [% IF ( SMSSendDriver == 'Email' ) %]
-                                <ol><li>
-                                    <label for="sms_provider_id">SMS provider:</label>
-                                    <select id="sms_provider_id" name="sms_provider_id">
-                                        <option value="">Unknown</option>
-                                        [% FOREACH s IN sms_providers %]
-                                            [% IF s.id == sms_provider_id %]
-                                                <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% s.id | html %]">[% s.name | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                    <em>Please contact a library staff member if you are unsure of your mobile service provider, or you do not see your provider in this list.</em>
-                                </li></ol>
-                            [% END %]
-
-                            [% IF Koha.Preference('TranslateNotices') %]
-                                <ol>
-                                    <li>
-                                        <label for="lang">Preferred language for notices: </label>
-                                        <select id="lang" name="lang">
-                                            <option value="default">Default</option>
-                                            [% FOR language IN languages %]
-                                                [% FOR sublanguage IN language.sublanguages_loop %]
-                                                    [% IF language.plural %]
-                                                        [% IF sublanguage.rfc4646_subtag == patron_lang %]
-                                                            <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                                                        [% ELSE %]
-                                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                                                        [% END %]
+                                            [% IF ( messaging_preference.has_digest ) %]
+                                                <td>
+                                                    [% IF ( messaging_preference.digest ) %]
+                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]
-                                                        [% IF sublanguage.rfc4646_subtag == patron_lang %]
-                                                            <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                                                        [% ELSE %]
-                                                            <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                        <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                    [% END %]
+                                                </td>
+                                            [% ELSE %]
+                                            <td>-</td>
+                                            [% END %]
+
+                                        </tr>
+                                    [% END # / FOREACH messaging_preferences%]
+                                </tbody>
+                            </table>
+
+                            [% IF ( SMSSendDriver || Koha.Preference('TranslateNotices') ) %]
+                                <fieldset class="rows">
+                                    <ol>
+                                        [% IF ( SMSSendDriver ) %]
+                                            <li>
+                                                <strong>Notice:</strong> Some charges for text messages may be incurred when using this service. Please check with your mobile service provider if you have questions.
+                                            </li>
+                                            <li>
+                                                <label for="SMSnumber">SMS number:</label>
+                                                <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber | html %]" pattern="^\+?[1-9]\d{1,14}$" />
+                                                <div class="hint">Please enter numbers only. <strong>(123) 456-7890</strong> would be entered as <strong>1234567890</strong>.</div>
+                                            </li>
+
+                                            [% IF ( SMSSendDriver == 'Email' ) %]
+                                                <li>
+                                                    <label for="sms_provider_id">SMS provider:</label>
+                                                    <select id="sms_provider_id" name="sms_provider_id">
+                                                        <option value="">Unknown</option>
+                                                        [% FOREACH s IN sms_providers %]
+                                                            [% IF s.id == sms_provider_id %]
+                                                                <option value="[% s.id | html %]" selected="selected">[% s.name | html %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% s.id | html %]">[% s.name | html %]</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END # /IF language.plural %]
-                                                [% END # /FOR sublanguage %]
-                                            [% END #/FOR language %]
-                                        </select> <!-- /#lang -->
-                                    </li>
-                                </ol>
-                            [% END #/IF Koha.Preference('TranslateNotices') %]
+                                                    </select>
+                                                    <div class="hint">Please contact a library staff member if you are unsure of your mobile service provider, or you do not see your provider in this list.</div>
+                                                </li>
+                                            [% END # /IF ( SMSSendDriver == 'Email' ) %]
+                                        [% END # /IF SMSSendDriver %]
 
-                        </fieldset>
+                                        [% IF Koha.Preference('TranslateNotices') %]
+                                            <li>
+                                                <label for="lang">Preferred language for notices: </label>
+                                                <select id="lang" name="lang">
+                                                    <option value="default">Default</option>
+                                                    [% FOR language IN languages %]
+                                                        [% FOR sublanguage IN language.sublanguages_loop %]
+                                                            [% IF language.plural %]
+                                                                [% IF sublanguage.rfc4646_subtag == patron_lang %]
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                [% END %]
+                                                            [% ELSE %]
+                                                                [% IF sublanguage.rfc4646_subtag == patron_lang %]
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]" selected="selected">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                                                                [% END %]
+                                                            [% END # /IF language.plural %]
+                                                        [% END # /FOR sublanguage %]
+                                                    [% END #/FOR language %]
+                                                </select> <!-- /#lang -->
+                                            </li>
+                                        [% END #/IF Koha.Preference('TranslateNotices') %]
+                                    </ol>
+                                </fieldset>
+                            [% END #/IF SMSSendDriver || Koha.Preference('TranslateNotices') %]
 
-                        <fieldset class="action">
-                          <input type="submit" value="Submit changes" class="btn" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
-                        </fieldset>
-                    </form>
-                </div> <!-- / #usermessaging -->
+                            <fieldset class="action">
+                                <input type="submit" value="Submit changes" class="btn btn-primary" />
+                                <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
+                            </fieldset>
+                        </form>
+                    </div> <!-- / #usermessaging -->
                 [% ELSE %]
                     <h4>You are not allowed to call this page directly</h4>
-                [% END %]
-           </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+                [% END # /IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' ) %]
+           </div> <!-- / .col-lg-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script>//<![CDATA[
-  $(document).ready(function(){
-    $(".none").click(function(){
-      if($(this).attr("checked")){
-        var rowid = $(this).attr("id");
-        newid = Number(rowid.replace("none",""))
-          $("#sms"+newid).removeAttr("checked");
-          $("#email"+newid).removeAttr("checked");
-          $("#digest"+newid).removeAttr("checked");
-          $("#rss"+newid).removeAttr("checked");
-      }
-    });
-    $("#info_digests").tooltip();
-  });
+    <script>
+        $(document).ready(function(){
+            $(".none").click(function(){
+                if($(this).attr("checked")){
+                    var rowid = $(this).attr("id");
+                    newid = Number(rowid.replace("none",""))
+                    $("#sms"+newid).removeAttr("checked");
+                    $("#email"+newid).removeAttr("checked");
+                    $("#digest"+newid).removeAttr("checked");
+                    $("#rss"+newid).removeAttr("checked");
+                }
+            });
+            $("#info_digests").tooltip();
+        });
 
-function normalizeSMS(value){
-  let has_plus = value.charAt(0) === '+';
-  let new_value = value.replace(/\D/g,'');
-  if ( has_plus ) new_value = '+' + new_value;
-  return new_value;
-}
+        function normalizeSMS(value){
+            let has_plus = value.charAt(0) === '+';
+            let new_value = value.replace(/\D/g,'');
+            if ( has_plus ) new_value = '+' + new_value;
+            return new_value;
+        }
 
-var sms_input = document.getElementById('SMSnumber');
+        var sms_input = document.getElementById('SMSnumber');
 
-if (typeof sms_input !== 'undefined' && sms_input !== null) {
-  sms_input.addEventListener('keyup', function(){
-    var field = sms_input.value;
-    sms_input.value = normalizeSMS(field);
-  });
+        if (typeof sms_input !== 'undefined' && sms_input !== null) {
+            sms_input.addEventListener('keyup', function(){
+                var field = sms_input.value;
+                sms_input.value = normalizeSMS(field);
+            });
 
-  sms_input.addEventListener('paste', function(event) {
-    let paste = (event.clipboardData || window.clipboardData).getData('text');
-    setTimeout(function () {
-      sms_input.value = normalizeSMS(paste);
-    }, 100);
-  });
-}
-
-//]]>
-</script>
+            sms_input.addEventListener('paste', function(event) {
+                let paste = (event.clipboardData || window.clipboardData).getData('text');
+                setTimeout(function () {
+                sms_input.value = normalizeSMS(paste);
+                }, 100);
+            });
+        }
+    </script>
 [% END %]

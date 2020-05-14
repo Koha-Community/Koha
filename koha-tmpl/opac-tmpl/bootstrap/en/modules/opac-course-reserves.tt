@@ -16,14 +16,20 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Course reserves</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="#">Course reserves</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col order-first order-md-first order-lg-2">
                 <div id="courses" class="maincontent">
                     <h1>Courses</h1>
 
@@ -58,8 +64,8 @@
                         </tbody>
                     </table>
                 </div> <!-- / #courses -->
-            </div> <!-- / .span12 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
@@ -67,19 +73,20 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-
-    $(document).ready(function() {
-        columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course_reserves_table', 'json' ) | $raw %]
-
-        KohaTable("#course_reserves_table", {
-            "dom": '<"top"flp>rt<"clear">',
-            "sorting": [[ 1, "asc" ]],
-            "autoWidth": false,
-            "asColumnDefs": [
-                { "aTargets": [ 1 ], "sType": "nsb-nse" },
-            ]
-        }, columns_settings );
-    });
-
+        $(document).ready(function() {
+            columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course_reserves_table', 'json' ) | $raw %]
+            KohaTable("#course_reserves_table", {
+                "dom": '<"top"flp>rt<"clear">',
+                "sorting": [[ 1, "asc" ]],
+                "autoWidth": false,
+                "asColumnDefs": [
+                    { "aTargets": [ 1 ], "sType": "nsb-nse" },
+                ],
+                "language": {
+                    "search": "_INPUT_",
+                    "searchPlaceholder": "Search courses"
+                }
+            }, columns_settings );
+        });
     </script>
 [% END %]

@@ -7,62 +7,61 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon')  ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
- [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/jquery/jquery-ui-1.12.1.css") | $raw %]
+[% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( SCOUserCSS ) %]<style>[% SCOUserCSS | $raw %]</style>[% END %]
-<!--[if lt IE 9]>
-    <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
-<![endif]-->
 <script>
     function _(s) { return s } // dummy function for gettext
 </script>
 [% Asset.js("lib/modernizr.min.js") | $raw %]
 </head>
 <body id="sco_help" class="sco">
-[% INCLUDE 'masthead-sco.inc' %]
+    [% INCLUDE 'masthead-sco.inc' %]
 
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
+                    <h1>Self checkout help</h1>
 
-<h1>Self checkout help</h1>
+                    [% IF ( SelfCheckHelpMessage ) %]
+                        <div id="selfcheckhelpmessage">
+                            [% SelfCheckHelpMessage | $raw %]
+                        </div>
+                    [% END %]
 
-[% IF ( SelfCheckHelpMessage ) %]
-<div id="selfcheckhelpmessage">
-[% SelfCheckHelpMessage | $raw %]
-</div>
-[% END %]
+                    <p>If this is your first time using the self checkout system, or if the system
+                    is not behaving as expected, you may want to refer to this guide to get
+                    yourself started.</p>
 
-<p>If this is your first time using the self checkout system, or if the system
-is not behaving as expected, you may want to refer to this guide to get
-yourself started.</p>
+                    <h3>Step one: Enter your user id[% IF ( SelfCheckoutByLogin ) %] and password[% END %]</h3>
 
-<h3>Step one: Enter your user id[% IF ( SelfCheckoutByLogin ) %] and password[% END %]</h3>
-<p>Enter your User ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %], and click the
-submit button (or press the enter key).</p>
+                    <p>Enter your User ID[% IF ( SelfCheckoutByLogin ) %] and password[% END %], and click the
+                    submit button (or press the enter key).</p>
 
-<h3>Step two: Scan the barcode for each item, one at a time</h3>
-<p>Scan each item and wait for the page to reload before scanning the next item.
-The checked-out item should appear in your checkouts list.
-The Submit button only needs to be clicked if you enter the barcode manually.</p>
+                    <h3>Step two: Scan the barcode for each item, one at a time</h3>
 
-<h3>Step three: Click the 'Finish' button</h3>
-<p>If you do not click the 'Finish' button, your session will automatically expire in
-[% SelfCheckTimeout | html %] seconds.</p>
+                    <p>Scan each item and wait for the page to reload before scanning the next item.
+                    The checked-out item should appear in your checkouts list.
+                    The Submit button only needs to be clicked if you enter the barcode manually.</p>
 
-    <div class="button">
-        <a href="javascript:history.go(-1)">Return to the self-checkout</a>
-    </div>
+                    <h3>Step three: Click the 'Finish' button</h3>
 
-                    </div> <!-- / #showreviews -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                    <p>If you do not click the 'Finish' button, your session will automatically expire in
+                    [% SelfCheckTimeout | html %] seconds.</p>
+
+                    <div class="button">
+                        <a href="javascript:history.go(-1)">Return to the self-checkout</a>
+                    </div>
+
+                </div> <!-- / .col -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% IF ( SCOUserJS ) %]<script>[% SCOUserJS | $raw %]</script>[% END %]
+    [% IF ( SCOUserJS ) %]<script>[% SCOUserJS | $raw %]</script>[% END %]
 [% END %]

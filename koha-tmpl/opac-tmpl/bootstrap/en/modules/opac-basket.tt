@@ -13,19 +13,19 @@
 [% INCLUDE 'bodytag.inc' bodyid='basket' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="userbasket">
+            <div class="row">
+                <div class="col">
+                    <div id="userbasket" class="maincontent">
                         <h1>Your cart</h1>
                         <div id="floating">
                             <div id="toolbar" class="toolbar noprint">
                                 [% IF ( verbose ) %]
-                                    <a href="opac-basket.pl" class="btn btn-link brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
+                                    <a href="opac-basket.pl" class="btn btn-link btn-sm brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
                                 [% ELSE %]
-                                    <a href="opac-basket.pl" class="btn btn-link detail"><i class="fa fa-fw fa-search-plus" aria-hidden="true"></i> More details</a>
+                                    <a href="opac-basket.pl" class="btn btn-link btn-sm detail"><i class="fa fa-fw fa-search-plus" aria-hidden="true"></i> More details</a>
                                 [% END %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    <a class="btn btn-link send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send</a>
+                                    <a class="btn btn-link btn-sm send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send</a>
                                 [% END %]
 
                                 <div id="download-cart" class="btn-group dropdown">
@@ -46,26 +46,26 @@
                                 <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash" aria-hidden="true"></i> Empty and close</a>
                                 <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i> Hide window</a>
                                 [% IF ( verbose ) %]
-                                    <a class="btn btn-link print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
+                                    <a class="btn btn-link btn-sm print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
                                 [% END %]
                             </div>
 
                             <div id="selections-toolbar" class="toolbar noprint">
-                                <a id="CheckAll" href="#">Select all</a>
-                                <a id="CheckNone" href="#">Clear all</a>
+                                <a id="CheckAll" class="btn btn-link btn-sm btn-sm" href="#">Select all</a>
+                                <a id="CheckNone" class="btn btn-link btn-sm btn-sm" href="#">Clear all</a>
                                 <span class="sep">|</span>
                                 <span class="links" id="tag_hides">
                                     <span id="selections">Select titles to: </span>
-                                    <a href="#" class="btn btn-link remove deleteshelf disabled"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
+                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                                            <a href="#" class="btn btn-link newshelf disabled"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
+                                            <a href="#" class="btn btn-link btn-sm newshelf disabled"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
                                         [% END %]
                                         [% IF ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
-                                            <a href="#" class="btn btn-link hold disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
+                                            <a href="#" class="btn btn-link btn-sm hold disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                         [% END %]
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <a href="#" id="tagsel_tag" class="btn btn-link disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
+                                            <a href="#" id="tagsel_tag" class="btn btn-link btn-sm disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
                                         [% END %]
                                     [% END # / IF opacuserlogin %]
                                 </span>
@@ -316,8 +316,8 @@
                             </form>
 
                 </div> <!-- / #userbasket -->
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 

@@ -18,16 +18,25 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Course reserves for <em>[% course.course_name | html %]</em></a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                Course reserves for &nbsp;<em>[% course.course_name | html %]</em>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col">
                 <div id="course_reserves" class="maincontent">
+
                     <h2>Course reserves for <em>[% course.course_name | html %]</em></h2>
                     <div class="rows">
                         <ol>
@@ -101,8 +110,8 @@
                         </div>
                     [% END %]
                 </div> <!-- / #course_reserves -->
-            </div> <!-- / .span12 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 [% INCLUDE 'opac-bottom.inc' %]
@@ -110,13 +119,13 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-    $(document).ready(function() {
-        columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
-        KohaTable("#course-items-table", {
-            "dom": '<"top"flp>rt<"clear">',
-            "sorting": [[ 1, "asc" ]],
-            "autoWidth": false,
-        }, columns_settings );
-    });
+        $(document).ready(function() {
+            columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
+            KohaTable("#course-items-table", {
+                "dom": '<"top"flp>rt<"clear">',
+                "sorting": [[ 1, "asc" ]],
+                "autoWidth": false,
+            }, columns_settings );
+        });
     </script>
 [% END %]

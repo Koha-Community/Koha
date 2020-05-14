@@ -1,4 +1,4 @@
-<div id="recordedbooks-checkout" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="recordedbooks-checkout-label" aria-hidden="true">
+<div id="recordedbooks-checkout" class="modal" tabindex="-1" role="dialog" aria-labelledby="recordedbooks-checkout-label" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="recordedbooks-checkout-label">Checkout</h3>

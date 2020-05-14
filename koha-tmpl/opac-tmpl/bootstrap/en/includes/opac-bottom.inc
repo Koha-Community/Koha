@@ -6,87 +6,116 @@
 [% SET opaccredits = KohaNews.get( location => "opaccredits", lang => lang, library => branchcode ) %]
 [% PROCESS 'html_helpers.inc' %]
 [% UNLESS ( is_popup ) %]
-    [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-    [% IF ( opaccredits ) %]
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div id="opaccredits">
-                    [% PROCESS koha_news_block news => opaccredits %]
+        [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
+        [% IF ( opaccredits ) %]
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        [% PROCESS koha_news_block news => opaccredits %]
+                    </div>
                 </div>
             </div>
-        </div>
-    [% END #/ opaccredits %]
+        [% END #/ opaccredits %]
 
-    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || OpacKohaUrl %]
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
-                    <div id="report_a_problem" class="noprint" style="float:left;">
-                        <a class="koha-url" href="/cgi-bin/koha/opac-reportproblem.pl">Report a problem</a>
-                    </div>
-                    [% END %]
-                    [% IF OpacKohaUrl %]
-                    <div id="koha_url" class="clearfix noprint">
-                        <p>Powered by
-                        [% IF template.name.match('opac-main.tt') %]
-                            <a class="koha_url" href="http://koha-community.org">Koha</a>
-                        [% ELSE %]
-                            <a class="koha_url" rel="nofollow" href="http://koha-community.org">Koha</a>
-                        [% END %]</p>
-                    </div>
-                    [% END %]
-                </div> <!-- /.span12 -->
-            </div> <!-- /.row-fluid -->
-        </div> <!-- /.container-fluid -->
-    [% END # / OPACReportProblem || OpacKohaUrl %]
+        [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || OpacKohaUrl %]
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <div id="report-koha-url">
+                            <div class="row justify-content-between">
+                                [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
+                                    <div class="col">
+                                        <div id="report_a_problem" class="noprint">
+                                            <a class="koha-url" href="/cgi-bin/koha/opac-reportproblem.pl">Report a problem</a>
+                                        </div>
+                                    </div>
+                                [% END # / IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
+                                [% IF OpacKohaUrl %]
+                                    <div class="col">
+                                        <div id="koha_url" class="clearfix noprint">
+                                            <p>Powered by
+                                            [% IF template.name.match('opac-main.tt') %]
+                                                <a class="koha_url" href="http://koha-community.org">Koha</a>
+                                            [% ELSE %]
+                                                <a class="koha_url" rel="nofollow" href="http://koha-community.org">Koha</a>
+                                            [% END %]</p>
+                                        </div> <!-- /#koha_url -->
+                                    </div> <!-- /.col -->
+                                [% END # /IF OpacKohaUrl %]
+                            </div> <!-- /.row.justify-content-between -->
+                        </div> <!-- /#report-koha-url -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div> <!-- /.container-fluid -->
+        [% END # / OPACReportProblem || OpacKohaUrl %]
+    </div> <!-- / #wrapper in masthead.inc -->
 
-</div> <!-- / #wrap in masthead.inc -->
-[% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
-    [% IF ( opaclanguagesdisplay ) %]
-        [% IF ( languages_loop && opaclanguagesdisplay ) %]
-            [% UNLESS ( one_language_enabled ) %]
-                <div id="changelanguage" class="navbar navbar-fixed-bottom navbar-static-bottom noprint">
-                    <div class="navbar-inner">
-                        <ul id="i18nMenu" class="nav">
-                            <li><p class="lang navbar-text"><strong>Languages:&nbsp;</strong></p></li>
+    [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
+        [% IF ( opaclanguagesdisplay ) %]
+            [% IF ( languages_loop && opaclanguagesdisplay ) %]
+                [% UNLESS ( one_language_enabled ) %]
+                    <footer id="changelanguage"  class="noprint">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <span class="navbar-text">Languages:</span>
+                            </li>
                             [% FOREACH languages_loo IN languages_loop %]
                                 [% IF ( languages_loo.group_enabled ) %]
                                     [% IF ( languages_loo.plural ) %]
-                                        <li class="dropdown">
-                                            <a data-toggle="dropdown" class="dropdown-toggle sublangs" id="show[% languages_loo.rfc4646_subtag | html %]" href="#">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %] <b class="caret"></b></a>
-                                                <ul id="sub[% languages_loo.rfc4646_subtag | html %]" class="dropdown-menu">
-                                                    [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
-                                                        [% IF ( sublanguages_loo.enabled ) %]
-                                                            [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                                <li> <p>[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</p></li>
-                                                            [% ELSE %]
-                                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a></li>
-                                                            [% END %]
-                                                        [% END # / IF sublanguages_loo.enabled %]
-                                                    [% END # / FOREACH sublanguages_loo %]
-                                                </ul>
-                                        </li> <!-- / .more -->
+                                        <li class="nav-item dropup">
+                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="show[% languages_loo.rfc4646_subtag | html %]">
+                                                [% IF ( languages_loo.native_description ) %]
+                                                    [% languages_loo.native_description | html %]
+                                                [% ELSE %]
+                                                    [% languages_loo.rfc4646_subtag | html %]
+                                                [% END %]
+                                            </a><!-- /.nav-link.dropdown-toggle -->
+                                            <div id="sub[% languages_loo.rfc4646_subtag | html %]" class="dropdown-menu" aria-labelledby="show[% languages_loo.rfc4646_subtag | html %]">
+                                                [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
+                                                    [% IF ( sublanguages_loo.enabled ) %]
+                                                        [% IF ( sublanguages_loo.sublanguage_current ) %]
+                                                            <a class="dropdown-item" href="#">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a>
+                                                        [% ELSE %]
+                                                            <a class="dropdown-item" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a>
+                                                        [% END %]
+                                                    [% END # / IF sublanguages_loo.enabled %]
+                                                [% END # / FOREACH sublanguages_loo %]
+                                            </div> <!-- /#sub[% languages_loo.rfc4646_subtag | html %] -->
+                                        </li> <!-- /.nav-item.dropup -->
                                     [% ELSE %]
                                         [% IF ( languages_loo.group_enabled ) %]
                                             [% IF ( languages_loo.current ) %]
-                                                <li class="active"><p class="navbar-text">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]</p></li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                                                        [% IF ( languages_loo.native_description ) %]
+                                                            [% languages_loo.native_description | html %]
+                                                        [% ELSE %]
+                                                            [% languages_loo.rfc4646_subtag | html %]
+                                                        [% END %]
+                                                    </a> <!-- /.nav-link -->
+                                                </li> <!-- /.nav-item -->
                                             [% ELSE %]
-                                                <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description | html %][% ELSE %][% languages_loo.rfc4646_subtag | html %][% END %]</a></li>
-                                            [% END %]
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/cgi-bin/koha/opac-changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]">
+                                                        [% IF ( languages_loo.native_description ) %]
+                                                            [% languages_loo.native_description | html %]
+                                                        [% ELSE %]
+                                                            [% languages_loo.rfc4646_subtag | html %]
+                                                        [% END %]
+                                                    </a> <!-- /.nav-link -->
+                                                </li> <!-- /.nav-item -->
+                                            [% END # /IF ( languages_loo.current ) %]
                                         [% END # / IF languages_loo.current %]
                                     [% END # / IF ( languages_loo.plural ) %]
                                 [% END # / IF ( languages_loo.group_enabled ) %]
                             [% END # / FOREACH languages_loo IN languages_loop %]
-                        </ul> <!-- / #i18menu -->
-                    </div> <!-- / .navbar-inner -->
-                </div> <!-- / #changelanguage -->
-            [% END # / UNLESS ( one_language_enabled ) %]
-        [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]
-    [% END # / IF opaclanguagesdisplay %]
-[% END %]
+                        </ul> <!-- /.nav -->
+                    </footer> <!-- / #changelanguage -->
+                [% END # / UNLESS ( one_language_enabled ) %]
+            [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]
+        [% END # / IF opaclanguagesdisplay %]
+    [% END # /IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
 [% END # / UNLESS is_popup %]
-
 
 <!-- JavaScript includes -->
 [% Asset.js("lib/jquery/jquery-3.4.1.min.js") | $raw %]
@@ -96,7 +125,7 @@
 // Resolve name collision between jQuery UI and Twitter Bootstrap
 $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
-[% Asset.js("lib/bootstrap/js/bootstrap.min.js") | $raw %]
+[% Asset.js("lib/bootstrap/js/bootstrap.bundle.min.js") | $raw %]
 [% Asset.js("lib/fontfaceobserver.min.js") | $raw %]
 [% Asset.js("js/global.js") | $raw %]
 <script>
@@ -115,15 +144,15 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 </script>
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
-<script>//<![CDATA[
+<script>
         var NO_AMAZON_IMAGE = _("No cover image available");
-    //]]>
+
 </script>
 [% Asset.js("js/amazonimages.js") | $raw %]
 [% END %]
 
 <script>
-    //<![CDATA[
+
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
     var MSG_DELETE_SEARCH_HISTORY = _("Are you sure you want to delete your search history?");
     var MSG_NO_SUGGESTION_SELECTED = _("No suggestion was selected");
@@ -212,7 +241,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     $(".clearsh").on("click", function(){
         return confirmDelete(MSG_DELETE_SEARCH_HISTORY);
     });
-    //]]>
+
 </script>
 
 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
@@ -227,38 +256,38 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% IF ( GoogleJackets ) %]
     [% Asset.js("js/google-jackets.js") | $raw %]
     <script>
-        //<![CDATA[
+
         var NO_GOOGLE_JACKET = _("No cover image available");
-        //]]>
+
     </script>
 [% END %]
 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
     [% Asset.js("js/coce.js") | $raw %]
     <script>
-        //<![CDATA[
+
         var NO_COCE_JACKET = _("No cover image available");
-        //]]>
+
     </script>
 [% END %]
 
 [% IF OPACLocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
     <script>
-    //<![CDATA[
+
     var NO_LOCAL_JACKET = _("No cover image available");
-    //]]>
+
     </script>
 [% END %]
 
 [% IF ( BakerTaylorEnabled ) %]
     [% Asset.js("js/bakertaylorimages.js") | $raw %]
     <script>
-        //<![CDATA[
+
         var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
         $(window).load(function(){
             bt_verify_images();
         });
-        //]]>
+
     </script>
 [% END %]
 
@@ -299,9 +328,9 @@ $(document).ready(function() {
     [% SET SCOUserJS = Koha.Preference('SCOUserJS') %]
     [% IF ( SCOUserJS ) %]
         <script>
-            //<![CDATA[
+
             [% SCOUserJS | $raw %]
-            //]]>
+
         </script>
     [% END %]
 [% END %]

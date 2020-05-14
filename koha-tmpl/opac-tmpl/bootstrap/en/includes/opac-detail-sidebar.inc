@@ -48,7 +48,7 @@
     [% IF ( Koha.Preference('OPACDetailQRCode' ) ) %]
         <li>
             <a class="show_qrcode btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> Send to device</a>
-            <div id="qrcode" class="hidden"></div>
+            <div id="qrcode" class="d-none"></div>
         </li>
     [% END %]
 
@@ -58,31 +58,29 @@
             <div id="export">
                 <div class="dropdown">
                     <a id="format" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Save record <b class="caret"></b></a>
-                        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
-                            [% FOREACH option IN export_options %]
-                                [% IF option == 'dc' %]
-                                    <li><a role="menuitem" href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
-                                [% ELSE %]
-                                <li>
-                                    <a role="menuitem" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblio.biblionumber | html %]&amp;format=[% option | html %]">
-                                        [% SWITCH option %]
-                                            [% CASE 'bibtex' %]BIBTEX
-                                            [% CASE 'endnote' %]EndNote
-                                            [% CASE 'marcxml' %]MARCXML
-                                            [% CASE 'marc8' %]MARC (non-Unicode/MARC-8)
-                                            [% CASE 'utf8' %]MARC (Unicode/UTF-8)
-                                            [% CASE 'marcstd' %]MARC (Unicode/UTF-8, Standard)
-                                            [% CASE 'mods' %]MODS (XML)
-                                            [% CASE 'ris' %]RIS
-                                            [% CASE 'isbd' %]ISBD
-                                        [% END %]
-                                    </a>
-                                </li>
-                                [% END %]
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="format">
+                        [% FOREACH option IN export_options %]
+                            [% IF option == 'dc' %]
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a>
+                            [% ELSE %]
+                                <a class="dropdown-item" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblio.biblionumber | html %]&amp;format=[% option | html %]">
+                                    [% SWITCH option %]
+                                        [% CASE 'bibtex' %]BIBTEX
+                                        [% CASE 'endnote' %]EndNote
+                                        [% CASE 'marcxml' %]MARCXML
+                                        [% CASE 'marc8' %]MARC (non-Unicode/MARC-8)
+                                        [% CASE 'utf8' %]MARC (Unicode/UTF-8)
+                                        [% CASE 'marcstd' %]MARC (Unicode/UTF-8, Standard)
+                                        [% CASE 'mods' %]MODS (XML)
+                                        [% CASE 'ris' %]RIS
+                                        [% CASE 'isbd' %]ISBD
+                                    [% END %]
+                                </a>
                             [% END %]
-                        </ul>
-                </div>
-            </div>
+                        [% END %]
+                    </div> <!-- /.dropdown-menu -->
+                </div> <!-- /.dropdown -->
+            </div> <!-- /#export -->
         </li>
     [% END %]
 
@@ -90,11 +88,13 @@
         <li>
             <div id="moresearches_menu">
                 <div class="dropdown">
-                    <a id="furthersearches" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-search" aria-hidden="true"></i> More searches <b class="caret"></b></a>
-                        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="furthersearches">
-                            <li><a href="#" class="menu-inactive">Search for this title in:</a></li>
-                            [% OPACSearchForTitleIn | $raw %]
-                        </ul>
+                    <a id="furthersearches" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-fw fa-search" aria-hidden="true"></i> More searches
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="furthersearches">
+                        <div class="dropdown-header">Search for this title in:</div>
+                        [% OPACSearchForTitleIn | $raw %]
+                    </div>
                 </div>
             </div>
         </li>
@@ -102,30 +102,34 @@
 </ul>
 
 <!-- Dublin Core Modal Form -->
-<div class="modal hide" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title" id="exportModalLabel">Exporting to Dublin Core...</h3>
-    </div>
-    <form method="get" action="/cgi-bin/koha/opac-export.pl">
-    <div class="modal-body">
-        <fieldset id="dc_fieldset">
-                <input id="input-simple" type="radio" name="format" value="rdfdc">
-                <label class="label_dc" for="input-simple">Simple DC-RDF</label>
-                <br>
-                <input id="input-oai" type="radio" name="format" value="oaidc" checked>
-                <label class="label_dc" for="input-oai">OAI-DC</label>
-                <br>
-                <input id="input-srw" type="radio" name="format" value="srwdc">
-                <label class="label_dc" for="input-srw">SRW-DC</label>
-                <br>
-        <input type="hidden" name="op" value="export">
-        <input type="hidden" name="bib" value="[% biblio.biblionumber | html %]">
-        </fieldset>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn">Export</button>
-        <button class="btn btn-link btn-lg" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    </div>
-    </form>
-</div>
+<div class="modal" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exportModalLabel">Exporting to Dublin Core...</h3>
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <form method="get" action="/cgi-bin/koha/opac-export.pl">
+                <div class="modal-body">
+                    <fieldset id="dc_fieldset">
+                        <input id="input-simple" type="radio" name="format" value="rdfdc">
+                        <label class="label_dc" for="input-simple">Simple DC-RDF</label>
+                        <br>
+                        <input id="input-oai" type="radio" name="format" value="oaidc" checked>
+                        <label class="label_dc" for="input-oai">OAI-DC</label>
+                        <br>
+                        <input id="input-srw" type="radio" name="format" value="srwdc">
+                        <label class="label_dc" for="input-srw">SRW-DC</label>
+                        <br>
+                        <input type="hidden" name="op" value="export">
+                        <input type="hidden" name="bib" value="[% biblio.biblionumber | html %]">
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Export</button>
+                    <button class="btn btn-link btn-lg" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </form>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->

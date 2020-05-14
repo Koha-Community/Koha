@@ -7,23 +7,31 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your payment</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+               <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-routing-lists.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Your payment</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="useraccount" class="maincontent">
                     [% IF error %]
-                        <div id="error" class="dialog alert">
+                        <div id="error" class="alert alert-warning">
                             <p><strong>Error:</strong> there was a problem processing your payment</p>
 
                             [% IF error == "PAYPAL_UNABLE_TO_CONNECT" %]
@@ -38,11 +46,11 @@
 
                     <a href="/cgi-bin/koha/opac-account.pl">Return to fine details</a>
                 </div> <!-- / #useraccount -->
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+
+            </div> <!-- / .col-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
-
 [% BLOCK jsinclude %][% END %]

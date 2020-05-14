@@ -1,5 +1,3 @@
-@import "mixins";
-@import "fonts";
 @import "common";
 
 body {
@@ -18,246 +16,6 @@ a {
     }
 }
 
-.ui-widget-content {
-    a,
-    a:visited {
-        color: $sci-link-color;
-    }
-}
-
-h1 {
-    color: $sci-heading-color;
-    font-size: 140%;
-    line-height: 150%;
-}
-
-h2 {
-    color: $sci-heading-color;
-    font-size: 130%;
-    line-height: 150%;
-}
-
-h3 {
-    color: $sci-heading-color;
-    font-size: 120%;
-    line-height: 150%;
-}
-
-h4 {
-    color: $sci-heading-color;
-    font-size: 110%;
-}
-
-h5 {
-    color: $sci-heading-color;
-    font-size: 100%;
-}
-
-caption {
-    color: $sci-heading-color;
-    font-size: 120%;
-    font-weight: bold;
-    margin: .5em 0;
-    text-align: left;
-}
-
-input,
-textarea {
-    width: auto;
-}
-
-// Search bar border glow
-input {
-    &[type="text"],
-    &[type="password"] {
-        &:focus {
-            border-color: #85CA11;
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(194, 228, 136, .6);
-        }
-    }
-}
-
-legend {
-    color: $sci-heading-color;
-    font-size: 110%;
-    font-weight: bold;
-}
-
-th {
-    background-color: #E2E8E8;
-}
-
-.main {
-    background-color: #FFF;
-    border-color: #F0F3F3;
-    margin: .5em 20px;
-    padding: .8em 0;
-}
-
-.navbar-inverse {
-    .navbar-inner {
-        background: #FCF9FC none;
-        border-color: #FCF9FC;
-        box-shadow: none;
-    }
-
-    .brand {
-        color: $sci-heading-color;
-        font-weight: bold;
-    }
-
-    .nav {
-        li {
-            a,
-            a:hover,
-            a:focus {
-                color: $sci-heading-color;
-                font-weight: bold;
-            }
-
-            &.dropdown {
-
-                a {
-                    &:hover,
-                    &:focus {
-                        .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
-                        }
-                    }
-                }
-
-                &.open {
-                    &> .dropdown-toggle {
-                        background-color: transparent;
-                        color: #85CA11;
-
-                        .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
-
-                            &:hover {
-                                border-bottom-color: #85CA11;
-                                border-top-color: #85CA11;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.navbar {
-    .nav {
-        li {
-            &.dropdown {
-                &> a {
-                    &:focus,
-                    &:hover {
-                        .caret {
-                            border-bottom-color: #85CA11;
-                            border-top-color: #85CA11;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Dropdown menus in Header
-.dropdown-menu {
-    border-radius: 0;
-
-    &> li {
-        &> a {
-            &:hover,
-            &:focus {
-                background: #85CA11 none;
-                color: #FFFFFF;
-            }
-        }
-    }
-}
-
-
-.table-striped tbody > tr:nth-child(odd) > td,
-.table-striped tbody > tr:nth-child(odd) > th {
-    background-color: #F0F3F3;
-}
-
-.modal-header {
-    .closebtn {
-        margin-top: 2px;
-    }
-}
-
-.closebtn {
-    color: #000000;
-    filter: alpha(opacity=20);
-    float: right;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 20px;
-    opacity: .2;
-    text-shadow: 0 1px 0 #FFFFFF;
-
-    &:hover {
-        color: #000000;
-        cursor: pointer;
-        filter: alpha(opacity=40);
-        opacity: .4;
-        text-decoration: none;
-    }
-}
-
-button {
-    &.closebtn {
-        background: transparent;
-        border: 0;
-        cursor: pointer;
-        padding: 0;
-    }
-}
-
-.btn-group {
-    label,
-    select {
-        font-size: 13px;
-    }
-}
-
-// Override Bootstrap alert
-.alert {
-    background: linear-gradient(to bottom,  #FFFBE5 0%, #FFF0B2 9%, #FFF1A8 89%, #F7E665 100%);
-    border-color: #D6C43B;
-    color: #333;
-
-    // Redefine a new style for Bootstrap's class "close" since we use that already
-    // Use <a class="closebtn" href="#">&times;</a>
-    .closebtn {
-        line-height: 20px;
-        position: relative;
-        right: -21px;
-        top: -2px;
-    }
-}
-
-// Override Bootstrap alert.alert-info
-.alert-info {
-    background: linear-gradient(to bottom,  #F4F6FA 0%, #EAEEF5 4%, #E8EDF6 96%, #CDDBF2 100%);
-    border-color: #C5D1E5;
-    color: #333;
-}
-
-// Override Bootstrap alert.alert-success
-.alert-success {
-    background: linear-gradient(to bottom,  #F8FFE8 0%, #E3F5AB 4%, #DCF48D 98%, #9EBF28 100%);
-    border-color: #9FBA35;
-    color: #333;
-}
-
 
 #members {
     a {
@@ -273,6 +31,8 @@ button {
 }
 
 .table {
+    font-size: .95rem;
+
     .sorting_asc {
         background: url("../images/asc.gif") no-repeat scroll right center #EEEEEE;
         padding-right: 19px;
@@ -325,16 +85,29 @@ button {
     }
 }
 
+.sco_entry {
+    margin: 2rem 0;
+
+    label {
+        text-align: right;
+    }
+}
+
 #sci_logout {
     color: #E8583C;
+}
+
+.sci_input_append {
+    margin-top: 1rem;
+    padding-top: 1rem;
 }
 
 #sci_checkin_button,
 #sci_refresh_button,
 #sci_append_button {
-    margin-bottom: 10px;
 }
 
 #sci_refresh_button {
-    color: rgb(51, 51, 51);
 }
+
+@import "responsive";

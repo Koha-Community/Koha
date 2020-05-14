@@ -1,4 +1,4 @@
-<div id="overdrive-checkout" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="overdrive-checkout-label" aria-hidden="true">
+<div id="overdrive-checkout" class="modal" tabindex="-1" role="dialog" aria-labelledby="overdrive-checkout-label" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="overdrive-checkout-label">Checkout</h3>

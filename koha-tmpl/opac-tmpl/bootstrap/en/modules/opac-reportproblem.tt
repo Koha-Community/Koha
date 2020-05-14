@@ -8,22 +8,28 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Report a problem</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Report a problem</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                 <h1>Report a problem</h1>
 
@@ -46,7 +52,7 @@
 
                     <div id="reportproblem" class="maincontent toptabs">
                         <form name="reportlibform" action="/cgi-bin/koha/opac-reportproblem.pl" method="post">
-                            <input type="hidden" name="op" value="addreport">
+                            <input type="hidden" name="op" value="addreport" />
                             <fieldset class="rows">
                                 <ol>
                                     <li>
@@ -62,16 +68,16 @@
                                     </li>
                                     <li>
                                         <label for="problempage">Problem found on page: </label>
-                                        <input type="hidden" name="problempage" id="problempage" value="[% problempage | url %]">
+                                        <input type="hidden" name="problempage" id="problempage" value="[% problempage | url %]" />
                                          [% problempage | html %]<br/>
                                     </li>
                                     <li>
                                         <label for="user">Username: </label>
-                                        <input type="hidden" name="user" id="user" value="[% username | html %]" class="span3">
+                                        <input type="hidden" name="user" id="user" value="[% username | html %]" />
                                         [% username | html %]
                                     <li>
                                         <label for="subject">Subject: </label>
-                                        <input type="text" name="subject" id="subject" value="[% subject | html %]" class="span3">
+                                        <input type="text" name="subject" id="subject" value="[% subject | html %]" />
                                     </li>
                                     <li>
                                         <label for="message">Message: </label>
@@ -80,15 +86,15 @@
                                 </ol>
                             </fieldset>
                             <fieldset class="action">
-                                <input type="submit" value="Submit" class="btn">
+                                <input type="submit" value="Submit" class="btn btn-primary">
                             </fieldset>
                         </form>
                     </div> <!-- / #reportproblem -->
 
-                [% END %]
+                [% END # /IF messages %]
 
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

@@ -2,7 +2,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Editing issue note for [% title | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -10,22 +10,30 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a><span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Editing issue note for [% ISSUE.title | html %] - [% ISSUE.author | html %]</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Editing issue note for [% title | html %] [% author | html %]</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="issuenote" class="maincontent">
-                    <h3>Editing issue note for [% title | html %] [% author | html %]</h3>
+                    <h2>Editing issue note for [% title | html %] [% author | html %]</h2>
                         [% IF not(Koha.Preference("AllowCheckoutNotes")) %]
                             Issue notes have not been enabled. Please contact the library.
                         [% ELSE %]
@@ -39,12 +47,12 @@
                                     <input type="hidden" name="action" value="issuenote">
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="submit" value="Submit note" class="btn btn-default btn-sm"><a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a>
+                                    <input type="submit" value="Submit note" class="btn btn-primary"><a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a>
                                 </fieldset>
                             </form> <!-- issue-note -->
                         [% END %]
                 </div> <!-- issuenote -->
-            </div> <!-- span10 -->
+            </div> <!-- col-10 -->
         </div> <!-- row-fluid -->
     </div> <!-- container-fluid -->
 

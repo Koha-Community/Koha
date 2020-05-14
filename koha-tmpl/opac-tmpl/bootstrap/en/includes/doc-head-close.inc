@@ -11,7 +11,6 @@
     [% Asset.css("lib/jquery/jquery-ui-rtl-1.12.1.min.css") | $raw %]
     [% Asset.css("css/right-to-left.css") | $raw %]
 [% ELSE %]
-    [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
     [% Asset.css("lib/jquery/jquery-ui-1.12.1.min.css") | $raw %]
 [% END %]
 [% IF ( Koha.Preference('opaclayoutstylesheet') ) %]
@@ -49,12 +48,9 @@
     <link rel="search" type="application/opensearchdescription+xml" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-search.pl?format=opensearchdescription" title="Search [% LibraryNameTitle | html %]">
     <link rel="unapi-server" type="application/xml" title="unAPI" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/unapi" />
 [% END %]
-[% PROCESS cssinclude %]
-<!-- Respond.js brings responsive layout behavior to IE < v.9 -->
-<!--[if lt IE 9]>
-    <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
-<![endif]-->
-
+[% FILTER collapse %]
+    [% PROCESS cssinclude %]
+[% END %]
 <script>
     var Koha = {};
     function _(s) { return s } // dummy function for gettext

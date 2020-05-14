@@ -9,7 +9,7 @@
     <div id="header-region" class="noprint">
         <nav class="navbar navbar-expand">
             <h1 id="logo">
-                <a class="navbar-brand" href="/cgi-bin/koha/sco/sco-main.pl">
+                <a class="navbar-brand" href="/cgi-bin/koha/sci/sci-main.pl">
                     [% IF ( LibraryNameTitle ) %]
                         [% LibraryNameTitle | html %]
                     [% ELSE %]
@@ -28,9 +28,14 @@
                 <li class="nav-item">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/cgi-bin/koha/sco/help.pl"><i class="fa fa-info-circle fa-icon-black" aria-hidden="true"></i> Help</a>
+                            <a href="/cgi-bin/koha/sci/sci-main.pl" class="nav-link helpModal-trigger" role="button" data-toggle="modal"><i class="fa fa-info-circle fa-icon-black" aria-hidden="true"></i> Help</a></li>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a id="sci_logout" href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1" class="nav-link logout">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i> Log out
+                    </a>
                 </li>
             </ul>
         </nav> <!-- /navbar -->

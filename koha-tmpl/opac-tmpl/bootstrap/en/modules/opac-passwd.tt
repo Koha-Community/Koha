@@ -10,25 +10,33 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Change your password</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Change your password</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-10 order-first order-lg-2">
                 <div id="userpasswd" class="maincontent">
                     <h3>Change your password </h3>
 
                     [% IF ( Error_messages ) %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             <h3>There was a problem with your submission</h3>
                             <p>
                                 [% IF ( passwords_mismatch ) %]
@@ -53,8 +61,6 @@
 
                     [% IF logged_in_user.category.effective_change_password %]
                         [% IF ( Ask_data ) %]
-
-
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
                                 <fieldset>
                                     [% IF ( Koha.Preference('RequireStrongPassword') ) %]
@@ -62,30 +68,42 @@
                                     [% ELSE %]
                                         <div class="alert alert-info">Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</div>
                                     [% END %]
-                                    <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
-                                    <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
-                                    <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />
+                                    <div class="form-group">
+                                        <label for="Oldkey">Current password:</label>
+                                        <input class="form-control" type="password" id="Oldkey" size="25"  name="Oldkey" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Newkey">New password:</label>
+                                        <input class="form-control" type="password" id="Newkey"  size="25"  name="Newkey" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Confirm">Re-type new password:</label>
+                                        <input class="form-control" type="password"  id="Confirm" size="25" name="Confirm" />
+                                    </div>
                                 </fieldset>
-                                <fieldset class="action"><input type="submit" value="Change password" class="btn" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
+                                <fieldset class="action">
+                                    <input type="submit" value="Change password" class="btn btn-primary" />
+                                    <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a>
+                                </fieldset>
                             </form>
                         [% END # /IF Ask_data %]
                     [% ELSE %]
-                        <div class="alert">You can't change your password.</div>
+                        <div class="alert alert-warning">You can't change your password.</div>
                     [% END # /IF logged_in_user.category.effective_change_password %]
 
                     [% IF ( password_updated ) %]
-                        <div class="alert alert-success">
+                        <div class="alert alert-info">
                             <h1>Password updated</h1>
                             Your password has been changed
                         </div>
                         <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                            <p><input type="submit" class="btn" value="Return to my account" /></p>
+                            <p><input type="submit" class="btn btn-primary" value="Return to my account" /></p>
                         </form>
                     [% END # /IF password_updated %]
                 </div> <!-- / #userpasswd -->
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+            </div> <!-- / .col-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 

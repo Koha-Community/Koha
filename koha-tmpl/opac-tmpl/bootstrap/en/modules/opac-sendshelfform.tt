@@ -7,9 +7,9 @@
 [% INCLUDE 'bodytag.inc' bodyid='sendshelf' bodyclass='popup' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="usersendshelfform">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
+                    <div id="usersendshelfform" class="maincontent">
                         [% IF ( email ) %]
                             [% IF ( SENT ) %]
                                 <h1>Message sent</h1>
@@ -19,13 +19,13 @@
                                 <p><a class="focus close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid | html %]">Back to lists</a></p>
                             [% END %]
                             [% IF ( error ) %]
-                                <div class="alert">
+                                <div class="alert alert-warning">
                                     <p>There was an error sending the list.</p>
                                 </div>
                             [% END %]
                         [% ELSE %]
                             [% IF ( invalidlist ) %]
-                                <div class="alert">
+                                <div class="alert alert-warning">
                                     <p>You do not have permission to send this list.</p>
                                 </div>
                                 <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid | html %]">Back to lists</a></p>
@@ -43,7 +43,7 @@
                                     </fieldset>
                                     [% IF Koha.Preference('RequestOnOpac') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                     <fieldset class="action">
-                                        <input type="submit" value="Send" class="btn" />
+                                        <input type="submit" value="Send" class="btn btn-primary" />
                                         <a class="cancel close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid | html %]">Cancel</a>
                                     </fieldset>
                                 </form>
@@ -52,7 +52,7 @@
                         [% END # / IF email %]
                     </div> <!-- / #usersendshelfform -->
                 </div> <!-- / .span12 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

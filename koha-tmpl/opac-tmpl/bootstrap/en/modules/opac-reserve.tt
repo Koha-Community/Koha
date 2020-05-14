@@ -14,10 +14,16 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Placing a hold</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Placing a hold</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container">
         <div id="holds" class="maincontent">
@@ -189,18 +195,18 @@
 
                                 [% UNLESS ( bibitemloo.holdable ) %]
                                     [% IF ( bibitemloo.ageRestricted ) %]
-                                        <div class="alert">Sorry, you are too young to reserve this material.</div>
+                                        <div class="alert alert-warning">Sorry, you are too young to reserve this material.</div>
                                     [% END %]
                                     [% IF ( bibitemloo.already_reserved ) %]
-                                        <div class="alert">You have already requested this title.</div>
+                                        <div class="alert alert-warning">You have already requested this title.</div>
                                     [% ELSE %]
                                         [% UNLESS ( bibitemloo.bib_available ) %]
-                                            <div class="alert">There are no items that can be placed on hold.</div>
+                                            <div class="alert alert-warning">There are no items that can be placed on hold.</div>
                                         [% ELSE %]
                                             [% IF ( bibitemloo.already_patron_possession ) %]
-                                                <div class="alert">This title cannot be requested because it's already in your possession.</div>
+                                                <div class="alert alert-warning">This title cannot be requested because it's already in your possession.</div>
                                             [% ELSE %]
-                                                <div class="alert">This title cannot be requested.</div>
+                                                <div class="alert alert-warning">This title cannot be requested.</div>
                                             [% END %]
                                         [% END # / UNLESS bibitemloo.bib_available %]
                                     [% END # / IF bibitemloo.already_reserved %]
@@ -449,7 +455,7 @@
                     </div><!-- #bigloop -->
 
                     [% UNLESS ( none_available ) %]
-                        <input type="submit" value="Confirm hold" class="btn placehold" />
+                        <input type="submit" value="Confirm hold" class="btn btn-primary placehold" />
                     [% END %]
 
                 </form>

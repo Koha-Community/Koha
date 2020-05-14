@@ -7,9 +7,9 @@
 [% INCLUDE 'bodytag.inc' bodyid='addtolist' bodyclass='popup' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div id="usersendbasket">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
+                    <div id="usersendbasket" class="maincontent">
                         [% IF ( email_add ) %]
 
                             [% IF ( SENT ) %]
@@ -21,7 +21,7 @@
                             [% END %]
 
                             [% IF ( error ) %]
-                                <div class="alert">
+                                <div class="alert alert-warning">
                                     <p>There was an error sending the cart.</p>
                                 </div>
                             [% END %]
@@ -39,7 +39,7 @@
                                 </fieldset>
                                 [% IF Koha.Preference('RequestOnOpac') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                 <fieldset class="action">
-                                    <input type="submit" class="btn" value="Send" />
+                                    <input type="submit" class="btn btn-primary" value="Send" />
                                     <a class="cancel close" href="#">Cancel</a>
                                 </fieldset>
                             </form>
@@ -47,7 +47,7 @@
                         [% END # / IF email_add %]
                     </div> <!-- / #usersendbasket -->
                 </div> <!-- / .span12 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

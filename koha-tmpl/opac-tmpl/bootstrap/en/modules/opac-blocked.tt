@@ -7,14 +7,20 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-blocked' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li>Blocked record</li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                Blocked record
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span9">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-6">
                 <div id="opac-blocked-message" class="maincontent">
                     <h3>Blocked</h3>
                     <p>You are not authorized to view this record.</p>

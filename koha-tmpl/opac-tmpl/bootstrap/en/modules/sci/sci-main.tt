@@ -21,179 +21,163 @@
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-
+[% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self check-in</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 
 [% IF ( Koha.Preference('OpacFavicon') ) %]
-<link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') | url %]" type="image/x-icon" />
+    <link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') | url %]" type="image/x-icon" />
 [% ELSE %]
-<link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]
-[% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/jquery/jquery-ui-1.12.1.css") | $raw %]
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style>[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
-<!--[if lt IE 9]>
-    <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
-<![endif]-->
 <script>
     function _(s) { return s } // dummy function for gettext
 </script>
 [% Asset.js("lib/modernizr.min.js") | $raw %]
 </head>
 <body id="sci_main" class="sci" onload="dofocus();" onunload="mungeHistory();">
-
-[% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-<div id="wrap">
-    <div class="navbar navbar-inverse navbar-static-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand" href="/cgi-bin/koha/sci/sci-main.pl"><img src="[% interface | html %]/[% theme | html %]/images/koha-green-logo.png" alt=""></a>
-                <div id="checkouthelp">
-                    <ul class="nav pull-right">
-                        <li><a href="/cgi-bin/koha/sci/sci-main.pl" class="helpModal-trigger" role="button" data-toggle="modal"><i class="fa fa-info-circle" aria-hidden="true"></i> Help</a></li>
-                        <li><a id="sci_logout" href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1" class="logout">Log out</a></li>
-                    </ul>
-                </div>
-
-                [% IF Koha.Preference( 'opaclanguagesdisplay' ) %]
-                    <div id="members">
-                        <ul class="nav pull-right">
-                            [% INCLUDE 'masthead-langmenu.inc' %]
-                        </ul>
-                    </div>
-                [% END %]
-
-            </div> <!-- /.container-fluid -->
-        </div> <!-- /.navbar-inner -->
-    </div> <!-- /.navbar -->
-
-    [% IF ( OpacHeader ) %]
-        <div class="container-fluid">
-            <div class="row-fluid">
-                <div id="opacheader">
-                    [% PROCESS koha_news_block news => OpacHeader %]
-                </div>
-            </div>
-        </div>
-    [% END %]
+    [% INCLUDE 'masthead-sci.inc' %]
 
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div id="masthead">
-                    <h1>[% LibraryName | html %] Self check-in</h1>
-                [% IF ( nopermission ) %]
-                    [%# This is what is displayed if user doesn't have permission %]
-                    <div class="alert">
-                        <h3>Access denied</h3>
-                        <p>Sorry, this self check-in station has lost authentication. Please contact the administrator to resolve this problem.</p>
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
+                    <div id="masthead">
+                        <h1>[% LibraryName | html %] Self check-in</h1>
                     </div>
-                [% ELSIF ( different_ip ) %]
-                    [%# This is what is displayed if user doesn't have permission %]
-                    <div class="alert">
-                        <h3>Session lost</h3>
-                        <p>You are accessing self check-in from a different IP address! Please log in again.</p>
-                    </div>
-                [% ELSIF ( checkins ) %]
-                    [%# We have results from a check-in attempt %]
-                    <div id="checkins" class="sci_results_list">
-                        [% IF ( success && success.size > 0 || errors && errors.size > 0 ) %]
-                            <h3>Results</h3>
-                                <table id="sci_bcheckins_table" class="table table-bordered table-striped dataTable no-footer" style="font-size: initial;">
-                                  <thead>
-                                    <th>Barcode</th>
-                                    <th>Status</th>
-                                  </thead>
-                                  <tbody>
-                                [% FOREACH success_line IN success %]
-                                    <tr><td>[% success_line.barcode | html %]</td><td>Checked in</td></tr>
-                                [% END %]
-                                [% FOREACH error IN errors %]
-                                    <tr>
-                                      <td>[% error.barcode | html %]</td>
-                                      <td>Not checked in [% PROCESS error_message messages=error.messages %]</td>
-                                    </tr>
-                                [% END %]
-                                  </tbody>
-                                </table>
-                                <div>
-                                    <form method="post" action="#" id="finish_form">
-                                        <button id="sci_finish_button" type="submit" class="btn"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
-                                    </form>
-                                </div>
-                        [% ELSE %]
-                            <div class="alert">
-                                <p>Your request included no check-ins.</p>
-                            </div>
-                        [% END %]
-                    </div>
-                [% ELSE %]
-                    [%# Prompt for barcodes %]
-                    <div id="new_checkins" class="sci_entry">
-                        <form id="scan_form" name="scan_form"
-                              method="post" action="/cgi-bin/koha/sci/sci-main.pl">
-                            <fieldset>
-                                <div>
-                                  <label for="barcode_input">Scan the item or enter its barcode:</label>
-                                  <input id="barcode_input" name="barcode_input" size="20" type="text" class="focus" autocomplete="off" />
-                                  <button id="sci_append_button" type="submit" class="btn btn-default btn-sm">
-                                    <i class="fa fa-plus" aria-hidden="true"></i> <span>Add</span>
-                                  </button>
-                                </div>
-                                <div class="sci_input_append">
-                                    <table id="sci_barcodes_table" class="table table-bordered table-striped dataTable no-footer" style="display: none; font-size: initial;">
-                                      <thead>
-                                        <th class="barcodes_column">Barcode</th>
-                                      </thead>
-                                      <tbody>
-                                      </tbody>
+
+                    [% IF ( nopermission ) %]
+                        [%# This is what is displayed if user doesn't have permission %]
+                        <div class="alert alert-warning">
+                            <h3>Access denied</h3>
+                            <p>Sorry, this self check-in station has lost authentication. Please contact the administrator to resolve this problem.</p>
+                        </div>
+                    [% ELSIF ( different_ip ) %]
+                        [%# This is what is displayed if user doesn't have permission %]
+                        <div class="alert alert-warning">
+                            <h3>Session lost</h3>
+                            <p>You are accessing self check-in from a different IP address! Please log in again.</p>
+                        </div>
+                    [% ELSIF ( checkins ) %]
+                        [%# We have results from a check-in attempt %]
+                        <div id="checkins" class="sci_results_list">
+                            [% IF ( success && success.size > 0 || errors && errors.size > 0 ) %]
+                                <h3>Results</h3>
+                                    <table id="sci_bcheckins_table" class="table table-bordered table-striped dataTable no-footer">
+                                        <thead>
+                                            <th>Barcode</th>
+                                            <th>Status</th>
+                                        </thead>
+                                        <tbody>
+                                            [% FOREACH success_line IN success %]
+                                                <tr>
+                                                    <td>[% success_line.barcode | html %]</td>
+                                                    <td>Checked in</td>
+                                                </tr>
+                                            [% END %]
+                                            [% FOREACH error IN errors %]
+                                                <tr>
+                                                    <td>[% error.barcode | html %]</td>
+                                                    <td>Not checked in [% PROCESS error_message messages=error.messages %]</td>
+                                                </tr>
+                                            [% END %]
+                                        </tbody>
                                     </table>
+                                    <div>
+                                        <form method="post" action="#" id="finish_form">
+                                            <button id="sci_finish_button" type="submit" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
+                                        </form>
+                                    </div>
+                            [% ELSE %]
+                                <div class="alert alert-warning">
+                                    <p>Your request included no check-ins.</p>
                                 </div>
-                                <input type="hidden" name="op" value="check_in" />
-                                <div id="button_bar">
-                                <button id="sci_checkin_button" type="submit" class="btn btn-default btn-sm" style="display: none;">
-                                    <i class="fa fa-check-square-o" aria-hidden="true"></i> <span>Check in</span>
-                                </button>
-                                <a href="/cgi-bin/koha/sci/sci-main.pl" class="btn btn-default btn-sm" role="button" style="display: none;" id="sci_refresh_button">
-                                    <i class="fa fa-refresh" aria-hidden="true"></i> <span>Cancel</span>
-                                </a>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div> <!-- / #new_checkins -->
-                [% END %]
+                            [% END %]
+                        </div>
+                    [% ELSE %]
+                        [%# Prompt for barcodes %]
+                        <div id="new_checkins" class="sci_entry">
+                            <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sci/sci-main.pl">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <label for="barcode_input">Scan the item or enter its barcode:</label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input id="barcode_input" name="barcode_input" size="20" type="text" class="focus form-control" autocomplete="off" />
+                                    </div>
+                                    <div class="col-auto">
+                                        <button id="sci_append_button" type="submit" class="btn btn-primary">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div> <!-- /.row -->
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="sci_input_append">
+                                            <table id="sci_barcodes_table" class="table table-bordered table-striped dataTable no-footer" style="display: none;">
+                                                <thead>
+                                                    <th class="barcodes_column">Barcode</th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table> <!-- /#sci_barcodes_table -->
+                                        </div> <!-- .sci_input_append -->
+                                        <input type="hidden" name="op" value="check_in" />
+                                        <div id="button_bar">
+                                            <button id="sci_checkin_button" type="submit" class="btn btn-primary" style="display: none;">
+                                                <i class="fa fa-check-square-o" aria-hidden="true"></i> <span>Check in</span>
+                                            </button>
+                                            <a href="/cgi-bin/koha/sci/sci-main.pl" class="btn btn-danger" role="button" style="display: none;" id="sci_refresh_button">
+                                                <i class="fa fa-times" aria-hidden="true"></i> <span>Cancel</span>
+                                            </a>
+                                        </div> <!-- /#button_bar -->
+                                    </div> <!-- /.col -->
+                                </div> <!-- /.row -->
+                            </form> <!-- /#scan_form -->
+                        </div> <!-- / #new_checkins -->
+                    [% END # /IF ( nopermission ) %]
                 </div> <!-- / #masthead -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
 
-        [% IF ( Koha.Preference('SelfCheckInMainUserBlock') ) %]
-            <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) | $raw %]</div>
-        [% END %]
-    </div> <!-- / .main -->
+    [% IF ( Koha.Preference('SelfCheckInMainUserBlock') ) %]
+        <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) | $raw %]</div>
+    [% END %]
+</div> <!-- / .main -->
 
-    <div id="helpModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+[% # Help modal %]
+<div id="helpModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="helpModalLabel">Self check-in help</h3>
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div> <!-- /.modal-header -->
+            <div class="modal-body">
+                <ul>
+                    <li>Scan each item or enter its barcode. A list with the entered barcodes will be displayed.</li>
+                    <li>Click the 'Check in' button to confirm.</li>
+                    <li>The operation results will be displayed for each entered barcode.</li>
+                    <li>The 'Finish' button is presented to start over.</li>
+                    <li>At any step, clicking the 'Cancel' button will erase the scanned barcodes and start over.</li>
+                </ul>
+            </div> <!-- /.modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /#helpModal -->
 
-      <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="helpModalLabel">Self check-in help</h3>
-      </div>
-
-      <div class="modal-body">
-        <ul>
-          <li>Scan each item or enter its barcode. A list with the entered barcodes will be displayed.</li>
-          <li>Click the 'Check in' button to confirm.</li>
-          <li>The operation results will be displayed for each entered barcode.</li>
-          <li>The 'Finish' button is presented to start over.</li>
-          <li>At any step, clicking the 'Cancel' button will erase the scanned barcodes and start over.</li>
-        </ul>
-      </div>
-    </div> <!-- /#helpModal -->
 </body>
 
 [% INCLUDE 'opac-bottom.inc' %]
@@ -271,5 +255,7 @@
         }
     </script>
 
-    [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]<script>[% Koha.Preference('SelfCheckInUserJS') | $raw %]</script>[% END %]
+    [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]
+        <script>[% Koha.Preference('SelfCheckInUserJS') | $raw %]</script>
+    [% END %]
 [% END %]

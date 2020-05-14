@@ -9,12 +9,13 @@
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% BLOCK delete_shelf %]
-    <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="form-inline">
+    <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="d-inline">
         <input type="hidden" name="op" value="delete" />
         <input type="hidden" name="referer" value="list" />
         <input type='hidden' name='category' value='[% category | html %]' />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-        <button type="submit" class="btn btn-link remove deleteshelf" data-shelfnumber="[% shelf.shelfnumber | html %]" data-shelfname="[% shelf.shelfname | html %]" data-shared="[% shelf.is_shared | html %]" data-count="[% contents.count | html %]"><i class="fa fa-remove" aria-hidden="true"></i>
+        <button type="submit" class="btn btn-link remove deleteshelf" data-shelfnumber="[% shelf.shelfnumber | html %]" data-shelfname="[% shelf.shelfname | html %]" data-shared="[% shelf.is_shared | html %]" data-count="[% contents.count | html %]">
+            <i class="fa fa-remove" aria-hidden="true"></i>
             [% IF ( context == "list" ) %]
                 Delete
             [% ELSE %]
@@ -28,7 +29,11 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   [% IF op == 'view' %]Contents of [% shelf.shelfname | html %][% ELSE %]Your lists[% END %]</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
-[% IF ( loggedinusername ) %][% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %][% ELSE %][% INCLUDE 'bodytag.inc' bodyid='opac-lists' bodyclass='scrollto' %][% END %]
+[% IF ( loggedinusername ) %]
+    [% INCLUDE 'bodytag.inc' bodyid='opac-userlists' bodyclass='scrollto' %]
+[% ELSE %]
+    [% INCLUDE 'bodytag.inc' bodyid='opac-lists' bodyclass='scrollto' %]
+[% END %]
 
 [% BLOCK list_permissions %]
     <li>
@@ -46,273 +51,296 @@
             [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
 
         </select>
-        &emsp; <span id="anyone_remark" style="display:none;color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
+        &emsp; <span id="anyone_remark" style="display:none;color:red;">The "Anyone" permission has no actual effect while this list is strictly private.</span>
     </li>
 [% END %]
 
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <ul class="breadcrumb noprint">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        [% IF ( loggedinusername ) %]
-            <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        [% END %]
-
-        [% IF op != 'list' %]
-            <li><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a></li>
-        [% ELSE %]
-            <li>Lists</li>
-        [% END %]
-
-        [% IF shelf and shelf.is_private %]
-            [% IF op == 'view' OR op == 'edit_form' %]
-                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a></li>
-            [% ELSE %]
-                <li><span class="divider">&rsaquo;</span> Your lists</li>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            [% IF ( loggedinusername ) %]
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+                </li>
             [% END %]
-        [% ELSIF shelf AND shelf.is_public %]
+
+            [% IF op != 'list' %]
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
+                </li>
+            [% ELSE %]
+                <li class="breadcrumb-item" aria-current="page">
+                    Lists
+                </li>
+            [% END %]
+
+            [% IF shelf and shelf.is_private %]
+                [% IF op == 'view' OR op == 'edit_form' %]
+                    <li class="breadcrumb-item">
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a>
+                    </li>
+                [% ELSE %]
+                    <li class="breadcrumb-item" aria-current="page">
+                        Your lists
+                    </li>
+                [% END %]
+            [% ELSIF shelf AND shelf.is_public %]
+                [% IF op == 'view' %]
+                    <li class="breadcrumb-item">
+                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a>
+                    </li>
+                [% ELSE %]
+                    <li class="breadcrumb-item" aria-current="page">
+                        Public lists
+                    </li>
+                [% END %]
+            [% END %]
+
             [% IF op == 'view' %]
-                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a></li>
-            [% ELSE %]
-                <li><span class="divider">&rsaquo;</span> Public lists</li>
+                <li class="breadcrumb-item" aria-current="page">
+                    Contents of &nbsp;<em>[% shelf.shelfname | html %]</em>
+                </li>
             [% END %]
-        [% END %]
 
-        [% IF op == 'view' %]
-            <li><span class="divider">&rsaquo;</span> Contents of <em>[% shelf.shelfname | html %]</em></li>
-        [% END %]
+            [% IF op == 'add_form' %]
+                <li class="breadcrumb-item" aria-current="page">
+                    Create new list
+                </li>
+            [% END %]
 
-        [% IF op == 'add_form' %]
-            <li><span class="divider">&rsaquo;</span> Create new list</li>
-        [% END %]
-
-        [% IF op == 'edit_form' %]
-            <li><span class="divider">&rsaquo;</span> Edit list <em>[% shelf.shelfname | html %]</em></li>
-        [% END %]
-
-    </ul> <!-- / .breadcrumb -->
+            [% IF op == 'edit_form' %]
+                <li class="breadcrumb-item" aria-current="page">
+                    Edit list &nbsp;<em>[% shelf.shelfname | html %]</em>
+                </li>
+            [% END %]
+        </ul> <!-- / .breadcrumb -->
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            [% IF ( OpacNav||loggedinusername ) && !print %]
-                <div class="span2">
+        <div class="row">
+            [% IF ( OpacNav||loggedinusername ) %]
+                <div class="col col-lg-2 order-2 order-lg-1">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                     </div>
                 </div>
+                <div class="col-md-12 col-lg-10 order-1">
+            [% ELSE %]
+                <div class="col order-first order-md-first order-lg-2">
             [% END %]
 
-            [% IF ( OpacNav||loggedinusername ) %]
-                <div class="span10">
-            [% ELSE %]
-                <div class="span12">
-            [% END %]
                 <div id="usershelves" class="maincontent">
 
-                [% FOR m IN messages %]
-                    [% SWITCH m.type %]
-                        [% CASE 'message' %]
-                            <div class="alert alert-success" role="alert">
-                        [% CASE 'error' %]
-                            <div class="alert alert-danger" role="alert">
+                    [% FOR m IN messages %]
+                        [% SWITCH m.type %]
+                            [% CASE 'message' %]
+                                <div class="alert alert-success" role="alert">
+                            [% CASE 'error' %]
+                                <div class="alert alert-danger" role="alert">
+                        [% END %]
+                        [% SWITCH m.code %]
+                        [% CASE 'error_on_update' %]
+                            <span>An error occurred when updating this list.</span>
+                        [% CASE 'error_on_insert' %]
+                            <span>An error occurred when creating this list.</span>
+                        [% CASE 'error_on_delete' %]
+                            <span>An error occurred when deleting this list.</span>
+                        [% CASE 'error_on_add_biblio' %]
+                            <span>The item has not been added to the list. Please check it's not already in the list.</span>
+                        [% CASE 'error_on_remove_share' %]
+                            <span>The share has not been removed.</span>
+                        [% CASE 'success_on_update' %]
+                            <span>List updated.</span>
+                        [% CASE 'success_on_insert' %]
+                            <span>List created.</span>
+                        [% CASE 'success_on_delete' %]
+                            <span>List deleted.</span>
+                        [% CASE 'success_on_add_biblio' %]
+                            <span>The item has been added to the list.</span>
+                        [% CASE 'success_on_remove_biblios' %]
+                            <span>The item has been removed from the list.</span>
+                        [% CASE 'success_on_remove_share' %]
+                            <span>The share has been removed.</span>
+                        [% CASE 'does_not_exist' %]
+                            <span>This list does not exist.</span>
+                        [% CASE 'item_does_not_exist' %]
+                            <span>This item does not exist.</span>
+                        [% CASE 'unauthorized_on_view' %]
+                            <span>You do not have permission to view this list.</span>
+                        [% CASE 'unauthorized_on_insert' %]
+                            <span>You do not have permission to create a new list.</span>
+                        [% CASE 'unauthorized_on_update' %]
+                            <span>You do not have permission to update this list.</span>
+                        [% CASE 'unauthorized_on_delete' %]
+                            <span>You do not have permission to delete this list.</span>
+                        [% CASE 'unauthorized_on_add_biblio' %]
+                            <span>You do not have permission to add a record to this list.</span>
+                        [% CASE 'no_biblio_removed' %]
+                            <span>No record was removed.</span>
+                        [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
+                            <span>An error occurred when creating the list. The name [% shelfname | html %] already exists.</span>
+                        [% CASE 'DBIx::Class::Exception' %]
+                            [% m.msg | html %]
+                        [% CASE %]
+                            [% m.code | html %]
+                            [% m.msg | html %]
+                        [% END %]
+                        </div>
                     [% END %]
-                    [% SWITCH m.code %]
-                    [% CASE 'error_on_update' %]
-                        <span>An error occurred when updating this list.</span>
-                    [% CASE 'error_on_insert' %]
-                        <span>An error occurred when creating this list.</span>
-                    [% CASE 'error_on_delete' %]
-                        <span>An error occurred when deleting this list.</span>
-                    [% CASE 'error_on_add_biblio' %]
-                        <span>The item has not been added to the list. Please check it's not already in the list.</span>
-                    [% CASE 'error_on_remove_share' %]
-                        <span>The share has not been removed.</span>
-                    [% CASE 'success_on_update' %]
-                        <span>List updated.</span>
-                    [% CASE 'success_on_insert' %]
-                        <span>List created.</span>
-                    [% CASE 'success_on_delete' %]
-                        <span>List deleted.</span>
-                    [% CASE 'success_on_add_biblio' %]
-                        <span>The item has been added to the list.</span>
-                    [% CASE 'success_on_remove_biblios' %]
-                        <span>The item has been removed from the list.</span>
-                    [% CASE 'success_on_remove_share' %]
-                        <span>The share has been removed.</span>
-                    [% CASE 'does_not_exist' %]
-                        <span>This list does not exist.</span>
-                    [% CASE 'item_does_not_exist' %]
-                        <span>This item does not exist.</span>
-                    [% CASE 'unauthorized_on_view' %]
-                        <span>You do not have permission to view this list.</span>
-                    [% CASE 'unauthorized_on_insert' %]
-                        <span>You do not have permission to create a new list.</span>
-                    [% CASE 'unauthorized_on_update' %]
-                        <span>You do not have permission to update this list.</span>
-                    [% CASE 'unauthorized_on_delete' %]
-                        <span>You do not have permission to delete this list.</span>
-                    [% CASE 'unauthorized_on_add_biblio' %]
-                        <span>You do not have permission to add a record to this list.</span>
-                    [% CASE 'no_biblio_removed' %]
-                        <span>No record was removed.</span>
-                    [% CASE 'Koha::Exceptions::Virtualshelves::DuplicateObject' %]
-                        <span>An error occurred when creating the list. The name [% shelfname | html %] already exists.</span>
-                    [% CASE 'DBIx::Class::Exception' %]
-                        [% m.msg | html %]
-                    [% CASE %]
-                        [% m.code | html %]
-                        [% m.msg | html %]
-                    [% END %]
-                    </div>
-                [% END %]
 
                     [% IF shelf AND op == 'view' %]
-                        <h3>
+                        <h2>
                             [% shelf.shelfname | html %]
                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint" aria-label="Subscribe to this list">
                                 <i class="fa fa-fw fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this list"></i>
                             </a>
-                        </h3>
+                        </h2>
 
-                         [% IF ( itemsloop ) %]
+                        [% IF ( itemsloop ) %]
                             [% SET contents = shelf.get_contents %]
                             [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
                             <div id="floating">
-                             <div id="toolbar" class="toolbar clearfix">
-                                 <div class="list-actions">
-                                    <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link download" data-toggle="modal" data-target="#modalWin"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download list</a>
+                                <div id="toolbar" class="toolbar clearfix">
+                                    <div class="list-actions">
+                                        <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
 
-                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=yes,resizable=yes,height=400,width=500,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span>
-                                    [% END %]
+                                        <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link download" data-toggle="modal" data-target="#modalWin"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download list</a>
 
-                                    <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction | uri %]&print=1"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print list</a>
-
-                                    [% IF can_manage_shelf %]
-                                        <span class="sep">|</span>
-                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
-                                            <input type="hidden" name="op" value="edit_form" />
-                                            <input type="hidden" name="referer" value="view" />
-                                            <input type='hidden' name='category' value='[% shelf.category | html %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i> Edit list</button>
-                                        </form>
-
-                                        [% PROCESS delete_shelf context = "details" %]
-
-                                        [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share" aria-hidden="true"></i> Share list</a>
+                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                            <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=yes,resizable=yes,height=400,width=500,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span>
                                         [% END %]
-                                    [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
-                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="unshare[% shelf.shelfnumber | html %]" class="form-inline">
-                                            <input type="hidden" name="op" value="remove_share" />
-                                            <input type="hidden" name="referer" value="list" />
-                                            <input type='hidden' name='category' value='[% category | html %]' />
-                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <button type="submit" class="btn btn-link remove remove_share"
-                                                            data-shelfname="[% shelf.shelfname | html %]" data-shelfnumber="[% shelf.shelfnumber | html %]"><i class="fa fa-remove" aria-hidden="true"></i> Remove share</button>
-                                        </form>
-                                    [% END %]
-                                </div>
 
-                                <form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="form-inline sort_by pull-right">
-                                    <input type="hidden" name="op" value="view" />
-                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                        <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction | uri %]&print=1"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print list</a>
 
-                                    <label for="sortfield">Sort by: </label>
-                                    <select name="sortfield" id="sortfield" class="resort">
-                                        <option value="">Default sorting</option>
-                                        <optgroup label="Author">
-                                            [% IF sortfield == 'author' && direction == 'asc' %]
-                                                <option value="author:asc" selected="selected">Author (A-Z)</option>
-                                            [% ELSE %]
-                                                <option value="author:asc">Author (A-Z)</option>
-                                            [% END %]
-                                            [% IF sortfield == 'author' && direction == 'desc' %]
-                                                <option value="author:desc" selected="selected">Author (Z-A)</option>
-                                            [% ELSE %]
-                                                <option value="author:desc">Author (Z-A)</option>
-                                            [% END %]
-                                        </optgroup>
-                                        <optgroup label="Title">
-                                            [% IF sortfield == 'title' && direction == 'asc' %]
-                                                <option value="title:asc" selected="selected">Title (A-Z)</option>
-                                            [% ELSE %]
-                                                <option value="title:asc">Title (A-Z)</option>
-                                            [% END %]
-                                            [% IF sortfield == 'title' && direction == 'desc' %]
-                                                <option value="title:desc" selected="selected">Title (Z-A)</option>
-                                            [% ELSE %]
-                                                <option value="title:desc">Title (Z-A)</option>
-                                            [% END %]
-                                        </optgroup>
-                                        <optgroup label="Call number">
-                                            [% IF sortfield == 'itemcallnumber' && direction == 'asc' %]
-                                                <option value="itemcallnumber:asc" selected="selected">Call number (A-Z)</option>
-                                            [% ELSE %]
-                                                <option value="itemcallnumber:asc">Call number (A-Z)</option>
-                                            [% END %]
-                                            [% IF sortfield == 'itemcallnumber' && direction == 'desc' %]
-                                                <option value="itemcallnumber:desc" selected="selected">Call number (Z-A)</option>
-                                            [% ELSE %]
-                                                <option value="itemcallnumber:desc">Call number (Z-A)</option>
-                                            [% END %]
-                                        </optgroup>
-                                        <optgroup label="Copyright date">
-                                            [% IF sortfield == 'copyrightdate' && direction == 'asc' %]
-                                                <option value="copyrightdate:desc" selected="selected">Copyright date (newest to oldest)</option>
-                                            [% ELSE %]
-                                                <option value="copyrightdate:desc">Copyright date (newest to oldest)</option>
-                                            [% END %]
-                                            [% IF sortfield == 'copyrightdate' && direction == 'desc' %]
-                                                <option value="copyrightdate:asc" selected="selected">Copyright date (oldest to newest)</option>
-                                            [% ELSE %]
-                                                <option value="copyrightdate:asc">Copyright date (oldest to newest)</option>
-                                            [% END %]
-                                        </optgroup>
-                                        <optgroup label="Date added">
-                                            [% IF sortfield == "dateadded" && direction == 'asc' %]
-                                                <option value="dateadded:desc" selected="selected">Date added (newest to oldest)</option>
-                                            [% ELSE %]
-                                                <option value="dateadded:desc">Date added (newest to oldest)</option>
-                                            [% END %]
-                                            [% IF sortfield == "dateadded" && direction == 'desc' %]
-                                                <option value="dateadded:asc" selected="selected">Date added (oldest to newest)</option>
-                                            [% ELSE %]
-                                                <option value="dateadded:asc">Date added (oldest to newest)</option>
-                                            [% END %]
-                                        </optgroup>
-                                    </select>
+                                        [% IF can_manage_shelf %]
+                                            <span class="sep">|</span>
+                                            <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
+                                                <input type="hidden" name="op" value="edit_form" />
+                                                <input type="hidden" name="referer" value="view" />
+                                                <input type='hidden' name='category' value='[% shelf.category | html %]' />
+                                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                                <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i> Edit list</button>
+                                            </form>
 
-                                    <input type="submit" class="btn btn-small" id="sort-submit" value="Resort list" />
-                                </form>
+                                            [% PROCESS delete_shelf context = "details" %]
 
-                            </div> <!-- / #toolbar -->
+                                            [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
+                                                <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share" aria-hidden="true"></i> Share list</a>
+                                            [% END %]
+                                        [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
+                                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="unshare[% shelf.shelfnumber | html %]" class="d-inline">
+                                                <input type="hidden" name="op" value="remove_share" />
+                                                <input type="hidden" name="referer" value="list" />
+                                                <input type='hidden' name='category' value='[% category | html %]' />
+                                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                                <button type="submit" class="btn btn-link remove remove_share" data-shelfname="[% shelf.shelfname | html %]" data-shelfnumber="[% shelf.shelfnumber | html %]">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i> Remove share
+                                                </button>
+                                            </form>
+                                        [% END # /IF can_manage_shelf %]
+                                    </div> <!-- /.list-actions -->
 
-                            <div id="selections-toolbar" class="toolbar noprint">
-                                <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
-                                <span class="links">
-                                    <span id="selections">Select titles to: </span>
-                                    [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
-                                        <span id="placehold"></span>
-                                    [% END %]
-                                    [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                        <span id="addtags">
-                                          <a id="tagsel_tag" href="#" class="btn btn-link btn-disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
-                                        </span>
-                                        <span id="tagsel_form" style="display:none">
-                                          <label for="tagsel_new">New tag(s), separated by a comma:</label>
-                                          <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                          <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-small" title="tagsel_button" type="submit" value="Add" />
-                                          <a href="#" id="tagsel_cancel">Cancel</a>
-                                        </span>
-                                    [% END %]
-                                    [% IF loggedinusername && can_remove_biblios %]
-                                        <span id="removeitems"></span>
-                                    [% END %]
-                                </span> <!-- / .links -->
-                            </div> <!-- / #selections-toolbar -->
+                                    <form action="/cgi-bin/koha/opac-shelves.pl" id="sorting-form" class="d-inline sort_by pull-right">
+                                        <input type="hidden" name="op" value="view" />
+                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+
+                                        <label for="sortfield">Sort by: </label>
+                                        <select name="sortfield" id="sortfield" class="resort">
+                                            <option value="">Default sorting</option>
+                                            <optgroup label="Author">
+                                                [% IF sortfield == 'author' && direction == 'asc' %]
+                                                    <option value="author:asc" selected="selected">Author (A-Z)</option>
+                                                [% ELSE %]
+                                                    <option value="author:asc">Author (A-Z)</option>
+                                                [% END %]
+                                                [% IF sortfield == 'author' && direction == 'desc' %]
+                                                    <option value="author:desc" selected="selected">Author (Z-A)</option>
+                                                [% ELSE %]
+                                                    <option value="author:desc">Author (Z-A)</option>
+                                                [% END %]
+                                            </optgroup>
+                                            <optgroup label="Title">
+                                                [% IF sortfield == 'title' && direction == 'asc' %]
+                                                    <option value="title:asc" selected="selected">Title (A-Z)</option>
+                                                [% ELSE %]
+                                                    <option value="title:asc">Title (A-Z)</option>
+                                                [% END %]
+                                                [% IF sortfield == 'title' && direction == 'desc' %]
+                                                    <option value="title:desc" selected="selected">Title (Z-A)</option>
+                                                [% ELSE %]
+                                                    <option value="title:desc">Title (Z-A)</option>
+                                                [% END %]
+                                            </optgroup>
+                                            <optgroup label="Call number">
+                                                [% IF sortfield == 'itemcallnumber' && direction == 'asc' %]
+                                                    <option value="itemcallnumber:asc" selected="selected">Call number (A-Z)</option>
+                                                [% ELSE %]
+                                                    <option value="itemcallnumber:asc">Call number (A-Z)</option>
+                                                [% END %]
+                                                [% IF sortfield == 'itemcallnumber' && direction == 'desc' %]
+                                                    <option value="itemcallnumber:desc" selected="selected">Call number (Z-A)</option>
+                                                [% ELSE %]
+                                                    <option value="itemcallnumber:desc">Call number (Z-A)</option>
+                                                [% END %]
+                                            </optgroup>
+                                            <optgroup label="Copyright date">
+                                                [% IF sortfield == 'copyrightdate' && direction == 'asc' %]
+                                                    <option value="copyrightdate:desc" selected="selected">Copyright date (newest to oldest)</option>
+                                                [% ELSE %]
+                                                    <option value="copyrightdate:desc">Copyright date (newest to oldest)</option>
+                                                [% END %]
+                                                [% IF sortfield == 'copyrightdate' && direction == 'desc' %]
+                                                    <option value="copyrightdate:asc" selected="selected">Copyright date (oldest to newest)</option>
+                                                [% ELSE %]
+                                                    <option value="copyrightdate:asc">Copyright date (oldest to newest)</option>
+                                                [% END %]
+                                            </optgroup>
+                                            <optgroup label="Date added">
+                                                [% IF sortfield == "dateadded" && direction == 'asc' %]
+                                                    <option value="dateadded:desc" selected="selected">Date added (newest to oldest)</option>
+                                                [% ELSE %]
+                                                    <option value="dateadded:desc">Date added (newest to oldest)</option>
+                                                [% END %]
+                                                [% IF sortfield == "dateadded" && direction == 'desc' %]
+                                                    <option value="dateadded:asc" selected="selected">Date added (oldest to newest)</option>
+                                                [% ELSE %]
+                                                    <option value="dateadded:asc">Date added (oldest to newest)</option>
+                                                [% END %]
+                                            </optgroup>
+                                        </select>
+
+                                        <input type="submit" class="btn btn-sm" id="sort-submit" value="Resort list" />
+                                    </form> <!-- /#sorting-form -->
+
+                                </div> <!-- / #toolbar -->
+
+                                <div id="selections-toolbar" class="toolbar noprint">
+                                    <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
+                                    <span class="links">
+                                        <span id="selections">Select titles to: </span>
+                                        [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
+                                            <span id="placehold"></span>
+                                        [% END %]
+                                        [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                            <span id="addtags">
+                                                <a id="tagsel_tag" href="#" class="btn btn-link btn-disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
+                                            </span>
+                                            <span id="tagsel_form" class="form-inline" style="display:none">
+                                                <label for="tagsel_new">New tag(s), separated by a comma:</label>
+                                                <input class="form-control form-control-sm" type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
+                                                <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-primary btn-sm" title="tagsel_button" type="submit" value="Add" />
+                                                <a href="#" id="tagsel_cancel">Cancel</a>
+                                            </span>
+                                        [% END %]
+                                        [% IF loggedinusername && can_remove_biblios %]
+                                            <span id="removeitems"></span>
+                                        [% END %]
+                                    </span> <!-- / .links -->
+                                </div> <!-- / #selections-toolbar -->
                             </div> <!-- /#floating -->
 
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
@@ -323,200 +351,207 @@
                                 <div class="searchresults">
                                     <table id="listcontents" class="table">
                                         <tbody>
-                                        [% FOREACH itemsloo IN itemsloop %]
-                                            <tr>
-                                                <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" /></td>
-                                                [% UNLESS ( item_level_itypes ) %]
+                                            [% FOREACH itemsloo IN itemsloop %]
+                                                <tr>
+                                                    <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" /></td>
+                                                    [% UNLESS ( item_level_itypes ) %]
+                                                        <td>
+                                                            [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
+                                                                <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
+                                                            [% END %]
+                                                            [% itemsloo.description | html %]
+                                                        </td>
+                                                    [% END %]
                                                     <td>
-                                                        [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
-                                                            <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
-                                                        [% END %]
-                                                        [% itemsloo.description | html %]
-                                                    </td>
-                                                [% END %]
-                                                <td>
-                                                    <div class="coverimages">
-                                                        <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber | html %]">
-                                                            [% IF ( itemsloo.title ) %]
-                                                                [% img_title = itemsloo.title %]
-                                                            [% ELSE %]
-                                                                [% img_title = itemsloo.biblionumber %]
-                                                            [% END %]
-
-                                                            [% IF ( OPACLocalCoverImages ) %]
-                                                                <span title="[% img_title | html %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
-                                                            [% END %]
-                                                            [% IF ( AdlibrisEnabled && itemsloo.normalized_isbn ) %]
-                                                                <img src="[% AdlibrisURL | html %]?isbn=[% itemsloo.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
-                                                            [% END %]
-                                                            [% IF ( OPACAmazonCoverImages ) %]
-                                                                [% IF ( itemsloo.normalized_isbn ) %]
-                                                                    <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>
+                                                        <div class="coverimages">
+                                                            <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber | html %]">
+                                                                [% IF ( itemsloo.title ) %]
+                                                                    [% img_title = itemsloo.title %]
                                                                 [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
+                                                                    [% img_title = itemsloo.biblionumber %]
                                                                 [% END %]
-                                                            [% END %]
 
-                                                            [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                                <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
-                                                            [% END %]
-
-                                                            [% IF ( GoogleJackets ) %]
-                                                                [% IF ( itemsloo.normalized_isbn ) %]
-                                                                    <div title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
-                                                                [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
+                                                                [% IF ( OPACLocalCoverImages ) %]
+                                                                    <span title="[% img_title | html %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                                 [% END %]
-                                                            [% END %]
-
-                                                            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                                                [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
-                                                                [% IF ( coce_id ) %]
-                                                                    <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
-                                                                [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
+                                                                [% IF ( AdlibrisEnabled && itemsloo.normalized_isbn ) %]
+                                                                    <img src="[% AdlibrisURL | html %]?isbn=[% itemsloo.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
                                                                 [% END %]
-                                                            [% END %]
-
-
-                                                            [% IF OpenLibraryCovers %]
-                                                                [% IF itemsloo.normalized_isbn %]
-                                                                    <span title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
-                                                                [% ELSE %]
-                                                                    <span class="no-image">No cover image available</span>
+                                                                [% IF ( OPACAmazonCoverImages ) %]
+                                                                    [% IF ( itemsloo.normalized_isbn ) %]
+                                                                        <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>
+                                                                    [% ELSE %]
+                                                                        <span class="no-image">No cover image available</span>
+                                                                    [% END %]
                                                                 [% END %]
-                                                            [% END %]
 
-                                                        </a> <!-- / .p1 -->
-                                                        [% IF ( Koha.Preference('BakerTaylorEnabled') && !Koha.Preference('BakerTaylorBookstoreURL') ) %]
-                                                            [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
-                                                            [% IF ( bt_id ) %]
-                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
+                                                                [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
+                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
+                                                                [% END %]
 
-                                                        [% IF ( Koha.Preference('BakerTaylorEnabled') && Koha.Preference('BakerTaylorBookstoreURL') ) %]
-                                                            [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
-                                                            [% IF ( bt_id ) %]
-                                                                <a href="https://[% Koha.Preference('BakerTaylorBookstoreURL') | uri %][% bt_id | uri %]">
+                                                                [% IF ( GoogleJackets ) %]
+                                                                    [% IF ( itemsloo.normalized_isbn ) %]
+                                                                        <div title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
+                                                                    [% ELSE %]
+                                                                        <span class="no-image">No cover image available</span>
+                                                                    [% END %]
+                                                                [% END %]
+
+                                                                [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+                                                                    [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
+                                                                    [% IF ( coce_id ) %]
+                                                                        <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
+                                                                    [% ELSE %]
+                                                                        <span class="no-image">No cover image available</span>
+                                                                    [% END %]
+                                                                [% END %]
+
+
+                                                                [% IF OpenLibraryCovers %]
+                                                                    [% IF itemsloo.normalized_isbn %]
+                                                                        <span title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
+                                                                    [% ELSE %]
+                                                                        <span class="no-image">No cover image available</span>
+                                                                    [% END %]
+                                                                [% END %]
+
+                                                            </a> <!-- / .p1 -->
+                                                            [% IF ( Koha.Preference('BakerTaylorEnabled') && !Koha.Preference('BakerTaylorBookstoreURL') ) %]
+                                                                [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
+                                                                [% IF ( bt_id ) %]
                                                                     <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                                </a>
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
+                                                                [% ELSE %]
+                                                                    <span class="no-image">No cover image available</span>
+                                                                [% END %]
                                                             [% END %]
-                                                        [% END %]
 
-                                                        [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                                                            [% IF ( Koha.Preference('BakerTaylorEnabled') && Koha.Preference('BakerTaylorBookstoreURL') ) %]
+                                                                [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
+                                                                [% IF ( bt_id ) %]
+                                                                    <a href="https://[% Koha.Preference('BakerTaylorBookstoreURL') | uri %][% bt_id | uri %]">
+                                                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
+                                                                    </a>
+                                                                [% ELSE %]
+                                                                    <span class="no-image">No cover image available</span>
+                                                                [% END %]
+                                                            [% END %]
+
+                                                            [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                                                                [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
+                                                                    <a class="custom_cover_image" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                [% ELSE %]
+                                                                    [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
+                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                    [% ELSE %]
+                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                    [% END %]
+                                                                [% END %]
+                                                                <img alt="Cover image" src="[% itemsloo.biblio_object.custom_cover_image_url | url %]" /></a>
+                                                            [% END %]
+
+                                                        </div>
+                                                        [% IF ( itemsloo.XSLTBloc ) %]
+                                                            [% itemsloo.XSLTBloc | $raw %]
+                                                        [% ELSE %]
+
                                                             [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
-                                                                <a class="custom_cover_image" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
                                                             [% ELSE %]
                                                                 [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
-                                                                    <a class="custom_cover_image" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                    <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
                                                                 [% ELSE %]
-                                                                    <a class="custom_cover_image" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
                                                                 [% END %]
                                                             [% END %]
-                                                            <img alt="Cover image" src="[% itemsloo.biblio_object.custom_cover_image_url | url %]" /></a>
-                                                        [% END %]
 
-                                                    </div>
-                                                    [% IF ( itemsloo.XSLTBloc ) %]
-                                                        [% itemsloo.XSLTBloc | $raw %]
-                                                    [% ELSE %]
+                                                            [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
+                                                            </a>
 
-                                                        [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
-                                                            <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
-                                                        [% ELSE %]
-                                                            [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
-                                                                <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
+                                                            [% IF ( itemsloo.author ) %]
+                                                                by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% itemsloo.author |url %]" title="Search for works by this author" class="author">[% itemsloo.author | html %]</a>
                                                             [% ELSE %]
-                                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]" title="View details for this title">
+                                                                &nbsp;
                                                             [% END %]
-                                                        [% END %]
 
-                                                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
-                                                        </a>
-
-                                                        [% IF ( itemsloo.author ) %]
-                                                            by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% itemsloo.author |url %]" title="Search for works by this author" class="author">[% itemsloo.author | html %]</a>
-                                                        [% ELSE %]
-                                                            &nbsp;
-                                                        [% END %]
-
-                                                        <span class="results_summary">
-                                                            <span class="label">Publication:</span>
-                                                            [% IF ( itemsloo.place ) %]
-                                                                [% itemsloo.place | html %]
-                                                            [% END %]
-                                                            [% IF ( itemsloo.publishercode ) %]
-                                                                [% itemsloo.publishercode | html %]
-                                                            [% END %]
-                                                            [% IF ( itemsloo.publicationyear ) %]
-                                                                [% itemsloo.publicationyear | html %]
-                                                            [% ELSE %]
-                                                                [% IF ( itemsloo.copyrightdate ) %]
-                                                                    [% itemsloo.copyrightdate | html %]
+                                                            <span class="results_summary">
+                                                                <span class="label">Publication:</span>
+                                                                [% IF ( itemsloo.place ) %]
+                                                                    [% itemsloo.place | html %]
                                                                 [% END %]
-                                                            [% END %]
-                                                            [% IF ( itemsloo.pages ) %]. [% itemsloo.pages | html %][% END %]
-                                                            [% IF ( itemsloo.notes ) %], [% itemsloo.notes | html %][% END %]
-                                                            [% IF ( itemsloo.item('size') ) %] [% itemsloo.item('size') | html %][% END %]
-                                                        </span>
-                                                        <span class="results_summary">
-                                                            <span class="label">Holdings:</span>
-                                                            [% IF ( itemsloo.ITEM_RESULTS ) %]
-                                                                [% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
-                                                                    [% ITEM_RESULT.homebranch | html %]
-                                                                    [% IF ( ITEM_RESULT.location_opac ) %]
-                                                                        <span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>
-                                                                    [% END %]
-                                                                    [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                                                                        ([% ITEM_RESULT.itemcallnumber | html %])
-                                                                            [% IF ( loop.last ) %].[% ELSE %],[% END %]
+                                                                [% IF ( itemsloo.publishercode ) %]
+                                                                    [% itemsloo.publishercode | html %]
+                                                                [% END %]
+                                                                [% IF ( itemsloo.publicationyear ) %]
+                                                                    [% itemsloo.publicationyear | html %]
+                                                                [% ELSE %]
+                                                                    [% IF ( itemsloo.copyrightdate ) %]
+                                                                        [% itemsloo.copyrightdate | html %]
                                                                     [% END %]
                                                                 [% END %]
-                                                            [% ELSE %]
-                                                                This record has no items.
-                                                            [% END %]
-                                                        </span>
-                                                    [% END # / IF itemsloo.XSLTBloc %]
-
-                                                    [% IF ( TagsShowEnabled && itemsloo.TagLoop.size ) %]
-                                                        <div class="results_summary tags">
-                                                            <span class="label">Tags:</span>
-                                                            <ul>
-                                                                [% FOREACH TagLoo IN itemsloo.TagLoop %]
-                                                                    <li><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span></li>
+                                                                [% IF ( itemsloo.pages ) %]. [% itemsloo.pages | html %][% END %]
+                                                                [% IF ( itemsloo.notes ) %], [% itemsloo.notes | html %][% END %]
+                                                                [% IF ( itemsloo.item('size') ) %] [% itemsloo.item('size') | html %][% END %]
+                                                            </span>
+                                                            <span class="results_summary">
+                                                                <span class="label">Holdings:</span>
+                                                                [% IF ( itemsloo.ITEM_RESULTS ) %]
+                                                                    [% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
+                                                                        [% ITEM_RESULT.homebranch | html %]
+                                                                        [% IF ( ITEM_RESULT.location_opac ) %]
+                                                                            <span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>
+                                                                        [% END %]
+                                                                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                                                                            ([% ITEM_RESULT.itemcallnumber | html %])
+                                                                                [% IF ( loop.last ) %].[% ELSE %],[% END %]
+                                                                        [% END %]
+                                                                    [% END %]
+                                                                [% ELSE %]
+                                                                    This record has no items.
                                                                 [% END %]
-                                                            </ul>
-                                                        </div>
-                                                    [% END %]
+                                                            </span>
+                                                        [% END # / IF itemsloo.XSLTBloc %]
 
-                                                    [% INCLUDE 'title-actions-menu.inc' items=itemsloo %]
+                                                        [% IF ( TagsShowEnabled && itemsloo.TagLoop.size ) %]
+                                                            <div class="results_summary tags">
+                                                                <span class="label">Tags:</span>
+                                                                <ul>
+                                                                    [% FOREACH TagLoo IN itemsloo.TagLoop %]
+                                                                        <li><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span></li>
+                                                                    [% END %]
+                                                                </ul>
+                                                            </div>
+                                                        [% END %]
 
-                                                    [% INCLUDE "openlibrary-readapi.inc" bib = itemsloo %]
-                                                    <!-- COinS / Openurl -->
-                                                    <span class="Z3988" title="[% itemsloo.coins | html %]"></span>
-                                                </td>
-                                            </tr>
-                                        [% END # / FOREACH itemsloop %]
+                                                        [% INCLUDE 'title-actions-menu.inc' items=itemsloo %]
+
+                                                        [% INCLUDE "openlibrary-readapi.inc" bib = itemsloo %]
+                                                        <!-- COinS / Openurl -->
+                                                        <span class="Z3988" title="[% itemsloo.coins | html %]"></span>
+                                                    </td>
+                                                </tr>
+                                            [% END # / FOREACH itemsloop %]
                                         </tbody>
                                     </table> <!-- / #listcontents -->
                                 </div><!-- / .searchresults -->
 
-                            [% IF ( pagination_bar ) %]
-                                <div class="pages">[% pagination_bar | $raw %]</div>
-                            [% END %]
+                                [% IF ( pagination_bar ) %]
+                                    <div class="pages">[% pagination_bar | $raw %]</div>
+                                [% END %]
 
+                                [% IF can_remove_biblios %]
+                                    <input type="hidden" name="op" value="remove_biblios" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    <input type="hidden" name="modifyshelfcontents" value="1" />
+                                    <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
+                                [% END %]
+                            </form> <!-- /myform -->
                         [% ELSE %]
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
                                     <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a>
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
-                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
+                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
                                             <input type="hidden" name="category" value="[% shelf.category | html %]" />
@@ -536,21 +571,17 @@
                                     You can add to your lists from the results of any <a href="opac-main.pl">search</a>.
                                 [% END %]
                             </div>
+
+                            [% IF can_manage_shelf %]
+                                <form method="post" action="opac-shelves.pl">
+                                    <input type="hidden" name="op" value="delete" />
+                                    <input type="hidden" name="referer" value="list" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
+                                    <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
+                                </form>
+                            [% END %]
                         [% END # / IF itemsloop %]
-                      [% END %]
-                    [% IF itemsloop && can_remove_biblios %]
-                        <input type="hidden" name="op" value="remove_biblios" />
-                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                        <input type="hidden" name="modifyshelfcontents" value="1" />
-                        <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
-                    [% ELSIF !itemsloop && can_manage_shelf %]
-                        <form method="post" action="opac-shelves.pl">
-                        <input type="hidden" name="op" value="delete" />
-                        <input type="hidden" name="referer" value="list" />
-                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
-                        <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
-                    [% END %]
-                            </form> <!-- / myform -->
+                    [% END # /IF shelf AND op == 'view' %]
 
                     [% IF op == 'add_form' OR op == 'edit_form' %]
                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
@@ -569,7 +600,8 @@
                                 <ol>
                                     <li>
                                         <label class="required" for="shelfname">List name: </label>
-                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname | html %]" required="required" class="required"/> <span class="required">Required</span></li>
+                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname | html %]" required="required" class="required"/>
+                                        <span class="required">Required</span></li>
                                     <li>
                                         <label for="sortfield" >Sort this list by: </label>
                                         <select name="sortfield" id="sortfield">
@@ -625,52 +657,51 @@
                                 [% UNLESS Koha.Preference('OpacAllowPublicListCreation') OR category == PUBLIC %]
                                     <input type="hidden" name="category" value="[% PRIVATE | html %]" />
                                 [% END %]
-                            </fieldset>
+                            </fieldset> <!-- /.rows -->
 
                             <fieldset class="action">
-                                <input type="submit" value="Save" class="btn" />
+                                <input type="submit" value="Save" class="btn btn-primary" />
                                 [% IF referer == 'view' %]
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
                                 [% ELSE %]
-                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]" class="cancel">Cancel</a>
-                                 [% END %]
-
+                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]" class="cancel">Cancel</a>
+                                [% END %]
                             </fieldset>
                         </form>
 
                     [% ELSIF op == 'list' %]
                         <h2>Lists</h2>
                         <div class="toptabs ui-tabs ui-widget ui-widget-content ui-corner-all">
-                        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                [% IF category == PRIVATE %]
-                                    <li id="privateshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=listamp;category=[% PRIVATE | html %]">Your lists</a></li>
-                                [% ELSE %]
-                                    <li id="privateshelves_tab" class="ui-state-default ui-corner-top"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a></li>
-                                [% END %]
-                            [% END %]
-                            [% IF category == PUBLIC %]
-                                <li id="publicshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a></li>
-                            [% ELSE %]
-                                <li id="publicshelves_tab" class="ui-state-default ui-corner-top"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a></li>
-                            [% END %]
-                        </ul>
-
-                        [% IF category == PRIVATE %]
-                            <div id="privateshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
-                        [% ELSE %]
-                            <div id="publicshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
-                        [% END %]
-
-                        [% IF category == PRIVATE || Koha.Preference('OpacAllowPublicListCreation') %]
-                            [% IF loggedinusername %]
-                                <div id="toolbar" class="toolbar"><a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New list</a></div>
-                            [% ELSE %]
+                            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
+                                    [% IF category == PRIVATE %]
+                                        <li id="privateshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=listamp;category=[% PRIVATE | html %]">Your lists</a></li>
+                                    [% ELSE %]
+                                        <li id="privateshelves_tab" class="ui-state-default ui-corner-top"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a></li>
+                                    [% END %]
+                                [% END %]
+                                [% IF category == PUBLIC %]
+                                    <li id="publicshelves_tab" class="ui-state-default ui-corner-top ui-tabs-active ui-state-active"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a></li>
+                                [% ELSE %]
+                                    <li id="publicshelves_tab" class="ui-state-default ui-corner-top"><a class="ui-tabs-anchor" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a></li>
+                                [% END %]
+                            </ul>
+
+                            [% IF category == PRIVATE %]
+                                <div id="privateshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
+                            [% ELSE %]
+                                <div id="publicshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
+                            [% END %]
+
+                            [% IF category == PRIVATE || Koha.Preference('OpacAllowPublicListCreation') %]
+                                [% IF loggedinusername %]
+                                    <div id="toolbar" class="toolbar"><a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New list</a></div>
+                                [% ELSE %]
+                                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                        <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
+                                    [% END %]
                                 [% END %]
                             [% END %]
-                        [% END %]
 
                             [% IF shelves.count %]
                                 <table class="table">
@@ -697,7 +728,7 @@
                                                 </td>
                                                 <td>
                                                     [% IF s.can_be_managed( loggedinusernumber ) %]
-                                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="form-inline">
+                                                        <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">
                                                             <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
                                                             <input type="hidden" name="category" value="[% s.category | html %]" />
                                                             <input type="hidden" name="op" value="edit_form" />
@@ -712,7 +743,7 @@
                                                         <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist btn btn-link"><i class="fa fa-share" aria-hidden="true"></i> Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
-                                                        <form action="opac-shelves.pl" method="post" id="unshare[% s.shelfnumber | html %]" class="form-inline">
+                                                        <form action="opac-shelves.pl" method="post" id="unshare[% s.shelfnumber | html %]" class="d-inline">
                                                             <input type="hidden" name="op" value="remove_share" />
                                                             <input type="hidden" name="referer" value="list" />
                                                             <input type='hidden' name='category' value='[% category | html %]' />
@@ -725,7 +756,7 @@
                                             </tr>
                                         [% END %]
                                     </tbody>
-                                </table>
+                                </table> <!-- /.table -->
                                 <div class="pages">[% pagination_bar | $raw %]</div>
                             [% ELSE %]
                                 [% IF category == PUBLIC %]
@@ -733,21 +764,20 @@
                                 [% ELSIF loggedinusernumber %]
                                     <p>No private lists.</p>
                                 [% END %]
-                            [% END %]
-                            </div> [%# privateshelves or publicshelves %]
-                            </div> [%# <div class="toptabs ui-tabs ui-widget ui-widget-content ui-corner-all"> %]
-                        [% ELSIF NOT loggedinusernumber %]
-                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
-                            [% END %]
-                        [% END  # IF loggedinusername %]
+                            [% END # /IF shelves.count %]
+                        </div> [%# <div class="toptabs ui-tabs ui-widget ui-widget-content ui-corner-all"> %]
+                    [% ELSIF NOT loggedinusernumber %]
+                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                            <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
+                        [% END %]
+                    [% END  # IF op == 'add_form' OR op == 'edit_form' %]
                 </div> <!-- / #usershelves -->
-                </div> <!-- / .span10/12 -->
-      </div> <!-- / .row-fluid -->
+            </div> <!-- / .col-lg-10/12 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
-  </div> <!-- / .main -->
+</div> <!-- / .main -->
 
-<div class="modal hide" id="modalWin" role="dialog" aria-hidden="true" tabindex="-1">
+<div class="modal" id="modalWin" role="dialog" aria-hidden="true" tabindex="-1">
     <div class="modal-content">
         <div class="modal-body">
             <div style="margin:1em;padding:1em;font-size:150%;">
@@ -846,8 +876,8 @@ function enableCheckboxActions(){
 
 $(function() {
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]$(".addtocart,.cartRemove").removeClass("hidden");[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
     $("a.print").show();
 
     [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
@@ -857,11 +887,6 @@ $(function() {
             return false;
         });
     [% END %]
-
-    // If JS is enabled add parameter to download link
-    var dialoglink = $(".download").attr("href");
-    dialoglink += "&context=modal";
-    $(".download").attr("href",dialoglink);
 
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
@@ -1019,20 +1044,20 @@ $(function() {
 function sortMenu( sorting_form ){
     var shelfnumber = sorting_form.find("input[name='shelfnumber']").val();
     var sort_link = "/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=" + shelfnumber + "&sortfield=";
-    var menu = "<div class=\"btn-group\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\" aria-hidden=\"true\"></i> " + _("Sort") + "</span></button><ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"sortmenu\">";
+    var menu = "<div class=\"btn-group dropdown\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\" aria-hidden=\"true\"></i> " + _("Sort") + "</span></button><div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"sortmenu\">";
     $("#sortfield").children().each(function(){
         if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
-            menu += "<li><a href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a></li>";
+            menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a>";
         } else if( $(this)[0].tagName.toUpperCase() == "OPTGROUP" ){
-            menu += "<li class=\"dropdown-header\">" + $(this).attr("label") + "</li>";
+            menu += "<span class=\"dropdown-header\">" + $(this).attr("label") + "</span>";
             $(this).children().each(function(){
                 if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
-                    menu += "<li><a href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a></li>";
+                    menu += "<a class=\"dropdown-item\" href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a>";
                 }
             });
         }
     });
-    menu += "</ul></div>";
+    menu += "</div>";
     $(".list-actions").append( menu );
     sorting_form.remove();
 }

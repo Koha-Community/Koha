@@ -7,25 +7,31 @@
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
         [% INCLUDE 'masthead.inc' %]
         <div class="main">
-            <ul class="breadcrumb">
-                <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-                [% IF ( logged_in_user ) %]
-                    <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-                [% END %]
-                <li>
-                    [% IF shelf.category == 1 %]
-                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">Your lists</a>
-                    [% ELSE %]
-                        <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2">Public lists</a>
+            <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                    </li>
+                    [% IF ( logged_in_user ) %]
+                        <li class="breadcrumb-item"><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></li>
                     [% END %]
-                    <span class="divider">&rsaquo;</span>
-                </li>
-                <li>Download list <em>[% shelf.shelfname | html %]</em></li>
-            </ul>
+                    <li class="breadcrumb-item">
+                        [% IF shelf.category == 1 %]
+                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">Your lists</a>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2">Public lists</a>
+                        [% END %]
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Download list <em>[% shelf.shelfname | html %]</em>
+                    </li>
+                </ul>
+            </nav>
+
             <div class="container-fluid">
-                <div class="row-fluid">
+                <div class="row">
                     [% IF ( OpacNav||loggedinusername ) %]
-                        <div class="span2">
+                        <div class="col-lg-2">
                             <div id="navigation">
                                 [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                             </div>
@@ -33,9 +39,9 @@
                     [% END %]
 
                     [% IF ( OpacNav||loggedinusername ) %]
-                        <div class="span10">
+                        <div class="col-10 order-first order-md-first order-lg-2">
                     [% ELSE %]
-                        <div class="span12">
+                        <div class="col order-first order-md-first order-lg-2">
                     [% END %]
 [% END # / IF fullpage %]
 
@@ -65,31 +71,29 @@
 
                                     <fieldset class="action">
                                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                        <input type="submit" name="save" class="btn" value="Go" />
+                                        <input type="submit" name="save" class="btn btn-primary" value="Go" />
                                         <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel close" data-dismiss="modal">Cancel</a>
                                     </fieldset>
                                 </form>
                                 [% IF ( modal ) %]
                                     <script>
-                                        //<![CDATA[
-                                            $(document).ready(function(){
-                                                $("#userdownloadshelf form").on("submit",function(e){
-                                                    if( $("#dlformat").val() == "" ){
-                                                        e.preventDefault();
-                                                        alert(_("Please choose a download format"));
-                                                    } else {
-                                                        $("#modalWin").modal("hide");
-                                                    }
-                                                });
+                                        $(document).ready(function(){
+                                            $("#userdownloadshelf form").on("submit",function(e){
+                                                if( $("#dlformat").val() == "" ){
+                                                    e.preventDefault();
+                                                    alert(_("Please choose a download format"));
+                                                } else {
+                                                    $("#modalWin").modal("hide");
+                                                }
                                             });
-                                        //]]>
+                                        });
                                     </script>
                                 [% END %]
                             [% END # / IF format %]
 
                         [% ELSE %]
 
-                            <div class="alert">
+                            <div class="alert alert-warning">
                                 <p>You do not have permission to download this list.</p>
                             </div>
 
@@ -98,23 +102,21 @@
                     </div> <!-- / #userdownloadshelf -->
 
 [% IF ( fullpage ) %]
-                    </div> <!-- / .span10 -->
-                </div> <!-- / .row-fluid -->
-            </div> <!-- / .container-fluid -->
-        </div> <!-- / .main -->
+                </div> <!-- / .col-10 -->
+            </div> <!-- / .row -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
     [% INCLUDE 'opac-bottom.inc' %]
     [% BLOCK jsinclude %]
         <script>
-            //<![CDATA[
-                $(document).ready(function(){
-                    $("#userdownloadshelf form").on("submit",function(e){
-                        if( $("#dlformat").val() == "" ){
-                            e.preventDefault();
-                            alert(_("Please choose a download format"));
-                        }
-                    });
+            $(document).ready(function(){
+                $("#userdownloadshelf form").on("submit",function(e){
+                    if( $("#dlformat").val() == "" ){
+                        e.preventDefault();
+                        alert(_("Please choose a download format"));
+                    }
                 });
-            //]]>
+            });
         </script>
     [% END %]
 [% END # / IF fullpage %]

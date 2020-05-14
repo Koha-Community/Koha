@@ -3,29 +3,35 @@
 [% PROCESS 'opac-authorities.inc' %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% BLOCK pagination %]
-    <div class="pagination">
-        <ul>
+    <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
+        <ul class="pagination">
             [% IF ( displayprev ) %]
-                <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">
-                        &laquo;
+                <li class="page-item">
+                    <a class="page-link" href="opac-authorities-home.pl?startfrom=[% startfromprev | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to the previous page">
+                        <i class="fa fa-fw fa-angle-left" aria-hidden="true"></i>  Previous
                     </a>
                 </li>
             [% END %]
             [% FOREACH number IN numbers %]
                 [% IF ( number.highlight ) %]
-                    <li class="active"><a href="#">[% number.number | html %]</a></li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-disabled="true" aria-label="Current page: Page [% number.number | html %]">[% number.number | html %]</a>
+                    </li>
                 [% ELSE %]
-                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom | uri %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">[% number.number | html %]</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="opac-authorities-home.pl?startfrom=[% number.startfrom | uri %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to page [% number.number | html %]">[% number.number | html %]</a>
+                    </li>
                 [% END %]
             [% END %]
             [% IF ( displaynext ) %]
-                <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">&raquo;</a>
+                <li class="page-item">
+                    <a class="page-link" href="opac-authorities-home.pl?startfrom=[% startfromnext | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to the next page">
+                        Next <i class="fa fa-fw fa-angle-double-right" aria-hidden="true"></i>
+                    </a>
                 </li>
             [% END %]
         </ul>
-    </div> <!-- / #pages -->
+    </nav> <!-- / #pages -->
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]</title>
@@ -36,23 +42,31 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Results</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
+                </li>
+                <li class="breadcrumb-item" aria-current="page">
+                    <a href="#">Results</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-lg-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="userauthsearchresults" class="maincontent">
                         <h1>Authority search results</h1>
@@ -105,8 +119,8 @@
 
                         [% END # / IF total %]
                     </div> <!-- / #userauthsearchresults -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

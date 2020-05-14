@@ -4,31 +4,31 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
-    #largeCoverImg {
-        border : 1px solid #CCCCCC;
-        display : block;
-        margin : auto;
-        padding : 1em;
-    }
-    #thumbnails {
-        text-align : center;
-    }
-    #thumbnails a img {
-        border : 2px solid #8EB3E7;
-    }
-    img.thumbnail {
-        display : block;
-        float : none;
-        margin : .3em 0;
-        padding : .5em;
-    }
+        #largeCoverImg {
+            border : 1px solid #CCCCCC;
+            display : block;
+            margin : auto;
+            padding : 1em;
+        }
+        #thumbnails {
+            text-align : center;
+        }
+        #thumbnails a img {
+            border : 2px solid #8EB3E7;
+        }
+        img.thumbnail {
+            display : block;
+            float : none;
+            margin : .3em 0;
+            padding : .5em;
+        }
 
-    #thumbnails a img.selected {
-        border-color: black;
-        cursor : default;
-        opacity:0.4;
-        filter:alpha(opacity=40); /* For IE8 and earlier */
-    }
+        #thumbnails a img.selected {
+            border-color: black;
+            cursor : default;
+            opacity:0.4;
+            filter:alpha(opacity=40); /* For IE8 and earlier */
+        }
     </style>
 [% END %]
 </head>
@@ -36,36 +36,43 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li>
-                [% IF ( BiblioDefaultViewmarc ) %]
-                    <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]">
-                [% ELSE %]
-                    [% IF ( BiblioDefaultViewisbd ) %]
-                        <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]">
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    [% IF ( BiblioDefaultViewmarc ) %]
+                        <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]">
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
-                    [% END %]
-                [% END %][% INCLUDE 'biblio-title.inc' %]</a> <span class="divider">&rsaquo;</span>
-            </li>
-            <li><a href="#">Images</a></li>
-        </ul>
+                        [% IF ( BiblioDefaultViewisbd ) %]
+                            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber |url %]">
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
+                        [% END %]
+                    [% END %][% INCLUDE 'biblio-title.inc' %]</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Images</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
+            <div class="row">
                 [% IF ( OpacNav || OpacNavBottom ) %]
-                    <div class="span2">
+                    <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="span10">
+                    <div class="col-10 order-first order-md-first order-lg-2">
                 [% ELSE %]
-                    <div class="span12">
+                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
-                    <div class="row-fluid">
-                        <div class="span9 maincontent">
+
+                    <div class="row">
+                        <div class="col-lg-9 maincontent">
                             <h1 class="title">Images for
                                 [% IF ( BiblioDefaultViewmarc ) %]
                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
@@ -77,11 +84,11 @@
                                     [% END %]
                                 [% END %][% INCLUDE 'biblio-title.inc' %]</a> [% biblio.author | html %]
                             </h1>
-                        </div> <!-- / .span9 -->
-                    </div> <!-- / .row-fluid -->
+                        </div> <!-- / col-lg-9 -->
+                    </div> <!-- / .row -->
 
-                    <div class="row-fluid">
-                        <div class="span9">
+                    <div class="row">
+                        <div class="col-lg-9">
                             <div id="imageviewer">
                                 <div id="largeCover">
                                     <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber | url %]" />
@@ -90,7 +97,7 @@
                         </div> <!-- / .span12 -->
 
                         [% IF OPACLocalCoverImages == 1 %]
-                            <div class="span3">
+                            <div class="col-lg-3">
                                 <div id="thumbnails">
                                     [% FOREACH img IN images %]
                                         [% IF img %]
@@ -103,21 +110,20 @@
                                             </a>
                                         [% END %]
                                     [% END %]
-                                </div>
-                            </div>
+                                </div> <!-- /#thumbnails -->
+                            </div> <!-- /.col-lg-3 -->
                         [% ELSE %]
                             Unfortunately, images are not enabled for this catalog at this time.
                         [% END %]
-                    </div> <!-- / .row-fluid -->
-                </div> <!-- / .span10/12 -->
-            </div> <!-- / .row-fluid -->
+                    </div> <!-- / .row -->
+                </div> <!-- / .col-lg-10/12 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script>
-    //<![CDATA[
+    <script>
         $(document).ready(function(){
             $("#largeCoverImg").attr("src","[% interface | html %]/[% theme | html %]/images/loading.gif");
             showCover([% imagenumber | html %]);
@@ -128,6 +134,5 @@
             $('#largeCoverImg').attr('src', '/cgi-bin/koha/opac-image.pl?imagenumber=' + img);
             $('#' + img + '.thumbnail').attr('class', 'thumbnail selected');
         }
-    //]]>
-</script>
+    </script>
 [% END %]

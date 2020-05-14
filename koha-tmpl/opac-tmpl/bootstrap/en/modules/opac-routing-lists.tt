@@ -14,24 +14,31 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-routing-lists.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your routing lists</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+               <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-routing-lists.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Your routing lists</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col-lg-2">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-10 order-first order-md-first order-lg-2">
                 <div id="user-routing-lists" class="maincontent">
 
-
-                    <h3>Routing lists</h3>
+                    <h2>Routing lists</h2>
 
                     [% SET routinglists = logged_in_user.get_routing_lists %]
                     [% IF ( routinglists.count ) %]
@@ -59,9 +66,10 @@
                     [% ELSE %]
                         <p>You are currently not listed on any routing lists.</p>
                     [% END %]
-                </div>
-            </div> <!-- / .span10 -->
-        </div> <!-- / .row-fluid -->
+                </div> <!-- /#user-routing-lists.maincontent -->
+
+            </div> <!-- / .col-10 -->
+        </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 

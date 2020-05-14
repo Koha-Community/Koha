@@ -26,20 +26,28 @@
 [% END %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your summary</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="#">Your summary</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-md-12 col-lg-10 order-1 order-lg-2">
                 <div id="userdetails" class="maincontent">
 
                     [% INCLUDE 'opac-note.inc' %]
@@ -59,26 +67,26 @@
                     [% END %]
 
                     [% IF ( borrower.blockedonfines ) %]
-                        <div class="alert" id="blockedonfines">
+                        <div class="alert alert-warning" id="blockedonfines">
                             <strong>Please note:</strong><span> Your account has outstanding fees & charges of [% amountoutstanding | $Price %]. Holds are blocked because your fine balance is over the limit.</span>
                         </div>
                     [% END %]
 
                     [% IF ( borrower.warndeparture ) %]
-                        <div class="alert" id="warndeparture">
+                        <div class="alert alert-warning" id="warndeparture">
                             <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% borrower.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
                                 [% IF ( borrower.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
                         </div>
                     [% END %]
 
                     [% IF ( borrower.warnexpired ) %]
-                        <div class="alert" id="warnexpired">
+                        <div class="alert alert-warning" id="warnexpired">
                             <strong>Please note: </strong><span>Your account has expired as of [% borrower.warnexpired | $KohaDates %]. Please contact the library if you wish to renew your account.</span>
                         </div>
                     [% END %]
 
                     [% IF ( RENEW_ERROR ) %]
-                        <div class="dialog alert">
+                        <div class="alert alert-warning">
                             <strong>Please note:</strong>
                                 Your loan renewal failed because of the following reason(s):
                                 <ul>
@@ -100,7 +108,7 @@
                     [% END %]
 
                     [% IF ( patron_flagged ) %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             <ul>
                                 [% IF ( userdebarred ) %]
                                     [% IF ( discharge_available ) %]
@@ -405,7 +413,7 @@
                                     </tbody>
                                 </table>
                                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                                    <input type="submit" class="btn" value="Renew selected" />
+                                    <input type="submit" class="btn btn-primary" value="Renew selected" />
                                 [% END %]
                                 </form>
 
@@ -416,7 +424,7 @@
                                     [% FOREACH ISSUE IN ISSUES %]
                                         <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
                                     [% END %]
-                                    <input type="submit" class="btn" value="Renew all" />
+                                    <input type="submit" class="btn btn-primary" value="Renew all" />
                                 </form>
                                 [% END %]
                                 <p><a href="opac-ics.pl">Download as iCal/.ics file</a></p>
@@ -761,8 +769,8 @@
 
                     </div> <!-- /#opac-user-views -->
                 </div> <!-- /#userdetails -->
-            </div> <!-- /.span10 -->
-        </div> <!-- /.row-fluid -->
+            </div> <!-- /.col-10 -->
+        </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
 </div> <!-- /#main -->
 
@@ -966,7 +974,7 @@
                 });
             }
         });
-        //]]>
+
         var borrowernumber = "[% borrowernumber | html %]";
         var MSG_YOUR_RATING = _("Your rating: %s, ");
         var MSG_AVERAGE_RATING = _("Average rating: %s (%s votes)");
@@ -996,7 +1004,7 @@
     [% END %]
     [% IF RecordedBooksCirculation %]
         [% Asset.js("js/recordedbooks.js") | $raw %]
-        <script type="text/JavaScript">
+        <script>
             $(document).ready(function() {
                 [% IF ( recordedbooks_error ) %]
                     KOHA.RecordedBooks.display_error("#opac-user-recordedbooks", "[% recordedbooks_error.dquote | html %]");

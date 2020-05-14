@@ -6,8 +6,8 @@
 [% INCLUDE 'bodytag.inc' bodyid='addtolist' bodyclass='popup' %]
     <div class="main">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span12">
+            <div class="row">
+                <div class="col order-first order-md-first order-lg-2">
                     <div id="useraddbybiblionumber" class="maincontent">
                         [% IF ( authorized ) %]
                             [% UNLESS ( newshelf ) %]
@@ -50,7 +50,7 @@
                                             <input type="hidden" name="modifyshelfcontents" value="1" />
                                         </fieldset>
                                         <fieldset class="action">
-                                            <input type="submit" value="Save" class="btn" />
+                                            <input type="submit" value="Save" class="btn btn-primary" />
                                             <a class="close cancel" href="#">Cancel</a>
                                         </fieldset>
                                     </form>
@@ -64,7 +64,7 @@
                                             <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]" />
                                             <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
                                             <fieldset class="action">
-                                                <input type="submit" value="Save" class="btn" />
+                                                <input type="submit" value="Save" class="btn btn-primary" />
                                                 <a class="close cancel" href="#">Cancel</a>
                                             </fieldset>
                                         </form>
@@ -91,7 +91,7 @@
                                     [% END %]
                                     <fieldset class="action">
                                         <input type="hidden" name="sortfield" value="title" />
-                                        <input type="submit" value="Save" class="btn" />
+                                        <input type="submit" value="Save" class="btn btn-primary" />
                                         <a class="close cancel" href="#">Cancel</a>
                                     </fieldset>
                                 </form>
@@ -108,7 +108,7 @@
                         <p><a href="#" class="close">Close this window.</a></p>
                     </div> <!-- / #useraddbybiblionumber -->
                 </div> <!-- / .span12 -->
-            </div> <!-- / .row-fluid -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 

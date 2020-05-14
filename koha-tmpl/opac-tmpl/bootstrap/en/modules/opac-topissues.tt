@@ -7,7 +7,30 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
-        #search-facets fieldset { border: 0; margin: 0;padding:.3em;}#search-facets ol{padding:.3em;}#search-facets li {list-style-type:none;padding:4px 4px;}#search-facets label{font-weight:bold;display:block;margin:.2em 0;}#search-facets fieldset.action {padding-left:4px;margin:.3em;};
+        #search-facets fieldset {
+            border: 0;
+            margin: 0;
+            padding: .3em;
+        }
+        #search-facets ol{
+            padding: .3em;
+        }
+        #search-facets li {
+            list-style-type: none;
+            padding: 4px 4px;
+        }
+        #search-facets label{
+            font-weight: bold;
+            display: block;
+            margin: .2em 0;
+        }
+        #search-facets fieldset.action {
+            padding-left: 4px;
+            margin: .3em;
+        }
+        #search-facets select {
+            max-width: 100%;
+        }
     </style>
 [% END %]
 </head>
@@ -15,14 +38,20 @@
 [% INCLUDE 'masthead.inc' %]
 
     <div class="main">
-        <ul class="breadcrumb">
-            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">Most popular titles</a></li>
-        </ul>
+        <nav aria-label="breadcrumb">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">Most popular titles</a>
+                </li>
+            </ul>
+        </nav>
 
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span2">
+            <div class="row">
+                <div class="col-lg-2">
                     <div id="usertopissues">
                         [% INCLUDE 'opac-topissues.inc' %]
                         [% IF ( OpacNav || OpacNavBottom ) %]
@@ -30,7 +59,7 @@
                         [% END %]
                     </div>
                 </div>
-                <div class="span10">
+                <div class="col-10 order-first order-md-first order-lg-2">
                     <div id="topissues" class="maincontent">
 
                         [% IF ( results ) %]
@@ -41,47 +70,63 @@
                                         [% ItemTypes.GetDescription(selected_itemtype) | html %]
                                     [% END %]
                                     [% IF ( branch ) %]
-                                    at
-                                    [% Branches.GetName( branch ) | html %]
+                                        at
+                                        [% Branches.GetName( branch ) | html %]
                                     [% END %]
                                     [% IF ( timeLimit != 999 ) %]
-                                    in the past [% timeLimitFinite | html %] months
-                                    [% ELSE %] of all time[% END %]
+                                        in the past [% timeLimitFinite | html %] months
+                                    [% ELSE %]
+                                         of all time
+                                     [% END %]
                                 </caption>
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
+                                        <th class="anti-the">Title</th>
                                         <th>[% IF ( ccodesearch ) %]Collection[% ELSE %]Item type[% END %]</th>
-                                        <th>Checkouts</th>
-                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<th>&nbsp;</th>[% END %]
+                                        <th class="title-num">Checkouts</th>
+                                        [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                            <th class="NoSort">&nbsp;</th>
+                                        [% END %]
                                     </tr>
                                 </thead>
                                 <tbody>
                                     [% FOREACH result IN results %]
                                         <tr>
-                                            <td><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber | html %]">[% result.title | html %]</a><p>[% result.author | html %]
-                                            [% IF ( result.publishercode ) %]- [% result.publishercode | html %][% END %]
-                                            [% IF ( result.place ) %][% result.place | html %][% END %]
-                                            [% IF ( result.publicationyear ) %]
-                                                [% result.publicationyear | html %]
-                                            [% ELSIF ( result.copyrightdate ) %]
-                                                [% result.copyrightdate | html %]
-                                            [% END %]
-                                            [% IF ( result.pages ) %] - [% result.pages | html %][% END %]
-                                            [% IF ( result.item('size') ) %][% result.item('size') | html %][% END %]</p>
+                                            <td>
+                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% result.biblionumber | html %]">[% result.title | html %]</a><p>[% result.author | html %]
+                                                    [% IF ( result.publishercode ) %]- [% result.publishercode | html %][% END %]
+                                                    [% IF ( result.place ) %][% result.place | html %][% END %]
+                                                    [% IF ( result.publicationyear ) %]
+                                                        [% result.publicationyear | html %]
+                                                    [% ELSIF ( result.copyrightdate ) %]
+                                                        [% result.copyrightdate | html %]
+                                                    [% END %]
+                                                    [% IF ( result.pages ) %] - [% result.pages | html %][% END %]
+                                                    [% IF ( result.item('size') ) %][% result.item('size') | html %][% END %]</p>
                                             </td>
                                             <td>
-                                              [% IF Koha.Preference('AdvancedSearchTypes') == 'ccode' %]
-                                                <span class="tdlabel">Collection</span>
-                                                [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
-                                              [% ELSE %]
-                                                <span class="tdlabel">Item type</span>
-                                                [% ItemTypes.GetDescription(result.itemtype) | html %]
-                                              [% END %]
+                                                [% IF Koha.Preference('AdvancedSearchTypes') == 'ccode' %]
+                                                    <span class="tdlabel">Collection</span>
+                                                    [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
+                                                [% ELSE %]
+                                                    <span class="tdlabel">Item type</span>
+                                                    [% ItemTypes.GetDescription(result.itemtype) | html %]
+                                                [% END %]
                                             </td>
-                                            <td><span class="tdlabel">Checkouts: </span> <span title="[% result.count | html %]">[% result.count | html %]</span></td>
-                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( result.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | uri %]">Place hold</a>[% END %][% END %]</td>[% END %]
-                                            </tr>
+                                            <td>
+                                                <span class="tdlabel">Checkouts: </span>
+                                                <span title="[% result.count | html %]">[% result.count | html %]</span>
+                                            </td>
+                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
+                                                <td>
+                                                    [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
+                                                        [% UNLESS ( result.norequests ) %]
+                                                            <a class="btn btn-link btn-sm hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | uri %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
+                                                        [% END %]
+                                                    [% END %]
+                                                </td>
+                                            [% END %]
+                                        </tr>
                                     [% END %]
                                 </tbody>
                             </table>
@@ -89,33 +134,27 @@
                             No results, try to change filters.
                         [% END # / IF results %]
                     </div> <!-- / #topissues -->
-                </div> <!-- / .span10 -->
-            </div> <!-- / .row-fluid -->
+                </div> <!-- / .col-lg-10 -->
+            </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% INCLUDE 'datatables.inc' %]
-<script>
-//<![CDATA[
-    $(function() {
-        $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sorting": [ [2, "desc"], [0, "asc"] ],
-            "columnDefs": [
-              [% IF ( opacuserlogin ) %]{ "targets": [ -1 ], "sortable": false, "searchable": false }[% END %]
-            ],
-            "columns": [
-                { "type": "anti-the" },
-                null,
-                { "type": "title-numeric" },
-                [% IF ( opacuserlogin ) %]null,[% END %]
-            ]
-        }));
-    });
-function Dopop(link) {
-    newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-//]]>
-</script>
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(function() {
+            $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sorting": [ [2, "desc"], [0, "asc"] ],
+                "columnDefs": [
+                    { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                    { "type": "anti-the", "targets" : [ "anti-the" ] },
+                    { "type": "title-numeric", "targets" : [ "title-num"] },
+                ]
+            }));
+        });
+        function Dopop(link) {
+            newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+        }
+    </script>
 [% END %]

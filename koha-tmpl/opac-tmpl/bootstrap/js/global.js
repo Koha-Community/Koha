@@ -78,12 +78,14 @@ function checkEnter(e){ //e is event object passed from function invocation
 function confirmModal(message, title, yes_label, no_label, callback) {
     $("#bootstrap-confirm-box-modal").data('confirm-yes', false);
     if($("#bootstrap-confirm-box-modal").length == 0) {
-        $("body").append('<div id="bootstrap-confirm-box-modal" class="modal">\
+        $("body").append('<div id="bootstrap-confirm-box-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">\
             <div class="modal-dialog">\
                 <div class="modal-content">\
                     <div class="modal-header" style="min-height:40px;">\
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>\
                         <h4 class="modal-title"></h4>\
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">\
+                        <span aria-hidden="true">×</span>\
+                    </button>\
                     </div>\
                     <div class="modal-body"><p></p></div>\
                     <div class="modal-footer">\

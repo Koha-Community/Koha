@@ -27,82 +27,89 @@
 
 [% BLOCK library_info %]
     <div property="address" typeof="PostalAddress">
-        <p>
-            <span property="streetAddress">
-                [% IF ( library.branchaddress1 ) %]
-                    [% library.branchaddress1 | html %]
-                [% END %]
-                [% IF ( library.branchaddress2 ) %]
-                    <br />[% library.branchaddress2 | html %]
-                [% END %]
-                [% IF ( library.branchaddress3 ) %]
-                    <br />[% library.branchaddress3 | html %]
-                [% END %]
-            </span><br>
-            [% IF ( library.branchcity ) %]
-                <span property="addressLocality">[% library.branchcity | html %]</span>
+        <span property="streetAddress">
+            [% IF ( library.branchaddress1 ) %]
+                [% library.branchaddress1 | html %]
             [% END %]
-            [% IF ( library.branchstate ) %]
-                <span property="addressRegion">[% library.branchstate | html %]</span>
+            [% IF ( library.branchaddress2 ) %]
+                <br />[% library.branchaddress2 | html %]
             [% END %]
-            [% IF ( library.branchzip ) %]
-                <span property="postalCode">[% library.branchzip | html %]</span>
+            [% IF ( library.branchaddress3 ) %]
+                <br />[% library.branchaddress3 | html %]
             [% END %]
-            [% IF ( library.branchcountry ) %]
-                <br /><span property="addressCountry">[% library.branchcountry | html %]</span>
-            [% END %]
-            [% IF ( library.branchphone ) %]
-                <p>Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
-            [% END %]
-            [% IF ( library.branchfax ) %]
-                <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
-            [% END %]
-            [% IF ( library.branchurl ) %]
-                <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
-            [% END %]
-        </p>
+        </span><br>
+        [% IF ( library.branchcity ) %]
+            <span property="addressLocality">[% library.branchcity | html %]</span>
+        [% END %]
+        [% IF ( library.branchstate ) %]
+            <span property="addressRegion">[% library.branchstate | html %]</span>
+        [% END %]
+        [% IF ( library.branchzip ) %]
+            <span property="postalCode">[% library.branchzip | html %]</span>
+        [% END %]
+        [% IF ( library.branchcountry ) %]
+            <br /><span property="addressCountry">[% library.branchcountry | html %]</span>
+        [% END %]
+        [% IF ( library.branchphone ) %]
+            <p>Phone: <a href="tel:[% library.branchphone | url %]" property="telephone">[% library.branchphone | html %]</a></p>
+        [% END %]
+        [% IF ( library.branchfax ) %]
+            <p>Fax: <span property="faxNumber">[% library.branchfax | html %]</span></p>
+        [% END %]
+        [% IF ( library.branchurl ) %]
+            <p><a href="[% library.branchurl | url %]" property="url">[% library.branchurl | html %]</a></p>
+        [% END %]
     </div> <!-- /div property=address -->
 [% END %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-library.pl">Libraries</a>
-        [% IF ( library ) %]
-            <span class="divider">&rsaquo;</span></li>
-            <li><a href="#">[% library.branchname | html %]</a></li>
-        [% ELSE %]
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
             </li>
-        [% END %]
-    </ul>
+            [% IF ( library ) %]
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-library.pl">Libraries</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#">[% library.branchname | html %]</a>
+                </li>
+            [% ELSE %]
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="/cgi-bin/koha/opac-library.pl">Libraries</a>
+                </li>
+            [% END %]
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-    <div class="row-fluid">
-        [% IF ( OpacNav ||  OpacNavBottom ) %]
-        <div class="span2">
-            <div id="navigation">
-                [% INCLUDE 'navigation.inc' %]
-            </div>
-        </div>
-        <div class="span10">
-        [% ELSE %]
-        <div class="span12">
-        [% END %]
+        <div class="row">
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                <div class="col-lg-2">
+                    <div id="navigation">
+                        [% INCLUDE 'navigation.inc' %]
+                    </div>
+                </div>
+                <div class="col-10 order-first order-md-first order-lg-2">
+            [% ELSE %]
+                <div class="col order-first order-md-first order-lg-2">
+            [% END %]
 
                 [% IF ( library ) %]
 
                     <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
                         <h3 property="name">[% library.branchname | html %]</h3>
 
-                        <div class="row-fluid">
-                            <div class="span8">
+                        <div class="row">
+                            <div class="col-lg-8">
                                 [% PROCESS library_info %]
                                 [% IF ( library.opac_info ) %]
                                     <hr />
                                     [% PROCESS library_description %]
                                 [% END %]
                             </div>
-                            <div class="span4">
+                            <div class="col-lg-4">
                                 [% IF ( libraries.count > 1 ) %]
                                     <nav class="libraries">
                                         <ul class="fa-ul">
@@ -123,9 +130,9 @@
                                             [% END %]
                                         </ul>
                                     </nav>
-                                [% END %]
-                            </div>
-                        </div>
+                                [% END # /IF libraries.count > 1 %]
+                            </div> <!-- /.col-lg-4 -->
+                        </div> <!-- /.row -->
                     </div> <!-- /#library_info -->
 
                 [% ELSE %]
@@ -146,11 +153,12 @@
                                 [% PROCESS library_description %]
                             [% END %]
                         [% END %]
-                    </div>
-                [% END %]
-
-        </div> <!-- /.row-fluid -->
+                    </div> <!-- /#library_info -->
+                [% END # /IF library %]
+            </div> <!-- /.col -->
+        </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
 </div> <!-- / .main -->
+
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %][% END %]

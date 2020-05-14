@@ -8,14 +8,20 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-marcdetail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">MARC view: [% bibliotitle | html %]</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+                <a href="#">MARC view: [% bibliotitle | html %]</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span9">
+        <div class="row">
+            <div class="col-lg-9">
                 <div id="opac-detail" class="maincontent">
                     <div id="usermarcdetail">
                         <div id="catalogue_detail_biblio">
@@ -160,11 +166,11 @@
                         </div> <!-- / #catalogue_detail_biblio -->
                     </div> <!-- / #usermarcdetail -->
                 </div> <!-- / #opac-detail -->
-            </div> <!-- / .span9 -->
-            <div class="span3">
+            </div> <!-- / .col-lg-9 -->
+            <div class="col-lg-3">
                 [% INCLUDE 'opac-detail-sidebar.inc' %]
             </div>
-        </div> <!-- / .row-fluid -->
+        </div> <!-- / .row -->
     </div>  <!-- / .container-fluid -->
 </div> <!-- / .main -->
 

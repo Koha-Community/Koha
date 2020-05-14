@@ -17,14 +17,22 @@
 [% INCLUDE 'masthead.inc' %]
 
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a>
-        [% IF news_item %]
-            <span class="divider">&rsaquo;</span></li>
-            <li>[% news_item.title | html %]</li>
-        [% END %]
-        </li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            [% IF news_item %]
+                <li class="breadcrumb-item">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    [% news_item.title | html %]
+                </li>
+            [% ELSE %]
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+                </li>
+            [% END %]
+        </ul>
+    </nav>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF ( loggedinusername ) %]
@@ -36,24 +44,26 @@
         <div id="notloggedin" class="container-fluid">
     [% END %]
 
-    <div class="row-fluid">
-    [% IF ( OpacNav ||  OpacNavBottom ) %]
-        <div class="span2">
-            <div id="navigation">
-                [% INCLUDE 'navigation.inc' %]
+    <div class="row">
+        [% IF ( OpacNav ||  OpacNavBottom ) %]
+            <div class="col-12 col-lg-2 order-3 order-lg-1">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' %]
+                </div>
             </div>
-        </div>
-    [% END %]
+        [% END %]
 
-    [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
-        <div class="span7 maincontent">
-    [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
-        <div class="span9 maincontent">
-    [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
-        <div class="span10 maincontent">
-    [% ELSE %]
-        <div class="span12 maincontent">
-    [% END %]
+        [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
+            [% #  Three-column layout with right and left sidebars %]
+            <div class="col-12 col-lg-7 order-md-1 maincontent">
+        [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
+            [% #  Two-column layout with right sidebar %]
+            <div class="col-12 col-lg-9 order-md-1 maincontent">
+        [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
+            <div class="col-12 col-lg-10 order-md-1 maincontent">
+        [% ELSE %]
+            <div class="col order-md-1 maincontent">
+        [% END %]
 
         [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
             [% UNLESS news_item %]
@@ -159,10 +169,10 @@
             [% END %]
         [% END %]
 
-        </div> <!-- / .span 7/9 -->
+        </div> <!-- / .col 6/8 -->
 
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
-            <div class="span3">
+            <div class="col-12 col-lg-3 order-md-2">
                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                     [% UNLESS ( loggedinusername ) %]
                         [% UNLESS ( casAuthentication || shibbolethAuthentication ) %]
@@ -171,10 +181,12 @@
                                     <input type="hidden" name="koha_login_context" value="opac" />
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>
-                                        <label for="userid">Login:</label><input type="text" id="userid" name="userid" />
-                                        <label for="password">Password:</label><input type="password" id="password" name="password" />
+                                        <label for="userid">Login:</label>
+                                        <input class="form-control" type="text" id="userid" name="userid" />
+                                        <label for="password">Password:</label>
+                                        <input class="form-control" type="password" id="password" name="password" />
                                         <fieldset class="action">
-                                            <input type="submit" value="Log in" class="btn" />
+                                            <input type="submit" value="Log in" class="btn btn-primary" />
                                         </fieldset>
                                         [% IF ( OpacLoginInstructions ) %]
                                             <div id="nologininstructions-main" class="nologininstructions">
@@ -221,11 +233,11 @@
                     [% END # /loggedinusername %]
                 [% END # /opacuserlogin %]
                 [% PROCESS koha_news_block news => OpacNavRight %]
-            </div> <!-- / .span3 -->
+            </div> <!-- / .col -->
         [% END # /opacuserlogin || OpacNavRight %]
 
         </div> <!-- /.container-fluid -->
-    </div> <!-- /.row-fluid -->
+    </div> <!-- /.row -->
 </div> <!-- /.main -->
 
 [% INCLUDE 'opac-bottom.inc' %]
