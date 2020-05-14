@@ -4,11 +4,19 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do( qq{
         INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS_DGST', 'notification on auto renewing', 'Auto renewals (Digest)',
         "Dear [% borrower.firstname %] [% borrower.surname %],
-        [% IF checkout.auto_renew_errors %]
-        There were [% checkout.auto_renew_errors %] items that where not correctly renewed.
+        [% IF error %]
+            There were [% error %] items that were not correctly renewed.
         [% END %]
-        [% IF checkout.auto_renew %]
-        There were [% checkout.auto_renew %] items that where correctly renewed.
+        [% IF success %]
+            There were [% success %] items that where correctly renewed.
+        [% END %]
+        [% FOREACH checkout IN checkouts %]
+            [% checkout.item.biblio.title %] : [% checkout.item.barcode %]
+            [% IF !checkout.auto_renew_error %]
+                was renewed until [% checkout.date_due %]
+            [% ELSE %]
+                was not renewed with error: [% checkout.auto_renew_error %]
+            [% END %]
         [% END %]
         ", 'email');
     });

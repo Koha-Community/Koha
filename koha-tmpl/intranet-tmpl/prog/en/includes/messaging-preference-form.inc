@@ -14,10 +14,10 @@
     </tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
     [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
+    [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
     <tr>
       <td>[% IF ( messaging_preference.Item_Due ) %]Item due
           [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
-          [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming events
           [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
           [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
           [% ELSIF ( messaging_preference.Item_Checkout ) %]
@@ -28,7 +28,6 @@
             [% END %]
           [% ELSIF ( messaging_preference.Ill_ready ) %]Interlibrary loan ready
           [% ELSIF ( messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
-          [% ELSIF ( messaging_preference.Auto_Renewals ) %]Auto renewals
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>

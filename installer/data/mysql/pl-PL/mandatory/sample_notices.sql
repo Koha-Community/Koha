@@ -427,11 +427,20 @@ This item must be renewed at the library.
 The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
 [% END %]", 'email');
 
-INSERT INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS_DGST', 'Notification on auto renewing', 'Auto renewals (Digest)',
+INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS_DGST', 'Notification on auto renewing', 'Auto renewals (Digest)',
 "Dear [% borrower.firstname %] [% borrower.surname %],
-[% IF <<error>> %]
-There were <<error>> items that where not correctly renewed.
+[% IF error %]
+    There were [% error %] items that were not correctly renewed.
 [% END %]
-[% IF <<success>> %]
-There were <<success>> items that where correctly renewed.
-[% END %]", 'email');
+[% IF success %]
+    There were [% success %] items that where correctly renewed.
+[% END %]
+[% FOREACH checkout IN checkouts %]
+    [% checkout.item.biblio.title %] : [% checkout.item.barcode %]
+    [% IF !checkout.auto_renew_error %]
+        was renewed until [% checkout.date_due | $KohaDates %]
+    [% ELSE %]
+        was not renewed with error: [% checkout.auto_renew_error %]
+    [% END %]
+[% END %]
+", 'email');
