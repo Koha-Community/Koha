@@ -19041,6 +19041,16 @@ WHERE a.id < b.id AND a.borrowernumber IS NOT NULL AND a.borrowernumber=b.borrow
     print "Upgrade to $DBversion done (Bug 20754: Remove double accepted list shares)\n";
 }
 
+$DBversion = '19.05.10.002';
+if( CheckVersion( $DBversion ) ) {
+     $dbh->do( "UPDATE items set issues=0 where issues is null" );
+     $dbh->do( "UPDATE deleteditems set issues=0 where issues is null" );
+     $dbh->do( "ALTER TABLE items ALTER issues set default 0" );
+     $dbh->do( "ALTER TABLE deleteditems ALTER issues set default 0" );
+     SetVersion( $DBversion );
+     print "Upgrade to $DBversion done (Bug 23081: Set default to 0 for items.issues)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
