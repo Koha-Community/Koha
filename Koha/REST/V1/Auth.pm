@@ -63,7 +63,15 @@ sub under {
 
         # /api/v1/{namespace}
         my $namespace = $c->req->url->to_abs->path->[2] // '';
-        my $is_public = ($namespace eq 'public') ? 1 : 0;
+
+        my $is_public = 0; # By default routes are not public
+        my $is_plugin = 0;
+
+        if ( $namespace eq 'public' ) {
+            $is_public = 1;
+        } elsif ( $namespace eq 'contrib' ) {
+            $is_plugin = 1;
+        }
 
         if ( $is_public
             and !C4::Context->preference('RESTPublicAPI') )
@@ -77,7 +85,7 @@ sub under {
             $status = 1;
         }
         else {
-            $status = authenticate_api_request($c, { is_public => $is_public });
+            $status = authenticate_api_request($c, { is_public => $is_public, is_plugin => $is_plugin });
         }
 
     } catch {
@@ -237,7 +245,7 @@ sub authenticate_api_request {
     if ( !$authorization and
          ( $params->{is_public} and
           ( C4::Context->preference('RESTPublicAnonymousRequests') or
-            $user) ) ) {
+            $user) ) or $params->{is_plugin} ) {
         # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );
