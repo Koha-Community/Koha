@@ -36,6 +36,7 @@ my $index  = $input->param('index');         # MARC editor input field id
 my $term   = $input->param('term');
 my $id     = $input->param('id');
 my $msg    = $input->param('msg');
+my $browsecategory = $input->param('browsecategory');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "tools/upload.tt",
@@ -55,6 +56,22 @@ $template->param(
 if ( $op eq 'new' ) {
     $template->param(
         mode             => 'new',
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
+
+} elsif ( $op eq 'browse' ) {
+    my $uploads;
+    if ($browsecategory){
+        $uploads = Koha::UploadedFiles->search({
+            uploadcategorycode => $browsecategory,
+            $plugin? ( public => 1 ): (),
+        })->unblessed;
+    }
+
+    $template->param(
+        mode    => 'report',
+        msg     => $msg,
+        uploads => $uploads,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
