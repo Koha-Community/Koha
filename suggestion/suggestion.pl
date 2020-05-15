@@ -61,8 +61,9 @@ sub GetCriteriumDesc{
         }
         return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
-    return Koha::Libraries->find($criteriumvalue)->branchname
-        if $displayby =~ /branchcode/;
+    if ( $displayby =~ /branchcode/ ) {
+        return $criteriumvalue ? Koha::Libraries->find($criteriumvalue)->branchname : "__ANY__";
+    }
     if ( $displayby =~ /itemtype/ ) {
         my $av = Koha::AuthorisedValues->search({ category => 'SUGGEST_FORMAT', authorised_value => $criteriumvalue });
         return $av->count ? $av->next->lib : 'Unknown';

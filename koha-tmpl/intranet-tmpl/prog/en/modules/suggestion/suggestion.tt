@@ -506,11 +506,13 @@
 
 <h1>Suggestions management</h1>
 
-<label for="branchcode">Viewing suggestions for library:</label>
-<select name="branchcode" id="branchcode">
-    <option value="__ANY__">Any</option>
-    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter || branchcode ) %]
-</select>
+[% IF ( displayby != "branchcode" ) %]
+    <label for="branchcode">Viewing suggestions for library:</label>
+    <select name="branchcode" id="branchcode">
+        <option value="__ANY__">Any</option>
+        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter || branchcode ) %]
+    </select>
+[% END %]
 
 
 [% FOR m IN messages %]
@@ -540,6 +542,7 @@
                 [% ELSIF (suggestion.suggestiontypelabel == "Available") %]Available
                 [% ELSIF (suggestion.suggestiontypelabel == "Ordered") %]Ordered
                 [% ELSIF (suggestion.suggestiontypelabel == "Unknown") %]Status unknown
+                [% ELSIF (suggestion.suggestiontypelabel == "__ANY__") %]Any
                 [% ELSE %][% suggestion.suggestiontypelabel | html %][% END %]
             [% ELSE %]
                 [% IF ( suggestion.suggestiontype ) %]
