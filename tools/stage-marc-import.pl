@@ -42,6 +42,7 @@ use Koha::UploadedFiles;
 use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
 use Koha::Plugins;
+use Koha::ImportBatches;
 
 my $input = CGI->new;
 
@@ -60,6 +61,7 @@ my $format                     = $input->param('format') || 'ISO2709';
 my $marc_modification_template = $input->param('marc_modification_template_id');
 my $basketno                   = $input->param('basketno');
 my $booksellerid               = $input->param('booksellerid');
+my $profile_id                 = $input->param('profile_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -150,6 +152,11 @@ if ($completedJobID) {
         $parse_items,    0,
         50, staging_progress_callback( $job, $dbh )
       );
+
+    if($profile_id) {
+        my $ibatch = Koha::ImportBatches->find($batch_id);
+        $ibatch->set({profile_id => $profile_id})->store;
+    }
 
     my $num_with_matches = 0;
     my $checked_matches = 0;

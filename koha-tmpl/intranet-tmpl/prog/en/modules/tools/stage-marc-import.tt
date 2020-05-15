@@ -95,11 +95,34 @@
     </div>
 </form>
 
+<fieldset class="rows" id="profile_fieldset">
+    <legend>Profile settings</legend>
+    <ol>
+        <li>
+            <label for="profile">Pre fill values with profile</label>
+            <select name="profile" id="profile">
+                <option value="">Do not use profile</option>
+            </select>
+        </li>
+        <li>
+            <label for="profile_name">Profile name</label>
+            <input type="text" id="profile_name" name="profile_name" />
+
+        </li>
+    </ol>
+    <fieldset class="action">
+        <button id="add_profile" disabled>Add profile</button>
+        <button id="mod_profile" disabled>Update profile</button>
+        <button id="del_profile" disabled>Remove profile</button>
+    </fieldset>
+</fieldset>
+
     <form method="post" id="processfile" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
 [% IF basketno && booksellerid %]
     <input type="hidden" name="basketno" id="basketno" value="[% basketno | html %]" />
     <input type="hidden" name="booksellerid" id="booksellerid" value="[% booksellerid | html %]" />
 [% END %]
+    <input type="hidden" name="profile_id" id="profile_id"/>
 <fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
@@ -220,6 +243,7 @@
         var xhr;
         $(document).ready(function(){
             $("#processfile").hide();
+            $('#profile_fieldset').hide();
             $("#record_type").change(function() {
                 if ($(this).val() == 'auth') {
                     $('#items').hide();
@@ -238,6 +262,195 @@
             $("#mainformsubmit").on("click",function(){
                 return CheckForm( document.getElementById("processfile"));
             });
+            getProfiles();
+            $('#profile').change(function(){
+                if(this.value=='') {
+                    $("#mod_profile, #del_profile").prop("disabled",true);
+                    $("#profile_id").val("");
+                    $("#comments").val("");
+                    $("#record_type").val('biblio').change();
+                    $("#encoding").val('UTF-8').change();
+                    $("#format").val('ISO2709').change();
+                    $("#marc_modification_template_id").val("").change();
+                    $("#matcher").val("").change();
+                    $("#overlay_action").val('replace').change();
+                    $("#nomatch_action").val('create_new').change();
+                    $("#parse_itemsyes").prop("checked", true).change();
+                    $("#item_action").val('always_add').change();
+                    $("#profile_name").val('').keyup();
+                } else {
+                    const profile = $('option:selected', this).data('profile');
+                    $("#profile_id").val(profile.profile_id);
+                    $("#mod_profile, #del_profile").prop("disabled", null);
+                    $("#comments").val(profile.comments);
+                    $("#record_type").val(profile.record_type).change();
+                    $("#encoding").val(profile.encoding).change();
+                    $("#format").val(profile.format).change();
+                    $("#marc_modification_template_id").val(profile.template_id).change();
+                    $("#matcher").val(profile.matcher_id).change();
+                    $("#overlay_action").val(profile.overlay_action).change();
+                    $("#nomatch_action").val(profile.nomatch_action).change();
+                    $("input[name='parse_items'][value='"+(profile.parse_items?'1':'0')+"']").prop("checked", true).change();
+                    $("#item_action").val(profile.item_action).change();
+                    $("#profile_name").val(profile.name).keyup();
+                }
+            });
+
+            $("#profile_name").keyup(function(){
+                $("#add_profile").prop("disabled", this.value.trim()=='');
+                $("#mod_profile").prop("disabled", this.value.trim()=='' || !$("#profile").val())
+            });
+
+            $("#add_profile").click(function() {
+                var name = $("#profile_name").val().trim();
+                if(!name) {
+                    alert(_("Profile must have a name"));
+                    return;
+                }
+
+                var profile = $("#profile option[value!='']")
+                    .map(function() {
+                        return $(this).data('profile');
+                    })
+                    .filter(function() {
+                        return this.name == name;
+                    });
+
+                if(profile.length) {
+                    if(!confirm(_("There is another profile with this name.")+"\n\n"+_("Do you want to replace it?"))) {
+                        return;
+                    }
+                }
+
+                new Promise(function(resolve, reject) {
+
+                    const params = {
+                        comments: $("#comments").val() || null,
+                        record_type: $("#record_type").val() || null,
+                        encoding: $("#encoding").val() || null,
+                        format: $("#format").val() || null,
+                        template_id: $("#marc_modification_template_id").val() || null,
+                        matcher_id: $("#matcher").val() || null,
+                        overlay_action: $("#overlay_action").val() || null,
+                        nomatch_action: $("#nomatch_action").val() || null,
+                        parse_items: !!parseInt($("input[name='parse_items']:checked").val()) || null,
+                        item_action: $("#item_action").val() || null,
+                        name: name
+                    };
+
+                    if(profile.length) {
+                        $.ajax({
+                            url: "/api/v1/import-batch-profiles/"+profile[0].profile_id,
+                            method: "PUT",
+                            data: JSON.stringify(params),
+                            contentType: 'application/json'
+                        })
+                        .done(resolve)
+                        .fail(reject);
+                    } else {
+                        $.ajax({
+                            url: "/api/v1/import-batch-profiles/",
+                            method: "POST",
+                            data: JSON.stringify(params),
+                            contentType: 'application/json'
+                        })
+                        .done(resolve)
+                        .fail(reject);
+                    }
+                })
+                .then(function(profile) {
+                    return getProfiles(profile.profile_id);
+                })
+                .catch(function(error) {
+                    alert(_("An error occurred")+"\n\n"+error);
+                })
+            });
+
+            $("#mod_profile").click(function() {
+                var name = $("#profile_name").val().trim();
+                var id = $("#profile").val();
+                if(!id) return;
+                if(!name) {
+                    alert(_("Profile must have a name"));
+                    return;
+                }
+                var profile = $("#profile option[value!='']")
+                    .map(function() {
+                        return $(this).data('profile');
+                    })
+                    .filter(function() {
+                        return this.name == name && this.profile_id != id;
+                    });
+
+                if(profile.length) {
+                    if(!confirm(_("There is another profile with this name.")+"\n\n"+_("Do you want to replace it?"))) {
+                        return;
+                    }
+                }
+                new Promise(function(resolve, reject) {
+                    if(!profile.length) return resolve();
+                    $.ajax({
+                        url: "/api/v1/import-batch-profiles/"+profile[0].profile_id,
+                        method: "DELETE"
+                    })
+                    .done(resolve)
+                    .fail(reject);
+                })
+                .then(function(){
+                    const params = {
+                        comments: $("#comments").val() || null,
+                        record_type: $("#record_type").val() || null,
+                        encoding: $("#encoding").val() || null,
+                        format: $("#format").val() || null,
+                        template_id: $("#marc_modification_template_id").val() || null,
+                        matcher_id: $("#matcher").val() || null,
+                        overlay_action: $("#overlay_action").val() || null,
+                        nomatch_action: $("#nomatch_action").val() || null,
+                        parse_items: !!parseInt($("input[name='parse_items']:checked").val()) || null,
+                        item_action: $("#item_action").val() || null,
+                        name: name
+                    };
+                    return new Promise(function(resolve, reject) {
+                        $.ajax({
+                            url: "/api/v1/import-batch-profiles/"+id,
+                            method: "PUT",
+                            data: JSON.stringify(params),
+                            contentType: 'application/json'
+                        })
+                        .done(resolve)
+                        .fail(reject);
+                    });
+                })
+                .then(function() {
+                    return getProfiles(id);
+                })
+                .catch(function(error) {
+                    alert(_("An error occurred")+"\n\n"+error.message);
+                })
+            });
+
+            $("#del_profile").click(function() {
+                var id = $("#profile").val();
+                if(!id) return;
+                if(!confirm(_("Are you sure you want to delete this profile?"))) {
+                    return;
+                }
+                new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: "/api/v1/import-batch-profiles/"+id,
+                        method: "DELETE"
+                    })
+                    .done(resolve)
+                    .fail(reject);
+                })
+                .then(function() {
+                    return getProfiles();
+                })
+                .catch(function(error) {
+                    alert(_("An error occurred")+"\n\n"+error);
+                })
+            });
+
         });
         function CheckForm(f) {
             if ($("#fileToUpload").value == '') {
@@ -252,6 +465,7 @@
             $('#fileuploadbutton').hide();
             $("#fileuploadfailed").hide();
             $("#processfile").hide();
+            $('#profile_fieldset').hide();
             $("#fileuploadstatus").show();
             $("#uploadedfileid").val('');
             xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
@@ -277,6 +491,7 @@
                     $('#format').val('MARCXML');
                 }
                 $("#processfile").show();
+                $('#profile_fieldset').show();
             } else {
                 var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
                 var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
@@ -290,6 +505,32 @@
                 );
             }
         }
+
+        function getProfiles(id) {
+            const select = $("#profile");
+            $("option[value!='']", select).remove();
+            return new Promise(function(resolve, reject) {
+                $.ajax("/api/v1/import-batch-profiles")
+                .then(resolve, reject);
+            })
+            .then(function(profiles) {
+                profiles.forEach(function(profile) {
+                    const opt = $("<option/>");
+                    select.append(opt);
+                    if(id && profile.profile_id == id) {
+                        opt.prop('selected', true);
+                    }
+                    opt.attr("value", profile.profile_id);
+                    opt.html(profile.name);
+                    opt.data("profile", profile);
+                });
+            })
+            .then(function(){
+                select.change();
+            });
+        }
+
+
     </script>
 [% END %]
 

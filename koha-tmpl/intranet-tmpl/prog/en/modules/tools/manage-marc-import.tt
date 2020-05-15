@@ -106,6 +106,7 @@
                         <fieldset class="rows" id="staged-record-matching-rules">
                             <ol>
                                 <li><span class="label">File name:</span> [% file_name | html %]</li>
+                                <li><span class="label">Profile:</span> [% IF (profile) %][% profile | html %][% ELSE %](none)[% END %]</li>
                                 <li><span class="label">Comments:</span> [% IF ( comments ) %][% comments | html %][% ELSE %](none)[% END %]</li>
                                 <li><span class="label">Type:</span> [% IF ( record_type == 'auth' ) %]Authority records[% ELSE %]Bibliographic records[% END %]</li>
                                 <li><span class="label">Staged:</span> [% upload_timestamp | $KohaDates with_hours=1 %]</li>
@@ -327,6 +328,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>File name</th>
+                                <th>Profile</th>
                                 <th>Comments</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -339,6 +341,7 @@
                                 <tr>
                                     <td>[% batch_lis.import_batch_id | html %]</td>
                                     <td><a href="[% batch_lis.script_name | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
+                                    <td>[% batch_lis.profile | html %]</td>
                                     <td>[% batch_lis.comments | html %]</td>
                                     <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
                                     <td>

@@ -216,6 +216,7 @@ sub import_batches_list {
             comments => $batch->{'comments'},
             can_clean => ($batch->{'import_status'} ne 'cleaned') ? 1 : 0,
             record_type => $batch->{'record_type'},
+            profile => $batch->{'profile'},
         };
     }
     $template->param(batch_list => \@list); 
@@ -390,6 +391,7 @@ sub batch_info {
     my ($template, $batch) = @_;
     $template->param(batch_info => 1);
     $template->param(file_name => $batch->{'file_name'});
+    $template->param(profile => $batch->{'profile'});
     $template->param(comments => $batch->{'comments'});
     $template->param(import_status => $batch->{'import_status'});
     $template->param(upload_timestamp => $batch->{'upload_timestamp'});
