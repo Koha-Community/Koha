@@ -101,14 +101,6 @@ $se->mock( 'get_elasticsearch_mappings', sub {
     return $all_mappings{$self->index};
 });
 
-my $cache = Koha::Caches->get_instance();
-my $clear_search_fields_cache = sub {
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');
-};
-
 subtest 'build_authorities_query_compat() tests' => sub {
 
     plan tests => 57;
@@ -635,7 +627,7 @@ subtest 'build_query with weighted fields tests' => sub {
     $search_field->update({ weight => 25.0 });
     $search_field = Koha::SearchFields->find({ name => 'subject' });
     $search_field->update({ weight => 15.5 });
-    $clear_search_fields_cache->();
+    Koha::SearchEngine::Elasticsearch->clear_search_fields_cache();
 
     my ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
     undef, undef, undef, { weighted_fields => 1 });

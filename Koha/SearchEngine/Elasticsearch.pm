@@ -331,11 +331,7 @@ sub reset_elasticsearch_mappings {
         }
     }
 
-    my $cache = Koha::Caches->get_instance();
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');
+    $self->clear_search_fields_cache();
 
     # FIXME return the mappings?
 }
@@ -1231,6 +1227,24 @@ sub get_facetable_fields {
     );
     # This could certainly be improved
     return ( @faceted_fields, @not_faceted_fields );
+}
+
+=head2 clear_search_fields_cache
+
+Koha::SearchEngine::Elasticsearch->clear_search_fields_cache();
+
+Clear cached values for ES search fields
+
+=cut
+
+sub clear_search_fields_cache {
+
+    my $cache = Koha::Caches->get_instance();
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_biblios');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac_biblios');
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client_authorities');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac_authorities');
+
 }
 
 1;
