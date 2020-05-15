@@ -136,7 +136,7 @@ log4perl_component()
     local config=$1
     local component=$2
 
-    if [ grep -q -x "log4perl.logger.$component" $config ]; then
+    if grep -q -x "log4perl.logger.$component" $config; then
         return 0
     else
         return 1
@@ -146,7 +146,7 @@ log4perl_component()
 # Take care of the instance's log4perl.conf file
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
-    if [ !log4perl_component $log4perl_config "z3950" ]; then
+    if !log4perl_component $log4perl_config "z3950"; then
         cat <<EOF >> $log4perl_config
 log4perl.logger.z3950 = WARN, Z3950
 log4perl.appender.Z3950=Log::Log4perl::Appender::File
