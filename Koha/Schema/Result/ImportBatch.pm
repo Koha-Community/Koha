@@ -117,6 +117,12 @@ __PACKAGE__->table("import_batches");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 profile_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -203,6 +209,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "comments",
   { data_type => "longtext", is_nullable => 1 },
+  "profile_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -234,10 +242,48 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 profile
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:41giNJCRD9WXC4IGO/1D3A
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::ImportBatchesProfile>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "profile",
+  "Koha::Schema::Result::ImportBatchesProfile",
+  { id => "profile_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-03 15:47:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jGfBdM8ht823HaxSr2c9Wg
+
+=head2 koha_object_class
+
+  Koha Object class
+
+=cut
+
+sub koha_object_class {
+    'Koha::ImportBatch';
+}
+
+=head2 koha_objects_class
+
+  Koha Objects class
+
+=cut
+
+sub koha_objects_class {
+    'Koha::ImportBatches';
+}
+
 1;
