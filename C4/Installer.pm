@@ -312,6 +312,7 @@ moved to a different method.
 
 sub load_sql_in_order {
     my $self = shift;
+    my $langchoice = shift;
     my $all_languages = shift;
     my @sql_list = @_;
 
@@ -346,13 +347,18 @@ sub load_sql_in_order {
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_offset_types.sql";
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_credit_types.sql";
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_debit_types.sql";
+    my $localization_file = C4::Context->config('intranetdir') .
+                            "/installer/data/$self->{dbms}/localization/$langchoice/custom.sql";
+    if ( $langchoice ne 'en' and -f $localization_file ) {
+        push @fnames, $localization_file;
+    }
     foreach my $file (@fnames) {
         #      warn $file;
         undef $/;
         my $error = $self->load_sql($file);
         my @file = split qr(\/|\\), $file;
         $lang = $file[ scalar(@file) - 3 ] unless ($lang);
-        my $level = $file[ scalar(@file) - 2 ];
+        my $level = ( $file =~ /(localization)/ ) ? $1 : $file[ scalar(@file) - 2 ];
         unless ($error) {
             $systempreference .= "$file[scalar(@file)-1]|"
               unless ( index( $systempreference, $file[ scalar(@file) - 1 ] ) >= 0 );

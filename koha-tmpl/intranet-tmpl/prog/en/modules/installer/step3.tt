@@ -173,6 +173,8 @@
                             <h3>Optional data added</h3>
                         [% ELSIF lis.level == 'mysql' %]
                             <h3>MySQL data added</h3>
+                        [% ELSIF lis.level == 'localization' %]
+                            <h3>Localization data added</h3>
                         [% ELSE %]
                             <h3>[% lis.level FILTER ucfirst | html %] data added</h3>
                         [% END %]
