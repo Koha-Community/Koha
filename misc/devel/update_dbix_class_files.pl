@@ -38,6 +38,7 @@ my $db_name;
 my $db_user;
 my $db_passwd;
 my $koha_conf;
+my $force;
 my $help;
 
 GetOptions(
@@ -49,6 +50,7 @@ GetOptions(
     "db_user=s"   => \$db_user,
     "db_passwd=s" => \$db_passwd,
     "koha-conf:s" => \$koha_conf,
+    "force"       => \$force,
     "h|help"      => \$help
 );
 
@@ -95,9 +97,11 @@ if (! defined $db_name ) {
     pod2usage(1);
 } else {
 
+    $force //= 0;
+
     make_schema_at(
         "Koha::Schema",
-        { debug => 1, dump_directory => $path, preserve_case => 1 },
+        { debug => 1, dump_directory => $path, preserve_case => 1, overwrite_modifications => $force },
         [
             "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
             $db_user,
