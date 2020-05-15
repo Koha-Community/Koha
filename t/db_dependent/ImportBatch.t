@@ -68,6 +68,8 @@ delete $importbatch2->{upload_timestamp};
 delete $importbatch2->{import_batch_id};
 delete $importbatch2->{num_records};
 delete $importbatch2->{num_items};
+delete $importbatch2->{profile_id};
+delete $importbatch2->{profile};
 
 is_deeply( $importbatch2, $sample_import_batch2,
     "GetImportBatch returns the right informations about $sample_import_batch2" );
@@ -77,6 +79,8 @@ delete $importbatch1->{upload_timestamp};
 delete $importbatch1->{import_batch_id};
 delete $importbatch1->{num_records};
 delete $importbatch1->{num_items};
+delete $importbatch1->{profile_id};
+delete $importbatch1->{profile};
 
 is_deeply( $importbatch1, $sample_import_batch1,
     "GetImportBatch returns the right informations about $sample_import_batch1" );
