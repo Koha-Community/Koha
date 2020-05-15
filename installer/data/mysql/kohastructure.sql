@@ -702,6 +702,28 @@ CREATE TABLE `export_format` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Used for CSV export';
 
 --
+-- Table structure for table `import_batches_profile`
+--
+
+DROP TABLE IF EXISTS `import_batches_profile`;
+CREATE TABLE `import_batches_profile` ( -- profile for batches of marc records to be imported
+  `id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
+  `name` varchar(100) NOT NULL, -- name of this profile
+  `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
+  `template_id` int(11) default NULL, -- the id of the marc modification template
+  `overlay_action` varchar(50) default NULL, -- how to handle duplicate records
+  `nomatch_action` varchar(50) default NULL, -- how to handle records where no match is found
+  `item_action` varchar(50) default NULL, -- what to do with item records
+  `parse_items` tinyint(1) default NULL, -- should items be parsed
+  `record_type` varchar(50) default NULL, -- type of record in the batch
+  `encoding` varchar(50) default NULL, -- file encoding
+  `format` varchar(50) default NULL, -- marc format
+  `comments` LONGTEXT, -- any comments added when the file was uploaded
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_import_batches_profile__name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `import_batches`
 --
 
@@ -722,8 +744,11 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio', -- type of record in the batch
   `file_name` varchar(100), -- the name of the file uploaded
   `comments` LONGTEXT, -- any comments added when the file was uploaded
+  `profile_id` int(11) default NULL,
   PRIMARY KEY (`import_batch_id`),
-  KEY `branchcode` (`branchcode`)
+  KEY `branchcode` (`branchcode`),
+  CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`)
+  REFERENCES `import_batches_profile` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
