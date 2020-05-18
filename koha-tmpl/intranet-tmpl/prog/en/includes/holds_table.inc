@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+[% USE AuthorisedValues %]
 <table>
     <tr>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
@@ -31,10 +33,10 @@
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
                 <input type="hidden" name="biblionumber" value="[% hold.biblionumber | html %]" />
                 [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
-                    <select name="rank-request">
+                    <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id %]">
                 [% ELSE %]
-                    <input type="hidden" name="rank-request" value="[% hold.priority | html %]">
-                    <select name="rank-request" disabled="disabled">
+                    <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id %]">
+                    <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id %]">
                 [% END %]
                     [% IF ( hold.found ) %]
                         [% IF ( hold.intransit ) %]

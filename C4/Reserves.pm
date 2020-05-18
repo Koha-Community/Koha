@@ -983,6 +983,7 @@ sub ModReserve {
     my $suspend_until = $params->{'suspend_until'};
     my $borrowernumber = $params->{'borrowernumber'};
     my $biblionumber = $params->{'biblionumber'};
+    my $cancellation_reason = $params->{'cancellation_reason'};
 
     return if $rank eq "W";
     return if $rank eq "n";
@@ -1000,7 +1001,7 @@ sub ModReserve {
     $hold ||= Koha::Holds->find($reserve_id);
 
     if ( $rank eq "del" ) {
-        $hold->cancel;
+        $hold->cancel({ cancellation_reason => $cancellation_reason });
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
@@ -1185,7 +1186,7 @@ sub ModReserveAffect {
 
 =head2 ModReserveCancelAll
 
-  ($messages,$nextreservinfo) = &ModReserveCancelAll($itemnumber,$borrowernumber);
+  ($messages,$nextreservinfo) = &ModReserveCancelAll($itemnumber,$borrowernumber,$reason);
 
 function to cancel reserv,check other reserves, and transfer document if it's necessary
 
@@ -1194,12 +1195,12 @@ function to cancel reserv,check other reserves, and transfer document if it's ne
 sub ModReserveCancelAll {
     my $messages;
     my $nextreservinfo;
-    my ( $itemnumber, $borrowernumber ) = @_;
+    my ( $itemnumber, $borrowernumber, $cancellation_reason ) = @_;
 
     #step 1 : cancel the reservation
     my $holds = Koha::Holds->search({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
     return unless $holds->count;
-    $holds->next->cancel;
+    $holds->next->cancel({ cancellation_reason => $cancellation_reason });
 
     #step 2 launch the subroutine of the others reserves
     ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);

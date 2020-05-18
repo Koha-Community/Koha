@@ -846,6 +846,16 @@
 
                                         <fieldset class="action">
                                             <input type="submit" class="cancel" name="submit" value="Cancel marked holds" />
+
+                                            [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                                            [% IF hold_cancellation %]
+                                                <select name="cancellation-reason">
+                                                    <option value="">No reason given</option>
+                                                    [% FOREACH reason IN hold_cancellation %]
+                                                        <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                                    [% END %]
+                                                </select>
+                                            [% END %]
                                         </fieldset>
                                     </form>
 

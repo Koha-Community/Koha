@@ -71,6 +71,7 @@ else {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] if !$itemnumber[$i];
         my $suspend_until = $query->param( "suspend_until_" . $reserve_id[$i] );
+        my $cancellation_reason = $query->param("cancellation-reason");
         my $params = {
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
@@ -78,6 +79,7 @@ else {
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
             defined $suspend_until ? ( suspend_until => $suspend_until ) : (),
+            cancellation_reason => $cancellation_reason,
         };
         if (C4::Context->preference('AllowHoldDateInFuture')) {
             $params->{reservedate} = $reservedates[$i] ? dt_from_string($reservedates[$i]) : undef;
