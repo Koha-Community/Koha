@@ -1760,6 +1760,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
   `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `cancellation_reason` varchar(80) default NULL, -- optional authorised value CANCELLATION_REASON
   `reservenotes` LONGTEXT, -- notes related to this hold
   `priority` smallint(6) NOT NULL DEFAULT 1, -- where in the queue the patron sits
   `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
@@ -1800,6 +1801,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
   `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `cancellation_reason` varchar(80) default NULL, -- optional authorised value CANCELLATION_REASON
   `reservenotes` LONGTEXT, -- notes related to this hold
   `priority` smallint(6) NOT NULL DEFAULT 1, -- where in the queue the patron sits
   `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
