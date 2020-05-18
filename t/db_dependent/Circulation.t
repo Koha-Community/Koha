@@ -1773,7 +1773,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 21;
+    plan tests => 24;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -1931,6 +1931,18 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             expiration_date => $now->clone->add(days => 5 + (5 * 2 - 1) ),
         }
     );
+
+    test_debarment_on_checkout(
+        {
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $now->clone->add(days => 1),
+            return_date     => $now->clone->add(days => 5),
+            expiration_date => $now->clone->add(days => 5 + (4 * 2 - 1) ),
+        }
+    );
+
 };
 
 subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
