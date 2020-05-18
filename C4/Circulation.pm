@@ -2036,7 +2036,7 @@ sub AddReturn {
         my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine );
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->itemnumber...) failed!";  # zero is OK, check defined
 
-        if ( $issue and $issue->is_overdue ) {
+        if ( $issue and $issue->is_overdue($return_date) ) {
         # fix fine days
             my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item_unblessed, dt_from_string($issue->date_due), $return_date );
             if ($reminder){
