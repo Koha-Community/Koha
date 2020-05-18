@@ -22142,6 +22142,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25389, "Catch errant cases of LOST_RETURNED");
 }
 
+$DBversion = '19.12.00.090';
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(
+        qq{
+          INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
+          ('UseIssueDesks','0','','Use issue desks with circulation.','YesNo')
+      }
+    );
+
+    NewVersion( $DBversion, 13881, "Add issue desks system preference");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
