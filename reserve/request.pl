@@ -577,14 +577,13 @@ foreach my $biblionumber (@biblionumbers) {
                         $item->{pickup_locations} = 'Any library';
                         $item->{pickup_locations_code} = 'all';
                     } else {
+                        my $arr_locations = Koha::Items->find($itemnumber)
+                                    ->pickup_locations( { patron => $patron } );
+
                         $item->{pickup_locations} = join( ', ',
-                            map { $_->unblessed->{branchname} }
-                              Koha::Items->find($itemnumber)
-                              ->pickup_locations( { patron => $patron } ) );
+                            map { $_->unblessed->{branchname} } @$arr_locations);
                         $item->{pickup_locations_code} = join( ',',
-                            map { $_->unblessed->{branchcode} }
-                              Koha::Items->find($itemnumber)
-                              ->pickup_locations( { patron => $patron } ) );
+                            map { $_->unblessed->{branchcode} } @$arr_locations);
                     }
 
                     push( @available_itemtypes, $item->{itype} );
