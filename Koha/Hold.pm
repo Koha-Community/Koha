@@ -416,7 +416,7 @@ sub to_api_mapping {
         branchcode       => 'pickup_library_id',
         notificationdate => undef,
         reminderdate     => undef,
-        cancellationdate => 'cancelation_date',
+        cancellationdate => 'cancellation_date',
         reservenotes     => 'notes',
         found            => 'status',
         itemnumber       => 'item_id',
