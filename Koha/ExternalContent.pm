@@ -22,10 +22,11 @@ use Carp;
 use base qw(Class::Accessor);
 
 use Koha;
+use Koha::Logger;
 use Koha::Patrons;
 use C4::Auth;
 
-__PACKAGE__->mk_accessors(qw(client koha_session_id koha_patron));
+__PACKAGE__->mk_accessors(qw(client koha_session_id koha_patron logger));
 
 =head1 NAME
 
@@ -54,6 +55,9 @@ sub agent_string {
 sub new {
     my $class     = shift;
     my $params    = shift || {};
+
+    $params->{logger} = Koha::Logger->get();
+
     return bless $params, $class;
 }
 

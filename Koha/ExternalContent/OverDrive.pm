@@ -23,9 +23,6 @@ use Carp;
 use base qw(Koha::ExternalContent);
 use WebService::ILS::OverDrive::Patron;
 use C4::Context;
-use Koha::Logger;
-
-use constant logger => Koha::Logger->get();
 
 =head1 NAME
 
@@ -71,6 +68,7 @@ sub new {
             user_agent_params => { agent => $class->agent_string }
         ) );
     }
+
     return $self;
 }
 

@@ -24,9 +24,6 @@ use base qw(Koha::ExternalContent);
 use WebService::ILS::RecordedBooks::PartnerPatron;
 use WebService::ILS::RecordedBooks::Partner;
 use C4::Context;
-use Koha::Logger;
-
-use constant logger => Koha::Logger->get();
 
 __PACKAGE__->mk_accessors(qw(domain is_identified));
 
