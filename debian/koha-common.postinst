@@ -136,7 +136,7 @@ log4perl_component()
     local config=$1
     local component=$2
 
-    if grep -q -x "log4perl.logger.$component" $config; then
+    if grep -q "log4perl.logger.$component" $config; then
         return 0
     else
         return 1
