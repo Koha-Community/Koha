@@ -63,8 +63,6 @@
                         <dd>Define libraries.</dd>
                         <dt><a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a></dt>
                         <dd>Define hierarchical library groups.</dd>
-                        <dt><a href="/cgi-bin/koha/admin/desks.pl">Desks</a></dt>
-                        <dd>Define desks</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_itemtypes ) %]
                         <dt><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></dt>
@@ -101,6 +99,10 @@
                 [% IF ( CAN_user_parameters_manage_item_circ_alerts ) %]
                     <dt><a href="/cgi-bin/koha/admin/item_circulation_alerts.pl">Item circulation alerts</a></dt>
                     <dd>Define rules for check-in and checkout notifications for combinations of libraries, patron categories, and item types</dd>
+                [% END %]
+                [% IF ( Koha.Preference('UseIssueDesks') && CAN_user_parameters_manage_libraries ) %]
+                        <dt><a href="/cgi-bin/koha/admin/desks.pl">Issue desks</a></dt>
+                        <dd>Define issue desks</dd>
                 [% END %]
                 [% IF ( CAN_user_parameters_manage_cities ) %]
                     <dt><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></dt>
