@@ -83,8 +83,6 @@ BEGIN {
 	);
 }
 
-our $logger = Koha::Logger->get( { category => 'C4.ImportBatch' } );
-
 =head1 NAME
 
 C4::ImportBatch - manage batches of imported MARC records
@@ -799,6 +797,8 @@ sub BatchCommitItems {
 
 sub BatchRevertRecords {
     my $batch_id = shift;
+
+    my $logger = Koha::Logger->get( { category => 'C4.ImportBatch' } );
 
     $logger->trace("C4::ImportBatch::BatchRevertRecords( $batch_id )");
 
