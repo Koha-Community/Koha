@@ -56,7 +56,8 @@ my @messages;
 if ( $op eq 'cancel_reserve' and $reserve_id ) {
     my $hold = Koha::Holds->find( $reserve_id );
     if ( $hold ) {
-        $hold->cancel;
+        my $cancellation_reason = $input->param('cancellation-reason');
+        $hold->cancel({ cancellation_reason => $cancellation_reason });
         push @messages, { type => 'message', code => 'hold_cancelled' };
     }
 } elsif ( $op =~ m|^mark_as_lost| ) {

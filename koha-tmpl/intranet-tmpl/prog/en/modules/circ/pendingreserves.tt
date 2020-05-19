@@ -151,10 +151,24 @@
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 <input type="hidden" name="op" value="cancel_reserve" />
                 <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id | html %]" />
+
+                [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                [% IF hold_cancellation %]
+                    <div class="form-group">
+                        <label for="cancellation-reason">Cancellation reason:</label>
+                        <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
+                            <option value="">No reason given</option>
+                            [% FOREACH reason IN hold_cancellation %]
+                                <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                            [% END %]
+                        </select>
+                    </div>
+                [% END %]
+
                 [% IF reserveloo.holdingbranch != reserveloo.homebranch %]
-                    <input type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) | html %]" />
+                    <input class="btn btn-default" type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) | html %]" />
                 [% ELSE %]
-                    <input type="submit" value="Cancel hold" />
+                    <input class="btn btn-default" type="submit" value="Cancel hold" />
                 [% END %]
             </form>
 
