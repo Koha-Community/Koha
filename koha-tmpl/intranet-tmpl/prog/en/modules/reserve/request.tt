@@ -956,6 +956,7 @@
         var biblionumber = "[% biblionumber | $raw %]";
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
+        var REASON_LABEL = _("Reason: ");
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
         [% itemloo.itemnumber | html %]: {
@@ -1245,7 +1246,19 @@
 
             // Confirm cancelation of hold
             $(".cancel-hold").on("click",function(e) {
-                return confirmDelete(MSG_CONFIRM_DELETE_HOLD);
+                e.preventDefault;
+                let msg = MSG_CONFIRM_DELETE_HOLD ;
+                if ( $("#cancellation-reason").val() ) {
+                    const reason = $("#cancellation-reason option:selected").text();
+                    msg += "\n\n" + REASON_LABEL + reason;
+                }
+                const confirm = confirmDelete(msg);
+                if ( confirm ) {
+                    let href = $(this).attr('href');
+                    href += "&cancellation-reason=" + $("#cancellation-reason").val();
+                    window.location = href;
+                }
+                return false;
             });
 
             [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
