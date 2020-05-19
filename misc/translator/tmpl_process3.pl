@@ -302,7 +302,7 @@ for my $in_dir ( @in_dirs ) {
 }
 
 # restores the string list from file
-$href = Locale::PO->load_file_ashash($str_file);
+$href = Locale::PO->load_file_ashash($str_file, 'utf-8');
 
 # guess the charsets. HTML::Templates defaults to iso-8859-1
 if (defined $href) {
@@ -465,7 +465,7 @@ if ($action eq 'create')  {
             VerboseWarnings::set_input_file_name $input;
             mkdir_recursive($targetdir) unless -d $targetdir;
             print STDERR "Creating $target...\n" unless $quiet;
-            open( OUTPUT, ">$target" ) || die "$target: $!\n";
+            open( OUTPUT, ">:encoding(UTF-8)", "$target" ) || die "$target: $!\n";
             text_replace( $h, *OUTPUT );
             close OUTPUT;
         } else {
