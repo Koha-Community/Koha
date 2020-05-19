@@ -29,6 +29,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Reserves qw(AddReserve);
 use Koha::Database;
 use Koha::AuthUtils qw(hash_password);
 use Koha::DateUtils;
@@ -36,6 +37,7 @@ use Koha::Items;
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
+use Koha::Holds;
 
 use C4::SIP::ILS;
 use C4::SIP::ILS::Patron;
@@ -67,7 +69,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 29;
+    plan tests => 33;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -596,6 +598,27 @@ sub test_checkin_v2 {
     is( substr($response,5,1), 'N', 'Alert flag is not set' );
     is( Koha::Checkouts->find( $issue->issue_id ), undef,
         'Issue record is gone now' );
+
+    # Test account option no_holds_check that prevents items on hold from being checked in via SIP
+    Koha::Old::Checkouts->search({ issue_id => $issue->issue_id })->delete;
+    $server->{account}->{no_holds_checkin} = 1;
+    my $reserve_id = AddReserve({
+        branchcode     => $branchcode,
+        borrowernumber => $patron1->{borrowernumber},
+        biblionumber   => $item_object->biblionumber,
+        priority       => 1,
+    });
+    my $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->id, $reserve_id, "Hold was created successfully" );
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    is( substr($response,2,1), '0', 'OK flag is false when we check in an item on hold and we do not allow it' );
+    is( substr($response,5,1), 'Y', 'Alert flag is set' );
+    check_field( $respcode, $response, FID_SCREEN_MSG, 'Item is on hold, please return to circulation desk', 'Screen message is correct' );
+    $hold->delete();
+    $server->{account}->{no_holds_checkin} = 0;
+
 }
 
 sub test_hold_patron_bcode {

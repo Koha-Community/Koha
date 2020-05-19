@@ -48,8 +48,11 @@ sub do_checkin {
     my $self = shift;
     my $branch = shift;
     my $return_date = shift;
-    my $cv_triggers_alert = shift;
-    my $checked_in_ok = shift;
+    my $account = shift;
+
+    my $checked_in_ok     = $account->{checked_in_ok};
+    my $cv_triggers_alert = $account->{cv_triggers_alert};
+    my $no_holds_checkin  = $account->{no_holds_checkin};
 
     if (!$branch) {
         $branch = 'SIP2';
@@ -113,13 +116,17 @@ sub do_checkin {
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{ResFound}) {
-        $self->hold($messages->{ResFound});
-        if ($branch eq $messages->{ResFound}->{branchcode}) {
+        if ($no_holds_checkin) {
+            $self->alert_type('99');
+            $return = 0;
+        } elsif ($branch eq $messages->{ResFound}->{branchcode}) {
+            $self->hold($messages->{ResFound});
             $self->alert_type('01');
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
                 $messages->{ResFound}->{borrowernumber}, 0, $messages->{ResFound}->{reserve_id});
 
         } else {
+            $self->hold($messages->{ResFound});
             $self->alert_type('02');
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
                 $messages->{ResFound}->{borrowernumber}, 1, $messages->{ResFound}->{reserve_id});
