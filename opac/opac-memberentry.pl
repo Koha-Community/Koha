@@ -25,6 +25,7 @@ use String::Random qw( random_string );
 
 use C4::Auth;
 use C4::Output;
+use C4::Context;
 use C4::Members;
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
@@ -299,6 +300,14 @@ elsif ( $action eq 'update' ) {
             Koha::Patron::Modifications->search({ borrowernumber => $borrowernumber })->delete;
 
             my $m = Koha::Patron::Modification->new( \%borrower_changes )->store();
+            #Automatically approve patron profile changes if set in syspref
+
+            if (C4::Context->preference('AutoApprovePatronProfileSettings')) {
+                # Need to get the object from database, otherwise it is not complete enough to allow deletion
+                # when approval has been performed.
+                my $tmp_m = Koha::Patron::Modifications->find({borrowernumber => $borrowernumber});
+                $tmp_m->approve() if $tmp_m;
+            }
 
             my $patron = Koha::Patrons->find( $borrowernumber );
             $template->param( borrower => $patron->unblessed );
