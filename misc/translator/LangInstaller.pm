@@ -686,7 +686,7 @@ sub install_installer {
     my $db_scheme = $self->{context}->config('db_scheme');
     my $langdir  = "$intradir/installer/data/$db_scheme/$self->{lang}";
     if ( -d $langdir ) {
-        say "$self->{lang} installer dir $langdir already exists.\nDelete it if you want to recreate it.";
+        say "$self->{lang} installer dir $langdir already exists.\nDelete it if you want to recreate it." if $self->{verbose};
         return;
     }
 
