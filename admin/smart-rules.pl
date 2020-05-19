@@ -254,9 +254,7 @@ elsif ($op eq 'add') {
     my $itemtype  = $input->param('itemtype');     # item type
     my $fine = $input->param('fine');
     my $finedays     = $input->param('finedays');
-    my $maxsuspensiondays = $input->param('maxsuspensiondays');
-    $maxsuspensiondays = undef if $maxsuspensiondays eq q||;
-    $maxsuspensiondays = '' if $maxsuspensiondays eq q||;
+    my $maxsuspensiondays = $input->param('maxsuspensiondays') || '';
     my $suspension_chargeperiod = $input->param('suspension_chargeperiod') || 1;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
