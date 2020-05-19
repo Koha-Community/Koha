@@ -2,8 +2,6 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 
-[% SET footerjs = 1 %]
-
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; Add items</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,9 +35,8 @@
                         [% IF item_level_itypes %]
                         <li>
                             <label class="required" for="itype">Item type:</label>
-                            <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
-                            <select id="itype" name="itype" disabled="disabled">
-                                <option value=""></option>
+                            <select id="itype" name="itype">
+                                <option value="">LEAVE UNCHANGED</option>
 
                                 [% FOREACH it IN ItemTypes.Get() %]
                                     <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
@@ -49,10 +46,9 @@
                         [% END %]
 
                         <li>
-                            <label class="required" for="ccode">Collection code:</label>
-                            <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" />
-                            <select id="ccode" name="ccode" disabled="disabled">
-                                <option value=""></option>
+                            <label class="required" for="ccode">Collection:</label>
+                            <select id="ccode" name="ccode">
+                                <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH c IN AuthorisedValues.Get('CCODE') %]
                                     <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
                                 [% END %]
@@ -61,9 +57,8 @@
 
                         <li>
                             <label class="required" for="location">Shelving location:</label>
-                            <input type="checkbox" class="field-toggle" data-pulldown="location"  value="1" name="location_enabled" id="location_enabled" />
-                            <select id="location" name="location" disabled="disabled">
-                                <option value=""></option>
+                            <select id="location" name="location">
+                                <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH s IN AuthorisedValues.Get('LOC') %]
                                     <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
                                 [% END %]
@@ -72,9 +67,8 @@
 
                         <li>
                             <label class="required" for="holdingbranch">Holding library:</label>
-                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
-                            <select id="holdingbranch" name="holdingbranch" disabled="disabled">
-                                <option value=""></option>
+                            <select id="holdingbranch" name="holdingbranch">
+                                <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH b IN Branches.all() %]
                                     <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
                                 [% END %]
@@ -137,22 +131,5 @@
         [% END %]
     </div>
 </div>
-
-[% MACRO jsinclude BLOCK %]
-    <script type="text/javascript">
-    //<![CDATA[
-        $(document).ready(function(){
-            $('.field-toggle').change(function() {
-                if( this.checked ) {
-                    $('#' + $(this).data('pulldown') ).removeAttr('disabled');
-                } else {
-                    $('#' + $(this).data('pulldown') ).val('');
-                    $('#' + $(this).data('pulldown') ).attr('disabled', 'disabled');
-                }
-            });
-        });
-    //]]>
-    </script>
-[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
