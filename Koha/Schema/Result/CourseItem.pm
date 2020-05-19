@@ -41,31 +41,7 @@ __PACKAGE__->table("course_items");
   is_nullable: 1
   size: 10
 
-=head2 itype_enabled
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-=head2 itype_storage
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =head2 ccode
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 80
-
-=head2 ccode_enabled
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-=head2 ccode_storage
 
   data_type: 'varchar'
   is_nullable: 1
@@ -78,31 +54,7 @@ __PACKAGE__->table("course_items");
   is_nullable: 1
   size: 10
 
-=head2 holdingbranch_enabled
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-=head2 holdingbranch_storage
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =head2 location
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 80
-
-=head2 location_enabled
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-=head2 location_storage
 
   data_type: 'varchar'
   is_nullable: 1
@@ -131,27 +83,11 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "itype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "itype_enabled",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "itype_storage",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
   "ccode",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
-  "ccode_enabled",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "ccode_storage",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
-  "holdingbranch_enabled",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "holdingbranch_storage",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
   "location",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
-  "location_enabled",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "location_storage",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "enabled",
   {
@@ -248,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-19 16:07:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8tTH0fAzewvaXRYs8+VZcg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0hBp2R7AMxgHLLZcG/676w
 
 
 sub koha_objects_class {
