@@ -757,6 +757,8 @@ then
         # Get letsencrypt certificates
         letsencrypt_instance
     fi
+
+    chown $username:$username /var/log/koha/$name/*.log
 fi
 
 
