@@ -51,6 +51,11 @@ subtest 'list() tests' => sub {
         }
     );
 
+    # Make sure we have at least 10 items
+    for ( 1..10 ) {
+        $builder->build_object({ class => 'Koha::Items' });
+    }
+
     my $nonprivilegedpatron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -72,13 +77,12 @@ subtest 'list() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok( "//$userid:$password@/api/v1/items" )
+    $t->get_ok( "//$userid:$password@/api/v1/items?_per_page=10" )
       ->status_is( 200, 'SWAGGER3.2.2' );
 
-    my $items_count = Koha::Items->search->count;
     my $response_count = scalar @{ $t->tx->res->json };
 
-    is( $items_count, $response_count, 'The API returns all the items' );
+    is( $response_count, 10, 'The API returns 10 items' );
 
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
       ->status_is(200)
