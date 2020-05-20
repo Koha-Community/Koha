@@ -118,24 +118,27 @@ sub GetPlugins {
     # Loop through all plugins that implement at least a method
     while ( my $plugin_class = $plugin_classes->next ) {
 
-        load $plugin_class;
-        my $plugin = $plugin_class->new({
-            enable_plugins => $self->{'enable_plugins'}
-                # loads even if plugins are disabled
-                # FIXME: is this for testing without bothering to mock config?
-        });
+        if ( can_load( modules => { $plugin_class => undef }, nocache => 1 ) ) {
+            my $plugin = $plugin_class->new({
+                enable_plugins => $self->{'enable_plugins'}
+                    # loads even if plugins are disabled
+                    # FIXME: is this for testing without bothering to mock config?
+            });
 
-        next unless $plugin->is_enabled or
-                    defined($params->{all}) && $params->{all};
+            next unless $plugin->is_enabled or
+                        defined($params->{all}) && $params->{all};
 
-        # filter the plugin out by metadata
-        my $plugin_metadata = $plugin->get_metadata;
-        next
-            if $plugin_metadata
-            and %$req_metadata
-            and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
+            # filter the plugin out by metadata
+            my $plugin_metadata = $plugin->get_metadata;
+            next
+                if $plugin_metadata
+                and %$req_metadata
+                and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
 
-        push @plugins, $plugin;
+            push @plugins, $plugin;
+        } elsif ( defined($params->{errors}) && $params->{errors} ){
+            push @plugins, { error => 'cannot_load', name => $plugin_class };
+        }
 
     }
 
@@ -161,13 +164,14 @@ sub InstallPlugins {
     my @plugin_classes = $self->plugins();
     my @plugins;
 
+    # If we can reload the plugin we will add the methods back, if not they should be removed
+    Koha::Plugins::Methods->search()->delete();
     foreach my $plugin_class (@plugin_classes) {
         if ( can_load( modules => { $plugin_class => undef }, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
 
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
-            Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
 
             foreach my $method ( @{ Class::Inspector->methods( $plugin_class, 'public' ) } ) {
                 Koha::Plugins::Method->new(

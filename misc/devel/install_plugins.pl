@@ -37,14 +37,18 @@ unless ( C4::Context->config("enable_plugins") ) {
     exit 1;
 }
 
-
 my @existing_plugins = Koha::Plugins->new()->GetPlugins({
     all    => 1,
+    errors => 1,
 });
 my $existing_plugins;
 for my $existing_plugin (@existing_plugins) {
-    $existing_plugins->{ $existing_plugin->{metadata}->{name} } =
-      $existing_plugin->{metadata}->{version};
+    if( defined $existing_plugin->{error} ){
+        print "Could not load: ".$existing_plugin->{name}." any associated method will be removed\n";
+    } else {
+        $existing_plugins->{ $existing_plugin->{metadata}->{name} } =
+          $existing_plugin->{metadata}->{version};
+    }
 }
 
 my @installed_plugins = Koha::Plugins->new()->InstallPlugins();
