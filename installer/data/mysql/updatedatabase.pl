@@ -20561,7 +20561,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 25389: Catch errant cases of LOST_RETURNED)\n";
 }
 
-$DBversion = 'XXX'; # will be replaced by the RM
+$DBversion = '19.11.05.007';
 if( CheckVersion( $DBversion ) ) {
     my $ft_enabled = $dbh->selectrow_array(q|
         SELECT COUNT(*) FROM systempreferences WHERE variable like "IDreamBooks%" and value="1"
