@@ -69,9 +69,7 @@ sub under {
 
         if ( $namespace eq 'public' ) {
             $is_public = 1;
-        }
-
-        if ( $namespace eq 'contrib' ) {
+        } elsif ( $namespace eq 'contrib' ) {
             $is_plugin = 1;
         }
 
