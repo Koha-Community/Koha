@@ -162,7 +162,7 @@
             </td>
             <td class="hq-patron">
               <p>
-                  [% INCLUDE 'patron-title.inc' patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+                  [% INCLUDE 'patron-title.inc' invert_name=1 patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
               </p>
               [% UNLESS Koha.Preference('HidePatronName') %]
                  <p>[% itemsloo.patron.phone | html %]</p>
