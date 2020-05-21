@@ -120,8 +120,8 @@ if ( $op eq 'show' ) {
         my $attr_type = C4::Members::AttributeTypes->fetch( $_->{code} );
         # TODO Repeatable attributes are not correctly managed and can cause data lost.
         # This should be implemented.
-        next if $attr_type->{repeatable};
-        next if $attr_type->{unique_id}; # Don't display patron attributes that must be unqiue
+        next if $attr_type->repeatable;
+        next if $attr_type->unique_id; # Don't display patron attributes that must be unqiue
         my $options = $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )
             : undef;
@@ -131,14 +131,14 @@ if ( $op eq 'show' ) {
                 options        => $options,
             };
 
-        my $category_code = $_->{category_code};
+        my $category_code = $attr_type->category_code;
         my ( $category_lib ) = map {
-            ( defined $category_code and $_->categorycode eq $category_code ) ? $_->description : ()
+            ( defined $category_code and $attr_type->category_code eq $category_code ) ? $attr_type->description : ()
         } @patron_categories;
         push @patron_attributes_codes,
             {
                 attribute_code => $_->{code},
-                attribute_lib  => $_->{description},
+                attribute_lib  => $attr_type->description,
                 category_lib   => $category_lib,
                 type           => $attr_type->authorised_value_category ? 'select' : 'text',
             };
@@ -346,7 +346,7 @@ if ( $op eq 'do' ) {
             $attribute->{attribute} = $attr_values[$i];
             my $attr_type = C4::Members::AttributeTypes->fetch( $_ );
             # If this borrower is not in the category of this attribute, we don't want to modify this attribute
-            ++$i and next if $attr_type->{category_code} and $attr_type->{category_code} ne $borrower_categorycode;
+            ++$i and next if $attr_type->category_code and $attr_type->category_code ne $borrower_categorycode;
             my $valuename = "attr" . $i . "_value";
             if ( grep { /^$valuename$/ } @disabled ) {
                 # The attribute is disabled, we remove it for this borrower !
