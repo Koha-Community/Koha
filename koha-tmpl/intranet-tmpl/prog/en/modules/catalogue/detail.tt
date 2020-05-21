@@ -726,7 +726,7 @@
             <p>
                 [% IF HTML5MediaSet.is_youtube %]
                     <iframe id="player" type="text/html" width="640" height="360"
-                        src="[% HTML5MediaSet.srcblock %]" frameborder="0"></iframe>
+                        src="[% HTML5MediaSet.srcblock | url %]" frameborder="0"></iframe>
                 [% ELSE %]
                   <[% HTML5MediaParent | html %] controls preload=none>
                     <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
