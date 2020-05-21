@@ -144,6 +144,17 @@ sub add_update_attribute_type {
     my $template = shift;
     my $code = shift;
 
+    my $description               = $input->param('description');
+    my $repeatable                = $input->param('repeatable') ? 1 : 0;
+    my $unique_id                 = $input->param('unique_id') ? 1 : 0;
+    my $opac_display              = $input->param('opac_display') ? 1 : 0;
+    my $opac_editable             = $input->param('opac_editable') ? 1 : 0;
+    my $staff_searchable          = $input->param('staff_searchable') ? 1 : 0;
+    my $authorised_value_category = $input->param('authorised_value_category');
+    my $display_checkout          = $input->param('display_checkout') ? 1 : 0;
+    my $category_code             = $input->param('category_code') || undef;
+    my $class                     = $input->param('class');
+
     my $description = $input->param('description');
 
     my $attr_type;
