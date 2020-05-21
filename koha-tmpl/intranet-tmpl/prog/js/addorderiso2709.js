@@ -48,7 +48,9 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#Aform").on("submit", function(){
+    $("input#add_order").on("click", function(e){
+        e.preventDefault();
+
         if ( $("input:checkbox[name='import_record_id']:checked").length < 1 ) {
             alert( ERR_NO_RECORD_SELECTED );
             return false;
@@ -72,7 +74,9 @@ $(document).ready(function() {
             return false;
         }
 
-        return disableUnchecked($(this));
+        disableUnchecked($(this.form));
+
+        $(this.form).submit();
     });
 
     $('#tabs').tabs();
