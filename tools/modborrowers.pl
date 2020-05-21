@@ -136,9 +136,6 @@ if ( $op eq 'show' ) {
     my $patron_attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
     my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']})->as_list;
     while ( my $attr_type = $patron_attribute_types->next ) {
-        # TODO Repeatable attributes are not correctly managed and can cause data lost.
-        # This should be implemented.
-        next if $attr_type->repeatable;
         next if $attr_type->unique_id; # Don't display patron attributes that must be unqiue
         my $options = $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )
@@ -357,9 +354,6 @@ if ( $op eq 'do' ) {
 
     delete $infos->{password_expiration_date} unless $logged_in_user->is_superlibrarian;
 
-    my @attributes = $input->multi_param('patron_attributes');
-    my @attr_values = $input->multi_param('patron_attributes_value');
-
     my @errors;
     my @borrowernumbers = $input->multi_param('borrowernumber');
     # For each borrower selected
@@ -398,33 +392,33 @@ if ( $op eq 'do' ) {
         }
 
         my $patron = Koha::Patrons->find( $borrowernumber );
-        my $i=0;
-        for ( @attributes ) {
-            next unless $_;
-            my $attribute;
-            $attribute->{code} = $_;
-            $attribute->{attribute} = $attr_values[$i];
-            my $attr_type = Koha::Patron::Attribute::Types->find($_);
+        my @attributes = $input->multi_param('patron_attributes');
+        my @attr_values = $input->multi_param('patron_attributes_value');
+        my $attributes;
+        my $i = 0;
+        for my $code ( @attributes ) {
+            push @{ $attributes->{$code}->{values} }, shift @attr_values; # Handling repeatables
+            $attributes->{$code}->{disabled} = grep { $_ eq sprintf("attr%s_value", ++$i) } @disabled;
+        }
+
+        for my $code ( keys %$attributes ) {
+            my $attr_type = Koha::Patron::Attribute::Types->find($code);
             # If this borrower is not in the category of this attribute, we don't want to modify this attribute
-            ++$i and next if $attr_type->category_code and $attr_type->category_code ne $patron->categorycode;
-            my $valuename = "attr" . $i . "_value";
-            if ( grep { $_ eq $valuename } @disabled ) {
+            next if $attr_type->category_code and $attr_type->category_code ne $patron->categorycode;
+
+            if ( $attributes->{$code}->{disabled} ) {
                 # The attribute is disabled, we remove it for this borrower !
                 eval {
-                    $patron->get_extended_attribute($attribute->{code})->delete;
+                    $patron->get_extended_attribute($code)->delete;
                 };
                 push @errors, { error => $@ } if $@;
             } else {
                 eval {
-                    # Note:
-                    # We should not need to filter by branch, but stay on the safe side
-                    # Repeatable are not supported so we can do that - TODO
-                    $patron->extended_attributes->search({'me.code' => $attribute->{code}})->filter_by_branch_limitations->delete;
-                    $patron->add_extended_attribute($attribute);
+                    $patron->extended_attributes->search({'me.code' => $code})->filter_by_branch_limitations->delete;
+                    $patron->add_extended_attribute({ code => $code, attribute => $_ }) for @{$attributes->{$code}->{values}};
                 };
                 push @errors, { error => $@ } if $@;
             }
-            $i++;
         }
     }
     $op = "show_results"; # We have process modifications, the user want to view its
