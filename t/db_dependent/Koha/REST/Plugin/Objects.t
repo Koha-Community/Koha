@@ -80,6 +80,7 @@ get '/biblios' => sub {
 use Test::More tests => 10;
 use Test::Mojo;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 
@@ -90,7 +91,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 38;
+    plan tests => 44;
 
     $schema->storage->txn_begin;
 
@@ -171,6 +172,25 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/name' => 'Manuela')
         ->json_is('/2/name' => 'Manuelab')
         ->json_is('/3/name' => 'Emanuel');
+
+    # Add 20 more cities
+    for ( 1..20 ) {
+        $builder->build_object({ class => 'Koha::Cities' });
+    }
+
+    t::lib::Mocks::mock_preference('RESTdefaultPageSize', 20 );
+    $t->get_ok('/cities')
+      ->status_is(200);
+
+    my $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 20, 'RESTdefaultPageSize is honoured by default (20)' );
+
+    t::lib::Mocks::mock_preference('RESTdefaultPageSize', 5 );
+    $t->get_ok('/cities')
+      ->status_is(200);
+
+    $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 5, 'RESTdefaultPageSize is honoured by default (5)' );
 
     $schema->storage->txn_rollback;
 };
