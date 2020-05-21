@@ -264,15 +264,17 @@ sub AddReserve {
 
 =head2 CanBookBeReserved
 
-  $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber, $branchcode)
+  $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber, $branchcode, $params)
   if ($canReserve eq 'OK') { #We can reserve this Item! }
+
+  $params are passed directly through to CanItemBeReserved
 
 See CanItemBeReserved() for possible return values.
 
 =cut
 
 sub CanBookBeReserved{
-    my ($borrowernumber, $biblionumber, $pickup_branchcode) = @_;
+    my ($borrowernumber, $biblionumber, $pickup_branchcode, $params) = @_;
 
     my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
     #get items linked via host records
@@ -283,7 +285,7 @@ sub CanBookBeReserved{
 
     my $canReserve = { status => '' };
     foreach my $itemnumber (@itemnumbers) {
-        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $pickup_branchcode );
+        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $pickup_branchcode, $params );
         return { status => 'OK' } if $canReserve->{status} eq 'OK';
     }
     return $canReserve;
@@ -291,8 +293,12 @@ sub CanBookBeReserved{
 
 =head2 CanItemBeReserved
 
-  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber, $branchcode)
+  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber, $branchcode, $params)
   if ($canReserve->{status} eq 'OK') { #We can reserve this Item! }
+
+  current params are 'ignore_found_holds' - if true holds that have been trapped are not counted
+  toward the patron limit, used by checkHighHolds to avoid counting the hold we will fill with the
+  current checkout against the high holds threshold
 
 @RETURNS { status => OK },              if the Item can be reserved.
          { status => ageRestricted },   if the Item is age restricted for this borrower.
@@ -307,7 +313,7 @@ sub CanBookBeReserved{
 =cut
 
 sub CanItemBeReserved {
-    my ( $borrowernumber, $itemnumber, $pickup_branchcode ) = @_;
+    my ( $borrowernumber, $itemnumber, $pickup_branchcode, $params ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
@@ -370,12 +376,13 @@ sub CanItemBeReserved {
         $ruleitemtype = '*';
     }
 
-    my $holds = Koha::Holds->search(
-        {
-            borrowernumber => $borrowernumber,
-            biblionumber   => $item->biblionumber,
-        }
-    );
+    my $search_params = {
+        borrowernumber => $borrowernumber,
+        biblionumber   => $item->biblionumber,
+    };
+    $search_params->{found} = undef if $params->{ignore_found_holds};
+
+    my $holds = Koha::Holds->search($search_params);
     if ( $holds->count() >= $holds_per_record ) {
         return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
     }

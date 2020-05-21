@@ -1222,7 +1222,7 @@ sub checkHighHolds {
             }
 
             # Remove any items that are not holdable for this patron
-            @items = grep { CanItemBeReserved( $borrower->{borrowernumber}, $_->itemnumber )->{status} eq 'OK' } @items;
+            @items = grep { CanItemBeReserved( $borrower->{borrowernumber}, $_->itemnumber, undef, { ignore_found_holds => 1 } )->{status} eq 'OK' } @items;
 
             my $items_count = scalar @items;
 

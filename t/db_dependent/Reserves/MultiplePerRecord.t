@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 39;
+use Test::More tests => 40;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -271,7 +271,7 @@ $rule = $rules_rs->new(
         categorycode     => '*',
         itemtype         => '*',
         branchcode       => '*',
-        reservesallowed  => 2,
+        reservesallowed  => 3,
         holds_per_record => 2,
     }
 )->insert();
@@ -292,5 +292,8 @@ is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of ho
 Koha::Holds->find($hold_id)->found("W")->store;
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
+
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber}, undef, { ignore_found_holds => 1 });
+is( $can->{status}, 'OK', 'Third hold is allowed when ignoring waiting holds' );
 
 $schema->storage->txn_rollback;
