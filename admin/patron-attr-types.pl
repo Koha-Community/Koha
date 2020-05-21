@@ -122,7 +122,7 @@ sub add_update_attribute_type {
     my $staff_searchable          = $input->param('staff_searchable') ? 1 : 0;
     my $authorised_value_category = $input->param('authorised_value_category');
     my $display_checkout          = $input->param('display_checkout') ? 1 : 0;
-    my $category_code             = $input->param('category_code');
+    my $category_code             = $input->param('category_code') || undef;
     my $class                     = $input->param('class');
 
     my $attr_type = Koha::Patron::Attribute::Types->find($code);
