@@ -65,6 +65,10 @@ sub register {
                 }
             );
 
+            # If no pagination parameters are passed, default
+            $reserved_params->{_per_page} //= C4::Context->preference('RESTdefaultPageSize');
+            $reserved_params->{_page}     //= 1;
+
             # Merge pagination into query attributes
             $c->dbic_merge_pagination(
                 {
