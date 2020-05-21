@@ -24,6 +24,8 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use List::Util qw(min);
+
 use Koha::Libraries;
 use Koha::Database;
 
@@ -35,7 +37,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
-    plan tests => 8;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -54,12 +56,13 @@ subtest 'list() tests' => sub {
     $another_library = $builder->build_object({ class => 'Koha::Libraries', value => $another_library });
 
     ## Authorized user tests
-    my $count_of_libraries = Koha::Libraries->search->count;
     # Make sure we are returned with the correct amount of libraries
     $t->get_ok( "//$userid:$password@/api/v1/libraries" )
-      ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_has('/'.($count_of_libraries-1).'/library_id')
-      ->json_hasnt('/'.($count_of_libraries).'/library_id');
+      ->status_is( 200, 'SWAGGER3.2.2' );
+
+    my $response_count = scalar @{ $t->tx->res->json };
+    my $expected_count = min( Koha::Libraries->count, C4::Context->preference('RESTdefaultPageSize') );
+    is( $response_count, $expected_count, 'Results count is paginated');
 
     subtest 'query parameters' => sub {
 
