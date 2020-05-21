@@ -99,6 +99,7 @@ sub to_api {
 use Test::More tests => 3;
 use Test::Mojo;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 
@@ -109,7 +110,7 @@ my $t = Test::Mojo->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 38;
+    plan tests => 44;
 
     $schema->storage->txn_begin;
 
@@ -190,6 +191,25 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/city_name' => 'Manuela')
         ->json_is('/2/city_name' => 'Manuelab')
         ->json_is('/3/city_name' => 'Emanuel');
+
+    # Add 20 more cities
+    for ( 1..20 ) {
+        $builder->build_object({ class => 'Koha::Cities' });
+    }
+
+    t::lib::Mocks::mock_preference('RESTdefaultPageSize', 20 );
+    $t->get_ok('/cities')
+      ->status_is(200);
+
+    my $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 20, 'RESTdefaultPageSize is honoured by default (20)' );
+
+    t::lib::Mocks::mock_preference('RESTdefaultPageSize', 5 );
+    $t->get_ok('/cities')
+      ->status_is(200);
+
+    $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 5, 'RESTdefaultPageSize is honoured by default (5)' );
 
     $schema->storage->txn_rollback;
 };
