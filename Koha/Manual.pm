@@ -132,6 +132,7 @@ our $mapping = {
     'course_reserves/course-details'           => '/course_reserves.html',
     'course_reserves/course-reserves'          => '/course_reserves.html',
     'course_reserves/course'                   => '/course_reserves.html#adding-courses',
+    'ill/ill-requests'                         => '/ILL_requests.html',
     'labels/label-edit-batch'                  => '/tools.html#label-batches-label',
     'labels/label-edit-layout'                 => '/tools.html#label-layouts-label',
     'labels/label-edit-profile'                => '/tools.html#label-profiles-label',
