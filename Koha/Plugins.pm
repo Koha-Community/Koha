@@ -66,8 +66,14 @@ sub call {
     if (C4::Context->config('enable_plugins')) {
         my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
         my @responses;
+        @plugins = grep { $_->can($method) } @plugins;
         foreach my $plugin (@plugins) {
-            my $response = $plugin->$method(@args);
+            my $response = eval { $plugin->$method(@args) };
+            if ($@) {
+                warn sprintf("Plugin error (%s): %s", $plugin->get_metadata->{name}, $@);
+                next;
+            }
+
             push @responses, $response;
         }
 
