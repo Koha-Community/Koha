@@ -39,6 +39,10 @@
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
+
+     <div class="row" id="intranet-serials-home-html">
+         [% Koha.Preference('IntranetSerialsHomeHTML') | $raw %]
+     </div>
 </div>
 
 [% MACRO jsinclude BLOCK %]
@@ -48,5 +52,4 @@
         var subscriptionid = "[% subscriptionid | html %]";
     </script>
 [% END %]
-
 [% INCLUDE 'intranet-bottom.inc' %]

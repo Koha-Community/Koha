@@ -117,6 +117,10 @@
             </form>
         [% END %]
 
+          <div class="row" id="intranet-members-home-html">
+              [% Koha.Preference('IntranetPatronsHomeHTML') | $raw %]
+          </div>
+
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -385,5 +389,4 @@
     [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns,actions => ['edit', 'checkout'], redirect_if_one_result => 1, redirect_url => redirect_url, sticky_header => "searchheader", sticky_to => "searchresults", default_sort_column => 'name-address', display_search_description => 1, remember_selections => 1 %]
 
 [% END %]
-
 [% INCLUDE 'intranet-bottom.inc' %]

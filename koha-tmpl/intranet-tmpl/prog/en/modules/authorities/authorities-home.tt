@@ -1,5 +1,6 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
@@ -25,15 +26,19 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            [% INCLUDE 'authorities-toolbar.inc' %]
 
     [% INCLUDE 'authorities-toolbar.inc' %]
 
     <h1>Authorities</h1>
 
     <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
-
+        </div>
     </div>
-  </div>
+
+    <div class="row" id="intranet-authorities-home-html">
+        [% Koha.Preference('IntranetAuthoritiesHomeHTML') | $raw %]
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]

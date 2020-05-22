@@ -3,6 +3,7 @@
 [% USE Price %]
 [% USE Branches %]
 [% USE TablesSettings %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -201,6 +202,10 @@
 </div><!-- /.page-section -->
 [% END %]
 
+    <div class="row" id="intranet-acqui-home-html">
+        [% Koha.Preference('IntranetAcquisitionsHomeHTML') | $raw %]
+    </div>
+
 </main>
 </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -209,6 +214,7 @@
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
 </div>
+
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
@@ -293,5 +299,4 @@
         });
     </script>
 [% END %]
-
 [% INCLUDE 'intranet-bottom.inc' %]
