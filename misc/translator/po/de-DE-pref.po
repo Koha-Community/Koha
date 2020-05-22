@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2020-04-17 07:50+0000\n"
+"PO-Revision-Date: 2020-05-17 02:06+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1587109805.165271\n"
+"X-POOTLE-MTIME: 1589681213.793704\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -567,10 +567,7 @@ msgstr "<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronj
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
-msgstr ""
-"<br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-"
-"bin/koha/admin/usage_statistics.pl\">Hea-Konfigurationsseite</a> um "
-"Systemparameter zu Hea zu bearbeiten."
+msgstr "<br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">Hea-Konfigurationsseite</a> um Systemparameter zu Hea zu bearbeiten."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1382,10 +1379,7 @@ msgstr "<br><strong>HINWEIS:</strong> Dieser Parameter hat keine Auswirkung, wen
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
-msgstr ""
-"<br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-"
-"bin/koha/admin/usage_statistics.pl\">Hea-Konfigurationsseite</a> um "
-"Systemparameter zu Hea zu bearbeiten."
+msgstr "<br><strong>HINWEIS:</strong> Verwenden Sie die <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">Hea-Konfigurationsseite</a> um Systemparameter zu Hea zu bearbeiten."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -2433,7 +2427,7 @@ msgstr "Vormerkparameter"
 
 # Circulation > Housebound module
 msgid "circulation.pref Housebound module"
-msgstr "Housebound-Modul"
+msgstr "Aufsuchende Bibliotheksarbeit"
 
 # Circulation > Interface
 msgid "circulation.pref Interface"
@@ -3121,9 +3115,7 @@ msgstr "Erlaube"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr ""
-"die Berücksichtigung der Schließtage bei der Berechnung der maximalen "
-"Abholfrist von Vormerkungen"
+msgstr "die Berücksichtigung der Schließtage bei der Berechnung der maximalen Abholfrist von Vormerkungen"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
@@ -3351,7 +3343,7 @@ msgstr "Aktiviere"
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr "das Fernleihemodul (Hauptschalter)."
+msgstr "das Fernleihmodul (Hauptschalter)."
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
@@ -5940,8 +5932,11 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "Zeige"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "das Format, die Zielgruppe und Materialtypicons in der Trefferliste und der Detailansicht des OPACs. (Betrifft nur MARC21)"
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
+msgstr ""
+"das Format, die Zielgruppe und die Materialtypicons mit den zugehörigen "
+"Beschreibungen in den den MARC21 XSLT Sichten für Trefferliste und "
+"Detailansicht im OPAC."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -6956,12 +6951,14 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr "<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Bitten Sie Ihren Systemadministrator darum diesen einzurichten."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr "Lösche Benutzer, die ein Konto über den OPAC angelegt, aber noch nicht verifiziert haben, nach"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+msgstr ""
+"Lösche Benutzer, die noch den Benutzertyp haben, der in "
+"PatronSelfRegistrationDefaultCategory definiert wurde,"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
-msgstr "Tagen."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
+msgstr "Tage nach Anlegen des Benutzeraccounts."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
@@ -8508,8 +8505,11 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr "Zeige"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "das Format, die Zielgruppe und Materialtypicons in der Trefferliste und der Datailansicht der Dienstoberfläche. (Betrifft nur MARC21 mit aktiviertem XSLT)"
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
+msgstr ""
+"das Format, die Zielgruppe und die Materialtypicons mit den zugehörigen "
+"Beschreibungen in den MARC21 XSLT-Sichten für Trefferliste und Detailansicht "
+"in der Dienstoberfläche."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
