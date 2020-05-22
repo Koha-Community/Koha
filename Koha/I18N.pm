@@ -24,6 +24,7 @@ use C4::Languages;
 use C4::Context;
 
 use Encode;
+use List::Util qw( first );
 use Locale::Messages qw(:locale_h LC_MESSAGES);
 use POSIX qw( setlocale );
 use Koha::Cache::Memory::Lite;
@@ -176,7 +177,20 @@ sub N__np {
 }
 
 sub _base_directory {
-    return C4::Context->config('intranetdir') . '/misc/translator/po';
+    # Directory structure is not the same for dev and standard installs
+    # Here we test the existence of several directories and use the first that exist
+    # FIXME There has to be a better solution
+    my @dirs = (
+        C4::Context->config('intranetdir') . '/misc/translator/po',
+        C4::Context->config('intranetdir') . '/../../misc/translator/po',
+    );
+    my $dir = first { -d } @dirs;
+
+    unless ($dir) {
+        die "The PO directory has not been found. There is a problem in your Koha installation.";
+    }
+
+    return $dir;
 }
 
 sub _gettext {
