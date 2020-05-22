@@ -8,6 +8,7 @@
     [%- CASE 'documentation'         -%]Documentation manager
     [%- CASE 'documentation_team'    -%]Documentation team
     [%- CASE 'translation'           -%]Translation manager
+    [%- CASE 'translations'          -%]Translation managers
     [%- CASE 'translation_assistant' -%]Translation manager assistant
     [%- CASE 'te'                    -%]Topic expert
     [%- CASE 'bugwrangler'           -%]Bug wrangler
@@ -142,20 +143,20 @@
         </li>
         [% END %]
 
-        [% IF t.packaging %]
-        [%- IF t.packaging.list.size == 1 %]
-        <li><strong>Packaging manager:</strong>
-            [% INCLUDE person p=t.packaging %]
-        </li>
-        [% ELSE %]
-        <li><strong>Packaging managers:</strong>
+        [% IF t.translations %]
+        <li><strong>Translation managers:</strong>
             <ul>
-                [% FOREACH packaging_manager IN t.packaging %]
-                <li>[% INCLUDE person p=packaging_manager %]</li>
+                [% FOREACH translation_manager IN t.translations %]
+                <li>[% INCLUDE person p=translation_manager %]</li>
                 [% END %]
             </ul>
         </li>
         [% END %]
+
+        [% IF t.packaging %]
+        <li><strong>Packaging manager:</strong>
+            [% INCLUDE person p=t.packaging %]
+        </li>
         [% END %]
 
         [% IF t.ci %]
