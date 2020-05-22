@@ -92,7 +92,7 @@ sub printorders {
             }
             push( @$arrbasket,
                 $basket->{basketno},
-                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nLieferantennotiz : ". $line->{order_vendornote} : '' ),                $line->{quantity},
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nLieferantennotiz : ". $line->{order_vendornote} : '' ),
                 $line->{quantity},
                 Koha::Number::Price->new( $line->{rrp_tax_included} )->format,
                 Koha::Number::Price->new( $line->{discount} )->format . '%',
