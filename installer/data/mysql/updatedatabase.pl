@@ -21631,8 +21631,9 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '19.12.00.072';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-        ('CalculateFinesOnBackdate','1','','Switch to control if overdue fines are calculated on return when backdating','YesNo');
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+            SELECT 'CalculateFinesOnBackdate',value,'','Switch to control if overdue fines are calculated on return when backdating','YesNo'
+            FROM ( SELECT value FROM systempreferences WHERE variable = 'CalculateFinesOnReturn' ) tmp
     });
 
     NewVersion( $DBversion, 24380, "Add syspref CalculateFinesOnBackdate");
