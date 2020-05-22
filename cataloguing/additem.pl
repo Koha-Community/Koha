@@ -872,7 +872,7 @@ for my $row ( @big_array ) {
         {
             my ( undef, $subfield ) = GetMarcFromKohaField($kohafield);
             next unless $key eq $subfield;
-            $item_field->{field} = output_pref( { str => $row->{$key}, dateonly => 1 } );
+            $item_field->{datatype} = 'date';
         }
 
         push @item_fields, $item_field;
