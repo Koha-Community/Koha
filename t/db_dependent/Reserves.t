@@ -309,7 +309,7 @@ is( $messages->{ResFound}->{borrowernumber},
 $biblio = Koha::Biblios->find( $biblionumber );
 $holds = $biblio->holds;
 is($holds->count, 1, "Only one reserves for this biblio");
-my $reserve_id = $holds->next->reserve_id;
+$holds->next->reserve_id;
 
 # Tests for bug 9761 (ConfirmFutureHolds): new CheckReserves lookahead parameter, and corresponding change in AddReturn
 # Note that CheckReserve uses its lookahead parameter and does not check ConfirmFutureHolds pref (it should be passed if needed like AddReturn does)
@@ -332,7 +332,7 @@ $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 4));
 $resdate=output_pref($resdate);
 $expdate= undef; #no expdate
-AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
+my $reserve_id = AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
            'a title',      $checkitem, $found);
 ($status)=CheckReserves($itemnumber,undef,undef);
@@ -378,7 +378,7 @@ is(
     'item that is captured to fill a hold cannot be deleted',
 );
 
-my $letter = ReserveSlip( { branchcode => $branch_1, borrowernumber => $requesters{$branch_1}, biblionumber => $bibnum } );
+my $letter = ReserveSlip( { branchcode => $branch_1, reserve_id => $reserve_id } );
 ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
 
 # Tests for bug 9788: Does Koha::Item->current_holds return a future wait?
