@@ -559,6 +559,9 @@ sub _gen_default_values {
             # Not X, used for statistics
             category_type => sub { return [ qw( A C S I P ) ]->[int(rand(5))] },
         },
+        Branch => {
+            pickup_location => 0,
+        },
         Itemtype => {
             rentalcharge => 0,
             rentalcharge_daily => 0,
