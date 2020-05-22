@@ -312,7 +312,7 @@
     <table id="budgeth">
       <thead>
         <tr>
-            <th>Fund id</th>
+            <th>Fund ID</th>
             <th>Fund code</th>
             <th>Fund name</th>
             <th>Unreceived orders</th>
@@ -322,7 +322,7 @@
         [% FOREACH budget IN budgets_to_move %]
           <tr>
             <td>[% budget.budget_id | html %]</td>
-            <td>[% budget.budget_code_indent | html %]</td>
+            <td>[% budget.budget_code | html %]</td>
             <td>[% budget.budget_name | html %]</td>
             <td>[% budget.unreceived_orders.size | html %]</td>
           </tr>
