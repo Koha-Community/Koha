@@ -353,15 +353,6 @@ sub TO_JSON {
                 ? Mojo::JSON->true
                 : Mojo::JSON->false;
         }
-        elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} )
-            and looks_like_number( $unblessed->{$col} )
-        ) {
-
-            # TODO: Remove once the solution for
-            # https://rt.cpan.org/Ticket/Display.html?id=119904
-            # is ported to whatever distro we support by that time
-            $unblessed->{$col} += 0;
-        }
         elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             eval {
                 return unless $unblessed->{$col};
