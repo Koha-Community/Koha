@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Items</title>
@@ -44,6 +45,7 @@
 
 <div id="cataloguing_additem_itemlist">
     [% IF ( item_loop ) %]
+        [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
         <div>
         <table id="itemst">
           <thead>
@@ -51,7 +53,11 @@
                 <th>&nbsp;</th>
                 [% FOREACH item_header IN item_header_loop %]
                     [% IF item_header.column_name %]
-                        <th data-colname="[% item_header.column_name | html %]">
+                        [% IF date_fields.grep(item_header.column_name).size %]
+                            <th class="title-string" data-colname="[% item_header.column_name | html %]">
+                        [% ELSE %]
+                            <th data-colname="[% item_header.column_name | html %]">
+                        [% END %]
                     [% ELSE %]
                         <th>
                     [% END %]
@@ -105,7 +111,11 @@
                       </td>
                     [% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
-                    <td>[% item_valu.field | html %]</td>
+                    [% IF item_valu.datatype == 'date' %]
+                        <td><span title="[% item_valu.field | html %]">[% item_valu.field | $KohaDates %]</span></td>
+                    [% ELSE %]
+                        <td>[% item_valu.field | html %]</td>
+                    [% END %]
                 [% END %]
                 </tr>
                 [% END %]
