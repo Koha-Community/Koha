@@ -63,7 +63,7 @@ Calls a plugin method for all enabled plugins
 sub call {
     my ($class, $method, @args) = @_;
 
-    if (C4::Context->preference('UseKohaPlugins') && C4::Context->config('enable_plugins')) {
+    if (C4::Context->config('enable_plugins')) {
         my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
         my @responses;
         foreach my $plugin (@plugins) {
