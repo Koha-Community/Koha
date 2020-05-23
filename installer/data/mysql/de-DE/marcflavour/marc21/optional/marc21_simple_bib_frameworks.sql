@@ -287,6 +287,9 @@ UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '306' AND tagsub
 UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '310' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','IR','KT','SR','VR');
 UPDATE marc_subfield_structure SET hidden = -1 WHERE tagfield = '310' AND tagsubfield = 'b' AND frameworkcode IN ('CF','SER');
 UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '362' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','IR','KT','SR','VR');
+UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '490' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
+UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '490' AND tagsubfield = 'v' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
+UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '490' AND tagsubfield = 'x' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
 UPDATE marc_subfield_structure SET hidden = -1 WHERE tagfield = '500' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
 UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '501' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
 UPDATE marc_subfield_structure SET hidden = -6 WHERE tagfield = '504' AND tagsubfield = 'a' AND frameworkcode IN ('AR','BKS','CF','IR','KT','SER','SR','VR');
