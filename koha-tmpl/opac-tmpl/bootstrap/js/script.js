@@ -62,12 +62,6 @@ $(document).ready(function(){
         }
     });
 
-    $(".menu-collapse-toggle").on("click",function(e){
-        e.preventDefault();
-        $(this).toggleClass("menu-open");
-        $(".menu-collapse").toggle();
-    });
-
     $(".loginModal-trigger").on("click",function(e){
         e.preventDefault();
         $("#loginModal").modal("show");
