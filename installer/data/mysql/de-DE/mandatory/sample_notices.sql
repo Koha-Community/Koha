@@ -20,12 +20,12 @@ VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>
 ('suggestions','ORDERED','Vorgeschlagenes Medium bestellt', 'Das vorgeschlagene Medium wurde im Buchhandel bestellt','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlaten: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Buchhandel bestellt wurde. Nach Eintreffen wird er in unseren Bestand eingearbeitet.\n\nSie erhalten Nachricht, sobald das Medium verfügbar ist.\n\nBei Nachfragen erreichen Sie uns unter der Emailadresse <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','REJECTED','Anschaffungsvorschlag nicht angenommen', 'Ihr Anschaffungsvorschlag wurde nicht angenommen','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haven der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nDie Bibliothek hat diesen Titel heute recherchiert und sich gegen eine Anschaffung entschieden.\n\nBegründung: <<suggestions.reason>>\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','TO_PROCESS','Benachrichtigung an Besitzer des Kontos (Erwerbung)', 'Anschaffungsvorschlag wartet auf Bearbeitung','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nEin neuer Anschaffungsvorschlag wartet auf Bearbeitung: <<suggestions.title>> von <<suggestions.author>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
-('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email'),
-('members', 'PROBLEM_REPORT','OPAC Problem Report','OPAC Problem Report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email');
+('suggestions', 'NOTIFY_MANAGER', 'Benachrichtigung an Bearbeiter eines Anschaffungsvorschlags', "Neuer Anschaffungsvorschlag zugewiesen", "Liebe(r) [% borrower.firstname %] [% borrower.surname %],\nIhnen wurde ein Anschaffungsvorschlag zur Bearbeitung zugewiesen: [% suggestion.title %].\nDanke,\n[% branch.branchname %]", 'email'),
+('members', 'PROBLEM_REPORT','OPAC-Problemmeldung','OPAC-Problemmeldung','Benutzername: <<problem_reports.username>>\n\nSeite: <<problem_reports.problempage>>\n\nTitel: <<problem_reports.title>>\n\nNachricht: <<problem_reports.content>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
-VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
-    <p><h4>Suggested by</h4>
+VALUES ('suggestions','NEW_SUGGESTION','Neuer Anschaffungsvorschlag','Neuer Anschaffungsvorschlag','<h3>Neuer Anschaffungsvorschlag zur Bearbeitung</h3>
+    <p><h4>Vorgeschlagen von</h4>
     <ul>
     <li><<borrowers.firstname>> <<borrowers.surname>></li>
     <li><<borrowers.cardnumber>></li>
@@ -33,20 +33,20 @@ VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Su
     <li><<borrowers.email>></li>
     </ul>
     </p>
-    <p><h4>Title suggested</h4>
+    <p><h4>Vorgeschlagener Titel</h4>
     <ul>
-    <li><b>Library:</b> <<branches.branchname>></li>
-    <li><b>Title:</b> <<suggestions.title>></li>
-    <li><b>Author:</b> <<suggestions.author>></li>
-    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
-    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
-    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
-    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
-    <li><b>Publication place:</b> <<suggestions.place>></li>
-    <li><b>Quantity:</b> <<suggestions.quantity>></li>
-    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
-    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
-    <li><b>Notes:</b> <<suggestions.note>></li>
+    <li><b>Bibliothek:</b> <<branches.branchname>></li>
+    <li><b>Titel:</b> <<suggestions.title>></li>
+    <li><b>Verfasser:</b> <<suggestions.author>></li>
+    <li><b>Jahr:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Standardnummer (ISBN, ISSN oder andere):</b> <<suggestions.isbn>></li>
+    <li><b>Veröffentlicht:</b> <<suggestions.publishercode>></li>
+    <li><b>Reihe:</b> <<suggestions.collectiontitle>></li>
+    <li><b>Verlagsort:</b> <<suggestions.place>></li>
+    <li><b>Anzahl:</b> <<suggestions.quantity>></li>
+    <li><b>Medientyp:</b>  <<suggestions.itemtype>></li>
+    <li><b>Grund für den Vorschlag:</b> <<suggestions.patronreason>></li>
+    <li><b>Notiz:</b> <<suggestions.note>></li>
     </ul>
     </p>',1, 'email');
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
@@ -212,7 +212,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'ACCOUNT_WRITEOFF', '', 'Erlass', 0, 'Erlassquittung für Bibliothekskonto', '[%- USE Price -%]\r\nEin Erlass in Höhe von [% credit.amount * -1 | $Price %] wurde auf Ihr Konto verbucht.\r\n\r\nDer Erlass wurde mit den folgenden Gebührenposten verrechnet:\r\n[%- FOREACH o IN offsets %]\r\nBeschreibung: [% o.debit.description %]\r\nErlassener Betrag: [% o.amount * -1 | $Price %]\r\nOffener Betrag: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('circulation', 'ACCOUNT_CREDIT', '', 'Account payment', 0, 'Account payment', '<table>
+('circulation', 'ACCOUNT_CREDIT', '', 'Zahlungsquittung', 0, 'Zahlungsquittung', '<table>
 [% IF ( LibraryName ) %]
  <tr>
     <th colspan="4" class="centerednames">
@@ -222,7 +222,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 [% END %]
  <tr>
     <th colspan="4" class="centerednames">
-        <h2><u>Fee receipt</u></h2>
+        <h2><u>Zahlungsquittung</u></h2>
     </th>
  </tr>
  <tr>
@@ -232,15 +232,15 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
  </tr>
  <tr>
     <th colspan="4">
-        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
-        Card number: [% patron.cardnumber | html %]<br />
+        Mit Dank erhalten von [% patron.firstname | html %] [% patron.surname | html %] <br />
+        Ausweisnummer: [% patron.cardnumber | html %]<br />
     </th>
  </tr>
   <tr>
-    <th>Date</th>
-    <th>Description of charges</th>
-    <th>Note</th>
-    <th>Amount</th>
+    <th>Datum</th>
+    <th>Beschreibung</th>
+    <th>Notiz</th>
+    <th>Summe</th>
  </tr>
 
   [% FOREACH account IN accounts %]
@@ -257,14 +257,14 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="3">Total outstanding dues as on date: </td>
+    <td colspan="3">Aktuell ausstehende Gebühren: </td>
     [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
   </tr>
 </tfoot>
 </table>', 'print', 'default');
 
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('circulation', 'ACCOUNT_DEBIT', '', 'Account fee', 0, 'Account fee', '<table>
+('circulation', 'ACCOUNT_DEBIT', '', 'Rechnung', 0, 'Rechnung', '<table>
   [% IF ( LibraryName ) %]
     <tr>
       <th colspan="5" class="centerednames">
@@ -285,16 +285,16 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
   </tr>
   <tr>
     <th colspan="5" >
-      Bill to: [% patron.firstname | html %] [% patron.surname | html %] <br />
-      Card number: [% patron.cardnumber | html %]<br />
+      Rechnung für: [% patron.firstname | html %] [% patron.surname | html %] <br />
+      Ausweisnummer: [% patron.cardnumber | html %]<br />
     </th>
   </tr>
   <tr>
-    <th>Date</th>
-    <th>Description of charges</th>
-    <th>Note</th>
-    <th style="text-align:right;">Amount</th>
-    <th style="text-align:right;">Amount outstanding</th>
+    <th>Datum</th>
+    <th>Beschreibung</th>
+    <th>Notiz</th>
+    <th style="text-align:right;">Summe</th>
+    <th style="text-align:right;">Ausstehende Summe</th>
   </tr>
 
   [% FOREACH account IN accounts %]
@@ -312,7 +312,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   <tfoot>
     <tr>
-      <td colspan="4">Total outstanding dues as on date: </td>
+      <td colspan="4">Aktuell ausstehende Gebühren: </td>
       [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
     </tr>
   </tfoot>
@@ -322,7 +322,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'SR_SLIP', '', 'Report über Bestandsrotation', 0, 'Report über Bestandsrotation', 'Report über Bestandsrotation für [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] Exemplare wurden für diese Bibliothek bearbeitet.\r\n[% ELSE %]Es wurden keine Exemplare für diese Bibliothek bearbeitet\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Titel: [% item.title %]\r\nVerfasser: [% item.author %]\r\nSignatur: [% item.callnumber %]\r\nStandort: [% item.location %]\r\nBarcode: [% item.barcode %]\r\nAusgeliehen?: [% item.onloan %]\r\nStatus: [% item.reason %]\r\nAktuelle Bibliothek: [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');
 
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '[% PROCESS "accounts.inc" %]
+('pos', 'RECEIPT', '', 'Kassenquittung', 0, 'Quittung', '[% PROCESS "accounts.inc" %]
 <table>
 [% IF ( LibraryName ) %]
  <tr>
@@ -341,27 +341,27 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
         <h3>[% payment.date | $KohaDates %]</h3>
 </tr>
 <tr>
-  <td>Transaction ID: </td>
+  <td>Transaktionsnr.: </td>
   <td>[% payment.accountlines_id %]</td>
 </tr>
 <tr>
-  <td>Operator ID: </td>
+  <td>Mitarbeitender: </td>
   <td>[% payment.manager_id %]</td>
 </tr>
 <tr>
-  <td>Payment type: </td>
+  <td>Zahlungsart: </td>
   <td>[% payment.payment_type %]</td>
 </tr>
  <tr></tr>
  <tr>
     <th colspan="2" class="centerednames">
-        <h2><u>Fee receipt</u></h2>
+        <h2><u>Zahlungsquittung</u></h2>
     </th>
  </tr>
  <tr></tr>
  <tr>
-    <th>Description of charges</th>
-    <th>Amount</th>
+    <th>Beschreibung</th>
+    <th>Summe</th>
   </tr>
 
   [% FOREACH offset IN offsets %]
@@ -373,37 +373,37 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
 <tfoot>
   <tr class="highlight">
-    <td>Total: </td>
+    <td>Gesamt: </td>
     <td>[% payment.amount * -1| $Price %]</td>
   </tr>
   <tr>
-    <td>Tendered: </td>
+    <td>Bezahlt: </td>
     <td>[% collected | $Price %]</td>
   </tr>
   <tr>
-    <td>Change: </td>
+    <td>Wechselgeld: </td>
     <td>[% change | $Price %]</td>
     </tr>
 </tfoot>
 </table>', 'print', 'default');
 
-INSERT INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS', 'Notification of automatic renewal', 'Automatic renewal notice',
-"Dear [% borrower.firstname %] [% borrower.surname %],
+INSERT INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS', 'Benachrichtigung über automatische Verlängerung', 'Automatische Verlängerung',
+"Liebe(r) [% borrower.firstname %] [% borrower.surname %],
 [% IF checkout.auto_renew_error %]
-The following item, [% biblio.title %], has not been renewed because:
+Das folgende Exemplar ([% biblio.title %]) wurde aus folgendem Grund nicht verlängert:
 [% IF checkout.auto_renew_error == 'too_many' %]
-You have reached the maximum number of checkouts possible.
+Die maximal mögliche Anzahl an Verlängerungen wurde erreicht.
 [% ELSIF checkout.auto_renew_error == 'on_reserve' %]
-This item is on hold for another patron.
+Dieses Exemplar wurde von einen anderen Benutzer vorgemerkt.
 [% ELSIF checkout.auto_renew_error == 'restriction' %]
-You are currently restricted.
+Ihr Konto ist aktuell gesperrt.
 [% ELSIF checkout.auto_renew_error == 'overdue' %]
-You have overdue items.
+Sie haben überfällige Ausleihen
 [% ELSIF checkout.auto_renew_error == 'auto_too_late' %]
-It\'s too late to renew this item.
+Es ist zu spät für eine Verlängerung, das Exemplar ist bereits überfällig.
 [% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
-Your total unpaid fines are too high.
+Die offenen Gebühren auf Ihrem Konto sind zu hoch.
 [% END %]
 [% ELSE %]
-The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
+Das folgende Exemplar ([% biblio.title %]) wurde erfolgreich verlängert und ist jetzt am [% checkout.date_due | $KohaDates as_due_date => 1 %] fällig.
 [% END %]", 'email');
