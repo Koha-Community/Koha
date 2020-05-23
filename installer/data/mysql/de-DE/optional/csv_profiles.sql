@@ -1,6 +1,6 @@
 INSERT IGNORE INTO export_format( profile, description, content, csv_separator, type, used_for )
 VALUES ( "Zeitschriftenreklamationen", "Standardprofil für den Export von Heftinformationen für Zeitschriftenreklamationen", "LIEFERANT=aqbooksellers.name|TITEL=subscription.title|HEFTNUMMER=serial.serialseq|VERSPÄTET SEIT=serial.planneddate", ",", "sql", "late_issues" ),
-("Late orders (CSV profile)", "Default CSV export for late orders", 'Title[% separator %]Author[% separator %]Publication year[% separator %]ISBN[% separator %]Quantity[% separator %]Number of claims
+("Verspätete Bestellungen", "CSV-Profil für verspätete Bestellungen", 'Titel[% separator %]Verfasser[% separator %]Jahr[% separator %]ISBN[% separator %]Bestellte Anzahl[% separator %]Anzahl Reklamationen
 [% FOR order IN orders ~%]
 [%~ SET biblio = order.biblio ~%]
 "[% biblio.title %]"[% separator ~%]
