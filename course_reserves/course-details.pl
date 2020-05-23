@@ -34,7 +34,7 @@ my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');
 
 my $flagsrequired;
-$flagsrequired->{coursereserves} = 'delete_reserves' if ( $action eq 'del_reserve' );
+$flagsrequired->{coursereserves} = 'delete_reserves' if ( $action eq 'del_reserve' or $action eq 'rm_all' );
 
 my $tmpl = ($course_id) ? "course-details.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -48,6 +48,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 if ( $action eq 'del_reserve' ) {
     DelCourseReserve( cr_id => scalar $cgi->param('cr_id') );
+}
+elsif ( $action eq 'rm_all' ) {
+    my $course_res = GetCourseReserves(course_id => $course_id);
+    foreach my $cr (@$course_res) {
+        if(exists $cr->{'cr_id'}) {
+            DelCourseReserve(cr_id => $cr->{cr_id});
+        }
+    }
 }
 
 my $course          = GetCourse($course_id);
