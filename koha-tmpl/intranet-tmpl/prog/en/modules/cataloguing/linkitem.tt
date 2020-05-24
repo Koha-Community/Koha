@@ -42,7 +42,13 @@
 
     	    [% IF ( missingbarcode ) %]
 	    <fieldset id="barcode_fieldset">
-        <label for="barcode_fieldset">Select the host record to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle | html %]</i>[% END %]</label>
+        <label for="barcode_fieldset">
+            [% IF (bibliotitle ) %]
+                Select the host record to link to '[% bibliotitle | html %]'
+            [% ELSE %]
+                Select the host record to link
+            [% END %]
+        </label>
 		    <div class="hint">Enter item barcode:</div>
 		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
 	    </fieldset>
