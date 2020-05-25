@@ -164,7 +164,7 @@
                                     [% IF cr.course_item.enabled == 'yes' %]
                                         <strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>
                                         [% IF cr.item.homebranch %]
-                                            ([% Branches.GetName( cr.course_item.homebranch ) | html %])
+                                            ([% Branches.GetName( cr.course_item.homebranch_storage ) | html %])
                                         [% END %]
                                     [% ELSE %]
                                         [% Branches.GetName( cr.course_item.homebranch ) | html %]
