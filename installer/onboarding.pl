@@ -286,30 +286,8 @@ if ( $step == 5 ) {
               }
         };
 
-        my $params_2 = {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            rules        => {
-                patron_maxissueqty       => "",
-                patron_maxonsiteissueqty => "",
-                max_holds                => "",
-            }
-        };
-
-        my $params_3 = {
-            branchcode => $branchcode,
-            itemtype   => $itemtype,
-            rules      => {
-                holdallowed             => "",
-                hold_fulfillment_policy => "",
-                returnbranch            => "",
-            }
-        };
-
         eval {
             Koha::CirculationRules->set_rules($params);
-            Koha::CirculationRules->set_rules($params_2);
-            Koha::CirculationRules->set_rules($params_3);
         };
 
         if ($@) {
