@@ -194,6 +194,8 @@ subtest 'Manually pass a return date' => sub {
 subtest 'AutoRemoveOverduesRestrictions' => sub {
     plan tests => 2;
 
+    $schema->storage->txn_begin;
+
     t::lib::Mocks::mock_preference('AutoRemoveOverduesRestrictions', 1);
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -223,4 +225,6 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
 
     $debarments = Koha::Patron::Debarments::GetDebarments({ borrowernumber => $patron->borrowernumber });
     is( scalar @$debarments, 0, 'OVERDUES debarment is removed if patron does not have overdues' );
+
+    $schema->storage->txn_rollback;
 };
