@@ -151,7 +151,7 @@ my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
 my $booksellers = Koha::Acquisition::Booksellers->search(
     {
         id => {
-            -in => map { $_->basket->booksellerid } @lateorders
+            -in => [ map { $_->basket->booksellerid } @lateorders ]
         },
     }
 );
