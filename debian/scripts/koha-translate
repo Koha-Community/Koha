@@ -234,7 +234,7 @@ init_template_paths()
 flush_cache()
 {
     if [ "$dev" = "" ]; then
-        koha-foreach --enabled "$KOHA_HOME/misc/bin/clear_cache.pl"
+        koha-foreach --enabled "$KOHA_HOME/bin/clear_cache.pl"
     else
         koha-shell $dev -c "$KOHA_HOME/misc/bin/clear_cache.pl"
     fi
