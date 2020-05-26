@@ -124,16 +124,23 @@ elsif ($op eq 'delete-branch-cat') {
     } elsif ($categorycode eq "*") {
         Koha::CirculationRules->set_rules(
             {
+                branchcode   => $branch,
                 categorycode => undef,
+                rules        => {
+                    max_holds                => undef,
+                    patron_maxissueqty       => undef,
+                    patron_maxonsiteissueqty => undef,
+                }
+            }
+        );
+        Koha::CirculationRules->set_rules(
+            {
                 branchcode   => $branch,
                 itemtype     => undef,
                 rules        => {
-                    patron_maxissueqty             => undef,
-                    patron_maxonsiteissueqty       => undef,
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
                     returnbranch            => undef,
-                    max_holds               => undef,
                 }
             }
         );
