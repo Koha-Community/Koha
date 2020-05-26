@@ -226,7 +226,7 @@ if ( not $ordernumber ) {    # create order
                     }
                 }
 
-                if ( $value eq '' ) {
+                if ( $value ) {
 
                     # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
                     my $today_dt = dt_from_string;
