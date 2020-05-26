@@ -902,7 +902,7 @@ elsif ($phase eq 'Export'){
             $content .= join("\t", header_cell_values($sth)) . "\n";
             $content = Encode::decode('UTF-8', $content);
             while (my $row = $sth->fetchrow_arrayref()) {
-                $content .= join("\t", @$row) . "\n";
+                $content .= join("\t", map { $_ // '' } @$row) . "\n";
             }
         } else {
             my $delimiter = C4::Context->preference('delimiter') || ',';
