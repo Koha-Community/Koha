@@ -161,6 +161,7 @@ elsif ($op eq 'delete-branch-cat') {
                 branchcode   => $branch,
                 categorycode => undef,
                 rules        => {
+                    max_holds                => undef,
                     patron_maxissueqty       => undef,
                     patron_maxonsiteissueqty => undef,
                 }
@@ -169,11 +170,11 @@ elsif ($op eq 'delete-branch-cat') {
         Koha::CirculationRules->set_rules(
             {
                 branchcode   => $branch,
+                itemtype     => undef,
                 rules        => {
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
                     returnbranch            => undef,
-                    max_holds               => undef,
                 }
             }
         );
