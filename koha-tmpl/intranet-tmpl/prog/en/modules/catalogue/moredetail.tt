@@ -104,7 +104,12 @@
                             <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                             <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
                             <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+
+                        [% IF ClaimReturnedLostValue && ITEM_DAT.itemlost == ClaimReturnedLostValue %]
+                            <select name="itemlost" disabled="disabled">
+                        [% ELSE %]
                             <select name="itemlost">
+                        [% END %]
                                 <option value="">Choose</option>
                                 [% FOREACH itemlostloo IN itemlostloop %]
                                     [% IF ClaimReturnedLostValue && !ITEM_DAT.itemlost && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
