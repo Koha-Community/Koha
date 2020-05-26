@@ -535,21 +535,77 @@ sub _UpdateCourseItem {
     my %data = map { $_ => $params{$_} } @FIELDS;
     my %enabled = map { $_ . "_enabled" => $params{ $_ . "_enabled" } } @FIELDS;
 
-    $course_item->update( { %data, %enabled } );
+    my $item = Koha::Items->find( $course_item->itemnumber );
+
+    # Handle updates to changed fields for a course item, both adding and removing
     if ( $course_item->is_enabled ) {
         my $item_fields = {};
-        $item_fields->{itype}         = $course_item->itype         if $course_item->itype_enabled;
-        $item_fields->{ccode}         = $course_item->ccode         if $course_item->ccode_enabled;
-        $item_fields->{location}      = $course_item->location      if $course_item->location_enabled;
-        $item_fields->{homebranch}    = $course_item->homebranch    if $course_item->homebranch_enabled;
-        $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
 
-        Koha::Items->find( $course_item->itemnumber )
-                   ->set( $item_fields )
-                   ->store
+        # Find newly enabled field and add item value to storage
+        if ( $params{itype_enabled} && !$course_item->itype_enabled ) {
+            $enabled{itype_storage} = $item->itype;
+            $item_fields->{itype} = $params{itype};
+        }
+        # Find newly disabled field and copy the storage value to the item, unset storage value
+        elsif ( !$params{itype_enabled} && $course_item->itype_enabled ) {
+            $item_fields->{itype} = $course_item->itype_storage;
+            $enabled{itype_storage} = undef;
+        }
+        # The field was already enabled, copy the incoming value to the item.
+        # The "original" ( when not on course reserve ) value is already in the storage field
+        elsif ( $course_item->itype_enabled) {
+            $item_fields->{itype} = $params{itype};
+        }
+
+        if ( $params{ccode_enabled} && !$course_item->ccode_enabled ) {
+            $enabled{ccode_storage} = $item->ccode;
+            $item_fields->{ccode} = $params{ccode};
+        }
+        elsif ( !$params{ccode_enabled} && $course_item->ccode_enabled ) {
+            $item_fields->{ccode} = $course_item->ccode_storage;
+            $enabled{ccode_storage} = undef;
+        } elsif ( $course_item->ccode_enabled) {
+            $item_fields->{ccode} = $params{ccode};
+        }
+
+        if ( $params{location_enabled} && !$course_item->location_enabled ) {
+            $enabled{location_storage} = $item->location;
+            $item_fields->{location} = $params{location};
+        }
+        elsif ( !$params{location_enabled} && $course_item->location_enabled ) {
+            $item_fields->{location} = $course_item->location_storage;
+            $enabled{location_storage} = undef;
+        } elsif ( $course_item->location_enabled) {
+            $item_fields->{location} = $params{location};
+        }
+
+        if ( $params{homebranch_enabled} && !$course_item->homebranch_enabled ) {
+            $enabled{homebranch_storage} = $item->homebranch;
+            $item_fields->{homebranch} = $params{homebranch};
+        }
+        elsif ( !$params{homebranch_enabled} && $course_item->homebranch_enabled ) {
+            $item_fields->{homebranch} = $course_item->homebranch_storage;
+            $enabled{homebranch_storage} = undef;
+        } elsif ( $course_item->homebranch_enabled) {
+            $item_fields->{homebranch} = $params{homebranch};
+        }
+
+        if ( $params{holdingbranch_enabled} && !$course_item->holdingbranch_enabled ) {
+            $enabled{holdingbranch_storage} = $item->holdingbranch;
+            $item_fields->{holdingbranch} = $params{holdingbranch};
+        }
+        elsif ( !$params{holdingbranch_enabled} && $course_item->holdingbranch_enabled ) {
+            $item_fields->{holdingbranch} = $course_item->holdingbranch_storage;
+            $enabled{holdingbranch_storage} = undef;
+        } elsif ( $course_item->holdingbranch_enabled) {
+            $item_fields->{holdingbranch} = $params{holdingbranch};
+        }
+
+        $item->set( $item_fields )->store
             if keys %$item_fields;
-
     }
+
+    $course_item->update( { %data, %enabled } );
 
 }
 
