@@ -23,7 +23,7 @@ use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCou
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 BEGIN {
     require_ok('C4::CourseReserves');
@@ -201,6 +201,137 @@ is($course_item2->{ccode_storage}, '', 'Course item ccode storage should be empt
 DelCourseReserve( cr_id => $cr_id2 );
 $item = Koha::Items->find($itemnumber);
 is($item->ccode, '', 'Item ccode should be set back to empty');
+
+subtest 'Ensure modifying fields on existing course items updates the item and course item' => sub {
+    plan tests => 60;
+
+    my ($biblionumber, $itemnumber) = create_bib_and_item();
+    my $ci_id = ModCourseItem(
+        itemnumber            => $itemnumber,
+        itype_enabled         => 0,
+        ccode_enabled         => 0,
+        homebranch_enabled    => 0,
+        holdingbranch_enabled => 0,
+        location_enabled      => 0,
+    );
+
+    my $course = $builder->build({
+        source => 'CourseReserve',
+        value => {
+            ci_id => $ci_id,
+            enabled => 'no',
+        }
+    });
+
+    my $cr_id = ModCourseReserve(
+        course_id   => $course->{course_id},
+        ci_id       => $ci_id,
+        staff_note  => '',
+        public_note => '',
+    );
+
+    my $course_item = GetCourseItem( ci_id => $ci_id );
+    is($course_item->{itype_storage}, undef, 'Course item itype storage should be undef');
+    is($course_item->{ccode_storage}, undef, 'Course item ccode storage should be undef');
+    is($course_item->{homebranch_storage}, undef, 'Course item holding branch storage should be undef');
+    is($course_item->{holdingbranch_storage}, undef, 'Course item holding branch storage should be undef');
+    is($course_item->{location_storage}, undef, 'Course item location storage should be undef');
+
+    is($course_item->{itype}, undef, 'Course item itype should be undef');
+    is($course_item->{ccode}, undef, 'Course item ccode should be undef');
+    is($course_item->{homebranch}, undef, 'Course item holding branch should be undef');
+    is($course_item->{holdingbranch}, undef, 'Course item holding branch should be undef');
+    is($course_item->{location}, undef, 'Course item location should be undef');
+
+    is($course_item->{itype_enabled}, 0, 'Course item itype enabled should be 0');
+    is($course_item->{ccode_enabled}, 0, 'Course item ccode enabled should be 0');
+    is($course_item->{homebranch_enabled}, 0, 'Course item holding branch enabled should be 0');
+    is($course_item->{holdingbranch_enabled}, 0, 'Course item holding branch enabled should be 0');
+    is($course_item->{location_enabled}, 0, 'Course item location enabled should be 0');
+
+    my $item = Koha::Items->find($itemnumber);
+    is($item->effective_itemtype, 'CD_foo', 'Item type in course should be CD_foo');
+    is($item->ccode, 'CD', 'Item ccode in course should be CD');
+    is($item->homebranch, 'B1', 'Item home branch in course should be B1');
+    is($item->holdingbranch, 'B1', 'Item holding branch in course should be B1');
+    is($item->location, 'HR', 'Item location in course should be HR');
+
+    ModCourseItem(
+        itemnumber            => $itemnumber,
+        itype_enabled         => 1,
+        ccode_enabled         => 1,
+        homebranch_enabled    => 1,
+        holdingbranch_enabled => 1,
+        location_enabled      => 1,
+        itype                 => 'BK_foo',
+        ccode                 => 'BOOK',
+        homebranch            => 'B2',
+        holdingbranch         => 'B2',
+        location              => 'TH',
+    );
+
+    $course_item = GetCourseItem( ci_id => $ci_id );
+    is($course_item->{itype_storage}, 'CD_foo', 'Course item itype storage should be CD_foo');
+    is($course_item->{ccode_storage}, 'CD', 'Course item ccode storage should be CD');
+    is($course_item->{homebranch_storage}, 'B1', 'Course item holding branch storage should be B1');
+    is($course_item->{holdingbranch_storage}, 'B1', 'Course item holding branch storage should be B1');
+    is($course_item->{location_storage}, 'HR', 'Course item location storage should be HR');
+
+    is($course_item->{itype}, 'BK_foo', 'Course item itype should be BK_foo');
+    is($course_item->{ccode}, 'BOOK', 'Course item ccode should be BOOK');
+    is($course_item->{homebranch}, 'B2', 'Course item holding branch should be B2');
+    is($course_item->{holdingbranch}, 'B2', 'Course item holding branch should be B2');
+    is($course_item->{location}, 'TH', 'Course item location should be TH');
+
+    is($course_item->{itype_enabled}, 1, 'Course item itype enabled should be 1');
+    is($course_item->{ccode_enabled}, 1, 'Course item ccode enabled should be 1');
+    is($course_item->{homebranch_enabled}, 1, 'Course item holding branch enabled should be 1');
+    is($course_item->{holdingbranch_enabled}, 1, 'Course item holding branch enabled should be 1');
+    is($course_item->{location_enabled}, 1, 'Course item location enabled should be 1');
+
+    $item = Koha::Items->find($itemnumber);
+    is($item->effective_itemtype, 'BK_foo', 'Item type in course should be BK_foo');
+    is($item->ccode, 'BOOK', 'Item ccode in course should be BOOK');
+    is($item->homebranch, 'B2', 'Item home branch in course should be B2');
+    is($item->holdingbranch, 'B2', 'Item holding branch in course should be B2');
+    is($item->location, 'TH', 'Item location in course should be TH');
+
+    # Test removing fields from an active course item
+    ModCourseItem(
+        itemnumber            => $itemnumber,
+        itype_enabled         => 0,
+        ccode_enabled         => 0,
+        homebranch_enabled    => 0,
+        holdingbranch_enabled => 0,
+        location_enabled      => 0,
+    );
+
+    $course_item = GetCourseItem( ci_id => $ci_id );
+    is($course_item->{itype_storage}, undef, 'Course item itype storage should be undef');
+    is($course_item->{ccode_storage}, undef, 'Course item ccode storage should be undef');
+    is($course_item->{homebranch_storage}, undef, 'Course item holding branch storage should be undef');
+    is($course_item->{holdingbranch_storage}, undef, 'Course item holding branch storage should be undef');
+    is($course_item->{location_storage}, undef, 'Course item location storage should be undef');
+
+    is($course_item->{itype}, undef, 'Course item itype should be undef');
+    is($course_item->{ccode}, undef, 'Course item ccode should be undef');
+    is($course_item->{homebranch}, undef, 'Course item holding branch should be undef');
+    is($course_item->{holdingbranch}, undef, 'Course item holding branch should be undef');
+    is($course_item->{location}, undef, 'Course item location should be undef');
+
+    is($course_item->{itype_enabled}, 0, 'Course item itype enabled should be 0');
+    is($course_item->{ccode_enabled}, 0, 'Course item ccode enabled should be 0');
+    is($course_item->{homebranch_enabled}, 0, 'Course item holding branch enabled should be 0');
+    is($course_item->{holdingbranch_enabled}, 0, 'Course item holding branch enabled should be 0');
+    is($course_item->{location_enabled}, 0, 'Course item location enabled should be 0');
+
+    $item = Koha::Items->find($itemnumber);
+    is($item->effective_itemtype, 'CD_foo', 'Item type in course should be CD_foo');
+    is($item->ccode, 'CD', 'Item ccode in course should be CD');
+    is($item->homebranch, 'B1', 'Item home branch in course should be B1');
+    is($item->holdingbranch, 'B1', 'Item holding branch in course should be B1');
+    is($item->location, 'HR', 'Item location in course should be HR');
+};
 
 subtest 'Ensure item info is preserved' => sub {
     plan tests => 8;
