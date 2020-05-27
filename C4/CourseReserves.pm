@@ -541,64 +541,26 @@ sub _UpdateCourseItem {
     if ( $course_item->is_enabled ) {
         my $item_fields = {};
 
-        # Find newly enabled field and add item value to storage
-        if ( $params{itype_enabled} && !$course_item->itype_enabled ) {
-            $enabled{itype_storage} = $item->itype;
-            $item_fields->{itype} = $params{itype};
-        }
-        # Find newly disabled field and copy the storage value to the item, unset storage value
-        elsif ( !$params{itype_enabled} && $course_item->itype_enabled ) {
-            $item_fields->{itype} = $course_item->itype_storage;
-            $enabled{itype_storage} = undef;
-        }
-        # The field was already enabled, copy the incoming value to the item.
-        # The "original" ( when not on course reserve ) value is already in the storage field
-        elsif ( $course_item->itype_enabled) {
-            $item_fields->{itype} = $params{itype};
-        }
+        for my $field ( qw( itype ccode location homebranch holdingbranch ) ) {
 
-        if ( $params{ccode_enabled} && !$course_item->ccode_enabled ) {
-            $enabled{ccode_storage} = $item->ccode;
-            $item_fields->{ccode} = $params{ccode};
-        }
-        elsif ( !$params{ccode_enabled} && $course_item->ccode_enabled ) {
-            $item_fields->{ccode} = $course_item->ccode_storage;
-            $enabled{ccode_storage} = undef;
-        } elsif ( $course_item->ccode_enabled) {
-            $item_fields->{ccode} = $params{ccode};
-        }
+            my $field_enabled = sprintf "%s_enabled", $field;
+            my $field_storage = sprintf "%s_storage", $field;
 
-        if ( $params{location_enabled} && !$course_item->location_enabled ) {
-            $enabled{location_storage} = $item->location;
-            $item_fields->{location} = $params{location};
-        }
-        elsif ( !$params{location_enabled} && $course_item->location_enabled ) {
-            $item_fields->{location} = $course_item->location_storage;
-            $enabled{location_storage} = undef;
-        } elsif ( $course_item->location_enabled) {
-            $item_fields->{location} = $params{location};
-        }
-
-        if ( $params{homebranch_enabled} && !$course_item->homebranch_enabled ) {
-            $enabled{homebranch_storage} = $item->homebranch;
-            $item_fields->{homebranch} = $params{homebranch};
-        }
-        elsif ( !$params{homebranch_enabled} && $course_item->homebranch_enabled ) {
-            $item_fields->{homebranch} = $course_item->homebranch_storage;
-            $enabled{homebranch_storage} = undef;
-        } elsif ( $course_item->homebranch_enabled) {
-            $item_fields->{homebranch} = $params{homebranch};
-        }
-
-        if ( $params{holdingbranch_enabled} && !$course_item->holdingbranch_enabled ) {
-            $enabled{holdingbranch_storage} = $item->holdingbranch;
-            $item_fields->{holdingbranch} = $params{holdingbranch};
-        }
-        elsif ( !$params{holdingbranch_enabled} && $course_item->holdingbranch_enabled ) {
-            $item_fields->{holdingbranch} = $course_item->holdingbranch_storage;
-            $enabled{holdingbranch_storage} = undef;
-        } elsif ( $course_item->holdingbranch_enabled) {
-            $item_fields->{holdingbranch} = $params{holdingbranch};
+            # Find newly enabled field and add item value to storage
+            if ( $params{$field_enabled} && !$course_item->$field_enabled ) {
+                $enabled{$field_storage} = $item->$field;
+                $item_fields->{$field}   = $params{$field};
+            }
+            # Find newly disabled field and copy the storage value to the item, unset storage value
+            elsif ( !$params{$field_enabled} && $course_item->$field_enabled ) {
+                $item_fields->{$field}   = $course_item->$field_storage;
+                $enabled{$field_storage} = undef;
+            }
+            # The field was already enabled, copy the incoming value to the item.
+            # The "original" ( when not on course reserve ) value is already in the storage field
+            elsif ( $course_item->$field_enabled) {
+                $item_fields->{$field} = $params{$field};
+            }
         }
 
         $item->set( $item_fields )->store
