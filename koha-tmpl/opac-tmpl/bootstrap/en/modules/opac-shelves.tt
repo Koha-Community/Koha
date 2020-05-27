@@ -79,7 +79,7 @@
         [% END %]
 
         [% IF op == 'view' %]
-            <li><span class="divider">&rsaquo;</span> Contents of <i>[% shelf.shelfname | html %]</i></li>
+            <li><span class="divider">&rsaquo;</span> Contents of <em>[% shelf.shelfname | html %]</em></li>
         [% END %]
 
         [% IF op == 'add_form' %]
@@ -87,7 +87,7 @@
         [% END %]
 
         [% IF op == 'edit_form' %]
-            <li><span class="divider">&rsaquo;</span> Edit list <i>[% shelf.shelfname | html %]</i></li>
+            <li><span class="divider">&rsaquo;</span> Edit list <em>[% shelf.shelfname | html %]</em></li>
         [% END %]
 
     </ul> <!-- / .breadcrumb -->
@@ -981,7 +981,7 @@ $(function() {
         var shelf_number = $(this).data("shelfnumber");
         var is_shared = $(this).data("shared");
         var count = $(this).data("count");
-        var message = "<p><i>" + shelf_name + "</i></p>";
+        var message = "<p><em>" + shelf_name + "</em></p>";
         if( count ){
             message += "<p>" + _("Items on this list:") + " <strong>" + count + "</strong></p>";
         }

@@ -39,7 +39,7 @@
                             </div>
                         [% END # / ERRORs %]
 
-                        <h1>Comments on <i>[% INCLUDE 'biblio-title.inc' %]</i></h1>
+                        <h1>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h1>
                         [% IF ( biblio.author ) %]<h3>[% biblio.author | html %]</h3>[% END %]
                         <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
                             <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />

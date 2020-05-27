@@ -295,7 +295,7 @@
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=ISSUE %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
 
-                                                    [% IF ( ISSUE.onsite_checkout ) %] <i class="onsite_checkout">(On-site checkout)</i>[% END %]
+                                                    [% IF ( ISSUE.onsite_checkout ) %] <em class="onsite_checkout">(On-site checkout)</em>[% END %]
 
                                                     [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
                                                         [% INCLUDE 'user-star-ratings.inc' item=ISSUE %]
@@ -685,7 +685,7 @@
                                                         [% ar.item.enumchron | html %]
                                                     </a>
                                                     [% ar.biblio.author | html %]
-                                                    [% IF ar.itemnumber %] <i>(only [% ar.item.barcode | html %])</i>[% END %]
+                                                    [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
                                                 </td>
 
                                                 <td class="article-request-created_on">
