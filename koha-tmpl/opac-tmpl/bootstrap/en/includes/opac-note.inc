@@ -5,7 +5,7 @@
             [% FOREACH message IN patron_messages %]
                 <li>
                     <strong>[% message.message | html | html_line_break %]</strong><br>
-                    &nbsp;&nbsp;&nbsp;<i>Written on [% message.message_date | $KohaDates %] by [% Branches.GetName(message.branchcode) | html %]</i>
+                    &nbsp;&nbsp;&nbsp;<em>Written on [% message.message_date | $KohaDates %] by [% Branches.GetName(message.branchcode) | html %]</em>
                 </li>
             [% END %]
 

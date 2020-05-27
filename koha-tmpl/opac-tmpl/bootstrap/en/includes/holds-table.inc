@@ -105,7 +105,7 @@
                                 <i class="fa fa-exclamation-circle text-warning"></i>
                                 [% IF ( HOLD.is_at_destination ) %]
                                     [% IF ( HOLD.found ) %]
-                                        Item waiting at <b> [% HOLD.branch.branchname | html %]</b>
+                                        Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong>
                                         [% IF ( HOLD.waitingdate ) %]
                                             since [% HOLD.waitingdate | $KohaDates %]
                                             [% IF HOLD.expirationdate %]
@@ -114,15 +114,15 @@
                                         [% END %]
                                         <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                                     [% ELSE %]
-                                        Item waiting to be pulled from <b> [% Branches.GetName( HOLD.branchcode ) | html %]</b>
+                                        Item waiting to be pulled from <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong>
                                     [% END %]
                                 [% ELSE %]
-                                    Item in transit to <b> [% Branches.GetName( HOLD.branchcode ) | html %]</b> <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
+                                    Item in transit to <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong> <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                                 [% END %]
                             [% ELSE %]
                                 [% IF ( HOLD.is_in_transit ) %]
                                     [% SET transfer = HOLD.item.get_transfer %]
-                                    Item in transit from <b> [% Branches.GetName( transfer.frombranch ) | html %]</b> since
+                                    Item in transit from <strong> [% Branches.GetName( transfer.frombranch ) | html %]</strong> since
                                     [% transfer.datesent | $KohaDates %]
                                 [% ELSIF ( HOLD.suspend ) %]
                                     Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | $KohaDates %] [% END %]
@@ -152,9 +152,9 @@
                                                     <div class="modal-header">
                                                         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                                                         [% IF HOLD.suspend %]
-                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Resume your hold on <i>[% HOLD.biblio.title | html %]</i></h3>
+                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Resume your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
                                                         [% ELSE %]
-                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Suspend your hold on <i>[% HOLD.biblio.title | html %]</i></h3>
+                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Suspend your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
                                                         [% END %]
                                                     </div>
                                                     <div class="modal-body">

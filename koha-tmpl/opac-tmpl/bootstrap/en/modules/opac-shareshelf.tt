@@ -69,7 +69,7 @@
     [% ELSIF op=='conf_invite' %]
         <div id="conf_invite">
         [% IF approvedaddress %]
-        <p>An invitation to share list <i>[% shelfname | html %]</i> will be sent shortly to [% approvedaddress | html %].</p>
+        <p>An invitation to share list <em>[% shelfname | html %]</em> will be sent shortly to [% approvedaddress | html %].</p>
         [% END %]
         [% IF failaddress %]
             <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress | html %]</p>
