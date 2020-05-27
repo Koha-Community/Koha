@@ -1395,8 +1395,8 @@
                         <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
                         <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
                             <xsl:choose>
-                                <xsl:when test="$OPACItemLocation='location'"><b><xsl:value-of select="concat(items:location,' ')"/></b></xsl:when>
-                                <xsl:when test="$OPACItemLocation='ccode'"><b><xsl:value-of select="concat(items:ccode,' ')"/></b></xsl:when>
+                                <xsl:when test="$OPACItemLocation='location'"><strong><xsl:value-of select="concat(items:location,' ')"/></strong></xsl:when>
+                                <xsl:when test="$OPACItemLocation='ccode'"><strong><xsl:value-of select="concat(items:ccode,' ')"/></strong></xsl:when>
                             </xsl:choose>
                             <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"><span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span></xsl:if>
                             <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
@@ -1408,8 +1408,8 @@
                         <xsl:variable name="reference_items" select="key('item-by-status', 'reference')"/>
                         <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch))[1])]">
                             <xsl:choose>
-                                <xsl:when test="$OPACItemLocation='location'"><b><xsl:value-of select="concat(items:location,' ')"/></b></xsl:when>
-                                <xsl:when test="$OPACItemLocation='ccode'"><b><xsl:value-of select="concat(items:ccode,' ')"/></b></xsl:when>
+                                <xsl:when test="$OPACItemLocation='location'"><strong><xsl:value-of select="concat(items:location,' ')"/></strong></xsl:when>
+                                <xsl:when test="$OPACItemLocation='ccode'"><strong><xsl:value-of select="concat(items:ccode,' ')"/></strong></xsl:when>
                             </xsl:choose>
                             <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"><span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span></xsl:if>
                             <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>

@@ -20,14 +20,14 @@
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="/cgi-bin/koha/opac-course-reserves.pl">Course reserves</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Course reserves for <i>[% course.course_name | html %]</i></a></li>
+        <li><a href="#">Course reserves for <em>[% course.course_name | html %]</em></a></li>
     </ul>
 
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
 
-                <h2>Course reserves for <i>[% course.course_name | html %]</i></h2>
+                <h2>Course reserves for <em>[% course.course_name | html %]</em></h2>
                 <div class="rows">
                     <ol>
                         [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
