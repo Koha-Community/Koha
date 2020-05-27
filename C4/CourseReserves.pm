@@ -541,10 +541,10 @@ sub _UpdateCourseItem {
     if ( $course_item->is_enabled ) {
         my $item_fields = {};
 
-        for my $field ( qw( itype ccode location homebranch holdingbranch ) ) {
+        for my $field ( @FIELDS ) {
 
-            my $field_enabled = sprintf "%s_enabled", $field;
-            my $field_storage = sprintf "%s_storage", $field;
+            my $field_enabled = $field . '_enabled';
+            my $field_storage = $field . '_storage';
 
             # Find newly enabled field and add item value to storage
             if ( $params{$field_enabled} && !$course_item->$field_enabled ) {
