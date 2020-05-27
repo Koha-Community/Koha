@@ -199,13 +199,10 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
         } else {
             my $item = Koha::Items->find({barcode => $barcode});
             if ( $item ) {
-                my $item_unblessed = $item->unblessed;
                 # Modify date last seen for scanned items, remove lost status
                 $item->set({ itemlost => 0, datelastseen => $date })->store;
+                my $item_unblessed = $item->unblessed;
                 $moddatecount++;
-                # update item hash accordingly
-                $item_unblessed->{itemlost} = 0;
-                $item_unblessed->{datelastseen} = $date;
                 unless ( $dont_checkin ) {
                     $qonloan->execute($barcode);
                     if ($qonloan->rows){
@@ -219,7 +216,7 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
                         }
                     }
                 }
-                push @scanned_items, $item;
+                push @scanned_items, $item_unblessed;
             } else {
                 push @errorloop, { barcode => $barcode, ERR_BARCODE => 1 };
             }
