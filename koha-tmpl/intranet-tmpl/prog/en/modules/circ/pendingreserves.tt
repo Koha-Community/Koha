@@ -275,8 +275,11 @@
           function createSelect( data ) {
               data = separateData(data);
               var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
+              var regex = /(<([^>]+)>)/ig; // Remove html tags
               for ( i=0 ; i<len ; i++ ) {
-                  r += '<option value="'+data[i]+'">'+data[i]+'</option>';
+                  var cell_val = data[i].replace(regex, '');
+                  if ( cell_val.length < 1 ) continue;
+                  r += '<option value="'+cell_val+'">'+cell_val+'</option>';
               }
               return r+'</select>';
           }
