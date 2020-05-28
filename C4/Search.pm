@@ -1585,7 +1585,7 @@ sub _build_initial_query {
     my $operator = "";
     if ($params->{previous_operand}){
         #If there is a previous operand, add a supplied operator or the default 'and'
-        $operator = ($params->{operator}) ? " ".($params->{operator})." " : ' and ';
+        $operator = ($params->{operator}) ? " ".($params->{operator})." " : ' AND ';
     }
 
     #NOTE: indexes_set is typically set when doing truncation or field weighting

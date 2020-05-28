@@ -1634,7 +1634,7 @@ sub GetMarcSubjects {
                 push @link_loop, {
                     limit    => $subject_limit,
                     'link'   => $linkvalue,
-                    operator => (scalar @link_loop) ? ' and ' : undef
+                    operator => (scalar @link_loop) ? ' AND ' : undef
                 };
             }
             my @this_link_loop = @link_loop;
@@ -1733,7 +1733,7 @@ sub GetMarcAuthors {
                 push @link_loop, {
                     limit    => 'au',
                     'link'   => $linkvalue,
-                    operator => (scalar @link_loop) ? ' and ' : undef
+                    operator => (scalar @link_loop) ? ' AND ' : undef
                 };
             }
             my @this_link_loop = @link_loop;
@@ -1871,7 +1871,7 @@ sub GetMarcSeries {
 
             push @link_loop, {
                 'link' => $linkvalue,
-                operator => (scalar @link_loop) ? ' and ' : undef
+                operator => (scalar @link_loop) ? ' AND ' : undef
             };
 
             if ($volume_number) {
