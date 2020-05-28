@@ -183,7 +183,14 @@ sub dt_from_string {
     $dt_params{minute} = 00 unless defined $dt_params{minute};
     $dt_params{second} = 00 unless defined $dt_params{second};
 
-    $dt_params{hour} += 12 if $ampm && $ampm eq 'PM';
+    if ( $ampm ) {
+        if ( $ampm eq 'AM' ) {
+            $dt_params{hour} = 00 if $dt_params{hour} == 12;
+        } elsif ( $dt_params{hour} != 12 ) { # PM
+            $dt_params{hour} += 12;
+            $dt_params{hour} = 00 if $dt_params{hour} == 24;
+        }
+    }
 
     my $dt = eval {
         DateTime->new(
