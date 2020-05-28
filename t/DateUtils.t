@@ -270,17 +270,17 @@ subtest 'TimeFormat 12hr' => sub {
     t::lib::Mocks::mock_preference('TimeFormat', '12hr');
     my $output = output_pref({ dt => $dt, dateformat => 'iso' });
     $dt = dt_from_string( $output, 'iso' );
-    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 PM' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 PM', "12 NOON formatted correctly in 12hr format" );
     t::lib::Mocks::mock_preference('TimeFormat', '24hr');
-    is( output_pref( {dt => $dt} ), '28/05/2020 12:49' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49' , "12 NOON formatted correctly in 24hr format" );
 
     $dt = DateTime->new( year => 2020, month => 5, day => 28, hour => 0, minute => 49 );
     t::lib::Mocks::mock_preference('TimeFormat', '12hr');
     $output = output_pref({ dt => $dt, dateformat => 'iso' });
     $dt = dt_from_string( $output, 'iso' );
-    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 AM' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 AM', "12 MIDNIGHT formatted correctly in 12hr format" );
     t::lib::Mocks::mock_preference('TimeFormat', '24hr');
-    is( output_pref( {dt => $dt} ), '28/05/2020 00:49' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 00:49', "12 MIDNIGHT formatted correctly in 24hr format" );
 };
 
 # output_pref with no parameters, single parameter (no hash)
