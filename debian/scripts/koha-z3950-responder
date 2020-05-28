@@ -86,12 +86,12 @@ start_z3950()
     logging="-l /var/log/koha/${instancename}/z3950.log"
 
     if [ "$DEV_INSTALL" = "1" ]; then
-        LIBDIR=$KOHA_HOME
+        MISCDIR=$KOHA_HOME/misc
     else
-        LIBDIR=$KOHA_HOME/lib
+        MISCDIR=/usr/share/koha/bin
     fi
 
-    Z3950RESPONDER="/usr/bin/perl $LIBDIR/misc/z3950_responder.pl"
+    Z3950RESPONDER="/usr/bin/perl $MISCDIR/z3950_responder.pl"
     if [ "$debug_mode" = "yes" ]; then
         if [ "$DEV_INSTALL" = "1" ]; then
             warn "Not a dev install, disabling debug mode"
@@ -99,7 +99,7 @@ start_z3950()
             environment="development"
             daemonize=""
             logging="" # remote debugger takes care
-            Z3950RESPONDER="/usr/bin/perl -d ${LIBDIR}/misc/z3950_responder.pl"
+            Z3950RESPONDER="/usr/bin/perl -d ${MISCDIR}/z3950_responder.pl"
         fi
     fi
 
