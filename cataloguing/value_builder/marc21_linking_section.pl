@@ -168,7 +168,7 @@ my $launcher = sub {
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
-        my $op = 'and';
+        my $op = 'AND';
 
         my $searcher = Koha::SearchEngine::Search->new(
             { index => $Koha::SearchEngine::BIBLIOS_INDEX } );

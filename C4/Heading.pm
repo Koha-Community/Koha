@@ -202,14 +202,14 @@ sub _search {
 
     if ($index) {
         push @marclist, $index;
-        push @and_or,   'and';
+        push @and_or,   'AND';
         push @operator, $self->{'match_type'};
         push @value,    $self->{'search_form'};
     }
 
     #    if ($self->{'thesaurus'}) {
     #        push @marclist, 'thesaurus';
-    #        push @and_or, 'and';
+    #        push @and_or, 'AND';
     #        push @excluding, '';
     #        push @operator, 'is';
     #        push @value, $self->{'thesaurus'};

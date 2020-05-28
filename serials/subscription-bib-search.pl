@@ -89,7 +89,7 @@ if ( $op eq "do_search" && $query ) {
     # add the limits if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     my $ccodelimit    = $input->param('ccodelimit');
-    my $op = 'and';
+    my $op = 'AND';
     $query .= " $op $itype_or_itemtype:$itemtypelimit" if $itemtypelimit;
     $query .= " $op ccode:$ccodelimit" if $ccodelimit;
     $resultsperpage = $input->param('resultsperpage');

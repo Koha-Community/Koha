@@ -337,7 +337,7 @@ sub plugin {
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
-        my $op = 'and';
+        my $op = 'AND';
         $search = 'kw:'.$search." $op mc-itemtype:".$itype if $itype;
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
         my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat($search, $startfrom * $resultsperpage, $resultsperpage );

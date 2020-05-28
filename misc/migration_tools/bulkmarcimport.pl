@@ -592,7 +592,7 @@ sub build_query {
 	  my $string = build_simplequery($matchingpoint,$record);
 	  push @searchstrings,$string if (length($string)>0);
         }
-    my $op = 'and';
+    my $op = 'AND';
     return join(" $op ",@searchstrings);
 }
 sub build_simplequery {
@@ -608,7 +608,7 @@ sub build_simplequery {
 		  }
         }
     }
-    my $op = 'and';
+    my $op = 'AND';
     return join(" $op ",@searchstrings);
 }
 sub report_item_errors {

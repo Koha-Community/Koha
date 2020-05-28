@@ -1038,7 +1038,7 @@ sub get_marc_authors {
                 push @link_loop, {
                     limit    => 'au',
                     'link'   => $linkvalue,
-                    operator => (scalar @link_loop) ? ' and ' : undef
+                    operator => (scalar @link_loop) ? ' AND ' : undef
                 };
             }
             my @this_link_loop = @link_loop;
