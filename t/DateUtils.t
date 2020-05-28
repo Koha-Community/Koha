@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 76;
+use Test::More tests => 79;
 
 use Test::MockModule;
 use Test::Warn;
@@ -258,7 +258,30 @@ $dt = dt_from_string('2015-01-31 01:02 PM');
 is( output_pref( {dt => $dt} ), '31/01/2015 13:02', 'dt_from_string ' );
 $dt = dt_from_string('2015-01-31 01:02:03 PM');
 is( output_pref( {dt => $dt} ), '31/01/2015 13:02', 'dt_from_string ' );
+$dt = dt_from_string('2015-01-31 12:02 AM');
+is( output_pref( {dt => $dt} ), '31/01/2015 00:02', 'dt_from_string ' );
+$dt = dt_from_string('2015-01-31 12:02:03 AM');
+is( output_pref( {dt => $dt} ), '31/01/2015 00:02', 'dt_from_string ' );
 
+subtest 'TimeFormat 12hr' => sub {
+    plan tests => 4;
+
+    $dt = DateTime->new( year => 2020, month => 5, day => 28, hour => 12, minute => 49 );
+    t::lib::Mocks::mock_preference('TimeFormat', '12hr');
+    my $output = output_pref({ dt => $dt, dateformat => 'iso' });
+    $dt = dt_from_string( $output, 'iso' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 PM' );
+    t::lib::Mocks::mock_preference('TimeFormat', '24hr');
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49' );
+
+    $dt = DateTime->new( year => 2020, month => 5, day => 28, hour => 0, minute => 49 );
+    t::lib::Mocks::mock_preference('TimeFormat', '12hr');
+    $output = output_pref({ dt => $dt, dateformat => 'iso' });
+    $dt = dt_from_string( $output, 'iso' );
+    is( output_pref( {dt => $dt} ), '28/05/2020 12:49 AM' );
+    t::lib::Mocks::mock_preference('TimeFormat', '24hr');
+    is( output_pref( {dt => $dt} ), '28/05/2020 00:49' );
+};
 
 # output_pref with no parameters, single parameter (no hash)
 is( output_pref(), undef, 'Call output_pref without parameters' );
