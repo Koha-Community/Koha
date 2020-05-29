@@ -84,6 +84,8 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
 
     plan tests => 10;
 
+    $schema->storage->txn_begin;
+
     my $load_conditional = Test::MockModule->new('Module::Load::Conditional');
 
     # Enable the client credentials grant syspref
@@ -115,6 +117,7 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
       ->status_is(400)
       ->json_is( { error => 'Unimplemented grant type' } );
 
+    $schema->storage->txn_rollback;
 };
 
 sub run_oauth_tests {
