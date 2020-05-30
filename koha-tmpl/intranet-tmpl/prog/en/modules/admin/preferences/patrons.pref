@@ -32,16 +32,17 @@ Patrons:
            choices:
                yes: Allow
                no: "Don't allow"
-         - images to be uploaded and shown for patrons on the staff client.
+         - images to be uploaded and shown for patrons on the staff interface.
      -
          - By default, show
          - pref: PatronsPerPage
            class: integer
-         - results per page in the staff client.
+         - results per page in the staff interface.
      -
+         - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option:"
          - pref: DefaultPatronSearchFields
            class: multi
-         - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option. If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
+         - "If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
      -
          - "Show the following fields from the items database table as columns on the statistics tab on the patron record: "
          - pref: StatisticsFields
@@ -218,7 +219,7 @@ Patrons:
            source: borrowers
          - "will be added to the patron quick add form when entering a new patron. Displays only mandatory fields and fields specified here. If applicable the guarantor form will be shown as well, individual fields in that form will be ignored."
      -
-         - When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later)
+         - "When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later):"
          - pref: CollapseFieldsPatronAddForm
            multiple:
                identity: "Organization/Patron identity"
@@ -246,7 +247,7 @@ Patrons:
          - "Guarantors can be the following of those they guarantee:"
          - pref: borrowerRelationship
            class: multi
-         - (input multiple choices separated by |). Leave empty to deactivate
+         - (input multiple choices separated by |). Leave empty to deactivate.
      -
          - "When adding a guarantee to a guarantor patron fill the following fields in the guarantee's member entry form from the guarantors record:"
          - pref: PrefillGuaranteeField
@@ -261,15 +262,15 @@ Patrons:
                B_state: "Alternate address - State"
                B_streetnumber: "Alternate address - Street number"
                B_zipcode: "Alternate address - ZIP/Postal code"
-               altcontactaddress1: "Alternate contact: Address"
-               altcontactaddress2: "Alternate contact: Address 2"
-               altcontactaddress3: "Alternate contact: City"
-               altcontactcountry: "Alternate contact: Country"
-               altcontactfirstname: "Alternate contact: First name"
-               altcontactphone: "Alternate contact: Phone"
-               altcontactstate: "Alternate contact: State"
-               altcontactsurname: "Alternate contact: Surname"
-               altcontactzipcode: "Alternate contact: ZIP/Postal code"
+               altcontactaddress1: "Alternate contact - Address"
+               altcontactaddress2: "Alternate contact - Address 2"
+               altcontactaddress3: "Alternate contact - City"
+               altcontactcountry: "Alternate contact - Country"
+               altcontactfirstname: "Alternate contact - First name"
+               altcontactphone: "Alternate contact - Phone"
+               altcontactstate: "Alternate contact - State"
+               altcontactsurname: "Alternate contact - Surname"
+               altcontactzipcode: "Alternate contact - ZIP/Postal code"
                fax: "Contact - Fax"
                mobile: "Contact - Other phone"
                email: "Contact - Primary email"
@@ -302,13 +303,13 @@ Patrons:
          - to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)
          - "<br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
      -
-         - Set GDPR policy to
+         - "Set GDPR policy to:"
          - pref: GDPR_Policy
            choices:
-               '': 'Disabled'
-               Enforced: 'Enforced'
-               Permissive: 'Permissive'
-         - "GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
+               '': 'disabled'
+               Enforced: 'enforced'
+               Permissive: 'permissive'
+         - ". GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
          - "<br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
      -
          - Lock/expire patrons that submitted an unsubscribe request (refused consent) after
