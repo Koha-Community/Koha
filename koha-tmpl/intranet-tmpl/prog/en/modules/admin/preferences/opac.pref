@@ -5,7 +5,7 @@ OPAC:
               choices:
                   yes: Show
                   no: "Don't show"
-            - "a summary of a logged in user's checkouts, overdues, holds and fines on the mainpage"
+            - "a summary of a logged in user's checkouts, overdues, holds and fines on the OPAC start page."
         -
             - For search results in the OPAC, show the item's
             - pref: OPACResultsLibrary
@@ -50,8 +50,8 @@ OPAC:
             - "results from the "
             - pref: HighlightOwnItemsOnOPACWhich
               choices:
-                  PatronBranch: "patron's home branch"
-                  OpacURLBranch: "OPAC's branch via the URL"
+                  PatronBranch: "patron's home library"
+                  OpacURLBranch: "OPAC's library via the URL"
             - " by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
         -
             - "Show star-ratings on"
@@ -97,17 +97,17 @@ OPAC:
             - 'Display lists in the OPAC using XSLT stylesheet at: '
             - pref: OPACXSLTListsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - 'Display OPAC results using XSLT stylesheet at: '
             - pref: OPACXSLTResultsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - 'Display OPAC details using XSLT stylesheet at: '
             - pref: OPACXSLTDetailsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - "Show itemtype icons in the OPAC: "
             - pref: OpacNoItemTypeImages
@@ -167,7 +167,7 @@ OPAC:
                   both: "below both home and holding libraries"
                   column: "on a separate column"
             - "for items on the OPAC record details page."
-            - "<br />Note: If 'on a separate column' is selected, you still need to enable the item_shelving_location display on the <a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> administration page"
+            - "<br />Note: If 'on a separate column' is selected, you still need to enable the item_shelving_location display on the <a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> administration page."
         -
             - pref: OPACShowMusicalInscripts
               default: 0
@@ -201,7 +201,7 @@ OPAC:
               choices:
                   yes: Highlight
                   no: "Don't highlight"
-            - words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here
+            - "words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here:"
             - pref: NotHighlightedWords
               class: multi
             - (separate columns with |)
@@ -225,7 +225,7 @@ OPAC:
             - Use the CSS stylesheet
             - pref: opaclayoutstylesheet
               class: file
-            - on all pages in the OPAC, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
+            - on all pages in the OPAC, instead of the default CSS (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
         -
             - "Include the following CSS on all pages in the OPAC:"
             - pref: OPACUserCSS
@@ -345,13 +345,14 @@ OPAC:
                   both: "both top and footer"
                   top: "top"
                   footer: "only footer"
+            - "."
     Features:
         -
             - pref: OPACReportProblem
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to submit problem reports for OPAC pages to the library or Koha Administrator.
+            - patrons to submit problem reports for OPAC pages to the library or Koha administrator.
             - "<br/>"
             - "<strong>NOTE:</strong> You must have KohaAdminEmailAddress enabled."
         -
@@ -406,14 +407,14 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to browse subject authorities on OPAC
+            - "patrons to browse subject authorities on OPAC."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: OpacCloud
               choices:
                   yes: Show
                   no: "Don't show"
-            - a subject cloud on OPAC
+            - "a subject cloud on OPAC."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: OpacAuthorities
@@ -482,7 +483,7 @@ OPAC:
                 email: Email
                 twitter: Twitter
 
-            - social network links in opac detail pages
+            - "social network links in opac detail pages."
         -
             - pref: OpacBrowseResults
               default: 1
@@ -524,7 +525,7 @@ OPAC:
               choices:
                   yes: Display
                   no: Don't display
-            - a branch selection list for news items in the OPAC.
+            - a library selection list for news items in the OPAC.
         -
             - "Use the following as the OPAC ISBD template:"
             - pref: OPACISBD
@@ -610,7 +611,7 @@ OPAC:
               choices:
                   yes: Include
                   no: "Don't include"
-            - outstanding/unapplied credits when applying the OPACFineNoRenewals rule to users
+            - "outstanding/unapplied credits when applying the OPACFineNoRenewals rule to users."
         -
             - pref: OPACViewOthersSuggestions
               choices:
@@ -623,7 +624,7 @@ OPAC:
               choices:
                   no: "Don't allow"
                   yes: Allow
-            - patrons to select library when making a purchase suggestion
+            - "patrons to select library when making a purchase suggestion."
         -
             - "Fields that should be mandatory for patron purchase suggestions:"
             - pref: OPACSuggestionMandatoryFields
@@ -647,33 +648,33 @@ OPAC:
               class: code
             - Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href="http://wiki.koha-community.org/wiki/OpacHiddenItems" target="_blank">Koha wiki</a>.
         -
+            - "List of patron categories, separated by |, that can see items otherwise hidden by <code>OpacHiddenItems</code>:"
             - pref: OpacHiddenItemsExceptions
-            - List of borrower categories, separated by |, that can see items otherwise hidden by <code>OpacHiddenItems</code>
         -
             - pref: OpacAllowPublicListCreation
               default: 1
               choices:
                   no: "Don't allow"
                   yes: Allow
-            - opac users to create public lists
+            - "OPAC users to create public lists."
         -
             - pref: OpacAllowSharingPrivateLists
               default: 0
               choices:
                   no: "Don't allow"
                   yes: Allow
-            - opac users to share private lists with other patrons.
+            - "OPAC users to share private lists with other patrons."
         -
             - pref: BlockExpiredPatronOpacActions
               choices:
                 yes: "Block"
                 no: "Don't block"
-            - expired patrons from OPAC actions such as placing a hold or renewing.  Note that the setting for a patron category takes priority over this system preference.
+            - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
         -
             - Limit patrons to
             - pref: MaxOpenSuggestions
               class: integer
-            - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions"
+            - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions."
         -
             - Number of total suggestions allowed
             - pref: MaxTotalSuggestions
@@ -688,7 +689,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons that aren't logged in to make purchase suggestions. Suggestions are connected to the AnonymousPatron syspref"
+            - "patrons that aren't logged in to make purchase suggestions. Suggestions are connected to the AnonymousPatron system preference."
         -
             - pref: opacreadinghistory
               choices:
@@ -708,7 +709,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to choose their own privacy settings for their reading history.  This requires opacreadinghistory and AnonymousPatron
+            - "patrons to choose their own privacy settings for their reading history. This requires opacreadinghistory and AnonymousPatron system preferences."
         -
             - pref: AllowPatronToSetCheckoutsVisibilityForGuarantor
               default: 0
@@ -727,7 +728,7 @@ OPAC:
             - Use borrowernumber
             - pref: AnonymousPatron
               class: integer
-            - as the Anonymous Patron (for anonymous suggestions and reading history)
+            - "as the anonymous patron (for anonymous suggestions and reading history)."
         -
             - pref: TrackClicks
               default: 0
@@ -735,12 +736,12 @@ OPAC:
                   anonymous: "Track anonymously"
                   track: "Track"
                   no: "Don't track"
-            - links that patrons click on
+            - "links that patrons click on."
     Restricted page:
         -
             - "Access from IP addresses beginning with"
             - pref: RestrictedPageLocalIPs
-            - "do not need to be authenticated (comma separated - ex: '127.0.0,127.0.1')"
+            - "do not need to be authenticated (comma separated - ex: '127.0.0,127.0.1')."
         -
             - "HTML content of your restricted page (available at /cgi-bin/koha/opac-restrictedpage.pl)"
             - pref: RestrictedPageContent
@@ -751,7 +752,7 @@ OPAC:
             - Use
             - pref: RestrictedPageTitle
               class: long
-            - "as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)"
+            - "as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)."
     Shelf browser:
         -
             - pref: OPACShelfBrowser
@@ -860,7 +861,7 @@ OPAC:
 
     Advanced search options:
         -
-            - Show search options
+            - "Show search options:"
             - pref: OpacAdvSearchOptions
               multiple:
                 pubdate: Publication date
@@ -870,7 +871,7 @@ OPAC:
                 sorting: Sorting
                 location: Location and availability
         -
-            - Show search options for the expanded view
+            - "Show search options for the expanded view:"
             - pref: OpacAdvSearchMoreOptions
               multiple:
                 pubdate: Publication date
@@ -890,25 +891,29 @@ OPAC:
             - pref: PayPalSandboxMode
               default: 1
               choices:
-                  yes: "Sandbox"
-                  no: "Production"
+                  yes: "sandbox"
+                  no: "production"
             - "mode."
         -
             - "The email address to receive PayPal payments is "
             - pref: PayPalUser
               class: long
+            - "."
         -
             - "The password for the PayPal account to receive payments is "
             - pref: PayPalPwd
               class: long
+            - "."
         -
             - "The signature for the PayPal account to receive payments is "
             - pref: PayPalSignature
               class: long
+            - "."
         -
             - "The patron should see the charge description as "
             - pref: PayPalChargeDescription
               class: long
+            - "."
         -
             - "After payment or cancellation, PayPal should return to the "
             - pref: PayPalReturnURL
@@ -916,3 +921,4 @@ OPAC:
               choices:
                   BaseURL: "OPACBaseURL"
                   OPACAlias: "OPAC's alias"
+            - "."
