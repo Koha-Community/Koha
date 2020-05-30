@@ -642,7 +642,7 @@ Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>
 
 <<today>><br />
 
-<h4>Checked Out</h4>
+<h4>Checked out</h4>
 <checkedout>
 <p>
 <<biblio.title>> <br />
@@ -698,7 +698,7 @@ Checked out to [% borrower.title %] [% borrower.firstname %] [% borrower.initial
 
 [% today | \$KohaDates with_hours => 1 %]<br />
 
-<h4>Checked Out</h4>
+<h4>Checked out</h4>
 [% FOREACH checkout IN checkouts %]
 [%~ SET item = checkout.item %]
 [%~ SET biblio = checkout.item.biblio %]
