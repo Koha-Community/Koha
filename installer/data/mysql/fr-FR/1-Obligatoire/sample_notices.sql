@@ -23,7 +23,7 @@ VALUES
 ('suggestions','TO_PROCESS','Avis au propriétaire du poste budgétaire', 'Une suggestion est prête à être traitée','<<borrowers.firstname>> <<borrowers.surname>>,\n\nUne nouvelle suggestion est prête à être traitée : <<suggestions.title>> / <<suggestions.author>>.\n\nMerci,\n\n<<branches.branchname>>', 'email'),
 ('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email'),
 ('members', 'DISCHARGE', 'Quitus', 'Quitus pour <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Quitus</h1>\r\n\r\nLa librairie <<borrowers.branchcode>> certifies que lecteur suivant :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Numéro de carte : <<borrowers.cardnumber>>\r\n\r\na bien retourné tous ses documents.', 'email'),
-('members', 'PROBLEM_REPORT','OPAC Problem Report','OPAC Problem Report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email');
+('members', 'PROBLEM_REPORT','OPAC problem report','OPAC problem report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
 VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
@@ -184,7 +184,7 @@ VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notification on receiving', '
 ('members','MEMBERSHIP_EXPIRY','','Account expiration','Account expiration','Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nYour library card will expire soon, on:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nThank you,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>','email');
 
 INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type )
-VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Overdues Slip', '0', 'OVERDUES_SLIP', 'The following item(s) is/are currently overdue:
+VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Overdues slip', '0', 'Overdues slip', 'The following item(s) is/are currently overdue:
 
 <item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>
 ', 'print' );

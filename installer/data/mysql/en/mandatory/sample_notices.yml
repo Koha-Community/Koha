@@ -339,7 +339,7 @@ tables:
         - module: circulation
           code: CHECKIN
           branchcode: ""
-          name: "Item Check-in (Digest)"
+          name: "Item check-in (digest)"
           is_html: 0
           title: "Check-ins"
           message_transport_type: email
@@ -354,7 +354,7 @@ tables:
         - module: circulation
           code: CHECKOUT
           branchcode: ""
-          name: "Item Check-out (Digest)"
+          name: "Item check-out (digest)"
           is_html: 0
           title: "Checkouts"
           message_transport_type: email
@@ -380,9 +380,9 @@ tables:
         - module: circulation
           code: DUE
           branchcode: ""
-          name: "Item Due Reminder"
+          name: "Item due reminder"
           is_html: 0
-          title: "Item Due Reminder"
+          title: "Item due reminder"
           message_transport_type: email
           lang: default
           content:
@@ -395,9 +395,9 @@ tables:
         - module: circulation
           code: DUEDGST
           branchcode: ""
-          name: "Item Due Reminder (Digest)"
+          name: "Item due reminder (digest)"
           is_html: 0
-          title: "Item Due Reminder"
+          title: "Item due reminder"
           message_transport_type: email
           lang: default
           content:
@@ -406,9 +406,9 @@ tables:
         - module: circulation
           code: HOLD_SLIP
           branchcode: ""
-          name: "Hold Slip"
+          name: "Hold slip"
           is_html: 1
-          title: "Hold Slip"
+          title: "Hold slip"
           message_transport_type: email
           lang: default
           content:
@@ -444,9 +444,9 @@ tables:
         - module: circulation
           code: ISSUEQSLIP
           branchcode: ""
-          name: "Issue Quick Slip"
+          name: "Issue quick slip"
           is_html: 1
-          title: "Issue Quick Slip"
+          title: "Issue quick slip"
           message_transport_type: email
           lang: default
           content:
@@ -456,7 +456,7 @@ tables:
             - ""
             - "<<today>><br />"
             - ""
-            - "<h4>Checked Out Today</h4>"
+            - "<h4>Checked out today</h4>"
             - "<checkedout>"
             - "<p>"
             - "<<biblio.title>> <br />"
@@ -468,9 +468,9 @@ tables:
         - module: circulation
           code: ISSUESLIP
           branchcode: ""
-          name: "Issue Slip"
+          name: "Issue slip"
           is_html: 1
-          title: "Issue Slip"
+          title: "Issue slip"
           message_transport_type: email
           lang: default
           content:
@@ -480,7 +480,7 @@ tables:
             - ""
             - "<<today>><br />"
             - ""
-            - "<h4>Checked Out</h4>"
+            - "<h4>Checked out</h4>"
             - "<checkedout>"
             - "<p>"
             - "<<biblio.title>> <br />"
@@ -513,9 +513,9 @@ tables:
         - module: circulation
           code: ODUE
           branchcode: ""
-          name: "Overdue Notice"
+          name: "Overdue notice"
           is_html: 0
-          title: "Item Overdue"
+          title: "Item overdue"
           message_transport_type: email
           lang: default
           content:
@@ -544,9 +544,9 @@ tables:
         - module: circulation
           code: OVERDUES_SLIP
           branchcode: ""
-          name: "Overdues Slip"
+          name: "Overdues slip"
           is_html: 0
-          title: "OVERDUES_SLIP"
+          title: "Overdues slip"
           message_transport_type: print
           lang: default
           content:
@@ -558,9 +558,9 @@ tables:
         - module: circulation
           code: PREDUE
           branchcode: ""
-          name: "Advance Notice of Item Due"
+          name: "Advance notice of item due"
           is_html: 0
-          title: "Advance Notice of Item Due"
+          title: "Advance notice of item due"
           message_transport_type: email
           lang: default
           content:
@@ -573,9 +573,9 @@ tables:
         - module: circulation
           code: PREDUEDGST
           branchcode: ""
-          name: "Advance Notice of Item Due (Digest)"
+          name: "Advance notice of item due (digest)"
           is_html: 0
-          title: "Advance Notice of Item Due"
+          title: "Advance notice of item due"
           message_transport_type: email
           lang: default
           content:
@@ -584,9 +584,9 @@ tables:
         - module: circulation
           code: RENEWAL
           branchcode: ""
-          name: "Item Renewals"
+          name: "Item renewals"
           is_html: 0
-          title: "Item Renewals"
+          title: "Item renewals"
           message_transport_type: email
           lang: default
           content:
@@ -623,9 +623,9 @@ tables:
         - module: circulation
           code: TRANSFERSLIP
           branchcode: ""
-          name: "Transfer Slip"
+          name: "Transfer slip"
           is_html: 1
-          title: "Transfer Slip"
+          title: "Transfer slip"
           message_transport_type: email
           lang: default
           content:
@@ -644,9 +644,9 @@ tables:
         - module: claimacquisition
           code: ACQCLAIM
           branchcode: ""
-          name: "Acquisition Claim"
+          name: "Acquisition claim"
           is_html: 0
-          title: "Item Not Received"
+          title: "Item not received"
           message_transport_type: email
           lang: default
           content:
@@ -662,7 +662,7 @@ tables:
         - module: members
           code: ACCTDETAILS
           branchcode: ""
-          name: "Account Details Template - DEFAULT"
+          name: "Account details template - DEFAULT"
           is_html: 0
           title: "Your new Koha account details."
           message_transport_type: email
@@ -721,9 +721,9 @@ tables:
         - module: members
           code: OPAC_REG_VERIFY
           branchcode: ""
-          name: "Opac Self-Registration Verification Email"
+          name: "OPAC self-registration verification email"
           is_html: 1
-          title: "Verify Your Account"
+          title: "Verify your account"
           message_transport_type: email
           lang: default
           content:
@@ -915,9 +915,9 @@ tables:
         - module: reserves
           code: HOLD
           branchcode: ""
-          name: "Hold Available for Pickup"
+          name: "Hold available for pickup"
           is_html: 0
-          title: "Hold Available for Pickup at <<branches.branchname>>"
+          title: "Hold available for pickup at <<branches.branchname>>"
           message_transport_type: email
           lang: default
           content:
@@ -937,9 +937,9 @@ tables:
         - module: reserves
           code: HOLD
           branchcode: ""
-          name: "Hold Available for Pickup"
+          name: "Hold available for pickup"
           is_html: 0
-          title: "Hold Available for Pickup (print notice)"
+          title: "Hold available for pickup (print notice)"
           message_transport_type: print
           lang: default
           content:
@@ -948,7 +948,7 @@ tables:
             - "<<branches.branchaddress2>>"
             - ""
             - ""
-            - "Change Service Requested"
+            - "Change service requested"
             - ""
             - ""
             - ""
@@ -981,9 +981,9 @@ tables:
         - module: reserves
           code: HOLDPLACED
           branchcode: ""
-          name: "Hold Placed on Item"
+          name: "Hold placed on item"
           is_html: 0
-          title: "Hold Placed on Item"
+          title: "Hold placed on item"
           message_transport_type: email
           lang: default
           content:
@@ -1166,9 +1166,9 @@ tables:
         - module: members
           code: PROBLEM_REPORT
           branchcode: ""
-          name: "OPAC Problem Report"
+          name: "OPAC problem report"
           is_html: 0
-          title: "OPAC Problem Report"
+          title: "OPAC problem report"
           message_transport_type: email
           lang: default
           content:
