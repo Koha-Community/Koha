@@ -1865,7 +1865,7 @@ tables:
         - tagfield: "310"
           liblibrarian: "CURRENT PUBLICATION FREQUENCY"
           libopac: "CURRENT PUBLICATION FREQUENCY"
-          repeatable: 0
+          repeatable: 1
           mandatory: 0
           authorised_value:
           frameworkcode: ""
@@ -3399,8 +3399,8 @@ tables:
           frameworkcode: ""
 
         - tagfield: "883"
-          liblibrarian: "MACHINE-GENERATED METADATA PROVENANCE"
-          libopac: "MACHINE-GENERATED METADATA PROVENANCE"
+          liblibrarian: "METADATA PROVENANCE"
+          libopac: "METADATA PROVENANCE"
           repeatable: 1
           mandatory: 0
           authorised_value:
@@ -17065,6 +17065,60 @@ tables:
           defaultvalue:
 
         - tagfield: "310"
+          tagsubfield: "0"
+          liblibrarian: "Authority record control number or standard number"
+          libopac: "Authority record control number or standard number"
+          repeatable: 0
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "310"
+          tagsubfield: "1"
+          liblibrarian: "Real World Object URI"
+          libopac: "Real World Object URI"
+          repeatable: 1
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "310"
+          tagsubfield: "2"
+          liblibrarian: "Source"
+          libopac: "Source"
+          repeatable: 0
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "310"
           tagsubfield: "6"
           liblibrarian: "Linkage"
           libopac: "Linkage"
@@ -17182,6 +17236,60 @@ tables:
           tab: 3
           authorised_value: ""
           authtypecode: ""
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "321"
+          tagsubfield: "0"
+          liblibrarian: "Authority record control number or standard number"
+          libopac: "Authority record control number or standard number"
+          repeatable: 0
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "321"
+          tagsubfield: "1"
+          liblibrarian: "Real World Object URI"
+          libopac: "Real World Object URI"
+          repeatable: 1
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
+          value_builder: ""
+          isurl:
+          hidden: -6
+          frameworkcode: ""
+          seealso: ""
+          link: ""
+          defaultvalue:
+
+        - tagfield: "321"
+          tagsubfield: "2"
+          liblibrarian: "Source"
+          libopac: "Source"
+          repeatable: 0
+          mandatory: 0
+          kohafield:
+          tab: 3
+          authorised_value:
+          authtypecode:
           value_builder: ""
           isurl:
           hidden: -6
@@ -62174,8 +62282,8 @@ tables:
 
         - tagfield: "883"
           tagsubfield: "a"
-          liblibrarian: "Generation process"
-          libopac: "Generation process"
+          liblibrarian: "Creation process"
+          libopac: "Creation process"
           repeatable: 0
           mandatory: 0
           kohafield: ""
@@ -62210,8 +62318,8 @@ tables:
 
         - tagfield: "883"
           tagsubfield: "d"
-          liblibrarian: "Generation date"
-          libopac: "Generation date"
+          liblibrarian: "Creation date"
+          libopac: "Creation date"
           repeatable: 0
           mandatory: 0
           kohafield: ""
@@ -62228,8 +62336,8 @@ tables:
 
         - tagfield: "883"
           tagsubfield: "q"
-          liblibrarian: "Generation agency"
-          libopac: "Generation agency"
+          liblibrarian: "Assigning or generating agency"
+          libopac: "Assigning or generating agency"
           repeatable: 0
           mandatory: 0
           kohafield: ""
