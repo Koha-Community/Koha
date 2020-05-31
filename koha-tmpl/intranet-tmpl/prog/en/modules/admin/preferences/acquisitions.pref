@@ -46,10 +46,10 @@ Acquisitions:
                   no: "Do not warn"
             - when the librarian tries to create an invoice with a duplicate number.
         -
-            - Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a="foo bar").
+            - "Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\"):"
             - pref: AcqItemSetSubfieldsWhenReceived
         -
-            - Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a="bar foo").
+            - "Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"):"
             - pref: AcqItemSetSubfieldsWhenReceiptIsCancelled
         -
             - pref: AcqEnableFiles
@@ -92,20 +92,20 @@ Acquisitions:
                 '': Don't round
                 nearest_cent: Round
             - to nearest cent.<br>
-            - Determines whether full precision values or rounded values should be used in price calculations
+            - Determines whether full precision values or rounded values should be used in price calculations.
         -
             - pref: UseACQFrameworkForBiblioRecords
               default: no
               choices:
                 yes: "Use"
                 no: "Don't use"
-            - " the framework 'ACQ' for bibliographic records fields"
+            - " the framework 'ACQ' for bibliographic records fields."
         -
             - "Choose email address that new purchase suggestions will be sent to: "
             - pref: EmailPurchaseSuggestions
               default: 0
               choices:
-                  0: None
+                  0: none
                   EmailAddressForSuggestions: EmailAddressForSuggestions
                   BranchEmailAddress: email address of branch
                   KohaAdminEmailAddress: KohaAdminEmailAddress
