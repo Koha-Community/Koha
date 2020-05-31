@@ -50,7 +50,7 @@ Searching:
               choices:
                   yes: Force
                   no: "Don't force"
-            - subject tracings in the OPAC and Staff Client to search only for complete-subfield matches.
+            - subject tracings in the OPAC and staff interface to search only for complete-subfield matches.
         -
             - pref: TraceSubjectSubdivisions
               default: 0
@@ -78,23 +78,22 @@ Searching:
               choices:
                   yes: Keep
                   no: "Don't keep"
-            - patron search history in the staff client.
+            - patron search history in the staff interface.
         -
             - pref: BrowseResultSelection
               default: 0
               choices:
                   yes: Enable
                   no: Disable
-            - "browsing search results from the bibliographic record detail page in staff client."
+            - "browsing search results from the bibliographic record detail page in staff interface."
     Search form:
         -
-            - Load the unlogged history to the next user.
             - pref : LoadSearchHistoryToTheFirstLoggedUser
               default: 0
               choices:
-                   yes: "Load"
-                   no : "Don't load"
-            - history to the next client.
+                   yes: "Add"
+                   no : "Don't add"
+            - search history of the unlogged user to the next patron logging in.
         -
             - Show tabs in OPAC and staff-side advanced search for limiting searches on the
             - pref: AdvancedSearchTypes
@@ -122,7 +121,7 @@ Searching:
               choices:
                   yes: use
                   no: "don't use"
-            - 'the operator "phr" in the callnumber and standard number OPAC searches'
+            - 'the operator "phr" in the callnumber and standard number OPAC searches.'
         -
             - By default,
             - pref: IntranetNumbersPreferPhrase
@@ -130,7 +129,7 @@ Searching:
               choices:
                   yes: use
                   no: "don't use"
-            - 'the operator "phr" in the callnumber and standard number staff client searches'
+            - 'the operator "phr" in the callnumber and standard number staff interface searches.'
     Results display:
         -
             - pref: numSearchResultsDropdown
@@ -139,7 +138,7 @@ Searching:
               choices:
                   yes: Show
                   no: "Don't show"
-            - results per page dropdown on staff client search results.
+            - results per page dropdown on staff interface search results.
         -
             - pref: OPACnumSearchResultsDropdown
               type: boolean
@@ -149,7 +148,7 @@ Searching:
                   no: "Don't show"
             - results per page dropdown on OPAC search results.
         -
-            - By default, sort search results in the staff client by
+            - By default, sort search results in the staff interface by
             - pref: defaultSortField
               default: relevance
               choices:
@@ -179,7 +178,7 @@ Searching:
             - By default, show
             - pref: numSearchResults
               class: integer
-            - results per page in the staff client.
+            - results per page in the staff interface.
         -
             - For records with many items, only check the availability status for the first
             - pref: MaxSearchResultsItemsPerRecordStatusCheck
