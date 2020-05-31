@@ -110,14 +110,14 @@ Administration:
                   yes: "Yes"
                   no: "No"
         -
-            - Prevent staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries.
+            - "Prevent staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries: "
             - pref: IndependentBranchesPatronModifications
               default: 0
               choices:
                   yes: "Yes"
                   no: "No"
         -
-            - Prevent staff (but not superlibrarians) from transfering items to other libraries
+            - "Prevent staff (but not superlibrarians) from transfering items to other libraries: "
             - pref: IndependentBranchesTransfers
               default: 0
               choices:
@@ -157,7 +157,7 @@ Administration:
               choices:
                 yes: "Yes"
                 no: "No"
-            - You will need to select OAuth2 when creating an app in the google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
+            - You will need to select OAuth2 when creating an app in the Google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
         -
             - "Google OAuth2 Client ID: "
             - pref: GoogleOAuth2ClientID
@@ -426,8 +426,8 @@ Administration:
             - pref: UsageStatsLibrariesInfo
               choices:
                   yes: "Share"
-                  no: "Do not Share"
-            - "libraries information (name, url, country)"
+                  no: "Do not share"
+            - "libraries information (name, URL, country)"
             - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - "Geolocation of the main library: "
