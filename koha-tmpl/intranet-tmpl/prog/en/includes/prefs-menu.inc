@@ -140,7 +140,7 @@
 
         [% IF ( staff_client ) %]
             <li class="active">
-                <a title="Staff client" href="/cgi-bin/koha/admin/preferences.pl?tab=staff_client">Staff client</a>
+                <a title="Staff interface" href="/cgi-bin/koha/admin/preferences.pl?tab=staff_client">Staff interface</a>
                 [% PROCESS subtabs  %]
         [% ELSE %]
             <li>
