@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2020-05-13 18:05-0300\n"
-"PO-Revision-Date: 2020-05-21 09:23+0000\n"
+"PO-Revision-Date: 2020-05-25 07:55+0000\n"
 "Last-Translator: albcanon <elton.luku@albcanon.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sq\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1590053020.935645\n"
+"X-POOTLE-MTIME: 1590393328.527619\n"
 "X-Pootle-Path: /sq/18.05/sq-AL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -45,9 +45,9 @@ msgstr ""
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s nga %s%s "
+msgstr "%s %s %s %s nga"
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -98,9 +98,9 @@ msgstr "%s %s %s Koha, katalogu %s online %s &rsaquo; %s %s "
 #. %6$s:  library.branchname | html 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog &rsaquo; Libraries %s &rsaquo; %s %s "
-msgstr "%s %s %s Koha, katalogu %s online %s &rsaquo; %s %s "
+msgstr "%s %s %s Koha online %s katalog &rsaquo; Librari %s &rsaquo; %s %s "
 
 #. %1$s:  IF ( biblio.title ) 
 #. %2$s:  biblio.title | html 
@@ -383,7 +383,7 @@ msgstr "%s %s ju dërgoi një shportë nga katalogu online."
 #. %2$s:  surname | $raw 
 #. %3$s:  shelfname | $raw 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s sent you from our online catalog, the list called : %s."
 msgstr "%s %s derguar nga katalogu ynë online, rafti virtual i quajtur : %s."
 
@@ -454,18 +454,18 @@ msgstr "%s %sTë hapura%sPrivate%s %s Publike %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "%s %stag%stags%s successfully added."
-msgstr "%s %s tag%stags%s të shtuara me sukses."
+msgstr "%s %s etiket%s etiketa%s të shtuara me sukses."
 
 #. %1$s:  deleted_count | html 
 #. %2$s:  IF ( deleted_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:122
-#, fuzzy, c-format
+#, c-format
 msgid "%s %stag%stags%s successfully deleted."
-msgstr "%s%s tag%stags%s të fshirë me sukses."
+msgstr "%s%s etiket %s etiketa %s të fshirë me sukses."
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -572,7 +572,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Rifreskim automatik "
 
@@ -712,7 +712,7 @@ msgstr "%s Libraria %s Librarite %s"
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
 msgstr "%s Jo i rinovueshëm %s Nuk lejohet "
@@ -756,9 +756,9 @@ msgstr "%s Nuk lejohet"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "%s Rifreskim automatik "
+msgstr "%s Jo i rifreskueshem"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
@@ -844,9 +844,9 @@ msgstr "%s Preventiva"
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
-#, fuzzy, c-format
+#, c-format
 msgid "%s Renewal not allowed %s "
-msgstr "%s Jo i rinovueshëm %s Nuk lejohet "
+msgstr "%s Jo i rinovueshëm %s "
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
@@ -856,9 +856,9 @@ msgstr "%s Jo i rinovueshëm %s Nuk lejohet "
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Kufizim i shtuar për arsye të procesit të vonesave %s %s %s %s "
+msgstr "%s Kufizim i shtuar për arsye të procesit të vonesave %s %s %s %s "
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
@@ -880,9 +880,8 @@ msgstr "%s Kërko %spër '%s'%s%s&nbsp;me kufizim(e):&nbsp;'%s'%s"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
-#, fuzzy
 msgid "%s Search RSS feed"
-msgstr "%s Kërko"
+msgstr "%s Kërko RSS"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:90

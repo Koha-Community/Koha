@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2020-05-13 17:28-0300\n"
-"PO-Revision-Date: 2020-05-16 21:34+0000\n"
-"Last-Translator: m23 <black23@gmail.com>\n"
+"PO-Revision-Date: 2020-05-26 05:47+0000\n"
+"Last-Translator: Josef Moravec <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
 "\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1589664859.598480\n"
+"X-POOTLE-MTIME: 1590472056.859956\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -191,7 +191,7 @@ msgstr ""
 #. %30$s: - SWITCH account.status -
 #. %31$s: - CASE 'UNRETURNED' -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:171
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
@@ -1069,12 +1069,16 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%s You already have at least one item level hold on this title. All further "
 "holds must be item level. %s You already have at least one record level hold "
 "on this title. All further holds must be record level. %s "
 msgstr ""
+"%s U tohoto dokumentu máte již rezervaci na konkrétní jednotku, z toho "
+"důvodu musí být další rezervace také na konkrétní jednotku. %s U tohoto "
+"dokumentu již máte rezervaci na úrovni titulu, z toho důvodu musí být další "
+"rezervace také na úrovni celého titulu. %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3779,13 +3783,12 @@ msgstr "Opravdu chcete odstranit z košíku všechny položky?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
-#, fuzzy
 msgid ""
 "Are you sure you want to remove sharing? You will no longer have access to "
 "the list."
 msgstr ""
-"Jste si jistý(á), že chcete zrušit sdílení? Nebudete mít nadále přístup k "
-"seznamu."
+"Jste si jistý(á), že chcete zrušit sdílení? K tomuto seznamu nebudete mít "
+"nadále přístup."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
@@ -5367,9 +5370,9 @@ msgid "Display news for: "
 msgstr "Zobrazit novinky pro: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:230
-#, c-format, fuzzy
+#, c-format
 msgid "Displaying availability results"
-msgstr "Zobrazení výsledků dostupnosti"
+msgstr "Zobrazení výsledků vyhledávání dostupnosti"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #, c-format
@@ -6017,7 +6020,7 @@ msgid "Full subscription history for %s"
 msgstr "Informace o předplatném pro %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid "Fuzzy"
 msgstr "Přibližný"
 
@@ -6548,9 +6551,9 @@ msgstr ""
 "tak jak jste očekávali, můžete zkusit získat pomoc v tomto průvodci."
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:247
-#, fuzzy, c-format
+#, c-format
 msgid "If you can't find what you are looking for, you can "
-msgstr "Nenašli jste co jste hledali? "
+msgstr "Nenašli jste co jste hledali? Zkuste "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:71
 #, c-format
@@ -7533,9 +7536,9 @@ msgid "Match:"
 msgstr "Shoduje se:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
-#, fuzzy, c-format
+#, c-format
 msgid "Materials specified"
-msgstr "Žádný štítek nebyl zadán."
+msgstr "Přílohy"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -9296,9 +9299,9 @@ msgid "Re-type new password:"
 msgstr "Heslo (pro kontrolu):"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:55
-#, c-format
+#, c-format, fuzzy
 msgid "Really fuzzy"
-msgstr ""
+msgstr "Velmi přibližné"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:171
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:180
@@ -10605,7 +10608,6 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
-#, fuzzy
 msgid "Sort"
 msgstr "Řazení"
 
@@ -11906,7 +11908,7 @@ msgstr "Aktualizovat"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
 msgid "Update auto-renewal preference"
-msgstr ""
+msgstr "Aktualizovat nastavení automatického prodlužování"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:14
 #, c-format
@@ -12705,6 +12707,8 @@ msgid ""
 "Your account has outstanding fees & charges of %s. Holds are blocked because "
 "your fine balance is over the limit."
 msgstr ""
+"Máte nezaplacené poplatky ve výši %s. Z toho důvodu nemůžete vytvářet "
+"rezervace."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
 #, c-format

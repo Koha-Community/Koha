@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2020-05-13 17:59-0300\n"
-"PO-Revision-Date: 2020-02-06 10:46+0000\n"
-"Last-Translator: mlangowski <mlangowski@pwsz.com.pl>\n"
+"PO-Revision-Date: 2020-05-29 14:14+0000\n"
+"Last-Translator: rysiek_d <rysiek_d@o2.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1580986004.750141\n"
+"X-POOTLE-MTIME: 1590761680.726572\n"
 "X-Pootle-Path: /pl/18.05/pl-PL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -43,9 +43,9 @@ msgstr "%s %s %s %s Będziesz otrzymywać powiadomienia o nowych numerach "
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s %s%s "
+msgstr "%s %s %s %s przez "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -99,9 +99,9 @@ msgstr "%s%s%s Koha online %s katalog %s &rsaquo; %s %s "
 #. %6$s:  library.branchname | html 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog &rsaquo; Libraries %s &rsaquo; %s %s "
-msgstr "%s%s%s Koha online %s katalog %s &rsaquo; %s %s "
+msgstr "%s %s %s Koha online %s katalog &rsaquo; Biblioteki %s &rsaquo; %s %s "
 
 #. %1$s:  IF ( biblio.title ) 
 #. %2$s:  biblio.title | html 
@@ -125,11 +125,10 @@ msgstr "%s%s%s Koha online %s katalog %s &rsaquo; %s %s "
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s Dodane %s przez Ciebie %s %s Dodane %s przez %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s %s%s"
+"%s %s %s Brak tytułu %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -154,6 +153,9 @@ msgid ""
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
+"%s %s %s Twój raport o problemie został wysłany do administratora Koha. %s "
+"Twój raport o problemie został wysłany do biblioteki. %s %s Wystąpił problem "
+"podczas wysyłania raportu. Skontaktuj się ze swoją biblioteką. %s "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -224,14 +226,14 @@ msgstr "%s %s (niezatwierdzono) %s "
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
 #, c-format
 msgid "%s %s A similar document already exists: "
-msgstr ""
+msgstr "%s %s Podobny dokument już istnieje: "
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Did you mean: "
-msgstr "%s Czy chodziło o: "
+msgstr "%s %s Czy chodziło o: "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -333,7 +335,7 @@ msgstr ""
 #. %10$s:  m.code | html 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:240
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s The suggestion has not been added. You have reached your limit for "
 "suggestions you can place at this time (%s in %s days). %s The suggestion "
@@ -343,11 +345,12 @@ msgid ""
 "suggestion with this title already exists. %s Your suggestion has been "
 "submitted. %s %s %s "
 msgstr ""
-"%s %s Propozycja zakupu nie została dodana. Został osiągnięty limit "
-"składania propozycji (%s). Po przetworzeniu propozycji przez bibliotekę, "
-"będzie możliwe ponowne składanie propozycji zakupu. %s Propozycja zakupu nie "
-"została dodana. Propozycja o takim tytule już istnieje. %s Propozycja zakupu "
-"została przesłana. %s %s %s "
+"%s %s Propozycja nie została dodana. Osiągnąłeś limit propozycji, które "
+"możesz w tej chwili umieścić (%s z %s dzień). %s Propozycja zakupu nie "
+"została dodana. Został osiągnięty limit składania propozycji (%s). Po "
+"przetworzeniu propozycji przez bibliotekę, będzie możliwe ponowne składanie "
+"propozycji zakupu. %s Propozycja zakupu nie została dodana. Propozycja o "
+"takim tytule już istnieje. %s Propozycja zakupu została przesłana. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -379,9 +382,9 @@ msgstr "%s %s %s%s "
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "Należności na łączna kwotę:"
+msgstr "%s %s Należności na łączna kwotę:"
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -401,9 +404,9 @@ msgstr "%s %s wysłano zawartość listy o nazwie : %s z katalogu."
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:86
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s's fines and charges"
-msgstr "Należności"
+msgstr "%s %s's należności"
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -517,7 +520,7 @@ msgstr "%s <%s > <%s src=\"%s\" %s /> "
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
 #, c-format
 msgid "%s <?xml version=\"1.0\"?> "
-msgstr ""
+msgstr "%s <?xml version=\"1.0\"?> "
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
@@ -677,9 +680,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "%s Delete %s Delete list %s "
-msgstr "Usuń zaznaczone tagi"
+msgstr "%s Usuń %s Usuń listę %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -718,9 +721,9 @@ msgstr "Wypożyczenia (%s)"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:316
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library %s Libraries %s "
-msgstr "%s %s %s %s "
+msgstr "%s Biblioteka %s Biblioteki %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
@@ -759,9 +762,9 @@ msgstr "%s Brak wyników. %s "
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s %s %s%s%sBrak tytułu%s %s %s%s "
+msgstr "%s Brak tytułu %s %s%s,%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
@@ -1102,9 +1105,9 @@ msgstr "%s "
 #. %4$s:  END # /IF MY_TAG.XSLTBloc 
 #. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:153
-#, fuzzy, c-format
+#, c-format
 msgid "%s by %s %s %s %s "
-msgstr "%s %s %s %s "
+msgstr "%s przez %s %s %s %s "
 
 #. %1$s:  LoginBranchname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
@@ -1901,9 +1904,9 @@ msgstr "%s%s%sKoha online%s Najnowsze komentarze"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1286
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sLink to resource%s"
-msgstr "Link do zbiorów: "
+msgstr "%s%s%sLink do zasobu%s"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -2055,12 +2058,13 @@ msgstr "%s0 rekordów%s "
 #. %12$s: - starting_ccode | html -
 #. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
 "%sCollection: %s%s "
 msgstr ""
-"%sPrzeglądanie %s Półki%s %s, Lokalizacja półki: %s%s %s, Kod kolekcji: %s%s "
+"%sPrzeglądanie %s Półki%s %s, %s %sLokalizacja półki: %s%s %s, %s %sKod "
+"kolekcji: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -3531,9 +3535,9 @@ msgid "All libraries"
 msgstr "Wszystkie biblioteki"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
-#, fuzzy, c-format
+#, c-format
 msgid "Allow auto-renewal: "
-msgstr "%s Automatyczne odnowienie "
+msgstr "Automatyczne odnowienie: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:35
 #, c-format
@@ -6158,9 +6162,9 @@ msgstr "Grupy bibliotek"
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "Wydane przez: %s %s w %s %s %s , %s %s %s , %s %s "
+msgstr "Wydane przez: %s %s %s %s %s, %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -7123,9 +7127,9 @@ msgstr "Katalog biblioteki"
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
-#, fuzzy, c-format
+#, c-format
 msgid "Library default: %s"
-msgstr "Biblioteka: "
+msgstr "Domyślna biblioteka: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:234
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
@@ -7697,9 +7701,9 @@ msgstr "Nowy"
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "Nowe komentarze dla: %s %s, %s%s"
+msgstr "Nowe komentarze dla: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
@@ -11518,9 +11522,9 @@ msgstr "Link jest ważny przez 2 dni. "
 
 #. %1$s:  contents.count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "This list contains %s titles"
-msgstr "Lista nie istnieje."
+msgstr "Lista zawiera %s tytułów"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:143
 #, c-format
@@ -11639,9 +11643,9 @@ msgstr "Tytuł (Z-A)"
 
 #. %1$s:  title_notes_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:496
-#, fuzzy, c-format
+#, c-format
 msgid "Title notes ( %s )"
-msgstr "Uwagi"
+msgstr "Uwagi do tytułu (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:80
 #, c-format
@@ -12077,9 +12081,9 @@ msgstr "Witaj, "
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:95
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome, %s"
-msgstr "Witaj, "
+msgstr "Witaj, %s"
 
 # Angpol słownik z bib mówi ze "spłata",  "zwolnienie/usuniecie gracownika", niepewne tłumaczenie!
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44

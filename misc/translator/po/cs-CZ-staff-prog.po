@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2020-05-13 17:28-0300\n"
-"PO-Revision-Date: 2020-05-20 19:27+0000\n"
+"PO-Revision-Date: 2020-05-25 20:59+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
 "\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1590002875.109063\n"
+"X-POOTLE-MTIME: 1590440356.780718\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1565,7 +1565,7 @@ msgstr ""
 #. %31$s: - END -
 #. %32$s: - PROCESS account_status_description account=account -
 #: intranet-tmpl/prog/en/includes/accounts.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund "
 "%sRefund %s%s %s %s %s %sAccount creation fee %sAccount renewal fee %sLost "
@@ -1574,12 +1574,12 @@ msgid ""
 "%sHold fee %sHold waiting too long %sPayout %s%s %s %s %s "
 msgstr ""
 "%s %s %sPlatba %sOdepsáno %sProminuto %sKredit %sVrácený poplatek zaúčtovaný "
-"za ztrátu %s%s %s %s %s %sRegistrační poplatek %sPoplatek za obnovení "
-"registrace %sZtráta dokumentu %sRučně vložený poplatek %sNový průkaz "
-"%sUpomínka %sPoplatek za zpracování ztraceného dokumentu %sPůjčovné %sDenní "
-"půjčovné %sProdloužení placené výpůčky %sProdloužení výpůjčky s denním "
-"poplatkem%sRezervační poplatek %sPoplatek za nevyzvednutou rezervaci %s%s %s "
-"%s %s "
+"za ztrátu %s Vrácení peněz za již zaplacený poplatek %s%s %s %s %s %"
+"sRegistrační poplatek %sPoplatek za obnovení registrace %sZtráta dokumentu %"
+"sRučně vložený poplatek %sNový průkaz %sUpomínka %sPoplatek za zpracování "
+"ztraceného dokumentu %sPůjčovné %sDenní půjčovné %sProdloužení placené "
+"výpůčky %sProdloužení výpůjčky s denním poplatkem%sRezervační poplatek %"
+"sPoplatek za nevyzvednutou rezervaci %sVyplacení kreditu %s%s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  SWITCH loopfilte.crit 
@@ -1775,7 +1775,7 @@ msgstr "%s%s (zobrazeno %s )%s. "
 #: intranet-tmpl/prog/en/modules/pos/registers.tt:58
 #, fuzzy, c-format
 msgid "%s %s (%s) %s No last cashup %s "
-msgstr "%s%s %s %s Nebylo půjčeno %s "
+msgstr "%s %s (%s) %s Žádná poslední uzávěrka %s "
 
 #. %1$s:  IF ( current_matcher_id ) 
 #. %2$s:  current_matcher_code | html 
@@ -6967,9 +6967,9 @@ msgstr "%s | Namespace: %s"
 #. %4$s:  managedby_patron.category.description | html 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:417
-#, fuzzy, c-format
+#, c-format
 msgid "%s | Previously was %s %s (%s) %s "
-msgstr "%s %s Rezervace (%s) %s %s %s %s | "
+msgstr "%s | Dříve %s %s (%s) %s "
 
 #. %1$s:  END 
 #. %2$s:  IF memcached_servers 
@@ -25061,7 +25061,7 @@ msgstr "Detekovány duplicitní hodnoty. Prosím opravte chyby a zkuste to znovu
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:18
 #, c-format
 msgid "Duplicate warning"
-msgstr "Opakovat varování"
+msgstr "Upozornění na možnou duplicitu"
 
 #. INPUT type=text name=duration
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:210
@@ -32067,7 +32067,7 @@ msgstr "Vydání "
 #: intranet-tmpl/prog/en/modules/pos/register.tt:243
 #, fuzzy, c-format
 msgid "Issue refund from "
-msgstr "Nový fond pro %s"
+msgstr "Vrácení platby od "
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = request.patron 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:116
@@ -33318,7 +33318,7 @@ msgstr ""
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Basket %s &rsaquo; Duplicate warning"
 msgstr ""
-"Koha &rsaquo; Akvizice &rsaquo; Košík %s &rsaquo; Upozornění na duplikát"
+"Koha &rsaquo; Akvizice &rsaquo; Košík %s &rsaquo; Upozornění na duplicitu"
 
 #. %1$s:  basketno | html 
 #: intranet-tmpl/prog/en/modules/acqui/edi_ean.tt:2
@@ -59968,7 +59968,7 @@ msgstr "Použít výchozí hodnoty"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:29
 #, c-format
 msgid "Use existing record"
-msgstr "Použitje existující záznam"
+msgstr "Použít existující záznam"
 
 #. INPUT type=text name=export_remove_fields
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:74
@@ -60997,12 +60997,12 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1456
 msgid "Warning: Duplicate organization"
-msgstr "Varování: Duplikát organizace"
+msgstr "Varování: Duplicita organizace"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1456
 msgid "Warning: Duplicate patron"
-msgstr "Varování: Duplikát čtenáře"
+msgstr "Varování: Duplicita čtenáře"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1456
