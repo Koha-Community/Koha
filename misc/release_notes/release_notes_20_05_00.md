@@ -21,10 +21,12 @@ Koha 20.05.00 is a major release, that comes with many new features.
 
 It includes 13 new features, 275 enhancements, 592 bugfixes.
 
+A new <b>Technical highlights</b> section is included at the bottom of these notes for those seeking a short summary of the more technical changes included in this release
+
 ### System requirements
 
-Koha is continiously tested against the following configurations and as such these are the recommendations for 
-deployment: 
+Koha is continuously tested against the following configurations and as such, these are the recommendations for
+deployment:
 
 - Debian Jessie with MySQL 5.5 (End of life)
 - Debian Stretch with MariaDB 10.1
@@ -33,7 +35,7 @@ deployment:
 - Debian Stretch with MySQL 8.0 (Experimental MySQL 8.0 support)
 
 Additional notes:
-    
+
 - Perl 5.10 is required (5.24 is recommended)
 - Zebra or Elasticsearch is required
 
@@ -1918,6 +1920,83 @@ have already been fixed in maintainance releases)
   >Note: the previously documented but not implemented parameter names were changed: 
   >- needed_before_date => start_date
   >- pickup_expiry_date => expiry_date
+
+## Technical highlights
+
+Some significant technical changes were made behind the scenes in this release and it was felt that they should be additionally highlighted in the notes as they could be easily missed above.
+
+### Refactoring
+
+- C4::Members::Attributes has been moved to Koha::Patron::Attributes.
+   - GetBorrowerAttributeValue has been replaced by Koha::Patron-&gt;get_extended_attribute_value
+   - GetBorrowerAttributes has been replaced by Koha::Patron-&gt;get_extended_attributes
+   - DeleteBorrowerAttribute has been replaced by Koha::Patron-&gt;get_extended_attribute-&gt;delete
+   - UpdateBorrowerAttribute and SetBorrowerAttributes has been replaced by Koha::Patron-&gt;extended_attributes($attributes)
+   - C4::Members::AttributeTypes::GetAttributeTypes has been replaced by Koha::Patron::Attribute::Types-&gt;filter_by_branch_limitations
+- C4::Items CRUD subroutines have moved to Koha::Item
+   - Pay special attention to Koha::Item-&gt;store,-&gt;delete and-&gt;safe_delete
+- QueryParser has been completely removed from the codebase
+- The issuingrules table has been completely removed in favour of using the new circulation_rules table. Please use Koha::CirculationRules now
+- Dependancy management has been moved from the customer Koha code into a cpanfile
+
+### Dev tools
+
+A number of developer tools and processes have been refined
+- misc/devel/update_dbix_class_files.pl now defaults to using koha-conf.xml so you are not required to always append parameters now to run the script
+- The installer files are now translatable using the pootle process
+   - A new YAML format has been migrated to for the installer files
+   - A new command line script may be used to load the new yaml formatted installer files manually where required
+   - Work is ongoing to migrate and remove the original .SQL files which are still supported during the period of the migration (bug 24897 is a good example of the process)
+   - Work is underway to add a 'localization' process to the installer allowing for localization to be applied distinctly to translation
+
+- Strings found inside JavaScript are now directly translatable
+
+  >Prior to bug 21156 a translatable string would have taken the form
+  >
+  >`var my_string = _("my string");` # Within the .tt
+  >
+  >`alert(my_string);` # Within the .js
+  >
+  >Now we can simply use
+  >
+  >`alert(__("my string");` # Note the double underscore
+
+- The database update script now outputs timestamps and skeleton.perl has an updated simplified syntax to follow
+- Koha::Script added support for simple execution locking: fines.pl is a good example of how to utilise the new functionality
+
+### Plugins support
+
+A number of improvements have been made to the plugins system to allows better discoverability and code interaction
+- One can configure the new `plugin_repos` config option to point to their github organisation to allow plugins to be discovered by end users in the koha staff client
+- Additional hooks have been added in this release, please see the 'Plugin architecture' section above.
+
+### API Enhancements
+
+The code that is used to implement the REST API has seen many relevant structural changes on this release.
+
+Several generic methods have been added to the Koha::Object(s) classes:
+- to_api [[23770]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23770) [[23843]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23843)
+- new_from_api [[23893]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23893)
+- set_from_api [[23893]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23893)
+- attributes_from_api
+- from_api_mapping
+
+They are designed to simplify DB &lt;-&gt; API attribute name mapping. They allowed us to make our controllers thin and really simple to read and understand (and thus maintain). Tests become easier to write as well.
+One of the goals behind this move to Koha::Object-level, was that we intended to embed arbitrary data on the responses. So the attribute mapping responsibility (between the DB and our OpenAPI spec) was moved from the controllers to the Koha::Object(s) level (i.e. for an arbitrary object you can now ask for its API representation like in $patron-&gt;to_api).
+
+This 'to_api' method is designed to be passed parameters. Right now it only accepts the 'embed' parameter which expects a hashref representing the recursive data structures we would like to embed in the object representation (see POD for more details). For example: my $api = $patron-&gt;to_api({ embed =&gt; { children =&gt; { checkouts =&gt; {} } } }) will make the resulting $api variable contain the representation of the Koha::Patron object, with the added 'checkouts' attribute, which will be the result of calling $patron-&gt;checkouts-&gt;to_api and so on (if more nested objects need to be included). [[24228]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24228). A special syntax has been added for requiring counts (for result sets). And there is a plan to add a 'for_opac' parameter so we know what kind of representation we need to generate. There's been some discussion about having a 'brief' representation of objects as well, for some use cases but that's an ongoing discussion.
+
+The API spec got its counter-part additions: an 'x-koha-embed' attribute that specifies what things are allowed to be requested for embedding on a route. A special syntax was added to request counts (for example, x-koha-embed: [ checkouts+count] will be interpreted as a request to get the count, and will be placed in an attribute called checkouts_count) [[24302]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24302) [[24321]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24321) [[24528]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24528).
+
+Now we are embedding things, it was natural to think we would like to:
+- automatically build DBIC queries that would prefetch the required tables [[24356]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24356)
+- filter by those nested objects in a WHERE condition [[[24487]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24487)](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24487)
+- order by those nested properties [[24615]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24615)
+
+All the above features have been introduced as well.
+
+And the last bit, we introduced a 'q' parameter that allows building DBIC-ish queries on the resources we are fetching, as well as on the nested resources. [[24487]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24487) [[24502]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24502)
+
 ## New sysprefs
 
 - AccessControlAllowOrigin
