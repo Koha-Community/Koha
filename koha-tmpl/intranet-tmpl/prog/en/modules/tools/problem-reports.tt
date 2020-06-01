@@ -80,10 +80,24 @@
                                         [% report.content | html %]
                                     </td>
                                     <td><a href="[% OPACBaseURL | url %][% report.problempage | url %]">[% OPACBaseURL | url %][% report.problempage | html %]</a></td>
-                                    <td>[% report.recipient | html %]</td>
+                                    <td>
+                                        [% SWITCH report.recipient %]
+                                        [% CASE 'admin' %]Koha administrator
+                                        [% CASE 'library' %]A librarian
+                                        [% END %]
+                                    </td>
                                     <td><span title="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
-                                    <td class="status[% report.status | html %]" name="status"><span id="status_[% report.reportid | html %]">[% report.status | html %]</span></td>
+                                    <td class="status[% report.status | html %]" name="status">
+                                        <span id="status_[% report.reportid | html %]">
+                                            [% SWITCH report.status %]
+                                            [% CASE 'New' %]New
+                                            [% CASE 'Closed' %]Closed
+                                            [% CASE 'Viewed' %]Viewed
+                                            [% CASE %]Unknown status ([% report.status | html %])
+                                            [% END %]
+                                        </span>
+                                    </td>
                                     <td class="actions">
                                         [% IF ( report.status == 'New' ) %]
                                             <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" disabled="disabled" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
