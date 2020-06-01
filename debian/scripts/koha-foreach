@@ -61,7 +61,12 @@ do
         # Change to the instance's home dir if required
         [ "$chdir" != "no" ] && eval cd ~$name"-koha"
 
-        koha-shell ${name} -c "${cmd}"
+        if koha-shell ${name} -c "${cmd}"; then
+            : #noop
+        else
+            rv=$?
+            echo "${name}: $rv status returned by \"${cmd}\""
+        fi
 
         # Go back to the original dir if required
         [ "$chdir" != "no" ] && cd "$starting_dir"
