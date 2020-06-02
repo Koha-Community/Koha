@@ -246,6 +246,20 @@ sub GetRecords {
             $item{'homebranchname'}    = $home_library    ? $home_library->branchname    : '';
             $item{'holdingbranchname'} = $holding_library ? $holding_library->branchname : '';
 
+            if ($item->location) {
+                my $authorised_value = Koha::AuthorisedValues->find_by_koha_field({ kohafield => 'items.location', authorised_value => $item->location });
+                if ($authorised_value) {
+                    $item{location_description} = $authorised_value->opac_description;
+                }
+            }
+
+            if ($item->itype) {
+                my $itemtype = Koha::ItemTypes->find($item->itype);
+                if ($itemtype) {
+                    $item{itype_description} = $itemtype->description;
+                }
+            }
+
             my $transfer = $item->get_transfer;
             if ($transfer) {
                 $item{transfer} = {
