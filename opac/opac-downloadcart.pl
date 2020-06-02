@@ -90,15 +90,9 @@ if ($bib_list && $format) {
             next unless $record;
 
             if ($format eq 'iso2709') {
-                my $usmarc = $record->as_usmarc();
-                if ($usmarc) {
-                    #NOTE: If we don't explicitly UTF-8 encode the output,
-                    #the browser will guess the encoding, and it won't always choose UTF-8.
-                    my $bytes = encode("UTF-8", $usmarc);
-                    if ($bytes) {
-                        $output .= $bytes;
-                    }
-                }
+                #NOTE: If we don't explicitly UTF-8 encode the output,
+                #the browser will guess the encoding, and it won't always choose UTF-8.
+                $output .= encode("UTF-8", $record->as_usmarc()) // q{};
             }
             elsif ($format eq 'ris') {
                 $output .= marc2ris($record);
