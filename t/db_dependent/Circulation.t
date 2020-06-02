@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 48;
+use Test::More tests => 47;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -2349,7 +2349,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference('MarkLostItemsAsReturned', 'batchmod|moredetail|cronjob|additem|pendingreserves|onpayment');
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
@@ -2570,6 +2570,97 @@ subtest 'AddReturn | is_overdue' => sub {
         AddReturn( $item->{barcode}, $library->{branchcode}, 1, $one_day_ago );
         is( int( $patron->account->balance() ),
             0, "Overdue fine should be annulled" );
+
+        # Cleanup
+        Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+    };
+
+    subtest 'bug 24075 | backdated return with return datetime matching due datetime' => sub {
+        plan tests => 7;
+
+        t::lib::Mocks::mock_preference( 'CalculateFinesOnBackdate', 1 );
+
+        my $due_date = dt_from_string;
+        my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $due_date );
+
+        # Add fine
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => 0.25,
+                due            => output_pref($due_date)
+            }
+        );
+        is( $patron->account->balance(),
+            0.25, 'Overdue fine of $0.25 recorded' );
+
+        # Backdate return to exact due date and time
+        my ( undef, $message ) =
+          AddReturn( $item->{barcode}, $library->{branchcode},
+            undef, $due_date );
+
+        my $accountline =
+          Koha::Account::Lines->find( { issue_id => $issue->id } );
+        ok( !$accountline, 'accountline removed as expected' );
+
+        # Re-issue
+        $issue = AddIssue( $patron->unblessed, $item->{barcode}, $due_date );
+
+        # Add fine
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => .25,
+                due            => output_pref($due_date)
+            }
+        );
+        is( $patron->account->balance(),
+            0.25, 'Overdue fine of $0.25 recorded' );
+
+        # Partial pay accruing fine
+        my $lines = Koha::Account::Lines->search(
+            {
+                borrowernumber => $patron->borrowernumber,
+                issue_id       => $issue->id
+            }
+        );
+        my $debit  = $lines->next;
+        my $credit = $patron->account->add_credit(
+            {
+                amount    => .20,
+                type      => 'PAYMENT',
+                interface => 'test',
+            }
+        );
+        $credit->apply( { debits => [$debit], offset_type => 'Payment' } );
+
+        is( $patron->account->balance(), .05, 'Overdue fine reduced to $0.05' );
+
+        # Backdate return to exact due date and time
+        ( undef, $message ) =
+          AddReturn( $item->{barcode}, $library->{branchcode},
+            undef, $due_date );
+
+        $lines = Koha::Account::Lines->search(
+            {
+                borrowernumber => $patron->borrowernumber,
+                issue_id       => $issue->id
+            }
+        );
+        my $accountline = $lines->next;
+        is( $accountline->amountoutstanding + 0,
+            0, 'Partially paid fee amount outstanding was reduced to 0' );
+        is( $accountline->amount + 0,
+            0, 'Partially paid fee amount was reduced to 0' );
+        is( $patron->account->balance(), -0.20, 'Patron refund recorded' );
+
+        # Cleanup
+        Koha::Account::Lines->search(
+            { borrowernumber => $patron->borrowernumber } )->delete;
     };
 };
 
@@ -3884,49 +3975,6 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
     is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
     $itemtype->rentalcharge_daily('0')->store;
-};
-
-subtest "Test Backdating of Returns" => sub {
-    plan tests => 2;
-
-    my $branch = $library2->{branchcode};
-    my $biblio = $builder->build_sample_biblio();
-    my $item = $builder->build_sample_item(
-        {
-            biblionumber     => $biblio->biblionumber,
-            library          => $branch,
-            itype            => $itemtype,
-        }
-    );
-
-    my %a_borrower_data = (
-        firstname =>  'Kyle',
-        surname => 'Hall',
-        categorycode => $patron_category->{categorycode},
-        branchcode => $branch,
-    );
-    my $borrowernumber = Koha::Patron->new(\%a_borrower_data)->store->borrowernumber;
-    my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-
-    my $due_date = dt_from_string;
-    my $issue = AddIssue( $borrower, $item->barcode, $due_date );
-    UpdateFine(
-        {
-            issue_id          => $issue->id(),
-            itemnumber        => $item->itemnumber,
-            borrowernumber    => $borrowernumber,
-            amount            => .25,
-            amountoutstanding => .25,
-            type              => q{}
-        }
-    );
-
-
-    my ( undef, $message ) = AddReturn( $item->barcode, $branch, undef, $due_date );
-
-    my $accountline = Koha::Account::Lines->find( { issue_id => $issue->id } );
-    is( $accountline->amountoutstanding+0, 0, 'Fee amount outstanding was reduced to 0' );
-    is( $accountline->amount+0, 0, 'Fee amount was reduced to 0' );
 };
 
 subtest 'Do not return on renewal (LOST charge)' => sub {
