@@ -79,7 +79,7 @@ if ($op eq 'add_form') {
 
     if ( $av ) {
         $template->param(
-            category => $av->category,
+            category_name => $av->category,
             authorised_value => $av->authorised_value,
             lib              => $av->lib,
             lib_opac         => $av->lib_opac,
