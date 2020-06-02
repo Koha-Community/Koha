@@ -362,6 +362,15 @@ sub TO_JSON {
             # is ported to whatever distro we support by that time
             $unblessed->{$col} += 0;
         }
+        elsif ( _decimal_column_type( $columns_info->{$col}->{data_type} )
+            and looks_like_number( $unblessed->{$col} )
+        ) {
+
+            # TODO: Remove once the solution for
+            # https://rt.cpan.org/Ticket/Display.html?id=119904
+            # is ported to whatever distro we support by that time
+            $unblessed->{$col} += 0.00;
+        }
         elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             eval {
                 return unless $unblessed->{$col};
@@ -410,12 +419,24 @@ sub _numeric_column_type {
         'mediumint',
         'smallint',
         'tinyint',
+    );
+
+    return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
+}
+
+sub _decimal_column_type {
+    # TODO: Remove once the solution for
+    # https://rt.cpan.org/Ticket/Display.html?id=119904
+    # is ported to whatever distro we support by that time
+    my ($column_type) = @_;
+
+    my @decimal_types = (
         'decimal',
         'double precision',
         'float'
     );
 
-    return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
+    return ( grep { $column_type eq $_ } @decimal_types) ? 1 : 0;
 }
 
 =head3 prefetch_whitelist
