@@ -77,12 +77,14 @@ $(document).ready(function () {
 
     var searchType = '[% marclist | html %]';
     if (searchType) {
-        if ('mainentry' == searchType) {
-            $("#header_search").tabs( "option", "selected", 0 );
+        if ('mainmainentry' == searchType) {
+            $("#header_search").tabs( "option", "active", 0 );
+        } else if ('mainentry' == searchType) {
+            $("#header_search").tabs( "option", "active", 1 );
         } else if ('match' == searchType) {
-            $("#header_search").tabs( "option", "selected", 1 );
+            $("#header_search").tabs( "option", "active", 2 );
         } else if ('all' == searchType) {
-            $("#header_search").tabs( "option", "selected", 2 );
+            $("#header_search").tabs( "option", "active", 3 );
         }
     }
 
