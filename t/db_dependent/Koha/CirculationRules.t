@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use Koha::CirculationRules;
 use Koha::Database;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -373,6 +374,130 @@ subtest 'get_effective_daysmode' => sub {
         'Datedue',
         'daysmode default to pref value if the rule exists but set to""'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_lostreturn_policy() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    $schema->resultset('CirculationRule')->search()->delete;
+
+    my $default_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => undef,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1
+            }
+        }
+    );
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $specific_rule_false = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branchcode,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 0
+            }
+        }
+    );
+    my $branchcode2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $specific_rule_true = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branchcode2,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1
+            }
+        }
+    );
+    # Make sure we have an unused branchcode
+    my $branchcode3 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $specific_rule_dummy = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branchcode3,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+            }
+        }
+    );
+    my $branch_without_rule = $specific_rule_dummy->{ branchcode };
+    Koha::CirculationRules
+        ->search(
+            {
+                branchcode   => $branch_without_rule,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund'
+            }
+          )
+        ->next
+        ->delete;
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $specific_rule_true->{branchcode},
+            holdingbranch => $specific_rule_false->{branchcode}
+        }
+    );
+    my $params = {
+        return_branch => $specific_rule_true->{ branchcode },
+        item          => $item
+    };
+
+    # Specific rules
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+          1,'Specific rule for checkin branch is applied (true)');
+
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHomeBranch' );
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         1,'Specific rule for home branch is applied (true)');
+
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         0,'Specific rule for holoding branch is applied (false)');
+
+    # Default rule check
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
+    $params->{return_branch} = $branch_without_rule;
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         1,'No rule for branch, global rule applied (true)');
+
+    # Change the default value just to try
+    Koha::CirculationRules->search({ branchcode => undef, rule_name => 'refund' })->next->rule_value(0)->store;
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         0,'No rule for branch, global rule applied (false)');
+
+    # No default rule defined check
+    Koha::CirculationRules
+        ->search(
+            {
+                branchcode   => undef,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund'
+            }
+          )
+        ->next
+        ->delete;
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         1,'No rule for branch, no default rule, fallback default (true)');
 
     $schema->storage->txn_rollback;
 };
