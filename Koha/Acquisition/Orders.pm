@@ -23,6 +23,7 @@ use Koha::Database;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Order;
+use Koha::Exceptions::Exception;
 
 use base qw(Koha::Objects);
 
@@ -32,7 +33,7 @@ Koha::Acquisition::Orders object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 filter_by_lates
 
@@ -130,6 +131,23 @@ sub filter_by_lates {
     );
 }
 
+=head3 filter_by_active
+
+    my $new_rs = $orders->filter_by_active;
+
+Returns a new resultset filtering orders that are not active.
+
+=cut
+
+sub filter_by_active {
+    my ($self) = @_;
+    return $self->search(
+        {
+            orderstatus => [ 'new', 'ordered', 'partial' ]
+        }
+    );
+}
+
 =head3 filter_by_current
 
     $orders->filter_by_current
@@ -164,9 +182,39 @@ sub filter_by_cancelled {
     );
 }
 
+=head3 filter_by_id_including_transfers
+
+    my $orders = $orders->filter_by_id_including_transfers(
+        {
+            ordernumber => $ordernumber
+        }
+    );
+
+When searching for orders by I<ordernumber>, include the aqorders_transfers table
+so we can find orders that have changed their ordernumber as the result of a transfer
+
+=cut
+
+sub filter_by_id_including_transfers {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw( "The ordernumber param is mandatory" )
+        unless $params->{ordernumber};
+
+    return $self->search(
+        {
+            -or => [
+                { 'me.ordernumber' => $params->{ordernumber} },
+                { 'aqorders_transfers_ordernumber_to.ordernumber_from' => $params->{ordernumber} }
+            ]
+        },
+        { join => 'aqorders_transfers_ordernumber_to' }
+    );
+}
+
 =head2 Internal methods
 
-=head3 _type (internal)
+=head3 _type
 
 =cut
 
@@ -174,7 +222,7 @@ sub _type {
     return 'Aqorder';
 }
 
-=head3 object_class (internal)
+=head3 object_class
 
 =cut
 
