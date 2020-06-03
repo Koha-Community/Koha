@@ -3720,8 +3720,8 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddReturn' => sub {
                 branchcode   => undef,
                 categorycode => undef,
                 itemtype     => undef,
-                rule_name    => 'refund',
-                rule_value   => 1
+                rule_name    => 'lostreturn',
+                rule_value   => 'refund'
             }
         }
     );
@@ -3913,8 +3913,8 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddIssue' => sub {
                 branchcode   => undef,
                 categorycode => undef,
                 itemtype     => undef,
-                rule_name    => 'refund',
-                rule_value   => 1
+                rule_name    => 'lostreturn',
+                rule_value   => 'refund'
             }
         }
     );

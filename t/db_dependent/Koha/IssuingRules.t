@@ -163,10 +163,10 @@ subtest 'set_rule' => sub {
         lives_ok( sub {
             Koha::CirculationRules->set_rule( {
                 branchcode => $branchcode,
-                rule_name => 'refund',
+                rule_name => 'lostreturn',
                 rule_value => '',
             } );
-        }, 'setting refund with branch' );
+        }, 'setting lostreturn with branch' );
 
         lives_ok( sub {
             Koha::CirculationRules->set_rule( {
@@ -204,10 +204,10 @@ subtest 'set_rule' => sub {
 
         throws_ok( sub {
             Koha::CirculationRules->set_rule( {
-                rule_name => 'refund',
+                rule_name => 'lostreturn',
                 rule_value => '',
             } );
-        }, qr/branchcode/, 'setting refund without branch fails' );
+        }, qr/branchcode/, 'setting lostreturn without branch fails' );
 
         throws_ok( sub {
             Koha::CirculationRules->set_rule( {
@@ -244,10 +244,10 @@ subtest 'set_rule' => sub {
             Koha::CirculationRules->set_rule( {
                 branchcode => $branchcode,
                 categorycode => $categorycode,
-                rule_name => 'refund',
+                rule_name => 'lostreturn',
                 rule_value => '',
             } );
-        }, qr/categorycode/, 'setting refund with categorycode fails' );
+        }, qr/categorycode/, 'setting lostreturn with categorycode fails' );
 
         throws_ok( sub {
             Koha::CirculationRules->set_rule( {
