@@ -52,7 +52,6 @@ use Koha::Database;
 use Koha::Libraries;
 use Koha::Account::Lines;
 use Koha::Holds;
-use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
@@ -1470,12 +1469,10 @@ sub AddIssue {
                 }
 
                 if (
-                    $refund
-                    && Koha::RefundLostItemFeeRules->should_refund(
+                    $refund && Koha::CirculationRules->get_lostreturn_policy(
                         {
-                            current_branch   => C4::Context->userenv->{branch},
-                            item_home_branch => $item_object->homebranch,
-                            item_holding_branch => $item_object->holdingbranch,
+                            return_branch => C4::Context->userenv->{branch},
+                            item          => $item_object
                         }
                     )
                   )
@@ -2074,13 +2071,12 @@ sub AddReturn {
 
             if (
                 $refund &&
-                Koha::RefundLostItemFeeRules->should_refund(
+                Koha::CirculationRules->get_lostreturn_policy(
                     {
-                        current_branch      => C4::Context->userenv->{branch},
-                        item_home_branch    => $item->homebranch,
-                        item_holding_branch => $item_holding_branch
+                        return_branch => C4::Context->userenv->{branch},
+                        item          => $item,
                     }
-                )
+                  )
               )
             {
                 _FixAccountForLostAndFound( $item->itemnumber,

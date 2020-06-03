@@ -577,10 +577,7 @@ sub _gen_default_values {
         },
         AuthHeader => {
             marcxml => '',
-        },
-        RefundLostItemFeeRules => {
-            rule_name => 'refund',
-        },
+        }
     };
 }
 

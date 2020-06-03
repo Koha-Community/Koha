@@ -27,7 +27,6 @@ use C4::Debug;
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Logger;
-use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
 use Koha::CirculationRules;
 use Koha::Patron::Categories;
@@ -550,10 +549,11 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
     }
 }
 
-my $refundLostItemFeeRule = Koha::RefundLostItemFeeRules->find({ branchcode => ($branch eq '*') ? undef : $branch });
+my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'refund' });
+my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'refund' });
 $template->param(
     refundLostItemFeeRule => $refundLostItemFeeRule,
-    defaultRefundRule     => Koha::RefundLostItemFeeRules->_default_rule
+    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 1
 );
 
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
