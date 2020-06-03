@@ -426,6 +426,36 @@ sub get_onshelfholds_policy {
     return $rule ? $rule->rule_value : 0;
 }
 
+=head3 get_lostreturn_policy
+
+  my $refund = Koha::CirculationRules->get_lostreturn_policy( { return_branch => $return_branch, item => $item } );
+
+=cut
+
+sub get_lostreturn_policy {
+    my ( $class, $params ) = @_;
+
+    my $item   = $params->{item};
+
+    my $behaviour = C4::Context->preference( 'RefundLostOnReturnControl' ) // 'CheckinLibrary';
+    my $behaviour_mapping = {
+           CheckinLibrary => $params->{'return_branch'},
+           ItemHomeBranch => $item->homebranch,
+        ItemHoldingBranch => $item->holdingbranch
+    };
+
+    my $branch = $behaviour_mapping->{ $behaviour };
+
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            branchcode => $branch,
+            rule_name  => 'refund',
+        }
+    );
+
+    return $rule ? $rule->rule_value : 1;
+}
+
 =head3 article_requestable_rules
 
     Return rules that allow article requests, optionally filtered by
