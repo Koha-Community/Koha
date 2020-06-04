@@ -133,6 +133,9 @@
     [% IF ( CAN_user_tools_access_files ) %]
     <li><a href="/cgi-bin/koha/tools/access_files.pl">Access files</a></li>
     [% END %]
+    [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
+        <li><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></li>
+    [% END %]
 </ul>
 [% END %]
 </div></div>

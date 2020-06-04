@@ -78,6 +78,7 @@
     <dt><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></dt>
     <dd>Upload patron images in a batch or one at a time</dd>
     [% END %]
+
     </dl>
 </div>
 
@@ -141,6 +142,10 @@
         [% END %]
     [% END %]
 
+    [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
+        <dt><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></dt>
+        <dd>Manage OPAC problem reports submitted by patrons</dd>
+    [% END %]
 
 </dl>
 </div>
