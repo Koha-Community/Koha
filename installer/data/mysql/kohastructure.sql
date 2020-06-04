@@ -542,27 +542,27 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
   `othernames` LONGTEXT, -- any other names associated with the patron/borrower
   `initials` MEDIUMTEXT, -- initials for your patron/borrower
-  `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
-  `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
+  `streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's primary address
+  `streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
   `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
   `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
   `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
   `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
-  `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
+  `zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's primary address
   `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
   `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
   `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
-  `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
+  `mobile` TINYTEXT default NULL, -- the other phone number for your patron/borrower's primary address
   `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
   `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
   `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
-  `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
-  `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
-  `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
+  `B_streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's alternate address
+  `B_streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
+  `B_address` MEDIUMTEXT default NULL, -- the first address line for your patron/borrower's alternate address
   `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
   `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
   `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
-  `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
+  `B_zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's alternate address
   `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
   `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
   `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
@@ -590,15 +590,15 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `altcontactfirstname` varchar(255) default NULL, -- first name of alternate contact for the patron/borrower
-  `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
-  `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
-  `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
+  `altcontactfirstname` MEDIUMTEXT default NULL, -- first name of alternate contact for the patron/borrower
+  `altcontactsurname` MEDIUMTEXT default NULL, -- surname or last name of the alternate contact for the patron/borrower
+  `altcontactaddress1` MEDIUMTEXT default NULL, -- the first address line for the alternate contact for the patron/borrower
+  `altcontactaddress2` MEDIUMTEXT default NULL, -- the second address line for the alternate contact for the patron/borrower
+  `altcontactaddress3` MEDIUMTEXT default NULL, -- the city for the alternate contact for the patron/borrower
   `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
-  `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
+  `altcontactzipcode` MEDIUMTEXT default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
-  `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
+  `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
@@ -1577,27 +1577,27 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
   `othernames` LONGTEXT, -- any other names associated with the patron/borrower
   `initials` MEDIUMTEXT, -- initials for your patron/borrower
-  `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
-  `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
+  `streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's primary address
+  `streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
   `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
   `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
   `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
   `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
-  `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
+  `zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's primary address
   `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
   `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
   `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
-  `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
+  `mobile` TINYTEXT default NULL, -- the other phone number for your patron/borrower's primary address
   `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
   `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
   `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
-  `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
-  `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
-  `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
+  `B_streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's alternate address
+  `B_streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
+  `B_address` MEDIUMTEXT default NULL, -- the first address line for your patron/borrower's alternate address
   `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
   `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
   `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
-  `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
+  `B_zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's alternate address
   `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
   `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
   `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
@@ -1625,15 +1625,15 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `altcontactfirstname` varchar(255) default NULL, -- first name of alternate contact for the patron/borrower
-  `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
-  `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
-  `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
+  `altcontactfirstname` MEDIUMTEXT  default NULL, -- first name of alternate contact for the patron/borrower
+  `altcontactsurname` MEDIUMTEXT default NULL, -- surname or last name of the alternate contact for the patron/borrower
+  `altcontactaddress1` MEDIUMTEXT default NULL, -- the first address line for the alternate contact for the patron/borrower
+  `altcontactaddress2` MEDIUMTEXT default NULL, -- the second address line for the alternate contact for the patron/borrower
+  `altcontactaddress3` MEDIUMTEXT default NULL, -- the city for the alternate contact for the patron/borrower
   `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
-  `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
+  `altcontactzipcode` MEDIUMTEXT default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
-  `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
+  `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
