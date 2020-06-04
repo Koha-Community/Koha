@@ -151,9 +151,6 @@
             [% IF ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts ) %]
                 <li><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></li>
             [% END %]
-            [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
-                <li><a href="/cgi-bin/koha/admin/problem-reports.pl">OPAC problem reports</a></li>
-            [% END %]
         </ul>
     [% END %]
 </div>

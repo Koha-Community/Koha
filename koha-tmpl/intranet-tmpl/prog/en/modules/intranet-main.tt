@@ -190,7 +190,7 @@
 
                                 [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports && pending_problem_reports.count ) %]
                                     <div class="pending-info" id="problem_reports_pending">
-                                        <a href="/cgi-bin/koha/admin/problem-reports.pl">OPAC problem reports pending</a>:
+                                        <a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports pending</a>:
                                         <span class="pending-number-link">[% pending_problem_reports.count | html %]</span>
                                     </div>
                                 [% END %]
