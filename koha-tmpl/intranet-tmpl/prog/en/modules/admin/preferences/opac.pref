@@ -391,12 +391,6 @@ OPAC:
                   no: "not allowed"
             - " to recover their password via e-mail in the OPAC"
         -
-            - pref: OPACPatronDetails
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - patrons to notify the library of changes to their contact information from the OPAC.
-        -
             - pref: OPACpatronimages
               choices:
                   yes: Show
@@ -764,13 +758,13 @@ OPAC:
                   no: "Don't use"
             - "the item collection code when finding items for the shelf browser."      
 
-    Self Registration:
+    Self registration and modification:
         -
             - pref: PatronSelfRegistration
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "library patrons to register or modify their account via the OPAC."
+            - "library patrons to register for an account via the OPAC."
             - "<br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
         -
             - pref: PatronSelfRegistrationVerifyByEmail
@@ -828,6 +822,18 @@ OPAC:
                   yes: "Display and prefill"
                   no: "Do not display and prefill"
             - "password and login form after a patron has self registered."
+        -
+            - pref: PatronSelfRegistrationConfirmEmail
+              choices:
+                  yes: Require
+                  no: "Do not require"
+            - users to confirm their email address by entering it twice.
+        -
+            - pref: OPACPatronDetails
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to notify the library of changes to their contact information from the OPAC.
 
     Advanced Search Options:
         -
