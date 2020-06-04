@@ -24,6 +24,7 @@ use Carp;
 use DateTime;
 use Try::Tiny;
 
+use C4::Circulation qw(MarkIssueReturned);
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
 use Koha::DateUtils;
@@ -175,7 +176,13 @@ sub claim_returned {
                     $ClaimReturnedChargeFee eq 'charge'    ? 1
                 : $ClaimReturnedChargeFee eq 'no_charge' ? 0
                 :   $charge_lost_fee;    # $ClaimReturnedChargeFee eq 'ask'
-                C4::Circulation::LostItem( $self->itemnumber, 'claim_returned' ) if $charge_lost_fee;
+
+                if ( $charge_lost_fee ) {
+                    C4::Circulation::LostItem( $self->itemnumber, 'claim_returned' );
+                }
+                elsif ( C4::Context->preference( 'MarkLostItemsAsReturned' ) =~ m/claim_returned/ ) {
+                    C4::Circulation::MarkIssueReturned( $self->borrowernumber, $self->itemnumber, undef, $self->patron->privacy );
+                }
 
                 return $claim;
             }
