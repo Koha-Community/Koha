@@ -450,7 +450,7 @@ foreach my $biblionumber (@biblionumbers) {
         # (before this loop was inside that sub loop so it was O(n^2) )
         my $items_any_available;
 
-        $items_any_available = ItemsAnyAvailableForHold( { biblionumber => $biblioitemnumber, patron => $patron })
+        $items_any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblioitemnumber, patron => $patron })
             if $patron;
 
         foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {

@@ -98,7 +98,7 @@ Koha::CirculationRules->set_rules(
 
 my $is;
 
-$is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 });
+$is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 });
 is( $is, 1, "Items availability: both of 2 items are available" );
 
 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -106,7 +106,7 @@ is( $is, 0, "Item cannot be held, 2 items available" );
 
 my $issue1 = AddIssue( $patron2->unblessed, $item1->barcode );
 
-$is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 });
+$is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 });
 is( $is, 1, "Items availability: one item is available" );
 
 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -114,7 +114,7 @@ is( $is, 0, "Item cannot be held, 1 item available" );
 
 AddIssue( $patron2->unblessed, $item2->barcode );
 
-$is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 });
+$is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 });
 is( $is, 0, "Items availability: none of items are available" );
 
 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -144,7 +144,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 0, "Items availability: hold allowed from home + ReservesControlBranch=ItemHomeLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -154,7 +154,7 @@ AddReturn( $item1->barcode );
                 set_holdallowed_rule( $hold_allowed_from_any_libraries, $library_B );
                 #Adding a rule for the item's home library affects the availability for a borrower from another library because ReservesControlBranch is set to ItemHomeLibrary
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library for library B + ReservesControlBranch=ItemHomeLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -162,7 +162,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 0, "Items availability: hold allowed from any library for library B + ReservesControlBranch=PatronLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -170,7 +170,7 @@ AddReturn( $item1->barcode );
                 #Adding a rule for the patron's home library affects the availability for an item from another library because ReservesControlBranch is set to PatronLibrary
                 set_holdallowed_rule( $hold_allowed_from_any_libraries, $library_A );
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library for library A + ReservesControlBranch=PatronLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -182,7 +182,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=ItemHomeLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -190,7 +190,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 0 items, library B 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=PatronLibrary + one item is available at different library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -215,7 +215,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
                 is( $is, 1, "Items availability: hold allowed from home library + ReservesControlBranch=ItemHomeLibrary + one item is available at home library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -223,7 +223,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
                 is( $is, 1, "Items availability: hold allowed from home library + ReservesControlBranch=PatronLibrary + one item is available at home library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -235,7 +235,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=ItemHomeLibrary + one item is available at home library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -243,7 +243,7 @@ AddReturn( $item1->barcode );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
 
-                $is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
+                $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
                 is( $is, 1, "Items availability: hold allowed from any library + ReservesControlBranch=PatronLibrary + one item is available at home library" );
 
                 $is = IsAvailableForItemLevelRequest( $item1, $patron1);
@@ -279,7 +279,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$is = ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
+$is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron1 }); # patron1 in library A, library A 1 item
 is( $is, 1, "Items availability: 1 item is available, 1 item held in T" );
 
 $is = IsAvailableForItemLevelRequest( $item3, $patron1);
