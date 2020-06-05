@@ -123,15 +123,6 @@ if ($op and $op eq "send_alert"){
     }
 }
 
-my @parameters = ( $delay );
-push @parameters, $estimateddeliverydatefrom_dt
-    ? $estimateddeliverydatefrom_dt->ymd()
-    : undef;
-
-push @parameters, $estimateddeliverydateto_dt
-    ? $estimateddeliverydateto_dt->ymd()
-    : undef;
-
 my @lateorders = Koha::Acquisition::Orders->filter_by_lates(
     {
         delay        => $delay,
