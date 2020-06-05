@@ -30,7 +30,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'success tests' => sub {
 
-    plan tests => 5;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -43,8 +43,25 @@ subtest 'success tests' => sub {
     $patron->set_password({ password => $password });
     my $userid = $patron->userid;
 
+    my $stash;
+    my $interface;
+    my $userenv;
+
+    $t->app->hook(after_dispatch => sub {
+        $stash     = shift->stash;
+        $interface = C4::Context->interface;
+        $userenv   = C4::Context->userenv;
+    });
+
     $t->get_ok("//$userid:$password@/api/v1/patrons")
       ->status_is( 200, 'Successful authentication and permissions check' );
+
+    my $user = $stash->{'koha.user'};
+    ok( defined $user, 'The \'koha.user\' object is defined in the stash') and
+    is( ref($user), 'Koha::Patron', 'Stashed koha.user object type is Koha::Patron') and
+    is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
+    is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
+    is( $interface, 'api', "Interface correctly set to \'api\'" );
 
     $patron->flags(undef)->store;
 
