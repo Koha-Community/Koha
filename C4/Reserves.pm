@@ -122,7 +122,7 @@ BEGIN {
         &AutoUnsuspendReserves
 
         &IsAvailableForItemLevelRequest
-        ItemsAnyAvailableForHold
+        ItemsAnyAvailableAndNotRestricted
 
         &AlterPriority
         &ToggleLowestPriority
@@ -1299,24 +1299,25 @@ sub IsAvailableForItemLevelRequest {
         return  $items_any_available ? 0 : 1
             if defined $items_any_available;
 
-        my $any_available = ItemsAnyAvailableForHold( { biblionumber => $item->biblionumber, patron => $patron });
+        my $any_available = ItemsAnyAvailableAndNotRestricted( { biblionumber => $item->biblionumber, patron => $patron });
         return $any_available ? 0 : 1;
     } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
         return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
 }
 
-=head2 ItemsAnyAvailableForHold
+=head2 ItemsAnyAvailableAndNotRestricted
 
-  ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron });
+  ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber, patron => $patron });
 
-This function checks all items for specified biblionumber (num) / patron (object)
-and returns true (1) or false (0) depending if any of rules allows at least of
-one item to be available for hold including lots of parameters/logic
+This function checks all items for specified biblionumber (numeric) against patron (object)
+and returns true (1) if at least one item available for loan/check out/present/not held
+and also checks other parameters logic which not restricts item for hold at all (for ex.
+AllowHoldsOnDamagedItems or 'holdallowed' own/sibling library)
 
 =cut
 
-sub ItemsAnyAvailableForHold {
+sub ItemsAnyAvailableAndNotRestricted {
     my $param = shift;
 
     my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } );
@@ -1337,7 +1338,7 @@ sub ItemsAnyAvailableForHold {
             || $i->onloan
             || IsItemOnHoldAndFound( $i->id )
             || ( $i->damaged
-            && ! C4::Context->preference('AllowHoldsOnDamagedItems') )
+                 && ! C4::Context->preference('AllowHoldsOnDamagedItems') )
             || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
             || $branchitemrule->{holdallowed} == 1 && $param->{patron}->branchcode ne $i->homebranch
             || $branchitemrule->{holdallowed} == 3 && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } );
