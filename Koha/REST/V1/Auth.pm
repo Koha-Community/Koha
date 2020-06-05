@@ -154,6 +154,7 @@ sub authenticate_api_request {
     my $spec = $c->openapi->spec || $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
 
     $c->stash_embed({ spec => $spec });
+    my $cookie_auth = 0;
 
     my $authorization = $spec->{'x-koha-authorization'};
 
@@ -222,6 +223,7 @@ sub authenticate_api_request {
             $user = Koha::Patrons->find( $session->param('number') )
               unless $session->param('sessiontype')
                  and $session->param('sessiontype') eq 'anon';
+            $cookie_auth = 1;
         }
         elsif ($status eq "maintenance") {
             Koha::Exceptions::UnderMaintenance->throw(
@@ -246,6 +248,11 @@ sub authenticate_api_request {
     }
 
     $c->stash('koha.user' => $user);
+
+    if ( $user and !$cookie_auth ) { # cookie-auth sets this and more, don't mess with that
+        C4::Context->_new_userenv( $user->borrowernumber );
+        C4::Context->set_userenv( $user->borrowernumber );
+    }
 
     if ( !$authorization and
          ( $params->{is_public} and
