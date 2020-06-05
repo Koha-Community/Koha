@@ -1942,7 +1942,7 @@ Some significant technical changes were made behind the scenes in this release a
 ### Dev tools
 
 A number of developer tools and processes have been refined
-- misc/devel/update_dbix_class_files.pl now defaults to using koha-conf.xml so you are not required to always append parameters now to run the script
+- misc/devel/update_dbix_class_files.pl learned a new option --koha-conf to use values from koha-conf.xml so you are not required to always append parameters now to run the script
 - The installer files are now translatable using the pootle process
    - A new YAML format has been migrated to for the installer files
    - A new command line script may be used to load the new yaml formatted installer files manually where required
