@@ -44,7 +44,7 @@ t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 subtest 'token-based tests' => sub {
 
     if ( can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef } ) ) {
-        plan tests => 12;
+        plan tests => 14;
     }
     else {
         plan skip_all => 'Net::OAuth2::AuthorizationServer not available';
@@ -74,22 +74,30 @@ subtest 'token-based tests' => sub {
 
     my $access_token = $t->tx->res->json->{access_token};
 
-    # With access token and permissions, it returns 200
-    #$patron->flags(2**4)->store;
-
     my $stash;
+    my $interface;
+    my $userenv;
 
     my $tx = $t->ua->build_tx(GET => '/api/v1/acquisitions/orders');
     $tx->req->headers->authorization("Bearer $access_token");
     $tx->req->headers->header( 'x-koha-embed' => 'fund' );
 
-    $t->app->hook(after_dispatch => sub { $stash = shift->stash });
+    $t->app->hook(after_dispatch => sub {
+        $stash     = shift->stash;
+        $interface = C4::Context->interface;
+        $userenv   = C4::Context->userenv;
+    });
+
+    # With access token and permissions, it returns 200
+    #$patron->flags(2**4)->store;
     $t->request_ok($tx)->status_is(200);
 
     my $user = $stash->{'koha.user'};
     ok( defined $user, 'The \'koha.user\' object is defined in the stash') and
     is( ref($user), 'Koha::Patron', 'Stashed koha.user object type is Koha::Patron') and
     is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
+    is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
+    is( $interface, 'api', "Interface correctly set to \'api\'" );
 
     my $embed = $stash->{'koha.embed'};
     ok( defined $embed, 'The embed hashref is generated and stashed' );
@@ -100,7 +108,7 @@ subtest 'token-based tests' => sub {
 
 subtest 'cookie-based tests' => sub {
 
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -111,13 +119,23 @@ subtest 'cookie-based tests' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
 
     my $stash;
-    $t->app->hook(after_dispatch => sub { $stash = shift->stash });
+    my $interface;
+    my $userenv;
+
+    $t->app->hook(after_dispatch => sub {
+        $stash     = shift->stash;
+        $interface = C4::Context->interface;
+        $userenv   = C4::Context->userenv;
+    });
+
     $t->request_ok($tx)->status_is(200);
 
     my $user = $stash->{'koha.user'};
     ok( defined $user, 'The \'koha.user\' object is defined in the stash') and
     is( ref($user), 'Koha::Patron', 'Stashed koha.user object type is Koha::Patron') and
     is( $user->borrowernumber, $borrowernumber, 'The stashed user is the right one' );
+    is( $userenv->{number}, $borrowernumber, 'userenv set correctly' );
+    is( $interface, 'api', "Interface correctly set to \'api\'" );
 
     subtest 'logged-out tests' => sub {
         plan tests => 3;
