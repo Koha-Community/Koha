@@ -488,6 +488,12 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'LostItemFeeRefunded' ) {
         $template->param( LostItemFeeRefunded => 1 );
     }
+    elsif ( $code eq 'LostItemFeeCharged' ) {
+        $template->param( LostItemFeeCharged => 1 );
+    }
+    elsif ( $code eq 'LostItemFeeRestored' ) {
+        $template->param( LostItemFeeRestored => 1 );
+    }
     elsif ( $code eq 'ResFound' ) {
         ;    # FIXME... anything to do here?
     }

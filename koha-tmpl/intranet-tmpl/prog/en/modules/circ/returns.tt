@@ -266,6 +266,10 @@
                                             [% END %]
                                             [% IF LostItemFeeRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
                                                 <p class="problem ret_refund">A refund has been applied to the borrowing patron's account.</p>
+                                            [% ELSIF LostItemFeeCharged and not Koha.Preference('BlockReturnOfLostItems') %]
+                                                <p class="problem ret_charged">A refund for the lost item charge has been applied to the borrowing patron's account, and new overdue charge has been calculated and applied.</p>
+                                            [% ELSIF LostItemFeeRestored and not Koha.Preference('BlockReturnOfLostItems') %]
+                                                <p class="problem ret_restored">A refund for the lost item charge has been applied to the borrowing patron's account and if an overdue fine was forgiven when the item was marked as lost, it has been reverted.</p>
                                             [% ELSIF Koha.Preference('BlockReturnOfLostItems') %]
                                                <h5>Cannot check in</h5>
                                                <p><strong>NOT CHECKED IN</strong></p>
