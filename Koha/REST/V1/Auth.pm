@@ -178,7 +178,6 @@ sub authenticate_api_request {
         if ($valid_token) {
             my $patron_id = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
             $user         = Koha::Patrons->find($patron_id);
-            C4::Context->interface('api');
         }
         else {
             # If we have "Authorization: Bearer" header and oauth authentication
@@ -195,7 +194,6 @@ sub authenticate_api_request {
             );
         }
         $user = $c->_basic_auth( $authorization_header );
-        C4::Context->interface('api');
         unless ( $user ) {
             # If we have "Authorization: Basic" header and authentication
             # failed, do not try other authentication means
@@ -244,6 +242,7 @@ sub authenticate_api_request {
     }
 
     $c->stash('koha.user' => $user);
+    C4::Context->interface('api');
 
     if ( $user and !$cookie_auth ) { # cookie-auth sets this and more, don't mess with that
         C4::Context->_new_userenv( $user->borrowernumber );
