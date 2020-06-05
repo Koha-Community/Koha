@@ -360,8 +360,9 @@ sub TO_JSON {
         ) {
 
             # TODO: Remove once the solution for
-            # https://rt.cpan.org/Ticket/Display.html?id=119904
+            # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
+            # or we move to DBD::MariaDB
             $unblessed->{$col} += 0;
         }
         elsif ( _decimal_column_type( $columns_info->{$col}->{data_type} )
@@ -369,8 +370,9 @@ sub TO_JSON {
         ) {
 
             # TODO: Remove once the solution for
-            # https://rt.cpan.org/Ticket/Display.html?id=119904
+            # https://github.com/perl5-dbi/DBD-mysql/issues/212
             # is ported to whatever distro we support by that time
+            # or we move to DBD::MariaDB
             $unblessed->{$col} += 0.00;
         }
         elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
@@ -410,8 +412,9 @@ sub _datetime_column_type {
 
 sub _numeric_column_type {
     # TODO: Remove once the solution for
-    # https://rt.cpan.org/Ticket/Display.html?id=119904
+    # https://github.com/perl5-dbi/DBD-mysql/issues/212
     # is ported to whatever distro we support by that time
+    # or we move to DBD::MariaDB
     my ($column_type) = @_;
 
     my @numeric_types = (
@@ -428,8 +431,9 @@ sub _numeric_column_type {
 
 sub _decimal_column_type {
     # TODO: Remove once the solution for
-    # https://rt.cpan.org/Ticket/Display.html?id=119904
+    # https://github.com/perl5-dbi/DBD-mysql/issues/212
     # is ported to whatever distro we support by that time
+    # or we move to DBD::MariaDB
     my ($column_type) = @_;
 
     my @decimal_types = (
