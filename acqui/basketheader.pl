@@ -158,7 +158,7 @@ if ( $op eq 'add_form' ) {
         );
     } else { #New basket
         $basketno = NewBasket(
-            $booksellerid,
+            scalar $input->param('basketbooksellerid'),
             $loggedinuser,
             scalar $input->param('basketname'),
             scalar $input->param('basketnote'),
