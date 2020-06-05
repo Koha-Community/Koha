@@ -127,7 +127,9 @@ sub store {
     # Handle not null and default values for integers and dates
     foreach my $col ( keys %{$columns_info} ) {
         # Integers
-        if ( _numeric_column_type( $columns_info->{$col}->{data_type} ) ) {
+        if (   _numeric_column_type( $columns_info->{$col}->{data_type} )
+            or _decimal_column_type( $columns_info->{$col}->{data_type} )
+        ) {
             # Has been passed but not a number, usually an empty string
             my $value = $self->_result()->get_column($col);
             if ( defined $value and not looks_like_number( $value ) ) {
