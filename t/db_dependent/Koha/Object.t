@@ -27,11 +27,14 @@ use C4::Circulation; # AddIssue
 use C4::Biblio; # AddBiblio
 
 use Koha::Database;
+
+use Koha::Acquisition::Orders;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::ApiKeys;
 
+use JSON;
 use Scalar::Util qw( isvstring );
 use Try::Tiny;
 
@@ -164,7 +167,7 @@ subtest 'discard_changes' => sub {
 
 subtest 'TO_JSON tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -209,6 +212,11 @@ subtest 'TO_JSON tests' => sub {
         /xms;
     like( $updated_on, $rfc3999_regex, "Date-time $updated_on formatted correctly");
     like( $lastseen, $rfc3999_regex, "Date-time $updated_on formatted correctly");
+
+    # Test JSON doesn't receive strings
+    my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
+    $order = Koha::Acquisition::Orders->find( $order->ordernumber );
+    is_deeply( $order->TO_JSON, decode_json( encode_json( $order->TO_JSON ) ), 'Orders are similar' );
 
     $schema->storage->txn_rollback;
 };
