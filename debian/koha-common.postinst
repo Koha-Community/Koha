@@ -189,6 +189,16 @@ EOF
     fi
 done
 
+for site in $(koha-list); do
+    kohaconfig="/etc/koha/sites/$site/koha-conf.xml"
+    logdir="$( xmlstarlet sel -t -v 'yazgfs/config/logdir' $kohaconfig )"
+    if [ "$logdir" != "" ] && [ "$logdir" != "0" ]; then
+        chown -R $site-koha:$site-koha $logdir
+    else
+        chown -R $site-koha:$site-koha /var/log/koha/$site
+    fi
+done
+
 # Bug 14106 - fix the modulePath of existing koha instances so that it'll
 # continue to work. This will only patch the files if the exact original string
 # that we're fixing them from is there, so we just run it every time. Maybe
