@@ -42,7 +42,7 @@ my $writeoff_individual = $input->param('writeoff_individual');
 my $change_given        = $input->param('change_given');
 my $type                = scalar $input->param('type') || 'PAYMENT';
 
-my $updatecharges_permissions = ($writeoff_individual || $type eq 'writeoff') ? 'writeoff' : 'remaining_permissions';
+my $updatecharges_permissions = ($writeoff_individual || $type eq 'WRITEOFF') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/paycollect.tt',
         query           => $input,
@@ -165,7 +165,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             error_over => 1,
             total_due => $total_due
         );
-    } elsif ( $total_collected < $total_paid && !( $writeoff_individual || $type eq 'writeoff') ) {
+    } elsif ( $total_collected < $total_paid && !( $writeoff_individual || $type eq 'WRITEOFF' ) ) {
         $template->param(
             error_under => 1,
             total_paid => $total_paid
