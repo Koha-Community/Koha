@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use Test::Warn;
 
@@ -58,10 +58,11 @@ Koha::CirculationRules->set_rule(
 
 $branch = $builder->build( { source => 'Branch' } )->{branchcode};
 
-subtest 'Test Koha::Checkout::claim_returned' => sub {
-    plan tests => 6;
+subtest 'Test Koha::Checkout::claim_returned, do not mark as returned' => sub {
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{} );
     my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
     my $item   = $builder->build_object(
         {
@@ -90,6 +91,9 @@ subtest 'Test Koha::Checkout::claim_returned' => sub {
     is( $claim->notes, "Test note", "Claim notes match" );
     is( $claim->created_by, $patron->id, "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
+
+    my $checkout2 = Koha::Checkouts->find( $checkout->id );
+    is( $checkout2->id, $checkout->id, "Item is still checked out to patron")
 };
 
 subtest 'Test Koha::Patronn::return_claims' => sub {
@@ -130,6 +134,46 @@ subtest 'Test Koha::Patronn::return_claims' => sub {
     is( $claim->notes, "Test note", "Claim notes match" );
     is( $claim->created_by, $patron->id, "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
+};
+
+subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{claim_returned} );
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item   = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                notforloan   => 0,
+                itemlost     => 0,
+                withdrawn    => 0,
+            }
+        }
+    );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+
+    my $claim = $checkout->claim_returned(
+        {
+            created_by => $patron->id,
+            notes      => "Test note",
+        }
+    );
+
+    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
+    is( $claim->notes, "Test note", "Claim notes match" );
+    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+    ok( $claim->created_on, "Claim created_on is set" );
+
+    my $checkout2 = Koha::Checkouts->find( $checkout->id );
+    is( $checkout2, undef, "Checkout is not longer in the issues table");
+    $checkout2 = Koha::Old::Checkouts->find( $checkout->id );
+    is( $checkout2->id, $checkout->id, "Checkout was foudn in the old_issues table");
 };
 
 $schema->storage->txn_rollback;
