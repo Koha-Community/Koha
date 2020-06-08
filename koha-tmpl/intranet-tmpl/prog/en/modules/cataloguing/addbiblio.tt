@@ -5,6 +5,10 @@
 <title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
+<script>
+    var CAN_user_parameters_manage_auth_values = "[% CAN_user_parameters_manage_auth_values | html %]";
+</script>
+[% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'strings.inc' %]
 [% Asset.js("js/browser.js") | $raw %]
@@ -482,75 +486,6 @@
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 
-[% INCLUDE 'select2.inc' %]
-<script>
-  $(document).ready(function() {
-      [% IF CAN_user_parameters_manage_auth_values %]
-          var current_select2;
-          $('.subfield_line select[data-category!=""]').select2({
-              tags: true,
-              createTag: function (tag) {
-                  return {
-                      id: tag.term,
-                      text: tag.term,
-                      newTag: true
-                  };
-              },
-              templateResult: function(state) {
-                  if (state.newTag) {
-                      return state.text + " " + "(select to create)";
-                  }
-                  return state.text;
-              }
-          }).on("select2:select", function(e) {
-              if(e.params.data.newTag){
-
-                  var category = $(this).data("category");
-                  $("#avCreate #new_av_category").html(category);
-                  $("#avCreate input[name='category']").val(category);
-                  $("#avCreate input[name='value']").val(e.params.data.text);
-                  $("#avCreate input[name='description']").val(e.params.data.text);
-                  $('#avCreate').modal({show:true});
-
-                  $(current_select2).val($(current_select2).find("option:first").val()).trigger('change');
-
-                  current_select2 = this;
-
-              }
-          }).on("select2:clear", function () {
-              $(this).on("select2:opening.cancelOpen", function (evt) {
-                  evt.preventDefault();
-
-                  $(this).off("select2:opening.cancelOpen");
-              });
-          });
-
-          $("#add_new_av").on("submit", function(){
-              var data = {
-                  category: $(this).find('input[name="category"]').val(),
-                  value: $(this).find('input[name="value"]').val(),
-                  description: $(this).find('input[name="description"]').val(),
-                  opac_description: $(this).find('input[name="opac_description"]').val(),
-              };
-              $.ajax({
-                  type: "POST",
-                  url: "/api/v1/authorised_values",
-                  data:JSON.stringify(data),
-                  success: function(response) {
-                      $('#avCreate').modal('hide');
-
-                      $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
-                  },
-                  error: function(err) {
-                      $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
-                  }
-              });
-              return false;
-          });
-      [% END %]
-  });
-</script>
-
 </head>
 <body id="cat_addbiblio" class="cat">
 
@@ -964,47 +899,7 @@
                 [%# End of fields for fast cataloging %]
             </form> <!-- /name=f -->
 
-            <div id="avCreate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="avCreateLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h3 id="avCreateLabel">Create a new authorised value</h3>
-                        </div>
-                        <form id="add_new_av" method="post">
-                            <div class="modal-body">
-                                <div class="error"></div>
-                                <fieldset class="rows">
-                                    <ol>
-                                        <li>
-                                            <span class="label">Category:</span>
-                                            <input type="hidden" name="category" value="" />
-                                            <span id="new_av_category"></span>
-                                        </li>
-                                        <li>
-                                            <span class="label" for="value">Authorised value:</span>
-                                            <input type="text" id="value" name="value" />
-                                        </li>
-                                        <li>
-                                            <span class="label" for="description">Description:</span>
-                                            <input type="text" id="description" name="description" />
-                                        </li>
-                                        <li>
-                                            <span class="label" for="opac_description">Description (OPAC):</span>
-                                            <input type="text" id="opac_description" name="opac_description" />
-                                        </li>
-                                    </ol>
-                                </fieldset>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-                                <input type="hidden" name="select2" value="" />
-                                <input type="submit" class="btn btn-primary" value="Save">
-                            </div>
-                        </form>
-                    </div> <!-- /.modal-content -->
-                </div> <!-- /.modal-dialog -->
-            </div> <!-- /#avCreate -->
+            [% INCLUDE 'modals/cataloguing_create_av.inc' %]
 
         </div> <!-- /.col-md-10.col-md-offset-1 -->
     </div> <!-- /.row -->

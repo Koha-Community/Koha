@@ -247,6 +247,7 @@ sub generate_subfield_form {
                     id          => $subfield_data{id},
                     maxlength   => $subfield_data{maxlength},
                     value       => $value,
+                    ( ( grep { $_ eq $subfieldlib->{authorised_value}} ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $subfieldlib->{authorised_value}) ),
                 };
             }
             else {
@@ -256,6 +257,7 @@ sub generate_subfield_form {
                     values   => \@authorised_values,
                     labels   => \%authorised_lib,
                     default  => $value,
+                    ( ( grep { $_ eq $subfieldlib->{authorised_value}} ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $subfieldlib->{authorised_value}) ),
                 };
             }
         }
