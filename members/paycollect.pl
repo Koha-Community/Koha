@@ -39,7 +39,7 @@ my $input = CGI->new();
 my $writeoff_individual       = $input->param('writeoff_individual');
 my $type                      = scalar $input->param('type') || 'payment';
 
-my $updatecharges_permissions = ($writeoff_individual || $type eq 'writeoff') ? 'writeoff' : 'remaining_permissions';
+my $updatecharges_permissions = ($writeoff_individual || $type eq 'WRITEOFF') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/paycollect.tt',
         query           => $input,
