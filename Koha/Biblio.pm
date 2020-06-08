@@ -490,7 +490,7 @@ this object (MARC21 773$w points to this)
 sub components {
     my ($self) = @_;
 
-    return undef if (C4::Context->preference('marcflavour') ne 'MARC21');
+    return if (C4::Context->preference('marcflavour') ne 'MARC21');
 
     if (!defined($self->{_components})) {
         my $marc = C4::Biblio::GetMarcBiblio({ biblionumber => $self->id });
