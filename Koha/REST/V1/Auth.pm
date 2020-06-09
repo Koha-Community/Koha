@@ -245,8 +245,7 @@ sub authenticate_api_request {
     C4::Context->interface('api');
 
     if ( $user and !$cookie_auth ) { # cookie-auth sets this and more, don't mess with that
-        C4::Context->_new_userenv( $user->borrowernumber );
-        C4::Context->set_userenv( $user->borrowernumber );
+        $c->_set_userenv( $user );
     }
 
     if ( !$authorization and
@@ -484,6 +483,35 @@ sub _basic_auth {
     }
 
     return Koha::Patrons->find({ userid => $user_id });
+}
+
+=head3 _set_userenv
+
+    $c->_set_userenv( $patron );
+
+Internal method that sets C4::Context->userenv
+
+=cut
+
+sub _set_userenv {
+    my ( $c, $patron ) = @_;
+
+    my $library = $patron->library;
+
+    C4::Context->_new_userenv( $patron->borrowernumber );
+    C4::Context->set_userenv(
+        $patron->borrowernumber, # number,
+        $patron->userid,         # userid,
+        $patron->cardnumber,     # cardnumber
+        $patron->firstname,      # firstname
+        $patron->surname,        # surname
+        $library->branchcode,    # branch
+        $library->branchname,    # branchname
+        $patron->flags,          # flags,
+        $patron->email,          # emailaddress
+    );
+
+    return $c;
 }
 
 1;
