@@ -73,7 +73,8 @@ sub build_authorized_values_list {
 
 
     #---- branch
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+    my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+    if ( $category eq "branches" ) {
         my $sth =
         $dbh->prepare(
             "select branchcode,branchname from branches order by branchname");
@@ -86,7 +87,7 @@ sub build_authorized_values_list {
             $authorised_lib{$branchcode} = $branchname;
         }
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+    elsif ( $category eq "itemtypes" ) {
         push @authorised_values, ""
           unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
             && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
@@ -121,6 +122,7 @@ sub build_authorized_values_list {
         values   => \@authorised_values,
         labels   => \%authorised_lib,
         default  => $value,
+        ( ( grep { $_ eq $category } ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $category ) ),
     };
 }
 

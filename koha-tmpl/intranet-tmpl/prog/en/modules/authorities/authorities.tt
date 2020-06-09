@@ -5,6 +5,9 @@
 <title>Koha &rsaquo; Authorities &rsaquo; [% IF ( authid ) %]Modify authority #[% authid | html %] ([% authtypetext | html %])[% ELSE %]Adding authority ([% authtypetext | html %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
+<script>
+    var CAN_user_parameters_manage_auth_values = "[% CAN_user_parameters_manage_auth_values | html %]";
+</script>
 [% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
 
@@ -369,7 +372,12 @@ function confirmnotdup(redirect){
                 
                 [% SET mv = subfield_loo.marc_value %]
                 [% IF ( mv.type == 'select' ) %]
-                     <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
+                    [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
+                        <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
+                    [% ELSE %]
+                        <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
+                    [% END %]
+
                      [% FOREACH aval IN mv.values %]
                          [% IF aval == mv.default %]
                          <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
@@ -443,6 +451,8 @@ function confirmnotdup(redirect){
 [% END %]
 
 </form>
+
+[% INCLUDE 'modals/cataloguing_create_av.inc' %]
 
 </div>
 </div>
