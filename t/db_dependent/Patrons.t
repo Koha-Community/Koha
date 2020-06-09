@@ -106,7 +106,7 @@ foreach my $b ( $patrons->as_list() ) {
 }
 
 subtest "Update patron categories" => sub {
-    plan tests => 19;
+    plan tests => 20;
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
     my $c_categorycode = $builder->build({ source => 'Category', value => {
             category_type=>'C',
@@ -182,6 +182,13 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category({from=>$a_categorycode,fine_min=>5})->next->borrowernumber,$adult2->borrowernumber,'One patron with fines over $5 is expected one');
     is( Koha::Patrons->search_patrons_to_update_category({from=>$a_categorycode,fine_max=>5})->count,1,'One patron with fines under $5');
     is( Koha::Patrons->search_patrons_to_update_category({from=>$a_categorycode,fine_max=>5})->next->borrowernumber,$adult1->borrowernumber,'One patron with fines under $5 is expected one');
+
+    my $adult3 = $builder->build_object({class => 'Koha::Patrons', value => {
+            categorycode=>$a_categorycode,
+            branchcode=>$branchcode1,
+        }
+    });
+    is( Koha::Patrons->search_patrons_to_update_category({from=>$a_categorycode,fine_max=>5})->count,2,'Two patrons with fines under $5, patron with no fine history is found');
 
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,3,'Guarantor has 3 guarantees');
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode})->update_category_to({category=>$c_categorycode_2}),3,'Three child patrons updated to another child category with no params passed');
