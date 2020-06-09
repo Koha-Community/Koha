@@ -77,21 +77,55 @@ function ExpandField(index) {
     }
 }
 
+var current_select2;
 var Select2Utils = {
-    removeSelect2: function(element) {
+    removeSelect2: function(selects) {
         if ($.fn.select2) {
-            var selects = element.getElementsByTagName('select');
-            for (var i=0; i < selects.length; i++) {
-                $(selects[i]).select2('destroy');
-            }
+            $(selects).each(function(){
+                $(this).select2('destroy');
+            });
         }
     },
 
-    initSelect2: function(element) {
+    initSelect2: function(selects) {
         if ($.fn.select2) {
-            var selects = element.getElementsByTagName('select');
-            for (var i=0; i < selects.length; i++) {
-                $(selects[i]).select2();
+            if ( ! CAN_user_parameters_manage_auth_values ) {
+                $(selects).select2();
+            } else {
+                $(selects).select2({
+                    tags: true,
+                    createTag: function (tag) {
+                        return {
+                            id: tag.term,
+                            text: tag.term,
+                            newTag: true
+                        };
+                    },
+                    templateResult: function(state) {
+                        if (state.newTag) {
+                            return state.text + " " + __("(select to create)");
+                        }
+                        return state.text;
+                    }
+                }).on("select2:select", function(e) {
+                    if(e.params.data.newTag){
+                        current_select2 = this;
+                        var category = $(this).data("category");
+                        $("#avCreate #new_av_category").html(category);
+                        $("#avCreate input[name='category']").val(category);
+                        $("#avCreate input[name='value']").val(e.params.data.text);
+                        $("#avCreate input[name='description']").val(e.params.data.text);
+
+                        $(this).val($(this).find("option:first").val()).trigger('change');
+                        $('#avCreate').modal({show:true});
+                    }
+                }).on("select2:clear", function () {
+                    $(this).on("select2:opening.cancelOpen", function (evt) {
+                        evt.preventDefault();
+
+                        $(this).off("select2:opening.cancelOpen");
+                    });
+                });
             }
         }
     }
@@ -104,7 +138,7 @@ var Select2Utils = {
  */
 function CloneField(index, hideMarc, advancedMARCEditor) {
     var original = document.getElementById(index); //original <li>
-    Select2Utils.removeSelect2(original);
+    Select2Utils.removeSelect2($(original).find('select'));
 
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
@@ -262,8 +296,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
     $("ul.sortable_subfield", clone).sortable();
 
-    Select2Utils.initSelect2(original);
-    Select2Utils.initSelect2(clone);
+    Select2Utils.initSelect2($(original).find('select'));
+    Select2Utils.initSelect2($(clone).find('select'));
 }
 
 
@@ -274,7 +308,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
  */
 function CloneSubfield(index, advancedMARCEditor){
     var original = document.getElementById(index); //original <div>
-    Select2Utils.removeSelect2(original);
+    Select2Utils.removeSelect2($(original).find('select'));
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     // set the attribute for the new 'li' subfields
@@ -357,8 +391,8 @@ function CloneSubfield(index, advancedMARCEditor){
     original.parentNode.insertBefore(clone,original.nextSibling);
 
     //Restablish select2 for the cloned elements.
-    Select2Utils.initSelect2(original);
-    Select2Utils.initSelect2(clone);
+    Select2Utils.initSelect2($(original).find('select'));
+    Select2Utils.initSelect2($(clone).find('select'));
 
     // delete data of cloned subfield
     clone.querySelectorAll('input.input_marceditor').value = "";
@@ -442,7 +476,7 @@ function CreateKey(){
  * @param original subfield div to clone
  */
 function CloneItemSubfield(original){
-    Select2Utils.removeSelect2(original);
+    Select2Utils.removeSelect2($(original).find('select'));
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
 
@@ -482,8 +516,8 @@ function CloneItemSubfield(original){
 
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
-    Select2Utils.initSelect2(original);
-    Select2Utils.initSelect2(clone);
+    Select2Utils.initSelect2($(original).find('select'));
+    Select2Utils.initSelect2($(clone).find('select'));
 }
 
 /**
@@ -522,66 +556,30 @@ $(document).ready(function() {
     });
 
     if ( window.editor === undefined ) { // TODO This does not work with the advanced editor
-        if ( CAN_user_parameters_manage_auth_values ) {
-            var current_select2;
-            $('.subfield_line select[data-category!=""]').select2({
-                tags: true,
-                createTag: function (tag) {
-                    return {
-                        id: tag.term,
-                        text: tag.term,
-                        newTag: true
-                    };
-                },
-                templateResult: function(state) {
-                    if (state.newTag) {
-                        return state.text + " " + __("(select to create)");
-                    }
-                }
-            }).on("select2:select", function(e) {
-                if(e.params.data.newTag){
-
-                    var category = $(this).data("category");
-                    $("#avCreate #new_av_category").html(category);
-                    $("#avCreate input[name='category']").val(category);
-                    $("#avCreate input[name='value']").val(e.params.data.text);
-                    $("#avCreate input[name='description']").val(e.params.data.text);
-                    $('#avCreate').modal({show:true});
-
-                    $(current_select2).val($(current_select2).find("option:first").val()).trigger('change');
-
-                    current_select2 = this;
-                }
-            }).on("select2:clear", function () {
-                $(this).on("select2:opening.cancelOpen", function (evt) {
-                    evt.preventDefault();
-
-                    $(this).off("select2:opening.cancelOpen");
-                });
-            });
-
-            $("#add_new_av").on("submit", function(){
-                var data = {
-                    category: $(this).find('input[name="category"]').val(),
-                    value: $(this).find('input[name="value"]').val(),
-                    description: $(this).find('input[name="description"]').val(),
-                    opac_description: $(this).find('input[name="opac_description"]').val(),
-                };
-                $.ajax({
-                    type: "POST",
-                    url: "/api/v1/authorised_values",
-                    data:JSON.stringify(data),
-                    success: function(response) {
-                        $('#avCreate').modal('hide');
-
-                        $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
-                    },
-                    error: function(err) {
-                        $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
-                    }
-                });
-                return false;
-            });
-        }
+        Select2Utils.initSelect2($('.subfield_line select[data-category=""]')); // branches, itemtypes and cn_source
+        Select2Utils.initSelect2($('.subfield_line select[data-category!=""]'));
     }
+
+    $("#add_new_av").on("submit", function(){
+        var data = {
+            category: $(this).find('input[name="category"]').val(),
+            value: $(this).find('input[name="value"]').val(),
+            description: $(this).find('input[name="description"]').val(),
+            opac_description: $(this).find('input[name="opac_description"]').val(),
+        };
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/authorised_values",
+            data:JSON.stringify(data),
+            success: function(response) {
+                $('#avCreate').modal('hide');
+
+                $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
+            },
+            error: function(err) {
+                $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
+            }
+        });
+        return false;
+    });
 });
