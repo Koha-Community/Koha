@@ -19229,8 +19229,8 @@ if( CheckVersion( $DBversion ) ) {
         });
     }
 
-    $dbh->do("UPDATE marc_subfield_structure JOIN fieldmapping ON tagfield = fieldcode AND subfieldcode=tagsubfield SET kohafield='biblio.subtitle' WHERE fieldmapping.frameworkcode=''");
-    $sth = $dbh->prepare("SELECT * FROM fieldmapping WHERE frameworkcode != '' OR field != 'subtitle'");
+#    $dbh->do(q{UPDATE marc_subfield_structure JOIN fieldmapping ON tagfield = fieldcode AND subfieldcode=tagsubfield SET kohafield='biblio.subtitle' WHERE fieldmapping.frameworkcode='' AND field = 'subtitle'});
+    $sth = $dbh->prepare("SELECT * FROM fieldmapping"); # WHERE frameworkcode != '' OR field != 'subtitle'");
     $sth->execute;
     my @fails_11529;
     if ( $sth->rows ) {
@@ -19259,7 +19259,7 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 11529: Add medium, subtitle and part information to biblio table)\n";
     if ( @fails_11529 ) {
-        print "WARNING: Not all Keyword to MARC mappings could be preserved\n";
+        print "WARNING: Keyword to MARC Mappings:\n";
         for my $fail_11529 ( @fails_11529 ) {
             print "    keyword: "
               . $fail_11529->{field}
