@@ -492,6 +492,7 @@ sub _gen_real {
     if( defined( $params->{info}->{size} ) ) {
         $max = 10 ** ($params->{info}->{size}->[0] - $params->{info}->{size}->[1]);
     }
+    $max = 10 ** 5 if $max > 10 ** 5;
     return sprintf("%.2f", rand($max-0.1));
 }
 
