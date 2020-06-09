@@ -89,7 +89,7 @@ var Select2Utils = {
 
     initSelect2: function(selects) {
         if ($.fn.select2) {
-            if ( ! CAN_user_parameters_manage_auth_values ) {
+            if ( window.CAN_user_parameters_manage_auth_values === undefined || ! CAN_user_parameters_manage_auth_values ) {
                 $(selects).select2();
             } else {
                 $(selects).select2({
