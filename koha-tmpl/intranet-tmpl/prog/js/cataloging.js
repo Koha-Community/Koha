@@ -521,67 +521,67 @@ $(document).ready(function() {
         $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
     });
 
-    if ( CAN_user_parameters_manage_auth_values ) {
-        var current_select2;
-        $('.subfield_line select[data-category!=""]').select2({
-            tags: true,
-            createTag: function (tag) {
-                return {
-                    id: tag.term,
-                    text: tag.term,
-                    newTag: true
-                };
-            },
-            templateResult: function(state) {
-                if (state.newTag) {
-                    return state.text + " " + __("(select to create)");
-                }
-                return state.text;
-            }
-        }).on("select2:select", function(e) {
-            if(e.params.data.newTag){
-
-                var category = $(this).data("category");
-                $("#avCreate #new_av_category").html(category);
-                $("#avCreate input[name='category']").val(category);
-                $("#avCreate input[name='value']").val(e.params.data.text);
-                $("#avCreate input[name='description']").val(e.params.data.text);
-                $('#avCreate').modal({show:true});
-
-                $(current_select2).val($(current_select2).find("option:first").val()).trigger('change');
-
-                current_select2 = this;
-
-            }
-        }).on("select2:clear", function () {
-            $(this).on("select2:opening.cancelOpen", function (evt) {
-                evt.preventDefault();
-
-                $(this).off("select2:opening.cancelOpen");
-            });
-        });
-
-        $("#add_new_av").on("submit", function(){
-            var data = {
-                category: $(this).find('input[name="category"]').val(),
-                value: $(this).find('input[name="value"]').val(),
-                description: $(this).find('input[name="description"]').val(),
-                opac_description: $(this).find('input[name="opac_description"]').val(),
-            };
-            $.ajax({
-                type: "POST",
-                url: "/api/v1/authorised_values",
-                data:JSON.stringify(data),
-                success: function(response) {
-                    $('#avCreate').modal('hide');
-
-                    $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
+    if ( window.editor === undefined ) { // TODO This does not work with the advanced editor
+        if ( CAN_user_parameters_manage_auth_values ) {
+            var current_select2;
+            $('.subfield_line select[data-category!=""]').select2({
+                tags: true,
+                createTag: function (tag) {
+                    return {
+                        id: tag.term,
+                        text: tag.term,
+                        newTag: true
+                    };
                 },
-                error: function(err) {
-                    $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
+                templateResult: function(state) {
+                    if (state.newTag) {
+                        return state.text + " " + __("(select to create)");
+                    }
                 }
+            }).on("select2:select", function(e) {
+                if(e.params.data.newTag){
+
+                    var category = $(this).data("category");
+                    $("#avCreate #new_av_category").html(category);
+                    $("#avCreate input[name='category']").val(category);
+                    $("#avCreate input[name='value']").val(e.params.data.text);
+                    $("#avCreate input[name='description']").val(e.params.data.text);
+                    $('#avCreate').modal({show:true});
+
+                    $(current_select2).val($(current_select2).find("option:first").val()).trigger('change');
+
+                    current_select2 = this;
+                }
+            }).on("select2:clear", function () {
+                $(this).on("select2:opening.cancelOpen", function (evt) {
+                    evt.preventDefault();
+
+                    $(this).off("select2:opening.cancelOpen");
+                });
             });
-            return false;
-        });
+
+            $("#add_new_av").on("submit", function(){
+                var data = {
+                    category: $(this).find('input[name="category"]').val(),
+                    value: $(this).find('input[name="value"]').val(),
+                    description: $(this).find('input[name="description"]').val(),
+                    opac_description: $(this).find('input[name="opac_description"]').val(),
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/api/v1/authorised_values",
+                    data:JSON.stringify(data),
+                    success: function(response) {
+                        $('#avCreate').modal('hide');
+
+                        $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
+                    },
+                    error: function(err) {
+                        $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))
+                    }
+                });
+                return false;
+            });
+        }
     }
 });
