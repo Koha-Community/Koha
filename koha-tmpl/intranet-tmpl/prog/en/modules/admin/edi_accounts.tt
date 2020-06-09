@@ -282,29 +282,29 @@
      </td>
       <td>[% account.san | html %]</td>
       [% IF account.quotes_enabled %]
-         <td>Y</td>
+         <td>Yes</td>
       [% ELSE %]
-         <td>N</td>
+         <td>No</td>
       [% END %]
       [% IF account.orders_enabled %]
-         <td>Y</td>
+         <td>Yes</td>
       [% ELSE %]
-         <td>N</td>
+         <td>No</td>
       [% END %]
       [% IF account.invoices_enabled %]
-         <td>Y</td>
+         <td>Yes</td>
       [% ELSE %]
-         <td>N</td>
+         <td>No</td>
       [% END %]
       [% IF account.responses_enabled %]
-         <td>Y</td>
+         <td>Yes</td>
       [% ELSE %]
-         <td>N</td>
+         <td>No</td>
       [% END %]
       [% IF account.auto_orders %]
-         <td>Y</td>
+         <td>Yes</td>
       [% ELSE %]
-         <td>N</td>
+         <td>No</td>
       [% END %]
       <td class="actions">
           <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id | html %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id | html %]"><i class="fa fa-trash"></i> Delete</a>
