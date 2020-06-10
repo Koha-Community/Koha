@@ -487,8 +487,7 @@ sub getRecords {
                 # BUILD FACETS
                 if ( $servers[ $i - 1 ] =~ /biblioserver/ ) {
                     for my $link_value (
-                        sort { $facets_counter->{$b} <=> $facets_counter->{$a} }
-                        keys %$facets_counter
+                        sort { $a cmp $b } keys %$facets_counter
                       )
                     {
                         my @this_facets_array;
