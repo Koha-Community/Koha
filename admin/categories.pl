@@ -94,6 +94,7 @@ elsif ( $op eq 'add_validate' ) {
     my $default_privacy = $input->param('default_privacy');
     my $reset_password = $input->param('reset_password');
     my $change_password = $input->param('change_password');
+    my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     $reset_password = undef if $reset_password eq -1;
@@ -129,6 +130,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->default_privacy($default_privacy);
         $category->reset_password($reset_password);
         $category->change_password($change_password);
+        $category->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
         eval {
             $category->store;
             $category->replace_branch_limitations( \@branches );
@@ -157,6 +159,7 @@ elsif ( $op eq 'add_validate' ) {
             default_privacy => $default_privacy,
             reset_password => $reset_password,
             change_password => $change_password,
+            exclude_from_local_holds_priority => $exclude_from_local_holds_priority,
         });
         eval {
             $category->store;

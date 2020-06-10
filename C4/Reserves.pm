@@ -843,17 +843,19 @@ sub CheckReserves {
                     $patron = Koha::Patrons->find( $res->{borrowernumber} );
                     $item = Koha::Items->find($itemnumber);
 
-                    my $local_holds_priority_item_branchcode =
-                      $item->$LocalHoldsPriorityItemControl;
-                    my $local_holds_priority_patron_branchcode =
-                      ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
-                      ? $res->{branchcode}
-                      : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )
-                      ? $patron->branchcode
-                      : undef;
-                    $local_hold_match =
-                      $local_holds_priority_item_branchcode eq
-                      $local_holds_priority_patron_branchcode;
+                    unless ($item->exclude_from_local_holds_priority || $patron->category->exclude_from_local_holds_priority) {
+                        my $local_holds_priority_item_branchcode =
+                            $item->$LocalHoldsPriorityItemControl;
+                        my $local_holds_priority_patron_branchcode =
+                            ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
+                            ? $res->{branchcode}
+                            : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )
+                            ? $patron->branchcode
+                            : undef;
+                        $local_hold_match =
+                            $local_holds_priority_item_branchcode eq
+                            $local_holds_priority_patron_branchcode;
+                    }
                 }
 
                 # See if this item is more important than what we've got so far

@@ -401,13 +401,16 @@ sub MapItemsToHoldRequests {
 
         foreach my $request (@$hold_requests) {
             last if $num_items_remaining == 0;
+            my $patron = Koha::Patrons->find($request->{borrowernumber});
+            next if $patron->category->exclude_from_local_holds_priority;
 
             my $local_hold_match;
             foreach my $item (@$available_items) {
                 next
                   if ( !$item->{holdallowed} )
                   || ( $item->{holdallowed} == 1
-                    && $item->{homebranch} ne $request->{borrowerbranch} );
+                    && $item->{homebranch} ne $request->{borrowerbranch}
+                  || $item->{_object}->exclude_from_local_holds_priority );
 
                 next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
 

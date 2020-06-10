@@ -8,7 +8,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% INCLUDE 'biblio-title-head.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>h3{padding-top: 1em; border-top: 2px solid #CCCCCC;}#exportLabelexportModal_{border-top: 0px;}</style>
+<style>h3{padding-top: 1em; border-top: 2px solid #CCCCCC; clear: both}#exportLabelexportModal_{border-top: 0px;}</style>
 </head>
 <body id="catalog_moredetail" class="catalog">
 [% USE KohaDates %]
@@ -44,7 +44,7 @@
         [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc | html %]</li>[% END %]
         <li><span class="label">Physical details:</span> [% pages | html %] [% illus | html %] [% size | html %]&nbsp;</li>
         [% IF ( bnotes ) %]<li><span class="label">Notes:</span> [% bnotes | html %]</li>[% END %]
-        <li><span class="label">No. of items:</span> [% count | html %]&nbsp;[% IF ( hiddencount ) %]total ([% showncount | html %] shown / [% hiddencount | html %] hidden) 
+        <li><span class="label">No. of items:</span> [% count | html %]&nbsp;[% IF ( hiddencount ) %]total ([% showncount | html %] shown / [% hiddencount | html %] hidden)
 <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items</a>[% END %]</li>
     </ol>
     </div>
@@ -216,6 +216,32 @@
             [% END %]
 
             </ol></div></div>
+
+            <div class="listgroup"><h4>Priority</h4>
+                <div class="rows">
+                    <ol class="bibliodetails">
+                        <li>
+                            <span class="label">Exclude from local holds priority:</span>
+                            <form action="updateitem.pl" method="post">
+                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                            <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority">
+                            [% IF ITEM_DAT.exclude_from_local_holds_priority %]
+                                <option value="1" selected>Yes</option>
+                                <option value="0">No</option>
+                            [% ELSE %]
+                                <option value="1">Yes</option>
+                                <option value="0" selected>No</option>
+                            [% END %]
+                            </select>
+                            <input type="hidden" name="op" value="set_exclude_priority" />
+                            <input type="submit" name="submit" class="submit" value="Update" /></form>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
             <div class="listgroup"><h4>History</h4>
             <div class="rows">
             <ol class="bibliodetails">

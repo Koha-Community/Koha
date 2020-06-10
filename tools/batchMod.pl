@@ -57,6 +57,7 @@ my $completedJobID = $input->param('completedJobID');
 my $runinbackground = $input->param('runinbackground');
 my $src          = $input->param('src');
 my $use_default_values = $input->param('use_default_values');
+my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
 
 my $template_name;
 my $template_flag;
@@ -231,6 +232,7 @@ if ($op eq "action") {
                             }
                         }
                         else {
+                            $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store if defined $exclude_from_local_holds_priority;
                             if ( $values_to_modify || $values_to_blank ) {
                                 my $localmarcitem = Item2Marc($itemdata);
                                 my $modified = 0;

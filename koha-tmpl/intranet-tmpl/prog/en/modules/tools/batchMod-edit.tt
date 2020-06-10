@@ -335,6 +335,21 @@ $(document).ready(function(){
         [% END %]
     </ol>
     </fieldset>
+    <fieldset class="rows">
+      <legend>Priority</legend>
+      <ol>
+        <li>
+          <div class="subfield_line">
+          <label for="exclude_from_local_holds_priority">Exclude from local holds priority:</label>
+            <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority" class="input_marceditor" style="width: 50px">
+                <option selected></option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+          </div>
+        </li>
+      </ol>
+    </fieldset>
     <fieldset class="action">    
    <div id="jobpanel">
        <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>

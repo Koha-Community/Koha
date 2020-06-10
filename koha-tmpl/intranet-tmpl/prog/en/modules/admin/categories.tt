@@ -297,6 +297,19 @@
                     </select>
                     <span>Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <i>batch_anonymise.pl</i> which should be set up by your system administrator.</span>
                 </li>
+                <li>
+                    <label for="exclude_from_local_holds_priority">Exclude from local holds priority:</label>
+                    <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority">
+                    [% IF category.exclude_from_local_holds_priority %]
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
+                    [% ELSE %]
+                        <option value="1">Yes</option>
+                        <option value="0" selected>No</option>
+                    [% END %]
+                    </select>
+                    <span>If <i>Yes</i>, holds placed by patrons of this category will not be given priority</span>
+                </li>
             </ol>
         </fieldset>
 
