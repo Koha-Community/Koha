@@ -31,7 +31,7 @@ plugin 'Koha::REST::Plugin::Pagination';
 get '/cities' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
-    my $cities = $c->objects->search(Koha::Cities->new);
+    my $cities = $c->objects->search(Koha::Cities->new, \&to_model );
     $c->render( status => 200, json => $cities );
 };
 
@@ -152,18 +152,18 @@ subtest 'objects.search helper' => sub {
     });
 
     # _match=starts_with
-    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=starts_with')
+    $t->get_ok('/cities?nombre=manuel&_per_page=4&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
         ->json_hasnt('/3')
-        ->json_is('/0/name' => 'Manuel')
-        ->json_is('/1/name' => 'Manuela')
-        ->json_is('/2/name' => 'Manuelab');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela')
+        ->json_is('/2/city_name' => 'Manuelab');
 
     # _match=ends_with
-    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=ends_with')
+    $t->get_ok('/cities?nombre=manuel&_per_page=4&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
@@ -172,24 +172,24 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/city_name' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=exact')
+    $t->get_ok('/cities?nombre=manuel&_per_page=4&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
         ->json_is('/0/city_name' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=contains')
+    $t->get_ok('/cities?nombre=manuel&_per_page=4&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
         ->json_has('/3')
         ->json_hasnt('/4')
-        ->json_is('/0/name' => 'Manuel')
-        ->json_is('/1/name' => 'Manuela')
-        ->json_is('/2/name' => 'Manuelab')
-        ->json_is('/3/name' => 'Emanuel');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela')
+        ->json_is('/2/city_name' => 'Manuelab')
+        ->json_is('/3/city_name' => 'Emanuel');
 
     $schema->storage->txn_rollback;
 };
