@@ -129,23 +129,24 @@
                     </div> <!-- /#library_info -->
 
                 [% ELSE %]
-                    <h2>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h2>
+                    <div id="library_info" class="maincontent">
+                        <h2>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h2>
 
-                    [% FOREACH library IN libraries %]
-                        <h3 property="name">
-                            [% IF ( libraries.count > 1 ) %]
-                                <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
-                            [% ELSE %]
-                                [% library.branchname | html %]
+                        [% FOREACH library IN libraries %]
+                            <h3 property="name">
+                                [% IF ( libraries.count > 1 ) %]
+                                    <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">[% library.branchname | html %]</a>
+                                [% ELSE %]
+                                    [% library.branchname | html %]
+                                [% END %]
+                            </h3>
+                            [% PROCESS library_info %]
+                            <hr>
+                            [% IF ( libraries.count == 1 ) %]
+                                [% PROCESS library_description %]
                             [% END %]
-                        </h3>
-                        [% PROCESS library_info %]
-                        <hr>
-                        [% IF ( libraries.count == 1 ) %]
-                            [% PROCESS library_description %]
                         [% END %]
-                    [% END %]
-
+                    </div>
                 [% END %]
 
         </div> <!-- /.row-fluid -->
