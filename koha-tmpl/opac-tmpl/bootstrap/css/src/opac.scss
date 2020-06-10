@@ -3236,4 +3236,29 @@ $star-selected: #EDB867;
 }
 /*end browse search*/
 
+/* Skip to content link. CSS adapted from https://webaim.org/ */
+#scrolltocontent {
+    background: #c60000;
+    border: 1px solid white;
+    border-radius: 0 0 4px 0;
+    border-width: 0 1px 1px 0;
+    color: white;
+    left: 0px;
+    padding: 6px 12px;
+    position: absolute;
+    text-decoration: none;
+    text-shadow: 0 -1px 0 rgba(58, 0, 0, 0.75);
+    top: -40px;
+    transition: top .5s ease-out;
+    z-index: 100;
+
+    &:focus {
+        left: 0px;
+        outline-color: transparent;
+        position: absolute;
+        top: 0px;
+        transition: top .1s ease-in;
+    }
+}
+
 @import "responsive";
