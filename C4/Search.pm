@@ -625,7 +625,6 @@ sub getRecords {
         foreach my $f (@facets_loop) {
             $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
         }
-        @facets_loop = sort {$a->{expand} cmp $b->{expand}} @facets_loop;
     }
 
     return ( undef, $results_hashref, \@facets_loop );
