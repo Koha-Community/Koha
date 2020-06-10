@@ -67,11 +67,11 @@ my $opac     = $ENV{KOHA_OPAC_URL};
 
 
 # test KOHA_INTRANET_URL is set
-if ( not defined $intranet ) {
+if ( not $intranet ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 }
 # test KOHA_OPAC_URL is set
-elsif ( not defined $opac ) {
+elsif ( not $opac ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_OPAC_URL to do tests\n";
 }
 else {
