@@ -27,79 +27,80 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
-
-                <h2>Course reserves for <i>[% course.course_name | html %]</i></h2>
-                <div class="rows">
-                    <ol>
-                        [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
-                        <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department, 1 ) | html %]</li>
-                        [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
-                        [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]
-                        [% IF ( course.instructors ) %]
-                            <li><span class="label">Instructors:</span>
-                                <ul>
-                                    [% FOREACH i IN course.instructors %]
-                                        <li><div class="instructor">[% i.firstname | html %] [% i.surname | html %]</div></li>
-                                    [% END %]
-                                </ul>
-                            </li>
-                        [% END %]
-                        [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note | $raw %]</li>[% END %]
-                    </ol>
-                </div>
-
-                [% IF ( course_reserves ) %]
-                    <table id="course-items-table" class="table table-bordered table-striped table-condensed">
-                        <thead>
-                            <tr>
-                                <th class="anti-the">Title</th>
-                                <th>Author</th>
-                                <th>Item type</th>
-                                <th>Location</th>
-                                <th>Collection</th>
-                                <th>Call number</th>
-                                <th>Copy number</th>
-                                <th>Status</th>
-                                <th class="title-string">Date due</th>
-                                <th>Notes</th>
-                                <th>Link</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            [% FOREACH cr IN course_reserves %]
-                                <tr>
-                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
-                                    <td>[% cr.biblio.author | html %]</td>
-                                    <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
-                                    <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location, 1 ) | html %]</i></td>
-                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode, 1 ) | html %]</td>
-                                    <td>[% cr.item.itemcallnumber | html %]</td>
-                                    <td>[% cr.item.copynumber | html %]</td>
-                                    <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
-                                    <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</span></td>
-                                    <td>[% IF ( cr.public_note ) %]
-                                            [% cr.public_note | $raw %]
-                                        [% ELSIF ( cr.item.itemnotes ) %]
-                                            [% cr.item.itemnotes | $raw %]
+                <div id="course_reserves" class="maincontent">
+                    <h2>Course reserves for <i>[% course.course_name | html %]</i></h2>
+                    <div class="rows">
+                        <ol>
+                            [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
+                            <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department, 1 ) | html %]</li>
+                            [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
+                            [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]
+                            [% IF ( course.instructors ) %]
+                                <li><span class="label">Instructors:</span>
+                                    <ul>
+                                        [% FOREACH i IN course.instructors %]
+                                            <li><div class="instructor">[% i.firstname | html %] [% i.surname | html %]</div></li>
                                         [% END %]
-                                    </td>
-                                    <td>[% IF (cr.item.uri) %]
-                                            <a href="[% cr.item.uri | url %]">Item URI</a>
-                                        [% ELSIF (cr.biblioitem.url) %]
-                                            <a href="[% cr.biblioitem.url | url %]">Record URL</a>
-                                        [% END %]
-                                    </td>
-                                </tr>
+                                    </ul>
+                                </li>
                             [% END %]
-                        </tbody>
-                    </table>
-                [% ELSE %]
-                    <br style="clear:both;" />
-                    <div class="alert alert-info">
-                        <p>No reserves have been selected for this course.</p>
+                            [% IF ( course.public_note ) %]<li><span class="label">Notes:</span> [% course.public_note | $raw %]</li>[% END %]
+                        </ol>
                     </div>
-                [% END %]
+
+                    [% IF ( course_reserves ) %]
+                        <table id="course-items-table" class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="anti-the">Title</th>
+                                    <th>Author</th>
+                                    <th>Item type</th>
+                                    <th>Location</th>
+                                    <th>Collection</th>
+                                    <th>Call number</th>
+                                    <th>Copy number</th>
+                                    <th>Status</th>
+                                    <th class="title-string">Date due</th>
+                                    <th>Notes</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                [% FOREACH cr IN course_reserves %]
+                                    <tr>
+                                        <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
+                                        <td>[% cr.biblio.author | html %]</td>
+                                        <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
+                                        <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location, 1 ) | html %]</i></td>
+                                        <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode, 1 ) | html %]</td>
+                                        <td>[% cr.item.itemcallnumber | html %]</td>
+                                        <td>[% cr.item.copynumber | html %]</td>
+                                        <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
+                                        <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</span></td>
+                                        <td>[% IF ( cr.public_note ) %]
+                                                [% cr.public_note | $raw %]
+                                            [% ELSIF ( cr.item.itemnotes ) %]
+                                                [% cr.item.itemnotes | $raw %]
+                                            [% END %]
+                                        </td>
+                                        <td>[% IF (cr.item.uri) %]
+                                                <a href="[% cr.item.uri | url %]">Item URI</a>
+                                            [% ELSIF (cr.biblioitem.url) %]
+                                                <a href="[% cr.biblioitem.url | url %]">Record URL</a>
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <br style="clear:both;" />
+                        <div class="alert alert-info">
+                            <p>No reserves have been selected for this course.</p>
+                        </div>
+                    [% END %]
+                </div> <!-- / #course_reserves -->
             </div> <!-- / .span12 -->
         </div> <!-- / .row-fluid -->
     </div> <!-- / .container-fluid -->
