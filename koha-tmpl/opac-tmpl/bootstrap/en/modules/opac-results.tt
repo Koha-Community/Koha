@@ -95,7 +95,19 @@
                     </div>
                 [% END %]
 
-                [% IF ( opacfacets && total ) %]<div class="span10 maincontent">[% ELSE %]<div class="span12 maincontent">[% END %]
+                [% IF ( total ) %]
+                   [% IF ( opacfacets ) %]
+                   <div class="span10 maincontent">
+                   [% ELSE %]
+                   <div class="span12 maincontent">
+                   [% END %]
+                [% ELSE %]
+                   [% IF ( opacfacets ) %]
+                   <div class="span10">
+                   [% ELSE %]
+                   <div class="span12">
+                   [% END %]
+                [% END %]
 
                 [% IF ( searchdesc ) %]
                     [% IF ( total ) %]
