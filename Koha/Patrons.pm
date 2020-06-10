@@ -393,7 +393,7 @@ sub search_patrons_to_update_category {
     }
     if ($params->{fine_min} || $params->{fine_max}) {
         $query{join} = ["accountlines"];
-        $query{select} = ["borrowernumber", "accountlines.amountoutstanding" ];
+        $query{columns} = ["borrowernumber"];
         $query{group_by} = ["borrowernumber"];
         $query{having} = \['IFNULL(sum(accountlines.amountoutstanding),0) <= ?',$params->{fine_max}] if defined $params->{fine_max};
         $query{having} = \['IFNULL(sum(accountlines.amountoutstanding),0) >= ?',$params->{fine_min}] if defined $params->{fine_min};
