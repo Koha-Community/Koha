@@ -80,6 +80,7 @@
                     [% INCLUDE 'biblio-title.inc' biblio=reserveloo %]
                 </a></p>
                 [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author | html %]</p>[% END %]
+                [% IF ( reserveloo.editionstatement ) %]<p>[% reserveloo.editionstatement | html %]</p>[% END %]
             </td>
         [% ELSE %]
             <td>"</td>
