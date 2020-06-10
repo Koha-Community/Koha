@@ -74,7 +74,7 @@ Print a brief help message and exits.
 
 Prints the manual page and exits.
 
-=item B<--verbosse | -v>
+=item B<--verbose | -v>
 
 Verbose. Without this flag set, only fatal errors are reported.
 
@@ -248,17 +248,18 @@ my $target_patrons = Koha::Patrons->search(\%params)->search_patrons_to_update_c
         fine_max      => $fine_max,
     }
 );
+
 my $patrons_found    = $target_patrons->count;
 my $actually_updated = 0;
 my $testdisplay      = $doit ? "" : "WOULD HAVE ";
 if ($verbose) {
     while ( my $target_patron = $target_patrons->next() ) {
-        my $target = Koha::Patrons->find( $target_patron->borrowernumber );
+        $target_patron->discard_changes();
         $verbose
           and print $testdisplay
           . "Updated "
-          . $target->firstname . " "
-          . $target->surname
+          . $target_patron->firstname() . " "
+          . $target_patron->surname()
           . " from $fromcat to $tocat\n";
     }
     $target_patrons->reset;
