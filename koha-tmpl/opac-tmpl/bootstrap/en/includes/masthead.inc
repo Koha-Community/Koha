@@ -12,7 +12,7 @@
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <button id="scrolltocontent" class="sr-only sr-only-focusable pull-left nav btn btn-danger" type="button">Skip to main content</button>
+                    <button id="scrolltocontent">Skip to main content</button>
                     <h1 id="logo">
                         <a class="brand" href="/cgi-bin/koha/opac-main.pl">
                             [% IF ( LibraryNameTitle ) %]
