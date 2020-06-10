@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
@@ -27,8 +27,12 @@ use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use Koha::MarcSubfieldStructures;
 
+use MARC::Field;
+use MARC::Record;
+
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+use Test::MockModule;
 
 BEGIN {
     use_ok('Koha::Biblio');
@@ -503,6 +507,41 @@ subtest 'suggestions() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'components() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my ($host_bibnum) = C4::Biblio::AddBiblio(host_record(), '');
+    my $host_biblio = Koha::Biblios->find($host_bibnum);
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Zebra' );
+    my $search_mod = Test::MockModule->new( 'Koha::SearchEngine::Zebra::Search' );
+    $search_mod->mock( 'simple_search_compat', \&search_component_record2 );
+
+    my @components = $host_biblio->components;
+    is( ref(\@components), 'ARRAY', 'Return type is correct' );
+
+    is_deeply(
+        [@components],
+        [()],
+        '->components returns an empty ARRAY'
+    );
+
+    $search_mod->unmock( 'simple_search_compat');
+    $search_mod->mock( 'simple_search_compat', \&search_component_record1 );
+    my $component_record = component_record1()->as_xml();
+
+    is_deeply(
+        $host_biblio->components,
+        [($component_record)],
+        '->components returns the related component part record'
+    );
+    $search_mod->unmock( 'simple_search_compat');
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'orders() and active_orders() tests' => sub {
 
     plan tests => 5;
@@ -736,3 +775,32 @@ subtest 'article_requests() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+sub component_record1 {
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '001', '3456' ),
+        MARC::Field->new( '245', '', '', a => 'Some title 1' ),
+        MARC::Field->new( '773', '', '', w => '(FIRST)1234' ),
+    );
+    return $marc;
+}
+sub search_component_record1 {
+    my @results = ( component_record1()->as_xml() );
+    return ( undef, \@results, 1 );
+}
+
+sub search_component_record2 {
+    my @results;
+    return ( undef, \@results, 0 );
+}
+
+sub host_record {
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '001', '1234' ),
+        MARC::Field->new( '003', 'FIRST' ),
+        MARC::Field->new( '245', '', '', a => 'Some title' ),
+    );
+    return $marc;
+}
