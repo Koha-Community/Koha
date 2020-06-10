@@ -286,6 +286,11 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 32
 
+=head2 exclude_from_local_holds_priority
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -406,6 +411,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "exclude_from_local_holds_priority",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -747,8 +754,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-27 10:38:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IpI7wRweeZCbCeU1LhZbRQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-05 20:21:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9AxhV/hJnavWY4OTDTNRcQ
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
@@ -757,6 +764,10 @@ __PACKAGE__->belongs_to(
   "Koha::Schema::Result::Biblio",
   { biblionumber => "biblionumber" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->add_columns(
+    '+exclude_from_local_holds_priority' => { is_boolean => 1 },
 );
 
 use C4::Context;

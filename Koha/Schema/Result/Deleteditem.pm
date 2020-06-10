@@ -282,6 +282,11 @@ __PACKAGE__->table("deleteditems");
   is_nullable: 1
   size: 32
 
+=head2 exclude_from_local_holds_priority
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -392,6 +397,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "exclude_from_local_holds_priority",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -407,8 +414,12 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-27 10:38:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MsPWE8Trd034UYFcZVbCtw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-05 20:21:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4xydPpkFXE+oOR46jY5L8Q
+
+__PACKAGE__->add_columns(
+    '+exclude_from_local_holds_priority' => { is_boolean => 1 },
+);
 
 sub koha_objects_class {
     'Koha::Old::Items';

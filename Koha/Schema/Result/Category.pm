@@ -133,6 +133,11 @@ __PACKAGE__->table("categories");
   data_type: 'tinyint'
   is_nullable: 1
 
+=head2 exclude_from_local_holds_priority
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -188,6 +193,8 @@ __PACKAGE__->add_columns(
   "reset_password",
   { data_type => "tinyint", is_nullable => 1 },
   "change_password",
+  { data_type => "tinyint", is_nullable => 1 },
+  "exclude_from_local_holds_priority",
   { data_type => "tinyint", is_nullable => 1 },
 );
 
@@ -281,8 +288,12 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 15:54:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mWu3jtWB0NXhGMjoapGfSg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-07-22 17:36:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p5Jzm0gHhk42fcLikwUnWw
+
+__PACKAGE__->add_columns(
+    '+exclude_from_local_holds_priority' => { is_boolean => 1 },
+);
 
 sub koha_object_class {
     'Koha::Patron::Category';
