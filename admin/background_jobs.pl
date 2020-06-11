@@ -24,8 +24,8 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 
-use Koha::BackgroundJob;
 use Koha::BackgroundJobs;
+use Koha::Virtualshelves;
 
 my $input             = new CGI;
 my $op                = $input->param('op') || 'list';
@@ -50,6 +50,8 @@ if ( $op eq 'view' ) {
         $template->param(
             job       => $job,
         );
+        $template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) )
+            if $job->type eq 'batch_biblio_record_modification';
     } else {
         $op = 'list';
     }
