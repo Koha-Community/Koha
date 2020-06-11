@@ -54,10 +54,10 @@
         </ul>
 
         [% UNLESS ( total ) %]
-            <div class="container-fluid maincontent">
+            <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span12">
-                        <strong>No results found!</strong>
+                        <h2 id="numresults">No results found!</h2>
                         <p>
                             [% IF ( searchdesc ) %]
                                 No results found for that in [% LibraryName | html %] catalog.
@@ -83,7 +83,7 @@
             </div> <!-- / .container-fluid -->
         [% END # / UNLESS searchdesc %]
 
-        <div id="maincontent" class="container-fluid">
+        <div class="container-fluid">
             <div class="row-fluid">
                 [% IF ( opacfacets && total ) %]
                     <div class="span2">
@@ -98,20 +98,17 @@
                 [% IF ( opacfacets && total ) %]<div class="span10 maincontent">[% ELSE %]<div class="span12 maincontent">[% END %]
 
                 [% IF ( searchdesc ) %]
-                    <p id="numresults">
-                    [% IF ( total ) %]<strong>Your search returned [% total | html %] results.</strong>
+                    [% IF ( total ) %]
+                        <h2 id="numresults">
+                            Your search returned [% total | html %] results.
+                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="btn btn-link rsssearchlink noprint" aria-label="Subscribe to this search">
+                                <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
+                            </a>
+                        </h2>
                         [% IF ( related ) %]
-                            (related searches:
-                                [% FOREACH relate IN related %]
-                                    [% relate.related_search | html %]
-                                [% END %]
-                            ).
+                        <p>(related searches:[% FOREACH relate IN related %] [% relate.related_search | html %][% END %]).</p>
                         [% END %]
-                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="rsssearchlink noprint">
-                            <i class="fa fa-rss rsssearchicon" title="Subscribe to this search"></i>
-                        </a>
                     [% END # / IF total %]
-                    </p>
                 [% END # / IF searchdesc %]
 
                 <div id="userresults">
