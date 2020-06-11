@@ -160,14 +160,14 @@
 
         <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
-            <h5 class="author">
+            <span class="results_summary author h3">
                 <xsl:call-template name="m880Select">
                     <xsl:with-param name="basetags">100,110,111,700,710,711</xsl:with-param>
                     <xsl:with-param name="codes">abc</xsl:with-param>
                     <xsl:with-param name="index">au</xsl:with-param>
                     <!-- do not use label 'by ' here, it would be repeated for every occurrence of 100,110,111,700,710,711 -->
                 </xsl:call-template>
-            </h5>
+            </span>
         </xsl:if>
 
         <!--#13382 Added Author Statement to separate Authors and Contributors -->
@@ -1571,7 +1571,7 @@
         <xsl:param name="materialTypeLabel" />
         <xsl:param name="theme" />
         <xsl:if test="count($authorfield)&gt;0">
-        <h5 class="author">
+        <span class="results_summary author h3">
             <xsl:for-each select="$authorfield">
                 <xsl:choose>
                     <xsl:when test="position()&gt;1"/>
@@ -1839,7 +1839,7 @@
                     <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
-        </h5>
+        </span>
         </xsl:if>
     </xsl:template>
 
