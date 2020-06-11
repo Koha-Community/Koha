@@ -303,7 +303,7 @@
     <div id="loginModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="modalLoginLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="modalLoginLabel">Log in to your account</h3>
+            <h2 id="modalLoginLabel">Log in to your account</h2>
         </div>
         <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
             <input type="hidden" name="has-search-query" id="has-search-query" value="" />
@@ -315,9 +315,9 @@
                             <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
                         </div>
                     [% ELSE %]
-                        <h4>Shibboleth login</h4>
+                        <h3>Shibboleth login</h3>
                         <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl | $raw %]">click here to login</a>.</p>
-                        <h4>Local Login</h4>
+                        <h3>Local Login</h3>
                     [% END %]
                 [% END %]
                 <input type="hidden" name="koha_login_context" value="opac" />
