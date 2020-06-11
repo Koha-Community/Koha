@@ -25,7 +25,7 @@
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
-      <h1 class="title">
+      <h2 class="title">
         <xsl:call-template name="addClassRtl" />
         <xsl:for-each select="marc:subfield">
           <xsl:choose>
@@ -62,7 +62,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>
-      </h1>
+      </h2>
     </xsl:for-each>
   </xsl:if>
 

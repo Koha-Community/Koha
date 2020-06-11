@@ -67,7 +67,7 @@
 
         <!-- Tittel og ansvarsopplysninger -->
         <xsl:if test="marc:datafield[@tag=245]">
-        <h1 class="title">
+        <h2 class="title">
             <xsl:for-each select="marc:datafield[@tag=245]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">a</xsl:with-param>
@@ -89,7 +89,7 @@
                         <xsl:with-param name="codes">np</xsl:with-param>
                     </xsl:call-template>
             </xsl:for-each>
-        </h1>
+        </h2>
         </xsl:if>
 
         <!-- Author Statement -->
