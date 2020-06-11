@@ -20,6 +20,12 @@ if( CheckVersion( $DBversion ) ) {
         |);
     }
 
+    $dbh->do(qq{
+        INSERT IGNORE permissions (module_bit, code, description)
+        VALUES
+        (3, 'manage_background_jobs', 'Manage background jobs')
+    });
+
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 15032 - Add new table background_jobs)\n";
 }

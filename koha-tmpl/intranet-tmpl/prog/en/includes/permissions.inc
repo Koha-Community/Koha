@@ -260,6 +260,11 @@
             Manage keyboard shortcuts for the advanced cataloging editor
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_background_jobs' -%]
+        <span class="sub_permission manage_background_jobs_subpermission">
+            Manage background jobs
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_borrowers' -%]
         <span class="sub_permission edit_borrowers_subpermission">
             Add, modify and view patron information

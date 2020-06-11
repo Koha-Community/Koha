@@ -37,7 +37,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 'manage_background_jobs' }, # TODO Add this new permission, so far only works for superlibrarians
+        flagsrequired   => { parameters => 'manage_background_jobs' }, # Maybe the "view" view should be accessible for the user who create this job.
+                                                                       # But in that case what could the permission to check here? tools => '*' ?
         debug           => 1,
     }
 );
