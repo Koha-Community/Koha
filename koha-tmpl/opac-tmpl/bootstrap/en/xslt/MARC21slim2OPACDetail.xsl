@@ -119,17 +119,17 @@
         <!-- Title Statement -->
         <!-- Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
-            <h1 class="title" property="alternateName">
+            <h2 class="title" property="alternateName">
                 <xsl:call-template name="m880Select">
                     <xsl:with-param name="basetags">245</xsl:with-param>
                     <xsl:with-param name="codes">abhfgknps</xsl:with-param>
                 </xsl:call-template>
-            </h1>
+            </h2>
         </xsl:if>
 
             <!--Bug 13381 -->
             <xsl:if test="marc:datafield[@tag=245]">
-                <h1 class="title" property="name">
+                <h2 class="title" property="name">
                     <xsl:for-each select="marc:datafield[@tag=245]">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">a</xsl:with-param>
@@ -154,7 +154,7 @@
                             </xsl:choose>
                         </xsl:for-each>
                     </xsl:for-each>
-                </h1>
+                </h2>
             </xsl:if>
 
 
