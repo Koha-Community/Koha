@@ -131,7 +131,7 @@
 
             [% UNLESS ( message ) %]
                 [% UNLESS ( none_available ) %]
-                    <h3>Confirm holds for:[% INCLUDE 'patron-title.inc' patron = logged_in_user %] ([% logged_in_user.cardnumber | html %])</h3>
+                    <h2>Confirm holds for:[% INCLUDE 'patron-title.inc' patron = logged_in_user %] ([% logged_in_user.cardnumber | html %])</h2>
                 [% END # / UNLESS none_available %]
 
                 [% IF (RESERVE_CHARGE) %]
