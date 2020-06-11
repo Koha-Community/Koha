@@ -19229,8 +19229,7 @@ if( CheckVersion( $DBversion ) ) {
         });
     }
 
-#    $dbh->do(q{UPDATE marc_subfield_structure JOIN fieldmapping ON tagfield = fieldcode AND subfieldcode=tagsubfield SET kohafield='biblio.subtitle' WHERE fieldmapping.frameworkcode='' AND field = 'subtitle'});
-    $sth = $dbh->prepare("SELECT * FROM fieldmapping"); # WHERE frameworkcode != '' OR field != 'subtitle'");
+    $sth = $dbh->prepare("SELECT * FROM fieldmapping");
     $sth->execute;
     my @fails_11529;
     if ( $sth->rows ) {
@@ -19269,7 +19268,10 @@ if( CheckVersion( $DBversion ) ) {
               . $fail_11529->{framework}
               . " framework\n";
         }
-        print "You will need to remap using Koha to MARC mappings in administration\n";
+        print "The keyword to marc mapping feature is no longer supported. Above find the\n";
+        print "mappings that had been defined in your system. You will need to remap any\n";
+        print "desired MARC fields to the Koha field you desire in the Koha to MARC mappings\n";
+        print "page under Administration\n";
     }
     print "NOTE: misc/batchRebuildBiblioTables.pl should be run to populate the fields introduced in bug 11529. It may take some time for larger databases.\n\n"
 }
