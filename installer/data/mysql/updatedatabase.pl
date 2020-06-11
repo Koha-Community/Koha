@@ -19084,6 +19084,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24854 - Disable IDreamBooks)\n";
 }
 
+$DBversion = '19.05.11.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('TrapHoldsOnOrder','1',NULL,'If enabled, Koha will trap holds for on order items ( notforloan < 0 )','YesNo')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Replay of 19.05.10.003 upgrade - that initially had a typo - to ensure the changes are done)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
