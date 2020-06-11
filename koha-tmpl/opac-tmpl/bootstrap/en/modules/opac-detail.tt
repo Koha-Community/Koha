@@ -112,7 +112,7 @@
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc | $raw %]
                     [% ELSE %]
-                        <h1 class="title">[% title | html %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl.subfield | html %] [% END %]</span>[% END %]</h1>
+                        <h2 class="title">[% title | html %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl.subfield | html %] [% END %]</span>[% END %]</h2>
                         [% IF ( author ) %]<h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></h5>[% END %]
 
                         <span class="results_summary">[% UNLESS ( item_level_itypes ) %]
