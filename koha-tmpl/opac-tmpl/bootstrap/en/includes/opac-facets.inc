@@ -3,9 +3,9 @@
 [% USE Languages %]
 [% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
-        <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
+        <h2><a href="#" class="menu-collapse-toggle">Refine your search</a></h2>
         <ul class="menu-collapse">
-            <li id="availability_facet"><h5 id="facet-availability">Availability</h5>
+            <li id="availability_facet"><h3 id="facet-availability">Availability</h3>
                 <ul>
                     <li>
                         [% IF ( available ) %]
@@ -21,19 +21,19 @@
             [% FOREACH facets_loo IN facets_loop %]
                 [% IF facets_loo.facets.size > 0 %]
                     <li id="[% facets_loo.type_id | html %]">
-                        [% IF facets_loo.type_label_Authors %]<h5 id="facet-authors">Authors</h5>[% END %]
-                        [% IF facets_loo.type_label_Titles %]<h5 id="facet-titles">Titles</h5>[% END %]
-                        [% IF facets_loo.type_label_Topics %]<h5 id="facet-topics">Topics</h5>[% END %]
-                        [% IF facets_loo.type_label_Places %]<h5 id="facet-places">Places</h5>[% END %]
-                        [% IF facets_loo.type_label_Series %]<h5 id="facet-series">Series</h5>[% END %]
-                        [% IF facets_loo.type_label_ItemTypes %]<h5 id="facet-itemtypes">Item types</h5>[% END %]
-                        [% IF facets_loo.type_label_CollectionCodes %]<h5 id="facet-collections">Collections</h5>[% END %]
-                        [% IF facets_loo.type_label_Language %]<h5 id="facet-languages">Languages</h5>[% END %]
+                        [% IF facets_loo.type_label_Authors %]<h3 id="facet-authors">Authors</h3>[% END %]
+                        [% IF facets_loo.type_label_Titles %]<h3 id="facet-titles">Titles</h3>[% END %]
+                        [% IF facets_loo.type_label_Topics %]<h3 id="facet-topics">Topics</h3>[% END %]
+                        [% IF facets_loo.type_label_Places %]<h3 id="facet-places">Places</h3>[% END %]
+                        [% IF facets_loo.type_label_Series %]<h3 id="facet-series">Series</h3>[% END %]
+                        [% IF facets_loo.type_label_ItemTypes %]<h3 id="facet-itemtypes">Item types</h3>[% END %]
+                        [% IF facets_loo.type_label_CollectionCodes %]<h3 id="facet-collections">Collections</h3>[% END %]
+                        [% IF facets_loo.type_label_Language %]<h3 id="facet-languages">Languages</h3>[% END %]
                         [% UNLESS singleBranchMode %]
-                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<h5 id="facet-home-libraries">Home libraries</h5>[% END %]
-                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<h5 id="facet-holding-libraries">Holding libraries</h5>[% END %]
+                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<h3 id="facet-home-libraries">Home libraries</h3>[% END %]
+                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<h3 id="facet-holding-libraries">Holding libraries</h3>[% END %]
                         [% END %]
-                        [% IF facets_loo.type_label_Location %]<h5 id="facet-locations">Locations</h5>[% END %]
+                        [% IF facets_loo.type_label_Location %]<h3 id="facet-locations">Locations</h3>[% END %]
                         <ul>
                             [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                             [% IF ( sort_by ) %]
