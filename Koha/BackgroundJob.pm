@@ -53,7 +53,7 @@ sub enqueue {
             # Also, here we just want the Koha instance's name, but it's not in the config...
             # Picking a random id (memcached_namespace) from the config
             my $namespace = C4::Context->config('memcached_namespace');
-            $conn->send_with_receipt( { destination => sprintf("%s-%s", $namespace, $job_type), body => $json_args } )
+            $conn->send_with_receipt( { destination => sprintf("/queue/%s-%s", $namespace, $job_type), body => $json_args } )
               or Koha::Exceptions::Exception->throw('Job has not been enqueued');
         }
     );
