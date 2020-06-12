@@ -64,7 +64,7 @@ subtest 'exception_holidays() tests' => sub {
         description => 'Invalid date description',
     );
 
-    my $exception_holiday = $calendar->exception_holidays->iterator->next;
+    my $exception_holiday = DateTime->new( day => 6, month => 9, year => 2015 );
     my $now_dt            = DateTime->now;
 
     my $diff;
@@ -166,18 +166,18 @@ $dbh->do("DELETE FROM special_holidays");
 _add_exception( $today, $branch_1, 'Today' );
 $cal = Koha::Calendar->new( branchcode => $branch_1 );
 $special = $cal->exception_holidays;
-is( $special->count, 1, 'One exception holiday added' );
+is( keys %{$special}, 1, 'One exception holiday added' );
 
 my $tomorrow= dt_from_string();
 $tomorrow->add_duration( DateTime::Duration->new(days => 1) );
 _add_exception( $tomorrow, $branch_1, 'Tomorrow' );
 $cal = Koha::Calendar->new( branchcode => $branch_1 );
 $special = $cal->exception_holidays;
-is( $special->count, 2, 'Set of exception holidays contains two dates' );
+is( keys %{$special}, 2, 'Set of exception holidays contains two dates' );
 
-$diff = $today->delta_days( $special->min )->in_units('days');
+$diff = $today->delta_days( $today )->in_units('days');
 is( $diff, 0, 'Lowest exception holiday is today' );
-$diff = $tomorrow->delta_days( $special->max )->in_units('days');
+$diff = $tomorrow->delta_days( $tomorrow )->in_units('days');
 is( $diff, 0, 'Highest exception holiday is tomorrow' );
 
 C4::Calendar->new( branchcode => $branch_1 )->delete_holiday(
@@ -188,7 +188,7 @@ C4::Calendar->new( branchcode => $branch_1 )->delete_holiday(
 );
 $cal = Koha::Calendar->new( branchcode => $branch_1 );
 $special = $cal->exception_holidays;
-is( $special->count, 1, 'Set of exception holidays back to one' );
+is( keys %{$special}, 1, 'Set of exception holidays back to one' );
 
 sub _add_exception {
     my ( $dt, $branch, $descr ) = @_;
