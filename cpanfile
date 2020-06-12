@@ -31,7 +31,6 @@ requires 'DateTime', '0.58';
 requires 'DateTime::Event::ICal', '0.08';
 requires 'DateTime::Format::ICal', '0.09';
 requires 'DateTime::Format::MySQL', '0.04';
-requires 'DateTime::Set', '0.28';
 requires 'DateTime::TimeZone', '1.20';
 requires 'Digest::MD5', '2.36';
 requires 'Digest::SHA', '5.43';
