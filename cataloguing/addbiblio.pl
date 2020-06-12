@@ -170,14 +170,15 @@ sub build_authorized_values_list {
     # builds list, depending on authorised value...
 
     #---- branch
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+    my $category = $tagslib->{$tag}->{$subfield}->{authorised_value};
+    if ( $category eq "branches" ) {
         my $libraries = Koha::Libraries->search_filtered({}, {order_by => ['branchname']});
         while ( my $l = $libraries->next ) {
             push @authorised_values, $l->branchcode;;
             $authorised_lib{$l->branchcode} = $l->branchname;
         }
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+    elsif ( $category eq "itemtypes" ) {
         push @authorised_values, "";
 
         my $itemtype;
@@ -188,7 +189,7 @@ sub build_authorized_values_list {
         }
         $value = $itemtype unless ($value);
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
+    elsif ( $category eq "cn_source" ) {
         push @authorised_values, "";
 
         my $class_sources = GetClassSources();
@@ -219,6 +220,7 @@ sub build_authorized_values_list {
         }
     }
     $authorised_values_sth->finish;
+
     return {
         type     => 'select',
         id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
@@ -226,6 +228,7 @@ sub build_authorized_values_list {
         default  => $value,
         values   => \@authorised_values,
         labels   => \%authorised_lib,
+        ( ( grep { $_ eq $category } ( qw(branches itemtypes cn_source) ) ) ? () : ( category => $category ) ),
     };
 
 }
