@@ -215,7 +215,7 @@ my $strsth =
     $sqldatewhere
     AND (reserves.itemnumber IS NULL OR reserves.itemnumber = items.itemnumber)
     AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
-    AND items.itemnumber NOT IN (select itemnumber FROM reserves where found IS NOT NULL)
+    AND items.itemnumber NOT IN (SELECT itemnumber FROM reserves WHERE found IS NOT NULL AND itemnumber IS NOT NULL)
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
@@ -224,7 +224,7 @@ my $strsth =
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
     #    multiple patrons have a hold on an item
-
+#FIXME "found IS NOT NULL AND itemnumber IS NOT NULL" is just a workaround: see BZ 25726
 
 if (C4::Context->preference('IndependentBranches')){
     $strsth .= " AND items.holdingbranch=? ";
