@@ -2040,8 +2040,6 @@ sub AddReturn {
                 "UPDATE branchtransfers SET datearrived = now() WHERE itemnumber= ? AND datearrived IS NULL"
             );
             $sth->execute( $item->itemnumber );
-            # if we have a reservation with valid transfer, we can set it's status to 'W'
-            C4::Reserves::ModReserveStatus($item->itemnumber, 'W');
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
