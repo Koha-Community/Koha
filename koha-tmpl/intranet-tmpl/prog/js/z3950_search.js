@@ -21,12 +21,7 @@ $( document ).ready( function() {
         $( ".checkboxed" ).unCheckCheckboxes();
         return false;
     });
-    $( "#close_menu" ).on( "click", function(e) {
-        e.preventDefault();
-        $( ".linktools" ).hide();
-        $( "tr" ).removeClass( "selected" );
-        return false;
-    });
+
     $( ".submit" ).on( "click", function() {
         $( "body" ).css( "cursor", "wait" );
     });
@@ -56,7 +51,52 @@ $( document ).ready( function() {
             return true;
         }
     });
-    $( ".previewMARC" ).on( "click", function(e) {
+
+    /* Display actions menu anywhere the table is clicked */
+    /* Note: The templates where this is included must have a search results
+       table with the id "resultst" and "action" table cells with the class "actions" */
+    $("#resultst").on("click", "td", function(event){
+        var tgt = $(event.target);
+        var row = $(this).parent();
+        /* Remove highlight from all rows and add to the clicked row */
+        $("tr").removeClass("highlighted-row");
+        row.addClass("highlighted-row");
+        /* Remove any menus created on the fly for other rows */
+        $(".btn-wrapper").remove();
+
+        if( tgt.is("a") || tgt.hasClass("actions") ){
+            /* Don't show inline links for cells containing links of their own. */
+        } else {
+            event.stopPropagation();
+            /* Remove the "open" class from all dropup menus in case one is open */
+            $(".dropup").removeClass("open");
+            /* Create a clone of the Bootstrap dropup menu in the "Actions" column */
+            var menu_clone = $(".dropdown-menu", row)
+                .clone()
+                .addClass("menu-clone")
+                .css({
+                    "display" : "block",
+                    "position" : "absolute",
+                    "top" : "auto",
+                    "bottom" : "100%",
+                    "right" : "auto",
+                    "left" : "0",
+                });
+            /* Append the menu clone to the table cell which was clicked.
+                The menu must first be wrapped in a block-level div to clear
+                the table cell's text contents and then a relative-positioned
+                div to allow the menu to be positioned correctly */
+            tgt.append(
+                $('<div/>', {'class': 'btn-wrapper'}).append(
+                    $('<div/>', {'class': 'btn-group'}).append(
+                        menu_clone
+                    )
+                )
+            );
+        }
+    });
+
+    $( "#resultst" ).on("click", ".previewMARC", function(e) {
         e.preventDefault();
         var ltitle = $( this ).text();
         var page = $( this ).attr( "href" );
@@ -68,7 +108,7 @@ $( document ).ready( function() {
         $( "#marcPreviewLabel" ).html( "" );
         $( "#marcPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
     });
-    $( ".previewData" ).on( "click", function(e) {
+    $( "#resultst" ).on("click", ".previewData", function(e) {
         e.preventDefault();
         var ltitle = $( this ).text();
         var page = $( this ).attr( "href" );
@@ -80,7 +120,7 @@ $( document ).ready( function() {
         $( "#dataPreviewLabel" ).html( "" );
         $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
     });
-    $( ".import_record" ).on( "click", function(e) {
+    $( "#resultst" ).on("click", ".import_record", function(e) {
         e.preventDefault();
         var data_breedingid = $( this ).data( "breedingid" );
         var data_headingcode = $( this ).data( "heading_code" );

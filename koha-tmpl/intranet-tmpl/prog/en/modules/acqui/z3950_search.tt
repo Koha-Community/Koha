@@ -135,7 +135,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                </dl>
             </td>
             [% END %]
-            <td>
+            <td class="actions">
                 <div class="btn-group dropup">
                     <a class="btn btn-default btn-xs dropdown-toggle" id="z3950preview[% breeding_loo.breedingid | uri %]" role="button" data-toggle="dropdown" href="#">
                         Preview <b class="caret"></b>
@@ -227,6 +227,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
             var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -237,26 +238,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
             }));
-            /* Inline edit/delete links */
-            $("td").click(function(event){
-                var $tgt = $(event.target);
-                var row = $(this).parent();
-                $(".linktools").hide();
-                $("tr").removeClass("selected");
-                row.addClass("selected");
-                if($tgt.is("a")||$tgt.is(":nth-child(6)")||$tgt.is(":nth-child(7)")){
-                    //Don't show inline links for cells containing links of their own.
-                } else {
-                    var position = $(this).offset();
-                    var top = position.top+5;
-                    var left = position.left+5;
-                    $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
-                }
-            });
         });
     </script>
     [% INCLUDE 'z3950_search.inc' %]
-    [% Asset.js("js/z3950_search.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

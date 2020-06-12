@@ -170,20 +170,9 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
-
-            $(".dropdown").on("hidden.bs.dropdown", function(){
-                // Reset menu styles so that a click on the
-                // original dropdown button toggle works correctly
-                $(".dropdown").css("position","absolute");
-                $(".dropdown-menu").css({
-                    "top" : "100%",
-                    "left" : "auto",
-                    "right" : 0
-                });
-            });
-
             $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
                 "aoColumnDefs": [
@@ -192,38 +181,9 @@
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
             }));
-
-            /* Display actions menu anywhere the table is clicked */
-            $("td").click(function(event){
-                var tgt = $(event.target);
-                var row = $(this).parent();
-                var rowid = row.attr("id");
-                $("tr").removeClass("highlighted-row");
-                row.addClass("highlighted-row");
-                $(".dropdown").removeClass("open");
-                if(tgt.is("a")||tgt.is(":nth-child(8)")){
-                    // Don't show inline links for cells containing links of their own.
-                } else {
-                    event.stopPropagation();
-                    var dropdown = $(".dropdown", row);
-                    dropdown.addClass("open");
-                    var position = $(this).offset();
-                    var top = position.top + 5;
-                    var left = position.left + 5;
-                    dropdown.css("position","unset");
-                    $(".dropdown-menu", row).css({
-                        "top" : top,
-                        "left" : left,
-                        "right" : "unset"
-                    });
-
-               }
-            });
-
         });
     </script>
     [% INCLUDE 'z3950_search.inc' %]
-    [% Asset.js("js/z3950_search.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

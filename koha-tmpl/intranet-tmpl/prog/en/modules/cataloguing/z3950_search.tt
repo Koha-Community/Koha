@@ -154,7 +154,7 @@
                                                    </dl>
                                                 </td>
                                             [% END %]
-                                            <td>
+                                            <td class="actions">
                                                 <div class="btn-group dropup">
                                                     <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid | html %]" role="button" data-toggle="dropdown" href="#">
                                                       Actions <b class="caret"></b>
@@ -242,18 +242,6 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function(){
-
-            $(".dropdown").on("hidden.bs.dropdown", function(){
-                // Reset menu styles so that a click on the
-                // original dropdown button toggle works correctly
-                $(".dropdown").css("position","absolute");
-                $(".dropdown-menu").css({
-                    "top" : "100%",
-                    "left" : "auto",
-                    "right" : 0
-                });
-            });
-
             var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
             var thetable = KohaTable("resultst", {
                 "aoColumnDefs": [
@@ -263,33 +251,6 @@
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
             }, columns_settings );
-
-
-            /* Display actions menu anywhere the table is clicked */
-            $("td").click(function(event){
-                var tgt = $(event.target);
-                var row = $(this).parent();
-                var rowid = row.attr("id");
-                $("tr").removeClass("highlighted-row");
-                row.addClass("highlighted-row");
-                $(".dropdown").removeClass("open");
-                if(tgt.is("a")||tgt.is(":nth-child(8)")){
-                    // Don't show inline links for cells containing links of their own.
-                } else {
-                    event.stopPropagation();
-                    var dropdown = $(".dropdown", row);
-                    dropdown.addClass("open");
-                    var position = $(this).offset();
-                    var top = position.top + 5;
-                    var left = position.left + 5;
-                    dropdown.css("position","unset");
-                    $(".dropdown-menu", row).css({
-                        "top" : top,
-                        "left" : left,
-                        "right" : "unset"
-                    });
-               }
-            });
         });
 
         function columnsInit(){
