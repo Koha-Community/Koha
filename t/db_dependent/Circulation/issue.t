@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 45;
+use Test::More tests => 46;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -404,6 +404,16 @@ t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', '_ALL_: CART' );
 AddReturn( 'barcode_4', $branchcode_1 );
 $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART"} );
+Koha::Item::Transfer->new({
+    itemnumber => $itemnumber2,
+    frombranch => $branchcode_2,
+    tobranch => $branchcode_1,
+    datesent => '2020-01-01'
+})->store;
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART" when transfer filled} );
+
 ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin does not update permanent_location value from 'GEN' with setting "_ALL_: CART"} );
 AddIssue( $borrower_1, 'barcode_4', $daysago10,0, $today, '' );
 $item2 = Koha::Items->find( $itemnumber2 );
