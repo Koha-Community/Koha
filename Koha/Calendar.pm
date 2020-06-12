@@ -51,7 +51,7 @@ sub _init {
 }
 
 sub exception_holidays {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $cache              = Koha::Caches->get_instance();
     my $exception_holidays = $cache->get_from_cache('exception_holidays');
@@ -81,7 +81,7 @@ sub exception_holidays {
             { expiry => 76800 } );
     }
 
-    return $exception_holidays->{$self->{branchcode}} // {};
+    return $exception_holidays->{ $self->{branchcode} } // {};
 }
 
 sub is_exception_holiday {
@@ -92,8 +92,8 @@ sub is_exception_holiday {
 }
 
 sub single_holidays {
-    my ( $self, $date ) = @_;
-    my $branchcode = $self->{branchcode};
+    my ($self) = @_;
+
     my $cache           = Koha::Caches->get_instance();
     my $single_holidays = $cache->get_from_cache('single_holidays');
 
@@ -106,42 +106,38 @@ sub single_holidays {
     #   ...
     # }
 
+    # Populate the cache if necessary
     unless ($single_holidays) {
         my $dbh = C4::Context->dbh;
         $single_holidays = {};
 
-        # push holidays for each branch
-        my $branches_sth =
-          $dbh->prepare('SELECT distinct(branchcode) FROM special_holidays');
-        $branches_sth->execute();
-        while ( my $br = $branches_sth->fetchrow ) {
-            my $single_holidays_sth = $dbh->prepare(
-'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
-            );
-            $single_holidays_sth->execute($br);
+        # Push holidays for each branch
+        my $single_holidays_sth = $dbh->prepare(
+'SELECT day, month, year, branchcode FROM special_holidays WHERE isexception = 0'
+        );
+        $single_holidays_sth->execute();
 
-            my @ymd_arr;
-            while ( my ( $day, $month, $year ) =
-                $single_holidays_sth->fetchrow )
-            {
-                my $dt = DateTime->new(
-                    day       => $day,
-                    month     => $month,
-                    year      => $year,
-                    time_zone => 'floating',
-                )->truncate( to => 'day' );
-                push @ymd_arr, $dt->ymd('');
-            }
-            $single_holidays->{$br} = \@ymd_arr;
-        }    # br
+        while ( my ( $day, $month, $year, $branch ) =
+            $single_holidays_sth->fetchrow )
+        {
+            my $datestring =
+                sprintf( "%04d", $year )
+              . sprintf( "%02d", $month )
+              . sprintf( "%02d", $day );
+
+            $single_holidays->{$branch}->{$datestring} = 1;
+        }
         $cache->set_in_cache( 'single_holidays', $single_holidays,
-            { expiry => 76800 } )    #24 hrs ;
+            { expiry => 76800 } );
     }
 
-    my $holidays  = ( $single_holidays->{$branchcode} );
-    for my $hols  (@$holidays ) {
-            return 1 if ( $date == $hols )   #match ymds;
-    }
+    return $single_holidays->{ $self->{branchcode} } // {};
+}
+
+sub is_single_holiday {
+    my ( $self, $date ) = @_;
+
+    return 1 if ( $self->single_holidays->{$date} );
     return 0;
 }
 
@@ -307,7 +303,7 @@ sub is_holiday {
         return 1;
     }
 
-    if ($self->single_holidays(  $ymd  ) == 1 ) {
+    if ($self->is_single_holiday(  $ymd  ) == 1 ) {
         return 1;
     }
 
