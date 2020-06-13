@@ -5,27 +5,11 @@
 [% Asset.css("css/select2.css") | $raw %]
 <!-- select2.inc -->
 <script>
-  jQuery.extend($.fn.select2.defaults, {
-    allowClear: true,
-    width: function() {
-      var width = this.element.outerWidth();
+  $.fn.select2.defaults.set("allowClear", true);
+  $.fn.select2.defaults.set("placeholder", "");
 
-      // 18 is the width of .select2-arrow
-      width -= 18;
-
-      if (this.allowClear) {
-        // 42 is the margin-right of .select2-chosen when allowClear is true
-        width += 42;
-      } else {
-        // 26 is the margin-right of .select2-chosen when allowClear is false
-        width += 26;
-      }
-
-      return width;
-    },
-
-    // Internationalization
-    language: {
+  // Internationalization
+  $.fn.select2.defaults.set("language", {
       errorLoading:function(){return"The results could not be loaded."},
       inputTooLong:function(e){
           var n = e.input.length - e.max;
@@ -46,7 +30,6 @@
       searching:function(){return _("Searching…")},
       removeAllItems:function(){return _("Remove all items")},
       removeItem:function(){return _("Remove item")}
-    }
-  });
+    });
 </script>
 <!-- / select2.inc -->
