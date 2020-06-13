@@ -25,34 +25,27 @@
     },
 
     // Internationalization
-    formatMatches: function (matches) {
-      if (matches === 1) {
-        return _("One result is available, press enter to select it.");
-      }
-      return _("%s results are available, use up and down arrow keys to navigate.").format(matches);
-    },
-    formatNoMatches: function () {
-      return _("No matches found");
-    },
-    formatInputTooShort: function (input, min) {
-      var n = min - input.length;
-      return _("Please enter %n or more characters").format(n);
-    },
-    formatInputTooLong: function (input, max) {
-      var n = input.length - max;
-      return _("Please delete %d character(s)").format(n);
-    },
-    formatResult: function(item) {
-        return $('<div>', {title: item.element[0].title}).text(item.text);
-    },
-    formatSelectionTooBig: function (limit) {
-      return _("You can only select %s item(s)").format(limit);
-    },
-    formatLoadMore: function (pageNumber) {
-      return _("Loading more results…");
-    },
-    formatSearching: function () {
-      return _("Searching…");
+    language: {
+      errorLoading:function(){return"The results could not be loaded."},
+      inputTooLong:function(e){
+          var n = e.input.length - e.max;
+          return _("Please delete %d character(s)").format(n);
+      },
+      inputTooShort:function(e){
+          var n = e.min - e.input.length;
+          return _("Please enter %n or more characters").format(n);
+      },
+      formatResult: function(item) {
+          return $('<div>', {title: item.element[0].title}).text(item.text);
+      },
+      loadingMore:function(){return"Loading more results…"},
+      maximumSelected:function(e){
+          return _("You can only select %s item(s)").format(e.max);
+      },
+      noResults:function(){return _("No results found")},
+      searching:function(){return _("Searching…")},
+      removeAllItems:function(){return _("Remove all items")},
+      removeItem:function(){return _("Remove item")}
     }
   });
 </script>
