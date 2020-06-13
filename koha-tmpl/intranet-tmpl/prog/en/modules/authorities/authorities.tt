@@ -80,7 +80,14 @@ function AreMandatoriesNotOk(){
         var id_string = mandatories[i];
         // alert (id_string);
         if( ! $("#" + id_string).val() ){
-            $("#" + id_string).attr('class','subfield_not_filled').focus();
+            var elt = document.getElementById(id_string);
+            if ( elt.nodeName == 'SELECT' ) {
+                $(elt).siblings('.select2').find("span[role='combobox']").addClass('subfield_not_filled');
+            } else {
+                $(elt).addClass('subfield_not_filled');
+            }
+
+            $(elt).focus();
             StrAlert += "\t* " + _("%s in tab %s").format(label[i], tab[i]) + "\n";
         }
     }
