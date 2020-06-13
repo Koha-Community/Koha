@@ -561,20 +561,24 @@ $(document).ready(function() {
     }
 
     $("#add_new_av").on("submit", function(){
-        var data = {
-            category: $(this).find('input[name="category"]').val(),
-            value: $(this).find('input[name="value"]').val(),
-            description: $(this).find('input[name="description"]').val(),
-            opac_description: $(this).find('input[name="opac_description"]').val(),
-        };
+        var category         = $(this).find('input[name="category"]').val();
+        var value            = $(this).find('input[name="value"]').val();
+        var description      = $(this).find('input[name="description"]').val();
+        var opac_description = $(this).find('input[name="opac_description"]').val();
+
+        var data = "category="+encodeURIComponent(category)
+            +"&value="+encodeURIComponent(value)
+            +"&description="+encodeURIComponent(description)
+            +"&opac_description="+encodeURIComponent(opac_description);
+
         $.ajax({
             type: "POST",
-            url: "/api/v1/authorised_values",
-            data:JSON.stringify(data),
+            url: "/cgi-bin/koha/svc/authorised_values",
+            data: data,
             success: function(response) {
                 $('#avCreate').modal('hide');
 
-                $(current_select2).append('<option selected value="'+data['value']+'">'+data['description']+'</option>');
+                $(current_select2).append('<option selected value="'+response.value+'">'+response.description+'</option>');
             },
             error: function(err) {
                 $("#avCreate .error").html(_("Something went wrong, maybe the value already exists?"))

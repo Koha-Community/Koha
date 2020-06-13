@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2020 Koha Development Team
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use JSON qw( to_json );
+use CGI;
+use C4::Service;
+use C4::Auth qw( check_cookie_auth );
+use C4::Output qw(:DEFAULT :ajax);
+use Koha::AuthorisedValues;
+
+=head1 NAME
+
+svc/authorised_values - Web service for adding authorised values
+
+=head1 DESCRIPTION
+
+=cut
+
+our ( $query, $response ) = C4::Service->init( parameters => 'manage_auth_values' );
+
+sub add_authorised_value {
+    my $category         = $query->param('category');
+    my $value            = $query->param('value');
+    my $description      = $query->param('description');
+    my $opac_description = $query->param('opac_description');
+    my $image_url        = $query->param('image_url');
+
+    eval {
+        my $av = Koha::AuthorisedValue->new(
+            {
+                category         => $category,
+                authorised_value => $value,
+                lib              => $description,
+                lib_opac         => $opac_description,
+                imageurl         => $image_url,
+            }
+        );
+        $av->store;
+        $response->param(
+            category         => $av->category,
+            value            => $av->authorised_value,
+            description      => $av->lib,
+            opac_description => $av->lib_opac,
+            image_url        => $av->imageurl,
+        );
+    };
+    C4::Service->return_error ( $@ ) if $@;
+
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'POST /', [ 'category', 'value', 'description', 'opac_description' ], \&add_authorised_value ],
+);
