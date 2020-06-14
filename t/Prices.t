@@ -151,7 +151,7 @@ for my $currency_format ( qw( US FR ) ) {
     };
 
     subtest 'Configuration 1: 1 1 (Vendor List prices do include tax / Invoice prices include tax)' => sub {
-        plan tests => 8;
+        plan tests => 11;
 
         my $biblionumber_1_1 = 43;
         my $order_1_1        = {
@@ -246,6 +246,55 @@ for my $currency_format ( qw( US FR ) ) {
             {
                 got      => $order_1_1->{tax_value_on_receiving},
                 expected => 7.03,
+                conf     => '1 1',
+                field    => 'tax_value'
+            }
+        );
+
+        # When unitprice is 0.00 C4::Acquisition->populate_order_with_prices() falls back to using ecost_tax_included and ecost_tax_excluded
+        $order_1_1        = {
+            biblionumber     => $biblionumber_1_1,
+            quantity         => 1,
+            listprice        => 10,
+            unitprice        => '0.00',
+            quantityreceived => 1,
+            basketno         => $basketno_1_1,
+            invoiceid        => $invoiceid_1_1,
+            rrp              => 10.00,
+            ecost            => 10.00,
+            tax_rate         => 0.1500,
+            discount         => 0,
+            datereceived     => $today
+        };
+
+        $order_1_1 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_1_1,
+                booksellerid => 4,
+                ordering     => 1,
+            }
+        );
+
+        compare(
+            {
+                got      => $order_1_1->{ecost_tax_included},
+                expected => 10.00,
+                conf     => '1 1',
+                field    => 'ecost_tax_included'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{ecost_tax_excluded},
+                expected => 8.70,
+                conf     => '1 1',
+                field    => 'ecost_tax_excluded'
+            }
+        );
+        compare(
+            {
+                got      => $order_1_1->{tax_value_on_ordering},
+                expected => 1.30,
                 conf     => '1 1',
                 field    => 'tax_value'
             }
@@ -492,6 +541,7 @@ for my $currency_format ( qw( US FR ) ) {
             }
         );
     };
+
 }
 
 sub compare {

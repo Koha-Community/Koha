@@ -3074,6 +3074,7 @@ sub populate_order_with_prices {
         if ( $bookseller->listincgst ) {
 
             # The user entered the prices tax included
+            $order->{unitprice} += 0;
             $order->{unitprice_tax_included} = $order->{unitprice};
             $order->{rrp_tax_included} = $order->{rrp};
 
