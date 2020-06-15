@@ -20,6 +20,7 @@ use Modern::Perl;
 
 Getopt::Long::Configure("bundling");
 
+my $pwd = `pwd`;
 my %opts;
 my $res = GetOptions( \%opts, "command|c=s", "help|h", "login|l", "shell|s=s",
     "preserve-environment|p|m", "verbose|v" );
@@ -51,7 +52,7 @@ push @su_args,
     "env "
   . "KOHA_CONF=/etc/koha/sites/$instance/koha-conf.xml "
   . "PERL5LIB=$perl5lib $shell"
-  . ( $opts{command} ? " -c '$opts{command}'" : '' );
+  . ( $opts{command} ? " -c '$opts{command}'" : " -c 'cd \"$pwd\"; $shell'" );
 
 print "Command: '".join("' '",@su_args)."'\n" if $opts{verbose};
 system("@su_args");
