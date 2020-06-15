@@ -303,6 +303,8 @@ foreach my $r ( @{$budgets} ) {
         b_txt    => $r->{budget_name},
         b_active => $r->{budget_period_active},
         selected => $selected,
+        b_sort1_authcat => $r->{'sort1_authcat'},
+        b_sort2_authcat => $r->{'sort2_authcat'},
       };
 }
 
@@ -326,6 +328,7 @@ $template->param(
     suppliername                => $details->{'suppliername'},
     booksellerid                => $details->{'booksellerid'},
     shipmentdate                => $details->{'shipmentdate'},
+    shipment_budget_id          => $shipmentcost_budgetid,
     billingdate                 => $details->{'billingdate'},
     invoiceclosedate            => $details->{'closedate'},
     shipmentcost                => $shipmentcost,

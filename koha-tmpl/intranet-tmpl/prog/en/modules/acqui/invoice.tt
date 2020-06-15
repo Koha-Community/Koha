@@ -5,6 +5,53 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
+[% Asset.css("css/humanmsg.css") | $raw %]
+
+<span style="display:none;" id="all_fund_dropdown">
+    <option value="">No fund</option>
+    [% FOREACH budget IN budgets %]
+        [% IF ( budget.b_active ) %]
+            <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
+        [% ELSE %]
+            <option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat |html %]">[% budget.b_txt | html %] (inactive)</option>
+        [% END %]
+    [% END %]
+</span>
+[% BLOCK fund_dropdown %]
+    <span>
+    <label for="[% form_name | html %]">Fund: </label>
+    <select id="[% form_id | html %]" name="[% form_name | html %]" class="fund_dropdown" data-selected="[% selected | html %]">
+    </select>
+    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+    <input type="checkbox" class="showallfunds" />
+    </span>
+[% END %]
+
+<div id="updateFund" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="updateReceivedFund">Update received fund</h3>
+            </div>
+            <div class="modal-body">
+                <p>Updating the fund may change available statistics for the order, please check values before submitting.</p>
+                [% PROCESS fund_dropdown form_id => 'modify_budget_id' form_name => 'modify_budget_id' selected => "" %]
+                </br>
+                <label for="sort1">Statistic 1</label>
+                <input type="text" name="sort1" />
+                </br>
+                <label for="sort2">Statistic 2</label>
+                <input type="text" name="sort2" />
+                <br><a id="update_fund" class="btn btn-default">Update fund</a>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Invoice &rsaquo; Acquisitions &rsaquo; Koha</title>
@@ -96,25 +143,7 @@
                 [% END %]
             </li>
             <li>
-                <label for="shipment_budget_id">Shipping fund: </label>
-                [% IF readonly %]
-                    [% budget.budget_name | html %]
-                [% ELSE %]
-                    <select id="shipment_budget_id" name="shipment_budget_id">
-                        <option value="">No fund</option>
-                        [% FOREACH budget IN budgets %]
-                            [% IF ( budget.selected ) %]
-                                <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
-                            [% ELSIF ( budget.b_active ) %]
-                                <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                            [% ELSE %]
-                                <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
-                            [% END %]
-                        [% END %]
-                    </select>
-                    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                    <input type="checkbox" id="showallfunds" />
-                [% END %]
+                [% PROCESS fund_dropdown form_id => 'shipment_budget_id' form_name => 'shipment_budget_id' selected => shipment_budget_id %]
             </li>
 
             [% IF ( invoiceclosedate ) %]
@@ -218,26 +247,7 @@
                                       [% END %]
                                   </td>
                                   <td>
-                                      [% IF readonly %]
-                                          [% adjustement.fund.budget_name | html %]
-                                      [% ELSE %]
-                                          <select id="budget_id_[% adjustment.adjustment_id | html %]" name="budget_id">
-                                              <option value="">No fund</option>
-                                              [% FOREACH budget IN budgets %]
-                                                  [% IF ( budget.b_id == adjustment.budget_id ) %]
-                                                      <option selected="selected" value="[% budget.b_id | html %]">
-                                                  [% ELSE %]
-                                                      <option value="[% budget.b_id | html %]">
-                                                  [% END %]
-                                                  [% IF budget.b_active %]
-                                                      [% budget.b_txt | html %]
-                                                  [% ELSE %]
-                                                      [% budget.b_txt | html %] <span>(inactive)</span>
-                                                  [% END %]
-                                                  </option>
-                                              [% END %]
-                                          </select>
-                                      [% END %]
+                                      [% PROCESS fund_dropdown form_id => "budget_id_" _ adjustment.adjustment_id form_name => 'budget_id' selected => adjustment.budget_id %]
                                   </td>
                                   [% IF adjustment.encumber_open %]
                                       <td>
@@ -304,21 +314,7 @@
                                       <input type="text" name="note" id="note_new" value=""/>
                                   </li>
                                   <li>
-                                      <label for="budget_id_new">Fund: </label>
-                                      <select id="budget_id_new" name="budget_id">
-                                          <option value="">No fund</option>
-                                          [% FOREACH budget IN budgets %]
-                                              [% IF ( budget.selected ) %]
-                                                  <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
-                                              [% ELSIF ( budget.b_active ) %]
-                                                  <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                                              [% ELSE %]
-                                                  <option value="[% budget.b_id | html %]" class="ab_inactive">[% budget.b_txt | html %] (inactive)</option>
-                                              [% END %]
-                                          [% END %]
-                                      </select>
-                                      <label for="showallfunds_adj" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                                      <input type="checkbox" id="showallfunds_adj" />
+                                      [% PROCESS fund_dropdown form_id => "budget_id_new" form_name => 'budget_id' selected => "" %]
                                   </li>
                                   <li>
                                       <label for="encumber_new">Encumber while invoice open? </label>
@@ -393,7 +389,10 @@
                   <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
                   <td class="number">[% order.tax_rate * 100 | html %]</td>
                   <td class="number">[% order.tax_value | $Price %]</td>
-                  <td>[% order.budget_name | html %]</td>
+                  <td>
+                      <span class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</span></br>
+                      <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort_1="[% order.sort1 | html %]" data-sort_2="[% order.sort2 | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
+                  </td>
                 </tr>
               [% END %]
             </tbody>
@@ -484,6 +483,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -535,17 +536,85 @@
             });
 
             //keep a copy of all budgets before removing the inactives
-            var budgetId = $("#shipment_budget_id");
-            var disabledBudgetsCopy = budgetId.html();
+            var disabledBudgetsCopy = $("#all_fund_dropdown").html();
+            $(".fund_dropdown").each(function(){
+                $(this).html( disabledBudgetsCopy);
+                var selected = $(this).data('selected');
+                $(this).find('option[value="'+selected+'"]').removeClass('b_inactive');
+                $(this).val( selected );
+            });
+
             $('.b_inactive').remove();
 
-            $('#showallfunds').click(function() {
+            $('.showallfunds').click(function() {
+                var the_dropdown = $(this).parent('span').find('.fund_dropdown');
+                var selected = the_dropdown.val();
                 if ($(this).is(":checked")) {
-                    budgetId.html(disabledBudgetsCopy); //Puts back all the funds
+                    the_dropdown.html(disabledBudgetsCopy).val(selected);
                 }
                 else {
-                    $('.b_inactive').remove();
+                    the_dropdown.find('option[value="'+selected+'"]').removeClass('b_inactive');
+                    $(this).parent('span').find('.b_inactive').remove();
                 }
+            });
+
+            $(".modify_fund").on('click',function(e){
+                e.preventDefault();
+                var selected = $(this).data('budget_id');
+                var sort1 = $(this).data('sort1');
+                var sort2 = $(this).data('sort2');
+                $("#update_fund").data('order_id',$(this).data('order_id'));
+                $("#modify_budget_id").html(disabledBudgetsCopy);
+                $("#modify_budget_id").val(selected).find('option[value="'+selected+'"]').removeClass('b_inactive');
+                $("#sort1").val(sort1);
+                $("#sort2").val(sort2);
+                $("#modify_budget_id").find('.b_inactive').remove();
+                $("#modify_budget_id").change();
+                $("#updateFund").modal('show');
+            });
+            $("#update_fund").on('click',function(){
+                var new_fund = $("#modify_budget_id").val();
+                var sort1 = $("#sort1").val();
+                var sort2 = $("#sort2").val();
+                var new_fund_name = $('#modify_budget_id option[value="'+new_fund+'"]').text();
+                var order_id = $(this).data('order_id');
+                let options = {
+                    url: "/api/v1/acquisitions/orders/" + order_id,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        fund_id: new_fund,
+                        statistics_1: sort1,
+                        statistics_2: sort2
+                    })
+                };
+                $.ajax(options)
+                    .then(function(thing,result){
+                        $("#updateFund").modal('hide');
+                        $('#updateFund .showallfunds').prop('checked',false);
+                        $('.modify_fund[data-order_id="'+order_id+'"]').data('budget_id',new_fund);
+                        $('.order_name[data-order_id="'+order_id+'"]').text(new_fund_name);
+                        humanMsg.displayAlert( _("Order updated"), { className: 'humanError' } );
+                    })
+                    .fail(function(err){
+                        humanMsg.displayAlert( _("Failed to update order:") + err.responseText, { className: 'humanError' } );
+                    });
+            });
+            $("#modify_budget_id").change(function(){
+                var destination_sort1 = $(this).parents('.modal-body').find('input[name="sort1"]');
+                var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+                var sort1 = $(destination_sort1).val() || "";
+                if ( destination_sort1.length < 1 ) {
+                    destination_sort1 = $(this).parents('.modal-body').find('select[name="sort1"]');
+                }
+                var destination_sort2 = $(this).parents('.modal-body').find('input[name="sort2"]');
+                var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+                var sort2 = $(destination_sort2).val() || "";
+                if ( destination_sort2.length < 1 ) {
+                    destination_sort2 = $(this).parents('.modal-body').find('select[name="sort2"]');
+                }
+                getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
+                getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
             });
             // same effort for the adjustments
             var adjBudgetId = $("#budget_id_new");
