@@ -60,7 +60,7 @@
     [%- IF data.category_type == 'I' -%]
         [%- data.surname | html %] [% IF data.othernames %] ([% data.othernames | html %])[% END -%]
     [%- ELSIF invert_name -%]
-        [% data.title | $raw %][%- data.surname | html %], [% data.firstname | html %] [% IF data.othernames %] ([% data.othernames | html %]) [% END -%]
+        [% data.title | $raw %][%- data.surname | html %][% IF ( data.firstname ) %], [% data.firstname | html %][% END %][% IF data.othernames %] ([% data.othernames | html %]) [% END -%]
     [%- ELSE -%]
         [% data.title | $raw %][%- data.firstname | html %] [% IF data.othernames %] ([% data.othernames | html %]) [% END %] [% data.surname | html -%]
     [%- END -%]
