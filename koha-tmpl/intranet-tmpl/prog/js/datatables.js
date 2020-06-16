@@ -522,7 +522,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                         'pagingType': 'full_numbers',
                         'processing': true,
                         'language': {
-                            'emptyTable': (options.emptyTable) ? options.emptyTable : _("No data available in table")
+                            'emptyTable': (options.emptyTable) ? options.emptyTable : __("No data available in table")
                         },
                         'ajax': {
                             'type': 'GET',
@@ -637,7 +637,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
         var export_buttons = [
             {
                 extend: 'excelHtml5',
-                text: _("Excel"),
+                text: __("Excel"),
                 exportOptions: {
                     columns: exportColumns,
                     format:  export_format
@@ -645,7 +645,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             },
             {
                 extend: 'csvHtml5',
-                text: _("CSV"),
+                text: __("CSV"),
                 exportOptions: {
                     columns: exportColumns,
                     format:  export_format
@@ -653,7 +653,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             },
             {
                 extend: 'copyHtml5',
-                text: _("Copy"),
+                text: __("Copy"),
                 exportOptions: {
                     columns: exportColumns,
                     format:  export_format
@@ -661,7 +661,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             },
             {
                 extend: 'print',
-                text: _("Print"),
+                text: __("Print"),
                 exportOptions: {
                     columns: exportColumns,
                     format:  export_format
@@ -673,9 +673,9 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             {
                 fade: 100,
                 className: "dt_button_clear_filter",
-                titleAttr: _("Clear filter"),
+                titleAttr: __("Clear filter"),
                 enabled: false,
-                text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+                text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __("Clear filter") + '</span>',
                 action: function ( e, dt, node, config ) {
                     dt.search( "" ).draw("page");
                     node.addClass("disabled");
@@ -690,8 +690,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                     fade: 100,
                     columns: included_ids,
                     className: "columns_controls",
-                    titleAttr: _("Columns settings"),
-                    text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
+                    titleAttr: __("Columns settings"),
+                    text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + __("Columns") + '</span>',
                     exportOptions: {
                         columns: exportColumns
                     }
@@ -705,8 +705,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                 autoClose: true,
                 fade: 100,
                 className: "export_controls",
-                titleAttr: _("Export or print"),
-                text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + _("Export") + '</span>',
+                titleAttr: __("Export or print"),
+                text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + __("Export") + '</span>',
                 buttons: export_buttons
             }
         );
