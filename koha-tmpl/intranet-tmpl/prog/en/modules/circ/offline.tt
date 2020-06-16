@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 <!DOCTYPE html>
 [% IF (AllowOfflineCirculation) %]
@@ -314,7 +315,7 @@
 
         function synchronize() {
             kohadb.saveSetting("userid", "[% logged_in_user.userid | html %]");
-            kohadb.saveSetting("branchcode", "[% LoginBranchcode | html %]");
+            kohadb.saveSetting("branchcode", "[% Branches.GetLoggedInBranchcode | html %]");
             showSyncInfo();
             [% UNLESS (AllowOfflineCirculation) %]
                 reloadRecords();

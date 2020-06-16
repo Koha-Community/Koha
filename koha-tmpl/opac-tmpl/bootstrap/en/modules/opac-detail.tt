@@ -479,8 +479,8 @@
                         [% ELSE %]
                             <li id="tab_holdings">
                         [% END %]
-                        [% BLOCK holding_tab_title %][% IF SeparateHoldings %]<span>[% LoginBranchname | html %] holdings</span>[% ELSE %]<span>Holdings</span>[% END %][% END %]
-                            <a href="#holdings">[% PROCESS holding_tab_title %] [% UNLESS too_many_items %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]</a>
+                        [% BLOCK holding_tab_title %][% IF SeparateHoldings %]<span>[% Branches.GetLoggedInBranchname | html %] holdings</span>[% ELSE %][% IF specific_item %]<span>Item details</span>[% ELSE %]<span>Holdings</span>[% END %][% END %][% END %]
+                            <a href="#holdings">[% PROCESS holding_tab_title %] [% UNLESS too_many_items OR specific_item %][% ' ( ' _ (itemloop.size || 0) _ ' )' | html %][% END %]</a>
                         </li>
                         [% IF (SeparateHoldings) %]
                             <li><a href="#otherholdings">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a></li>

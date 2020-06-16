@@ -174,7 +174,7 @@
 <ul>
     [% IF (SeparateHoldings) %]
         <li>
-            <a href="#holdings">[% LoginBranchname | html %] holdings ([% itemloop.size() || 0 | html %])</a>
+            <a href="#holdings">[% Branches.GetLoggedInBranchname | html %] holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
         <li>
             <a href="#otherholdings">Other holdings ([% otheritemloop.size() || 0 | html %])</a>

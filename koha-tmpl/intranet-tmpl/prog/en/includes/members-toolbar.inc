@@ -120,7 +120,7 @@
                     </div>
                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                     <input type="hidden" name="batch" value="[% batch | html %]" />
-                    <input type="hidden" name="branchcode" value="[% LoginBranchcode | html %]" />
+                    <input type="hidden" name="branchcode" value="[% Branches.GetLoggedInBranchcode | html %]" />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
