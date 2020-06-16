@@ -38,7 +38,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'all() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -46,6 +46,7 @@ subtest 'all() tests' => sub {
         source => 'Branch',
         value => {
             branchcode => 'MYLIBRARY',
+            branchname => 'My sweet library'
         }
     });
     my $another_library = $builder->build({
@@ -67,12 +68,12 @@ subtest 'all() tests' => sub {
     $name = $plugin->GetName(undef);
     is($name, '', 'received empty string as name of NULL/undefined library code');
 
-    $library = $plugin->GetLoggedInBranchcode();
-    is($library, '', 'no active library if there is no active user session');
+    is($plugin->GetLoggedInBranchcode(), '', 'no active library code if there is no active user session');
+    is($plugin->GetLoggedInBranchname(), '', 'no active library name if there is no active user session');
 
     t::lib::Mocks::mock_userenv({ branchcode => 'MYLIBRARY' });
-    $library = $plugin->GetLoggedInBranchcode();
-    is($library, 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library');
+    is($plugin->GetLoggedInBranchcode(), 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library code');
+    is($plugin->GetLoggedInBranchname(), 'My sweet library', 'GetLoggedInBranchname() returns active library name');
 
     t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
     my $libraries = $plugin->all();
