@@ -1,14 +1,14 @@
 [% USE Branches %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Overdues at [% LoginBranchname | html %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Overdues at [% Branches.GetLoggedInBranchname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="circ_branchoverdues" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues at [% LoginBranchname | html %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues at [% Branches.GetLoggedInBranchname | html %]</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -19,7 +19,7 @@
         [% END %]
             <main>
 
-<h1>Circulation: Overdues at [% LoginBranchname | html %]</h1>
+<h1>Circulation: Overdues at [% Branches.GetLoggedInBranchname | html %]</h1>
 
 <form name="selectlocation" action="branchoverdues.pl" method="post">
     <label for="location">Shelving location selected: </label><select id="location" name="location">

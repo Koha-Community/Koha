@@ -77,11 +77,11 @@
                         <span class="separator">|</span>
                         [% IF ( AutoLocation ) %]
                             <brand>
-                                [% LoginBranchname | html %]
+                                [% Branches.GetLoggedInBranchname | html %]
                             </brand>
                         [% ELSE %]
                             <strong>
-                                <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                                <span class="logged-in-branch-name">[% Branches.GetLoggedInBranchname | html %]</span>
                                 <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             </strong>
                         [% END %]
@@ -97,11 +97,11 @@
                     <li class="loggedin-menu-label">
                         [% IF ( AutoLocation ) %]
                             <brand>
-                                [% LoginBranchname | html %]
+                                [% Branches.GetLoggedInBranchname | html %]
                             </brand>
                         [% ELSE %]
                             Location: <br />
-                            <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                            <span class="logged-in-branch-name">[% Branches.GetLoggedInBranchname | html %]</span>
                             <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                         [% END %]
                     </li>

@@ -49,14 +49,13 @@ my @updated;
 if ( $branch and my $library = Koha::Libraries->find($branch) ) {
     if (! $userenv_branch or $userenv_branch ne $branch ) {
         my $branchname = $library->branchname;
-        $template->param(LoginBranchname => $branchname);   # update template for new branch
-        $template->param(LoginBranchcode => $branch);       # update template for new branch
         $session->param('branchname', $branchname);         # update sesssion in DB
         $session->param('branch', $branch);                 # update sesssion in DB
         $session->flush();
         push @updated, {
             updated_branch => 1,
                 old_branch => $userenv_branch,
+                new_branch => $branch,
         };
     } # else branch the same, no update
 } else {

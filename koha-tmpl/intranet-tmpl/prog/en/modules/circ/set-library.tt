@@ -36,7 +36,7 @@
 Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch ) %]
-        <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.LoginBranchcode or "?" | html %]</li>
+        <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
