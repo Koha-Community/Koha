@@ -244,7 +244,7 @@
                                                 [% END %]
                                                     <th>Call no.</th>
                                                 [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                                                    <th class="nosort">Renew</th>
+                                                    <th>Renew</th>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
                                                     <th>Fines</th>
@@ -345,45 +345,49 @@
                                                     [% ISSUE.itemcallnumber | html %]
                                                 </td>
                                                 [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                                                    <td class="renew">
-                                                    [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
-                                                    [% IF ( ISSUE.status ) %]
-                                                        [% IF ( canrenew ) %]
-                                                            <input type="checkbox" name="item" value="[% ISSUE.itemnumber | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
-                                                        [% END %]
-                                                        [% IF ISSUE.renewalfee > 0 %]
-                                                            <span class="renewalfee label label-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
-                                                        [% END %]
-                                                        [% IF ISSUE.itemtype_object.rentalcharge_daily > 0 %]
-                                                            <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_daily | $Price %] per day</span>
-                                                        [% END %]
-                                                        [% IF ISSUE.itemtype_object.rentalcharge_hourly > 0 %]
-                                                            <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
-                                                        [% END %]
-                                                        <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
-                                                    [% ELSIF ( ISSUE.on_reserve ) %]
-                                                        Not renewable <span class="renewals">(on hold)</span>
-                                                    [% ELSIF ( ISSUE.too_many ) %]
-                                                        Not renewable
-                                                    [% ELSIF ( ISSUE.norenew_overdue ) %]
-                                                        Not allowed <span class="renewals">(overdue)</span>
-                                                    [% ELSIF ( ISSUE.auto_too_late ) %]
-                                                        No longer renewable
-                                                    [% ELSIF ISSUE.auto_too_much_oweing %]
-                                                        Automatic renewal failed, you have unpaid fines.
-                                                        <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
-                                                    [% ELSIF ISSUE.auto_account_expired %]
-                                                        Automatic renewal failed, your account is expired.
-                                                        <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
-                                                    [% ELSIF ( ISSUE.too_soon ) %]
-                                                        No renewal before [% ISSUE.soonestrenewdate | html %]
-                                                        <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
-                                                    [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
-                                                        Automatic renewal
-                                                        <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
-                                                    [% ELSIF ( ISSUE.item_denied_renewal ) %]
-                                                        Renewal not allowed
+                                                    [% IF ( ISSUE.status && canrenew ) %]
+                                                        <td class="renew" data-order="[% ISSUE.renewsleft | html %]">
+                                                    [% ELSE %]
+                                                        <td class="renew" data-order="0">
                                                     [% END %]
+                                                        [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
+                                                        [% IF ( ISSUE.status ) %]
+                                                            [% IF ( canrenew ) %]
+                                                                <input type="checkbox" name="item" value="[% ISSUE.itemnumber | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
+                                                            [% END %]
+                                                            [% IF ISSUE.renewalfee > 0 %]
+                                                                <span class="renewalfee label label-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
+                                                            [% END %]
+                                                            [% IF ISSUE.itemtype_object.rentalcharge_daily > 0 %]
+                                                                <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_daily | $Price %] per day</span>
+                                                            [% END %]
+                                                            [% IF ISSUE.itemtype_object.rentalcharge_hourly > 0 %]
+                                                                <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
+                                                            [% END %]
+                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                        [% ELSIF ( ISSUE.on_reserve ) %]
+                                                            Not renewable <span class="renewals">(on hold)</span>
+                                                        [% ELSIF ( ISSUE.too_many ) %]
+                                                            Not renewable
+                                                        [% ELSIF ( ISSUE.norenew_overdue ) %]
+                                                            Not allowed <span class="renewals">(overdue)</span>
+                                                        [% ELSIF ( ISSUE.auto_too_late ) %]
+                                                            No longer renewable
+                                                        [% ELSIF ISSUE.auto_too_much_oweing %]
+                                                            Automatic renewal failed, you have unpaid fines.
+                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                        [% ELSIF ISSUE.auto_account_expired %]
+                                                            Automatic renewal failed, your account is expired.
+                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                        [% ELSIF ( ISSUE.too_soon ) %]
+                                                            No renewal before [% ISSUE.soonestrenewdate | html %]
+                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                        [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
+                                                            Automatic renewal
+                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                        [% ELSIF ( ISSUE.item_denied_renewal ) %]
+                                                            Renewal not allowed
+                                                        [% END %]
                                                     </td>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
