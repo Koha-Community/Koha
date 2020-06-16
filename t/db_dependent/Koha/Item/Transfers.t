@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Item::Transfer;
 use Koha::Item::Transfers;
@@ -27,6 +27,7 @@ use Koha::Database;
 use Koha::DateUtils;
 
 use t::lib::TestBuilder;
+use t::lib::Dates;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -66,3 +67,43 @@ is( $retrieved_transfer_1->itemnumber, $new_transfer_1->itemnumber, 'Find a tran
 
 $schema->storage->txn_rollback;
 
+subtest 'daterequested tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+    my $library_from = $builder->build( { source => 'Branch' } );
+    my $library_to   = $builder->build( { source => 'Branch' } );
+    my $item         = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                holding_branch => $library_from->{branchcode},
+                homebranch     => $library_to->{branchcode}
+            }
+        }
+    );
+
+    my $now = dt_from_string;
+    my $transfer = Koha::Item::Transfer->new(
+        {
+            itemnumber => $item->{itemnumber},
+            frombranch => $library_from->{branchcode},
+            tobranch   => $library_to->{branchcode}
+        }
+    )->store;
+    $transfer->discard_changes;
+
+    ok( $transfer->daterequested, 'daterequested set on creation' );
+    is( t::lib::Dates::compare( $transfer->daterequested, $now ),
+        0, 'daterequested was set correctly' );
+
+    my $new_date = $now->clone->add( hours => 1 );
+    $transfer->set({ datesent => $new_date })->store;
+    $transfer->discard_changes;
+
+    is( t::lib::Dates::compare( $transfer->daterequested, $now ),
+        0, 'daterequested is not updated when other fields are updated' );
+
+    $schema->storage->txn_rollback;
+};
