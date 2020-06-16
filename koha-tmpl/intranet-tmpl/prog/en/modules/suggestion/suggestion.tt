@@ -343,6 +343,12 @@
                             <option value="REJECTED">Rejected</option>
                         [% END %]
 
+                        [% IF ( statusselected_ORDERED ) %]
+                            <option value="ORDERED" selected="selected">Ordered</option>
+                        [% ELSE %]
+                            <option value="ORDERED">Ordered</option>
+                        [% END %]
+
                         [% FOREACH s IN SuggestionStatuses %]
                             [% IF s.authorised_value == suggestion.STATUS %]
                                 <option value="[% s.authorised_value | html %]" selected="selected">[% s.lib | html %]</option>
@@ -681,6 +687,12 @@
                                <option value="REJECTED">Rejected</option>
                            [% END %]
 
+                           [% IF ( statusselected_ORDERED ) %]
+                               <option value="ORDERED" selected="selected">Ordered</option>
+                           [% ELSE %]
+                               <option value="ORDERED">Ordered</option>
+                           [% END %]
+
                            [% FOREACH s IN SuggestionStatuses %]
                                <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
                            [% END %]
@@ -840,6 +852,12 @@
                               [% ELSE %]
                                   <option value="REJECTED">Rejected</option>
                               [% END %]
+
+                               [% IF ( statusselected_ORDERED ) %]
+                                   <option value="ORDERED" selected="selected">Ordered</option>
+                               [% ELSE %]
+                                   <option value="ORDERED">Ordered</option>
+                               [% END %]
 
                               [% FOREACH s IN SuggestionStatuses %]
                                   [% IF s.authorised_value == selected_status %]
