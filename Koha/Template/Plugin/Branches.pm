@@ -30,19 +30,21 @@ use Koha::Libraries;
 sub GetName {
     my ( $self, $branchcode ) = @_;
 
-    my $query = "SELECT branchname FROM branches WHERE branchcode = ?";
-    my $sth   = C4::Context->dbh->prepare($query);
-    $sth->execute($branchcode);
-    my $b = $sth->fetchrow_hashref();
-    return $b ? $b->{'branchname'} : q{};
+    my $l = Koha::Libraries->find($branchcode);
+    return $l ? $l->branchname : q{};
 }
 
 sub GetLoggedInBranchcode {
     my ($self) = @_;
 
-    return C4::Context->userenv ?
-        C4::Context->userenv->{'branch'} :
-        '';
+    return C4::Context::mybranch;
+}
+
+sub GetLoggedInBranchname {
+    my ($self) = @_;
+
+    my $code = $self->GetLoggedInBranchcode;
+    return $code ? $self->GetName($code) : q{};
 }
 
 sub GetURL {
