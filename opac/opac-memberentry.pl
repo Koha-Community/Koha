@@ -468,16 +468,18 @@ sub ParseCgiForBorrower {
         }
     }
 
-    my $dob_dt;
-    $dob_dt = eval { dt_from_string( $borrower{'dateofbirth'} ); }
-        if ( $borrower{'dateofbirth'} );
+    if ( defined $borrower{'dateofbirth'} ) {
+        my $dob_dt;
+        $dob_dt = eval { dt_from_string( $borrower{'dateofbirth'} ); }
+            if ( $borrower{'dateofbirth'} );
 
-    if ( $dob_dt ) {
-        $borrower{'dateofbirth'} = output_pref ( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' } );
-    }
-    else {
-        # Trigger validation
-        $borrower{'dateofbirth'} = undef;
+        if ( $dob_dt ) {
+            $borrower{'dateofbirth'} = output_pref( { dt => $dob_dt, dateonly => 1, dateformat => 'iso' } );
+        }
+        else {
+            # Trigger validation
+            $borrower{'dateofbirth'} = undef;
+        }
     }
 
     # Replace checkbox 'agreed' by datetime in gdpr_proc_consent
