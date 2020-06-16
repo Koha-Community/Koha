@@ -331,8 +331,8 @@ sub load_sql_in_order {
     my $global_mandatory_dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory";
 
     # Make sure some stuffs are loaded first
-    unshift(@fnames, C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql");
     unshift(@fnames,
+        "$global_mandatory_dir/sysprefs.sql",
         "$global_mandatory_dir/subtag_registry.sql",
         "$global_mandatory_dir/auth_val_cat.sql",
         "$global_mandatory_dir/message_transport_types.sql",
@@ -341,12 +341,13 @@ sub load_sql_in_order {
         "$global_mandatory_dir/keyboard_shortcuts.sql",
     );
 
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userflags.sql";
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userpermissions.sql";
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/audio_alerts.sql";
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_offset_types.sql";
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_credit_types.sql";
-    push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/account_debit_types.sql";
+    push @fnames, "$global_mandatory_dir/userflags.sql",
+                  "$global_mandatory_dir/userpermissions.sql",
+                  "$global_mandatory_dir/audio_alerts.sql",
+                  "$global_mandatory_dir/account_offset_types.sql",
+                  "$global_mandatory_dir/account_credit_types.sql",
+                  "$global_mandatory_dir/account_debit_types.sql",
+                  ;
     my $localization_file = C4::Context->config('intranetdir') .
                             "/installer/data/$self->{dbms}/localization/$langchoice/custom.sql";
     if ( $langchoice ne 'en' and -f $localization_file ) {
