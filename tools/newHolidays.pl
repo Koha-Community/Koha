@@ -143,7 +143,4 @@ sub add_holiday {
             }
         }
     }
-    # we updated the single_holidays table, so wipe its cache
-    my $cache = Koha::Caches->get_instance();
-    $cache->clear_from_cache( 'single_holidays') ;
 }

@@ -43,8 +43,9 @@ Koha::CirculationRules->set_rules(
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
 t::lib::Mocks::mock_preference('useDaysMode', 'Days');
 
-my $cache           = Koha::Caches->get_instance();
-$cache->clear_from_cache('single_holidays');
+my $cache = Koha::Caches->get_instance();
+my $key   = $branchcode . "_holidays";
+$cache->clear_from_cache($key);
 
 my $dateexpiry = '2013-01-01';
 
@@ -302,6 +303,5 @@ $calendar->delete_holiday(
     weekday => 6
 );
 
-
-$cache->clear_from_cache('single_holidays');
+$cache->clear_from_cache($key);
 $schema->storage->txn_rollback;
