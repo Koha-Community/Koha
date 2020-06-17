@@ -986,11 +986,15 @@ Note that permanent location is a code, and location may be an authval.
                                 $(covernav).addClass("nav-active");
                             }
                             $(covernav).html("<i class=\"fa fa-circle\"></i>");
-                            $("#cover-slides").append( covernav );
+                            $("#cover-slides").addClass("cover-slides").append( covernav );
                         }
                     }
                 }
             });
+            if( $(".cover-image").length < 2 ){
+                /* Don't show controls for switching between covers if there is only 1 */
+                $(".cover-nav").remove();
+            }
             if( $(".cover-image:visible").length < 1 ){
                 $("#cover-slides").remove();
             }
@@ -1166,7 +1170,8 @@ Note that permanent location is a code, and location may be an authval.
                 link = $(this).attr("href");
                 openWindow(link,"Print spine label",400,400);
              });
-             $("#cover-slides").on("click",".cover-nav", function(){
+             $("#cover-slides").on("click",".cover-nav", function(e){
+                 e.preventDefault();
                 // Adding click handler for cover image navigation links
                 var num = $(this).data("num");
                 $(".cover-nav").removeClass("nav-active");
