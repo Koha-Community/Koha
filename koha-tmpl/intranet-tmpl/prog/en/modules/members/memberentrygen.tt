@@ -477,12 +477,23 @@ legend:hover {
                                                             </li>
 
                                                             <li>
-                                                                <label for="guarantor_relationship">Relationship: </label>
-                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                                                [% UNLESS empty_relationship_allowed %]
+                                                                    <label for="guarantor_relationship" class="required">Relationship: </label>
+                                                                    <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
+                                                                [% ELSE %]
+                                                                    <label for="guarantor_relationship">Relationship: </label>
+                                                                    <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                                                [% END %]
+                                                                    <option value="" selected>Empty option</option>
                                                                     [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                        <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                        [% IF pr != "" %]
+                                                                            <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                        [% END %]
                                                                     [% END %]
                                                                 </select>
+                                                                [% UNLESS empty_relationship_allowed %]
+                                                                    <span class="required">Required</span>
+                                                                [% END %]
                                                             </li>
 
                                                             <li>
@@ -513,12 +524,23 @@ legend:hover {
                                                     </li>
 
                                                     <li>
-                                                        <label for="guarantor_relationship">Relationship: </label>
-                                                        <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                                        [% UNLESS empty_relationship_allowed %]
+                                                            <label for="guarantor_relationship" class="required">Relationship: </label>
+                                                            <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
+                                                        [% ELSE %]
+                                                            <label for="guarantor_relationship">Relationship: </label>
+                                                            <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                                        [% END %]
+                                                            <option value="" selected></option>
                                                             [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                [% IF pr != "" %]
+                                                                    <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                [% END %]
                                                             [% END %]
                                                         </select>
+                                                        [% UNLESS empty_relationship_allowed %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
                                                     </li>
 
                                                     <li>
