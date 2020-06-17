@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 52;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -1008,6 +1008,82 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
         "Hold queue contains one hold from chosen from three possible items" );
 };
 
+
+subtest "Item level holds info is preserved (Bug 25738)" => sub {
+
+    plan tests => 3;
+
+    $dbh->do("DELETE FROM tmp_holdsqueue");
+    $dbh->do("DELETE FROM hold_fill_targets");
+    $dbh->do("DELETE FROM reserves");
+    $dbh->do("DELETE FROM circulation_rules");
+
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron_1 = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $library->branchcode
+            }
+        }
+    );
+
+    my $patron_2 = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $library->branchcode
+            }
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+
+    # Add item-level hold for patron_1
+    my $reserve_id_1 = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $biblio->id,
+            itemnumber     => $item_1->itemnumber,
+            priority       => 1
+        }
+    );
+
+    my $reserve_id_2 = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->id,
+            priority       => 2
+        }
+    );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+
+    is( $queue_rs->count(), 2, "Hold queue contains two holds" );
+
+    my $queue_line_1 = $queue_rs->next;
+    is( $queue_line_1->item_level_request, 1, 'Request is correctly advertised as item-level' );
+
+    my $queue_line_2 = $queue_rs->next;
+    is( $queue_line_2->item_level_request, 0, 'Request is correctly advertised as biblio-level' );
+
+};
 
 subtest 'Trivial test for UpdateTransportCostMatrix' => sub {
     plan tests => 1;
