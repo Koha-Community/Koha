@@ -50,95 +50,45 @@ sub _init {
     return;
 }
 
-sub exception_holidays {
+sub _holidays {
     my ($self) = @_;
 
-    my $cache              = Koha::Caches->get_instance();
-    my $exception_holidays = $cache->get_from_cache('exception_holidays');
+    my $key      = $self->{branchcode} . "_holidays";
+    my $cache    = Koha::Caches->get_instance();
+    my $holidays = $cache->get_from_cache($key);
 
-    # Populate the cache is necessary
-    unless ($exception_holidays) {
-        my $dbh = C4::Context->dbh;
-        $exception_holidays = {};
-
-        # Push holidays for each branch
-        my $exception_holidays_sth = $dbh->prepare(
-'SELECT day, month, year, branchcode FROM special_holidays WHERE isexception = 1'
-        );
-        $exception_holidays_sth->execute();
-        my $dates = [];
-        while ( my ( $day, $month, $year, $branch ) =
-            $exception_holidays_sth->fetchrow )
-        {
-            my $datestring =
-                sprintf( "%04d", $year )
-              . sprintf( "%02d", $month )
-              . sprintf( "%02d", $day );
-
-            $exception_holidays->{$branch}->{$datestring} = 1;
-        }
-        $cache->set_in_cache( 'exception_holidays', $exception_holidays,
-            { expiry => 76800 } );
-    }
-
-    return $exception_holidays->{ $self->{branchcode} } // {};
-}
-
-sub is_exception_holiday {
-    my ( $self, $date ) = @_;
-
-    return 1 if ( $self->exception_holidays->{$date} );
-    return 0;
-}
-
-sub single_holidays {
-    my ($self) = @_;
-
-    my $cache           = Koha::Caches->get_instance();
-    my $single_holidays = $cache->get_from_cache('single_holidays');
-
-    # $single_holidays looks like:
+    # $holidays looks like:
     # {
-    #   CPL =>  [
-    #        [0] 20131122,
-    #         ...
-    #    ],
-    #   ...
+    #    20131122 => 1, # single_holiday
+    #    20131123 => 0, # exception_holiday
+    #    ...
     # }
 
     # Populate the cache if necessary
-    unless ($single_holidays) {
+    unless ($holidays) {
         my $dbh = C4::Context->dbh;
-        $single_holidays = {};
+        $holidays = {};
 
-        # Push holidays for each branch
-        my $single_holidays_sth = $dbh->prepare(
-'SELECT day, month, year, branchcode FROM special_holidays WHERE isexception = 0'
+        # Add holidays for each branch
+        my $holidays_sth = $dbh->prepare(
+'SELECT day, month, year, isexception FROM special_holidays WHERE branchcode = ?'
         );
-        $single_holidays_sth->execute();
+        $holidays_sth->execute($self->{branchcode});
 
-        while ( my ( $day, $month, $year, $branch ) =
-            $single_holidays_sth->fetchrow )
+        while ( my ( $day, $month, $year, $exception ) =
+            $holidays_sth->fetchrow )
         {
             my $datestring =
                 sprintf( "%04d", $year )
               . sprintf( "%02d", $month )
               . sprintf( "%02d", $day );
 
-            $single_holidays->{$branch}->{$datestring} = 1;
+            $holidays->{$datestring} = !$exception;
         }
-        $cache->set_in_cache( 'single_holidays', $single_holidays,
-            { expiry => 76800 } );
+        $cache->set_in_cache( $key, $holidays, { expiry => 76800 } );
     }
 
-    return $single_holidays->{ $self->{branchcode} } // {};
-}
-
-sub is_single_holiday {
-    my ( $self, $date ) = @_;
-
-    return 1 if ( $self->single_holidays->{$date} );
-    return 0;
+    return $holidays // {};
 }
 
 sub addDate {
@@ -275,17 +225,13 @@ sub is_holiday {
     my $localdt = $dt->clone();
     my $day   = $localdt->day;
     my $month = $localdt->month;
-    my $ymd   = $localdt->ymd('')  ;
+    my $ymd   = $localdt->ymd('');
 
     #Change timezone to "floating" before doing any calculations or comparisons
     $localdt->set_time_zone("floating");
     $localdt->truncate( to => 'day' );
 
-
-    if ( $self->is_exception_holiday( $ymd ) == 1 ) {
-        # exceptions are not holidays
-        return 0;
-    }
+    return $self->_holidays->{$ymd} if defined($self->_holidays->{$ymd});
 
     my $dow = $localdt->day_of_week;
     # Representation fix
@@ -300,10 +246,6 @@ sub is_holiday {
     }
 
     if ( exists $self->{day_month_closed_days}->{$month}->{$day} ) {
-        return 1;
-    }
-
-    if ($self->is_single_holiday(  $ymd  ) == 1 ) {
         return 1;
     }
 
@@ -512,25 +454,6 @@ C<$unit> is a string value 'days' or 'hours' toflag granularity of duration
 
 Currently unit is only used to invoke Staffs return Monday at 10 am rule this
 parameter will be removed when issuingrules properly cope with that
-
-
-=head2 single_holidays
-
-my $rc = $self->single_holidays(  $ymd  );
-
-Passed a $date in Ymd (yyyymmdd) format -  returns 1 if date is a single_holiday, or 0 if not.
-
-=head2 exception_holidays
-
-my $exceptions = $self->exception_holidays;
-
-Returns a hashref of exception holidays for the branch
-
-=head2 is_exception_holiday
-
-my $rc = $self->is_exception_holiday( $ymd );
-
-Passed a $date in Ymd (yyyymmdd) format - returns 1 if the date is an exception_holiday, or 0 if not.
 
 =head2 is_holiday
 
