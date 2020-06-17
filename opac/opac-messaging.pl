@@ -69,6 +69,10 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
     })->store;
 
     C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $patron->borrowernumber }, $template);
+
+    if ( C4::Context->preference('TranslateNotices') ) {
+        $patron->set({ lang => scalar $query->param('lang') })->store;
+    }
 }
 
 C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $patron->borrowernumber }, $template);
@@ -90,5 +94,13 @@ $template->param(
             session_id => $new_session_id,
         }),
 );
+
+if ( C4::Context->preference('TranslateNotices') ) {
+    my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
+    $template->param(
+        languages => $translated_languages,
+        patron_lang => $patron->lang,
+    );
+}
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
