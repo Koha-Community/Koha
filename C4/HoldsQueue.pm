@@ -409,6 +409,8 @@ sub MapItemsToHoldRequests {
                   || ( $item->{holdallowed} == 1
                     && $item->{homebranch} ne $request->{borrowerbranch} );
 
+                next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
+
                 next unless $item->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                 my $local_holds_priority_item_branchcode =
