@@ -77,7 +77,7 @@ get '/biblios' => sub {
 
 
 # The tests
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -202,6 +202,26 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
       ->json_hasnt('/2')
       ->json_is('/0/name' => 'B')
       ->json_is('/1/name' => 'A');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.search helper, encoding' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    Koha::Cities->delete;
+
+    $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'A', city_country => 'Argentina' } });
+    $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'B', city_country => '❤Argentina❤' } });
+
+    $t->get_ok('/cities?q={"country": "❤Argentina❤"}')
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_hasnt('/1')
+      ->json_is('/0/name' => 'B');
 
     $schema->storage->txn_rollback;
 };

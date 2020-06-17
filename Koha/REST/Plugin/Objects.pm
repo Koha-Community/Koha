@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
-use JSON qw(decode_json);
+use JSON;
 
 =head1 NAME
 
@@ -104,8 +104,9 @@ sub register {
                 my @query_params_array;
                 my $query_params;
                 push @query_params_array, $reserved_params->{query} if defined $reserved_params->{query};
-                push @query_params_array, decode_json($reserved_params->{q}) if defined $reserved_params->{q};
-                push @query_params_array, decode_json($reserved_params->{'x-koha-query'}) if defined $reserved_params->{'x-koha-query'};
+                my $json = JSON->new;
+                push @query_params_array, $json->decode($reserved_params->{q}) if defined $reserved_params->{q};
+                push @query_params_array, $json->decode($reserved_params->{'x-koha-query'}) if defined $reserved_params->{'x-koha-query'};
 
                 if(scalar(@query_params_array) > 1) {
                     $query_params = {'-and' => \@query_params_array};
