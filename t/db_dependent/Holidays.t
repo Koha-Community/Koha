@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 12;
 
 use DateTime;
 use DateTime::TimeZone;
@@ -37,7 +37,7 @@ my $schema = Koha::Database->new->schema;
 my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'exception_holidays() tests' => sub {
+subtest 'is_holiday timezone tests' => sub {
 
     plan tests => 1;
 
@@ -159,47 +159,6 @@ C4::Calendar->new( branchcode => $branch_2 )->insert_single_holiday(
 
 is( Koha::Calendar->new( branchcode => $branch_2 )->is_holiday( $today ), 1, "Today is a holiday for $branch_2" );
 is( Koha::Calendar->new( branchcode => $branch_1 )->is_holiday( $today ), 0, "Today is not a holiday for $branch_1");
-
-# Few tests for exception holidays
-my ( $diff, $cal, $special );
-$dbh->do("DELETE FROM special_holidays");
-_add_exception( $today, $branch_1, 'Today' );
-$cal = Koha::Calendar->new( branchcode => $branch_1 );
-$special = $cal->exception_holidays;
-is( keys %{$special}, 1, 'One exception holiday added' );
-
-my $tomorrow= dt_from_string();
-$tomorrow->add_duration( DateTime::Duration->new(days => 1) );
-_add_exception( $tomorrow, $branch_1, 'Tomorrow' );
-$cal = Koha::Calendar->new( branchcode => $branch_1 );
-$special = $cal->exception_holidays;
-is( keys %{$special}, 2, 'Set of exception holidays contains two dates' );
-
-$diff = $today->delta_days( $today )->in_units('days');
-is( $diff, 0, 'Lowest exception holiday is today' );
-$diff = $tomorrow->delta_days( $tomorrow )->in_units('days');
-is( $diff, 0, 'Highest exception holiday is tomorrow' );
-
-C4::Calendar->new( branchcode => $branch_1 )->delete_holiday(
-    weekday => $tomorrow->day_of_week,
-    day     => $tomorrow->day,
-    month   => $tomorrow->month,
-    year    => $tomorrow->year,
-);
-$cal = Koha::Calendar->new( branchcode => $branch_1 );
-$special = $cal->exception_holidays;
-is( keys %{$special}, 1, 'Set of exception holidays back to one' );
-
-sub _add_exception {
-    my ( $dt, $branch, $descr ) = @_;
-    C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
-        day         => $dt->day,
-        month       => $dt->month,
-        year        => $dt->year,
-        title       => $descr,
-        description => $descr,
-    );
-}
 
 $schema->storage->txn_rollback;
 
