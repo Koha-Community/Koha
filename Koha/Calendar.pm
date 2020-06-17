@@ -500,6 +500,15 @@ representing the previous open day after subtracting the number of passed
 days. It is intended for use to calculate the due date when useDaysMode
 syspref is set to either 'Datedue', 'Calendar' or 'Dayweek'.
 
+=head2 days_forward
+
+$datetime = $calendar->days_forward($start_dt, $to_add)
+
+Passed a Datetime and number of days, returns another Datetime representing
+the next open day after adding the passed number of days. It is intended for
+use to calculate the due date when useDaysMode syspref is set to either
+'Datedue', 'Calendar' or 'Dayweek'.
+
 =head2 set_daysmode
 
 For testing only allows the calling script to change days mode
