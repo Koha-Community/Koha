@@ -277,7 +277,7 @@ sub GetPendingHoldRequestsForBib {
     my $dbh = C4::Context->dbh;
 
     my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserves.branchcode,
-                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype
+                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype, item_level_hold
                          FROM reserves
                          JOIN borrowers USING (borrowernumber)
                          WHERE biblionumber = ?
@@ -436,7 +436,7 @@ sub MapItemsToHoldRequests {
                             holdingbranch  => $item->{holdingbranch},
                             pickup_branch  => $request->{branchcode}
                               || $request->{borrowerbranch},
-                            item_level   => 0,
+                            item_level   => $request->{item_level_hold},
                             reservedate  => $request->{reservedate},
                             reservenotes => $request->{reservenotes},
                         };
@@ -475,7 +475,7 @@ sub MapItemsToHoldRequests {
                     biblionumber   => $request->{biblionumber},
                     holdingbranch  => $items_by_itemnumber{ $request->{itemnumber} }->{holdingbranch},
                     pickup_branch  => $request->{branchcode} || $request->{borrowerbranch},
-                    item_level     => 1,
+                    item_level     => $request->{item_level_hold},
                     reservedate    => $request->{reservedate},
                     reservenotes   => $request->{reservenotes},
                 };
@@ -650,7 +650,7 @@ sub MapItemsToHoldRequests {
                 biblionumber => $request->{biblionumber},
                 holdingbranch => $holdingbranch,
                 pickup_branch => $pickup_branch,
-                item_level => 0,
+                item_level => $request->{item_level_hold},
                 reservedate => $request->{reservedate},
                 reservenotes => $request->{reservenotes},
             };
