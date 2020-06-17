@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 52;
+use Test::More tests => 53;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -950,6 +950,70 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
+};
+
+subtest "Test Local Holds Priority - Get correct item for item level hold" => sub {
+    plan tests => 3;
+
+    Koha::Biblios->delete();
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
+    my $branch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $local_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch->branchcode
+            }
+        }
+    );
+    my $other_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch2->branchcode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item1 = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
+    my $item3 = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
+
+    my $reserve_id2 =
+        AddReserve( $item2->homebranch, $local_patron->borrowernumber,
+            $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item2->id, undef, undef );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+    my $q = $queue_rs->next;
+    is( $queue_rs->count(), 1,
+        "Hold queue contains one hold" );
+    is(
+        $q->borrowernumber,
+        $local_patron->borrowernumber,
+        "We should pick the local hold over the next available"
+    );
+    is( $q->itemnumber->id, $item2->id, "Got the correct item for item level local holds priority" );
 };
 
 subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue (Bug 18001)" => sub {
