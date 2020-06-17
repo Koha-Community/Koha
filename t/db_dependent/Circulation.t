@@ -110,7 +110,11 @@ $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 my $cache = Koha::Caches->get_instance();
 $dbh->do(q|DELETE FROM special_holidays|);
 $dbh->do(q|DELETE FROM repeatable_holidays|);
-$cache->clear_from_cache('single_holidays');
+my $branches = Koha::Libraries->search();
+for my $branch ( $branches->next ) {
+    my $key = $branch->branchcode . "_holidays";
+    $cache->clear_from_cache($key);
+}
 
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
@@ -4060,4 +4064,8 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
 
 $schema->storage->txn_rollback;
 C4::Context->clear_syspref_cache();
-$cache->clear_from_cache('single_holidays');
+$branches = Koha::Libraries->search();
+for my $branch ( $branches->next ) {
+    my $key = $branch->branchcode . "_holidays";
+    $cache->clear_from_cache($key);
+}
