@@ -167,7 +167,7 @@ sub hold_patron_id {
 }
 sub hold_patron_name {
     my ( $self, $template ) = @_;
-    my $borrowernumber = $self->hold_patron_id() or return;
+    my $borrowernumber = $self->hold_patron_id() or return q{};
 
     if ($template) {
         my $tt = Template->new();
@@ -182,7 +182,7 @@ sub hold_patron_name {
     my $holder = Koha::Patrons->find( $borrowernumber );
     unless ($holder) {
         siplog("LOG_ERR", "While checking hold, failed to retrieve the patron with borrowernumber '$borrowernumber'");
-        return;
+        return q{};
     }
     my $email = $holder->email || '';
     my $phone = $holder->phone || '';
