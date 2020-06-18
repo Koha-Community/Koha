@@ -147,20 +147,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     var MSG_CANCEL_HOLD = _("Cancel");
     var MSG_CANCEL_HOLD_CONFIRM = _("Are you sure you want to cancel this hold?");
     var MSG_ON_HOLD = _("On hold");
-    [% IF Koha.Preference( 'opacbookbag' ) == 1 or Koha.Preference( 'virtualshelves' ) == 1 %]
-        var MSG_BASKET_EMPTY = _("Your cart is currently empty");
-        var MSG_RECORD_IN_BASKET = _("The item is already in your cart");
-        var MSG_RECORD_ADDED = _("The item has been added to your cart");
-        var MSG_RECORD_REMOVED = _("The item has been removed from your cart");
-        var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
-        var MSG_NRECORDS_IN_BASKET = _("already in your cart");
-        var MSG_NO_RECORD_SELECTED = _("No item was selected");
-        var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
-        var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
-        var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
-        var MSG_ITEM_IN_CART = _("In your cart");
-        var MSG_ITEM_NOT_IN_CART = _("Add to cart");
-    [% END %]
+
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
         var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
         var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");
