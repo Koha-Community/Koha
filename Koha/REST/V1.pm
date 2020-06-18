@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious';
 
 use C4::Context;
+use Carp;
 use JSON::Validator::OpenAPI::Mojolicious;
 use Try::Tiny;
 
@@ -103,32 +104,42 @@ sub startup {
     catch {
         # Validation of the complete spec failed. Resort to validation one-by-one
         # to catch bad ones.
-        $validator->load_and_validate_schema(
-            $self->home->rel_file("api/v1/swagger/swagger.json"),
-            {
-                allow_invalid_ref  => 1,
-                schema => ( $swagger_schema ) ? $swagger_schema : undef,
-            }
-        );
 
-        $spec = $validator->schema->data;
-        $self->plugin(
-            'Koha::REST::Plugin::PluginRoutes' => {
-                spec      => $spec,
-                validator => $validator
-            }
-        )  unless C4::Context->needs_install; # load only if Koha is installed
+        # JSON::Validator uses confess, so trim call stack from the message.
+        carp "Warning: Could not load REST API spec bundle: " . ($_ =~ /\A(.*?)$/ms)[0];
 
-        $self->plugin(
-            OpenAPI => {
-                spec  => $spec,
-                route => $self->routes->under('/api/v1')->to('Auth#under'),
-                allow_invalid_ref =>
-                1,    # required by our spec because $ref directly under
-                        # Paths-, Parameters-, Definitions- & Info-object
-                        # is not allowed by the OpenAPI specification.
-            }
-        );
+        try {
+            $validator->load_and_validate_schema(
+                $self->home->rel_file("api/v1/swagger/swagger.json"),
+                {
+                    allow_invalid_ref  => 1,
+                    schema => ( $swagger_schema ) ? $swagger_schema : undef,
+                }
+            );
+
+            $spec = $validator->schema->data;
+            $self->plugin(
+                'Koha::REST::Plugin::PluginRoutes' => {
+                    spec      => $spec,
+                    validator => $validator
+                }
+            )  unless C4::Context->needs_install; # load only if Koha is installed
+
+            $self->plugin(
+                OpenAPI => {
+                    spec  => $spec,
+                    route => $self->routes->under('/api/v1')->to('Auth#under'),
+                    allow_invalid_ref =>
+                    1,    # required by our spec because $ref directly under
+                            # Paths-, Parameters-, Definitions- & Info-object
+                            # is not allowed by the OpenAPI specification.
+                }
+            );
+        }
+        catch {
+            # JSON::Validator uses confess, so trim call stack from the message.
+            croak "Could not load REST API spec: " . ($_ =~ /\A(.*?)$/ms)[0];
+        };
     };
 
     $self->plugin( 'Koha::REST::Plugin::Pagination' );

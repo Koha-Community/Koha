@@ -89,7 +89,9 @@ sub inject_routes {
         return $spec;
     }
     catch {
-        warn "$_";
+        my $error = $_;
+        my $class = ref $plugin;
+        warn "Plugin $class route injection failed: $error";
         return $spec;
     };
 }
