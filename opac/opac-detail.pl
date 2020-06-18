@@ -67,6 +67,9 @@ my $query = CGI->new();
 my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
 $biblionumber = int($biblionumber);
 
+my $specific_item = $query->param('itemnumber') ? Koha::Items->find( scalar $query->param('itemnumber') ) : undef;
+$biblionumber = $specific_item->biblionumber if $specific_item;
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-detail.tt",
@@ -77,6 +80,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my @all_items = GetItemsInfo($biblionumber);
+if( $specific_item ) {
+    @all_items = grep { $_->{itemnumber} == $query->param('itemnumber') } @all_items;
+    $template->param( specific_item => 1 );
+}
 my @hiddenitems;
 my $patron = Koha::Patrons->find( $borrowernumber );
 our $borcat= q{};
