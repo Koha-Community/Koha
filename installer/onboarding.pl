@@ -272,7 +272,7 @@ if ( $step == 5 ) {
                 hardduedatecompare               => -1,
                 holds_per_day                    => $holds_per_day,
                 holds_per_record                 => $holds_per_record,
-                maxissueqty                      => "",
+                maxissueqty                      => $maxissueqty,
                 maxonsiteissueqty                => "",
                 maxsuspensiondays                => "",
                 no_auto_renewal_after            => "",
@@ -294,26 +294,7 @@ if ( $step == 5 ) {
             warn $@;
             push @messages, { code => 'error_on_insert_circ_rule' };
         } else {
-
-            eval {
-                Koha::CirculationRules->set_rules(
-                    {
-                        categorycode => $categorycode,
-                        itemtype     => $itemtype,
-                        branchcode   => $branchcode,
-                        rules        => {
-                            maxissueqty => $maxissueqty,
-                        }
-                    }
-                );
-            };
-
-            unless ($@) {
-                push @messages, { code => 'success_on_insert_circ_rule' };
-            }
-            else {
-                push @messages, { code => 'error_on_insert_circ_rule' };
-            }
+            push @messages, { code => 'success_on_insert_circ_rule' };
         }
     }
 
