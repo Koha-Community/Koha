@@ -54,9 +54,17 @@
 <!--[if lt IE 9]>
     <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
 <![endif]-->
+
 <script>
+    var Koha = {};
     function _(s) { return s } // dummy function for gettext
 </script>
+[% IF lang && lang != 'en' %]
+    [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
+[% END %]
+[% Asset.js('js/Gettext.js') | $raw %]
+[% Asset.js('js/i18n.js') | $raw %]
+
 [% Asset.js("lib/modernizr.min.js") | $raw %]
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% PROCESS 'html_helpers.inc' %]

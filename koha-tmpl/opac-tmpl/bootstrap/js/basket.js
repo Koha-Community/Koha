@@ -1,4 +1,4 @@
-/* global MSG_BASKET_EMPTY MSG_RECORD_IN_BASKET MSG_RECORD_ADDED MSG_NRECORDS_IN_BASKET MSG_NRECORDS_ADDED MSG_NO_RECORD_SELECTED MSG_NO_RECORD_ADDED MSG_RECORD_REMOVED MSG_CONFIRM_DEL_BASKET MSG_CONFIRM_DEL_RECORDS MSG_ITEM_IN_CART MSG_ITEM_NOT_IN_CART */
+/* global __ __p */
 
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
@@ -86,7 +86,7 @@ function openBasket() {
         if (window.focus) {basket.focus()}
     }
     else {
-        showCartUpdate(MSG_BASKET_EMPTY);
+        showCartUpdate( __("Your cart is currently empty") );
     }
 }
 
@@ -115,7 +115,7 @@ function addRecord(val, selection,NoMsgAlert) {
                 return 0;
             }
             if (! NoMsgAlert ) {
-                showCartUpdate(MSG_RECORD_IN_BASKET);
+                showCartUpdate( __p("Bibliographic record", "The item is already in your cart") );
             }
         }
         else {
@@ -132,7 +132,7 @@ function addRecord(val, selection,NoMsgAlert) {
             return 1;
         }
         if (! NoMsgAlert ) {
-            showCartUpdate(MSG_RECORD_ADDED);
+            showCartUpdate( __p("Bibliographic record", "The item has been added to your cart") );
             updateLink(val,"add");
         }
 
@@ -189,18 +189,18 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
     var msg = "";
     if (nbAdd) {
         if (i > nbAdd) {
-            msg = nbAdd+" "+MSG_NRECORDS_ADDED+", "+(i-nbAdd)+" "+MSG_NRECORDS_IN_BASKET;
+            msg = nbAdd+" "+ __p("Bibliographic record", " item(s) added to your cart") +", "+(i-nbAdd)+" " + __("already in your cart");
         }
         else {
-            msg = nbAdd+" "+MSG_NRECORDS_ADDED;
+            msg = nbAdd+" "+ __p("Bibliographic record", " item(s) added to your cart");
         }
     }
     else {
         if (i < 1) {
-            msg = MSG_NO_RECORD_SELECTED;
+            msg = __p("Bibliographic record", "No item was selected");
         }
         else {
-            msg = MSG_NO_RECORD_ADDED+" ("+MSG_NRECORDS_IN_BASKET+") !";
+            msg = __p("Bibliographic record", "No item was added to your cart") + " (" + __("already in your cart") + ") !";
         }
     }
     showCartUpdate(msg);
@@ -241,7 +241,7 @@ function delSingleRecord(biblionumber){
     writeCookie( nameCookie, valCookie );
     updateBasket( arrayRecords.length-1 );
     updateLink(biblionumber,"del");
-    showCartUpdate(MSG_RECORD_REMOVED);
+    showCartUpdate( __p("Bibliographic record", "The item has been removed from your cart") );
 }
 
 function delSelRecords() {
@@ -268,7 +268,7 @@ function delSelRecords() {
 
             if (str2.length == 0) { // equivalent to emptying the basket
                 var rep = false;
-                rep = confirm(MSG_CONFIRM_DEL_BASKET);
+                rep = confirm( __("Are you sure you want to empty your cart?") );
                 if (rep) {
                     delCookie(nameCookie);
                     document.location = "about:blank";
@@ -293,7 +293,7 @@ function delSelRecords() {
         document.location = "/cgi-bin/koha/opac-basket.pl?" + strCookie;
     }
     else {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __p("Bibliographic record", "No item was selected") );
     }
 }
 
@@ -324,7 +324,7 @@ function delBasket() {
     var nameCookie = "bib_list";
 
     var rep = false;
-    rep = confirm(MSG_CONFIRM_DEL_BASKET);
+    rep = confirm( __("Are you sure you want to empty your cart?") );
     if (rep) {
         delCookie(nameCookie);
         updateAllLinks(top.opener);
@@ -338,7 +338,7 @@ function delBasket() {
 function quit() {
     if (document.myform.records.value) {
         var rep = false;
-        rep = confirm(MSG_CONFIRM_DEL_RECORDS);
+        rep = confirm( __p("Bibliographic records", "Are you sure you want to remove the selected items?") );
         if (rep) {
             delSelRecords();
         }
@@ -388,7 +388,7 @@ function holdSel() {
         parent.opener.document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers=" + items;
         window.close();
     } else {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __p("Bibliographic record", "No item was selected") );
     }
 }
 
@@ -420,7 +420,7 @@ function addSelToShelf() {
         var loc = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
         var shelf = open(loc, "shelf", optWin);
     } else {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __p("Bibliographic record", "No item was selected") );
     }
 }
 
@@ -434,7 +434,7 @@ function vShelfAdd() {
                                 bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
                         }
                 }
-        if (bibs.length == 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
+        if (bibs.length == 0) { showListsUpdate( __p("Bibliographic record", "No item was selected") ); }
             return bibs.join("&");
         } else {
             if (document.bookbag_form.biblionumber.checked) {
@@ -466,18 +466,18 @@ function hideCart(){
 function updateLink(val,op,target){
     if(target){
         if(op == "add"){
-            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_IN_CART ).addClass("incart");
+            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("In your cart") ).addClass("incart");
             target.$("a.cartR"+val).show();
         } else {
-            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart cart"+val);
+            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("Add to cart") ).removeClass("incart").addClass("addtocart cart"+val);
             target.$("a.cartR"+val).hide();
         }
     } else {
         if(op == "add"){
-            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_IN_CART ).addClass("incart");
+            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("In your cart") ).addClass("incart");
             $("a.cartR"+val).show();
         } else {
-            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart cart"+val);
+            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("Add to cart") ).removeClass("incart").addClass("addtocart cart"+val);
             $("a.cartR"+val).hide();
         }
     }
@@ -485,10 +485,10 @@ function updateLink(val,op,target){
 
 function updateAllLinks(target){
     if(target){
-        target.$("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart");
+        target.$("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("Add to cart") ).removeClass("incart").addClass("addtocart");
         target.$("a.cartRemove").hide();
     } else {
-        $("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart");
+        $("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + __("Add to cart") ).removeClass("incart").addClass("addtocart");
         $("a.cartRemove").hide();
     }
 }
