@@ -96,7 +96,7 @@ Makefile.PL - Koha packager and installer
     --install_sru                Install the SRU server (yes, no)
     --install_pazpar2            Install PazPar2 (yes, no)
     --use_memcached              Use Memcached (yes, no)
-    --font_dir                   Location of fonts (e.g. /usr/share/fonts/truetype/ttf-dejavu)
+    --font_dir                   Location of fonts (e.g. /usr/share/fonts/truetype/dejavu)
     --run_database_tests         Run database dependent tests (yes, no)
     --install_base               Base directory of installation (e.g. /usr/share/koha)
     --template-cache-dir         Specify a template cache directory (e.g. /var/cache/koha)
@@ -488,7 +488,7 @@ my %config_defaults = (
   'MEMCACHED_SERVERS' => '127.0.0.1:11211',
   'MEMCACHED_NAMESPACE' => 'KOHA',
   'TEMPLATE_CACHE_DIR' => '/tmp/koha',
-  'FONT_DIR'          => '/usr/share/fonts/truetype/ttf-dejavu'
+  'FONT_DIR'          => '/usr/share/fonts/truetype/dejavu'
 );
 
 # set some default configuration options based on OS
