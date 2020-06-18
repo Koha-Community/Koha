@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -79,6 +79,41 @@ subtest 'Test hold_patron_bcode' => sub {
     plan tests => 2;
     $C4::SIP::Sip::protocol_version = 2;
     test_hold_patron_bcode();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'hold_patron_name() tests' => sub {
+
+    plan tests => 2;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    my $item = $builder->build_sample_item(
+        {
+            damaged       => 0,
+            withdrawn     => 0,
+            itemlost      => 0,
+            restricted    => 0,
+            homebranch    => $branchcode,
+            holdingbranch => $branchcode
+        }
+    );
+
+    my $server = { ils => $mocks->{ils} };
+    my $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
+
+    is( $sip_item->hold_patron_name, q{}, "SIP item with no hold returns empty string for patron name" );
+
+    my $resp .= C4::SIP::Sip::maybe_add( FID_CALL_NUMBER, $sip_item->hold_patron_name, $server );
+    is( $resp, q{}, "maybe_add returns empty string for SIP item with no hold returns empty string" );
+
     $schema->storage->txn_rollback;
 };
 
