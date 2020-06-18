@@ -1145,8 +1145,16 @@ subtest "Test Local Holds Priority - Get correct item for item level hold" => su
     );
 
     my $reserve_id2 =
-        AddReserve( $item2->homebranch, $local_patron->borrowernumber,
-            $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item2->id, undef, undef );
+        AddReserve(
+            {
+                branchcode     => $item2->homebranch,
+                borrowernumber => $local_patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 2,
+                itemnumber     => $item2->id,
+            }
+        );
+
 
     C4::HoldsQueue::CreateQueue();
 
