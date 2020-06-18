@@ -109,7 +109,7 @@ our $RULE_KINDS = {
     issuelength => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
-    useDaysMode => {
+    daysmode => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
     lengthunit => {
@@ -490,32 +490,32 @@ sub guess_article_requestable_itemtypes {
     return $res;
 }
 
-=head3 get_useDaysMode_effective_value
+=head3 get_daysmode_effective_value
 
-Return the value for useDaysMode defined in the circulation rules.
+Return the value for daysmode defined in the circulation rules.
 If not defined (or empty string), the value of the system preference useDaysMode is returned
 
 =cut
 
-sub get_useDaysMode_effective_value {
+sub get_effective_daysmode {
     my ( $class, $params ) = @_;
 
     my $categorycode     = $params->{categorycode};
     my $itemtype         = $params->{itemtype};
     my $branchcode       = $params->{branchcode};
 
-    my $useDaysMode_rule = $class->get_effective_rule(
+    my $daysmode_rule = $class->get_effective_rule(
         {
             categorycode => $categorycode,
             itemtype     => $itemtype,
             branchcode   => $branchcode,
-            rule_name    => 'useDaysMode',
+            rule_name    => 'daysmode',
         }
     );
 
-    return ( defined($useDaysMode_rule)
-          and $useDaysMode_rule->rule_value ne '' )
-      ? $useDaysMode_rule->rule_value
+    return ( defined($daysmode_rule)
+          and $daysmode_rule->rule_value ne '' )
+      ? $daysmode_rule->rule_value
       : C4::Context->preference('useDaysMode');
 
 }

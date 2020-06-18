@@ -48,14 +48,14 @@ sub calculate_dropbox_date {
     my $userenv    = C4::Context->userenv;
     my $branchcode = $userenv->{branch} // q{};
 
-    my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+    my $daysmode = Koha::CirculationRules->get_effective_daysmode(
         {
             categorycode => undef,
             itemtype     => undef,
             branchcode   => $branchcode,
         }
     );
-    my $calendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => $useDaysMode_value );
+    my $calendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => $daysmode );
     my $today        = dt_from_string;
     my $dropbox_date = $calendar->addDate( $today, -1 );
 

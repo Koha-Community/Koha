@@ -284,7 +284,7 @@ subtest 'get_onshelfholds_policy() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'get_useDaysMode_effective_value' => sub {
+subtest 'get_effective_daysmode' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
@@ -293,13 +293,13 @@ subtest 'get_useDaysMode_effective_value' => sub {
     my $item_2 = $builder->build_sample_item();
 
     my $circ_rules =
-      Koha::CirculationRules->search( { rule_name => 'useDaysMode' } )->delete;
+      Koha::CirculationRules->search( { rule_name => 'daysmode' } )->delete;
 
     # Default value 'Datedue' at pref level
     t::lib::Mocks::mock_preference( 'useDaysMode', 'Datedue' );
 
     is(
-        Koha::CirculationRules->get_useDaysMode_effective_value(
+        Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => undef,
                 itemtype     => $item_1->effective_itemtype,
@@ -307,7 +307,7 @@ subtest 'get_useDaysMode_effective_value' => sub {
             }
         ),
         'Datedue',
-        'useDaysMode default to pref value if the rule does not exist'
+        'daysmode default to pref value if the rule does not exist'
     );
 
     Koha::CirculationRules->set_rule(
@@ -315,7 +315,7 @@ subtest 'get_useDaysMode_effective_value' => sub {
             branchcode   => '*',
             categorycode => '*',
             itemtype     => '*',
-            rule_name    => 'useDaysMode',
+            rule_name    => 'daysmode',
             rule_value   => 'Calendar',
         }
     );
@@ -324,13 +324,13 @@ subtest 'get_useDaysMode_effective_value' => sub {
             branchcode   => '*',
             categorycode => '*',
             itemtype     => $item_1->effective_itemtype,
-            rule_name    => 'useDaysMode',
+            rule_name    => 'daysmode',
             rule_value   => 'Days',
         }
     );
 
     is(
-        Koha::CirculationRules->get_useDaysMode_effective_value(
+        Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => undef,
                 itemtype     => $item_1->effective_itemtype,
@@ -338,10 +338,10 @@ subtest 'get_useDaysMode_effective_value' => sub {
             }
         ),
         'Days',
-        "useDaysMode for item_1 is the specific rule"
+        "daysmode for item_1 is the specific rule"
     );
     is(
-        Koha::CirculationRules->get_useDaysMode_effective_value(
+        Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => undef,
                 itemtype     => $item_2->effective_itemtype,
@@ -349,7 +349,7 @@ subtest 'get_useDaysMode_effective_value' => sub {
             }
         ),
         'Calendar',
-        "useDaysMode for item_2 is the one defined for the default circ rule"
+        "daysmode for item_2 is the one defined for the default circ rule"
     );
 
     Koha::CirculationRules->set_rule(
@@ -357,13 +357,13 @@ subtest 'get_useDaysMode_effective_value' => sub {
             branchcode   => '*',
             categorycode => '*',
             itemtype     => $item_2->effective_itemtype,
-            rule_name    => 'useDaysMode',
+            rule_name    => 'daysmode',
             rule_value   => '',
         }
     );
 
     is(
-        Koha::CirculationRules->get_useDaysMode_effective_value(
+        Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => undef,
                 itemtype     => $item_2->effective_itemtype,
@@ -371,7 +371,7 @@ subtest 'get_useDaysMode_effective_value' => sub {
             }
         ),
         'Datedue',
-        'useDaysMode default to pref value if the rule exists but set to""'
+        'daysmode default to pref value if the rule exists but set to""'
     );
 
     $schema->storage->txn_rollback;

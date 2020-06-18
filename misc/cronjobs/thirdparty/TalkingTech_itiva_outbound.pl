@@ -333,7 +333,7 @@ sub GetWaitingHolds {
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
         my $item = Koha::Items->find({ barcode => $issue->{barcode} });
-        my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+        my $daysmode = Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => $issue->{categorycode},
                 itemtype     => $item->effective_itemtype,
@@ -341,7 +341,7 @@ sub GetWaitingHolds {
             }
         );
 
-        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'}, days_mode => $useDaysMode_value );
+        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'}, days_mode => $daysmode );
 
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
         my $pickup_date = $waiting_date->clone->add( days => $pickupdelay );

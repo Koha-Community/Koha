@@ -131,7 +131,7 @@
                         [% SET maxissueqty = all_rules.$c.$i.maxissueqty %]
                         [% SET maxonsiteissueqty = all_rules.$c.$i.maxonsiteissueqty %]
                         [% SET issuelength = all_rules.$c.$i.issuelength %]
-                        [% SET useDaysMode = all_rules.$c.$i.useDaysMode %]
+                        [% SET daysmode = all_rules.$c.$i.daysmode %]
                         [% SET lengthunit = all_rules.$c.$i.lengthunit %]
                         [% SET hardduedate = all_rules.$c.$i.hardduedate %]
                         [% SET hardduedatecompare = all_rules.$c.$i.hardduedatecompare %]
@@ -158,7 +158,7 @@
                         [% SET article_requests = all_rules.$c.$i.article_requests %]
                         [% SET rentaldiscount = all_rules.$c.$i.rentaldiscount %]
 
-                        [% SET show_rule = maxissueqty || maxonsiteissueqty || issuelength || useDaysMode || lengthunit || hardduedate || hardduedatebefore || hardduedateexact || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalsallowed || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || article_requests %]
+                        [% SET show_rule = maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatebefore || hardduedateexact || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalsallowed || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || article_requests %]
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
@@ -201,7 +201,7 @@
                                     </td>
                                     <td>[% issuelength | html %]</td>
                                     <td>
-                                        [% SWITCH useDaysMode %]
+                                        [% SWITCH daysmode %]
                                         [% CASE 'Calendar' %]<span title="Use the calendar to skip days the library is closed">Calendar</span>
                                         [% CASE 'Datedue' %]<span title="Use the calendar to push the due date to the next open day">Datedue</span>
                                         [% CASE 'Days' %]<span title="Ignore the calendar">Days</span>
@@ -346,7 +346,7 @@
                     <td><input type="text" name="maxonsiteissueqty" id="maxonsiteissueqty" size="3" /></td>
                     <td><input type="text" name="issuelength" id="issuelength" size="3" /> </td>
                     <td>
-                        <select name="useDaysMode" id="useDaysMode">
+                        <select name="daysmode" id="daysmode">
                             <option value="">Default</option>
                             <option value="Calendar">Calendar</option>
                             <option value="Datedue">Datedue</option>

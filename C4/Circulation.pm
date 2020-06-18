@@ -1241,14 +1241,14 @@ sub checkHighHolds {
         my $issuedate = dt_from_string();
 
         my $itype = $item_object->effective_itemtype;
-        my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+        my $daysmode = Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => $borrower->{categorycode},
                 itemtype     => $itype,
                 branchcode   => $branchcode,
             }
         );
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => $useDaysMode_value );
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => $daysmode );
 
         my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
@@ -3583,7 +3583,7 @@ sub updateWrongTransfer {
 $newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
 
 this function calculates the due date given the start date and configured circulation rules,
-checking against the holidays calendar as per the useDaysMode circulation rule.
+checking against the holidays calendar as per the daysmode circulation rule.
 C<$startdate>   = DateTime object representing start date of loan period (assumed to be today)
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
@@ -3617,7 +3617,7 @@ sub CalcDateDue {
     }
 
 
-    my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+    my $daysmode = Koha::CirculationRules->get_effective_daysmode(
         {
             categorycode => $borrower->{categorycode},
             itemtype     => $itemtype,
@@ -3626,7 +3626,7 @@ sub CalcDateDue {
     );
 
     # calculate the datedue as normal
-    if ( $useDaysMode_value eq 'Days' )
+    if ( $daysmode eq 'Days' )
     {    # ignoring calendar
         if ( $loanlength->{lengthunit} eq 'hours' ) {
             $datedue->add( hours => $loanlength->{$length_key} );
@@ -3643,7 +3643,7 @@ sub CalcDateDue {
         else { # days
             $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
         }
-        my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $useDaysMode_value );
+        my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $daysmode );
         $datedue = $calendar->addDate( $datedue, $dur, $loanlength->{lengthunit} );
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
@@ -3681,8 +3681,8 @@ sub CalcDateDue {
                 $datedue = $expiry_dt->clone->set_time_zone( C4::Context->tz );
             }
         }
-        if ( $useDaysMode_value ne 'Days' ) {
-          my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $useDaysMode_value );
+        if ( $daysmode ne 'Days' ) {
+          my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $daysmode );
           if ( $calendar->is_holiday($datedue) ) {
               # Don't return on a closed day
               $datedue = $calendar->prev_open_days( $datedue, 1 );

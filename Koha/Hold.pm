@@ -184,14 +184,14 @@ sub set_waiting {
 
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
         my $itemtype = $self->item ? $self->item->effective_itemtype : $self->biblio->itemtype;
-        my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+        my $daysmode = Koha::CirculationRules->get_effective_daysmode(
             {
                 categorycode => $self->borrower->categorycode,
                 itemtype     => $itemtype,
                 branchcode   => $self->branchcode,
             }
         );
-        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode, days_mode => $useDaysMode_value );
+        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode, days_mode => $daysmode );
 
         $expirationdate = $calendar->days_forward( dt_from_string(), $max_pickup_delay );
     }

@@ -94,7 +94,7 @@ if ($op eq 'delete') {
                 chargeperiod                     => undef,
                 chargeperiod_charge_at           => undef,
                 issuelength                      => undef,
-                useDaysMode                      => undef,
+                daysmode                         => undef,
                 lengthunit                       => undef,
                 hardduedate                      => undef,
                 hardduedatecompare               => undef,
@@ -279,7 +279,7 @@ elsif ($op eq 'add') {
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     my $issuelength  = $input->param('issuelength');
     $issuelength = $issuelength eq q{} ? undef : $issuelength;
-    my $useDaysMode = $input->param('useDaysMode');
+    my $daysmode = $input->param('daysmode');
     my $lengthunit  = $input->param('lengthunit');
     my $hardduedate = $input->param('hardduedate') || undef;
     $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) } if ( $hardduedate );
@@ -305,7 +305,7 @@ elsif ($op eq 'add') {
         chargeperiod                  => $chargeperiod,
         chargeperiod_charge_at        => $chargeperiod_charge_at,
         issuelength                   => $issuelength,
-        useDaysMode                   => $useDaysMode,
+        daysmode                      => $daysmode,
         lengthunit                    => $lengthunit,
         hardduedate                   => $hardduedate,
         hardduedatecompare            => $hardduedatecompare,
