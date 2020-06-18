@@ -358,16 +358,6 @@ function sendBasket() {
     var win_form = open(loc,"win_form",optWin);
 }
 
-function downloadBasket() {
-    var nameCookie = "bib_list";
-    var valCookie = readCookie(nameCookie);
-    var strCookie = nameCookie + "=" + valCookie;
-
-    var loc = "/cgi-bin/koha/opac-downloadcart.pl?" + strCookie;
-
-    open(loc,"win_form",'scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
-}
-
 function showMore() {
     var strCookie = "";
 
