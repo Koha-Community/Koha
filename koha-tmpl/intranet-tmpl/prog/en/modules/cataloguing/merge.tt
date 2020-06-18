@@ -181,7 +181,6 @@ div#result { margin-top: 1em; }
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/merge-record.js") | $raw %]
-    [% INCLUDE 'merge-record-strings.inc' %]
     <script>
         [% UNLESS (result) %]
           [% IF (choosereference) %]

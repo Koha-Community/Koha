@@ -69,7 +69,7 @@ function field_can_be_added($sources, $li) {
   }
 
   if ((!repeatable) && (tag in target_record)) {
-    alert(MSG_MERGEREC_ALREADY_EXISTS);
+    alert( __p("Bibliographic record", "The field is non-repeatable and already exists in the destination record. Therefore, you cannot add it.") );
     return false;
   }
 
@@ -104,7 +104,7 @@ function subfield_can_be_added($sources, $li) {
       for (i in target_field.subfields) {
         var subfield = target_field.subfields[i];
         if (code == subfield.code) {
-          alert(MSG_MERGEREC_SUBFIELD_ALREADY_EXISTS);
+          alert( __p("Bibliographic record", "The subfield is non-repeatable and already exists in the destination record. Therefore, you cannot add it.") );
           return false;
         }
       }
