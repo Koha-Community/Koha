@@ -209,6 +209,8 @@ unless ( $sessions
     || $pOldReserves
     || $pTransfers
     || defined $pPseudoTransactions
+    || $pPseudoTransactionsFrom
+    || $pPseudoTransactionsTo
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -456,8 +458,8 @@ if ($pTransfers) {
     print "Done with purging transfers.\n" if $verbose;
 }
 
-if (defined $pPseudoTransactions) {
-    print "Purging pseudonymized transactions older than $pPseudoTransactions days.\n" if $verbose;
+if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransactionsTo ) {
+    print "Purging pseudonymized transactions\n" if $verbose;
     Koha::PseudonymizedTransactions->filter_by_last_update(
         {
             timestamp_column_name => 'datetime',
