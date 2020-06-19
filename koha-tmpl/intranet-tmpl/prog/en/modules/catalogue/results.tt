@@ -420,46 +420,61 @@
                                     <!-- Actual Search Results -->
                                     [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                                        <tr>
+                                        <tr id="row[% SEARCH_RESULT.biblionumber | html %]">
                                             [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                                                <td>
-                                                    [% IF ( LocalCoverImages) %]
-                                                        <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                                            <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
-                                                        </a>
-                                                    [% END %]
-                                                    [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
-                                                        <a href="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
-                                                    [% END %]
-                                                    [% IF ( AmazonCoverImages ) %]
-                                                        [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
-                                                        [% ELSIF ( !LocalCoverImages ) %]
-                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                                            <span class="no-image">No cover image available</span>
-                                                        [% END %]
-                                                        </a>
-                                                    [% END # /IF AmazonCoverImages %]
-                                                    [% IF ( IntranetCoce && CoceProviders ) %]
-                                                        [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
-                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber | url %]">
-                                                        [% IF ( coce_id ) %]
-                                                            <span style="block" title="[% SEARCH_RESULT.biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
-                                                        [% ELSE %]
-                                                            <span class="no-image">No cover image available</span>
-                                                        [% END %]
-                                                            </a>
-                                                    [% END %]
+    <td class="bookcoverimg">
+        <div id="cover-slides-[% SEARCH_RESULT.biblionumber | html %]" class="cover-slides" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]">
+            [% IF ( LocalCoverImages ) %][% SEARCH_RESULT.localimage | html %]
+                <div id="local-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image local-coverimg">
+                    <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" alt="Local cover image" />
+                    </a>
+                    <div class="hint">Local cover image</div>
+                </div>
+            [% END %]
 
-                                                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-                                                        [% SET custom_cover_image_url = SEARCH_RESULT.biblio_object.custom_cover_image_url %]
-                                                        [% IF custom_cover_image_url %]
-                                                            <a class="custom_cover_image" href="[% custom_cover_image_url | url %]"><img alt="Cover image" src="[% custom_cover_image_url | url %]" />
-                                                        [% END %]
-                                                    [% END %]
-                                                </td>
-                                            [% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce )%]
+            [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
+                <div id="adlibris-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image adlibris-coverimg">
+                    <a href="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                </div>
+                <div class="hint">Adlibris cover image</div>
+            [% END %]
+
+            [% IF ( AmazonCoverImages && SEARCH_RESULT.normalized_isbn ) %]
+                <div id="amazon-bookcoverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image amazon-bookcoverimg">
+                    <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                        <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="Cover image from Amazon.com" />
+                    </a>
+                    <div class="hint">Amazon cover image</div>
+                </div>
+            [% END # /IF AmazonCoverImages %]
+
+            [% IF ( IntranetCoce && CoceProviders && SEARCH_RESULT.normalized_isbn ) %]
+                [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
+                [% IF ( coce_id ) %]
+                    <div id="coce-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image coce-coverimg">
+                        <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber | url %]">
+                            <span style="block" title="[% SEARCH_RESULT.biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail[% SEARCH_RESULT.biblionumber | html %]"></span>
+                        </a>
+                        <div class="hint">Coce cover image</div>
+                    </div>
+                [% END %]
+            [% END %]
+
+            [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+                [% SET custom_cover_image_url = SEARCH_RESULT.biblio_object.custom_cover_image_url %]
+                [% IF custom_cover_image_url %]
+                    <div id="custom-coverimg-[% SEARCH_RESULT.biblionumber | html %]" class="cover-image custom-coverimg">
+                        <a class="custom_cover_image" href="[% custom_cover_image_url | url %]">
+                            <img alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
+                        </a>
+                        <div class="hint">Custom cover image</div>
+                    </div>
+                [% END %]
+            [% END %]
+        </div>
+    </td>
+[% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce )%]
 
                                             <td>
                                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" style="display:none" />

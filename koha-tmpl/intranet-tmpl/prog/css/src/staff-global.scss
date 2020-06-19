@@ -2178,7 +2178,7 @@ li {
 }
 
 .cover-slides {
-    background: #FFF url("[% interface | html %]/[% theme | html %]/img/spinner-small.gif") center center no-repeat;
+    background: #FFF url("../img/spinner-small.gif") center center no-repeat;
 
     .hint {
         font-size: 90%;
@@ -2192,6 +2192,21 @@ li {
                 color: #85ca11;
             }
         }
+    }
+}
+
+td {
+    &.bookcoverimg {
+        background: #FFF url("../img/spinner-small.gif") center center no-repeat;
+        min-width: 120px;
+        text-align: center;
+    }
+    .cover-slides {
+        background: transparent none;
+        border: 0;
+        margin: 0;
+        min-height: unset;
+        padding: 0;
     }
 }
 

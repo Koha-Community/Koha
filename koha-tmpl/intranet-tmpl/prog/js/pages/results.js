@@ -1,16 +1,127 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords __ */
 
-if( PREF_AmazonCoverImages ){
-    $(window).load(function() {
-        verify_images();
+function verify_images() {
+    /* Loop over each container in the template which contains covers */
+    var coverSlides = $(".cover-slides"); /* One coverSlides for each search result */
+    coverSlides.each( function( index ){
+        var slide = $(this);
+        var biblionumber = $(this).data("biblionumber");
+        var coverImages = $(".cover-image", slide ); /* Multiple coverImages for each coverSlides */
+        var blanks = [];
+        coverImages.each( function( index ){
+            var div = $(this);
+            var coverId = div.attr("id");
+            /* Find the image in the container */
+            var img = div.find("img")[0];
+            if( $(img).length > 0 ){
+                if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
+                    /* No image loaded in the container. Remove the slide */
+                    blanks.push( coverId );
+                    div.remove();
+                } else {
+                    /* Check if Amazon image is present */
+                    if ( div.hasClass("amazon-bookcoverimg") ) {
+                        w = img.width;
+                        h = img.height;
+                        if ((w == 1) || (h == 1)) {
+                            /* Amazon returned single-pixel placeholder */
+                            /* Remove the container */
+                            blanks.push( coverId );
+                            div.remove();
+                        }
+                    }
+                    /* Check if Local image is present */
+                    if ( div.hasClass("local-coverimg" ) ) {
+                        w = img.width;
+                        h = img.height;
+                        if ((w == 1) || (h == 1)) {
+                            /* Local cover image returned single-pixel placeholder */
+                            /* Remove the container */
+                            blanks.push( coverId );
+                            div.remove();
+                        }
+                    }
+                    if( div.hasClass("custom-img") ){
+                        /* Check for image from CustomCoverImages system preference */
+                        if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
+                            /* No image was loaded via the CustomCoverImages system preference */
+                            /* Remove the container */
+                            blanks.push( coverId );
+                            div.remove();
+                        }
+                    }
+
+                    if( div.hasClass("coce-coverimg") ){
+                        /* Identify which service's image is being loaded by IntranetCoce system pref */
+                        if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
+                            div.find(".hint").html(_("Coce image from Amazon.com"));
+                        } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
+                            div.find(".hint").html(_("Coce image from Google Books"));
+                        } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
+                            div.find(".hint").html(_("Coce image from Open Library"));
+                        } else {
+                            blanks.push( coverId );
+                            div.remove();
+                        }
+                    }
+                    if( coverImages.length > 1 ){
+                        if( blanks.includes( coverId ) ){
+                            /* Don't add covernav link */
+                        } else {
+                            var covernav = $("<a href=\"#\" data-coverid=\"" + coverId + "\" data-biblionumber=\"" + biblionumber + "\" class=\"cover-nav\"></a>");
+                            $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                            slide.addClass("cover-slides").append( covernav );
+                        }
+                    }
+                } /* /IF image loaded */
+            } else {
+                blanks.push( coverId );
+                div.remove();
+            } /* /IF there is an image tag */
+            /* console.log( coverImages ); */
+        });
+
+        /* Show the first cover image slide after empty ones have been removed */
+        $(".cover-image", slide).eq(0).show();
+        /* Remove "loading" background gif */
+        $(".bookcoverimg").css("background","unset");
+
+        if( $(".cover-image", slide).length < 2 ){
+            /* Don't show controls for switching between covers if there is only 1 */
+            $(".cover-nav", slide).remove();
+        }
+        /* Set the first navigation link as active */
+        $(".cover-nav", slide).eq(0).addClass("nav-active");
+
+        /* If no slides contain any cover images, remove the container */
+        if( $(".cover-image:visible", slide).length < 1 ){
+            slide.remove();
+        }
     });
 }
+
+$(window).load(function() {
+    verify_images();
+});
 
 var Sticky;
 var toHighlight = {};
 var q_array;
 
 $(document).ready(function() {
+
+    $("#searchresults").on("click",".cover-nav", function(e){
+        e.preventDefault();
+        /* Adding click handler for cover image navigation links */
+        var coverid = $(this).data("coverid");
+        var biblionumber = $(this).data("biblionumber");
+        var slides = $("#cover-slides-" + biblionumber );
+
+        $(".cover-nav", slides).removeClass("nav-active");
+        $(this).addClass("nav-active");
+        $(".cover-image", slides).hide();
+        $( "#" + coverid ).show();
+    });
 
     $(".moretoggle").click(function(e) {
         e.preventDefault();
@@ -86,8 +197,8 @@ $(document).ready(function() {
     if( search_result.query_desc ){
         toHighlight = $("p,span.results_summary,a.title");
         q_array = search_result.query_desc.split(" ");
-        // ensure that we don't have "" at the end of the array, which can
-        // break the highlighter
+        /* ensure that we don't have "" at the end of the array, which can */
+        /* break the highlighter */
         while ( q_array.length > 0 && q_array[q_array.length-1] == "") {
             q_array = q_array.splice(0,-1);
         }
@@ -303,21 +414,6 @@ function holdForClub() {
     placeHold();
 }
 
-// http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
-function verify_images() {
-    $("img").each(function(){
-        if ((this.src.indexOf('images-amazon.com') >= 0) || (this.src.indexOf('images.amazon.com') >=0)) {
-            var w = this.width;
-            var h = this.height;
-            if ((w == 1) || (h == 1)) {
-                $(this).parent().html('<span class="no-image">'+ __("No cover image available") +'</span>');
-            } else if ((this.complete != null) && (!this.complete)) {
-                $(this).parent().html('<span class="no-image">'+ __("No cover image available") +'</span>');
-            }
-        }
-    });
-}
-
 function toggleBatchOp( b ){
     var results_batch_ops = $("#results_batch_ops");
     if( b ){
@@ -332,7 +428,7 @@ function resultsBatchProcess( op ){
     var params = [];
     var url = "";
     if( op == "edit" ){
-        // batch edit selected records
+        /* batch edit selected records */
         if ( selected.length < 1 ){
             alert( __("You must select at least one record") );
         } else {
@@ -343,7 +439,7 @@ function resultsBatchProcess( op ){
             location.href = url;
         }
     } else if( op == "delete" ){
-        // batch delete selected records
+        /* batch delete selected records */
         if ( selected.length < 1) {
             alert( __("You must select at least one record") );
         } else {
@@ -354,7 +450,7 @@ function resultsBatchProcess( op ){
             location.href = url;
         }
     } else if( op == "merge" ){
-        // merge selected records
+        /* merge selected records */
         if ( selected.length < 2) {
             alert( __("At least two records must be selected for merging") );
         } else {
