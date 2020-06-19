@@ -33,7 +33,9 @@ Koha::PseudonymizedTransaction - Koha Koha::PseudonymizedTransaction Object clas
 
 =head2 Class methods
 
-=head3 new
+=head3 new_from_statistic
+
+    Creates new object from a passed Koha::Statistic object
 
 =cut
 
@@ -97,6 +99,13 @@ sub new_from_statistic {
 
     return $self;
 }
+
+=head3 get_hash
+
+    Generates a hashed value for $s (e.g. borrowernumber) with Bcrypt.
+    Needs config entry 'key' in koha-conf.
+
+=cut
 
 sub get_hash {
     my ( $class, $s ) = @_;
