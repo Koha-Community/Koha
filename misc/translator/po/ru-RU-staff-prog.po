@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-15 17:45-0300\n"
+"POT-Creation-Date: 2020-06-18 08:48-0300\n"
 "PO-Revision-Date: 2019-10-03 10:04+0000\n"
 "Last-Translator: Igor A. Sychev <ias@tpu.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -219,7 +219,7 @@ msgstr "ОШИБКА: <em>«Дата c»</em> не является правил
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "ОШИБКА: <em>«Дата по»</em> не является правильной датой («%s»). %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:395
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:407
 #, fuzzy, c-format
 msgid "# Bibliographic records"
 msgstr "библиографической записи № %s"
@@ -3468,9 +3468,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:142
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:350
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:154
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:158
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:362
 #, fuzzy, c-format
 msgid "%s (inactive)"
 msgstr "Не задействовано"
@@ -3847,7 +3847,7 @@ msgstr "%s Населённый пункт: "
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:416
 #, c-format
 msgid ""
 "%s Cleaned %s Imported %s Importing %s Reverted %s Reverting %s Staged %s %s "
@@ -4506,7 +4506,7 @@ msgstr "%s Нет ограничений %s "
 #. %7$s:  IF ( biblio.match_biblionumber ) 
 #. %8$s:  biblio.match_biblionumber | uri 
 #. %9$s:  biblio.match_score | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:108
 #, c-format
 msgid ""
 "%s No match %s Match applied %s Match found %s %s %s %s Matches biblio %s "
@@ -5386,6 +5386,12 @@ msgid ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
+msgstr ""
+
+#. %1$s:  INCLUDE 'doc-head-close.inc' 
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:13
+#, c-format
+msgid "%s [%%# As long as cataloging plugins rely on "
 msgstr ""
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
@@ -7190,7 +7196,7 @@ msgstr "Экземпляр был изъят"
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:164
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
 #, c-format
 msgid ""
 "%sItem records could not be processed because the number of item fields was "
@@ -7904,7 +7910,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Заглавие как фраза"
 msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(формат: гггг-гггг)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:82
 #, fuzzy, c-format
 msgid "&nbsp;Show inactive funds:"
 msgstr "&nbsp;Показать все: "
@@ -7913,7 +7919,7 @@ msgstr "&nbsp;Показать все: "
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:366
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
 #, fuzzy, c-format
 msgid "&nbsp;Show inactive:"
@@ -8462,7 +8468,7 @@ msgstr "&rsaquo; Добавление заказа из предложения"
 msgid "&rsaquo; Add order from a suggestion"
 msgstr "&rsaquo; Добавление заказа из предложения"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #, fuzzy, c-format
 msgid "&rsaquo; Add orders from MARC file"
 msgstr "&rsaquo; Добавление правила соответствия записей"
@@ -10102,11 +10108,6 @@ msgstr "(связанные поиски: %s%s%s)"
 msgid "(remove)"
 msgstr "Удалить"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:123
-#, c-format
-msgid "(see online help)"
-msgstr " (смотрите интерактивную справку)"
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:30
 #, fuzzy, c-format
 msgid "(start date of the 1st subscription) "
@@ -10886,7 +10887,7 @@ msgstr "Учёт"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:210
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:299
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:321
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
 #, c-format
 msgid "Accounting details"
 msgstr "Подробности учёта"
@@ -10995,7 +10996,7 @@ msgstr "Дата поступления"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -11689,7 +11690,7 @@ msgstr "Выгружаем данные автономного оборота"
 msgid "Add or remove items"
 msgstr "Добавить/удалить экземпляры"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Add order"
 msgstr "Добавить заказ"
@@ -11705,7 +11706,7 @@ msgstr "Добавляем в корзину заказа"
 msgid "Add order to basket %s"
 msgstr "Добавляем в корзину заказа"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:436
 #, fuzzy, c-format
 msgid "Add orders"
 msgstr "Добавить заказ"
@@ -11713,7 +11714,7 @@ msgstr "Добавить заказ"
 #. %1$s:  comments | html 
 #. %2$s:  file_name | html 
 #. %3$s:  upload_timestamp | $KohaDates  with_hours => 1 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:32
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:44
 #, c-format
 msgid "Add orders from %s (%s staged on %s) "
 msgstr ""
@@ -12147,7 +12148,7 @@ msgstr "Обложка Adlibris"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:25
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -12185,7 +12186,7 @@ msgstr "Управление"
 msgid "Administration &gt; Currencies and exchange rates"
 msgstr "Денежные единицы и обменные курсы"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:124
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:125
 #, fuzzy, c-format
 msgid "Administration &rsaquo; Circulation and fine rules "
 msgstr "Коха &rsaquo; Управление &rsaquo; Правила оборота и штрафы"
@@ -14146,7 +14147,7 @@ msgstr "Август"
 msgid "August"
 msgstr "Август"
 
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:93
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:86
 #, c-format
 msgid "Auth"
@@ -14557,7 +14558,7 @@ msgid "Auto subscription sharing: "
 msgstr "Искать среди подписок: "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:140
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:141
 #, fuzzy
 msgid "Auto-fill row"
 msgstr "(обычно заполняются с поля 300)"
@@ -14982,7 +14983,7 @@ msgstr "Корзина заказов"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:18
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
 #, c-format
 msgid "Basket %s"
@@ -15895,7 +15896,7 @@ msgstr "Ориентировочная цена: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:94
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:18
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:161
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:85
@@ -16520,7 +16521,7 @@ msgstr "Не возможно сохранить запись, потому чт
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:174
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:87
@@ -16970,7 +16971,7 @@ msgstr "Цена для замены"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Card"
 msgstr "Карточка"
@@ -17375,7 +17376,7 @@ msgstr "Значение ячейки "
 msgid "Cell value "
 msgstr "Значение ячейки "
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:41
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:42
 #, c-format
 msgid "Cells contain estimated values only."
 msgstr ""
@@ -18126,7 +18127,7 @@ msgstr "Выбор"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:39
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:50
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:115
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:112
 #, c-format
@@ -18235,7 +18236,7 @@ msgstr ""
 msgid "Choose order of text fields to print"
 msgstr "Определение порядка текстовых полей для печати"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:387
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:399
 #, fuzzy, c-format
 msgid "Choose the file to add to the basket"
 msgstr "Выберите отчет для запуска из списка"
@@ -18664,7 +18665,7 @@ msgstr "Очистить"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:48
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -18992,7 +18993,7 @@ msgstr "Сдублировать правила выдачи не удалось
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:261
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:273
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
@@ -19406,7 +19407,7 @@ msgstr "Комментатор "
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:32
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:392
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:20
 #, c-format
@@ -20690,7 +20691,7 @@ msgstr "Денежная единица = %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:381
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:203
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:385
 #, c-format
@@ -21408,7 +21409,7 @@ msgstr "По умолчанию"
 msgid "Default "
 msgstr "По умолчанию "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:40
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:52
 #, fuzzy, c-format
 msgid "Default accounting details"
 msgstr "Подробности учёта"
@@ -22758,7 +22759,7 @@ msgstr "дискография"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:434
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:314
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:125
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:137
 #, c-format
 msgid "Discount: "
 msgstr "Скидка: "
@@ -22913,7 +22914,7 @@ msgstr "не создавать запись экземпляра при пол�
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:126
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:163
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:54
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:66
 #, c-format
 msgid "Do not look for matching records"
 msgstr "Не искать соответствия записей"
@@ -23438,7 +23439,7 @@ msgstr ""
 msgid "EXAMPLE plugin"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:40
 #, c-format
 msgid "Each cell contain both actual and estimated values."
 msgstr ""
@@ -24892,8 +24893,8 @@ msgstr "Описание: "
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:248
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
@@ -25542,7 +25543,7 @@ msgstr "У этой записи нет экземпляров."
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:391
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:403
 #, c-format
 msgid "File name"
 msgstr "Имя файла"
@@ -25675,7 +25676,7 @@ msgstr "фильмографии"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:188
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:189
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:81
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
@@ -26476,13 +26477,13 @@ msgid "Fund list of budget "
 msgstr "Править смету"
 
 #. TD
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:74
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:75
 #, fuzzy
 msgid "Fund locked"
 msgstr "Код средств"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:91
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:53
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 #, c-format
@@ -26499,7 +26500,7 @@ msgstr "Название средств: "
 msgid "Fund parent: "
 msgstr "Средства-предок: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:66
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:67
 #, c-format
 msgid "Fund remaining"
 msgstr "Осталось средств"
@@ -26509,7 +26510,7 @@ msgstr "Осталось средств"
 msgid "Fund search"
 msgstr "Поиск поставщика"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:55
 #, c-format
 msgid "Fund total"
 msgstr "Средств в целом"
@@ -26527,10 +26528,10 @@ msgstr "Средства: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:339
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:342
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:131
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:329
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:143
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:357
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:86
 #, c-format
 msgid "Fund: "
@@ -26546,7 +26547,7 @@ msgstr "Средства: %s "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:97
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:20
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:23
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:165
@@ -27089,7 +27090,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Hide all columns"
 msgstr ""
@@ -27778,7 +27779,7 @@ msgstr "Исключение праздника"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -27833,7 +27834,7 @@ msgstr "Исключение праздника"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:24
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:16
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -28363,7 +28364,7 @@ msgid ""
 "on this template from the public catalog."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:119
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:226
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:335
 #, fuzzy, c-format
@@ -28375,7 +28376,7 @@ msgstr "%s недоступно: "
 msgid "If amounts changed, round to a multiple of"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:334
 #, fuzzy, c-format
@@ -28440,7 +28441,7 @@ msgstr ""
 msgid "If empty, English is used"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:127
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:139
 #, fuzzy, c-format
 msgid "If empty, discount rate from vendor will be used"
 msgstr "%% (Если пусто, то будет использоваться учётная ставка вендора)"
@@ -28823,14 +28824,14 @@ msgstr ""
 "Импорт структуры (поля, подполя) из файла электронной таблицы (*.csv, *.xml, "
 "*.ods) или SQL-файла"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:331
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following accounting "
 "details (used only if no information is filled for the item):"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:282
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
@@ -29267,7 +29268,7 @@ msgstr "Внутреннее примечание: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:301
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:499
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:476
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:360
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:372
 #, c-format
 msgid "Internal note: "
 msgstr "Внутреннее примечание: "
@@ -29283,7 +29284,7 @@ msgstr "Введите поисковые термины"
 msgid "Internationalization and localization"
 msgstr "Интернационализация и локализация"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:251
 #, c-format
 msgid "Into an application"
 msgstr "для приложения с поддержкой "
@@ -29656,7 +29657,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:370
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:284
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:274
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:286
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #, c-format
@@ -29680,7 +29681,7 @@ msgid "Item %s"
 msgstr "Экземпляр %s"
 
 #. %1$s:  item.item_id | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:168
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:180
 #, fuzzy, c-format
 msgid "Item Record %s"
 msgstr "# Записи"
@@ -29810,8 +29811,8 @@ msgstr "Резервирование экземпляров"
 msgid "Item home library:"
 msgstr "С исходной библиотеки: "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:269
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #, fuzzy, c-format
 msgid "Item information"
 msgstr "Системная информация"
@@ -30875,7 +30876,7 @@ msgstr "Коха &rsaquo; Поступления &rsaquo; Задержанные
 #. %2$s:  import_batch_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:7
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:6
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records %s &rsaquo; "
@@ -31192,12 +31193,12 @@ msgstr ""
 "удалены %s "
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:6
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; "
-"Planning for %s by %s"
+"Planning for %s %s"
 msgstr "Коха &rsaquo; Управление &rsaquo; Сметы &rsaquo; Планирование сметы"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:17
@@ -34399,7 +34400,7 @@ msgstr "Списки, которые включают этот заголово�
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
@@ -34420,7 +34421,7 @@ msgstr "Загрузка"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:383
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:90
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:80
@@ -34844,7 +34845,7 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:333
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #, c-format
@@ -34973,7 +34974,7 @@ msgstr "Коллектив"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:83
 #, c-format
 msgid "MARC preview"
@@ -36005,7 +36006,7 @@ msgstr "Код правила соответствия отсутствует"
 msgid "Matching rule code: "
 msgstr "Код правила соответствия: "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:63
 #, fuzzy, c-format
 msgid "Matching:"
 msgstr " — партия"
@@ -37850,7 +37851,7 @@ msgid "No (default)"
 msgstr "нет (по умолчанию)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:286
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:276
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:288
 #, c-format
 msgid ""
 "No ACQ framework, using default. You should create a framework with code "
@@ -38111,7 +38112,7 @@ msgstr "Резервирований не обнаружено."
 msgid "No fund selected."
 msgstr "без упорядочивания"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:174
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:175
 #, c-format
 msgid "No funds to display for this search criteria"
 msgstr "Нет средств, чтобы соответствовали этому критерию поиска"
@@ -38500,7 +38501,7 @@ msgstr ""
 msgid "No reason"
 msgstr "Количество выпусков: "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, fuzzy, c-format
 msgid ""
 "No record have been imported because they all match an existing record in "
@@ -38523,7 +38524,7 @@ msgstr "Не заготовлено ни одной записи."
 msgid "No records have been staged."
 msgstr "Не заготовлено ни одной записи."
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, fuzzy, c-format
 msgid "No records imported"
 msgstr "Количество проигнорированных записей"
@@ -40030,7 +40031,7 @@ msgstr "Зарезервировано"
 msgid "On shelf holds allowed"
 msgstr "резервирование не разрешено"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:113
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:114
 #, fuzzy, c-format
 msgid "On shelf holds allowed: "
 msgstr "резервирование не разрешено"
@@ -40686,7 +40687,7 @@ msgstr "Формат вывода "
 msgid "Output format:"
 msgstr "Формат вывода: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #, c-format
 msgid "Output to a file named: "
 msgstr ""
@@ -42419,7 +42420,7 @@ msgid "Planned date"
 msgstr "Планируемая дата"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:73
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:21
 #, c-format
 msgid "Planning"
 msgstr "Планирование"
@@ -42430,10 +42431,10 @@ msgid "Planning "
 msgstr "Планирование"
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:31
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:32
 #, fuzzy, c-format
-msgid "Planning for %s by %s"
+msgid "Planning for %s %s"
 msgstr "История чтения - %s %s"
 
 #: intranet-tmpl/prog/en/modules/about.tt:524
@@ -42705,7 +42706,7 @@ msgstr "Пожалуйста, введите действительный адр
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:280
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 msgid "Please enter a valid number."
 msgstr "Пожалуйста, введите правильное число."
 
@@ -43459,7 +43460,7 @@ msgstr "Цена: "
 msgid "Price:"
 msgstr "Цена: "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:117
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:129
 #, fuzzy, c-format
 msgid "Price: "
 msgstr "Цена: "
@@ -44254,7 +44255,7 @@ msgstr "Ищем авторитетный источник"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:306
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:124
 #, c-format
 msgid "Quantity: "
 msgstr "Количество: "
@@ -45172,12 +45173,12 @@ msgstr "Интервал продолжения"
 msgid "Renewals allowed (count)"
 msgstr "Продолжения (допустимое количество)"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:101
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
 #, fuzzy, c-format
 msgid "Renewals allowed: "
 msgstr "Продолжения (допустимое количество)"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:107
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:108
 #, fuzzy, c-format
 msgid "Renewals period: "
 msgstr "Интервал продолжения"
@@ -45346,7 +45347,7 @@ msgstr "Цена для замены"
 msgid "Replacement price:"
 msgstr "Цена для замены:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:133
 #, fuzzy, c-format
 msgid "Replacement price: "
 msgstr "Цена для замены:"
@@ -45747,8 +45748,9 @@ msgstr "Отсутствует обязательный модуль"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:73
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:103
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:109
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
@@ -45771,10 +45773,10 @@ msgstr "Отсутствует обязательный модуль"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:760
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:111
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:114
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:151
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:126
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:320
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:59
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:62
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
@@ -46632,7 +46634,7 @@ msgstr "Суббота"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:86
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
@@ -46655,7 +46657,7 @@ msgstr "Суббота"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:129
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:393
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:154
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:155
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:198
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:84
@@ -47290,7 +47292,7 @@ msgid "Search on"
 msgstr "Поиск за"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:82
 #, fuzzy
 msgid "Search on %s"
@@ -47733,13 +47735,13 @@ msgstr "выберите средства"
 msgid "Select a fund"
 msgstr "выберите средства"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:347
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:359
 #, c-format
 msgid "Select a fund (will populate orders/items if set)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:136
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:233
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:148
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:245
 #, c-format
 msgid "Select a fund (will use default if set)"
 msgstr ""
@@ -47839,7 +47841,7 @@ msgstr "Удалить список"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:46
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:58
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -47970,7 +47972,7 @@ msgid ""
 "this patron record and the remaining patron records will be deleted."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:199
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:200
 #, fuzzy, c-format
 msgid "Select planning type:"
 msgstr "выберите тип категории"
@@ -48048,7 +48050,7 @@ msgstr ""
 msgid "Select to display or not:"
 msgstr "Выберите — отображать или нет:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:50
 #, fuzzy, c-format
 msgid "Select to import"
 msgstr "Выбираем файл для импорта: "
@@ -48831,7 +48833,7 @@ msgstr "Виводить _MENU_ записей"
 msgid "Show active baskets only"
 msgstr "Показывать только активные корзины заказов"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:226
 #, c-format
 msgid "Show active funds only"
 msgstr "Показывать только активные средства"
@@ -48841,7 +48843,7 @@ msgstr "Показывать только активные средства"
 msgid "Show active vendors only"
 msgstr "Показывать только активные средства"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:236
 #, c-format
 msgid "Show actual/estimated values"
 msgstr ""
@@ -48876,7 +48878,7 @@ msgstr "Показать все корзины заказов"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show all columns"
 msgstr ""
@@ -49011,7 +49013,7 @@ msgstr "Правила соответствия записей"
 msgid "Show more"
 msgstr "Показать больше"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:217
 #, c-format
 msgid "Show my funds only"
 msgstr "Показывать только мои средства"
@@ -49049,7 +49051,7 @@ msgstr "Показать метки"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show/hide columns:"
 msgstr ""
@@ -49154,7 +49156,7 @@ msgstr ""
 "быть установлены, прежде чем продолжить."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #, fuzzy
 msgid "Some budgets are not defined in item records"
 msgstr "Получение сериального издания не создает запись экземпляра."
@@ -49619,7 +49621,7 @@ msgstr "Заготавливаем записи в хранилище"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:444
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:406
 #, c-format
 msgid "Staged"
 msgstr "Заготовлено"
@@ -49800,8 +49802,8 @@ msgstr "статистические данные"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:484
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:155
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:369
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:381
 #, c-format
 msgid "Statistic 1: "
 msgstr "Поле статистики № 1: "
@@ -49813,8 +49815,8 @@ msgstr "статистические данные"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:487
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:159
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:373
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:385
 #, c-format
 msgid "Statistic 2: "
 msgstr "Поле статистики № 2:  "
@@ -49873,7 +49875,7 @@ msgstr "Мастера статистики"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:38
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:393
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
@@ -50311,7 +50313,7 @@ msgstr "Темы:"
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:45
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:178
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:43
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:129
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:130
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:42
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
@@ -50335,8 +50337,8 @@ msgstr "Темы:"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:85
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:86
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:239
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:263
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:240
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:115
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:59
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:93
@@ -51501,7 +51503,7 @@ msgstr "Текст"
 msgid "Th"
 msgstr "Чт"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:172
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:173
 #, c-format
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr ""
@@ -51571,7 +51573,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:226
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:380
 #, c-format
 msgid ""
 "The 2 following fields are available for your own usage. They can be useful "
@@ -52879,7 +52881,7 @@ msgstr ""
 "Нет ни одной записи о сообщениях, которые были высланы для этого посетителя."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #, fuzzy
 msgid "There is no record selected"
 msgstr "Количество удаленных записей"
@@ -53841,7 +53843,7 @@ msgstr "Заглавие (любое): "
 msgid "Title (uniform): "
 msgstr "Заглавие (типовое): "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:65
 #, fuzzy, c-format
 msgid "Title and author"
 msgstr "Города и поселки"
@@ -53995,7 +53997,7 @@ msgstr ""
 msgid "To create another patron, go to: "
 msgstr "Предупреждения при обороте экземпляров"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:123
 #, fuzzy, c-format
 msgid "To create circulation rule, go to: "
 msgstr "Предупреждения при обороте экземпляров"
@@ -56211,7 +56213,7 @@ msgstr "Примечание касательно поставщика: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:480
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:364
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:376
 #, c-format
 msgid "Vendor note: "
 msgstr "Примечание касательно поставщика: "
@@ -57307,7 +57309,7 @@ msgstr "Ежегодно — повторяющиеся праздники"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:414
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:417
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:268
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:423
@@ -58139,7 +58141,7 @@ msgid "You will need to save the report before you can execute it"
 msgstr ""
 "Вам нужно будет сохранить отчёт перед тем, как Вы сможете выполнить его"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:27
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
 #, c-format
 msgid "You'll have to treat them individually. "
 msgstr ""
@@ -58882,7 +58884,7 @@ msgstr ""
 msgid "biblionumber|borrowernumber"
 msgstr "biblio и biblionumber"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
 #, fuzzy, c-format
 msgid "budget_code"
 msgstr "Смета"
@@ -58906,7 +58908,7 @@ msgstr "по "
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:31
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:195
 #, c-format
 msgid "by %s"
 msgstr "за %s"
@@ -59033,17 +59035,20 @@ msgstr " распространяется на условиях лицензий
 msgid "by _AUTHOR_"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:5
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
 #, fuzzy, c-format
 msgid "by item types"
 msgstr "Любой тип единицы"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:4
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
 #, fuzzy, c-format
 msgid "by libraries"
 msgstr "Распланировать по библиотекам"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:191
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:3
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
 #, fuzzy, c-format
 msgid "by months"
 msgstr " месяц(а)"
@@ -59059,7 +59064,7 @@ msgstr ""
 msgid "call.ogg"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:256
 #, fuzzy, c-format
 msgid "callnumber"
 msgstr "Шифр хранения"
@@ -59100,7 +59105,7 @@ msgstr "Дата получения"
 msgid "cataloging the record"
 msgstr "Поиск для каталогизации"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:213
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:225
 #, fuzzy, c-format
 msgid "ccode"
 msgstr "Штрих-код"
@@ -59200,7 +59205,7 @@ msgstr "содержит"
 msgid "controls for column visiblity in DataTables"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
 #, c-format
 msgid "copyno"
 msgstr ""
@@ -59587,7 +59592,7 @@ msgstr "имеет слишком много резервирований."
 msgid "here"
 msgstr "сдесь"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:194
 #, fuzzy, c-format
 msgid "holdingbranch"
 msgstr "Подразделение врем. хранения/выдачи"
@@ -59603,7 +59608,7 @@ msgstr ""
 msgid "holdingbranch defined"
 msgstr "подразделение врем. хранения/выдачи {holdingbranch} определено"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:183
 #, fuzzy, c-format
 msgid "homebranch"
 msgstr "Исходное подразделение"
@@ -59881,7 +59886,7 @@ msgstr ""
 msgid "itemtype NOT mapped"
 msgstr "itemtype НЕ спроектирован"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:192
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
 #, fuzzy, c-format
 msgid "itype"
 msgstr "Тип единицы"
@@ -60061,7 +60066,7 @@ msgstr "Идёт загрузка…"
 msgid "loading_2.ogg"
 msgstr "Идёт загрузка…"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:205
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:217
 #, c-format
 msgid "loc"
 msgstr ""
@@ -60180,7 +60185,7 @@ msgstr "Добавление системного параметра"
 msgid "none"
 msgstr "ничего"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:203
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:215
 #, fuzzy, c-format
 msgid "nonpublic_note"
 msgstr "Непубличная заметка: "
@@ -60214,7 +60219,7 @@ msgstr ""
 msgid "not like"
 msgstr "не подобно к"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:142
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:143
 #, fuzzy, c-format
 msgid "not owned"
 msgstr "не известно"
@@ -60225,7 +60230,7 @@ msgstr "не известно"
 msgid "not running"
 msgstr "Нет предупреждений "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
 #, fuzzy, c-format
 msgid "notforloan"
 msgstr "Не для выдачи"
@@ -60414,7 +60419,7 @@ msgstr ""
 msgid "previous"
 msgstr "назад"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
 #, fuzzy, c-format
 msgid "price"
 msgstr "Цена"
@@ -60433,7 +60438,7 @@ msgstr "pst"
 
 # Общедоступная заметка:
 # (длинное)
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:216
 #, fuzzy, c-format
 msgid "public_note"
 msgstr "Общедоступн. заметка:"
@@ -60447,7 +60452,7 @@ msgid "published by: %s %s %s in "
 msgstr "издано: %s %s %s в "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "quantity values are not filled in or are not numbers"
 msgstr ""
 
@@ -60505,7 +60510,7 @@ msgstr "Изображение успешно загружено."
 msgid "reopen basketgroup"
 msgstr "Закрыть группу пакетов"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
 #, fuzzy, c-format
 msgid "replacement price"
 msgstr "Цена для замены"
@@ -60971,7 +60976,7 @@ msgstr "для юношества"
 msgid "updated successfully"
 msgstr "Собрание «%s» обновлено успешно!"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:230
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
 #, fuzzy, c-format
 msgid "uri"
 msgstr "Птн"
@@ -61227,7 +61232,7 @@ msgstr "%s %s %s %s (%s)"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:379
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:98
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:178

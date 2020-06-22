@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-05-15 17:02-0300\n"
+"POT-Creation-Date: 2020-06-18 08:22-0300\n"
 "PO-Revision-Date: 2019-10-15 19:38+0000\n"
 "Last-Translator: bright <bright92dream@hotmail.com>\n"
 "Language-Team: za\n"
@@ -223,7 +223,7 @@ msgstr "\"تاريخ من\" ليست قيمة قانونية (\"%s\"). %s"
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "\"تاريخ حتى\" ليس قيمة قانونية (\"%s\"). %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:395
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:407
 #, c-format
 msgid "# Bibliographic records"
 msgstr "التسجيلات البيبلوغرافية"
@@ -3598,9 +3598,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:142
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:350
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:154
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:158
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:362
 #, c-format
 msgid "%s (inactive)"
 msgstr "%s (غير نشط)"
@@ -3980,7 +3980,7 @@ msgstr "%s مدينة: "
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:416
 #, c-format
 msgid ""
 "%s Cleaned %s Imported %s Importing %s Reverted %s Reverting %s Staged %s %s "
@@ -4633,7 +4633,7 @@ msgstr "%s لا يوجد حد %s "
 #. %7$s:  IF ( biblio.match_biblionumber ) 
 #. %8$s:  biblio.match_biblionumber | uri 
 #. %9$s:  biblio.match_score | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:108
 #, c-format
 msgid ""
 "%s No match %s Match applied %s Match found %s %s %s %s Matches biblio %s "
@@ -5547,6 +5547,12 @@ msgstr ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
+
+#. %1$s:  INCLUDE 'doc-head-close.inc' 
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:13
+#, c-format
+msgid "%s [%%# As long as cataloging plugins rely on "
+msgstr ""
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate | html 
@@ -7332,7 +7338,7 @@ msgstr "%sالمادة معارة%sالمادة بانتظار الحجز%s"
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:164
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
 #, c-format
 msgid ""
 "%sItem records could not be processed because the number of item fields was "
@@ -8052,7 +8058,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; العنوان كعبارة"
 msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(التنسيق: السنة-السنة)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:82
 #, c-format
 msgid "&nbsp;Show inactive funds:"
 msgstr "&nbsp;عرض التمويلات غير النشطة:"
@@ -8061,7 +8067,7 @@ msgstr "&nbsp;عرض التمويلات غير النشطة:"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:366
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
 #, c-format
 msgid "&nbsp;Show inactive:"
@@ -8596,7 +8602,7 @@ msgstr "&rsaquo; إضافة طلبية من اشتراك"
 msgid "&rsaquo; Add order from a suggestion"
 msgstr "&rsaquo; إضافة طلب إلى الاقتراح"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #, c-format
 msgid "&rsaquo; Add orders from MARC file"
 msgstr "&rsaquo; أضف طلبيات من ملف مارك"
@@ -10210,11 +10216,6 @@ msgstr "(روابط مقترحة : %s%s%s)"
 msgid "(remove)"
 msgstr "(إزالة)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:123
-#, c-format
-msgid "(see online help)"
-msgstr "(انظر إلى المساعدة على الخط المباشر)"
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:30
 #, c-format
 msgid "(start date of the 1st subscription) "
@@ -10981,7 +10982,7 @@ msgstr "الحسابات"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:210
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:299
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:321
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
 #, c-format
 msgid "Accounting details"
 msgstr "تفاصيل المحاسبة"
@@ -11090,7 +11091,7 @@ msgstr "جداول التزويد"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -11777,7 +11778,7 @@ msgstr "أضف إعارات بدون اتصال إلى الصف"
 msgid "Add or remove items"
 msgstr "إضافة أو حذف المواد"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Add order"
 msgstr "أضف طلب"
@@ -11792,7 +11793,7 @@ msgstr "أضف طلب إلى السلة"
 msgid "Add order to basket %s"
 msgstr "إضافة طلبية إلى السلة%s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:436
 #, c-format
 msgid "Add orders"
 msgstr "أضف طلبات"
@@ -11800,7 +11801,7 @@ msgstr "أضف طلبات"
 #. %1$s:  comments | html 
 #. %2$s:  file_name | html 
 #. %3$s:  upload_timestamp | $KohaDates  with_hours => 1 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:32
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:44
 #, c-format
 msgid "Add orders from %s (%s staged on %s) "
 msgstr "إضافة طلب من %s (%s انطلق في %s) "
@@ -12231,7 +12232,7 @@ msgstr "صورة غلاف Adlibris "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:25
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -12269,7 +12270,7 @@ msgstr "الإدارة"
 msgid "Administration &gt; Currencies and exchange rates"
 msgstr "الإدارة &gt; العملات وأسعار الصرف"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:124
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:125
 #, c-format
 msgid "Administration &rsaquo; Circulation and fine rules "
 msgstr "الإدارة &rsaquo;الإعارة وقواعد الغرامات"
@@ -14143,7 +14144,7 @@ msgstr "آب"
 msgid "August"
 msgstr "آب"
 
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:93
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:86
 #, c-format
 msgid "Auth"
@@ -14549,7 +14550,7 @@ msgid "Auto subscription sharing: "
 msgstr "مشاركة الاشتراك التلقائي:"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:140
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:141
 msgid "Auto-fill row"
 msgstr "الملئ التلقائي للصف"
 
@@ -14968,7 +14969,7 @@ msgstr "سلة"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:18
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
 #, c-format
 msgid "Basket %s"
@@ -15870,7 +15871,7 @@ msgstr "التكلفة وفقًا للميزانية:"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:94
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:18
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:161
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:85
@@ -16513,7 +16514,7 @@ msgstr "لا يمكن حفظ هذه التسجيلة لان الحقل التا�
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:174
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:87
@@ -16952,7 +16953,7 @@ msgstr "تغطية الغرامة بسعر الاستبدال"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Card"
 msgstr "بطاقة"
@@ -17354,7 +17355,7 @@ msgstr "قيمة الخلية"
 msgid "Cell value "
 msgstr "قيمة الخلية: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:41
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:42
 #, c-format
 msgid "Cells contain estimated values only."
 msgstr "الخلايا تحتوي فقط على قيم مقدرة"
@@ -18093,7 +18094,7 @@ msgstr "الإختيار"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:39
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:50
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:115
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:112
 #, c-format
@@ -18201,7 +18202,7 @@ msgstr ""
 msgid "Choose order of text fields to print"
 msgstr "إختر طلب لحقول النص للطباعة"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:387
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:399
 #, c-format
 msgid "Choose the file to add to the basket"
 msgstr "إختر الملف لإضافته إلى السلة"
@@ -18628,7 +18629,7 @@ msgstr "مسح"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:48
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -18964,7 +18965,7 @@ msgstr "فشل نسخ قواعد الإعارة والغرامات!"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:261
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:273
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
@@ -19379,7 +19380,7 @@ msgstr "تعليق"
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:32
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:392
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:20
 #, c-format
@@ -20673,7 +20674,7 @@ msgstr "العملة = %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:381
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:203
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:385
 #, c-format
@@ -21382,7 +21383,7 @@ msgstr "إفتراضى"
 msgid "Default "
 msgstr "إفتراضى"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:40
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:52
 #, c-format
 msgid "Default accounting details"
 msgstr "تفاصيل المحاسبة الافتراضية"
@@ -22715,7 +22716,7 @@ msgstr "التسجيلات"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:434
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:314
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:125
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:137
 #, c-format
 msgid "Discount: "
 msgstr "التخفيض:"
@@ -22868,7 +22869,7 @@ msgstr "لا تقم بإنشاء تسجيلة مادة عند استلام هذ�
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:126
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:163
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:54
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:66
 #, c-format
 msgid "Do not look for matching records"
 msgstr "لا يبحث عن تسجيلات مماثلة"
@@ -23384,7 +23385,7 @@ msgstr "EUC-KR"
 msgid "EXAMPLE plugin"
 msgstr "برنامج EXAMPLE المساعد"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:40
 #, c-format
 msgid "Each cell contain both actual and estimated values."
 msgstr "كل خلية تحتوي على كلا من القيم المقدرة والفعلية."
@@ -24826,8 +24827,8 @@ msgstr "التفسير:"
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:248
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
@@ -25464,7 +25465,7 @@ msgstr "الملف غير قابل للقراءة"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:391
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:403
 #, c-format
 msgid "File name"
 msgstr "إسم الملف"
@@ -25597,7 +25598,7 @@ msgstr "Filmographies"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:188
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:189
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:81
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
@@ -26402,12 +26403,12 @@ msgid "Fund list of budget "
 msgstr "قائمة تمويل الميزانية"
 
 #. TD
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:74
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:75
 msgid "Fund locked"
 msgstr "التمويل مجمد"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:91
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:53
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 #, c-format
@@ -26424,7 +26425,7 @@ msgstr "اسم التمويل:"
 msgid "Fund parent: "
 msgstr "أصل التمويل:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:66
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:67
 #, c-format
 msgid "Fund remaining"
 msgstr "التمويل المتبقي"
@@ -26434,7 +26435,7 @@ msgstr "التمويل المتبقي"
 msgid "Fund search"
 msgstr "بحث التمويل"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:55
 #, c-format
 msgid "Fund total"
 msgstr "إجمالي التمويل"
@@ -26452,10 +26453,10 @@ msgstr "التمويل:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:339
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:342
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:131
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:329
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:143
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:357
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:86
 #, c-format
 msgid "Fund: "
@@ -26471,7 +26472,7 @@ msgstr "التمويل: %s"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:97
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:20
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:23
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:165
@@ -27008,7 +27009,7 @@ msgstr "إخفاء الكل"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Hide all columns"
 msgstr "اخفِ كل الأعمدة"
@@ -27685,7 +27686,7 @@ msgstr "عطلة تتكرر سنويا لمجموعة معينة"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -27740,7 +27741,7 @@ msgstr "عطلة تتكرر سنويا لمجموعة معينة"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:24
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:16
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -28270,7 +28271,7 @@ msgstr ""
 "إذا كان القالب يسمح بالاشتراك العام، يمكن للمستفيدين الاشتراك في نادي بناء "
 "على هذا القالب من الفهرس العام."
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:119
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:226
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:335
 #, c-format
@@ -28282,7 +28283,7 @@ msgstr "إذا كان الكل غير متاح"
 msgid "If amounts changed, round to a multiple of"
 msgstr "إذا تغيرت المبالغ، قم بالتقريب إلى "
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:334
 #, c-format
@@ -28347,7 +28348,7 @@ msgstr "عند تجميع عدة مفاتيح يجب أن تكون بترتيب 
 msgid "If empty, English is used"
 msgstr "إذا كان فارغاً، يتم استخدام اللغة الإنجليزية"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:127
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:139
 #, c-format
 msgid "If empty, discount rate from vendor will be used"
 msgstr "إذا كان فارغًا، سيتم استخدام معدل الخصم من المزود"
@@ -28743,7 +28744,7 @@ msgstr ""
 "استيراد %s بنية الإطار (الحقول والحقول الفرعية) من ملف جدول بيانات (.csv, ."
 "xml, .ods)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:331
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following accounting "
@@ -28752,7 +28753,7 @@ msgstr ""
 "قم باستيراد كل المواد المحددة في السلة بتفاصيل المحاسبة التالية (تستخدم فقط "
 "في حالة عدم ملء معلومات المادة)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:282
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
@@ -29197,7 +29198,7 @@ msgstr "ملاحظة داخلية"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:301
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:499
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:476
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:360
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:372
 #, c-format
 msgid "Internal note: "
 msgstr "ملاحظة داخلية:"
@@ -29212,7 +29213,7 @@ msgstr "خطأ بحث داخلي"
 msgid "Internationalization and localization"
 msgstr "التدويل والترجمة"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:251
 #, c-format
 msgid "Into an application"
 msgstr "داخل تطبيق"
@@ -29580,7 +29581,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:370
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:284
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:274
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:286
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #, c-format
@@ -29604,7 +29605,7 @@ msgid "Item %s"
 msgstr "مادة %s"
 
 #. %1$s:  item.item_id | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:168
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:180
 #, c-format
 msgid "Item Record %s"
 msgstr "تسجيلات المواد %s"
@@ -29727,8 +29728,8 @@ msgstr "حجوزات المادة / إجمالي الحجوزات"
 msgid "Item home library:"
 msgstr "مكتبة المادة الرئيسية:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:269
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #, c-format
 msgid "Item information"
 msgstr "معلومات المادة"
@@ -30786,7 +30787,7 @@ msgstr "كوها &rsaquo; التزويد &rsaquo; تفاصيل الطلبية"
 #. %2$s:  import_batch_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:7
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:6
 #, c-format
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records %s &rsaquo; "
@@ -31096,12 +31097,12 @@ msgstr ""
 "%s&rsaquo; الميزانية%s أغلقت %s"
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:6
-#, c-format
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; "
-"Planning for %s by %s"
+"Planning for %s %s"
 msgstr ""
 "كوها &rsaquo; الإدارة &rsaquo; الميزانيات &rsaquo; الأرصدة &rsaquo; التخطيط "
 "لـِ %s بواسطة %s"
@@ -34252,7 +34253,7 @@ msgstr "قوائم تتضمن هذا العنوان"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
@@ -34273,7 +34274,7 @@ msgstr "تحميل"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:383
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:90
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:80
@@ -34691,7 +34692,7 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:333
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #, c-format
@@ -34820,7 +34821,7 @@ msgstr "رمز منظمة مارك"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:83
 #, c-format
 msgid "MARC preview"
@@ -35850,7 +35851,7 @@ msgstr "رمز قاعدة المضاهاة مفقود"
 msgid "Matching rule code: "
 msgstr "رمز قاعدة المضاهاة: "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:63
 #, c-format
 msgid "Matching:"
 msgstr "المطابقة:"
@@ -37664,7 +37665,7 @@ msgid "No (default)"
 msgstr "لا (افتراضي)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:286
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:276
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:288
 #, c-format
 msgid ""
 "No ACQ framework, using default. You should create a framework with code "
@@ -37922,7 +37923,7 @@ msgstr "لم يتم العثور على أي تمويل"
 msgid "No fund selected."
 msgstr "لم يتم تحديد تمويل"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:174
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:175
 #, c-format
 msgid "No funds to display for this search criteria"
 msgstr "لا ميزانيات لعرضها لمعايير البحث هذه"
@@ -38312,7 +38313,7 @@ msgstr "لا توجد اقتباسات متاحة. يرجى استخدام زر 
 msgid "No reason"
 msgstr "بلا سبب"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, c-format
 msgid ""
 "No record have been imported because they all match an existing record in "
@@ -38334,7 +38335,7 @@ msgstr "لم يتم تحديد تسجيلات"
 msgid "No records have been staged."
 msgstr "لا توجد تسجيلات مستخدمين خذفت."
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, c-format
 msgid "No records imported"
 msgstr "لم يتم استيراد أي تسجيلة"
@@ -39823,7 +39824,7 @@ msgstr "محجوز لـِ"
 msgid "On shelf holds allowed"
 msgstr "مسموح بالحجوزات على الرف"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:113
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:114
 #, c-format
 msgid "On shelf holds allowed: "
 msgstr "الحجوزات على الرف المسموح بها:"
@@ -40485,7 +40486,7 @@ msgstr "شكل المخرجات"
 msgid "Output format:"
 msgstr "شكل المخرجات:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #, c-format
 msgid "Output to a file named: "
 msgstr "الإخراج إلى الملف المسمى:"
@@ -42191,7 +42192,7 @@ msgid "Planned date"
 msgstr "تاريخ مخطّط"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:73
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:21
 #, c-format
 msgid "Planning"
 msgstr "تخطيط"
@@ -42202,10 +42203,10 @@ msgid "Planning "
 msgstr "تخطيط"
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:31
-#, c-format
-msgid "Planning for %s by %s"
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:32
+#, fuzzy, c-format
+msgid "Planning for %s %s"
 msgstr "التخطيط لـِ %s بواسطة %s"
 
 #: intranet-tmpl/prog/en/modules/about.tt:524
@@ -42469,7 +42470,7 @@ msgstr "الرجاء إدخال عنوان بريد الكتروني صحيح"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:280
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 msgid "Please enter a valid number."
 msgstr "الرجاء إدخال رقما صحيحا"
 
@@ -43201,7 +43202,7 @@ msgstr "السعر المدفوع:"
 msgid "Price:"
 msgstr "سعر:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:117
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:129
 #, c-format
 msgid "Price: "
 msgstr "السعر:"
@@ -43982,7 +43983,7 @@ msgstr "بحث الكمية"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:306
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:124
 #, c-format
 msgid "Quantity: "
 msgstr "الكمية:"
@@ -44883,12 +44884,12 @@ msgstr "فترة التجديد"
 msgid "Renewals allowed (count)"
 msgstr "التجديدات المسموحة (عد)"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:101
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
 #, c-format
 msgid "Renewals allowed: "
 msgstr "التجديدات المسموح بها:"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:107
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:108
 #, c-format
 msgid "Renewals period: "
 msgstr "فترة التجديدات:"
@@ -45056,7 +45057,7 @@ msgstr "بحث سعر الاستبدال"
 msgid "Replacement price:"
 msgstr "سعر الاستبدال:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:133
 #, c-format
 msgid "Replacement price: "
 msgstr "سعر الاستبدال:"
@@ -45458,8 +45459,9 @@ msgstr "Require.js JS النظام الفرعي"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:73
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:103
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:109
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
@@ -45482,10 +45484,10 @@ msgstr "Require.js JS النظام الفرعي"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:760
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:111
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:114
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:151
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:126
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:320
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:59
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:62
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
@@ -46338,7 +46340,7 @@ msgstr "أيام السبت"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:86
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
@@ -46361,7 +46363,7 @@ msgstr "أيام السبت"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:129
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:393
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:154
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:155
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:198
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:84
@@ -46973,7 +46975,7 @@ msgid "Search on"
 msgstr "البحث على"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:82
 msgid "Search on %s"
 msgstr "بحث عن %s"
@@ -47402,13 +47404,13 @@ msgstr "اختر تواتر"
 msgid "Select a fund"
 msgstr "اختر تمويل"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:347
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:359
 #, c-format
 msgid "Select a fund (will populate orders/items if set)"
 msgstr "قم بتحديد تمويل (سيقوم بملء الطلبيات/المواد عند الضبط)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:136
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:233
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:148
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:245
 #, c-format
 msgid "Select a fund (will use default if set)"
 msgstr "قم بتحديد تمويل (سيتسخدم الافتراضي عند الضبط)"
@@ -47508,7 +47510,7 @@ msgstr "تحديد وقت"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:46
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:58
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -47640,7 +47642,7 @@ msgstr ""
 "حدد مستفيد للاحتفاظ به. سيتم نقل البيانات من المستفيدين الآخرين إلى تسجيلة "
 "هذا المستفيد بينما سيتم حذف تسجيلات المستفيدين الآخرين."
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:199
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:200
 #, c-format
 msgid "Select planning type:"
 msgstr "اختر نوع المخطط:"
@@ -47715,7 +47717,7 @@ msgstr "قم بتحديد حساب المكتبة التي تقدم طلب EDI"
 msgid "Select to display or not:"
 msgstr "اختر للعرض او لغير العرض:"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:50
 #, c-format
 msgid "Select to import"
 msgstr "تحديد للاستيراد"
@@ -48493,7 +48495,7 @@ msgstr "عرض _MENU_ مدخلات"
 msgid "Show active baskets only"
 msgstr "عرض السلات النشطة فقط"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:226
 #, c-format
 msgid "Show active funds only"
 msgstr "أظهر الميزانية الفعالة فقط"
@@ -48503,7 +48505,7 @@ msgstr "أظهر الميزانية الفعالة فقط"
 msgid "Show active vendors only"
 msgstr "أإظهار المزودين النشطين فقط"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:236
 #, c-format
 msgid "Show actual/estimated values"
 msgstr "أظهر القيم الفعلية/ التقديرية"
@@ -48538,7 +48540,7 @@ msgstr "عرض كل السلات"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show all columns"
 msgstr "أظهر جميع الأعمدة"
@@ -48672,7 +48674,7 @@ msgstr "عرض العناوين المطابقة"
 msgid "Show more"
 msgstr "أظهر المزيد"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:217
 #, c-format
 msgid "Show my funds only"
 msgstr "أظهر ميزانيتي فقط"
@@ -48710,7 +48712,7 @@ msgstr "عرض الوسوم"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show/hide columns:"
 msgstr "إظهار/إخفاء الأعمدة:"
@@ -48813,7 +48815,7 @@ msgid "Some Perl modules are missing. "
 msgstr "بعض أنظمة بيرل الفرعية مفقودة."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "Some budgets are not defined in item records"
 msgstr "لم يتم تعريف بعض الميزانيات في تسجيلات المادة"
 
@@ -49280,7 +49282,7 @@ msgstr "جهز التسجيلات إلى داخل المستودع"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:444
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:406
 #, c-format
 msgid "Staged"
 msgstr "مجهز"
@@ -49457,8 +49459,8 @@ msgstr "إحصائية 1 قد تمت:"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:484
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:155
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:369
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:381
 #, c-format
 msgid "Statistic 1: "
 msgstr "إحصائية 1:"
@@ -49470,8 +49472,8 @@ msgstr "إحصائية 2 قد تمت:"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:487
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:159
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:373
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:385
 #, c-format
 msgid "Statistic 2: "
 msgstr "إحصائية 2:"
@@ -49530,7 +49532,7 @@ msgstr "معالجات الاحصائيات"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:38
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:393
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
@@ -49964,7 +49966,7 @@ msgstr "موضوعات:"
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:45
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:178
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:43
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:129
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:130
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:42
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
@@ -49988,8 +49990,8 @@ msgstr "موضوعات:"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:85
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:86
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:239
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:263
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:240
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:115
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:59
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:93
@@ -51157,7 +51159,7 @@ msgstr "ناحية النص"
 msgid "Th"
 msgstr "الخميس"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:172
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:173
 #, c-format
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr "هذه الميزانية غير موجودة! يرجى تحديد ميزانية للاستمرار"
@@ -51235,7 +51237,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:226
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:380
 #, c-format
 msgid ""
 "The 2 following fields are available for your own usage. They can be useful "
@@ -52585,7 +52587,7 @@ msgid "There is no record of any messages that have been sent to this patron."
 msgstr "لا يوجد تسجيلة في أي الرسائل التي تم إرسالها إلى هذا المستفيد."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "There is no record selected"
 msgstr "لم يتم تحديد تسجيلة"
 
@@ -53569,7 +53571,7 @@ msgstr "عنوان (أي):"
 msgid "Title (uniform): "
 msgstr "العنوان (موحد):"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:65
 #, c-format
 msgid "Title and author"
 msgstr "العنوان والمؤلف"
@@ -53722,7 +53724,7 @@ msgstr "لإنشاء نوع مادة آخر لاحقا وللمزيد من ال�
 msgid "To create another patron, go to: "
 msgstr "لإنشاء مستفيد آخر، اذهب إلى:"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:123
 #, c-format
 msgid "To create circulation rule, go to: "
 msgstr "لإنشاء قاعدة إعارة، اذهب إلى:"
@@ -55912,7 +55914,7 @@ msgstr "ملاحظة المزود"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:480
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:364
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:376
 #, c-format
 msgid "Vendor note: "
 msgstr "ملاحظة المزود:"
@@ -57003,7 +57005,7 @@ msgstr "عطلة سنوية: %s"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:414
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:417
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:268
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:423
@@ -57840,7 +57842,7 @@ msgstr "لقد حاولت الوصول إلى صفحة تحتاج إلى تأك�
 msgid "You will need to save the report before you can execute it"
 msgstr "ستحتاج الى حفظ التقرير قبل أن تتمكن من تفيذه."
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:27
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
 #, c-format
 msgid "You'll have to treat them individually. "
 msgstr "يجب عليك معاملتهم فرديا "
@@ -58640,7 +58642,7 @@ msgstr "تم تخطيط biblionumber و biblioitemnumber  بشكل صحيح"
 msgid "biblionumber|borrowernumber"
 msgstr "biblionumber|borrowernumber"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
 #, c-format
 msgid "budget_code"
 msgstr "رمز_الميزانية"
@@ -58663,7 +58665,7 @@ msgstr "بواسطة "
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:31
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:195
 #, c-format
 msgid "by %s"
 msgstr "بواسطة %s"
@@ -58792,17 +58794,20 @@ msgstr "by Zhixin Wen is licensed under the MIT license."
 msgid "by _AUTHOR_"
 msgstr "بـ _المؤلف_"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:5
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
 #, c-format
 msgid "by item types"
 msgstr "بواسطة أنواع المادة"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:4
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
 #, c-format
 msgid "by libraries"
 msgstr "بواسطة المكتبات"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:191
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:3
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
 #, c-format
 msgid "by months"
 msgstr "بواسطة الأشهر"
@@ -58817,7 +58822,7 @@ msgstr "من قبل جسر الإتحاد لكلية كارليتون و كلي�
 msgid "call.ogg"
 msgstr "call.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:256
 #, c-format
 msgid "callnumber"
 msgstr "رقم الاستدعاء"
@@ -58855,7 +58860,7 @@ msgstr "لا يمكن تكراره"
 msgid "cataloging the record"
 msgstr "فهرسة التسجيلة"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:213
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:225
 #, c-format
 msgid "ccode"
 msgstr "ccode"
@@ -58953,7 +58958,7 @@ msgstr "يحتوى"
 msgid "controls for column visiblity in DataTables"
 msgstr "التحكم في عرض الأعمدة في جداول البيانات"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
 #, c-format
 msgid "copyno"
 msgstr "رقم النسخة"
@@ -59339,7 +59344,7 @@ msgstr "لديه الكثير من الحجوزات."
 msgid "here"
 msgstr "هنا"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:194
 #, c-format
 msgid "holdingbranch"
 msgstr "الفرع المقتني"
@@ -59354,7 +59359,7 @@ msgstr "لم يتم تعيين المكتبة الفرعية المقتنية"
 msgid "holdingbranch defined"
 msgstr "المكتبة المقتنية غير معرفة"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:183
 #, c-format
 msgid "homebranch"
 msgstr "الفرع الرئيسى"
@@ -59628,7 +59633,7 @@ msgstr "items.permanent_location تم تخطيطه"
 msgid "itemtype NOT mapped"
 msgstr "نوع المادة ليس مُعيّن"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:192
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
 #, c-format
 msgid "itype"
 msgstr "itype"
@@ -59810,7 +59815,7 @@ msgstr "loading.ogg"
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:205
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:217
 #, c-format
 msgid "loc"
 msgstr "محلي"
@@ -59926,7 +59931,7 @@ msgstr "تفضيل النظام noItemTypeImages"
 msgid "none"
 msgstr "لا شيئ"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:203
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:215
 #, c-format
 msgid "nonpublic_note"
 msgstr "ملاحظة_غير عامة"
@@ -59958,7 +59963,7 @@ msgstr "لا تساوي"
 msgid "not like"
 msgstr "غير شبيه"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:142
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:143
 #, c-format
 msgid "not owned"
 msgstr "غير مملوك"
@@ -59969,7 +59974,7 @@ msgstr "غير مملوك"
 msgid "not running"
 msgstr "متوقف عن التشغيل"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
 #, c-format
 msgid "notforloan"
 msgstr "ليس للإعارة"
@@ -60160,7 +60165,7 @@ msgstr "popup.ogg"
 msgid "previous"
 msgstr "السابق"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
 #, c-format
 msgid "price"
 msgstr "السعر"
@@ -60177,7 +60182,7 @@ msgstr "بطاقة السعر"
 msgid "pt"
 msgstr "pt"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:216
 #, c-format
 msgid "public_note"
 msgstr "ملاحظة_عامة"
@@ -60191,7 +60196,7 @@ msgid "published by: %s %s %s in "
 msgstr "نشر بواسطة:%s %s %s في "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "quantity values are not filled in or are not numbers"
 msgstr "لم يتم ملء قيم الكمية أو لم يتم إدخالها بالأرقام"
 
@@ -60241,7 +60246,7 @@ msgstr "تم الحذف بنجاح"
 msgid "reopen basketgroup"
 msgstr "إعادة فتح مجموعة السلة"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
 #, c-format
 msgid "replacement price"
 msgstr "سعر الاستبدال"
@@ -60690,7 +60695,7 @@ msgstr "في%s"
 msgid "updated successfully"
 msgstr "تم التحديث بنجاح"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:230
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
 #, c-format
 msgid "uri"
 msgstr "uri"
@@ -60944,7 +60949,7 @@ msgstr "| الحالة: %s"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:379
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:98
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:178

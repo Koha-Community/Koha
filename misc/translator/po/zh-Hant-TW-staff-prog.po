@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-05-15 17:57-0300\n"
-"PO-Revision-Date: 2020-05-15 03:15+0000\n"
+"POT-Creation-Date: 2020-06-18 08:56-0300\n"
+"PO-Revision-Date: 2020-05-29 02:37+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1589512524.221369\n"
+"X-POOTLE-MTIME: 1590719855.420448\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -221,7 +221,7 @@ msgstr "\"資料來自\" 是不合法的值 (\"%s\")。%s"
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "\"到期日\" 是不合法的值 (\"%s\")。%s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:395
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:407
 #, c-format
 msgid "# Bibliographic records"
 msgstr "# 書目紀錄"
@@ -581,8 +581,8 @@ msgid ""
 "%s %s %s %s %s %sItem due %sAdvance notice %sUpcoming events %sHold filled "
 "%sItem check-in %sItem checkout %sUnknown %s: "
 msgstr ""
-"%s %s %s %s %s %s到期日 %s提早通知 %s活動通知 %s預約 %s還入館藏 %s借出館藏 %s"
-"不明 %s："
+"%s %s %s %s %s %s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館"
+"藏 %s不明 %s："
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -3519,9 +3519,9 @@ msgstr "%s (如點選，即表示此分欄為可點選的 URL) "
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:164
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:142
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:350
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:154
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:158
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:362
 #, c-format
 msgid "%s (inactive)"
 msgstr "%s (未啟用)"
@@ -3889,7 +3889,7 @@ msgstr "%s 縣市："
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:416
 #, c-format
 msgid ""
 "%s Cleaned %s Imported %s Importing %s Reverted %s Reverting %s Staged %s %s "
@@ -4537,7 +4537,7 @@ msgstr "%s 無限制 %s "
 #. %7$s:  IF ( biblio.match_biblionumber ) 
 #. %8$s:  biblio.match_biblionumber | uri 
 #. %9$s:  biblio.match_score | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:108
 #, c-format
 msgid ""
 "%s No match %s Match applied %s Match found %s %s %s %s Matches biblio %s "
@@ -5433,6 +5433,12 @@ msgstr ""
 "|| CAN_user_tools_marc_modification_templates || "
 "CAN_user_tools_stage_marc_import || CAN_user_tools_manage_staged_marc || "
 "CAN_user_tools_upload_local_cover_images ) %%] "
+
+#. %1$s:  INCLUDE 'doc-head-close.inc' 
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:13
+#, c-format
+msgid "%s [%%# As long as cataloging plugins rely on "
+msgstr ""
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate | html 
@@ -7178,7 +7184,7 @@ msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
 msgstr ""
-"%s到期日 %s提早通知 %s活動通知 %s預約失敗 %s還入館藏 %s借出館藏 %s不明 %s"
+"%s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s借出館藏 %s不明 %s"
 
 #. %1$s:  IF ( not_deleted_loo.book_on_loan ) 
 #. %2$s:  ELSIF ( not_deleted_loo.book_reserved ) 
@@ -7191,7 +7197,7 @@ msgstr "%s館藏已被借出%s館藏可預約%s"
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:164
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:176
 #, c-format
 msgid ""
 "%sItem records could not be processed because the number of item fields was "
@@ -7906,7 +7912,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 題名敘述"
 msgid "&nbsp;&nbsp;(format: yyyy-yyyy)"
 msgstr "&nbsp;&nbsp;(格式：yyyy-yyyy)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:82
 #, c-format
 msgid "&nbsp;Show inactive funds:"
 msgstr "&nbsp;顯示不活躍的基金："
@@ -7915,7 +7921,7 @@ msgstr "&nbsp;顯示不活躍的基金："
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:168
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:366
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:101
 #, c-format
 msgid "&nbsp;Show inactive:"
@@ -8443,7 +8449,7 @@ msgstr "&rsaquo; 從訂閱新增訂單"
 msgid "&rsaquo; Add order from a suggestion"
 msgstr "&rsaquo; 從建議新增訂單"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #, c-format
 msgid "&rsaquo; Add orders from MARC file"
 msgstr "&rsaquo; 從 MARC 檔案新增訂單"
@@ -10052,11 +10058,6 @@ msgstr "(相關搜尋：%s%s%s)"
 msgid "(remove)"
 msgstr "(移除)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:123
-#, c-format
-msgid "(see online help)"
-msgstr "(見線上說明)"
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:30
 #, c-format
 msgid "(start date of the 1st subscription) "
@@ -10809,7 +10810,7 @@ msgstr "帳戶"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:210
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:299
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:321
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
 #, c-format
 msgid "Accounting details"
 msgstr "帳戶詳情"
@@ -10918,7 +10919,7 @@ msgstr "採訪表單"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -11603,7 +11604,7 @@ msgstr "新增離線流通至佇列"
 msgid "Add or remove items"
 msgstr "新增/移除館藏"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Add order"
 msgstr "新增訂單"
@@ -11618,7 +11619,7 @@ msgstr "新增訂單給採購單"
 msgid "Add order to basket %s"
 msgstr "新增訂單給採購單 %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:424
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:436
 #, c-format
 msgid "Add orders"
 msgstr "新增訂單"
@@ -11626,7 +11627,7 @@ msgstr "新增訂單"
 #. %1$s:  comments | html 
 #. %2$s:  file_name | html 
 #. %3$s:  upload_timestamp | $KohaDates  with_hours => 1 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:32
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:44
 #, c-format
 msgid "Add orders from %s (%s staged on %s) "
 msgstr "新增訂單自 %s (%s 待處理於 %s) "
@@ -12055,7 +12056,7 @@ msgstr "Adlibris 封面"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:25
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -12093,7 +12094,7 @@ msgstr "管理 "
 msgid "Administration &gt; Currencies and exchange rates"
 msgstr "管理 &gt; 幣別與匯率"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:124
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:125
 #, c-format
 msgid "Administration &rsaquo; Circulation and fine rules "
 msgstr "管理 &rsaquo; 流通與罰款規則 "
@@ -13940,7 +13941,7 @@ msgstr "八月"
 msgid "August"
 msgstr "八月"
 
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:93
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:86
 #, c-format
 msgid "Auth"
@@ -14345,7 +14346,7 @@ msgid "Auto subscription sharing: "
 msgstr "自動訂閱分享："
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:140
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:141
 msgid "Auto-fill row"
 msgstr "自動填入列"
 
@@ -14760,7 +14761,7 @@ msgstr "採購單"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:18
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
 #, c-format
 msgid "Basket %s"
@@ -15659,7 +15660,7 @@ msgstr "預算成本："
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:94
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:17
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:18
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:18
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:161
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:85
@@ -16299,7 +16300,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:174
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:87
@@ -16738,7 +16739,7 @@ msgstr "最高的重購價格"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #, c-format
 msgid "Card"
 msgstr "卡片格式"
@@ -17139,7 +17140,7 @@ msgstr "儲存格的值"
 msgid "Cell value "
 msgstr "儲存格的值 "
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:41
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:42
 #, c-format
 msgid "Cells contain estimated values only."
 msgstr "儲存格祗有估計值。"
@@ -17866,7 +17867,7 @@ msgstr "選擇"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:39
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:50
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:115
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:112
 #, c-format
@@ -17974,7 +17975,7 @@ msgstr ""
 msgid "Choose order of text fields to print"
 msgstr "選擇文字欄位的排序供列印之用"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:387
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:399
 #, c-format
 msgid "Choose the file to add to the basket"
 msgstr "選擇新增入採購單的檔案"
@@ -18396,7 +18397,7 @@ msgstr "清除"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:48
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:60
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -18718,7 +18719,7 @@ msgstr "複製流通與罰款規則失敗！"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:261
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:273
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
@@ -19130,7 +19131,7 @@ msgstr "評論者 "
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:32
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:392
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:20
 #, c-format
@@ -20410,7 +20411,7 @@ msgstr "幣別 = %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:381
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:333
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:203
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:385
 #, c-format
@@ -21118,7 +21119,7 @@ msgstr "預設"
 msgid "Default "
 msgstr "預設："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:40
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:52
 #, c-format
 msgid "Default accounting details"
 msgstr "預設帳戶詳情"
@@ -22431,7 +22432,7 @@ msgstr "唱片分類目錄"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:434
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:314
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:125
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:137
 #, c-format
 msgid "Discount: "
 msgstr "折扣："
@@ -22584,7 +22585,7 @@ msgstr "簽收此期刊時，不要新增館藏記錄 "
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:126
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:163
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:54
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:66
 #, c-format
 msgid "Do not look for matching records"
 msgstr "不要檢視對映紀錄"
@@ -23100,7 +23101,7 @@ msgstr "EUC-KR"
 msgid "EXAMPLE plugin"
 msgstr "EXAMPLE 外掛"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:40
 #, c-format
 msgid "Each cell contain both actual and estimated values."
 msgstr "每個儲存格包括實際的與估計的值。"
@@ -24535,8 +24536,8 @@ msgstr "說明："
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:248
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
@@ -25167,7 +25168,7 @@ msgstr "無法讀取檔案"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:391
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:403
 #, c-format
 msgid "File name"
 msgstr "檔案名稱"
@@ -25300,7 +25301,7 @@ msgstr "影片目錄"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:188
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:189
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:81
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
@@ -26095,12 +26096,12 @@ msgid "Fund list of budget "
 msgstr "預算的基金清單 "
 
 #. TD
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:74
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:75
 msgid "Fund locked"
 msgstr "鎖定基金"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:91
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:53
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:68
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 #, c-format
@@ -26117,7 +26118,7 @@ msgstr "基金名稱："
 msgid "Fund parent: "
 msgstr "上層基金："
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:66
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:67
 #, c-format
 msgid "Fund remaining"
 msgstr "基金餘額"
@@ -26127,7 +26128,7 @@ msgstr "基金餘額"
 msgid "Fund search"
 msgstr "搜尋基金"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:54
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:55
 #, c-format
 msgid "Fund total"
 msgstr "基金總數"
@@ -26145,10 +26146,10 @@ msgstr "基金："
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:339
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:342
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:131
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:134
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:329
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:345
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:143
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:146
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:357
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:86
 #, c-format
 msgid "Fund: "
@@ -26164,7 +26165,7 @@ msgstr "基金：%s"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:97
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:20
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:19
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:20
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:23
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:165
@@ -26700,7 +26701,7 @@ msgstr "隱藏所有"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Hide all columns"
 msgstr "隱藏所有欄"
@@ -26893,7 +26894,7 @@ msgstr "預約費用："
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:64
 #, c-format
 msgid "Hold filled for:"
-msgstr "預約於："
+msgstr "預約可取於："
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:282
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:452
@@ -27374,7 +27375,7 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:16
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
@@ -27429,7 +27430,7 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:71
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:24
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:16
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:17
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:25
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:13
@@ -27955,7 +27956,7 @@ msgid ""
 "on this template from the public catalog."
 msgstr "若模版允許公眾註冊，則讀者可以從公共目錄的這個模版登入club。"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:119
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:226
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:335
 #, c-format
@@ -27967,7 +27968,7 @@ msgstr "若均不可得"
 msgid "If amounts changed, round to a multiple of"
 msgstr "若金額改變，捨入至"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:118
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:334
 #, c-format
@@ -28027,7 +28028,7 @@ msgstr "組合鍵必須指定順序：Shift-Cmd-Ctrl-Alt"
 msgid "If empty, English is used"
 msgstr "若空白，表示使用英文"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:127
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:139
 #, c-format
 msgid "If empty, discount rate from vendor will be used"
 msgstr "若空白，將使用供應商的折扣"
@@ -28393,14 +28394,14 @@ msgid ""
 "(.csv or .ods)"
 msgstr "從試算表檔案 (.csv 或 .ods) 匯入 %s 框架結構 (段與分欄)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:331
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following accounting "
 "details (used only if no information is filled for the item):"
 msgstr "以下列帳戶詳情匯入採購單勾選的館藏(祗限無資訊的館藏)："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:282
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
@@ -28832,7 +28833,7 @@ msgstr "內部說明："
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:301
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:499
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:476
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:360
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:372
 #, c-format
 msgid "Internal note: "
 msgstr "內部說明："
@@ -28847,7 +28848,7 @@ msgstr "內部搜尋錯誤"
 msgid "Internationalization and localization"
 msgstr "國際化與在地化"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:251
 #, c-format
 msgid "Into an application"
 msgstr "進入應用程式"
@@ -29215,7 +29216,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:370
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:284
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:274
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:286
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #, c-format
@@ -29239,7 +29240,7 @@ msgid "Item %s"
 msgstr "館藏 %s"
 
 #. %1$s:  item.item_id | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:168
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:180
 #, c-format
 msgid "Item Record %s"
 msgstr "館藏記錄 %s"
@@ -29362,8 +29363,8 @@ msgstr "館藏預約 / 總共預約"
 msgid "Item home library:"
 msgstr "館藏所屬圖書館："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:269
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #, c-format
 msgid "Item information"
 msgstr "館藏資訊"
@@ -30407,7 +30408,7 @@ msgstr "Koha &rsaquo; 採訪 &rsaquo; 訂單詳情"
 #. %2$s:  import_batch_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:7
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:6
 #, c-format
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records %s &rsaquo; "
@@ -30712,12 +30713,12 @@ msgstr ""
 "%s %s&rsaquo; 關閉預算 %s %s %s&rsaquo; 預算 %s 已關閉 %s "
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:6
-#, c-format
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; "
-"Planning for %s by %s"
+"Planning for %s %s"
 msgstr "Koha &rsaquo; 管理 &rsaquo; 預算 &rsaquo; 基金 &rsaquo; 規畫 %s 由 %s"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:17
@@ -33810,7 +33811,7 @@ msgstr "清單包括此題名："
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:986
@@ -33831,7 +33832,7 @@ msgstr "載入中"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:383
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:90
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:80
@@ -34247,7 +34248,7 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:333
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:90
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:102
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #, c-format
@@ -34376,7 +34377,7 @@ msgstr "MARC 機構代碼"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:83
 #, c-format
 msgid "MARC preview"
@@ -35394,7 +35395,7 @@ msgstr "遺失對映規則代碼"
 msgid "Matching rule code: "
 msgstr "對映規則代碼："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:51
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:63
 #, c-format
 msgid "Matching:"
 msgstr "對映點："
@@ -37204,7 +37205,7 @@ msgid "No (default)"
 msgstr "不(預設值)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:286
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:276
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:288
 #, c-format
 msgid ""
 "No ACQ framework, using default. You should create a framework with code "
@@ -37453,7 +37454,7 @@ msgstr "找不到基金"
 msgid "No fund selected."
 msgstr "還沒有選擇基金。"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:174
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:175
 #, c-format
 msgid "No funds to display for this search criteria"
 msgstr "此搜尋類別內無基金"
@@ -37829,7 +37830,7 @@ msgstr "無引句可用。請使用 '新增引句' 鈕以新增引句。"
 msgid "No reason"
 msgstr "無理由"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, c-format
 msgid ""
 "No record have been imported because they all match an existing record in "
@@ -37851,7 +37852,7 @@ msgstr "無選定紀錄。"
 msgid "No records have been staged."
 msgstr "無紀錄待處理。"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:26
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
 #, c-format
 msgid "No records imported"
 msgstr "未匯入紀錄"
@@ -39323,7 +39324,7 @@ msgstr "預約者"
 msgid "On shelf holds allowed"
 msgstr "預約取得方式"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:113
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:114
 #, c-format
 msgid "On shelf holds allowed: "
 msgstr "預約取得方式："
@@ -39979,7 +39980,7 @@ msgstr "輸出格式 "
 msgid "Output format:"
 msgstr "輸出格式："
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
 #, c-format
 msgid "Output to a file named: "
 msgstr "輸出檔案名稱："
@@ -41675,7 +41676,7 @@ msgid "Planned date"
 msgstr "計畫日期"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:73
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:21
 #, c-format
 msgid "Planning"
 msgstr "計畫"
@@ -41686,10 +41687,10 @@ msgid "Planning "
 msgstr "計畫 "
 
 #. %1$s:  budget_period_description | html 
-#. %2$s:  authcat | html 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:31
-#, c-format
-msgid "Planning for %s by %s"
+#. %2$s:  PROCESS planning plan=authcat 
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:32
+#, fuzzy, c-format
+msgid "Planning for %s %s"
 msgstr "計畫 %s by %s"
 
 #: intranet-tmpl/prog/en/modules/about.tt:524
@@ -41945,7 +41946,7 @@ msgstr "請鍵入有效電子郵件地址。"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:280
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:281
 msgid "Please enter a valid number."
 msgstr "請鍵入有效數字。"
 
@@ -42669,7 +42670,7 @@ msgstr "支付價格："
 msgid "Price:"
 msgstr "價格："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:117
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:129
 #, c-format
 msgid "Price: "
 msgstr "價格："
@@ -43449,7 +43450,7 @@ msgstr "數量搜尋"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:306
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:124
 #, c-format
 msgid "Quantity: "
 msgstr "數量："
@@ -44349,12 +44350,12 @@ msgstr "續借天數"
 msgid "Renewals allowed (count)"
 msgstr "允許續借 (次數)"
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:101
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:102
 #, c-format
 msgid "Renewals allowed: "
 msgstr "允許續借："
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:107
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:108
 #, c-format
 msgid "Renewals period: "
 msgstr "續借天數："
@@ -44522,7 +44523,7 @@ msgstr "搜尋重置價格"
 msgid "Replacement price:"
 msgstr "重置價格："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:133
 #, c-format
 msgid "Replacement price: "
 msgstr "重置價格："
@@ -44922,8 +44923,9 @@ msgstr "Require.js JS 模組系統"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:68
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:73
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:79
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:103
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:109
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:99
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:104
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:110
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:29
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:24
@@ -44946,10 +44948,10 @@ msgstr "Require.js JS 模組系統"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:760
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:111
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:114
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:151
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:126
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:320
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:59
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:62
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
@@ -45800,7 +45802,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:276
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:86
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
@@ -45823,7 +45825,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:129
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:393
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:154
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:155
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:198
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:84
@@ -46435,7 +46437,7 @@ msgid "Search on"
 msgstr "搜尋"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
+#: intranet-tmpl/prog/en/modules/authorities/detail.tt:89
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:82
 msgid "Search on %s"
 msgstr "搜尋於 %s"
@@ -46859,13 +46861,13 @@ msgstr "選定頻率"
 msgid "Select a fund"
 msgstr "選定基金"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:347
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:359
 #, c-format
 msgid "Select a fund (will populate orders/items if set)"
 msgstr "選擇基金 (設定後布置訂單/物件)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:136
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:233
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:148
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:245
 #, c-format
 msgid "Select a fund (will use default if set)"
 msgstr "選擇基金 (設定後使用預設值)"
@@ -46965,7 +46967,7 @@ msgstr "選定時間"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:134
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:60
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:46
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:58
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:6
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:97
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:206
@@ -47094,7 +47096,7 @@ msgid ""
 msgstr ""
 "選定保留的讀者。來自其他讀者的資料將轉移至此讀者紀錄並刪除其他讀者的紀錄。"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:199
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:200
 #, c-format
 msgid "Select planning type:"
 msgstr "選定計畫類型："
@@ -47169,7 +47171,7 @@ msgstr "選定圖書館帳號以便傳送 EDI 訂單"
 msgid "Select to display or not:"
 msgstr "選定顯示或不顯示："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:38
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:50
 #, c-format
 msgid "Select to import"
 msgstr "選定匯入的檔案"
@@ -47942,7 +47944,7 @@ msgstr "顯示_MENU_ 項目"
 msgid "Show active baskets only"
 msgstr "僅顯示使用中的購書籃"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:226
 #, c-format
 msgid "Show active funds only"
 msgstr "祗顯示使用中的基金"
@@ -47952,7 +47954,7 @@ msgstr "祗顯示使用中的基金"
 msgid "Show active vendors only"
 msgstr "祗顯示使用中的代理商"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:236
 #, c-format
 msgid "Show actual/estimated values"
 msgstr "顯示使用中/估計值"
@@ -47987,7 +47989,7 @@ msgstr "顯示所有購書籃"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show all columns"
 msgstr "顯示所有欄位"
@@ -48121,7 +48123,7 @@ msgstr "顯示匹配題名"
 msgid "Show more"
 msgstr "顯示更多"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:217
 #, c-format
 msgid "Show my funds only"
 msgstr "祗顯示我的基金"
@@ -48159,7 +48161,7 @@ msgstr "顯示標籤"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:45
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:46
 #, c-format
 msgid "Show/hide columns:"
 msgstr "顯示/隱藏欄位："
@@ -48261,7 +48263,7 @@ msgid "Some Perl modules are missing. "
 msgstr "遺失部份 Perl 模組。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "Some budgets are not defined in item records"
 msgstr "部份預算未成為館藏紀錄"
 
@@ -48724,7 +48726,7 @@ msgstr "待處理紀錄進入儲存庫"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:444
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:406
 #, c-format
 msgid "Staged"
 msgstr "待處理"
@@ -48901,8 +48903,8 @@ msgstr "統計1完成於："
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:484
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:155
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:369
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:381
 #, c-format
 msgid "Statistic 1: "
 msgstr "統計1："
@@ -48914,8 +48916,8 @@ msgstr "統計2完成於："
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:487
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:159
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:373
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:385
 #, c-format
 msgid "Statistic 2: "
 msgstr "統計2："
@@ -48974,7 +48976,7 @@ msgstr "統計精靈"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:38
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:393
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
@@ -49406,7 +49408,7 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:45
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:178
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:43
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:129
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:130
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:42
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:35
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
@@ -49430,8 +49432,8 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:85
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:86
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:239
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:263
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:240
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:264
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:115
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:59
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:93
@@ -50591,7 +50593,7 @@ msgstr "文字區"
 msgid "Th"
 msgstr "星期四"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:172
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:173
 #, c-format
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr "此預算不存在！請選擇另個預算再繼續工作。"
@@ -50668,7 +50670,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:226
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:380
 #, c-format
 msgid ""
 "The 2 following fields are available for your own usage. They can be useful "
@@ -51965,7 +51967,7 @@ msgid "There is no record of any messages that have been sent to this patron."
 msgstr "沒有發送簡訊給此讀者的紀錄。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "There is no record selected"
 msgstr "未選定紀錄"
 
@@ -52915,7 +52917,7 @@ msgstr "題名(任何)："
 msgid "Title (uniform): "
 msgstr "題名(劃一)："
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:53
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:65
 #, c-format
 msgid "Title and author"
 msgstr "題名與著者"
@@ -53068,7 +53070,7 @@ msgstr "新增另個館藏類型及其他設定，請至："
 msgid "To create another patron, go to: "
 msgstr "新增其他讀者，請至："
 
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:122
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:123
 #, c-format
 msgid "To create circulation rule, go to: "
 msgstr "新增流通規則，請至 ："
@@ -55245,7 +55247,7 @@ msgstr "供應商說明："
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:303
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:480
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:364
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:376
 #, c-format
 msgid "Vendor note: "
 msgstr "供應商說明："
@@ -56320,7 +56322,7 @@ msgstr "每年重複的假日：%s"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:414
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:417
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:268
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:117
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:423
@@ -57129,7 +57131,7 @@ msgstr "您企圖近用需要認證的頁面"
 msgid "You will need to save the report before you can execute it"
 msgstr "執行前，應先儲存報表"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:27
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:39
 #, c-format
 msgid "You'll have to treat them individually. "
 msgstr "您必須個別處理它們。"
@@ -57919,7 +57921,7 @@ msgstr "書目號與書目館藏號對映正確"
 msgid "biblionumber|borrowernumber"
 msgstr "biblionumber|borrowernumber"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
 #, c-format
 msgid "budget_code"
 msgstr "budget_code"
@@ -57942,7 +57944,7 @@ msgstr "著者 "
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:31
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:81
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:195
 #, c-format
 msgid "by %s"
 msgstr "著者 %s"
@@ -58072,17 +58074,20 @@ msgstr "著者 Zhixin Wen 以 MIT 條款授權。"
 msgid "by _AUTHOR_"
 msgstr "by _AUTHOR_"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:5
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
 #, c-format
 msgid "by item types"
 msgstr "依館藏類型"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:193
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:4
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
 #, c-format
 msgid "by libraries"
 msgstr "依圖書館"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:191
+#: intranet-tmpl/prog/en/includes/budget_planning.inc:3
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
 #, c-format
 msgid "by months"
 msgstr "依月份"
@@ -58097,7 +58102,7 @@ msgstr "製作者 Carleton College 與 St. Olaf College 的 Bridge Consortium。
 msgid "call.ogg"
 msgstr "call.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:244
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:256
 #, c-format
 msgid "callnumber"
 msgstr "callnumber"
@@ -58135,7 +58140,7 @@ msgstr "不能重複"
 msgid "cataloging the record"
 msgstr "編目紀錄"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:213
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:225
 #, c-format
 msgid "ccode"
 msgstr "ccode"
@@ -58233,7 +58238,7 @@ msgstr "包括"
 msgid "controls for column visiblity in DataTables"
 msgstr "控制 DataTables 欄位的可見度"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
 #, c-format
 msgid "copyno"
 msgstr "copyno"
@@ -58615,7 +58620,7 @@ msgstr "預約太多。"
 msgid "here"
 msgstr "這裡"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:194
 #, c-format
 msgid "holdingbranch"
 msgstr "holdingbranch"
@@ -58630,7 +58635,7 @@ msgstr "預約分館未對映"
 msgid "holdingbranch defined"
 msgstr "指定預約分館"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:183
 #, c-format
 msgid "homebranch"
 msgstr "所屬分館"
@@ -58902,7 +58907,7 @@ msgstr "items.permanent_location 已對應"
 msgid "itemtype NOT mapped"
 msgstr "館藏類型未對映"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:192
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
 #, c-format
 msgid "itype"
 msgstr "Itype"
@@ -59083,7 +59088,7 @@ msgstr "loading.ogg"
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:205
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:217
 #, c-format
 msgid "loc"
 msgstr "loc"
@@ -59199,7 +59204,7 @@ msgstr "noItemTypeImages系統偏好"
 msgid "none"
 msgstr "無"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:203
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:215
 #, c-format
 msgid "nonpublic_note"
 msgstr "nonpublic_note"
@@ -59231,7 +59236,7 @@ msgstr "不等同於"
 msgid "not like"
 msgstr "不像"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:142
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:143
 #, c-format
 msgid "not owned"
 msgstr "未擁有"
@@ -59242,7 +59247,7 @@ msgstr "未擁有"
 msgid "not running"
 msgstr "無執行"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
 #, c-format
 msgid "notforloan"
 msgstr "notforloan"
@@ -59432,7 +59437,7 @@ msgstr "popup.ogg"
 msgid "previous"
 msgstr "上一頁"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
 #, c-format
 msgid "price"
 msgstr "price"
@@ -59449,7 +59454,7 @@ msgstr "價格標籤"
 msgid "pt"
 msgstr "pt"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:204
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:216
 #, c-format
 msgid "public_note"
 msgstr "public_note"
@@ -59463,7 +59468,7 @@ msgid "published by: %s %s %s in "
 msgstr "出版者：%s %s %s 在 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:15
 msgid "quantity values are not filled in or are not numbers"
 msgstr "未填入數量或填入的不是數字"
 
@@ -59513,7 +59518,7 @@ msgstr "移除成功"
 msgid "reopen basketgroup"
 msgstr "再開啟採購單群組"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:243
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
 #, c-format
 msgid "replacement price"
 msgstr "重置價格"
@@ -59960,7 +59965,7 @@ msgstr "直到 %s"
 msgid "updated successfully"
 msgstr "更新成功"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:230
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
 #, c-format
 msgid "uri"
 msgstr "uri"
@@ -60213,7 +60218,7 @@ msgstr "| 狀態：%s "
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:157
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:379
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:98
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:178
