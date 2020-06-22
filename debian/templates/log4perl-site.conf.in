@@ -37,3 +37,11 @@ log4perl.appender.SIP.mode=append
 log4perl.appender.SIP.layout=PatternLayout
 log4perl.appender.SIP.layout.ConversionPattern=[%d] [%p] %m %l %n
 log4perl.appender.SIP.utf8=1
+
+log4perl.logger.plack = WARN, PLACK
+log4perl.appender.PLACK=Log::Log4perl::Appender::Screen
+log4perl.appender.PLACK.stderr = 1
+log4perl.appender.PLACK.mode=append
+log4perl.appender.PLACK.layout=PatternLayout
+log4perl.appender.PLACK.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACK.utf8=1
