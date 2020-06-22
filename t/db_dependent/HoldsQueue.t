@@ -1009,7 +1009,7 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
 };
 
 
-subtest "Item level holds info is preserved (Bug 25738)" => sub {
+subtest "Item level holds info is preserved (Bug 25783)" => sub {
 
     plan tests => 3;
 
@@ -1052,24 +1052,9 @@ subtest "Item level holds info is preserved (Bug 25738)" => sub {
     );
 
     # Add item-level hold for patron_1
-    my $reserve_id_1 = AddReserve(
-        {
-            branchcode     => $library->branchcode,
-            borrowernumber => $patron_1->borrowernumber,
-            biblionumber   => $biblio->id,
-            itemnumber     => $item_1->itemnumber,
-            priority       => 1
-        }
-    );
+    my $reserve_id_1 = AddReserve( $library->branchcode, $patron_1->borrowernumber, $biblio->id, undef, 1, undef, undef, undef, undef, $item_1->itemnumber );
 
-    my $reserve_id_2 = AddReserve(
-        {
-            branchcode     => $library->branchcode,
-            borrowernumber => $patron_2->borrowernumber,
-            biblionumber   => $biblio->id,
-            priority       => 2
-        }
-    );
+    my $reserve_id_2 = AddReserve( $library->branchcode, $patron_2->borrowernumber, $biblio->id, undef, 2 );
 
     C4::HoldsQueue::CreateQueue();
 
