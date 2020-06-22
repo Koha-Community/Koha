@@ -2651,7 +2651,7 @@ subtest 'AddReturn | is_overdue' => sub {
                 issue_id       => $issue->id
             }
         );
-        my $accountline = $lines->next;
+        $accountline = $lines->next;
         is( $accountline->amountoutstanding + 0,
             0, 'Partially paid fee amount outstanding was reduced to 0' );
         is( $accountline->amount + 0,
