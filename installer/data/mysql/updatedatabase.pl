@@ -19094,6 +19094,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Replay of 19.05.10.003 upgrade - that initially had a typo - to ensure the changes are done)\n";
 }
 
+$DBversion = "19.05.12.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (19.05.12 release)\n";
+    SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
