@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2020-02-18 10:13+0000\n"
+"PO-Revision-Date: 2020-05-24 00:11+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1582020806.477060\n"
+"X-POOTLE-MTIME: 1590279073.844029\n"
 "X-Pootle-Path: /pt/18.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -626,6 +626,10 @@ msgstr "<br><strong>NOTA:</strong> As outras preferências de sistema do grupo \
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema necessita que a tarefa <code>misc/cronjobs/share_usage_with_koha_community.pl</code> esteja em funcionamento. Peça ao administrador do sistema para a configurar."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+msgstr "<br><strong>NOTA:</strong> Deve usar a <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">página de configuração dedicada na administração</a> para editar as preferências relacionadas com o Hea."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1440,6 +1444,10 @@ msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value h
 msgstr "<br><strong>NOTA:</strong> Este valor não tem efeito se a preferência de sistema UsageStats estiver definida como \"Não partilhar\"."
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr "<br><strong>NOTA:</strong> Deve usar a <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">página de configuração dedicada na administração</a> para editar esta preferência."
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "Localização geográfica da biblioteca principal: "
 
@@ -2119,17 +2127,11 @@ msgstr "Não mostrar os campos de notas"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
-"Para esconder os campos noutras páginas como a vista normal, use as "
-"configurações de visibilidade dos subcampos na secção dos modelos "
-"bibliográficos MARC na administração do sistema."
+msgstr "Para esconder os campos noutras páginas como a vista normal, use as configurações de visibilidade dos subcampos na secção dos modelos bibliográficos MARC na administração do sistema."
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
-"de notas no separador 'Notas do título' e no separador 'Descrição' nas "
-"páginas de detalhes do OPAC e do interface dos técnicos. Use uma vírgula "
-"para separar os vários campos. Exemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr "de notas no separador 'Notas do título' e no separador 'Descrição' nas páginas de detalhes do OPAC e do interface dos técnicos. Use uma vírgula para separar os vários campos. Exemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -4287,6 +4289,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "dia(s) depois de ser enviada."
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr "Não prender"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr "Prender"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr "os exemplares que não são emprestáveis mas que podem ser reservados ( notforloan < 0 ) para preencher as reservas."
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr "Exemplos:<br/>"
 
@@ -4559,10 +4573,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema necessita que a tarefa <code>misc/cronjobs/fines.pl</code> esteja em funcionamento. Peça ao administrador do sistema para a configurar."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "Calcular (mas somente para o envio ao administrador)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calcular e cobrar"
 
@@ -4667,8 +4677,8 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr "Ordenar os empréstimo de hoje na página de empréstimo da"
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "data de término."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
+msgstr "data de empréstimo."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -5938,6 +5948,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "informação sobre as tarefas agendadas."
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr "Despejar"
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr "Não despejar"
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr "a frase de pesquisa como parâmetro, necessita que a variável DumpTemplateVars[interface] esteja visível."
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr "Efetuar"
 
@@ -6226,8 +6248,8 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "Mostrar"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "o formato, a audiência e os ícones de tipo de material nas páginas de resultados e detalhes em MARC21 XSLT no OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
+msgstr "o formato, a audiência, os ícones de tipo de material nas páginas de resultados e as descrições nas páginas de resultados e detalhes do XSLT de MARC21."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -7418,12 +7440,12 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema necessita que a tarefa <code>misc/cronjobs/cleanup_database.pl</code> esteja em funcionamento. Peça ao administrador do sistema para a configurar."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr "Eliminar os leitores registados via OPAC, mas não verificados após"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+msgstr "Eliminar os leitores que ainda se encontram na categoria indicada na preferência PatronSelfRegistrationDefaultCategory"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
-msgstr "dias."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
+msgstr "dias após a criação da conta."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
@@ -9022,8 +9044,8 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr "Mostrar"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "o formato, audiência e ícones de tipo de material nas páginas de resultados e detalhes em MARC21 XSLT no interface dos técnicos."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
+msgstr "o formato, audiência, ícones de tipo de material e as descrições nas páginas de resultados e detalhes em MARC21 XSLT no interface dos técnicos."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9592,3 +9614,4 @@ msgstr "Para apenas retornar"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório pedido via web service."
+

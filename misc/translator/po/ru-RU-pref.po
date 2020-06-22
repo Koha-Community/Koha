@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-02-10 07:25+0000\n"
+"PO-Revision-Date: 2020-04-24 11:37+0000\n"
 "Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1581319551.745262\n"
+"X-POOTLE-MTIME: 1587728239.614614\n"
 "X-Pootle-Path: /ru/18.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -63,7 +63,7 @@ msgstr ""
 
 # Acquisitions
 msgid "acquisitions.pref"
-msgstr "Поступления"
+msgstr "Комплектование"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref Policy"
@@ -627,6 +627,10 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1442,6 +1446,10 @@ msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value h
 msgstr ""
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr ""
 
@@ -1791,7 +1799,7 @@ msgstr "Использовать следующий текст для позиц
 
 # Authorities > General
 msgid "authorities.pref#UNIMARCAuthorityField100# Use the following text for the contents of UNIMARC authority field 100 position 08-35 (fixed length data elements). Do NOT include the date (position 00-07)."
-msgstr "Использовать следующий текст для позиций 06-39 контрольного поля 008 МАРК-данных авторитетных источников (элементы данных фиксированной длины).  НЕ включать дату (позиции 00-05)."
+msgstr "Использовать следующий текст для позиций 08-35 контрольного поля 100 UNIMARC авторитетных источников (элементы данных фиксированной длины). НЕ включать дату (позиции 00-07)."
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -2137,7 +2145,7 @@ msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Redirect the opac detail page for suppressed records to"
-msgstr "cataloguing.pref#OpacSuppression# перенаправить страницу сведений OPAC для скрытых записей в"
+msgstr "перенаправить страницу сведений ЭК для скрытых записей в"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Restrict the suppression to IP addresses outside of the IP range"
@@ -2451,7 +2459,7 @@ msgstr " (разделенных запятыми) в правильные по�
 
 # Circulation
 msgid "circulation.pref"
-msgstr "Оборот"
+msgstr "Книговыдача"
 
 # Circulation > Article Requests
 msgid "circulation.pref Article Requests"
@@ -2463,7 +2471,7 @@ msgstr ""
 
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
-msgstr ""
+msgstr "Правила возврата"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref Checkout Policy"
@@ -2491,7 +2499,7 @@ msgstr "Интерфейс"
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref Interlibrary Loans"
-msgstr ""
+msgstr "Межбиблиотечный абонемент"
 
 # Circulation > Return Claims
 msgid "circulation.pref Return Claims"
@@ -3495,7 +3503,7 @@ msgstr ""
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
-msgstr ""
+msgstr "модуль межбиблиотечного абонемента (главный выключатель)."
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
@@ -4283,6 +4291,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr ""
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr ""
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr ""
 
@@ -4555,10 +4575,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "Подсчитывать (но только для высылки администратору)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Подсчитывать и взимать"
 
@@ -4663,7 +4679,7 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr ""
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
 msgstr ""
 
 # Circulation > Interface
@@ -4892,7 +4908,7 @@ msgstr "Не включать"
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque# include information (such as reviews and citations) from Babelthèque in item detail pages on the OPAC."
-msgstr " информацию (вроде отзывов и цитат) с <a href=\"http://www.babeltheque.com/\">Babelthèque.com</a> на странице подробностей о записи в электронном каталоге."
+msgstr "Показывать информацию (вроде отзывов и цитат) с \"Babelthèque.com\" на странице подробностей о записи в электронном каталоге."
 
 # Enhanced Content > Babelthèque
 msgid "enhanced_content.pref#Babeltheque_url_js# Defined the url for the Babeltheque javascript file (eg. http://www.babeltheque.com/bw_XX.js)"
@@ -4928,7 +4944,7 @@ msgstr "."
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# Access Baker and Taylor using username"
-msgstr "Иметь доступ к «<a href=\"http://www.btol.com/\">Бейкер & Тейлор</a>», используя имя пользователя "
+msgstr "Иметь доступ к «Бейкер & Тейлор», используя имя пользователя "
 
 # Enhanced Content > Baker and Taylor
 msgid "enhanced_content.pref#BakerTaylorUsername# and password"
@@ -5934,6 +5950,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr ""
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr ""
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr ""
 
@@ -6222,7 +6250,7 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
 # OPAC > Privacy
@@ -7414,11 +7442,11 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
 # OPAC > Self Registration
@@ -8759,7 +8787,7 @@ msgstr "дате добавления"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# date of publication"
-msgstr "дате пибликации"
+msgstr "дата публикации"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# descending."
@@ -9018,7 +9046,7 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
 msgstr ""
 
 # Staff Client > Options
@@ -9427,11 +9455,11 @@ msgstr "Включить"
 
 # Web services > IdRef
 msgid "web_services.pref#IdRef# Please note that this feature is available only for UNIMARC."
-msgstr "web_services.pref#IdRef# Обратите внимание, что эта функция доступна только для UNIMARC."
+msgstr "Обратите внимание, что эта функция доступна только для UNIMARC."
 
 # Web services > IdRef
 msgid "web_services.pref#IdRef# the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database."
-msgstr "web_services.pref#IdRef# веб-сервис IdRef со страницы подробностей OPAC. IdRef позволяет запрашивать авторитетные записи из базы данных Sudoc."
+msgstr "Веб-сервис IdRef со страницы подробностей OPAC. IdRef позволяет запрашивать авторитетные записи из базы данных Sudoc."
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Disable"

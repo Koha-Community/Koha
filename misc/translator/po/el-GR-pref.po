@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-02-06 17:05+0000\n"
-"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
+"PO-Revision-Date: 2020-05-11 12:19+0000\n"
+"Last-Translator: s.pierros <s.pierros@thessaloniki.gr>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1581008703.135182\n"
+"X-POOTLE-MTIME: 1589199599.112272\n"
 "X-Pootle-Path: /el/18.05/el-GR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -626,6 +626,10 @@ msgstr ""
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί το χρονοπρογραμματισμό <code>misc/cronjobs/share_usage_with_koha_community.pl</code>. Ζητήστε από τον διαχειριστή συστήματός σας να το ενεργοποιήσει."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1437,6 +1441,10 @@ msgstr "Ζιμπάμπουε"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -2893,7 +2901,7 @@ msgstr ""
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Pages"
-msgstr ""
+msgstr "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Σελίδες"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Title"
@@ -3117,7 +3125,7 @@ msgstr "της πλαϊνής μπάρας πλοήγησης σε όλες τι
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ."
-msgstr ""
+msgstr "circulation.pref#ClaimReturnedChargeFee# ."
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims returned\","
@@ -4262,11 +4270,11 @@ msgstr "τα αντίτυπα όταν ακυρώνονται όλες οι κρ
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TransfersBlockCirc# Block"
-msgstr ""
+msgstr "Διέκοψε"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TransfersBlockCirc# Don't block"
-msgstr ""
+msgstr "Μην διακόπτεις"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TransfersBlockCirc# staff from continuing to checkin items when a transfer is triggered."
@@ -4279,6 +4287,18 @@ msgstr "Να εμφανίζεται μία προειδοποίηση στην �
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "ημέρες αφού εστάλη."
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr ""
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -4553,10 +4573,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr "<br><strong>Σημείωση:</strong> Αυτή η επιλογή συστήματος απαιτεί το χρονοπρογραμματισμό <code>misc/cronjobs/fines.pl</code>. Ζητήστε από τον διαχειριστή συστήματός σας να το ενεργοποιήσει."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "να υπολογίζονται (αλλά μόνο για αποστολή email στον διαχειριστή)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "να υπολογίζονται και να χρεώνονται"
 
@@ -4661,8 +4677,8 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr "Να ταξινομηθούν οι σημερινοί δανεισμοί στη σελίδα κυκλοφορίας υλικού σύμφωνα με"
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "την ημερομηνία λήξης."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -5781,11 +5797,11 @@ msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# Format times in"
-msgstr ""
+msgstr "Μορφή ώρας"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# Allow"
-msgstr ""
+msgstr "i18n_l10n.pref#TranslateNotices# Να επιτρέπεται"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# Don't allow"
@@ -5793,15 +5809,15 @@ msgstr "Να μην επιτρέπεται"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# If set, notices will be translatable from the \"Notices and Slips\" interface. The language used to send a notice to a patron will be the one defined for the patron."
-msgstr ""
+msgstr "i18n_l10n.pref#TranslateNotices# Εάν ορισθεί, οι ειδοποιήσεις θα είναι μεταφράσιμες από το μενού \"Ειδοποιήσεις και σημειώσεις\". Η γλώσσα που θα χρησιμοποιείται για να σταλεί μια ειδοποίηση στο μέλος θα είναι αυτή που ορίζεται από το μέλος."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
-msgstr ""
+msgstr "i18n_l10n.pref#TranslateNotices# την μετάφραση των ειδοποιήσεων."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
-msgstr ""
+msgstr "i18n_l10n.pref#alphabet# <br/> Hint: Η αλλαγή στη βάση δεδομένων σε ταξιθέτηση κατά την στήλη Επίθετο στον πίνακα δανειζομένων είναι απαραίτητη για να δουλεύει η παρουσίαση κατά το επίθετο στο members-home.pl όταν χρησιμοποιούμε ένα μη λατινικό αλφάβητο."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# Use the alphabet"
@@ -5809,7 +5825,7 @@ msgstr "Χρήση του αλφαβήτου"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# for lists of browsable letters. This should be a space separated list of uppercase letters."
-msgstr ""
+msgstr "i18n_l10n.pref#alphabet# για ένα κατάλογο γραμμάτων προς εύκολη προσέγγιση. Αυτός ο κατάλογος πρέπει να αποτελείται από κεφαλαία γράμματα που χωρίζονται από ένα κενό διάστημα."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
@@ -5821,7 +5837,7 @@ msgstr "Μορφή ημερομηνιών όπως"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd.mm.yyyy"
-msgstr ""
+msgstr "i18n_l10n.pref#dateformat# ηη.μμ.εεεε"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd/mm/yyyy"
@@ -5841,7 +5857,7 @@ msgstr "Να είναι διαθέσιμες οι ακόλουθες γλώσσ�
 
 # I18N/L10N
 msgid "i18n_l10n.pref#language# This list can be sorted to modify the order of the languages on the interface."
-msgstr ""
+msgstr "i18n_l10n.pref#language# Αυτός ο κατάλογος μπορεί να ταξινομηθεί ώστε να αλλάξει η σειρά των γλωσσών στη διεπαφή."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguages# Enable the following languages on the OPAC:"
@@ -5849,7 +5865,7 @@ msgstr "Να είναι διαθέσιμες οι ακόλουθες γλώσσ�
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguages# This list can be sorted to modify the order of the languages on the interface."
-msgstr ""
+msgstr "i18n_l10n.pref#opaclanguages# Αυτός ο κατάλογος μπορεί να ταξινομηθεί ώστε να αλλάξει η σειρά των γλωσσών στη διεπαφή."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#opaclanguagesdisplay# Allow"
@@ -5869,7 +5885,7 @@ msgstr "Τοπική Χρήση"
 
 # Local Use
 msgid "local_use.pref## Nothing defined yet."
-msgstr ""
+msgstr "local_use.pref## Δεν έχει ακόμα οριστεί."
 
 # Logging
 msgid "logs.pref"
@@ -5877,7 +5893,7 @@ msgstr "Ιστορικό"
 
 # Logging > Debugging
 msgid "logs.pref Debugging"
-msgstr ""
+msgstr "logs.pref Debugging"
 
 # Logging > Logging
 msgid "logs.pref Logging"
@@ -5917,18 +5933,30 @@ msgstr "Να καταγράφεται το ιστορικό"
 
 # Logging > Logging
 msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
-msgstr ""
+msgstr "logs.pref#CataloguingLog# οποιαδήποτε τροποποίηση σε βιβλιογραφικές εγγραφές ή εγγραφές τεκμηρίων."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
-msgstr ""
+msgstr "logs.pref#CronjobLog# Να μην γίνεται καταγραφή ιστορικού"
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Log"
-msgstr ""
+msgstr "logs.pref#CronjobLog# Να γίνεται καταγραφή ιστορικού."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# information from cron jobs."
+msgstr "logs.pref#CronjobLog# των πληροφοριών από τις χρονο-προγραμματισμένες εργασίες. "
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr "logs.pref#DumpSearchQueryTemplate# Να [σύμφωνα με παλαιότερες μεταφράσεις: μια άλλη εκδοχή θα ήταν \"απορρίπτονται\" και \"παραμένουν\" ....]"
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr "logs.pref#DumpSearchQueryTemplate# Να "
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
 msgstr ""
 
 # Logging > Debugging
@@ -6121,7 +6149,7 @@ msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
-msgstr ""
+msgstr "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Να επιτρέπεται"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
@@ -6220,7 +6248,7 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "Εμφάνιση"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
 # OPAC > Privacy
@@ -7097,7 +7125,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLoginInstructions# Show the following HTML on the OPAC login form when a patron is not logged in:"
-msgstr ""
+msgstr "opac.pref#OpacLoginInstructions# Εμφάνισε το ακόλουθο HTML στην φόρμα σύνδεσης του OPAC όταν το μέλος δεν έχει συνδεθεί:"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMainUserBlock# Show the following HTML in its own column on the main page of the OPAC:"
@@ -7412,11 +7440,11 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
 # OPAC > Self Registration
@@ -9016,7 +9044,7 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
 msgstr ""
 
 # Staff Client > Options

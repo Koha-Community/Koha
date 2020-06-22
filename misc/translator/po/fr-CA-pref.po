@@ -629,6 +629,10 @@ msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference 
 msgstr "<br><strong>NOTE:</strong> Cette préférence système demande que le cronjob <code>misc/cronjobs/purge_suggestions.pl</code> soit actif. Demandez à votre administrateur système de le programmer."
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
 msgstr "non"
 
@@ -1439,6 +1443,10 @@ msgstr "Zimbabwe"
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
 msgstr " <br><strong>NOTE:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est définie à \"Ne pas partager\"."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -4282,6 +4290,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "jours après qu'il a été envoyé."
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr ""
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr "Exemples: <br/>"
 
@@ -4554,10 +4574,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr " <br><strong>NOTE:</strong> Cette préférence système nécessite le cronjob <code>misc/cronjobs/fines.pl</code>. Demandez à votre administrateur système de le planifier."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "Calculer (uniquement pour envoi à l'admin)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "Calculer et facturer"
 
@@ -4662,8 +4678,8 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr "Trier les prêts du jour à l'écran de circulation"
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -5933,6 +5949,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "les informations des tâches en cron."
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr ""
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr "Supprimer"
 
@@ -6221,8 +6249,8 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "Afficher"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "le format, le public et les icônes de type de matériel dans les résultats XSLT MARC21 et les pages de détail dans l'OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
+msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -7413,12 +7441,12 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr "<br><strong>NOTE:</strong>Cette préférence système nécessite le cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Demandez à votre administrateur système de le planifier."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr "Supprimer les utilisateurs enregistrés à partir de l'OPAC, mais pas encore vérifié après"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
-msgstr "jours."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
+msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
@@ -9017,8 +9045,8 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr "Afficher"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "le format, le public et les icônes de type de matériel dans les résultats XSLT MARC21 et les pages de détail dans l'intranet."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
+msgstr ""
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"

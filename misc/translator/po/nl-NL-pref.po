@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2018-12-18 15:58+0000\n"
-"Last-Translator: vwooldrik <v.g.j.lutjewooldrik@saxion.nl>\n"
+"PO-Revision-Date: 2020-05-26 07:21+0000\n"
+"Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/18.05/nl-NL-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1545148703.007527\n"
+"X-POOTLE-MTIME: 1590477702.394687\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -626,6 +626,10 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1438,6 +1442,10 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -4282,6 +4290,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr ""
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr ""
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr ""
 
@@ -4554,10 +4574,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr ""
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr ""
 
@@ -4662,7 +4678,7 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr ""
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
 msgstr ""
 
 # Circulation > Interface
@@ -5770,7 +5786,7 @@ msgstr "i18n_l10n.pref#CalendarFirstDayOfWeek# comme premier jour de la semaine 
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr "i18n_l10n.pref#TimeFormat# . <b>Let op:</b> Wijzig deze instelling niet op een productieserver met te late items met oplopende boetes. Dit resulteert in dubbele boetes!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -5814,7 +5830,7 @@ msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr "i18n_l10n.pref#dateformat# . <b>Let op:</b> Wijzig deze instelling niet op een productieserver met te late items met oplopende boetes. Dit resulteert in dubbele boetes!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -5930,6 +5946,18 @@ msgstr ""
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# information from cron jobs."
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
 msgstr ""
 
 # Logging > Debugging
@@ -6221,7 +6249,7 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
 # OPAC > Privacy
@@ -7413,11 +7441,11 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
 # OPAC > Self Registration
@@ -9017,7 +9045,7 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
 msgstr ""
 
 # Staff Client > Options

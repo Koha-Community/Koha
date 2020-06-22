@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2020-01-17 14:28+0000\n"
+"PO-Revision-Date: 2020-05-16 06:58+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1579271289.805401\n"
+"X-POOTLE-MTIME: 1589612318.256363\n"
 "X-Pootle-Path: /hi/18.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -627,6 +627,10 @@ msgstr "admin.pref#UsageStats# <br><strong>नोट:</strong> Tवह अन्
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "admin.pref#UsageStats# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है <code>misc/cronjobs/share_usage_with_koha_community.pl</code> क्रॉनजॉब. अपने सिस्टम प्रशासक से इसे शेड्यूल करने के लिए कहें."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+msgstr "admin.pref#UsageStats# <br><strong>नोट:</strong> आपको उपयोग करना चाहिए <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">Hea से संबंधित वरीयता को संपादित करने के लिए समर्पित व्यवस्थापक कॉन्फ़िगरेशन पृष्ठ </a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1441,6 +1445,10 @@ msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value h
 msgstr "admin.pref#UsageStatsGeolocation# <br><strong>नोट:</strong> यदि UsageStats सिस्टम वरीयता को \"साझा न करें\" पर सेट किया गया है, तो इस मान का कोई प्रभाव नहीं पड़ता है."
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr "admin.pref#UsageStatsGeolocation# <br><strong>नोट:</strong> आपको अवश्य उपयोग करना चाहिए <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">इस प्राथमिकता को संपादित करने के लिए समर्पित व्यवस्थापक कॉन्फ़िगरेशन पृष्ठ </a>."
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "admin.pref#UsageStatsGeolocation# मुख्य पुस्तकालय का जियोलोकेशन: "
 
@@ -2112,19 +2120,19 @@ msgstr "cataloguing.pref # NewItemsDefaultLocation # जब आइटम बन�
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# <br />"
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# <br />"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# Don't show"
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# मत दिखाओ"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# सामान्य दृश्य जैसे अन्य पृष्ठों से फ़ील्ड्स को छुपाने के लिए, प्रशासन मॉड्यूल के मार्क ग्रंथ सूची ढांचे में उप-क्षेत्रों के लिए दृश्यता सेटिंग्स का उपयोग करें।"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# 'शीर्षक नोट्स' टैब में और ओपेक और स्टाफ इंटरफेस विवरण पृष्ठों पर 'विवरण' टैब में फ़ील्ड नोट करें। कई फ़ील्ड को अलग करने के लिए अल्पविराम का उपयोग करें। उदाहरण: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2410,7 +2418,7 @@ msgstr "cataloguing.pref # itemcallnumber # मार्क subfield नक्�
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr ""
+msgstr "cataloguing.pref#itemcallnumber# एक आइटम के लिए। (उदाहरण के लिए, इसमें देखने के लिए कई सबफील्ड हो सकते हैं <code>082ab</code> 082 उपक्षेत्रों में दिखेगा a और b.)</br>नोट: रिकॉर्ड में उपक्षेत्रों के क्रम को संरक्षित किया जाएगा.<br />उदाहरण (मार्क21 रिकॉर्ड के लिए): <strong>डेवी</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>आइटम रिकॉर्ड से</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -4282,6 +4290,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "circulation.pref # TransfersMaxDaysWarning # दिनों के बाद यह भेजा गया था।"
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr "circulation.pref#TrapHoldsOnOrder# फसाओं मत"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr "circulation.pref#TrapHoldsOnOrder# जाल में फसाना"
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr "circulation.pref#TrapHoldsOnOrder# आइटम जो लोन के लिए नहीं हैं, लेकिन होल्ड को भरने के लिए (notforloan < 0) होल्ड करने योग्य ."
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr "circulation.pref#UpdateItemLocationOnCheckin# उदाहरण:<br/>"
 
@@ -4554,10 +4574,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr "circulation.pref#finesMode# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है <code>misc/cronjobs/fines.pl</code> क्रॉन जॉब. इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "circulation.pref # finesMode # गणना (लेकिन केवल व्यवस्थापक को डाक के लिए)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "circulation.pref # finesMode # गणना और आरोप"
 
@@ -4662,8 +4678,8 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr "circulation.pref # todaysIssuesDefaultSortOrder # तरह से प्रचलन पेज पर आज के checkouts"
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "circulation.pref # todaysIssuesDefaultSortOrder # नियत तारीख।"
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
+msgstr "circulation.pref#todaysIssuesDefaultSortOrder# चेकआउट समय."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -5933,6 +5949,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "logs.pref # CronjobLog # क्रॉन नौकरियों से जानकारी।"
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr "logs.pref#DumpSearchQueryTemplate# करें"
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr "logs.pref#DumpSearchQueryTemplate# नही करे"
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr "logs.pref#DumpSearchQueryTemplate# टेम्पलेट पैरामीटर के रूप में डंप खोज क्वेरी की आवश्यकता है, DumpTemplateVars[interface] को दिखाई देना चाहिए."
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr "logs.pref # DumpTemplateVarsIntranet # Do"
 
@@ -6221,8 +6249,8 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "opac.pref # DisplayOPACiconsXSLT # दिखाएँ"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "opac.pref # DisplayOPACiconsXSLT # प्रारूप, XSLT MARC21 परिणामों में दर्शकों को, और सामग्री के प्रकार का प्रतीक है और ओपेक में विस्तार पृष्ठों की है।"
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
+msgstr "opac.pref#DisplayOPACiconsXSLT# प्रारूप, दर्शक और सामग्री प्रकार के चिह्न और विवरण XSLT मार्क21 परिणाम और विवरण पेज ओपेक में."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -7413,12 +7441,12 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए <code>misc/cronjobs/cleanup_database.pl</code> क्रानजॉब की आवश्यकता होती है। इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr "opac.pref # PatronSelfRegistrationExpireTemporaryAccountsDelay # ओपेक के माध्यम से पंजीकृत संरक्षक हटाएँ, लेकिन अभी तक के बाद सत्यापित नहीं"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# PatronSelfRegistrationDefaultCategory द्वारा इंगित श्रेणी में अभी भी संरक्षक हटाएं"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
-msgstr "opac.pref # PatronSelfRegistrationExpireTemporaryAccountsDelay # दिनों के लिए।"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
+msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# खाता बनाने के बाददिन "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
@@ -9017,8 +9045,8 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr "staff_client.pref # DisplayIconsXSLT # दिखाएँ"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "staff_client.pref # DisplayIconsXSLT # प्रारूप, XSLT MARC21 परिणाम और कर्मचारियों को ग्राहक में विस्तार पन्नों में दर्शकों को, और सामग्री के प्रकार प्रतीक।"
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
+msgstr "staff_client.pref#DisplayIconsXSLT# वह XSLT MARC21 के परिणामों और विवरणों को प्रारूप, दर्शक और सामग्री प्रकार के विवरण और स्टाफ क्लाइंट में विवरण पृष्ठ।"
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"

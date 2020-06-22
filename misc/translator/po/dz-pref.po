@@ -30,7 +30,7 @@ msgid "accounting.pref#FinePaymentAutoPopup# Don't"
 msgstr ""
 
 # Accounting > Policy
-msgid "accounting.pref#FinePaymentAutoPopup# automatically display a print dialog for a payment receipt when making a payment.."
+msgid "accounting.pref#FinePaymentAutoPopup# automatically display a print dialog for a payment receipt when making a payment."
 msgstr ""
 
 # Accounting > Policy
@@ -611,6 +611,10 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
 msgstr ""
 
 # Administration > Share anonymous usage statistics
@@ -1426,6 +1430,10 @@ msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value h
 msgstr ""
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr ""
 
@@ -2096,11 +2104,19 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show these"
+msgid "cataloguing.pref#NotesBlacklist# <br />"
 msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
+msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
 msgstr ""
 
 # Cataloging > Display
@@ -2386,7 +2402,7 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr ""
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
 msgstr ""
 
 # Cataloging > Record Structure
@@ -2614,18 +2630,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr ""
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr ""
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr ""
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr ""
 
@@ -2635,6 +2639,26 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -2778,7 +2802,47 @@ msgid "circulation.pref#ArticleRequestsLinkControl# article request link on sear
 msgstr ""
 
 # Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Author"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Chapters"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Date"
+msgstr ""
+
+# Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# For records that are record level or item level requestable, make the following fields mandatory"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Issue"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Pages"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Title"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFields# Volume"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Author"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Chapters"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Date"
 msgstr ""
 
 # Circulation > Article Requests
@@ -2786,7 +2850,51 @@ msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# For records that
 msgstr ""
 
 # Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Issue"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Pages"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Title"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Volume"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Author"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Chapters"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Date"
+msgstr ""
+
+# Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# For records that are only record level requestable, make the following fields mandatory"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Issue"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Pages"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Title"
+msgstr ""
+
+# Circulation > Article Requests
+msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -3030,7 +3138,7 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr ""
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
 msgstr ""
 
 # Circulation > Return Claims
@@ -3146,15 +3254,15 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
 msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
 msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
 msgstr ""
 
 # Circulation > Holds Policy
@@ -3516,6 +3624,26 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# Mark items as returned when flagged as lost "
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# from the 'Holds to pull' list"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# from the batch item modification tool"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# from the items tab of the catalog module"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# from the longoverdue cronjob"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# when cataloguing an item"
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -4091,15 +4219,15 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -4144,6 +4272,18 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
 msgstr ""
 
 # Circulation > Checkin Policy
@@ -4343,11 +4483,27 @@ msgid "circulation.pref#decreaseLoanHighHolds# . Ignore items with the following
 msgstr ""
 
 # Circulation > Holds Policy
+msgid "circulation.pref#decreaseLoanHighHolds# Damaged"
+msgstr ""
+
+# Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# Don't enable"
 msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# Enable"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#decreaseLoanHighHolds# Lost"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#decreaseLoanHighHolds# Not for loan"
+msgstr ""
+
+# Circulation > Holds Policy
+msgid "circulation.pref#decreaseLoanHighHolds# Withdrawn"
 msgstr ""
 
 # Circulation > Holds Policy
@@ -4383,15 +4539,15 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
+msgid "circulation.pref#finesCalendar# Use the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
 msgstr ""
 
 # Circulation > Fines Policy
@@ -4400,10 +4556,6 @@ msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-
-# Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
 msgstr ""
 
 # Circulation > Fines Policy
@@ -4511,7 +4663,7 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr ""
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
 msgstr ""
 
 # Circulation > Interface
@@ -4523,23 +4675,23 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
+msgid "circulation.pref#useDaysMode# when calculating the date due."
 msgstr ""
 
 # Circulation > Fines Policy
@@ -4643,10 +4795,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr ""
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr ""
 
@@ -4656,6 +4804,14 @@ msgstr ""
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
+msgstr ""
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr ""
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
 msgstr ""
 
 # Enhanced Content > Local or remote cover images
@@ -4780,6 +4936,18 @@ msgstr ""
 
 # Enhanced Content > Coce Cover images cache
 msgid "enhanced_content.pref#CoceHost# Coce server URL"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Amazon Web Services"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Google Books"
+msgstr ""
+
+# Enhanced Content > Coce Cover images cache
+msgid "enhanced_content.pref#CoceProviders# Open Library"
 msgstr ""
 
 # Enhanced Content > Coce Cover images cache
@@ -5766,6 +5934,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr ""
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr ""
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr ""
 
@@ -6054,7 +6234,7 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
 msgstr ""
 
 # OPAC > Privacy
@@ -6458,7 +6638,51 @@ msgid "opac.pref#OPACSuggestionMandatoryFields# <br />Note: if none of the above
 msgstr ""
 
 # OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Author"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Collection title"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Copyright or publication date"
+msgstr ""
+
+# OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Fields that should be mandatory for patron purchase suggestions:"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# ISBN, ISSN or other standard number"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Item type"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Library or branch"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
+msgstr ""
+
+# OPAC > Policy
+msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
 msgstr ""
 
 # OPAC > Appearance
@@ -6566,11 +6790,59 @@ msgid "opac.pref#OpacAdditionalStylesheet# to override specified settings from t
 msgstr ""
 
 # OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Language"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Location and availability"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Publication date"
+msgstr ""
+
+# OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
 msgstr ""
 
 # OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchMoreOptions# Subtypes"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Item types"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Language"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Location and availability"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Publication date"
+msgstr ""
+
+# OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Sorting"
+msgstr ""
+
+# OPAC > Advanced Search Options
+msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
 msgstr ""
 
 # OPAC > Policy
@@ -6658,7 +6930,43 @@ msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pag
 msgstr ""
 
 # OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# BibTeX"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# Dublin Core"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# ISBD"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# MARC-8 encoded MARC"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# MARCXML"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# MODS"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# RIS"
+msgstr ""
+
+# OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields"
 msgstr ""
 
 # OPAC > Appearance
@@ -7118,11 +7426,11 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
 # OPAC > Self Registration
@@ -7330,7 +7638,23 @@ msgid "opac.pref#ShowReviewerPhoto# reviewer's avatar beside comments in OPAC. T
 msgstr ""
 
 # OPAC > Features
+msgid "opac.pref#SocialNetworks# Email"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# Facebook"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# LinkedIn"
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#SocialNetworks# Show"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#SocialNetworks# Twitter"
 msgstr ""
 
 # OPAC > Features
@@ -7702,7 +8026,7 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
 msgstr ""
 
 # Patrons > General
@@ -8706,7 +9030,7 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
 msgstr ""
 
 # Staff Client > Options
@@ -9079,6 +9403,10 @@ msgstr ""
 
 # Web services > Mana KB
 msgid "web_services.pref#AutoShareWithMana# Fields automatically shared with Mana KB"
+msgstr ""
+
+# Web services > Mana KB
+msgid "web_services.pref#AutoShareWithMana# Subscriptions"
 msgstr ""
 
 # Web services > ILS-DI

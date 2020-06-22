@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2020-02-21 10:46+0000\n"
-"Last-Translator: Anthony MAO <mao@lins.fju.edu.tw>\n"
+"PO-Revision-Date: 2020-05-29 02:38+0000\n"
+"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1582281961.218116\n"
+"X-POOTLE-MTIME: 1590719898.522413\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -627,6 +627,10 @@ msgstr "<br><strong>說明：</strong> 此偏好設為 \"無\" 則其他的 \"Us
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>說明：</strong> 此系統偏好需啟用 <code>misc/cronjobs/share_usage_with_koha_community.pl</code> 工作排程。"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -1441,6 +1445,10 @@ msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value h
 msgstr "<br><strong>說明：</strong> 若 UsageStats 系統偏好設為 \"不共享\" 則此值無作用。"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "總館的位置："
 
@@ -2120,11 +2128,11 @@ msgstr "不顯示"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
+msgstr "標準檢視隱藏的欄位，可以用管理模組內 MARC 書目框架的設定檢視其中的分欄。"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
+msgstr "在 OPAC 與館員介面的詳情中，'題名說明' 分頁與 '說明' 分頁的說明欄位。使用逗點區隔多個欄位。如：500,502 (MARC21)；300,328 (UNIMARC)。"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2510,7 +2518,7 @@ msgstr "輪轉館藏模組"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
-msgstr "如，輸入預期讀者的鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
+msgstr "如，輸入預期讀者的關鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following target audience values from checking out inappropriate materials:"
@@ -2622,7 +2630,7 @@ msgstr "不允許"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# hold requests to be placed on and filled by damaged items."
-msgstr "預約毀損的館藏。"
+msgstr "circulation.pref#AllowHoldsOnDamagedItems# 預約毀損的館藏。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnPatronsPossessions# Allow"
@@ -2714,7 +2722,7 @@ msgstr "不允許"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
-msgstr "讀者續借未被預約的館藏。"
+msgstr "circulation.pref#AllowRenewalIfOtherItemsAvailable# 讀者續借未被預約的館藏。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -4282,6 +4290,18 @@ msgid "circulation.pref#TransfersMaxDaysWarning# days after it was sent."
 msgstr "天在送出之後。"
 
 # Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# Trap"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
+msgstr ""
+
+# Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
 msgstr "範例：<br/>"
 
@@ -4554,10 +4574,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr "<br><strong>說明</strong> 此系統偏好需啟用 <code>misc/cronjobs/fines.pl</code> 工作排程。請洽您的系統管理員。"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "計算(但祗寄給管理者)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "計算並收取"
 
@@ -4579,7 +4595,7 @@ msgstr "啟用"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# the automatic use of a keyword catalog search if the phrase entered as a barcode on the checkout page does not turn up any results during an item barcode search."
-msgstr "在借出頁面鍵入條碼後，系統沒有任何回應時，自動轉換為鍵詞搜尋。"
+msgstr "在借出頁面鍵入條碼後，系統沒有任何回應時，自動轉換為關鍵詞搜尋。"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
@@ -4662,8 +4678,8 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on 
 msgstr "在流通頁面，排序今天的借出"
 
 # Circulation > Interface
-msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "到期日。"
+msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -5933,6 +5949,18 @@ msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "來自工作排程的資訊。"
 
 # Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Do"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# Don't"
+msgstr ""
+
+# Logging > Debugging
+msgid "logs.pref#DumpSearchQueryTemplate# dump search query as a template parameter, requires DumpTemplateVars[interface] to be visible."
+msgstr ""
+
+# Logging > Debugging
 msgid "logs.pref#DumpTemplateVarsIntranet# Do"
 msgstr "做"
 
@@ -6221,8 +6249,8 @@ msgid "opac.pref#DisplayOPACiconsXSLT# Show"
 msgstr "顯示"
 
 # OPAC > Appearance
-msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "在 XSLT MARC21 結果與 OPAC 詳情頁面的格式、預期讀者與資料類型圖示。"
+msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
+msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -7413,12 +7441,12 @@ msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong
 msgstr "<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr "經由OPAC刪除註冊的讀者，但不必驗證"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+msgstr ""
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
-msgstr "天數。"
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
+msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
@@ -8482,7 +8510,7 @@ msgstr "下個讀者的記錄。"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
-msgstr "<br/>館藏數超過上限時可能顯示錯誤的可用狀態。狀態將顯示在記錄詳情內。"
+msgstr "<br/>館藏數超過上限時可能顯示錯誤的可借狀態。狀態將顯示在記錄詳情內。"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit."
@@ -9017,8 +9045,8 @@ msgid "staff_client.pref#DisplayIconsXSLT# Show"
 msgstr "顯示"
 
 # Staff Client > Appearance
-msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "在XSLT MARC21 結果與館藏介面詳情頁面裡的格式、預期讀者及資料類型圖示。"
+msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
+msgstr ""
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9587,3 +9615,4 @@ msgstr "祗送回"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
+
