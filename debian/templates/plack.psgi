@@ -36,6 +36,7 @@ use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Logger;
 
 use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 {
@@ -65,9 +66,13 @@ my $apiv1  = builder {
     $server->to_psgi_app;
 };
 
+Koha::Logger->get;
+
 builder {
     enable "ReverseProxy";
     enable "Plack::Middleware::Static";
+    enable "Log4perl", category => "plack";
+    enable "LogWarn";
 
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
