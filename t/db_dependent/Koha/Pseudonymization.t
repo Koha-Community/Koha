@@ -102,16 +102,16 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     $pseudonymized = Koha::PseudonymizedTransactions->search( { itemnumber => $item->itemnumber } )->next;
     like( $pseudonymized->hashed_borrowernumber,
         qr{^\$2a\$08\$}, "The hashed_borrowernumber must be a bcrypt hash" );
-    is( $pseudonymized->datetime,               $statistic->datetime );
-    is( $pseudonymized->transaction_branchcode, $statistic->branch );
-    is( $pseudonymized->transaction_type,       $statistic->type );
-    is( $pseudonymized->itemnumber,             $item->itemnumber );
-    is( $pseudonymized->itemtype,               $item->effective_itemtype );
-    is( $pseudonymized->holdingbranch,          $item->holdingbranch );
-    is( $pseudonymized->homebranch,             $item->homebranch );
-    is( $pseudonymized->location,               $item->location );
-    is( $pseudonymized->itemcallnumber,         $item->itemcallnumber );
-    is( $pseudonymized->ccode,                  $item->ccode );
+    is( $pseudonymized->datetime,               $statistic->datetime,      'datetime attribute copied correctly' );
+    is( $pseudonymized->transaction_branchcode, $statistic->branch,        'transaction_branchcode copied correctly' );
+    is( $pseudonymized->transaction_type,       $statistic->type,          'transacttion_type copied correctly' );
+    is( $pseudonymized->itemnumber,             $item->itemnumber,         'itemnumber copied correctly' );
+    is( $pseudonymized->itemtype,               $item->effective_itemtype, 'itemtype copied correctly' );
+    is( $pseudonymized->holdingbranch,          $item->holdingbranch,      'holdingbranch copied correctly' );
+    is( $pseudonymized->homebranch,             $item->homebranch,         'homebranch copied correctly' );
+    is( $pseudonymized->location,               $item->location,           'location copied correctly' );
+    is( $pseudonymized->itemcallnumber,         $item->itemcallnumber,     'itemcallnumber copied correctly' );
+    is( $pseudonymized->ccode,                  $item->ccode,              'ccode copied correctly' );
 
     $schema->storage->txn_rollback;
 };
