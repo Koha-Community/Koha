@@ -463,9 +463,9 @@ if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransact
     Koha::PseudonymizedTransactions->filter_by_last_update(
         {
             timestamp_column_name => 'datetime',
-            ( $pPseudoTransactions     ? ( days => $pPseudoTransactions     ) : () ),
-            ( $pPseudoTransactionsFrom ? ( from => $pPseudoTransactionsFrom ) : () ),
-            ( $pPseudoTransactionsTo   ? ( to   => $pPseudoTransactionsTo   ) : () ),
+            ( defined $pPseudoTransactions  ? ( days => $pPseudoTransactions     ) : () ),
+            ( $pPseudoTransactionsFrom      ? ( from => $pPseudoTransactionsFrom ) : () ),
+            ( $pPseudoTransactionsTo        ? ( to   => $pPseudoTransactionsTo   ) : () ),
         }
     )->delete;
     print "Done with purging pseudonymized transactions.\n" if $verbose;
