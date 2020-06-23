@@ -1696,7 +1696,7 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr ""
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
 # Authorities > General
@@ -2136,10 +2136,6 @@ msgstr "näytettävät poistettujen tietueiden kentät yhdistämisen jälkeen"
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(Anna hyllypaikan lyhenne tai jätä tyhjäksi jos uutuusaineiston hyllypaikkaa ei käytetä)."
-
-# Cataloging > Record structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -4512,6 +4508,18 @@ msgstr "aineistolajiin"
 msgid "circulation.pref#UseBranchTransferLimits# library transfer limits based on"
 msgstr "aineistokuljetusten rajoituksia, jotka perustuvat"
 
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Don't use"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Use"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# circulation desks with circulation."
+msgstr ""
+
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
 msgstr "Älä käytä"
@@ -6195,8 +6203,8 @@ msgstr "Yksityisyysasetukset"
 msgid "opac.pref Restricted page"
 msgstr "Rajoitettu sivu"
 
-# OPAC > Self registration
-msgid "opac.pref Self registration"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
 msgstr ""
 
 # OPAC > Shelf browser
@@ -6571,15 +6579,15 @@ msgstr ""
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr ""
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "Salli"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "Älä salli"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "käyttäjän muuttaa yhteystietojaan verkkokirjaston kautta."
 
@@ -7495,131 +7503,131 @@ msgstr ""
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(erottele sarakkeet |-merkillä)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>tietokannan sarakkeet</a> eivät näy asiakkaan itserekisteröitymissivulla:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Salli"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Älä salli"
 
-# OPAC > Self registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "Näytä seuraava lisäohje asiakkaille, jotka rekisteröityvät itse verkkokirjaston kautta (HTML on sallittu):"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "(erota sarakkeet |-merkillä)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>tietokannan sarakkeet</a> ovat pakollisia asiakastietojen rekisteröimissivulla:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(erota sarakkeet |-merkillä)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>tietokannan sarakkeet</a> eivät näy asiakkaan itserekisteröitymissivulla:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Käytä asiakastyyppiä"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "oletusasiakastyyppinä, kun asiakas rekisteröityy verkkokirjaston kautta."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "Vaadi"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "Älä vaadi"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr ", että asiakkaan sähköpostiosoite (borrowers.email) on uniikki itserekisteröitymisessä. Sähköpostiosoitetta ei hyväksytä, jos se on jo tietokannassa."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(erottele kirjastotunnukset |-merkillä)."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "Salli itserekisteröityminen seuraaville kirjastoille:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "Jos tyhjä, listataan kaikki kirjastot."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "Näytä ja täytä automaattisesti"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "Älä näytä ja täytä automaattisesti"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "salasana ja käyttäjätunnus kirjautumissivulla, kun asiakas on itserekisteröitynyt."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "Älä vaadi"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Vaadi"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr ""
 

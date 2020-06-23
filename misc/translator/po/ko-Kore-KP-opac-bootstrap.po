@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-05-13 17:49-0300\n"
+"POT-Creation-Date: 2020-06-18 07:17-0300\n"
 "PO-Revision-Date: 2015-10-08 08:45+0000\n"
 "Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -210,10 +210,21 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
 #, c-format
 msgid "%s %s (not approved) %s "
 msgstr ""
+
+#. %1$s:  ELSE 
+#. %2$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %3$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %4$s:  HTML5MediaSet.child | html 
+#. %5$s:  HTML5MediaSet.srcblock | url 
+#. %6$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
+#, fuzzy, c-format
+msgid "%s %s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s 저자 %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'biblio_exists' 
@@ -450,7 +461,7 @@ msgstr "%s%s개인 전용%s공유됨%s%s "
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:117
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully added."
 msgstr "%s %s 태그%s태그들%s 성공적으로 추가되었습니다."
@@ -459,7 +470,7 @@ msgstr "%s %s 태그%s태그들%s 성공적으로 추가되었습니다."
 #. %2$s:  IF ( deleted_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:120
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully deleted."
 msgstr "%s%s 태그%s태그들%s 삭제 성공."
@@ -488,16 +499,6 @@ msgstr "%s (레코드 no. %s)"
 #, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "%s (관련 검색 결과: %s %s %s ). %s "
-
-#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
-#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
-#. %3$s:  HTML5MediaSet.child | html 
-#. %4$s:  HTML5MediaSet.srcblock | html 
-#. %5$s:  HTML5MediaSet.typeblock | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:957
-#, fuzzy, c-format
-msgid "%s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s %s 저자 %s %s "
 
 #. %1$s:  USE raw 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
@@ -890,7 +891,7 @@ msgstr "%s 무인대출반납 시스템"
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s 다른 이용자들의 태그 보기 %s 태그 보기 %s: "
@@ -1065,7 +1066,7 @@ msgstr "%s 의 리뷰"
 #. %3$s:  END 
 #. %4$s:  END # /IF MY_TAG.XSLTBloc 
 #. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:151
 #, fuzzy, c-format
 msgid "%s by %s %s %s %s "
 msgstr "%s 저자 %s %s %s "
@@ -1857,7 +1858,7 @@ msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 최신 의견들"
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1286
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1291
 #, fuzzy, c-format
 msgid "%s%s%sLink to resource%s"
 msgstr "자료 연결"
@@ -2171,8 +2172,8 @@ msgstr "%s목록:%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, fuzzy, c-format
 msgid "%sby %s%s"
 msgstr "%s, 저자 %s%s "
@@ -3048,7 +3049,7 @@ msgstr "연체 (%s)"
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1301
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1306
 #, fuzzy, c-format
 msgid "(priority %s)"
 msgstr "우선순위"
@@ -3441,7 +3442,7 @@ msgstr "고급 검색"
 msgid "All"
 msgstr "전체"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:75
 #, c-format
 msgid "All Tags"
 msgstr "모든 태그"
@@ -3667,7 +3668,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "정말 선택한 검색 이력 항목들을 삭제하겠습니까?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 #, fuzzy
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "정말 이 목록을 삭제하시겠습니까?"
@@ -3969,7 +3970,7 @@ msgstr "사용가능한 간행물"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:443
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, fuzzy, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr "평균 순위: %s (%s 표)"
@@ -3995,13 +3996,13 @@ msgstr ""
 msgid "Back to lists"
 msgstr "목록으로 돌아가기"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 #, c-format
 msgid "Back to results"
 msgstr "결과로 돌아가기"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 msgid "Back to the results search list"
 msgstr "검색결과 목록으로 돌아갑니다"
 
@@ -4012,7 +4013,7 @@ msgstr "검색결과 목록으로 돌아갑니다"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
@@ -4094,8 +4095,8 @@ msgstr "계층구조로 보기"
 msgid "Browse our catalog"
 msgstr "도서목록 찾아보기"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1020
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
 #, c-format
 msgid "Browse results"
 msgstr "찾아보기 결과"
@@ -4107,8 +4108,8 @@ msgstr "찾아보기 결과"
 msgid "Browse search"
 msgstr "계층구조로 보기"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, c-format
 msgid "Browse shelf"
 msgstr "책장 보기"
@@ -4166,7 +4167,7 @@ msgstr "청구기호"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1150
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:250
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
@@ -4229,7 +4230,7 @@ msgstr "청구기호: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1349
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
@@ -4602,7 +4603,7 @@ msgstr "여기를 눌러 로그인하세요"
 msgid "Click here to view them all."
 msgstr "모두 보기를 원하시면 여기를 클릭하세요."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:970
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:975
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "이미지 뷰어로 보려면 이미지를 클릭하세요"
@@ -4636,8 +4637,8 @@ msgstr "새 창에서 열려면 클릭하세요"
 msgid "Click to view in Google Books"
 msgstr "구글 북스에서 보려면 클릭하세요"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1019
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1067
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, c-format
 msgid "Close"
 msgstr "닫기"
@@ -4688,7 +4689,7 @@ msgstr "관심있는 자료들를 수집하세요"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1142
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
 #, c-format
 msgid "Collection"
 msgstr "장서"
@@ -4843,7 +4844,7 @@ msgstr "%s의 내용"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, c-format
 msgid "Copy number"
 msgstr "복본 번호"
@@ -4916,7 +4917,7 @@ msgstr "강좌 번호:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:21
 #, c-format
 msgid "Course reserves"
@@ -4991,7 +4992,7 @@ msgstr "만든 사람"
 msgid "Credits (%s)"
 msgstr "잔액 (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #, c-format
 msgid "Current location"
 msgstr "현재 위치"
@@ -5046,7 +5047,7 @@ msgstr "DVD 비디오 / 비디오디스크"
 msgid "Date"
 msgstr "날짜"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:598
@@ -5066,13 +5067,13 @@ msgstr "입수일: 최신자료순으로 정렬"
 msgid "Date added (oldest to newest)"
 msgstr "입수일: 오래된 순서대로 정렬"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:161
 #, c-format
 msgid "Date added:"
 msgstr "추가된 날짜:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
 #, c-format
 msgid "Date due"
 msgstr "만료일"
@@ -5178,7 +5179,7 @@ msgid "Delete selected"
 msgstr "선택항목 삭제"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:170
 #, fuzzy
 msgid "Delete selected tags"
 msgstr "선택항목 삭제"
@@ -6075,8 +6076,8 @@ msgid "Go"
 msgstr "이동"
 
 #. LI
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 msgid "Go to detail"
 msgstr "상세정보 보기"
 
@@ -6325,7 +6326,7 @@ msgid "Home libraries"
 msgstr "도서관 본관"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1140
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:134
 #, c-format
 msgid "Home library"
@@ -6772,12 +6773,12 @@ msgstr "%s 자료(들) 대출됨"
 msgid "Item damaged"
 msgstr "파손자료"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
 #, c-format
 msgid "Item hold queue priority"
 msgstr "우선 예약 대기중인 자료"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #, c-format
 msgid "Item holds"
 msgstr "자료 예약"
@@ -6808,7 +6809,7 @@ msgstr "연장할 수 없습니다"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:541
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, c-format
 msgid "Item type"
@@ -7283,8 +7284,8 @@ msgstr "내 목록을 만들기 위해서는 로그인하세요"
 msgid "Log in to create your own lists"
 msgstr "내 목록을 만들기 위해서는 로그인하세요"
 
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:97
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:99
 #, c-format
 msgid "Log in to see your own saved tags."
 msgstr "내 태그를 저장하기 위해서는 로그인하세요."
@@ -7469,7 +7470,7 @@ msgstr "3월"
 msgid "Match:"
 msgstr "일치: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "지정된 태그가 없습니다."
@@ -7716,14 +7717,14 @@ msgstr "%s%s%s도서관%s 뉴스"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1040
 #, c-format
 msgid "Next"
 msgstr "다음"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:84
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 #, fuzzy, c-format
 msgid "Next "
 msgstr "다음"
@@ -8131,7 +8132,7 @@ msgid "Note: you can only delete your own tags."
 msgstr "알림: 본인이 단 태그만 삭제하실 수 있습니다."
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:63
 #, fuzzy, c-format
 msgid ""
 "Note: you can only delete your own tags. %s Note: your tag contained markup "
@@ -8175,7 +8176,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:39
 #, c-format
 msgid "Notes"
@@ -8226,8 +8227,8 @@ msgid "Nov"
 msgstr "11월"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:536
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:983
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:988
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 #, c-format
 msgid "Novelist Select"
 msgstr "소설가 선택"
@@ -8267,7 +8268,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
 msgid "OK"
 msgstr "OK"
 
@@ -8876,7 +8877,7 @@ msgid "Please select a specific item for this article request."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 msgid "Please select a tag to delete."
 msgstr ""
 
@@ -8896,7 +8897,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
 #, c-format
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "일반 텍스트로 다시 시도해 보시기 바랍니다. %s식별 불가능 오류. %s "
@@ -8973,8 +8974,8 @@ msgstr "미리보기"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, c-format
 msgid "Previous"
 msgstr "이전"
@@ -9850,7 +9851,7 @@ msgstr "새 자료를 스캔하거나 바코드를 입력하세요:"
 #. INPUT type=submit name=do
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1353
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
@@ -9994,12 +9995,12 @@ msgid "See also:"
 msgstr "같이 보기:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -10019,7 +10020,7 @@ msgstr "특수자료 선택:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:51
@@ -10030,7 +10031,7 @@ msgstr "특수자료 선택:"
 msgid "Select all"
 msgstr "모두 선택"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1343
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "모두 선택"
@@ -10050,7 +10051,7 @@ msgstr "Select searches to: "
 msgid "Select suggestions to: "
 msgstr "Select suggestions to: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1344
 #, c-format
 msgid "Select the item(s) to search"
 msgstr "검색할 자료를 선택하세요"
@@ -10183,7 +10184,7 @@ msgstr "세션 종료됨"
 msgid "Settings updated"
 msgstr "설정 업데이트됨"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:709
 #, c-format
 msgid "Share"
@@ -10200,7 +10201,7 @@ msgid "Share a list with another patron"
 msgstr "다른 이용자와 목록 공유"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1104
 msgid "Share by email"
 msgstr "이메일로 공유하기"
 
@@ -10210,22 +10211,22 @@ msgid "Share list"
 msgstr "목록 공유하기"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 msgid "Share on Facebook"
 msgstr "Facebook에서 공유"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 msgid "Share on LinkedIn"
 msgstr "LinkedIn에서 공유"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "LinkedIn에서 공유"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "현재 위치"
@@ -10591,7 +10592,7 @@ msgstr "통계"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:787
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
 #, c-format
 msgid "Status"
@@ -10948,7 +10949,7 @@ msgstr "태그 상태입니다."
 msgid "Tag status here. "
 msgstr "태그 상태입니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:137
 #, fuzzy, c-format
 msgid "Tag:"
 msgstr "태그: %s"
@@ -10983,7 +10984,7 @@ msgstr "기술 보고서"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Term"
@@ -11294,7 +11295,7 @@ msgstr "%s일에 구독이 만료되었습니다"
 
 #. %1$s:  ERROR.scrubbed | html 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
 #, fuzzy, c-format
 msgid ""
 "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
@@ -11342,18 +11343,17 @@ msgstr "처리 대기중인 구매희망신청이 없습니다."
 msgid "There is no minimum or maximum character length."
 msgstr ""
 
-#. %1$s:  IF ( ERROR.tagsdisabled ) 
-#. %2$s:  ELSIF ( ERROR.badparam ) 
-#. %3$s:  ERROR.badparam | html 
-#. %4$s:  ELSIF ( ERROR.login ) 
-#. %5$s:  ELSIF ( ERROR.failed_delete ) 
-#. %6$s:  ERROR.failed_delete | html 
+#. %1$s:  IF ( ERROR.badparam ) 
+#. %2$s:  ERROR.badparam | html 
+#. %3$s:  ELSIF ( ERROR.login ) 
+#. %4$s:  ELSIF ( ERROR.failed_delete ) 
+#. %5$s:  ERROR.failed_delete | html 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:55
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"There was a problem with this operation: %s Sorry, tags are not enabled on "
-"this system. %s ERROR: illegal parameter %s %s ERROR: You must log in to "
-"complete that action. %s ERROR: You cannot delete the tag %s. "
+"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
+"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
+"the tag %s. "
 msgstr ""
 "이 작업에 오류가 있었습니다: %s 죄송합니다, 이 시스템에 사용 가능한 태그들이 "
 "아닙니다. %s 오류: 잘못된 매개변수입니다 %s %s 오류: 작업을 완료하기 위해서"
@@ -11490,7 +11490,7 @@ msgid "This news item does not exist. "
 msgstr "책바구니로 보내기 "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11548,7 +11548,7 @@ msgstr "목요일"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:491
@@ -11589,7 +11589,7 @@ msgstr "표제 주기사항"
 msgid "Title phrase"
 msgstr "제목 구절"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
@@ -11714,7 +11714,7 @@ msgstr "형식:"
 msgid "UF"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #, fuzzy, c-format
 msgid "URL"
 msgstr "URL(s)"
@@ -11947,7 +11947,7 @@ msgid "View on Amazon.com"
 msgstr "(Amazon.com 에의한) 평정척도:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1049
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1054
 #, fuzzy
 msgid "View record \"%s\""
 msgstr "레코드 저장"
@@ -11960,7 +11960,7 @@ msgid "View your search history"
 msgstr "검색중"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "Vol info"
 msgstr "권 정보"
@@ -12870,7 +12870,7 @@ msgstr "내 구매희망자료 신청"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "내 순위: %s,"
@@ -12929,7 +12929,7 @@ msgstr "귀하의 암호가 변경되었습니다."
 msgid "Your summary"
 msgstr "요약"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, fuzzy, c-format
 msgid "Your tags"
 msgstr "출판되지 않았습니다"
@@ -12968,13 +12968,13 @@ msgid "[ New list ]"
 msgstr "새 목록"
 
 #. INPUT type=text name=limit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:87
 #, fuzzy
 msgid "[% limit or"
 msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
 #, fuzzy, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr ""
@@ -13160,7 +13160,7 @@ msgid "for more information on what it does and how to configure it."
 msgstr "기능 및 설정 방법에 대한 더 자세한 정보입니다."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "here"
 msgstr "here"

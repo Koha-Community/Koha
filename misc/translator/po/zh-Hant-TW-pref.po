@@ -1697,8 +1697,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "使用以下的文字編輯附加於書目欄位 (可能為分欄 $2) 的權威紀錄控制指標。<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>說明：</strong> 此系統偏好需開啟 <code>misc/migration_tools/merge_authority.pl</code> 工作流程。請洽您的系統管理員。"
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2137,10 +2137,6 @@ msgstr "顯示合併後被刪除記錄的欄位"
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(應該是地區代碼，空白表示不用它)。"
-
-# Cataloging > Record structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>說明：</strong> 此系統偏好需啟用 <code>misc/cronjobs/cart_to_shelf.pl</code> 工作排程。請洽您的系統管理員。"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -4513,6 +4509,18 @@ msgstr "館藏類型"
 msgid "circulation.pref#UseBranchTransferLimits# library transfer limits based on"
 msgstr "圖書館轉移限制的基礎"
 
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Don't use"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Use"
+msgstr ""
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# circulation desks with circulation."
+msgstr ""
+
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
 msgstr "不使用"
@@ -6196,8 +6204,8 @@ msgstr "隱私"
 msgid "opac.pref Restricted page"
 msgstr "被限制的頁面"
 
-# OPAC > Self registration
-msgid "opac.pref Self registration"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
 msgstr ""
 
 # OPAC > Shelf browser
@@ -6572,15 +6580,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "供顯示 OpenURL 連結使用的館藏類型代碼 (以空格區隔) 清單："
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "允許"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "不允許"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "讀者從 OPAC 告知圖書館，他的連絡資訊已改變。"
 
@@ -7496,131 +7504,131 @@ msgstr "OpenURL 解析器的完整 URL (以 <code>http://</code> 或 <code>https
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "OpenURL 連結的文字 (若已在 OpenURLImageLocation 內設定則為影像題名)："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(以直線 | 區隔各欄)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "以下 <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>資料庫欄位</a> 將不會顯示在讀者自助修改的螢幕："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>說明：</strong> 此偏好 PatronSelfRegistrationDefaultCategory 需設定為有效的讀者類型代碼。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "允許"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "不允許"
 
-# OPAC > Self registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "經由 OPAC 登錄或修改讀者的帳號內容。"
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "顯示以下的額外指示(可使用 HTML 語法)給經由 OPAC 自行註冊的讀者："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "(以 | 區隔欄)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "以下 <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>資料庫欄位</a> 必須顯示在讀者鍵入螢幕："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(以 | 區隔欄)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "以下 <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>資料庫欄位</a> 將不會顯示在讀者自助登錄螢幕："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "使用讀者類型代碼"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "做為經由 OPAC 註冊讀者的預設讀者類型。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "考慮"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "不考慮"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "讀者的電子郵件帳號 (borrowers.email) 採用登錄時鍵入的。不接受與其他人重複的電子郵件帳號。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>說明：</strong> 此系統偏好必須用到 <code>misc/cronjobs/cleanup_database.pl</code> 工作排程。請洽您的系統管理員。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(以 | 區隔條碼)。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "下列圖書館啟用自我登記制度："
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "若空白，則列出全部圖書館。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "顯示並預填"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "不顯示且不預填"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "讀者自行登記後，顯示密碼與登入表單。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>說明：</strong> 此系統偏好需要啟用 <code>misc/cronjobs/cleanup_database.pl</code> 工作排程。請洽您的系統管理者。"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "不需要"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "必備"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "自助登錄讀者經由電子郵件確認。"
 
@@ -9995,3 +10003,4 @@ msgstr "祗送回"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
+

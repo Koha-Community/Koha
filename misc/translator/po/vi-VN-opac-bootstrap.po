@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-05-13 18:13-0300\n"
-"PO-Revision-Date: 2020-05-03 09:19+0000\n"
+"POT-Creation-Date: 2020-06-18 07:40-0300\n"
+"PO-Revision-Date: 2020-06-20 22:41+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1588497587.126872\n"
+"X-POOTLE-MTIME: 1592692865.657295\n"
 "X-Pootle-Path: /vi/18.05/vi-VN-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -215,10 +215,21 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
 #, c-format
 msgid "%s %s (not approved) %s "
 msgstr "%s %s (không được chấp nhận) %s"
+
+#. %1$s:  ELSE 
+#. %2$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %3$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %4$s:  HTML5MediaSet.child | html 
+#. %5$s:  HTML5MediaSet.srcblock | url 
+#. %6$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
+#, c-format
+msgid "%s %s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'biblio_exists' 
@@ -457,7 +468,7 @@ msgstr "%s %sĐược chia sẻ%sRiêng tư%s %s Công khai %s "
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:117
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully added."
 msgstr "Có %s %s từ khóa%stừ khóa%s được tạo thành công."
@@ -466,7 +477,7 @@ msgstr "Có %s %s từ khóa%stừ khóa%s được tạo thành công."
 #. %2$s:  IF ( deleted_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:120
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully deleted."
 msgstr "Có %s%s từ khóa%stừ khóa%s đã bị xóa."
@@ -495,16 +506,6 @@ msgstr "%s (Biểu ghi số %s)"
 #, fuzzy, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "%s (Tìm kiếm liên quan: %s %s %s ). %s "
-
-#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
-#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
-#. %3$s:  HTML5MediaSet.child | html 
-#. %4$s:  HTML5MediaSet.srcblock | html 
-#. %5$s:  HTML5MediaSet.typeblock | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:957
-#, c-format
-msgid "%s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s <%s > <%s src=\"%s\" %s /> "
 
 #. %1$s:  USE raw 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
@@ -669,9 +670,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "%s Delete %s Delete list %s "
-msgstr "Xóa đề xuất mua"
+msgstr "%s Xóa %s Xóa giá sách ảo %s"
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -709,9 +710,9 @@ msgstr "Hiện tại có %s tài liệu được ghi mượn cho bạn đọc"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:316
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library %s Libraries %s "
-msgstr "%s, tác giả: %s %s %s "
+msgstr "%s Thư viện %s Các thư viện %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
@@ -902,7 +903,7 @@ msgstr "Hệ thống mượn trả tự động %s"
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s Từ khóa của các bạn đọc khác %s Từ khóa để hiển thị %s: "
@@ -1076,10 +1077,10 @@ msgstr "%s , Tác giả: "
 #. %3$s:  END 
 #. %4$s:  END # /IF MY_TAG.XSLTBloc 
 #. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:153
-#, fuzzy, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:151
+#, c-format
 msgid "%s by %s %s %s %s "
-msgstr "%s, tác giả: %s %s %s "
+msgstr "%s tác giả %s %s %s %s "
 
 #. %1$s:  LoginBranchname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
@@ -1884,10 +1885,10 @@ msgstr "%s%s%sKoha online%s catalog bình luận mới nhất"
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1286
-#, fuzzy, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1291
+#, c-format
 msgid "%s%s%sLink to resource%s"
-msgstr "Liên kết tới tài nguyên "
+msgstr "%s%s%sLiên kết tới tài nguyên%s "
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -2079,13 +2080,14 @@ msgstr "%sBộ sưu tập%sKiểu tài liệu%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sDự kiến%s %sĐã về%s %sChậm%s %sThiếu%s %sKhông sẵn sàng%s %sXóa%s %sĐã "
+"%sDự kiến%s %sĐã về%s %sChậm%s %sThiếu%s %sThiếu (không nhận)%s %sThiếu (đã "
+"bán hết)%s %sThiếu (hỏng)%s %sThiếu (mất)%s %sKhông sẵn sàng%s %sXoá%s %sĐã "
 "khiếu nại%s %sNgừng phát hành%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
@@ -2198,8 +2200,8 @@ msgstr "%sgiá sách ảo:%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, fuzzy, c-format
 msgid "%sby %s%s"
 msgstr "%s, Tác giả: %s%s "
@@ -3070,17 +3072,17 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#, fuzzy, c-format
+#, c-format
 msgid "(overdue)"
-msgstr "Quá hạn (%s)"
+msgstr "(quá hạn)"
 
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1301
-#, fuzzy, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1306
+#, c-format
 msgid "(priority %s)"
-msgstr "Thứ tự đặt mượn"
+msgstr "(ưu tiên đặt mượn %s) "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
@@ -3138,9 +3140,9 @@ msgstr ". Xin vui lòng liên hệ với thư viện để biết thêm thông t
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "Bạn không có bất kỳ khoản tiền phạt nào!"
+msgstr ".%sBạn có khoản tiền phạt.%s %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, fuzzy, c-format
@@ -3293,11 +3295,13 @@ msgstr "Xác định truy cập"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
 "Please contact the library. "
-msgstr "Trong cơ sở dữ liệu, chúng tôi không có %s"
+msgstr ""
+"Trong cơ sở dữ liệu, chúng tôi không có thông tin liên lạc đã cập nhật. Vui "
+"lòng liên hệ với thư viện."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:65
 #, c-format
@@ -3391,9 +3395,8 @@ msgstr "Thêm vào..."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
-#, fuzzy
 msgid "Add to: "
-msgstr "Thêm tài liệu vào giá sách ảo %s"
+msgstr "Thêm vào:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:149
 #, c-format
@@ -3416,9 +3419,9 @@ msgstr "Thông tin liên hệ"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:628
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:779
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:781
-#, fuzzy, c-format
+#, c-format
 msgid "Address 2:"
-msgstr "%s Địa chỉ 2:"
+msgstr "Địa chỉ 2:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:425
@@ -3426,9 +3429,9 @@ msgstr "%s Địa chỉ 2:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
-#, fuzzy, c-format
+#, c-format
 msgid "Address:"
-msgstr "%s Địa chỉ :"
+msgstr "Địa chỉ:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:124
@@ -3468,7 +3471,7 @@ msgstr "Tìm kiếm nâng cao"
 msgid "All"
 msgstr "Tất cả"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:75
 #, c-format
 msgid "All Tags"
 msgstr "Tất cả từ khóa"
@@ -3501,9 +3504,9 @@ msgid "All libraries"
 msgstr "Tất cả thư viện"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
-#, fuzzy, c-format
+#, c-format
 msgid "Allow auto-renewal: "
-msgstr "%s Tự động gia hạn "
+msgstr "Cho phép tự động gia hạn: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:35
 #, c-format
@@ -3567,9 +3570,9 @@ msgstr ""
 
 #. %1$s:  shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:159
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred when creating the list. The name %s already exists."
-msgstr "Lỗi xảy ra khi hệ thống xử lý yêu cầu của bạn."
+msgstr "Lỗi xảy ra khi tạo ra giá sách ảo. Tên %s đã có rồi."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:123
 #, fuzzy, c-format
@@ -3695,7 +3698,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Bạn chắc chắn muốn xóa lịch sử tìm kiếm của mình?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 #, fuzzy
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Bạn chắc chắn muốn xóa giá sách ảo này?"
@@ -3988,9 +3991,9 @@ msgstr "Sẵn sàng:"
 
 #. %1$s:  IF restrictedvalueopac 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:99
-#, fuzzy, c-format
+#, c-format
 msgid "Available %s"
-msgstr "Ấn phẩm sẵn sàng"
+msgstr "Ấn phẩm có sẵn %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:122
 #, c-format
@@ -4004,7 +4007,7 @@ msgstr "Ấn phẩm sẵn sàng"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:443
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, fuzzy, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr "Đánh giá trung bình: %s (%s phiếu)"
@@ -4030,13 +4033,13 @@ msgstr ""
 msgid "Back to lists"
 msgstr "Quay lại"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 #, c-format
 msgid "Back to results"
 msgstr "Kết quả tìm kiếm"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 msgid "Back to the results search list"
 msgstr "Quay lại kết quả tìm kiếm"
 
@@ -4047,7 +4050,7 @@ msgstr "Quay lại kết quả tìm kiếm"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
@@ -4129,8 +4132,8 @@ msgstr "Tìm kiếm phân cấp"
 msgid "Browse our catalog"
 msgstr "Liệt kê kiểu phân cấp"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1020
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
 #, c-format
 msgid "Browse results"
 msgstr "Kết quả tìm kiếm"
@@ -4142,8 +4145,8 @@ msgstr "Kết quả tìm kiếm"
 msgid "Browse search"
 msgstr "Tìm kiếm phân cấp"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, c-format
 msgid "Browse shelf"
 msgstr "Xem kệ sách"
@@ -4201,7 +4204,7 @@ msgstr "Ký hiệu phân loại"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1150
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:250
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
@@ -4264,7 +4267,7 @@ msgstr "Ký hiệu phân loại: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1349
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
@@ -4340,9 +4343,9 @@ msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:202
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
+msgstr "Số thẻ phải có từ %s đến %s ký tự."
 
 #. %1$s:  minlength_cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:198
@@ -4484,9 +4487,9 @@ msgstr "Được ghi mượn"
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:36
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out to %s %s %s(%s)%s"
-msgstr "Được ghi mượn (%s)"
+msgstr "Được ghi mượn cho %s %s %s(%s)%s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
@@ -4496,9 +4499,8 @@ msgstr "Được ghi mượn (%s)"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#, fuzzy
 msgid "Checked out until: "
-msgstr "Được ghi mượn (%s)"
+msgstr "Được ghi mượn cho đến:"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:4
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:15
@@ -4550,9 +4552,9 @@ msgstr "Trích dẫn"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:641
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:792
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:794
-#, fuzzy, c-format
+#, c-format
 msgid "City:"
-msgstr "%s Thành phố:"
+msgstr "Thành phố: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:808
 #, c-format
@@ -4611,9 +4613,9 @@ msgstr "Xóa ngày"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "Click here if you're not %s"
-msgstr "Bấm vào đây nếu bạn không phải là %s %s"
+msgstr "Bấm vào đây nếu bạn không phải là %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:139
 #, fuzzy, c-format
@@ -4630,7 +4632,7 @@ msgstr "hãy bấm vào đây để đăng nhập"
 msgid "Click here to view them all."
 msgstr "Xem toàn bộ bản tài liệu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:970
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:975
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Click vào ảnh bìa để xem rõ hơn."
@@ -4665,8 +4667,8 @@ msgstr "Mở trong cửa sổ mới"
 msgid "Click to view in Google Books"
 msgstr "Kích để xem trong Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1019
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1067
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, c-format
 msgid "Close"
 msgstr "Thoát"
@@ -4718,7 +4720,7 @@ msgstr "Thông tin tài kiệu kiểm kê"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1142
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
 #, c-format
 msgid "Collection"
 msgstr "Bộ sưu tập"
@@ -4807,9 +4809,9 @@ msgstr "Đổi mật khẩu đăng nhập"
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm holds for:%s (%s)"
-msgstr "Xác nhận đặt mượn: %s %s %s (%s) %s "
+msgstr "Xác nhận đặt mượn cho:%s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:117
 #, fuzzy, c-format
@@ -4824,9 +4826,9 @@ msgstr "Đổi mật khẩu đăng nhập"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:564
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:566
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm primary email:"
-msgstr "%s Thư điện tử:"
+msgstr "Xác nhận địa chỉ thư điện tử chính:"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:212
@@ -4847,9 +4849,9 @@ msgstr "Thông tin liên hệ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:719
-#, fuzzy, c-format
+#, c-format
 msgid "Contact note:"
-msgstr "%s Ghi chú:"
+msgstr "Ghi chú liên hệ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
 #, c-format
@@ -4873,7 +4875,7 @@ msgstr "Giá sách ảo "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, c-format
 msgid "Copy number"
 msgstr "Số bản sao"
@@ -4931,9 +4933,9 @@ msgstr "Số lượng"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:680
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:831
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
-#, fuzzy, c-format
+#, c-format
 msgid "Country:"
-msgstr "%s Quốc gia"
+msgstr "Quốc gia:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:35
 #, c-format
@@ -4947,7 +4949,7 @@ msgstr "Số khóa học:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:21
 #, c-format
 msgid "Course reserves"
@@ -5023,7 +5025,7 @@ msgstr "Tài khoản trả trước"
 msgid "Credits (%s)"
 msgstr "Tài khoản trả trước (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #, c-format
 msgid "Current location"
 msgstr "Thư viện hiện tại"
@@ -5078,7 +5080,7 @@ msgstr "Đĩa DVD"
 msgid "Date"
 msgstr "Thời gian"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:598
@@ -5098,13 +5100,13 @@ msgstr "Ngày bổ sung: Mới nhất - Cũ nhất"
 msgid "Date added (oldest to newest)"
 msgstr "Ngày bổ sung: Cũ nhất - Mới nhất"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:161
 #, fuzzy, c-format
 msgid "Date added:"
 msgstr "Ngày tạo:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
 #, c-format
 msgid "Date due"
 msgstr "Ngày hết hạn"
@@ -5123,9 +5125,9 @@ msgstr "Ngày nhận"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:330
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:332
-#, fuzzy, c-format
+#, c-format
 msgid "Date of birth:"
-msgstr "%s Ngày sinh:"
+msgstr "Ngày sinh:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:178
 #, fuzzy, c-format
@@ -5212,7 +5214,7 @@ msgid "Delete selected"
 msgstr "Xóa đề xuất mua"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:170
 #, fuzzy
 msgid "Delete selected tags"
 msgstr "Xóa đề xuất mua"
@@ -5262,9 +5264,9 @@ msgid "Details for %s"
 msgstr "Hiển thị chi tiết biểu ghi: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: "
-msgstr "Hiển thị chi tiết biểu ghi: %s"
+msgstr "Chi tiết biểu ghi:"
 
 #. %1$s:  biblio.title | html 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:16
@@ -5591,15 +5593,14 @@ msgstr "Lỗi:"
 #. %1$s:  errno | html 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Error %s"
-msgstr "Lỗi: "
+msgstr "Lỗi %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#, fuzzy
 msgid "Error searching %s collection"
-msgstr "Lỗi tìm kiếm bộ sưu tập OverDrive"
+msgstr "Lỗi tìm kiếm bộ sưu tập %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -5768,14 +5769,14 @@ msgstr "Gia hạn thời gian lưu thông cho bạn đọc hiện tại ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:593
-#, fuzzy, c-format
+#, c-format
 msgid "Fax:"
-msgstr "%s Số Fax:"
+msgstr "Số Fax: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "Fax: "
-msgstr "%s Số Fax:"
+msgstr "Số Fax: "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5870,9 +5871,9 @@ msgstr "Lần 1"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:753
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:755
-#, fuzzy, c-format
+#, c-format
 msgid "First name:"
-msgstr "%s Tên:"
+msgstr "Tên: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:180
 #, c-format
@@ -5886,22 +5887,21 @@ msgstr ""
 "liệu xuất bản từ năm 2008 trở về sau."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in and change your password."
 msgstr ""
-"Để truy nhập nhanh, các thông tin này đã được điền sẵn.  Xin vui lòng đăng "
-"nhập %s và thay đổi mật khẩu %s."
+"Để cho tiện, thông tin đăng nhập đã được điền sẵn. Vui lòng đăng nhập và "
+"thay đổi mật khẩu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in."
 msgstr ""
-"Để truy nhập nhanh, các thông tin này đã được điền sẵn.  Xin vui lòng đăng "
-"nhập %s và thay đổi mật khẩu %s."
+"Để cho tiện, thông tin đăng nhập đã được điền sẵn. Xin vui lòng đăng nhập."
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:59
@@ -5948,9 +5948,8 @@ msgstr "Found"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#, fuzzy
 msgid "Found %s results in the library's %s collection"
-msgstr "kết quả tìm kiếm trong bộ sưu tập OverDrive của thư viện."
+msgstr "Đã tìm được %s kết quả trong bộ sưu tập %s của thư viện"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -6112,8 +6111,8 @@ msgid "Go"
 msgstr "Tìm kiếm"
 
 #. LI
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, fuzzy
 msgid "Go to detail"
 msgstr "Tới trang chi tiết"
@@ -6154,9 +6153,9 @@ msgstr "Nhóm thư viện"
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:161
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "Nhà xuất bản: %s %s vào %s %s %s , %s %s %s , %s %s "
+msgstr "Được bảo lãnh bởi %s %s %s %s %s, %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -6364,7 +6363,7 @@ msgid "Home libraries"
 msgstr "Thư viện chính"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1140
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:134
 #, c-format
 msgid "Home library"
@@ -6596,21 +6595,22 @@ msgstr ""
 "thư viện và liên hệ với cán bộ thư viện để lấy lại mật khẩu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
-msgstr "%s %s hãy chọn lại xác thực của bạn: "
+msgstr ""
+"Nếu bạn đã có tài khoản CAS, vui lòng chọn tài khoản nào bạn muốn xác thực:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:121
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, please click here to log in."
-msgstr ", %s  "
+msgstr "Nếu bạn có tài khoản CAS, vui lòng bấm vào đây để đăng nhập."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, you may use that below."
-msgstr ", %s  "
+msgstr "Nếu bạn có tài khoản CAS, bạn có thể dùng tài khoản đó dưới đây."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:351
 #, c-format
@@ -6618,14 +6618,14 @@ msgid "If you have a Shibboleth account, please "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
-msgstr ", %s  "
+msgstr "Nếu bạn có tài khoản Shibboleth, vui lòng bấm vào đây để đăng nhập."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a local account, you may use that below."
-msgstr ", %s  "
+msgstr "Nếu bạn có một tài khoản, bạn có thể dùng tài khoản đó dưới đây."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:148
 #, c-format
@@ -6701,9 +6701,9 @@ msgstr "Thông tin tài liệu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:350
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:352
-#, fuzzy, c-format
+#, c-format
 msgid "Initials:"
-msgstr "%s Tên viết tắt:"
+msgstr "Tên viết tắt: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:38
 #, c-format
@@ -6792,26 +6792,26 @@ msgid "Item cannot be checked out. There are no available formats"
 msgstr "Tài liệu không thể ghi mượn."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:201
-#, fuzzy, c-format
+#, c-format
 msgid "Item checked in"
-msgstr "Được ghi mượn (%s)"
+msgstr "Được ghi trả"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "Item checked out"
-msgstr "Hiện tại có %s tài liệu được ghi mượn cho bạn đọc"
+msgstr "Tài liệu được ghi mượn"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:83
 #, c-format
 msgid "Item damaged"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Thứ tự đặt mượn"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Đặt mượn"
@@ -6843,7 +6843,7 @@ msgstr "Không được phép gia hạn"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:541
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, c-format
 msgid "Item type"
@@ -6948,9 +6948,8 @@ msgstr "Koha"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:28
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-#, fuzzy
 msgid "Koha %s"
-msgstr "Koha"
+msgstr "Koha %s"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
@@ -7112,9 +7111,9 @@ msgstr "Từ khóa"
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
-#, fuzzy, c-format
+#, c-format
 msgid "Library default: %s"
-msgstr "Thư viện : "
+msgstr "Thư viện mặc định: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:234
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
@@ -7276,9 +7275,9 @@ msgstr "Kho tài liệu (trạng thái)"
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:753
-#, fuzzy, c-format
+#, c-format
 msgid "Location: %s %s %s "
-msgstr "Bộ sưu tập: %s "
+msgstr "Địa điểm: %s %s %s "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:36
 #, c-format
@@ -7318,8 +7317,8 @@ msgstr "Đăng nhập để tạo giá sách của bạn"
 msgid "Log in to create your own lists"
 msgstr "Đăng nhập để tạo giá sách của bạn"
 
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:97
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:99
 #, fuzzy, c-format
 msgid "Log in to see your own saved tags."
 msgstr "Đăng nhập để xem các từ khóa được lưu."
@@ -7354,9 +7353,9 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:125
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "Log out"
-msgstr "%s Đăng xuất"
+msgstr "Đăng xuất"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
@@ -7504,7 +7503,7 @@ msgstr "Tháng 3"
 msgid "Match:"
 msgstr "Phù hợp:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "Không có từ khóa nào được khai báo."
@@ -7667,9 +7666,9 @@ msgid "Never"
 msgstr "Chưa có"
 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:82
-#, fuzzy, c-format
+#, c-format
 msgid "Never expires "
-msgstr "Không có %s "
+msgstr "Vô hạn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:46
 #, c-format
@@ -7688,9 +7687,9 @@ msgstr ""
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "Bình luận mới nhất trên  %s %s, %s%s"
+msgstr "Bình luận mới về %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
@@ -7741,9 +7740,9 @@ msgstr "Tạo từ khóa mới:"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "News from %s%s%sthe library%s"
-msgstr "Từ khóa:"
+msgstr "Tin tức từ %s%s%sthư viện%s"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -7752,14 +7751,14 @@ msgstr "Từ khóa:"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1040
 #, c-format
 msgid "Next"
 msgstr "Tiếp tục"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:84
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 #, fuzzy, c-format
 msgid "Next "
 msgstr "Tiếp tục"
@@ -7911,9 +7910,9 @@ msgid "No operation parameter has been passed."
 msgstr "Không có thông số hoạt động nào được thông qua."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:637
-#, fuzzy, c-format
+#, c-format
 msgid "No other items."
-msgstr "%s %s %s Không có tài liệu khác. %s %s "
+msgstr "Không có tài liệu khác."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:623
 #, c-format
@@ -7962,10 +7961,8 @@ msgstr "Kết quả tìm kiếm"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#, fuzzy
 msgid "No results found in the library's %s collection"
-msgstr ""
-"Không tìm thấy kết quả phù hợp trong bộ sưu tập OverDrive của thư viện."
+msgstr "Không tìm thấy kết quả trong bộ sưu tập %s của thư viện"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -8007,9 +8004,8 @@ msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#, fuzzy
 msgid "No, do not cancel hold"
-msgstr "Xin lỗi, bạn không thể đặt mượn nhiều hơn %s tài liệu. "
+msgstr "Không, đừng hủy đặt mượn tài liệu"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
@@ -8031,15 +8027,13 @@ msgstr "Với đề xuất mua được chọn: "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
-#, fuzzy
 msgid "No, do not remove sharing"
-msgstr "Xin lỗi, bạn không thể đặt mượn nhiều hơn %s tài liệu. "
+msgstr "Không, đừng bỏ sự chia sẻ "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#, fuzzy
 msgid "No, do not resume holds"
-msgstr "Xin lỗi, bạn không thể đặt mượn nhiều hơn %s tài liệu. "
+msgstr "Không, đừng tiếp tục đặt mượn tài liệu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:38
 #, c-format
@@ -8169,7 +8163,7 @@ msgid "Note: you can only delete your own tags."
 msgstr "Lưu ý: Bạn chỉ được phép xóa các từ khóa bạn tạo ra."
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:63
 #, c-format
 msgid ""
 "Note: you can only delete your own tags. %s Note: your tag contained markup "
@@ -8211,7 +8205,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:39
 #, c-format
 msgid "Notes"
@@ -8264,8 +8258,8 @@ msgid "Nov"
 msgstr "Nov"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:536
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:983
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:988
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 #, c-format
 msgid "Novelist Select"
 msgstr "Chọn tác giả"
@@ -8305,7 +8299,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
 msgid "OK"
 msgstr "OK"
 
@@ -8421,15 +8415,15 @@ msgstr "Thư viện khác ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:363
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:365
-#, fuzzy, c-format
+#, c-format
 msgid "Other names:"
-msgstr "%s Tên khác:"
+msgstr "Tên khác:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:539
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:541
-#, fuzzy, c-format
+#, c-format
 msgid "Other phone:"
-msgstr "%s Tên khác:"
+msgstr "Điện thoại khác:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
 #, c-format
@@ -8462,9 +8456,9 @@ msgstr "Tìm kiếm OverDrive của '%s'"
 
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:605
-#, fuzzy, c-format
+#, c-format
 msgid "Overall queue priority: %s"
-msgstr "Thứ tự đặt mượn"
+msgstr "Thứ tự ưu tiên xếp hàng: %s"
 
 #. %1$s:  overdues_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
@@ -8547,10 +8541,12 @@ msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
-msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
+msgstr ""
+"Mật khẩu phải chứa ít nhất một chữ số, một ký tự thường và một ký tự viết "
+"hoa."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:91
@@ -8740,9 +8736,9 @@ msgid "Please choose a download format"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose against which one you would like to authenticate: "
-msgstr "%s %s hãy chọn lại xác thực của bạn: "
+msgstr "Hãy chọn lại sự xác thực của bạn: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:53
 #, c-format
@@ -8919,7 +8915,7 @@ msgid "Please select a specific item for this article request."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 msgid "Please select a tag to delete."
 msgstr ""
 
@@ -8939,7 +8935,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
 #, c-format
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Thử nhập lại dưới dạng văn bản. %sLỗi không xác định. %s "
@@ -9016,8 +9012,8 @@ msgstr "Xem trước"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, c-format
 msgid "Previous"
 msgstr "Sau"
@@ -9035,15 +9031,15 @@ msgstr "Tiểu học"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:552
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:554
-#, fuzzy, c-format
+#, c-format
 msgid "Primary email:"
-msgstr "%s Thư điện tử:"
+msgstr "Thư điện tử chỉnh:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:513
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:515
-#, fuzzy, c-format
+#, c-format
 msgid "Primary phone:"
-msgstr "%s Điện thoại:"
+msgstr "Điện thoại chính:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
@@ -9197,9 +9193,9 @@ msgstr "Nhà xuất bản: %s %s vào %s %s %s , %s %s %s , %s %s "
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Published on %s %s by "
-msgstr "(Ngày xuất bản: %s)"
+msgstr "Xuất bản ngày %s %s bởi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
@@ -9243,9 +9239,9 @@ msgstr "RIS (Zotero, EndNote, khác)"
 
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "RSS feed for public list %s"
-msgstr "Không có giá sách ảo cộng đồng"
+msgstr "Bản tin RSS cho danh sách công cộng %s"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
@@ -9396,9 +9392,8 @@ msgstr "Loại bỏ"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:56
-#, fuzzy
 msgid "Remove facet %s"
-msgstr "Loại bỏ trường tìm kiếm"
+msgstr "Loại bỏ facet %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:104
@@ -9803,9 +9798,9 @@ msgstr "Sa"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:283
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
-#, fuzzy, c-format
+#, c-format
 msgid "Salutation:"
-msgstr "%s Danh xưng:"
+msgstr "Danh xưng:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -9896,7 +9891,7 @@ msgstr "Quét hoặc nhập ĐKCB tài liệu:"
 #. INPUT type=submit name=do
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1353
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
@@ -9987,9 +9982,8 @@ msgstr "SearchCourseReserves "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#, fuzzy
 msgid "Searching %s..."
-msgstr "Đang tìm kiếm OverDrive..."
+msgstr "Đang tìm kiếm %s..."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9998,15 +9992,15 @@ msgstr "Đang tìm kiếm OverDrive..."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:578
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:580
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary email:"
-msgstr "%s Thư điện tử 2:"
+msgstr "Thư điện tử phụ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:526
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary phone:"
-msgstr "%s Điện thoại 2:"
+msgstr "Điện thoại phụ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
 #, c-format
@@ -10040,12 +10034,12 @@ msgid "See also:"
 msgstr "Xem thêm:"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -10065,7 +10059,7 @@ msgstr "Chọn bản tài liệu bạn muốn đặt mượn:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:51
@@ -10076,7 +10070,7 @@ msgstr "Chọn bản tài liệu bạn muốn đặt mượn:"
 msgid "Select all"
 msgstr "Chọn tất cả"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1343
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Chọn tất cả"
@@ -10096,7 +10090,7 @@ msgstr "Chọn nhan đề để: "
 msgid "Select suggestions to: "
 msgstr "Chọn đề xuất mua để: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1344
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
 msgstr "Chọn tài liệu để tìm kiếm"
@@ -10132,9 +10126,9 @@ msgid "Send"
 msgstr "Gửi thư"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "Send email"
-msgstr "%s Thư điện tử 2:"
+msgstr "Gửi thư điện tử"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:187
 #, c-format
@@ -10229,7 +10223,7 @@ msgstr "Lỗi đăng nhập"
 msgid "Settings updated"
 msgstr "Thiết lập thông báo của bạn đã được cập nhật"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:709
 #, c-format
 msgid "Share"
@@ -10246,7 +10240,7 @@ msgid "Share a list with another patron"
 msgstr "Chia sẻ giá sách ảo cho bạn đọc khác"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1104
 msgid "Share by email"
 msgstr "Chia sẻ qua hòm thư"
 
@@ -10256,22 +10250,22 @@ msgid "Share list"
 msgstr "Chia sẻ giá sách ảo"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 msgid "Share on Facebook"
 msgstr "Chia sẻ trên Facebook"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 msgid "Share on LinkedIn"
 msgstr "Chia sẻ trên LinkedIn"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "Chia sẻ trên LinkedIn"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "Thư viện hiện tại"
@@ -10522,9 +10516,9 @@ msgid "Sorry, you are too young to reserve this material."
 msgstr "Bạn chắc chắn muốn loại bỏ chia sẻ này?"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, you cannot place holds."
-msgstr "Xin lỗi, bạn không thể đặt mượn nhiều hơn %s tài liệu. "
+msgstr "Xin lỗi, bạn không thể đặt mượn tài liệu."
 
 #. %1$s:  too_many_reserves | html 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:74
@@ -10614,9 +10608,9 @@ msgstr "Số ISBN, ISSN:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:654
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:805
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:807
-#, fuzzy, c-format
+#, c-format
 msgid "State:"
-msgstr "%s Bang:"
+msgstr "Bang:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:361
 #, c-format
@@ -10630,7 +10624,7 @@ msgstr "Thống kê"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:787
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
 #, c-format
 msgid "Status"
@@ -10668,9 +10662,9 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "Street number:"
-msgstr "%s Số nhà:"
+msgstr "Số nhà:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10842,9 +10836,9 @@ msgstr "Kỳ ÂPĐK : "
 
 #. %1$s:  subscriptionsnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:526
-#, fuzzy, c-format
+#, c-format
 msgid "Subscriptions ( %s )"
-msgstr "Tìm kiếm ÂPĐK"
+msgstr "Ấn phẩm đăng ký ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:41
@@ -10901,9 +10895,9 @@ msgstr "Chủ nhật"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:742
-#, fuzzy, c-format
+#, c-format
 msgid "Surname:"
-msgstr "%s Họ:"
+msgstr "Họ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:356
 #, c-format
@@ -10989,7 +10983,7 @@ msgstr "Trạng thái từ khóa."
 msgid "Tag status here. "
 msgstr "Trạng thái từ khóa. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:137
 #, c-format
 msgid "Tag:"
 msgstr "Trường:"
@@ -11024,7 +11018,7 @@ msgstr "Báo cáo kỹ thuật"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Term"
@@ -11309,9 +11303,9 @@ msgstr ""
 
 #. %1$s:  username | html 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:138
-#, fuzzy, c-format
+#, c-format
 msgid "The password has been changed for user \"%s\"."
-msgstr "Bạn đã đổi thành công mật khẩu đăng nhập vào tài khoản."
+msgstr "Mật khẩu cho người dùng \"%s\" đã được thay đổi."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:256
 #, c-format
@@ -11336,7 +11330,7 @@ msgstr "Ngày hết hạn ÂPĐK: %s"
 
 #. %1$s:  ERROR.scrubbed | html 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
 #, c-format
 msgid ""
 "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
@@ -11383,22 +11377,21 @@ msgstr "Không có đề xuất mua đang chờ duyệt."
 msgid "There is no minimum or maximum character length."
 msgstr ""
 
-#. %1$s:  IF ( ERROR.tagsdisabled ) 
-#. %2$s:  ELSIF ( ERROR.badparam ) 
-#. %3$s:  ERROR.badparam | html 
-#. %4$s:  ELSIF ( ERROR.login ) 
-#. %5$s:  ELSIF ( ERROR.failed_delete ) 
-#. %6$s:  ERROR.failed_delete | html 
+#. %1$s:  IF ( ERROR.badparam ) 
+#. %2$s:  ERROR.badparam | html 
+#. %3$s:  ELSIF ( ERROR.login ) 
+#. %4$s:  ELSIF ( ERROR.failed_delete ) 
+#. %5$s:  ERROR.failed_delete | html 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:55
 #, c-format
 msgid ""
-"There was a problem with this operation: %s Sorry, tags are not enabled on "
-"this system. %s ERROR: illegal parameter %s %s ERROR: You must log in to "
-"complete that action. %s ERROR: You cannot delete the tag %s. "
+"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
+"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
+"the tag %s. "
 msgstr ""
-"Phát hiện lỗi đối với tính năng này: %s Xin lỗi, thư viện của bạn không kích "
-"hoạt tính năng này. %s Lỗi: Thông số không phù hợp %s %s Lỗi: Bạn phải đăng "
-"nhập để sử dụng tính năng này. %s Lỗi: Bạn không thể xóa từ khóa %s. "
+"Phát hiện lỗi đối với tính năng này: %s LỖI: Thông số không phù hợp %s %s "
+"LỖI: Bạn phải đăng nhập để sử dụng tính năng này. %s LỖI: Bạn không thể xóa "
+"từ khóa %s. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:32
 #, c-format
@@ -11467,9 +11460,9 @@ msgid "This is a serial"
 msgstr "ẤN PHẨM ĐỊNH KỲ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid "This item does not exist."
-msgstr "Tài liệu này sử dụng nội bộ, thư viện không cho mượn. %s "
+msgstr "Tài liệu này không tồn tại."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:328
 #, c-format
@@ -11494,9 +11487,9 @@ msgstr ""
 
 #. %1$s:  contents.count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "This list contains %s titles"
-msgstr "Không thể đặt mượn tài liệu này."
+msgstr "Giá sách ảo này có %s nhan đề"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:143
 #, fuzzy, c-format
@@ -11523,12 +11516,12 @@ msgid "This message can have the following reason(s):"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid "This news item does not exist. "
-msgstr "Tài liệu này sử dụng nội bộ, thư viện không cho mượn. %s "
+msgstr "Tin tức này không tồn tại."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11588,7 +11581,7 @@ msgstr "Thứ 5"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:491
@@ -11620,16 +11613,16 @@ msgstr "Nhan đề (Z-A)"
 
 #. %1$s:  title_notes_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:496
-#, fuzzy, c-format
+#, c-format
 msgid "Title notes ( %s )"
-msgstr "Ghi chú nhan đề"
+msgstr "Ghi chú nhan đề ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:80
 #, c-format
 msgid "Title phrase"
 msgstr "Cụm từ nhan đề"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
@@ -11757,7 +11750,7 @@ msgstr "Kiểu:"
 msgid "UF"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #, fuzzy, c-format
 msgid "URL"
 msgstr "URL"
@@ -11924,9 +11917,9 @@ msgstr "Băng VHS"
 
 #. %1$s:  extended_unique_id_failed_value | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:174
-#, fuzzy, c-format
+#, c-format
 msgid "Value is already in use (%s)"
-msgstr "đã có trong giỏ tài liệu của bạn"
+msgstr "Giá trị này đã dùng rồi (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:963
 #, fuzzy, c-format
@@ -11990,10 +11983,9 @@ msgid "View on Amazon.com"
 msgstr "Xem thêm tại  Amazon.com"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1049
-#, fuzzy
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1054
 msgid "View record \"%s\""
-msgstr "Lưu biểu ghi "
+msgstr "Xem biểu ghi \"%s\""
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:119
@@ -12002,7 +11994,7 @@ msgid "View your search history"
 msgstr "Xem lịch sử tìm kiếm của bạn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "Vol info"
 msgstr "Thông tin tập"
@@ -12066,9 +12058,9 @@ msgstr "Xin chào, "
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:95
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome, %s"
-msgstr "Xin chào, "
+msgstr "Xin chào, %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44
 #, c-format
@@ -12340,11 +12332,11 @@ msgstr "Đề xuất mua của bạn"
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-", do đó bạn không thể gia hạn tài liệu trên OPAC. Bạn vui lòng thanh toán "
-"các khoản tiền phạt của mình để có thể thực hiện gia hạn tài liệu trên OPAC."
+"Bạn không thể gia hạn mượn tài liệu trực tuyến. Lý do: %sBạn chưa trả tiền "
+"phạt trả muộn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:42
 #, c-format
@@ -12496,9 +12488,9 @@ msgid "You have renewed this item the maximum number of times allowed."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:765
-#, fuzzy, c-format
+#, c-format
 msgid "You have subscribed to email notification on new issues. "
-msgstr "%s %s %s %s Bạn đã đăng ký để nhận thư thông báo khi có kỳ mới về. "
+msgstr "Bạn đã đăng ký nhận thông báo về bản tin cập nhật."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:37
 #, fuzzy, c-format
@@ -12509,9 +12501,9 @@ msgstr ""
 
 #. %1$s:  too_much_oweing | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "You have unpaid fines. Amount: %s. "
-msgstr "Bạn không có bất kỳ khoản tiền phạt nào!"
+msgstr "Bạn chưa trả tiền phạt. Tổng cộng: %s."
 
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:50
 #, c-format
@@ -12565,10 +12557,10 @@ msgid "You must have an email address to enroll"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:770
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
-msgstr "%s %s Bạn phải đăng nhập để đăng ký nhận thông báo ÂPĐK %s %s "
+msgstr "Bạn phải đăng nhập để đăng ký nhận thông báo về bản tin cập nhật."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:92
 #, c-format
@@ -12583,9 +12575,8 @@ msgstr "Bạn phải chọn tài liệu đặt mượn. "
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:46
-#, fuzzy
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
-msgstr "%s Tìm kiếm %scho '%s'%s%s&nbsp;với giới hạn:&nbsp;'%s'%s"
+msgstr "Bạn đã tìm %s cho '%s'%s%s với giới hạn: '%s'%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:70
 #, c-format
@@ -12825,15 +12816,13 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
-msgstr "Quá trình đăng nhập hiện tại không thực hiện được."
+msgstr "Ghi chú của bạn về %s đã được lưu và gửi đến thư viện."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#, fuzzy
 msgid "Your note about %s was removed."
-msgstr "Lỗi: Không nhận được số biểu ghi."
+msgstr "Ghi chú của bạn về %s đã bị hủy."
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:42
 #, c-format
@@ -12906,7 +12895,7 @@ msgstr "Đề xuất mua của bạn"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "Đánh giá của bạn: %s, "
@@ -12965,7 +12954,7 @@ msgstr "Lịch sử ghi mượn của bạn đã bị xóa."
 msgid "Your summary"
 msgstr "Thông tin chung"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, fuzzy, c-format
 msgid "Your tags"
 msgstr "Từ khóa"
@@ -12992,9 +12981,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:818
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:820
-#, fuzzy, c-format
+#, c-format
 msgid "ZIP/Postal code:"
-msgstr "%s Mã bưu chính:"
+msgstr "Mã bưu chính:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13005,17 +12994,15 @@ msgid "[ New list ]"
 msgstr "Tạo giá sách ảo"
 
 #. INPUT type=text name=limit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:87
 msgid "[% limit or"
 msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
-#, fuzzy, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
+#, c-format
 msgid "[%s tag not supported by your browser.]"
-msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s tag not supported "
-"by your browser.] "
+msgstr "[trình duyệt của bạn không hỗ trợ thẻ %s.]"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -13116,9 +13103,9 @@ msgid "click here to login"
 msgstr "hãy bấm vào đây để đăng nhập"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "confirm email address"
-msgstr "%s Thư điện tử 2:"
+msgstr "xác nhận thư điện tử"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:50
 #, c-format
@@ -13187,9 +13174,9 @@ msgid "expiry_date"
 msgstr "pickup_expiry_date"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:473
-#, fuzzy, c-format
+#, c-format
 msgid "firstname"
-msgstr "%s Tên:"
+msgstr "tên"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:65
 #, c-format
@@ -13197,7 +13184,7 @@ msgid "for more information on what it does and how to configure it."
 msgstr "để có thêm thông tin cho việc thiết lập tính năng này."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "here"
 msgstr "tại đây"
@@ -13394,9 +13381,9 @@ msgid "out of"
 msgstr "ra khỏi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
-#, fuzzy, c-format
+#, c-format
 msgid "overdue(s)"
-msgstr "Quá hạn (%s)"
+msgstr "quá hạn"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:495
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:83
@@ -13487,9 +13474,9 @@ msgid "search"
 msgstr "Tìm kiếm"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "secondary email address"
-msgstr "%s Thư điện tử 2:"
+msgstr "địa chỉ thư điện tử phụ"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:101
 #, c-format
@@ -13534,11 +13521,13 @@ msgstr "show_loans"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
-msgstr "từ ngày %s %s Tạm dừng %s đến ngày %s %s %s Chờ đáp ứng %s %s "
+msgstr ""
+"từ ngày %s %s Tạm dừng %s đến ngày %s %s %s %s Chờ đáp ứng cho đến khi có "
+"tài liệu loại '%s' %s Chờ đáp ứng %s %s %s"
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:43
 #, c-format

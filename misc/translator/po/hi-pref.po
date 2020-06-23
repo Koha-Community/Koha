@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2020-05-14 11:27+0000\n"
+"PO-Revision-Date: 2020-06-18 11:34+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1589455655.230038\n"
+"X-POOTLE-MTIME: 1592480087.106503\n"
 "X-Pootle-Path: /hi/18.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1697,8 +1697,11 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "authorities.pref#AuthorityControlledIndicators# एडिटिंग रिकॉर्ड को बिब्लियों क्षेत्र संलग्न करने वाले प्राधिकरण के नियंत्रण संकेतक को संपादित करने के लिए निम्न पाठ का उपयोग करें (और संभावित रूप से उप-फ़ील्ड $2).<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "authorities.pref#AuthorityMergeLimit# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है <code>misc/migration_tools/merge_authority.pl</code> क्रॉनजॉब. इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+"authorities.pref#AuthorityMergeLimit# <br><strong>नोट:</strong> इस सिस्टम "
+"वरीयता के लिए आवश्यक है <code>misc/cronjobs/merge_authorities.pl</code> "
+"क्रॉनजॉब. इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2137,10 +2140,6 @@ msgstr "cataloguing.pref # MergeReportFields # मर्ज फ़ील्ड �
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "cataloguing.pref # NewItemsDefaultLocation # (निष्क्रिय करने के लिए खाली एक स्थान कोड होना चाहिए, या)।"
-
-# Cataloging > Record structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "cataloguing.pref#NewItemsDefaultLocation# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है <code>misc/cronjobs/cart_to_shelf.pl</code> क्रानजॉब. इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -3070,9 +3069,7 @@ msgstr "circulation.pref#CalculateFinesOnBackdate# नही करें"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnBackdate# calculate and update overdue charges when an item is returned with a backdated return date."
-msgstr ""
-"circulation.pref#CalculateFinesOnBackdate# जब कोई आइटम बैक डेट रिटर्न के साथ "
-"लौटाया जाता है, तो अतिदेय शुल्क की गणना और अपडेट करें."
+msgstr "circulation.pref#CalculateFinesOnBackdate# जब कोई आइटम बैक डेट रिटर्न के साथ लौटाया जाता है, तो अतिदेय शुल्क की गणना और अपडेट करें."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
@@ -3080,9 +3077,7 @@ msgstr "circulation.pref#CalculateFinesOnReturn# <br /><strong>नोट: यद
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE: This system preference requires FinesMode to be set to 'Calculate and charge.'</strong>"
-msgstr ""
-"circulation.pref#CalculateFinesOnReturn# <br /><strong>नोट: इस सिस्टम वरीयता "
-"के लिए 'गणना और चार्ज' करने के लिए FinesMode को सेट करना होगा.</strong>"
+msgstr "circulation.pref#CalculateFinesOnReturn# <br /><strong>नोट: इस सिस्टम वरीयता के लिए 'गणना और चार्ज' करने के लिए FinesMode को सेट करना होगा.</strong>"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -3550,9 +3545,7 @@ msgstr "circulation.pref#ILLCheckAvailability# चैक नही करें"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLCheckAvailability# external sources for availability during the request process"
-msgstr ""
-"circulation.pref#ILLCheckAvailability# अनुरोध प्रक्रिया के दौरान उपलब्धता के "
-"लिए बाहरी स्रोत"
+msgstr "circulation.pref#ILLCheckAvailability# अनुरोध प्रक्रिया के दौरान उपलब्धता के लिए बाहरी स्रोत"
 
 # Circulation > Interlibrary loans
 msgid "circulation.pref#ILLModule# Disable"
@@ -3725,8 +3718,7 @@ msgstr "circulation.pref#MarkLostItemsAsReturned# जब एक वस्तु 
 
 # Circulation > Checkout policy
 msgid "circulation.pref#MarkLostItemsAsReturned# when receiving payment for the item"
-msgstr ""
-"circulation.pref#MarkLostItemsAsReturned# आइटम के लिए भुगतान प्राप्त करते समय"
+msgstr "circulation.pref#MarkLostItemsAsReturned# आइटम के लिए भुगतान प्राप्त करते समय"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking out if the patron has guarantees owing in total more than"
@@ -3966,10 +3958,7 @@ msgstr "circulation.pref#RenewAccruingItemInOpac# नवीनीकरण न �
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# If a patron pays off all fines on an overdue item that is accruing fines in the OPAC via a payment plugin"
-msgstr ""
-"circulation.pref#RenewAccruingItemInOpac# यदि एक संरक्षक एक अतिदेय आइटम पर "
-"सभी जुर्मानाों का भुगतान करता है जो ओपेक में भुगतान प्लगइन के माध्यम से "
-"जुर्माना जमा कर रहा है"
+msgstr "circulation.pref#RenewAccruingItemInOpac# यदि एक संरक्षक एक अतिदेय आइटम पर सभी जुर्मानाों का भुगतान करता है जो ओपेक में भुगतान प्लगइन के माध्यम से जुर्माना जमा कर रहा है"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# Renew"
@@ -3977,10 +3966,7 @@ msgstr "circulation.pref#RenewAccruingItemInOpac# नवीकरण"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemInOpac# the item automatically. If the syspref \"RenewalPeriodBase\" is set to \"due date\", renewed items may still be overdue."
-msgstr ""
-"circulation.pref#RenewAccruingItemInOpac# आइटम स्वचालित रूप से। यदि syspref "
-"\"RenewalPeriodBase\" को \"नियत तारीख\" पर सेट किया जाता है, तो नवीनीकृत "
-"आइटम अभी भी अतिदेय हो सकते हैं।"
+msgstr "circulation.pref#RenewAccruingItemInOpac# आइटम स्वचालित रूप से। यदि syspref \"RenewalPeriodBase\" को \"नियत तारीख\" पर सेट किया जाता है, तो नवीनीकृत आइटम अभी भी अतिदेय हो सकते हैं।"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# Don't renew"
@@ -3988,9 +3974,7 @@ msgstr "circulation.pref#RenewAccruingItemWhenPaid# नवीनीकरण न
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# If a patron pays off all fines on an overdue item that is accruing fines"
-msgstr ""
-"circulation.pref#RenewAccruingItemWhenPaid# यदि एक संरक्षक एक अतिदेय वस्तु "
-"पर सभी जुर्माना अदा करता है जो जुर्माना लगा रहा है"
+msgstr "circulation.pref#RenewAccruingItemWhenPaid# यदि एक संरक्षक एक अतिदेय वस्तु पर सभी जुर्माना अदा करता है जो जुर्माना लगा रहा है"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# Renew"
@@ -3998,10 +3982,7 @@ msgstr "circulation.pref#RenewAccruingItemWhenPaid# नवीकरण"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewAccruingItemWhenPaid# the item automatically. If the syspref \"RenewalPeriodBase\" is set to \"due date\", renewed items may still be overdue."
-msgstr ""
-"circulation.pref#RenewAccruingItemWhenPaid# आइटम स्वचालित रूप से। यदि "
-"syspref \"RenewalPeriodBase\" को \"नियत तारीख\" पर सेट किया जाता है, तो "
-"नवीनीकृत आइटम अभी भी अतिदेय हो सकते हैं।"
+msgstr "circulation.pref#RenewAccruingItemWhenPaid# आइटम स्वचालित रूप से। यदि syspref \"RenewalPeriodBase\" को \"नियत तारीख\" पर सेट किया जाता है, तो नवीनीकृत आइटम अभी भी अतिदेय हो सकते हैं।"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new due date on"
@@ -4129,9 +4110,7 @@ msgstr "circulation.pref#SCOAllowCheckin# अनुमति नही"
 
 # Circulation > Self check-out module (sco-main.pl)
 msgid "circulation.pref#SCOAllowCheckin# patrons to return items through web-based self checkout system."
-msgstr ""
-"circulation.pref#SCOAllowCheckin# वेब-आधारित सेल्फ चेकआउट सिस्टम के माध्यम से"
-" आइटम वापस करने के लिए संरक्षक."
+msgstr "circulation.pref#SCOAllowCheckin# वेब-आधारित सेल्फ चेकआउट सिस्टम के माध्यम से आइटम वापस करने के लिए संरक्षक."
 
 # Circulation > Self check-out module (sco-main.pl)
 msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
@@ -4331,9 +4310,7 @@ msgstr "circulation.pref#StoreLastBorrower# संग्रह"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#StoreLastBorrower# the last patron to return an item. This setting is independent of opacreadinghistory/AnonymousPatron."
-msgstr ""
-"circulation.pref#StoreLastBorrower# एक आइटम वापस करने के लिए अंतिम संरक्षक। "
-"यह सेटिंग opacreadhistory/AnonymousPatron से स्वतंत्र है."
+msgstr "circulation.pref#StoreLastBorrower# एक आइटम वापस करने के लिए अंतिम संरक्षक। यह सेटिंग opacreadhistory/AnonymousPatron से स्वतंत्र है."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsIntranet# Allow"
@@ -4425,9 +4402,7 @@ msgstr "circulation.pref#TrapHoldsOnOrder# जाल करो"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
-msgstr ""
-"circulation.pref#TrapHoldsOnOrder# आइटम जो लोन के लिए नहीं हैं, लेकिन होल्ड "
-"को भरने के लिए (notforloan< 0) होल्ड करने योग्य ."
+msgstr "circulation.pref#TrapHoldsOnOrder# आइटम जो लोन के लिए नहीं हैं, लेकिन होल्ड को भरने के लिए (notforloan< 0) होल्ड करने योग्य ."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -4536,6 +4511,18 @@ msgstr "circulation.pref # UseBranchTransferLimits # आइटम प्रक�
 # Circulation > Checkout policy
 msgid "circulation.pref#UseBranchTransferLimits# library transfer limits based on"
 msgstr "circulation.pref # UseBranchTransferLimits # पुस्तकालय हस्तांतरण सीमा के आधार पर"
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Don't use"
+msgstr "circulation.pref#UseCirculationDesks# उपयोग न करें"
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# Use"
+msgstr "circulation.pref#UseCirculationDesks# उपयोग करें"
+
+# Circulation > Interface
+msgid "circulation.pref#UseCirculationDesks# circulation desks with circulation."
+msgstr "circulation.pref#UseCirculationDesks# परिसंचरण डेस्क परिसंचरण के साथ."
 
 # Circulation > Course reserves
 msgid "circulation.pref#UseCourseReserves# Don't use"
@@ -4695,12 +4682,7 @@ msgstr "circulation.pref#finesCalendar# जुर्माना की अव�
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
-msgstr ""
-"circulation.pref#finesMode# <br><strong>NOTE:</strong> यदि "
-"क्रॉनजाब्स/जुर्माना। क्रॉनजाब्स चलाया जा रहा है, तो जमा करने और अंतिम "
-"जुर्माना की गणना तब की जाएगी जब कोई वस्तु वापस आने पर क्रोन चलता है और "
-"उपार्जित जुर्माना अंतिम रूप दिया जाएगा। यदि CalculateFinesOnReturn सक्षम है, "
-"तो अंतिम जुर्माना की गणना तब की जाएगी जब कोई आइटम वापस किया जाएगा."
+msgstr "circulation.pref#finesMode# <br><strong>NOTE:</strong> यदि क्रॉनजाब्स/जुर्माना। क्रॉनजाब्स चलाया जा रहा है, तो जमा करने और अंतिम जुर्माना की गणना तब की जाएगी जब कोई वस्तु वापस आने पर क्रोन चलता है और उपार्जित जुर्माना अंतिम रूप दिया जाएगा। यदि CalculateFinesOnReturn सक्षम है, तो अंतिम जुर्माना की गणना तब की जाएगी जब कोई आइटम वापस किया जाएगा."
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# Calculate and charge"
@@ -4712,9 +4694,7 @@ msgstr "circulation.pref # finesMode # गणना नहीं करते"
 
 # Circulation > Fines policy
 msgid "circulation.pref#finesMode# fines (when <code>cronjobs/fines.pl</code> is being run)."
-msgstr ""
-"circulation.pref#finesMode# जुर्माना (जब <code>cronjobs/fines.pl</code> चलाया"
-" जा रहा है)."
+msgstr "circulation.pref#finesMode# जुर्माना (जब <code>cronjobs/fines.pl</code> चलाया जा रहा है)."
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# Don't enable"
@@ -6227,9 +6207,9 @@ msgstr "opac.pref गोपनीयता"
 msgid "opac.pref Restricted page"
 msgstr "opac.pref प्रतिबंधित पेज"
 
-# OPAC > Self registration
-msgid "opac.pref Self registration"
-msgstr "opac.pref स्वंय पंजीकरण"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr "opac.pref स्व पंजीकरण और संशोधन"
 
 # OPAC > Shelf browser
 msgid "opac.pref Shelf browser"
@@ -6349,9 +6329,7 @@ msgstr "opac.pref # DisplayOPACiconsXSLT # दिखाएँ"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
-msgstr ""
-"opac.pref#DisplayOPACiconsXSLT# प्रारूप, दर्शक और सामग्री प्रकार के चिह्न और "
-"विवरण XSLT MARC21 परिणाम और विवरण पेज OPAC में."
+msgstr "opac.pref#DisplayOPACiconsXSLT# प्रारूप, दर्शक और सामग्री प्रकार के चिह्न और विवरण XSLT MARC21 परिणाम और विवरण पेज OPAC में."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -6605,15 +6583,15 @@ msgstr "opac.pref#OPACOpenURLItemTypes# <br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "opac.pref#OPACOpenURLItemTypes# उन आइटम प्रकार कोड की सूची (रिक्त स्थान से अलग) जिन्हें आप OpenURL लिंक दिखाना चाहते हैं:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "opac.pref # OPACPatronDetails # अनुमति दें"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "opac.pref#OPACPatronDetails# अनुमति न दें"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "opac.pref # OPACPatronDetails # संरक्षक ओपेक से उनके संपर्क जानकारी में परिवर्तन के पुस्तकालय को सूचित करने के।"
 
@@ -6659,9 +6637,7 @@ msgstr "opac.pref#OPACReportProblem# <br/>"
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <strong>NOTE:</strong> You must have KohaAdminEmailAddress enabled."
-msgstr ""
-"opac.pref#OPACReportProblem# <strong>नोट:</strong> आपके पास "
-"KohaAdminEmailAddress सक्षम होना चाहिए."
+msgstr "opac.pref#OPACReportProblem# <strong>नोट:</strong> आपके पास KohaAdminEmailAddress सक्षम होना चाहिए."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# Allow"
@@ -6673,9 +6649,7 @@ msgstr "opac.pref#OPACReportProblem# अनुमति नही"
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# patrons to submit problem reports for OPAC pages to the library or Koha Administrator."
-msgstr ""
-"opac.pref#OPACReportProblem# पुस्तकालय या कोहा प्रशासक को ओपैक पृष्ठों के लि"
-"ए समस्या रिपोर्ट प्रस्तुत करने के लिए संरक्षक."
+msgstr "opac.pref#OPACReportProblem# पुस्तकालय या कोहा प्रशासक को ओपैक पृष्ठों के लिए समस्या रिपोर्ट प्रस्तुत करने के लिए संरक्षक."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# . Please note that this feature is currently available for MARC21 and UNIMARC."
@@ -7047,9 +7021,7 @@ msgstr "opac.pref # OpacBrowseResults # ब्राउज़िंग और �
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseSearch# (Elasticsearch only) Enable the interface allowing to browse all holdings."
-msgstr ""
-"opac.pref#OpacBrowseSearch# (केवल एलेस्टिकखोज) इंटरफ़ेस को सभी होल्डिंग्स को "
-"ब्राउज़ करने की अनुमति दें।"
+msgstr "opac.pref#OpacBrowseSearch# (केवल एलेस्टिकखोज) इंटरफ़ेस को सभी होल्डिंग्स को ब्राउज़ करने की अनुमति दें।"
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowseSearch# Disable"
@@ -7361,15 +7333,11 @@ msgstr "opac.pref # OpacPublic # सक्षम करें"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
-msgstr ""
-"opac.pref#OpacPublic# जनता के रूप में कोहा ओपेक. निजी ओपेक को ओपेक तक पहुंचने"
-" से पहले प्रमाणीकरण की आवश्यकता होती है। "
+msgstr "opac.pref#OpacPublic# जनता के रूप में कोहा ओपेक. निजी ओपेक को ओपेक तक पहुंचने से पहले प्रमाणीकरण की आवश्यकता होती है। "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
-msgstr ""
-"opac.pref#OpacPublic# नोट: यह सार्वजनिक एपीआई को प्रभावित नहीं करता है, देखें"
-" <code>RESTPublicAnonymousRequests</code> एपीआई को नियंत्रित करने के लिए."
+msgstr "opac.pref#OpacPublic# नोट: यह सार्वजनिक एपीआई को प्रभावित नहीं करता है, देखें <code>RESTPublicAnonymousRequests</code> एपीआई को नियंत्रित करने के लिए."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7539,137 +7507,133 @@ msgstr "opac.pref#OpenURLResolverURL# OpenURL रिज़ॉल्वर का
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "opac.pref#OpenURLText# OpenURL लिंक का पाठ (या OpenURLImageLocation परिभाषित होने पर छवि शीर्षक):"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "opac.pref # PatronSelfModificationBorrowerUnwantedField # (के साथ अलग-अलग कॉलम |)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "opac.pref#PatronSelfModificationBorrowerUnwantedField# निम्नलिखित <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक स्वयं-संशोधन स्क्रीन पर प्रकट नहीं होंगे:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "opac.pref#PatronSelfRegistration# <br><strong>नोट:</strong> यह PatronSelfRegistrationDefaultCategory को एक मान्य संरक्षक श्रेणी कोड पर सेट करने की आवश्यकता है."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "opac.pref # PatronSelfRegistration # अनुमति दें"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "opac.pref # PatronSelfRegistration # अनुमति न दें"
 
-# OPAC > Self registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "opac.pref#PatronSelfRegistration# ओपेक के माध्यम से अपने खाते को पंजीकृत करने या संशोधित करने के लिए पुस्तकालय संरक्षक."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
+"opac.pref#PatronSelfRegistration# ओपेक के माध्यम से खाते के लिए पंजीकरण करने "
+"के लिए पुस्तकालय संरक्षक."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "opac.pref # PatronSelfRegistrationAdditionalInstructions # संरक्षक जो आत्म ओपेक के माध्यम से रजिस्टर (एचटीएमएल की अनुमति दी जाती है) के लिए निम्नलिखित अतिरिक्त निर्देश प्रदर्शन:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "opac.pref # PatronSelfRegistrationBorrowerMandatoryField # (के साथ अलग-अलग कॉलम |)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# निम्नलिखित <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक प्रविष्टि स्क्रीन पर भरने चाहिए:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "opac.pref # PatronSelfRegistrationBorrowerUnwantedField # (के साथ अलग-अलग कॉलम |)"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# निम्नलिखित <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक स्वयं-पंजीकरण स्क्रीन पर प्रकट नहीं होंगे:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
 msgstr "opac.pref#PatronSelfRegistrationConfirmEmail# की आवश्यकता नहीं है"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
 msgstr "opac.pref#PatronSelfRegistrationConfirmEmail# आवश्यकता"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
-msgstr ""
-"opac.pref#PatronSelfRegistrationConfirmEmail# उपयोगकर्ता दो बार दर्ज करके "
-"अपने ईमेल पते की पुष्टि करते हैं।"
+msgstr "opac.pref#PatronSelfRegistrationConfirmEmail# उपयोगकर्ता दो बार दर्ज करके अपने ईमेल पते की पुष्टि करते हैं।"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "opac.pref # PatronSelfRegistrationDefaultCategory # संरक्षक श्रेणी कोड का उपयोग करें"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "opac.pref # PatronSelfRegistrationDefaultCategory # ओपेक के माध्यम से पंजीकृत संरक्षक के लिए डिफ़ॉल्ट संरक्षक श्रेणी के रूप में।"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# विचार करें"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# विचार नही करें"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# संरक्षक के ई-मेल (borrowers.email) स्व पंजीकरण के रूप में अद्वितीय। अगर यह पहले से ही डेटाबेस में मौजूद एक ईमेल स्वीकार नहीं किया जाएगा."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए <code>misc/cronjobs/cleanup_database.pl</code> क्रानजॉब की आवश्यकता होती है। इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
-msgstr ""
-"opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# संरक्षक हटाएं "
-"अभी भी PatronSelfRegistrationDefaultCategory श्रेणी के द्वारा संकेत दिया"
+msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# संरक्षक हटाएं अभी भी PatronSelfRegistrationDefaultCategory श्रेणी के द्वारा संकेत दिया"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
-msgstr ""
-"opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# खाता बनाने के "
-"कुछ दिन बाद।"
+msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# खाता बनाने के कुछ दिन बाद।"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "opac.pref#PatronSelfRegistrationLibraryList# (अलग शाखाकोड साथ |)."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "opac.pref#PatronSelfRegistrationLibraryList# निम्नलिखित पुस्तकालयों के लिए स्वयं को सक्षम पंजीकरण:"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "opac.pref#PatronSelfRegistrationLibraryList#खाली हैं, सभी पुस्तकालयों में सूचीबद्ध किया जाएगा."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# प्रदर्शन और Prefill"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# प्रदर्शन नही करें और Prefill"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# पासवर्ड और प्रवेश फार्म एक संरक्षक के बाद आत्म दर्ज की गई है।"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है  <code>misc/cronjobs/cleanup_database.pl</code> क्रॉनजॉब. अपने सिस्टम प्रशासक से इसे शेड्यूल करने के लिए कहें."
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "opac.pref # PatronSelfRegistrationVerifyByEmail # की आवश्यकता नहीं है"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "opac.pref # PatronSelfRegistrationVerifyByEmail # आवश्यकता"
 
-# OPAC > Self registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# एक स्व-पंजीकृत संरक्षक को ईमेल के माध्यम से सत्यापित करें."
 
@@ -8019,11 +7983,7 @@ msgstr "patrons.pref#AllowPatronToControlAutorenewal# संरक्षको�
 
 # Patrons > General
 msgid "patrons.pref#AllowPatronToControlAutorenewal# to allow/disallow auto-renewal for account. If allowed a patron will be able to update their own account to allow/disallow auto-renewal"
-msgstr ""
-"patrons.pref#AllowPatronToControlAutorenewal# खाते के लिए ऑटो-नवीनीकरण को "
-"अनुमति/अस्वीकार करने के लिए। यदि अनुमति दी गई है, तो ऑटो-नवीनीकरण को "
-"अनुमति/अस्वीकार करने के लिए एक संरक्षक अपने स्वयं के खाते को अपडेट करने में "
-"सक्षम होगा"
+msgstr "patrons.pref#AllowPatronToControlAutorenewal# खाते के लिए ऑटो-नवीनीकरण को अनुमति/अस्वीकार करने के लिए। यदि अनुमति दी गई है, तो ऑटो-नवीनीकरण को अनुमति/अस्वीकार करने के लिए एक संरक्षक अपने स्वयं के खाते को अपडेट करने में सक्षम होगा"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -8167,8 +8127,7 @@ msgstr "patrons.pref#CheckPrevCheckout# जब तक संरक्षक श�
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Additional attributes and identifiers"
-msgstr ""
-"patrons.pref#CollapseFieldsPatronAddForm# अतिरिक्त विशेषताएँ और पहचानकर्ता"
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# अतिरिक्त विशेषताएँ और पहचानकर्ता"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Alternate address"
@@ -8212,8 +8171,7 @@ msgstr "patrons.pref#CollapseFieldsPatronAddForm# संगठन/संरक�
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron account flags (existing patrons)"
-msgstr ""
-"patrons.pref#CollapseFieldsPatronAddForm# संरक्षक खाता ध्वज (मौजूदा संरक्षक)"
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# संरक्षक खाता ध्वज (मौजूदा संरक्षक)"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron messaging preferences"
@@ -8221,24 +8179,15 @@ msgstr "patrons.pref#CollapseFieldsPatronAddForm# संरक्षक सं�
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# Patron restrictions (existing patrons)"
-msgstr ""
-"patrons.pref#CollapseFieldsPatronAddForm# संरक्षक प्रतिबंध (मौजूदा संरक्षक)"
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# संरक्षक प्रतिबंध (मौजूदा संरक्षक)"
 
 # Patrons > Patron forms
 msgid "patrons.pref#CollapseFieldsPatronAddForm# When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later)"
-msgstr ""
-"patrons.pref#CollapseFieldsPatronAddForm# नए संरक्षक जोड़ते समय या मौजूदा "
-"संरक्षकों को संपादित करते हुए, निम्नलिखित फ़ील्ड को पूर्ण रूप से संक्षिप्त "
-"करें (अभी भी बाद में विस्तारित किया जा सकता है)"
+msgstr "patrons.pref#CollapseFieldsPatronAddForm# नए संरक्षक जोड़ते समय या मौजूदा संरक्षकों को संपादित करते हुए, निम्नलिखित फ़ील्ड को पूर्ण रूप से संक्षिप्त करें (अभी भी बाद में विस्तारित किया जा सकता है)"
 
 # Patrons > General
 msgid "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the default fields to be used during a patron search using the \"standard\" option. If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
-msgstr ""
-"patrons.pref#DefaultPatronSearchFields# \"मानक\" विकल्प का उपयोग करके संरक्"
-"षक खोज के दौरान उपयोग किए जाने वाले डिफ़ॉल्ट फ़ील्ड को परिभाषित करने वाली "
-"कोमा अलग सूची। यदि खाली कोहा \"उपनाम, फर्स्टनाम, अन्यनाम, कार्डनंबर, यूजरिड\""
-" के लिए डिफ़ॉल्ट होगा। इस वरीयता में जोड़े गए अतिरिक्त क्षेत्रों को संरक्षक "
-"खोज पृष्ठ पर ड्रॉपडाउन मेनू में खोज विकल्पों के रूप में जोड़ा जाएगा।"
+msgstr "patrons.pref#DefaultPatronSearchFields# \"मानक\" विकल्प का उपयोग करके संरक्षक खोज के दौरान उपयोग किए जाने वाले डिफ़ॉल्ट फ़ील्ड को परिभाषित करने वाली कोमा अलग सूची। यदि खाली कोहा \"उपनाम, फर्स्टनाम, अन्यनाम, कार्डनंबर, यूजरिड\" के लिए डिफ़ॉल्ट होगा। इस वरीयता में जोड़े गए अतिरिक्त क्षेत्रों को संरक्षक खोज पृष्ठ पर ड्रॉपडाउन मेनू में खोज विकल्पों के रूप में जोड़ा जाएगा।"
 
 # Patrons > General
 msgid "patrons.pref#EnableBorrowerFiles# Do"
@@ -8534,9 +8483,7 @@ msgstr "patrons.pref#PrefillGuaranteeField# मुख्य पता - गल�
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# When adding a guarantee to a guarantor patron fill the following fields in the guarantee's member entry form from the guarantors record:"
-msgstr ""
-"patrons.pref#PrefillGuaranteeField# गारंटर की गारंटी देते समय संरक्षक रिकॉर्"
-"ड से गारंटर के सदस्य प्रविष्टि फॉर्म में निम्नलिखित फ़ील्ड भरें:"
+msgstr "patrons.pref#PrefillGuaranteeField# गारंटर की गारंटी देते समय संरक्षक रिकॉर्ड से गारंटर के सदस्य प्रविष्टि फॉर्म में निम्नलिखित फ़ील्ड भरें:"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
@@ -9032,9 +8979,7 @@ msgstr "searching.pref#OPACnumSearchResultsDropdown# दिखाओ"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on OPAC search results."
-msgstr ""
-"searching.pref#OPACnumSearchResultsDropdown# ओपेक खोज परिणामों पर प्रति पृष्"
-"ठ ड्रॉपडाउन के परिणाम।"
+msgstr "searching.pref#OPACnumSearchResultsDropdown# ओपेक खोज परिणामों पर प्रति पृष्ठ ड्रॉपडाउन के परिणाम।"
 
 # Searching > Features
 msgid "searching.pref#OpacGroupResults# Don't use"
@@ -9286,9 +9231,7 @@ msgstr "searching.pref#numSearchResultsDropdown# दिखाओ"
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# results per page dropdown on staff client search results."
-msgstr ""
-"searching.pref#numSearchResultsDropdown# स्टाफ क्लाइंट खोज परिणामों पर प्रति "
-"पृष्ठ ड्रॉपडाउन के परिणाम।"
+msgstr "searching.pref#numSearchResultsDropdown# स्टाफ क्लाइंट खोज परिणामों पर प्रति पृष्ठ ड्रॉपडाउन के परिणाम।"
 
 # Serials
 msgid "serials.pref"
@@ -9472,9 +9415,7 @@ msgstr "staff_client.pref # DisplayIconsXSLT # दिखाएँ"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
-msgstr ""
-"staff_client.pref#DisplayIconsXSLT# वह XSLT MARC21 के परिणामों और विवरणों को "
-"प्रारूप, दर्शक और सामग्री प्रकार के विवरण और स्टाफ क्लाइंट में विवरण पृष्ठ।"
+msgstr "staff_client.pref#DisplayIconsXSLT# वह XSLT MARC21 के परिणामों और विवरणों को प्रारूप, दर्शक और सामग्री प्रकार के विवरण और स्टाफ क्लाइंट में विवरण पृष्ठ।"
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9854,9 +9795,7 @@ msgstr "web_services.pref#AccessControlAllowOrigin# ."
 
 # Web services > General
 msgid "web_services.pref#AccessControlAllowOrigin# Set the Access-Control-Allow-Origin header to"
-msgstr ""
-"web_services.pref#AccessControlAllowOrigin# Access-Control-Allow-Origin हेडर "
-"को सेट करें"
+msgstr "web_services.pref#AccessControlAllowOrigin# Access-Control-Allow-Origin हेडर को सेट करें"
 
 # Web services > Mana KB
 msgid "web_services.pref#AutoShareWithMana# Fields automatically shared with Mana KB"
@@ -10052,9 +9991,7 @@ msgstr "web_services.pref#RESTPublicAnonymousRequests# सक्षम"
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
-msgstr ""
-"web_services.pref#RESTPublicAnonymousRequests# सार्वजनिक मार्गों तक अनाम पहुँ"
-"च (जिसे प्रमाणित पहुँच की आवश्यकता नहीं है)"
+msgstr "web_services.pref#RESTPublicAnonymousRequests# सार्वजनिक मार्गों तक अनाम पहुँच (जिसे प्रमाणित पहुँच की आवश्यकता नहीं है)"
 
 # Web services > REST API
 msgid "web_services.pref#RESTdefaultPageSize# Set the default number of results returned by the REST API endpoints to"

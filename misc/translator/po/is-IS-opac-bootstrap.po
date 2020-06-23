@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-05-13 17:45-0300\n"
+"POT-Creation-Date: 2020-06-18 07:13-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,10 +208,21 @@ msgstr "%s %s %s %s (%s) "
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
 #, c-format
 msgid "%s %s (not approved) %s "
 msgstr ""
+
+#. %1$s:  ELSE 
+#. %2$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %3$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %4$s:  HTML5MediaSet.child | html 
+#. %5$s:  HTML5MediaSet.srcblock | url 
+#. %6$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
+#, fuzzy, c-format
+msgid "%s %s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s %s%s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'biblio_exists' 
@@ -439,7 +450,7 @@ msgstr "Engin persónulegur listi "
 #. %2$s:  IF ( added_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:117
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully added."
 msgstr "var bætt við."
@@ -448,7 +459,7 @@ msgstr "var bætt við."
 #. %2$s:  IF ( deleted_count == 1 ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:120
 #, fuzzy, c-format
 msgid "%s %stag%stags%s successfully deleted."
 msgstr "eyðsla tókst"
@@ -477,16 +488,6 @@ msgstr "%s (Færsla nr. %s)"
 #, fuzzy, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "(tengdar leitir: "
-
-#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
-#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
-#. %3$s:  HTML5MediaSet.child | html 
-#. %4$s:  HTML5MediaSet.srcblock | html 
-#. %5$s:  HTML5MediaSet.typeblock | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:957
-#, fuzzy, c-format
-msgid "%s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s %s %s%s"
 
 #. %1$s:  USE raw 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
@@ -870,7 +871,7 @@ msgstr "Sjálfsafgreiðslukerfi %s"
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:79
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "frá öðrum notendum "
@@ -1042,7 +1043,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  END # /IF MY_TAG.XSLTBloc 
 #. %5$s:  INCLUDE 'title-actions-menu.inc' items=MY_TAG 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:151
 #, fuzzy, c-format
 msgid "%s by %s %s %s %s "
 msgstr "%s %s (%s) "
@@ -1809,7 +1810,7 @@ msgstr "%s Skráning &rsaquo; Athugasemdir um %s "
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1286
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1291
 #, fuzzy, c-format
 msgid "%s%s%sLink to resource%s"
 msgstr "Netupplýsingar: "
@@ -2113,8 +2114,8 @@ msgstr "Listi:"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, fuzzy, c-format
 msgid "%sby %s%s"
 msgstr "%s %s %s %s (%s) "
@@ -2989,7 +2990,7 @@ msgstr "Runnið út af tíma "
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1301
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1306
 #, fuzzy, c-format
 msgid "(priority %s)"
 msgstr "Forgangsröðun"
@@ -3380,7 +3381,7 @@ msgstr "Ýtarleg leit"
 msgid "All"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:75
 #, c-format
 msgid "All Tags"
 msgstr "Öll tög"
@@ -3606,7 +3607,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Ertu viss um að þú viljir eyða leitarsögunni þinni ?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 #, fuzzy
 msgid "Are you sure you want to delete the selected tag(s)?"
 msgstr "Ertu viss um að þú viljir þurrka út þennan lista ?"
@@ -3911,7 +3912,7 @@ msgstr "Laus eintök"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:443
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr ""
@@ -3937,13 +3938,13 @@ msgstr ""
 msgid "Back to lists"
 msgstr "Aftur í listana"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 #, fuzzy, c-format
 msgid "Back to results"
 msgstr "Aftur í listana"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1030
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
 #, fuzzy
 msgid "Back to the results search list"
 msgstr "Aftur í listana"
@@ -3955,7 +3956,7 @@ msgstr "Aftur í listana"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
@@ -4037,8 +4038,8 @@ msgstr "Skoða eftir flokkun"
 msgid "Browse our catalog"
 msgstr "Skoða eftir flokkun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1017
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1020
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
 #, fuzzy, c-format
 msgid "Browse results"
 msgstr "(<a1>Skoða hillu</a>)"
@@ -4050,8 +4051,8 @@ msgstr "(<a1>Skoða hillu</a>)"
 msgid "Browse search"
 msgstr "Skoða eftir flokkun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "(<a1>Skoða hillu</a>)"
@@ -4109,7 +4110,7 @@ msgstr "Beiðnanr."
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1150
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:250
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
@@ -4172,7 +4173,7 @@ msgstr "Beiðnanúmer"
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1349
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
@@ -4539,7 +4540,7 @@ msgstr "Smelltu hér til að tengjast"
 msgid "Click here to view them all."
 msgstr "Smelltu hér til að tengjast"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:970
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:975
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr ""
@@ -4574,8 +4575,8 @@ msgstr "Smelltu hér til þess að opna nýjan glugga"
 msgid "Click to view in Google Books"
 msgstr "Smelltu hér til þess að skoða hjá Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1019
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1067
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1072
 #, fuzzy, c-format
 msgid "Close"
 msgstr "Safnskrár"
@@ -4627,7 +4628,7 @@ msgstr "Valdir hlutir :"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1142
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
 #, c-format
 msgid "Collection"
 msgstr "Safn"
@@ -4782,7 +4783,7 @@ msgstr "Athugasemdir um efni: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, fuzzy, c-format
 msgid "Copy number"
 msgstr "Beiðnanúmer"
@@ -4856,7 +4857,7 @@ msgstr "Korta númer:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:21
 #, fuzzy, c-format
 msgid "Course reserves"
@@ -4929,7 +4930,7 @@ msgstr "Þakkir"
 msgid "Credits (%s)"
 msgstr "Þakkir"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
 #, fuzzy, c-format
 msgid "Current location"
 msgstr "Núverandi tenging"
@@ -4984,7 +4985,7 @@ msgstr "DVD vídeó / Geisladiskur"
 msgid "Date"
 msgstr "Dagsetning"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:598
@@ -5004,13 +5005,13 @@ msgstr "Dagsetning kaupa: Frá þeim nýjustu til þeirra elstu"
 msgid "Date added (oldest to newest)"
 msgstr "Dagsetning kauap: Frá þeim elstu til þeirra nýjustu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:161
 #, fuzzy, c-format
 msgid "Date added:"
 msgstr "Bætt við dags"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "Skiladagsetning"
@@ -5115,7 +5116,7 @@ msgid "Delete selected"
 msgstr "Fjarlægja valda hluti"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:170
 #, fuzzy
 msgid "Delete selected tags"
 msgstr "Fjarlægja valda hluti"
@@ -6009,8 +6010,8 @@ msgid "Go"
 msgstr "Áfram"
 
 #. LI
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1064
 #, fuzzy
 msgid "Go to detail"
 msgstr "Nánari upplýsingar um tengilið"
@@ -6261,7 +6262,7 @@ msgid "Home libraries"
 msgstr "Heimasafn:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1140
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:134
 #, fuzzy, c-format
 msgid "Home library"
@@ -6709,12 +6710,12 @@ msgstr "%s Eintök í útláni"
 msgid "Item damaged"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Taka frá"
@@ -6745,7 +6746,7 @@ msgstr "Engar endurnýjanir eftir"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:541
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, c-format
 msgid "Item type"
@@ -7224,8 +7225,8 @@ msgstr "Skráðu þig inn til að búa til þína eigin lista"
 msgid "Log in to create your own lists"
 msgstr "Skráðu þig inn til að búa til þína eigin lista"
 
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:97
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:99
 #, fuzzy, c-format
 msgid "Log in to see your own saved tags."
 msgstr "<a1>Skráðu þig inn</a> til að sjá tögin sem þú hefur vistað."
@@ -7412,7 +7413,7 @@ msgstr "Leit"
 msgid "Match:"
 msgstr "Passar:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "Ekkert tag var valið."
@@ -7661,14 +7662,14 @@ msgstr "Tög frá þessu safni:"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1035
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1040
 #, c-format
 msgid "Next"
 msgstr "Næsta"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:84
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 #, fuzzy, c-format
 msgid "Next "
 msgstr "Næsta"
@@ -8080,7 +8081,7 @@ msgid "Note: you can only delete your own tags."
 msgstr "Athugaðu: Þú getur bara eytt þínum eigin tögum."
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:63
 #, fuzzy, c-format
 msgid ""
 "Note: you can only delete your own tags. %s Note: your tag contained markup "
@@ -8121,7 +8122,7 @@ msgstr "Athugasemd: Tagið þitt inniheldur kóða sem hefur verið fjarlægður
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:39
 #, c-format
 msgid "Notes"
@@ -8173,8 +8174,8 @@ msgid "Nov"
 msgstr "Nei"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:536
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:983
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:988
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -8215,7 +8216,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
 msgid "OK"
 msgstr "OK"
 
@@ -8825,7 +8826,7 @@ msgid "Please select a specific item for this article request."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:182
 msgid "Please select a tag to delete."
 msgstr ""
 
@@ -8845,7 +8846,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:69
 #, fuzzy, c-format
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Vinsamlegast reyndu aftur með venjulegan texta. "
@@ -8924,8 +8925,8 @@ msgstr "endurskoðun"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:13
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
 #, c-format
 msgid "Previous"
 msgstr "Fyrri"
@@ -9811,7 +9812,7 @@ msgstr "Skoða nýjan hlut eða skrá strikamerki hans:"
 #. INPUT type=submit name=do
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1353
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
@@ -9958,12 +9959,12 @@ msgid "See also:"
 msgstr "Velja lista"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1033
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -9983,7 +9984,7 @@ msgstr "Velja sértækt afrit:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1342
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:51
@@ -9994,7 +9995,7 @@ msgstr "Velja sértækt afrit:"
 msgid "Select all"
 msgstr "Velja allt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1343
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Velja allt"
@@ -10014,7 +10015,7 @@ msgstr "Valdir hlutir : "
 msgid "Select suggestions to: "
 msgstr "Valdir hlutir : "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1344
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
 msgstr "Valdir hlutir :"
@@ -10148,7 +10149,7 @@ msgstr "Tenging týnd"
 msgid "Settings updated"
 msgstr "Stillingar uppfærðar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:709
 #, fuzzy, c-format
 msgid "Share"
@@ -10165,7 +10166,7 @@ msgid "Share a list with another patron"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1104
 #, fuzzy
 msgid "Share by email"
 msgstr "Vinnunetfang:"
@@ -10176,22 +10177,22 @@ msgid "Share list"
 msgstr "Listinn þinn "
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1095
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 msgid "Share on LinkedIn"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1101
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "Velja lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "Núverandi tenging"
@@ -10549,7 +10550,7 @@ msgstr "Tölfræði"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:787
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
 #, c-format
 msgid "Status"
@@ -10911,7 +10912,7 @@ msgstr "Staða tags hér."
 msgid "Tag status here. "
 msgstr "Staða tags hér. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:137
 #, fuzzy, c-format
 msgid "Tag:"
 msgstr "BT: %s"
@@ -10946,7 +10947,7 @@ msgstr "Tæknilegar skýrslur"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Term"
@@ -11251,7 +11252,7 @@ msgstr "Áskriftin rennur út þann %s"
 
 #. %1$s:  ERROR.scrubbed | html 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:66
 #, fuzzy, c-format
 msgid ""
 "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
@@ -11298,18 +11299,17 @@ msgstr "Það eru engar ábendingar um kaup í bið."
 msgid "There is no minimum or maximum character length."
 msgstr ""
 
-#. %1$s:  IF ( ERROR.tagsdisabled ) 
-#. %2$s:  ELSIF ( ERROR.badparam ) 
-#. %3$s:  ERROR.badparam | html 
-#. %4$s:  ELSIF ( ERROR.login ) 
-#. %5$s:  ELSIF ( ERROR.failed_delete ) 
-#. %6$s:  ERROR.failed_delete | html 
+#. %1$s:  IF ( ERROR.badparam ) 
+#. %2$s:  ERROR.badparam | html 
+#. %3$s:  ELSIF ( ERROR.login ) 
+#. %4$s:  ELSIF ( ERROR.failed_delete ) 
+#. %5$s:  ERROR.failed_delete | html 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:55
 #, c-format
 msgid ""
-"There was a problem with this operation: %s Sorry, tags are not enabled on "
-"this system. %s ERROR: illegal parameter %s %s ERROR: You must log in to "
-"complete that action. %s ERROR: You cannot delete the tag %s. "
+"There was a problem with this operation: %s ERROR: illegal parameter %s %s "
+"ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
+"the tag %s. "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:32
@@ -11440,7 +11440,7 @@ msgid "This news item does not exist. "
 msgstr "<em>SKILABOÐ 5:</em> Það er ekki hægt að fá þennan hlut lánaðann. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #, fuzzy, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11498,7 +11498,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:491
@@ -11539,7 +11539,7 @@ msgstr "Skýringar titils"
 msgid "Title phrase"
 msgstr "Orðasamband titils"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:148
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:62
@@ -11667,7 +11667,7 @@ msgstr "Tegund:"
 msgid "UF"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #, fuzzy, c-format
 msgid "URL"
 msgstr "URL(s)"
@@ -11897,7 +11897,7 @@ msgid "View on Amazon.com"
 msgstr "Skoða hjá Amazon.com"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1049
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1054
 #, fuzzy
 msgid "View record \"%s\""
 msgstr "Vista færslu: "
@@ -11910,7 +11910,7 @@ msgid "View your search history"
 msgstr "Eyða leitarsögunni þinni"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "Magnupplýsingar"
@@ -12805,7 +12805,7 @@ msgstr "mína tillögur að kaupum"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1378
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "Listinn þinn : %s "
@@ -12864,7 +12864,7 @@ msgstr "Tillaga þín hefur verið send."
 msgid "Your summary"
 msgstr "um samantekt,"
 
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, fuzzy, c-format
 msgid "Your tags"
 msgstr "tögin mín"
@@ -12901,13 +12901,13 @@ msgid "[ New list ]"
 msgstr "Nýr listi"
 
 #. INPUT type=text name=limit
-#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-tags.tt:87
 #, fuzzy
 msgid "[% limit or"
 msgstr "Takmarkað við:"
 
 #. %1$s:  HTML5MediaParent | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:965
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr ""
@@ -13094,7 +13094,7 @@ msgid "for more information on what it does and how to configure it."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, fuzzy, c-format
 msgid "here"
 msgstr "Annað"
