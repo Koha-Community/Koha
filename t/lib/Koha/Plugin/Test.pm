@@ -155,6 +155,31 @@ sub after_item_action {
     }
 }
 
+sub post_renewal_action {
+    my ( $self, $params ) = @_;
+
+    my $renewal_library_id = $params->{renewal_library_id};
+    my $charge             = $params->{charge};
+    my $item_id            = $params->{item_id};
+    my $item_type          = $params->{item_type};
+    my $shelving_location  = $params->{shelving_location};
+    my $patron_id          = $params->{patron_id};
+    my $collection_code    = $params->{collection_code};
+    my $date_due           = $params->{date_due};
+
+    Koha::Exceptions::Exception->throw(
+        "post_renewal_action " .
+        "$renewal_library_id " .
+        "$charge " .
+        "$item_id " .
+        "$item_type " .
+        "$shelving_location " .
+        "$patron_id " .
+        "$collection_code " .
+        ref($date_due)
+    );
+}
+
 sub api_routes {
     my ( $self, $args ) = @_;
 
