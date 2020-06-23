@@ -62,6 +62,7 @@ use Koha::Checkouts::ReturnClaims;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
+use Try::Tiny;
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -3095,6 +3096,20 @@ sub AddRenewal {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
 
+        _post_renewal_actions(
+            {
+                renewal_library_id =>
+                  $item_object->renewal_branchcode( { branch => $branch } ),
+                charge            => $charge,
+                item_id           => $itemnumber,
+                item_type         => $itemtype,
+                shelving_location => $item_object->location // q{},
+                patron_id         => $borrowernumber,
+                collection_code   => $item_object->ccode // q{},
+                date_due          => $datedue
+            }
+        ) if C4::Context->config("enable_plugins");
+
         # Add the renewal to stats
         UpdateStats(
             {
@@ -4241,6 +4256,10 @@ sub GetTopIssues {
     return @$rows;
 }
 
+=head2 Internal methods
+
+=cut
+
 sub _CalculateAndUpdateFine {
     my ($params) = @_;
 
@@ -4317,6 +4336,29 @@ sub _item_denied_renewal {
     return 0;
 }
 
+=head3 _post_renewal_actions
+
+Internal method that calls the post_renewal_action plugin hook on configured
+plugins.
+
+=cut
+
+sub _post_renewal_actions {
+    my ($params) = @_;
+
+    my @plugins = Koha::Plugins->new->GetPlugins({
+        method => 'post_renewal_action',
+    });
+
+    foreach my $plugin ( @plugins ) {
+        try {
+            $plugin->post_renewal_action( $params );
+        }
+        catch {
+            warn "$_";
+        };
+    }
+}
 
 1;
 
