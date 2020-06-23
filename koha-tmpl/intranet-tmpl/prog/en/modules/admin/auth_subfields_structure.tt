@@ -263,13 +263,16 @@
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
 <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
 
-<table>
-    <tr>
-        <th>Subfield</th>
-        <th>Text</th>
-        <th>Constraints</th>
-        <th>&nbsp;</th>
-    </tr>
+<table id="table_authsubfieldstructure">
+    <thead>
+        <tr>
+            <th>Subfield</th>
+            <th>Text</th>
+            <th>Constraints</th>
+            <th class="NoSort">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
     [% FOREACH loo IN loop %]
     <tr>
         <td>
@@ -309,6 +312,7 @@
         </td>
     </tr>
     [% END %]
+    </tbody>
 </table>
 
     <form action="[% script_name | html %]" method="get">
@@ -342,11 +346,18 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
-     $(document).ready(function() {
-        $('#subfieldtabs').tabs();
-     });
+        $(document).ready(function() {
+            $('#subfieldtabs').tabs();
+            $("#table_authsubfieldstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "columnDefs": [
+                    { 'sortable': false, 'targets': [ 'NoSort' ] }
+                ],
+                paginate: false
+            }));
+        });
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
