@@ -240,7 +240,7 @@ sub get_push_amt {
         # We're using Dayweek useDaysMode option
         $self->{days_mode} eq 'Dayweek' &&
         # It's not a permanently closed day
-        !$self->{weekly_closed_days}->[$dow] == 1
+        !$self->{weekly_closed_days}->[$dow % 7]
     ) ? 7 : 1;
 }
 
