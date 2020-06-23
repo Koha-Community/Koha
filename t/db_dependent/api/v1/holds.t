@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -569,6 +569,91 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
     is( $hold_1->discard_changes->priority, 1, 'Priority adjusted correctly' );
     is( $hold_2->discard_changes->priority, 2, 'Priority adjusted correctly' );
     is( $hold_3->discard_changes->priority, 3, 'Priority adjusted correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add() tests (maxreserves behaviour)' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    $dbh->do('DELETE FROM reserves');
+
+    Koha::CirculationRules->new->delete;
+
+    my $password = 'AbcdEFG123';
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 1 } } );
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
+    Koha::CirculationRules->set_rules(
+        {
+            itemtype     => undef,
+            branchcode   => undef,
+            categorycode => undef,
+            rules        => {
+                reservesallowed => 3
+            }
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => $patron->categorycode,
+            rules        => {
+                max_holds   => 4,
+            }
+        }
+    );
+
+    my $biblio_1 = $builder->build_sample_biblio;
+    my $item_1   = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
+    my $biblio_2 = $builder->build_sample_biblio;
+    my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
+    my $biblio_3 = $builder->build_sample_biblio;
+    my $item_3   = $builder->build_sample_item({ biblionumber => $biblio_3->biblionumber });
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+    t::lib::Mocks::mock_preference( 'maxreserves',   2 );
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+    my $post_data = {
+        patron_id => $patron->borrowernumber,
+        biblio_id => $biblio_1->biblionumber,
+        pickup_library_id => $item_1->home_branch->branchcode,
+        item_type => $item_1->itype,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201);
+
+    $post_data = {
+        patron_id => $patron->borrowernumber,
+        biblio_id => $biblio_2->biblionumber,
+        pickup_library_id => $item_2->home_branch->branchcode,
+        item_id   => $item_2->itemnumber
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201);
+
+    $post_data = {
+        patron_id => $patron->borrowernumber,
+        biblio_id => $biblio_3->biblionumber,
+        pickup_library_id => $item_1->home_branch->branchcode,
+        item_id   => $item_3->itemnumber
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(403)
+      ->json_is( { error => 'Hold cannot be placed. Reason: tooManyReserves' } );
 
     $schema->storage->txn_rollback;
 };
