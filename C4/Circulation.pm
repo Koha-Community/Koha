@@ -2060,7 +2060,7 @@ sub AddReturn {
     # fix up the overdues in accounts...
     if ($borrowernumber) {
         my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine, 'RETURNED' );
-        defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->itemnumber...) failed!";  # zero is OK, check defined
+        defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, ".$item->itemnumber."...) failed!";  # zero is OK, check defined
 
         if ( $issue and $issue->is_overdue($return_date) ) {
         # fix fine days
@@ -2461,15 +2461,16 @@ sub _FixOverduesOnReturn {
 
                 $credit->apply({ debits => [ $accountline ], offset_type => 'Forgiven' });
 
-                $accountline->status('FORGIVEN');
-                $accountline->store();
-
                 if (C4::Context->preference("FinesLog")) {
                     &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
                 }
+
+                $accountline->status('FORGIVEN');
+                $accountline->store();
             } else {
                 $accountline->status($status);
                 $accountline->store();
+
             }
         }
     );
