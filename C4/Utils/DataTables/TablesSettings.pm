@@ -59,6 +59,22 @@ sub get_columns {
     return $columns;
 }
 
+=head3 get_table_settings
+
+my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings(
+    {
+        module                 => $module,
+        pag                    => $page,
+        tablename              => $tablename,
+    }
+);
+
+Returns the settings for a given table.
+
+The settings are default_display_length and default_sort_order.
+
+=cut
+
 sub get_table_settings {
     my ( $module, $page, $tablename ) = @_;
     my $list = get_yaml;

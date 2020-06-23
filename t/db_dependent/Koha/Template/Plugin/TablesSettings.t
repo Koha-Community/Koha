@@ -10,10 +10,10 @@ use Test::More tests => 3;
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('Koha::Template::Plugin::ColumnsSettings', "Can use Koha::Template::Plugin::ColumnsSettings");
+    use_ok('Koha::Template::Plugin::TablesSettings', "Can use Koha::Template::Plugin::TablesSettings");
 }
 
-ok( my $settings = Koha::Template::Plugin::ColumnsSettings->new(), 'Able to instantiate template plugin' );
+ok( my $settings = Koha::Template::Plugin::TablesSettings->new(), 'Able to instantiate template plugin' );
 
 subtest "is_hidden" => sub {
     plan tests => 2;

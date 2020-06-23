@@ -3,7 +3,6 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
-[% USE Dumper %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 0 %]
         Jump to:
@@ -101,6 +100,7 @@
                                             [% IF table_settings.default_display_length == 10 %]
                                                 <option value="10" selected="selected">10</option>
                                             [% ELSE %]
+                                                <option value="10">10</option>
                                             [% END %]
                                             [% IF table_settings.default_display_length == 20 %]
                                                 <option value="20" selected="selected">20</option>
