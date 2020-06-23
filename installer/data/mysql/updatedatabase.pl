@@ -22173,6 +22173,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, undef, '20.05.00 alpha release' );
 }
 
+$DBversion = '20.05.01.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, undef, '20.05.01 release' );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
