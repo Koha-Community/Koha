@@ -280,6 +280,7 @@ if ($zebraqueue_days) {
 
 if ($mail) {
     print "Mail queue purge triggered for $mail days.\n" if $verbose;
+    $count = 0;
     $sth = $dbh->prepare(
         q{
             DELETE FROM message_queue
@@ -289,8 +290,10 @@ if ($mail) {
     if ( $confirm ) {
         $sth->execute($mail) or die $dbh->errstr;
         $count = $sth->rows;
+        print "$count messages were deleted from the mail queue.\nDone with message_queue purge.\n" if $verbose;
+    } else {
+        print "Messages were deleted from the mail queue.\nDone with message_queue purge.\n" if $verbose;
     }
-    print "$count messages were deleted from the mail queue.\nDone with message_queue purge.\n" if $verbose;
 }
 
 if ($purge_merged) {
