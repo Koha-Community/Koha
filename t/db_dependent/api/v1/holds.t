@@ -199,7 +199,7 @@ subtest "Test endpoints without permission" => sub {
 
 subtest "Test endpoints with permission" => sub {
 
-    plan tests => 59;
+    plan tests => 62;
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
@@ -286,6 +286,20 @@ subtest "Test endpoints with permission" => sub {
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
       ->json_like('/error', qr/itemAlreadyOnHold/);
+
+    my $to_delete_patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $deleted_patron_id = $to_delete_patron->borrowernumber;
+    $to_delete_patron->delete;
+
+    my $tmp_patron_id = $post_data->{patron_id};
+    $post_data->{patron_id} = $deleted_patron_id;
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(400)
+      ->json_is( { error => 'patron_id not found' } );
+
+    # Restore the original patron_id as it is expected by the next subtest
+    # FIXME: this tests need to be rewritten from scratch
+    $post_data->{patron_id} = $tmp_patron_id;
 };
 
 subtest 'Reserves with itemtype' => sub {
