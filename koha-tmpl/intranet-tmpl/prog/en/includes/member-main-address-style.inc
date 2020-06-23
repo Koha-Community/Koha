@@ -48,13 +48,13 @@
 [% BLOCK 'address-style_roadtypes' %]
     [% IF roadtypes %]
         <li>
-            [% IF ( mandatorystreetype ) %]
-                <label for="streetype" class="required">
+            [% IF ( mandatorystreettype ) %]
+                <label for="streettype" class="required">
             [% ELSE %]
-                <label for="streetype">
+                <label for="streettype">
             [% END %]
             Street type: </label>
-            <select name="streetype">
+            <select name="streettype">
                 <option value=""></option>
                 [% FOR roadtype IN roadtypes %]
                     [% IF roadtype.authorised_value == patron.streettype %]
@@ -64,7 +64,7 @@
                     [% END %]
                 [% END %]
             </select>
-            [% IF ( mandatorystreetype ) %]<span class="required">Required</span>[% END %]
+            [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
 [% END %]
