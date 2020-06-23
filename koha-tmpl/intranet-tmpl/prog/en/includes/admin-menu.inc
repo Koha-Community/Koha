@@ -131,7 +131,7 @@
                 <li><a href="/cgi-bin/koha/admin/didyoumean.pl">Did you mean?</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_column_config ) %]
-                <li><a href="/cgi-bin/koha/admin/columns_settings.pl">Columns settings</a></li>
+                <li><a href="/cgi-bin/koha/admin/columns_settings.pl">Tables settings</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_audio_alerts ) %]
                 <li><a href="/cgi-bin/koha/admin/audio_alerts.pl">Audio alerts</a></li>
