@@ -127,10 +127,22 @@ sub add {
             );
         }
 
+        my $patron = Koha::Patrons->find( $patron_id );
+        unless ($patron) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => 'patron_id not found' }
+            );
+        }
+
         my $can_place_hold
             = $item_id
             ? C4::Reserves::CanItemBeReserved( $patron_id, $item_id )
             : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
+
+        if ( $patron->holds->count + 1 > C4::Context->preference('maxreserves') ) {
+            $can_place_hold->{status} = 'tooManyReserves';
+        }
 
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
 
