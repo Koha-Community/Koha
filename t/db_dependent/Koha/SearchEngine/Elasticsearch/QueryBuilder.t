@@ -547,7 +547,7 @@ subtest 'build_query with weighted fields tests' => sub {
     $se->mock( '_load_elasticsearch_mappings', sub {
         return {
             authorities => {
-                heading => {
+                Heading => {
                     label => 'heading',
                     type => 'string',
                     opac => 0,
@@ -557,7 +557,7 @@ subtest 'build_query with weighted fields tests' => sub {
                         marc_type => 'marc21',
                     }]
                 },
-                headingmain => {
+                Headingmain => {
                     label => 'headingmain',
                     type => 'string',
                     opac => 1,
