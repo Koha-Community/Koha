@@ -20715,6 +20715,9 @@ if( CheckVersion( $DBversion ) ) {
                 FROM issuingrules
             ");
         }
+        $dbh->do("
+            DELETE FROM circulation_rules WHERE rule_name='holdallowed' AND rule_value='';
+        ");
         $dbh->do("DROP TABLE issuingrules");
     }
 
