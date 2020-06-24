@@ -353,21 +353,24 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:element name="span">
-            <xsl:attribute name="class">results_summary analytics <xsl:value-of select="$leader7_class"/></xsl:attribute>
-            <span class="label">Analytics: </span>
-            <a>
-            <xsl:choose>
-                <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+AND+(bib-level:a+OR+bib-level:b)</xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>Show analytics</xsl:text>
-            </a>
-        </xsl:element>
+        <xsl:variable name="show_analytics_link" select="marc:variables/marc:variable[@name='show_analytics_link']" />
+        <xsl:if test="$show_analytics_link='1'">
+            <xsl:element name="span">
+                <xsl:attribute name="class">results_summary analytics <xsl:value-of select="$leader7_class"/></xsl:attribute>
+                <span class="label">Analytics: </span>
+                <a>
+                <xsl:choose>
+                    <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+AND+(bib-level:a+OR+bib-level:b)</xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:text>Show analytics</xsl:text>
+                </a>
+            </xsl:element>
+        </xsl:if>
 
         <!-- Volumes of sets and traced series -->
         <xsl:if test="$materialTypeCode='ST' or substring($controlField008,22,1)='m'">

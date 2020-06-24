@@ -62,6 +62,7 @@ use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Ratings;
 use Koha::Reviews;
+use Koha::SearchEngine::Search;
 
 use Try::Tiny;
 
@@ -181,8 +182,23 @@ my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
 if ( $xslfile ) {
 
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX }
+    );
+    my $cleaned_title = $biblio->title;
+    $cleaned_title =~ tr|/||;
+    my $query =
+      ( C4::Context->preference('UseControlNumber') and $record->field('001') )
+      ? 'rcn:'. $record->field('001')->data . ' and (bib-level:a or bib-level:b)'
+      : "Host-item:$cleaned_title";
+    my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
+
+    warn "Warning from simple_search_compat: $err"
+        if $err;
+
     my $variables = {
-        anonymous_session => ($borrowernumber) ? 0 : 1
+        anonymous_session   => ($borrowernumber) ? 0 : 1,
+        show_analytics_link => $count > 0 ? 1 : 0
     };
 
     my @plugin_responses = Koha::Plugins->call(
