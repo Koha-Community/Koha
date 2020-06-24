@@ -329,11 +329,11 @@ sub StringSearch  {
 sub duplicate_framework {
     my ($newframeworkcode,$oldframeworkcode) = @_;
     my $dbh = C4::Context->dbh;
-    $dbh->do(q|INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, important, authorised_value, ind1_defaultvalue, ind2_defaultvalue, frameworkcode)
-        SELECT tagfield,liblibrarian,libopac,repeatable,mandatory,important,authorised_value, ind1_defaultvalue, ind2_defaultvalue, ? from marc_tag_structure where frameworkcode=?|, undef, $newframeworkcode, $oldframeworkcode );
+    $dbh->do(q|INSERT INTO marc_tag_structure (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, ind1_defaultvalue, ind2_defaultvalue, frameworkcode)
+        SELECT tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value, ind1_defaultvalue, ind2_defaultvalue, ? from marc_tag_structure where frameworkcode=?|, undef, $newframeworkcode, $oldframeworkcode );
 
-    $dbh->do(q|INSERT INTO marc_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,important,kohafield,tab,authorised_value,authtypecode,value_builder,isurl,seealso,hidden,link,defaultvalue,maxlength)
-        SELECT ?,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,important,kohafield,tab,authorised_value,authtypecode,value_builder,isurl,seealso,hidden,link,defaultvalue,maxlength from marc_subfield_structure where frameworkcode=?
+    $dbh->do(q|INSERT INTO marc_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,isurl,seealso,hidden,link,defaultvalue,maxlength)
+        SELECT ?,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,isurl,seealso,hidden,link,defaultvalue,maxlength from marc_subfield_structure where frameworkcode=?
     |, undef, $newframeworkcode, $oldframeworkcode );
 }
 
