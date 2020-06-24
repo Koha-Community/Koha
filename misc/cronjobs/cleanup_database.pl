@@ -231,7 +231,6 @@ cronlogaction() unless $confirm;
 my $dbh = C4::Context->dbh();
 my $sth;
 my $sth2;
-my $count;
 
 if ( $sessions && !$sess_days ) {
     if ($verbose) {
@@ -256,7 +255,7 @@ elsif ( $sessions && $sess_days > 0 ) {
 }
 
 if ($zebraqueue_days) {
-    $count = 0;
+    my $count = 0;
     print "Zebraqueue purge triggered for $zebraqueue_days days.\n" if $verbose;
     $sth = $dbh->prepare(
         q{
@@ -282,6 +281,7 @@ if ($zebraqueue_days) {
 }
 
 if ($mail) {
+    my $count = 0;
     print "Mail queue purge triggered for $mail days.\n" if $verbose;
     $count = 0;
     $sth = $dbh->prepare(
@@ -364,7 +364,7 @@ if ($pListShareInvites) {
 
 if ($pDebarments) {
     print "Expired patrons restrictions purge triggered for $pDebarments days.\n" if $verbose;
-    $count = PurgeDebarments($pDebarments, $confirm);
+    my $count = PurgeDebarments($pDebarments, $confirm);
     if ( $verbose ) {
         say $confirm ? "$count restrictions were deleted." : "$count restrictions would have been deleted";
         say "Done with restrictions purge.";
@@ -373,7 +373,7 @@ if ($pDebarments) {
 
 if($allDebarments) {
     print "All expired patrons restrictions purge triggered.\n" if $verbose;
-    $count = PurgeDebarments(0, $confirm);
+    my $count = PurgeDebarments(0, $confirm);
     if ( $verbose ) {
         say $confirm ? "$count restrictions were deleted." : "$count restrictions would have been deleted";
         say "Done with all restrictions purge.";
@@ -382,7 +382,7 @@ if($allDebarments) {
 
 # Handle unsubscribe requests from GDPR consent form, depends on UnsubscribeReflectionDelay preference
 my $unsubscribed_patrons = Koha::Patrons->search_unsubscribed;
-$count = $unsubscribed_patrons->count;
+my $count = $unsubscribed_patrons->count;
 $unsubscribed_patrons->lock( { expire => 1, remove => 1 } ) if $confirm;
 say $confirm ? sprintf("Locked %d patrons", $count) : sprintf("%d patrons would have been locked", $count) if $verbose;
 
@@ -590,7 +590,7 @@ sub RemoveOldSessions {
     $sth->execute or die $dbh->errstr;
     $sth->bind_columns( \$id, \$a_session );
     $sth2  = $dbh->prepare(q{ DELETE FROM sessions WHERE id=? });
-    $count = 0;
+    my $count = 0;
 
     while ( $sth->fetch ) {
         $lasttime = 0;
@@ -652,7 +652,7 @@ sub PurgeZ3950 {
 sub PurgeDebarments {
     require Koha::Patron::Debarments;
     my ( $days, $doit ) = @_;
-    $count = 0;
+    my $count = 0;
     $sth   = $dbh->prepare(
         q{
             SELECT borrower_debarment_id
