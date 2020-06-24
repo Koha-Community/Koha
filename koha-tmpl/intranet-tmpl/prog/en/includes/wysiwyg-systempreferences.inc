@@ -14,6 +14,7 @@
 
     tinyMCE.init({
         branding : false,
+        relative_urls : false,
         content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
         editor_selector : "mce",
         menubar : "file edit view insert format tools table",
