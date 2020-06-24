@@ -235,11 +235,11 @@ my $count;
 
 if ( $sessions && !$sess_days ) {
     if ($verbose) {
-        print "Session purge triggered.\n";
+        say "Session purge triggered.";
         $sth = $dbh->prepare(q{ SELECT COUNT(*) FROM sessions });
         $sth->execute() or die $dbh->errstr;
         my @count_arr = $sth->fetchrow_array;
-        print "$count_arr[0] entries will be deleted.\n";
+        say $confirm ? "$count_arr[0] entries will be deleted." : "$count_arr[0] entries would be deleted.";
     }
     if ( $confirm ) {
         $sth = $dbh->prepare(q{ TRUNCATE sessions });
@@ -275,7 +275,10 @@ if ($zebraqueue_days) {
         }
         $count++;
     }
-    print "$count records were deleted.\nDone with zebraqueue purge.\n" if $verbose;
+    if ( $verbose ) {
+        say $confirm ? "$count records were deleted." : "$count records would have been deleted.";
+        say "Done with zebraqueue purge.";
+    }
 }
 
 if ($mail) {
@@ -290,9 +293,10 @@ if ($mail) {
     if ( $confirm ) {
         $sth->execute($mail) or die $dbh->errstr;
         $count = $sth->rows;
-        print "$count messages were deleted from the mail queue.\nDone with message_queue purge.\n" if $verbose;
-    } else {
-        print "Messages were deleted from the mail queue.\nDone with message_queue purge.\n" if $verbose;
+    }
+    if ( $verbose ) {
+        say $confirm ? "$count messages were deleted from the mail queue." : "Message from message_queue would have been deleted";
+        say "Done with message_queue purge.";
     }
 }
 
@@ -361,26 +365,32 @@ if ($pListShareInvites) {
 if ($pDebarments) {
     print "Expired patrons restrictions purge triggered for $pDebarments days.\n" if $verbose;
     $count = PurgeDebarments($pDebarments, $confirm);
-    print "$count restrictions were deleted.\nDone with restrictions purge.\n" if $verbose;
+    if ( $verbose ) {
+        say $confirm ? "$count restrictions were deleted." : "$count restrictions would have been deleted";
+        say "Done with restrictions purge.";
+    }
 }
 
 if($allDebarments) {
     print "All expired patrons restrictions purge triggered.\n" if $verbose;
     $count = PurgeDebarments(0, $confirm);
-    print "$count restrictions were deleted.\nDone with all restrictions purge.\n" if $verbose;
+    if ( $verbose ) {
+        say $confirm ? "$count restrictions were deleted." : "$count restrictions would have been deleted";
+        say "Done with all restrictions purge.";
+    }
 }
 
 # Handle unsubscribe requests from GDPR consent form, depends on UnsubscribeReflectionDelay preference
 my $unsubscribed_patrons = Koha::Patrons->search_unsubscribed;
 $count = $unsubscribed_patrons->count;
 $unsubscribed_patrons->lock( { expire => 1, remove => 1 } ) if $confirm;
-say sprintf "Locked %d patrons", $count if $verbose;
+say $confirm ? sprintf("Locked %d patrons", $count) : sprintf("%d patrons would have been locked", $count) if $verbose;
 
 # Anonymize patron data, depending on PatronAnonymizeDelay
 my $anonymize_candidates = Koha::Patrons->search_anonymize_candidates( { locked => 1 } );
 $count = $anonymize_candidates->count;
 $anonymize_candidates->anonymize if $confirm;
-say sprintf "Anonymized %s patrons", $count if $verbose;
+say $confirm ? sprintf("Anonymized %d patrons", $count) : sprintf("%d patrons would have been anonymized", $count) if $verbose;
 
 # Remove patron data, depending on PatronRemovalDelay (will raise an exception if problem encountered
 my $anonymized_patrons = Koha::Patrons->search_anonymized;
@@ -390,11 +400,9 @@ if ( $confirm ) {
     if ($@) {
         warn $@;
     }
-    elsif ($verbose) {
-        say sprintf "Deleted %d patrons", $count;
-    }
-} else {
-    say sprintf "Deleted %d patrons", $count;
+}
+if ($verbose) {
+    say $confirm ? sprintf("Deleted %d patrons", $count) : sprintf("%d patrons would have been deleted", $count);
 }
 
 # FIXME The output for dry-run mode needs to be improved
@@ -457,7 +465,11 @@ if ($oauth_tokens) {
     my $tokens = Koha::OAuthAccessTokens->search({ expires => { '<=', time } });
     my $count = $tokens->count;
     $tokens->delete if $confirm;
-    say sprintf "Removed %s expired OAuth2 tokens", $count if $verbose;
+    if ( $verbose ) {
+        say $confirm
+          ? sprintf( "Removed %d expired OAuth2 tokens", $count )
+          : sprintf( "%d expired OAuth tokens would have been removed", $count );
+    }
 }
 
 if ($pStatistics) {
@@ -466,7 +478,11 @@ if ($pStatistics) {
         { timestamp_column_name => 'datetime', days => $pStatistics } );
     my $count = $statistics->count;
     $statistics->delete if $confirm;
-    say sprintf "Done with purging %s statistics.", $count if $verbose;
+    if ( $verbose ) {
+        say $confirm
+          ? sprintf( "Done with purging %d statistics", $count )
+          : sprintf( "%d statistics would have been removed", $count );
+    }
 }
 
 if ($pDeletedCatalog) {
@@ -482,10 +498,13 @@ if ($pDeletedCatalog) {
         $old_biblioitems->delete;
         $old_biblios->delete;
     }
-    say sprintf
-        "Done with purging deleted catalog (%d items, %d biblioitems, %d biblios).",
-      $c_i, $c_bi, $c_b
-      if $verbose;
+    if ($verbose) {
+        say sprintf(
+            $confirm
+            ? "Done with purging deleted catalog (%d items, %d biblioitems, %d biblios)."
+            : "Deleted catalog would have been removed (%d items, %d biblioitems, %d biblios).",
+        $c_i, $c_bi, $c_b);
+    }
 }
 
 if ($pDeletedPatrons) {
@@ -494,7 +513,11 @@ if ($pDeletedPatrons) {
         { timestamp_column_name => 'updated_on', days => $pDeletedPatrons } );
     my $count = $old_patrons->count;
     $old_patrons->delete if $confirm;
-    say sprintf "Done with purging %d deleted patrons.", $count if $verbose;
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d deleted patrons.", $count
+          : sprintf "%d deleted patrons would have been purged.", $count;
+    }
 }
 
 if ($pOldIssues) {
@@ -502,7 +525,11 @@ if ($pOldIssues) {
     my $old_checkouts = Koha::Old::Checkouts->filter_by_last_update( { days => $pOldIssues } );
     my $count = $old_checkouts->count;
     $old_checkouts->delete if $confirm;
-    say sprintf "Done with purging %d old checkouts.", $count if $verbose;
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d old checkouts.", $count
+          : sprintf "%d old checkouts would have been purged.", $count;
+    }
 }
 
 if ($pOldReserves) {
@@ -510,7 +537,11 @@ if ($pOldReserves) {
     my $old_reserves = Koha::Old::Holds->filter_by_last_update( { days => $pOldReserves } );
     my $count = $old_reserves->count;
     $old_reserves->delete if $verbose;
-    say sprintf "Done with purging %d old reserves.", $count if $verbose;
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d old reserves.", $count
+          : sprintf "%d old reserves would have been purged.", $count;
+    }
 }
 
 if ($pTransfers) {
@@ -523,7 +554,11 @@ if ($pTransfers) {
     );
     my $count = $transfers->count;
     $transfers->delete if $verbose;
-    say sprintf "Done with purging %d transfers.", $count if $verbose;
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d transfers.", $count
+          : sprintf "%d transfers would have been purged.", $count;
+    }
 }
 
 if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransactionsTo ) {
@@ -538,7 +573,11 @@ if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransact
     );
     my $count = $anonymized_transactions->count;
     $anonymized_transactions->delete if $confirm;
-    say sprintf "Done with purging %d pseudonymized transactions.", $count if $verbose;
+    if ($verbose) {
+        say $confirm
+          ? sprintf "Done with purging %d pseudonymized transactions.", $count
+          : sprintf "%d pseudonymized transactions would have been purged.", $count;
+    }
 }
 
 exit(0);
