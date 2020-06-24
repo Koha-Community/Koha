@@ -1170,7 +1170,7 @@ sub _search_fields {
         my @search_fields;
         while (my $search_field = $result->next) {
             push @search_fields, [
-                $search_field->name,
+                lc $search_field->name,
                 $search_field->weight ? $search_field->weight : ()
             ];
         }
