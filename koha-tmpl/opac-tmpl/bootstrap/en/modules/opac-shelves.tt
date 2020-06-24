@@ -339,7 +339,7 @@
                                                                 [% END %]
                                                             [% END %]
 
-                                                            [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
+                                                            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                                                                 [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
                                                                 [% IF ( coce_id ) %]
                                                                     <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
@@ -963,7 +963,7 @@ $(function() {
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
+    [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
         KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]');
     [% END %]
 
