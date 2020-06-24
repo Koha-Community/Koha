@@ -339,22 +339,35 @@
         </span>
         </xsl:if>
 
-        <!-- Analytics -->
-        <xsl:if test="$leader7='s'">
-        <span class="results_summary analytics"><span class="label">Analytics: </span>
+        <!-- Analytics information -->
+        <xsl:variable name="leader7_class">
+            <xsl:choose>
+                <!--xsl:when test="$leader7='a'">analytic_mcp</xsl:when-->
+                <!--xsl:when test="$leader7='b'">analytic_scp</xsl:when-->
+                <xsl:when test="$leader7='c'">analytic_collection</xsl:when>
+                <xsl:when test="$leader7='d'">analytic_subunit</xsl:when>
+                <xsl:when test="$leader7='i'">analytic_ires</xsl:when>
+                <xsl:when test="$leader7='m'">analytic_monograph</xsl:when>
+                <xsl:when test="$leader7='s'">analytic_serial</xsl:when>
+                <xsl:otherwise>analytic_undefined</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:element name="span">
+            <xsl:attribute name="class">results_summary analytics <xsl:value-of select="$leader7_class"/></xsl:attribute>
+            <span class="label">Analytics: </span>
             <a>
             <xsl:choose>
-            <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+AND+(bib-level:a+OR+bib-level:b)</xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
-            </xsl:otherwise>
+                <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+AND+(bib-level:a+OR+bib-level:b)</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
+                </xsl:otherwise>
             </xsl:choose>
             <xsl:text>Show analytics</xsl:text>
             </a>
-        </span>
-        </xsl:if>
+        </xsl:element>
 
         <!-- Volumes of sets and traced series -->
         <xsl:if test="$materialTypeCode='ST' or substring($controlField008,22,1)='m'">
