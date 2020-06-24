@@ -566,7 +566,8 @@ foreach my $pm_type(@pm_types) {
                 current => ($pm_type eq 'current_pm' ? 1 : 0),
                 require => $stats->{'required'},
                 reqversion => $stats->{'min_ver'},
-                maxversion => $stats->{'max_ver'}
+                maxversion => $stats->{'max_ver'},
+                excversion => $stats->{'exc_ver'}
             }
         );
     }
