@@ -42,7 +42,7 @@ subtest 'Config does not exist' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_config( 'key', '' );
+    t::lib::Mocks::mock_config( 'bcrypt_settings', '' );
     t::lib::Mocks::mock_preference( 'Pseudonymization', 1 );
     t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields', 'branchcode,categorycode,sort1' );
 
@@ -64,8 +64,8 @@ subtest 'Config does not exist' => sub {
         );
 
     } catch {
-        ok($_->isa('Koha::Exceptions::Config::MissingEntry'), "Koha::Patron->store should raise a Koha::Exceptions::Config::MissingEntry if 'key' is not defined in the config");
-        is( $_->message, "Missing 'key' entry in config file");
+        ok($_->isa('Koha::Exceptions::Config::MissingEntry'), "Koha::Patron->store should raise a Koha::Exceptions::Config::MissingEntry if 'bcrypt_settings' is not defined in the config");
+        is( $_->message, "Missing 'bcrypt_settings' entry in config file");
     };
 
     $schema->storage->txn_rollback;
@@ -77,7 +77,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_config( 'key', '$2a$08$9lmorEKnwQloheaCLFIfje' );
+    t::lib::Mocks::mock_config( 'bcrypt_settings', '$2a$08$9lmorEKnwQloheaCLFIfje' );
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
@@ -122,7 +122,7 @@ subtest 'PseudonymizedBorrowerAttributes tests' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_config( 'key', '$2a$08$9lmorEKnwQloheaCLFIfje' );
+    t::lib::Mocks::mock_config( 'bcrypt_settings', '$2a$08$9lmorEKnwQloheaCLFIfje' );
     t::lib::Mocks::mock_preference( 'Pseudonymization', 1 );
     t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields',
         'branchcode,categorycode,sort1' );

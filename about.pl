@@ -519,10 +519,10 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 }
 
 {
-    # Test 'key' config for Pseudonymization
-    $template->param( config_key_no_set => 1 )
+    # Test 'bcrypt_settings' config for Pseudonymization
+    $template->param( config_bcrypt_settings_no_set => 1 )
       if C4::Context->preference('Pseudonymization')
-      and not C4::Context->config('key');
+      and not C4::Context->config('bcrypt_settings');
 }
 
 my %versions = C4::Context::get_versions();

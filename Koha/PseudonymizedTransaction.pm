@@ -103,18 +103,18 @@ sub new_from_statistic {
 =head3 get_hash
 
     Generates a hashed value for $s (e.g. borrowernumber) with Bcrypt.
-    Needs config entry 'key' in koha-conf.
+    Needs config entry 'bcrypt_settings' in koha-conf.
 
 =cut
 
 sub get_hash {
     my ( $class, $s ) = @_;
-    my $key = C4::Context->config('key');
+    my $bcrypt_settings = C4::Context->config('bcrypt_settings');
 
     Koha::Exceptions::Config::MissingEntry->throw(
-        "Missing 'key' entry in config file") unless $key;
+        "Missing 'bcrypt_settings' entry in config file") unless $bcrypt_settings;
 
-    return bcrypt($s, $key);
+    return bcrypt($s, $bcrypt_settings);
 }
 
 =head2 Internal methods
