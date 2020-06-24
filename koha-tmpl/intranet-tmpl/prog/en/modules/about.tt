@@ -168,7 +168,7 @@
                     [% END %]
                     [% END %]
                     [% IF ( ro.name ) %]
-                    [% ro.name | html %] <span style="font-weight:normal; font-size:smaller"> ([% ro.reqversion | html %][% IF ro.maxversion %] - [% ro.maxversion | html %][% END %])</span>
+                    [% ro.name | html %] <span style="font-weight:normal; font-size:smaller"> ([% ro.reqversion | html %][% IF ro.maxversion %] - [% ro.maxversion | html %][% END %][% IF ro.excversion %][% FOR v IN ro.excversion %], ![% v | html %][% END %][% END %])</span>
                     [% END %]
                     </th>
                     [% IF ( ro.name == '' ) %]
