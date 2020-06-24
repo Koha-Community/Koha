@@ -40,7 +40,7 @@
             <td>
                 <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
                     [% FOREACH trsfitemloo IN trsfitemloop %]
-                        <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                        <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
                         <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
                         <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                     [% END %]
@@ -65,7 +65,7 @@
                     <td>
                         <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
                             [% FOREACH trsfitemloo IN trsfitemloop %]
-                                <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                                <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
                                 <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
                                 <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                             [% END %]
@@ -82,11 +82,11 @@
                 <tr>
                     <th>Ignore and return to transfers: </th>
                         <td>
-                            <form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
+                            <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
                                 <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
                                 <input type="hidden" name="barcode" />
                                 [% FOREACH trsfitemloo IN trsfitemloop %]
-                                    <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+                                    <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
                                     <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
                                     <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                                 [% END %]
@@ -164,7 +164,7 @@
         </fieldset>
         <input type="hidden" name="tobranchcd" value="[% tobrancd | html %]" />
         [% FOREACH trsfitemloo IN trsfitemloop %]
-            <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.barcode | html %]" />
+            <input type="hidden" name="bc-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.item.barcode | html %]" />
             <input type="hidden" name="fb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.frombrcd | html %]" />
             <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
         [% END %]
@@ -186,13 +186,17 @@
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
-                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber | uri %]">[% trsfitemloo.title | html %]</a></td>
-                    <td class="tf-author">[% trsfitemloo.author | html %]</td>
-                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.itemnumber | uri %]#item[% trsfitemloo.itemnumber | uri %]">[% trsfitemloo.barcode | html %]</a></td>
-                    <td class="tf-location"><span class="shelvingloc">[% trsfitemloo.location | html %]</span></td>
-                    <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber | html %]</td>
-                    <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) | html %]</td>
-                    <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.ccode ) | html %]</td>
+                    <td class="tf-title">
+                        [% INCLUDE 'biblio-default-view.inc' biblionumber = trsfitemloo.item.biblionumber %]
+                        [% INCLUDE 'biblio-title.inc' biblio=trsfitemloo.item.biblio %]
+                        </a>
+                    </td>
+                    <td class="tf-author">[% trsfitemloo.item.biblio.author | html %]</td>
+                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.item.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.item.itemnumber | uri %]#item[% trsfitemloo.item.itemnumber | uri %]">[% trsfitemloo.item.barcode | html %]</a></td>
+                    <td class="tf-location"><span class="shelvingloc">[% AuthorisedValues.GetByCode( 'LOC', trsfitemloo.item.location ) | html %]</span></td>
+                    <td class="tf-itemcallnumber">[% trsfitemloo.item.itemcallnumber | html %]</td>
+                    <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.item.effective_itemtype ) | html %]</td>
+                    <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.item.ccode ) | html %]</td>
                     <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
                 </tr>
             [% END %]

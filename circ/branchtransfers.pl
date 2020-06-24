@@ -131,50 +131,30 @@ if ($barcode) {
     my $item = Koha::Items->find({ barcode => $barcode });
     $found = $messages->{'ResFound'};
     if ($transferred) {
-        my %item;
-        my $biblio = $item->biblio;
+        my %trsfitem;
         my $frbranchcd =  C4::Context->userenv->{'branch'};
-        $item{'biblionumber'}          = $item->biblionumber;
-        $item{'itemnumber'}            = $item->itemnumber;
-        $item{'title'}                 = $biblio->title;
-        $item{'author'}                = $biblio->author;
-        $item{'itemtype'}              = $biblio->biblioitem->itemtype;
-        $item{'ccode'}                 = $item->ccode;
-        $item{'itemcallnumber'}        = $item->itemcallnumber;
-        my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $item->location });
-        $item{'location'}              = $av->count ? $av->next->lib : '';
-        $item{counter}  = 0;
-        $item{barcode}  = $barcode;
-        $item{frombrcd} = $frbranchcd;
-        $item{tobrcd}   = $tobranchcd;
-        push( @trsfitemloop, \%item );
+        $trsfitem{item}     = $item;
+        $trsfitem{counter}  = 0;
+        $trsfitem{frombrcd} = $frbranchcd;
+        $trsfitem{tobrcd}   = $tobranchcd;
+        push( @trsfitemloop, \%trsfitem );
     }
 }
 
 foreach ( $query->param ) {
     (next) unless (/bc-(\d*)/);
     my $counter = $1;
-    my %item;
+    my %trsfitem;
     my $bc    = $query->param("bc-$counter");
     my $frbcd = $query->param("fb-$counter");
     my $tobcd = $query->param("tb-$counter");
     $counter++;
-    $item{counter}  = $counter;
-    $item{barcode}  = $bc;
-    $item{frombrcd} = $frbcd;
-    $item{tobrcd}   = $tobcd;
+    $trsfitem{counter}  = $counter;
+    $trsfitem{frombrcd} = $frbcd;
+    $trsfitem{tobrcd}   = $tobcd;
     my $item = Koha::Items->find({ barcode => $bc });
-    my $biblio = $item->biblio;
-    $item{'biblionumber'}          = $item->biblionumber;
-    $item{'itemnumber'}            = $item->itemnumber;
-    $item{'title'}                 = $biblio->title;
-    $item{'author'}                = $biblio->author;
-    $item{'itemtype'}              = $biblio->biblioitem->itemtype;
-    $item{'ccode'}                 = $item->ccode;
-    $item{'itemcallnumber'}        = $item->itemcallnumber;
-    my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $item->location });
-    $item{'location'}              = $av->count ? $av->next->lib : '';
-    push( @trsfitemloop, \%item );
+    $trsfitem{item}     = $item;
+    push( @trsfitemloop, \%trsfitem );
 }
 
 my $itemnumber;
