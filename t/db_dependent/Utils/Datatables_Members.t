@@ -467,7 +467,7 @@ subtest 'ExtendedPatronAttributes' => sub {
 };
 
 subtest 'Search with permissions' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     my $superlibrarian = $builder->build_object(
         {
@@ -515,6 +515,39 @@ subtest 'Search with permissions' => sub {
         ],
         'We got the 3 patrons we expected'
     );
+
+    C4::Context->dbh->do(
+        q|INSERT INTO user_permissions(borrowernumber, module_bit, code) VALUES(?,?,?)|,
+        undef,
+        $librarian_with_subpermission->borrowernumber,
+        13,
+        'moderate_comments'
+    );
+    $search_results = C4::Utils::DataTables::Members::search(
+        {
+            searchmember     => "",
+            searchfieldstype => 'standard',
+            searchtype       => 'contain',
+            branchcode       => $branchcode,
+            has_permission   => {
+                permission    => 'suggestions',
+                subpermission => 'suggestions_manage'
+            },
+            dt_params => { iDisplayLength => 3, iDisplayStart => 0 },
+        }
+    );
+    is( $search_results->{iTotalDisplayRecords},
+        3, "We find 3 patrons with suggestions_manage permission" );
+    is_deeply(
+        [ sort map { $_->{borrowernumber} } @{ $search_results->{patrons} } ],
+        [
+            $superlibrarian->borrowernumber,
+            $librarian_with_full_permission->borrowernumber,
+            $librarian_with_subpermission->borrowernumber
+        ],
+        'We got the 3 patrons we expected'
+    );
+
 };
 
 subtest 'return values' => sub {
