@@ -442,11 +442,11 @@ RECORD: while (  ) {
 			 	if ($sourcetag < "010"){
 					if ($record->field($sourcetag)){
 					  my $source = $record->field($sourcetag)->data();
-					  printf($idmapfh "%s|%s\n",$source,$biblionumber);
+                      printf($idmapfh "%s|%s\n",$source,$biblionumber);
 					}
 			    } else {
 					my $source=$record->subfield($sourcetag,$sourcesubfield);
-					printf($idmapfh "%s|%s\n",$source,$biblionumber);
+                    printf($idmapfh "%s|%s\n",$source,$biblionumber);
 			  }
 			}
 					# create biblio, unless we already have it ( either match or isbn )

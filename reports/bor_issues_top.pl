@@ -242,7 +242,7 @@ sub calculate {
 			$columns{($row[0] ||'NULL')}++;
             push @loopcol, { coltitle => $row[0] || 'NULL' };
         }
-		$debug and print $debugfh "full array: ", Dumper(\%columns), "\n";
+        $debug and print $debugfh "full array: ", Dumper(\%columns), "\n";
     }else{
         $columns{''} = 1;
     }

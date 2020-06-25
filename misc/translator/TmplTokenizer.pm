@@ -379,13 +379,13 @@ sub parametrize {
 		    ;
 		} elsif (defined $params[$i - 1]) {
 		    my $param = $params[$i - 1];
-		    warn_normal("$fmt_0: $&: Expected a TMPL_VAR, but found a "
-			    . $param->type->to_string . "\n", undef)
-			    if $param->type != C4::TmplTokenType::DIRECTIVE;
-		    warn_normal("$fmt_0: $&: Unsupported "
-				. "field width or precision\n", undef)
+            warn_normal("$fmt_0: $&: Expected a TMPL_VAR, but found a "
+                . $param->type->to_string . "\n", undef)
+                if $param->type != C4::TmplTokenType::DIRECTIVE;
+            warn_normal("$fmt_0: $&: Unsupported "
+                . "field width or precision\n", undef)
 			    if defined $width || defined $prec;
-		    warn_normal("$fmt_0: $&: Parameter $i not known", undef)
+            warn_normal("$fmt_0: $&: Parameter $i not known", undef)
 			    unless defined $param;
 		    $it .= defined $f? &$f( $param ): $param->string;
 		}
@@ -396,27 +396,27 @@ sub parametrize {
 
 		my $param = $params[$i - 1];
 		if (!defined $param) {
-		    warn_normal("$fmt_0: $&: Parameter $i not known", undef);
+            warn_normal("$fmt_0: $&: Parameter $i not known", undef);
 		} else {
 		    if ($param->type == C4::TmplTokenType::TAG
 			    && $param->string =~ /^<input\b/is) {
 			my $type = defined $param->attributes?
 				lc($param->attributes->{'type'}->[1]): undef;
 			if ($conv eq 'S') {
-			    warn_normal("$fmt_0: $&: Expected type=text, "
-					. "but found type=$type", undef)
+                warn_normal("$fmt_0: $&: Expected type=text, "
+                    . "but found type=$type", undef)
 				    unless $type eq 'text';
 			} elsif ($conv eq 'p') {
-			    warn_normal("$fmt_0: $&: Expected type=radio, "
-					. "but found type=$type", undef)
+                warn_normal("$fmt_0: $&: Expected type=radio, "
+                    . "but found type=$type", undef)
 				    unless $type eq 'radio';
 			}
 		    } else {
-			warn_normal("$&: Expected an INPUT, but found a "
-				. $param->type->to_string . "\n", undef)
+                warn_normal("$&: Expected an INPUT, but found a "
+                    . $param->type->to_string . "\n", undef)
 		    }
-		    warn_normal("$fmt_0: $&: Unsupported "
-				. "field width or precision\n", undef)
+            warn_normal("$fmt_0: $&: Unsupported "
+                . "field width or precision\n", undef)
 			    if defined $width || defined $prec;
 		    $it .= defined $f? &$f( $param ): $param->string;
 		}
@@ -439,7 +439,7 @@ sub parametrize {
 	    my $i  = $1;
 	    $fmt = $';
 	    my $anchor = $anchors[$i - 1];
-	    warn_normal("$&: Anchor $1 not found for msgid \"$fmt_0\"", undef) #FIXME
+        warn_normal("$&: Anchor $1 not found for msgid \"$fmt_0\"", undef) #FIXME
 		    unless defined $anchor;
 	    $it .= $anchor->string;
 	} else {
