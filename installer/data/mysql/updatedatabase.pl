@@ -22210,6 +22210,24 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25184, "Items with a negative notforloan status should not be captured for holds");
 }
 
+$DBversion = '20.06.00.003';
+if( CheckVersion( $DBversion ) ) {
+    unless ( TableExists( 'tables_settings' ) ) {
+        $dbh->do(q|
+            CREATE TABLE tables_settings (
+                module varchar(255) NOT NULL,
+                page varchar(255) NOT NULL,
+                tablename varchar(255) NOT NULL,
+                default_display_length smallint(6) NOT NULL DEFAULT 20,
+                default_sort_order varchar(255),
+                PRIMARY KEY(module (191), page (191), tablename (191) )
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        |);
+    }
+
+    NewVersion( $DBversion, 24156, "Add new table tables_settings" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
