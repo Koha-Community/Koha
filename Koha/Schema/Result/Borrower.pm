@@ -62,15 +62,13 @@ __PACKAGE__->table("borrowers");
 
 =head2 streetnumber
 
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 10
 
 =head2 streettype
 
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 50
 
 =head2 address
 
@@ -94,9 +92,8 @@ __PACKAGE__->table("borrowers");
 
 =head2 zipcode
 
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 25
 
 =head2 country
 
@@ -115,9 +112,8 @@ __PACKAGE__->table("borrowers");
 
 =head2 mobile
 
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 50
 
 =head2 fax
 
@@ -137,23 +133,20 @@ __PACKAGE__->table("borrowers");
 =head2 B_streetnumber
 
   accessor: 'b_streetnumber'
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 10
 
 =head2 B_streettype
 
   accessor: 'b_streettype'
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 50
 
 =head2 B_address
 
   accessor: 'b_address'
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 100
 
 =head2 B_address2
 
@@ -176,9 +169,8 @@ __PACKAGE__->table("borrowers");
 =head2 B_zipcode
 
   accessor: 'b_zipcode'
-  data_type: 'varchar'
+  data_type: 'tinytext'
   is_nullable: 1
-  size: 25
 
 =head2 B_country
 
@@ -334,33 +326,28 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactfirstname
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 altcontactsurname
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 altcontactaddress1
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 altcontactaddress2
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 altcontactaddress3
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 altcontactstate
 
@@ -369,9 +356,8 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactzipcode
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 50
 
 =head2 altcontactcountry
 
@@ -380,9 +366,8 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactphone
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 50
 
 =head2 smsalertnumber
 
@@ -482,9 +467,9 @@ __PACKAGE__->add_columns(
   "initials",
   { data_type => "mediumtext", is_nullable => 1 },
   "streetnumber",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "tinytext", is_nullable => 1 },
   "streettype",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "tinytext", is_nullable => 1 },
   "address",
   { data_type => "longtext", is_nullable => 1 },
   "address2",
@@ -494,7 +479,7 @@ __PACKAGE__->add_columns(
   "state",
   { data_type => "mediumtext", is_nullable => 1 },
   "zipcode",
-  { data_type => "varchar", is_nullable => 1, size => 25 },
+  { data_type => "tinytext", is_nullable => 1 },
   "country",
   { data_type => "mediumtext", is_nullable => 1 },
   "email",
@@ -502,7 +487,7 @@ __PACKAGE__->add_columns(
   "phone",
   { data_type => "mediumtext", is_nullable => 1 },
   "mobile",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "tinytext", is_nullable => 1 },
   "fax",
   { data_type => "longtext", is_nullable => 1 },
   "emailpro",
@@ -510,26 +495,11 @@ __PACKAGE__->add_columns(
   "phonepro",
   { data_type => "mediumtext", is_nullable => 1 },
   "B_streetnumber",
-  {
-    accessor => "b_streetnumber",
-    data_type => "varchar",
-    is_nullable => 1,
-    size => 10,
-  },
+  { accessor => "b_streetnumber", data_type => "tinytext", is_nullable => 1 },
   "B_streettype",
-  {
-    accessor => "b_streettype",
-    data_type => "varchar",
-    is_nullable => 1,
-    size => 50,
-  },
+  { accessor => "b_streettype", data_type => "tinytext", is_nullable => 1 },
   "B_address",
-  {
-    accessor => "b_address",
-    data_type => "varchar",
-    is_nullable => 1,
-    size => 100,
-  },
+  { accessor => "b_address", data_type => "mediumtext", is_nullable => 1 },
   "B_address2",
   { accessor => "b_address2", data_type => "mediumtext", is_nullable => 1 },
   "B_city",
@@ -537,12 +507,7 @@ __PACKAGE__->add_columns(
   "B_state",
   { accessor => "b_state", data_type => "mediumtext", is_nullable => 1 },
   "B_zipcode",
-  {
-    accessor => "b_zipcode",
-    data_type => "varchar",
-    is_nullable => 1,
-    size => 25,
-  },
+  { accessor => "b_zipcode", data_type => "tinytext", is_nullable => 1 },
   "B_country",
   { accessor => "b_country", data_type => "mediumtext", is_nullable => 1 },
   "B_email",
@@ -608,23 +573,23 @@ __PACKAGE__->add_columns(
   "sort2",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "altcontactfirstname",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactsurname",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactaddress1",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactaddress2",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactaddress3",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactstate",
   { data_type => "mediumtext", is_nullable => 1 },
   "altcontactzipcode",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactcountry",
   { data_type => "mediumtext", is_nullable => 1 },
   "altcontactphone",
-  { data_type => "varchar", is_nullable => 1, size => 50 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "smsalertnumber",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "sms_provider_id",
@@ -1703,8 +1668,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-04 07:27:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JMF49k5YH+pq7U3kVSgQRQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-25 08:47:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o+gWN0ND3K07hqLwAoNmMA
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
