@@ -1065,7 +1065,7 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
     my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', { branch => $library->id } );
 
-    my $now = DateTime->now;
+    my $now = dt_from_string;
     my $year = $now->year;
     my $month = $now->month;
     my ($accountlines_id, $accountline);

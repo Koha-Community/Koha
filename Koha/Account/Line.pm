@@ -27,6 +27,7 @@ use Koha::Account::CreditType;
 use Koha::Account::DebitType;
 use Koha::Account::Offsets;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Exceptions::Account;
 use Koha::Items;
 
@@ -905,7 +906,7 @@ sub store {
             $max //= 0;
             $self->credit_number($max + 1);
         } elsif ($AutoCreditNumber eq 'annual') {
-            my $now = DateTime->now;
+            my $now = dt_from_string;
             my $prefix = sprintf('%d-', $now->year);
             my $max = $rs->search({
                 -and => [
@@ -920,7 +921,7 @@ sub store {
             my $userenv = C4::Context->userenv;
             if ($userenv) {
                 my $branch = $userenv->{branch};
-                my $now = DateTime->now;
+                my $now = dt_from_string;
                 my $prefix = sprintf('%s%d%02d', $branch, $now->year, $now->month);
                 my $pattern = $prefix;
                 $pattern =~ s/([\?%_])/\\$1/g;
