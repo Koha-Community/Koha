@@ -62,14 +62,14 @@ InstallAuth - Authenticates Koha users for Install process
 
 =head1 DESCRIPTION
 
-    The main function of this module is to provide
-    authentification. However the get_template_and_user function has
-    been provided so that a users login information is passed along
-    automatically. This gets loaded into the template.
-    This package is different from C4::Auth in so far as 
-    C4::Auth uses many preferences which are supposed NOT to be obtainable when installing the database.
+The main function of this module is to provide
+authentification. However the get_template_and_user function has
+been provided so that a users login information is passed along
+automatically. This gets loaded into the template.
+This package is different from C4::Auth in so far as
+C4::Auth uses many preferences which are supposed NOT to be obtainable when installing the database.
     
-    As in C4::Auth, Authentication is based on cookies.
+As in C4::Auth, Authentication is based on cookies.
 
 =head1 FUNCTIONS
 
@@ -84,19 +84,19 @@ InstallAuth - Authenticates Koha users for Install process
         }
     );
 
-    This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
-    to C<&checkauth> (in this module) to perform authentification.
-    See C<&checkauth> for an explanation of these parameters.
+This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
+to C<&checkauth> (in this module) to perform authentification.
+See C<&checkauth> for an explanation of these parameters.
 
-    The C<template_name> is then used to find the correct template for
-    the page. The authenticated users details are loaded onto the
-    template in the logged_in_user variable (which is a Koha::Patron object). Also the
-    C<sessionID> is passed to the template. This can be used in templates
-    if cookies are disabled. It needs to be put as and input to every
-    authenticated page.
+The C<template_name> is then used to find the correct template for
+the page. The authenticated users details are loaded onto the
+template in the logged_in_user variable (which is a Koha::Patron object). Also the
+C<sessionID> is passed to the template. This can be used in templates
+if cookies are disabled. It needs to be put as and input to every
+authenticated page.
 
-    More information on the C<gettemplate> sub can be found in the
-    Templates.pm module.
+More information on the C<gettemplate> sub can be found in the
+Templates.pm module.
 
 =cut
 
