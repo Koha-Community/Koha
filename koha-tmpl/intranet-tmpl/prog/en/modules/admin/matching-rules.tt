@@ -2,17 +2,18 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Record matching rules
-[% IF ( matching_rule_form ) %]
-    [% IF ( edit_matching_rule ) %]
-        &rsaquo; Modify record matching rule
-    [% ELSE %]
-        &rsaquo; Add record matching rule
+<title>
+    Koha &rsaquo; Administration &rsaquo; Record matching rules
+    [% IF ( matching_rule_form ) %]
+        [% IF ( edit_matching_rule ) %]
+            &rsaquo; Modify record matching rule
+        [% ELSE %]
+            &rsaquo; Add record matching rule
+        [% END %]
     [% END %]
-[% END %]
-[% IF ( delete_matching_rule_form ) %]
-    &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
-[% END %]
+    [% IF ( delete_matching_rule_form ) %]
+        &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
+    [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 
@@ -80,7 +81,7 @@
     [% IF ( delete_matching_rule_form ) %]
         &rsaquo; Confirm deletion of record matching rule &quot;[% code | html %]&quot;
     [% END %]
-</div>
+</div> <!-- /#breadcrumbs -->
 
 <div class="main container-fluid">
     <div class="row">
@@ -129,7 +130,7 @@
                                     </select><span class="required">Required</span>
                                 </li>
                             </ol>
-                        </fieldset>
+                        </fieldset> <!-- /.rows -->
 
                         <fieldset class="rows" id="match_points">
                             <h4>Match points</h4>
@@ -193,13 +194,13 @@
                                                             </li>
                                                         [% END %]
                                                     </ol>
-                                                </fieldset>
-                                            [% END %]
-                                        </fieldset>
+                                                </fieldset> <!-- /#mp_[% matchpoint.mp_num | html %]_c_[% component.comp_num | html %] -->
+                                            [% END #/FOREACH component %]
+                                        </fieldset> <!-- /.rows -->
                                         <br style="clear:both;" />
-                                    </div>
-                                [% END %]
-                            [% ELSE %]
+                                    </div> <!-- /#mp_[% matchpoint.mp_num | html %] -->
+                                [% END # /FOREACH matchpoint %]
+                            [% ELSE # IF ( edit_matching_rule ) %]
                                 <div id="mp_1" class="matchgroup">
                                     <fieldset class="rows">
                                         <legend>Match point 1 | <a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
@@ -237,12 +238,12 @@
                                                     [% PROCESS norms_select selected_norm="none" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" %]
                                                 </li>
                                             </ol>
-                                        </fieldset>
-                                    </fieldset>
+                                        </fieldset> <!-- /#mp_1_c_1 -->
+                                    </fieldset> <!-- /.rows -->
                                     <br style="clear:both;" />
-                                </div>
-                            [% END %]
-                        </fieldset>
+                                </div> <!-- /#mp_1 -->
+                            [% END # /IF ( edit_matching_rule ) %]
+                        </fieldset> <!-- /#match_points -->
 
                         <fieldset class="rows" id="match_checks">
                             <h4>Required match checks</h4>
@@ -291,8 +292,8 @@
                                                             </li>
                                                         [% END %]
                                                     </ol>
-                                                </fieldset>
-                                            [% END %]
+                                                </fieldset> <!-- /#mc_[% src_component.mc_num | html %]_src_c_[% src_component.comp_num | html %] -->
+                                            [% END # /FOREACH src_component %]
 
                                             [% FOREACH tgt_component IN matchcheck.tgt_components %]
                                                 <fieldset class="rows" id="mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %]">
@@ -322,13 +323,13 @@
                                                             </li>
                                                         [% END %]
                                                     </ol>
-                                                </fieldset>
-                                            [% END %]
-                                        </fieldset>
+                                                </fieldset> <!-- /#mc_[% matchcheck.mc_num | html %]_tgt_c_[% tgt_component.comp_num | html %] -->
+                                            [% END # /FOREACH tgt_component %]
+                                        </fieldset> <!-- /.rows -->
                                         <br style="clear:both;" />
-                                    </div>
-                                [% END %]
-                            [% ELSE %]
+                                    </div> <!-- /#mc_[% matchcheck.mc_num | html %] -->
+                                [% END # /FOREACH matchcheck %]
+                            [% ELSE # IF ( edit_matching_rule ) %]
                                 <div id="mc_1" class="matchgroup">
                                     <fieldset class="rows">
                                         <legend>Match check 1 | <a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
@@ -383,11 +384,11 @@
                                                     [% PROCESS norms_select selected_norm="none" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" %]
                                                 </li>
                                             </ol>
-                                        </fieldset>
-                                    </fieldset>
+                                        </fieldset> <!-- /#mc_1_tgt_c_1 -->
+                                    </fieldset> <!-- /.rows -->
                                     <br style="clear:both;" />
-                                </div>
-                            [% END %]
+                                </div> <!-- /#mc_1 -->
+                            [% END # /IF ( edit_matching_rule ) %]
                         </fieldset>
                         <fieldset class="action">
                             [% IF ( edit_matching_rule ) %]
@@ -396,9 +397,9 @@
                                 <input type="button" value="Save" onclick="CheckMatchingRuleForm(this.form)" />
                             [% END %]
                             <a class="cancel" href="/cgi-bin/koha/admin/matching-rules.pl">Cancel</a>
-                        </fieldset>
+                        </fieldset> <!-- /.action -->
                     </form>
-                [% END %]
+                [% END # /IF ( matching_rule_form ) %]
 
                 [% IF ( delete_matching_rule_form ) %]
                     <div class="dialog alert">
@@ -412,7 +413,7 @@
                             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
                         </form>
                     </div>
-                [% END %]
+                [% END # /IF ( delete_matching_rule_form ) %]
 
                 [% IF ( display_list ) %]
 
@@ -453,10 +454,10 @@
                         </table>
                     [% ELSE %]
                         <p>There are no saved matching rules.</p>
-                    [% END %]
+                    [% END # /IF ( available_matching_rules ) %]
 
                     <div class="pages">[% pagination_bar | $raw %]</div>
-                [% END %]
+                [% END # /IF ( display_list ) %]
 
                 [% IF ( matching_rule_form ) %]
                     <div id="mp_template" class="matchgroup" style="display:none;">
@@ -496,10 +497,10 @@
                                         [% PROCESS norms_select selected_norm="none" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" %]
                                     </li>
                                 </ol>
-                            </fieldset>
-                        </fieldset>
+                            </fieldset> <!-- /#mp_num_c_1 -->
+                        </fieldset> <!-- /.rows -->
                         <br style="clear:both;" />
-                    </div>
+                    </div> <!-- /#mp_template -->
 
                     <div id="mc_template" class="matchgroup" style="display:none">
                         <fieldset class="rows">
@@ -529,7 +530,7 @@
                                         [% PROCESS norms_select selected_norm="none" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" %]
                                     </li>
                                 </ol>
-                            </fieldset>
+                            </fieldset> <!-- /#mc_num_src_c_1 -->
                             <fieldset class="rows" id="mc_num_tgt_c_1">
                                 <legend>Target (database) record check field</legend>
                                 <ol>
@@ -554,11 +555,11 @@
                                         [% PROCESS norms_select selected_norm="none" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" %]
                                     </li>
                                 </ol>
-                            </fieldset>
-                        </fieldset>
+                            </fieldset> <!-- #mc_num_tgt_c_1 -->
+                        </fieldset> <!-- /.rows -->
                         <br style="clear:both;" />
-                    </div>
-                [% END %]
+                    </div> <!-- /#mc_template -->
+                [% END # /IF ( matching_rule_form ) %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
