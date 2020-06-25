@@ -31,6 +31,11 @@ use C4::Koha;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+@ISA    = qw(Exporter);
+@EXPORT = qw(
+  &checkauth
+  &get_template_and_user
+);
 
 =head1 NAME
 
@@ -68,17 +73,7 @@ InstallAuth - Authenticates Koha users for Install process
 
 =head1 FUNCTIONS
 
-=over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &checkauth
-  &get_template_and_user
-);
-
-=item get_template_and_user
+=head2 get_template_and_user
 
     my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {   template_name   => "opac-main.tt",
@@ -168,7 +163,7 @@ sub _get_template_language {
     -d $path ? $opaclang : 'en';
 }
 
-=item checkauth
+=head2 checkauth
 
   ($userid, $cookie, $sessionID) = &checkauth($query, $noauth, $flagsrequired, $type);
 
@@ -427,8 +422,6 @@ sub checkpw {
 END { }    # module clean-up code here (global destructor)
 1;
 __END__
-
-=back
 
 =head1 SEE ALSO
 

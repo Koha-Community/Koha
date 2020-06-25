@@ -427,8 +427,8 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
-	my $value;
-   if ( $use_default_values) {
+    my $value;
+    if ( $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value
             my $today = dt_from_string;

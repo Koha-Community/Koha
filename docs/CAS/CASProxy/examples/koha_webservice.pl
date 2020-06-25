@@ -26,8 +26,12 @@
 
 =head1 CGI PARAMETERS
 
+=over
+
 =item PT
 The Proxy Ticket, needed for check_api_auth, that will try to make the CAS Server validate it.
+
+=back
 
 =cut 
 

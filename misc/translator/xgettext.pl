@@ -275,13 +275,13 @@ sub convert_translation_file {
 	$translation{$msgid} = $msgstr unless $msgstr eq '*****';
 
 	if ($msgid  =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
-	    my $candidate = TmplTokenizer::charset_canon($2);
+        my $candidate = TmplTokenizer::charset_canon($2);
 	    die "Conflicting charsets in msgid: $candidate vs $charset_in\n"
 		    if defined $charset_in && $charset_in ne $candidate;
 	    $charset_in = $candidate;
 	}
 	if ($msgstr =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
-	    my $candidate = TmplTokenizer::charset_canon($2);
+        my $candidate = TmplTokenizer::charset_canon($2);
 	    die "Conflicting charsets in msgid: $candidate vs $charset_out\n"
 		    if defined $charset_out && $charset_out ne $candidate;
 	    $charset_out = $candidate;
@@ -289,8 +289,8 @@ sub convert_translation_file {
     }
     # The following assumption is correct; that's what HTML::Template assumes
     if (!defined $charset_in) {
-	$charset_in = $charset_out = TmplTokenizer::charset_canon('utf-8');
-	warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
+        $charset_in = $charset_out = TmplTokenizer::charset_canon('utf-8');
+        warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
     }
 }
 
@@ -383,7 +383,7 @@ if (defined $files_from) {
 	my $input = /^\//? $_: "$directory/$_";
 	my $h = TmplTokenizer->new( $input );
 	$h->set_allow_cformat( 1 );
-	VerboseWarnings::set_input_file_name($input);
+    VerboseWarnings::set_input_file_name($input);
 	print STDERR "$0: Processing file \"$input\"\n" if $verbose_p;
 	text_extract( $h );
     }

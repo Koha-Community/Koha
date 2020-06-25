@@ -46,7 +46,7 @@ sub hashup {
 }
 
 sub recursive_breakdown {
-	my $dse = shift or return;
+    my $dse = shift or return;
 	if (ref($dse) =~ /HASH/) {
 		return join "\n", map {"$_\t=> " . recursive_breakdown($dse->{$_})} keys %$dse;
 	} elsif (ref($dse) =~ /ARRAY/) {
