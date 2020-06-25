@@ -53,7 +53,7 @@
         [% END %]
         [% IF ( patron.dateofbirth ) %]
             <li class="patrondateofbirth">
-                <span class="label">Born:</span>
+                <span>Born:</span>
                 [% INCLUDE 'patron-age.inc' %]
             </li>
         [% END %]
