@@ -37,13 +37,15 @@ sub search {
         |, undef, $has_permission->{permission});
     }
 
+    my (@where, @conditions);
     # Get the iTotalRecords DataTable variable
     $iTotalQuery = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
     if ( $has_permission ) {
-        $iTotalQuery .= ' LEFT JOIN user_permissions on borrowers.borrowernumber=user_permissions.borrowernumber';
+        $iTotalQuery .= ' LEFT JOIN user_permissions ON borrowers.borrowernumber=user_permissions.borrowernumber';
+        $iTotalQuery .= ' AND module_bit=? AND code=?';
+        push @conditions, $has_permission->{module_bit}, $has_permission->{subpermission};
     }
 
-    my (@where, @conditions);
     if ( @restricted_branchcodes ) {
         push @where, "borrowers.branchcode IN (" . join( ',', ('?') x @restricted_branchcodes ) . ")";
         push @conditions, @restricted_branchcodes;
@@ -90,11 +92,13 @@ sub search {
     my $from = "FROM borrowers
                 LEFT JOIN branches ON borrowers.branchcode = branches.branchcode
                 LEFT JOIN categories ON borrowers.categorycode = categories.categorycode";
+    my @where_args;
     if ( $has_permission ) {
         $from .= '
-                LEFT JOIN user_permissions on borrowers.borrowernumber=user_permissions.borrowernumber';
+                LEFT JOIN user_permissions ON borrowers.borrowernumber=user_permissions.borrowernumber
+                AND module_bit=? AND code=?';
+        push @where_args, $has_permission->{module_bit}, $has_permission->{subpermission};
     }
-    my @where_args;
     my @where_strs;
     if(defined $firstletter and $firstletter ne '') {
         push @where_strs, "borrowers.surname LIKE ?";
