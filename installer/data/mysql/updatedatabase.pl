@@ -22200,6 +22200,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24986, "Switch borrowers address related fields to TINYTEXT or MEDIUMTEXT");
 }
 
+$DBversion = '20.06.00.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('SkipHoldTrapOnNotForLoanValue','',NULL,'If set, Koha will never trap items for hold with this notforloan value','Integer')
+    });
+
+    NewVersion( $DBversion, 25184, "Items with a negative notforloan status should not be captured for holds");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
