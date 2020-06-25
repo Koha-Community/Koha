@@ -41,6 +41,14 @@ __PACKAGE__->table("account_credit_types");
   default_value: 1
   is_nullable: 0
 
+=head2 credit_number_enabled
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Is autogeneration of credit number enabled for this credit type
+
 =head2 is_system
 
   data_type: 'tinyint'
@@ -62,6 +70,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 200 },
   "can_be_added_manually",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "credit_number_enabled",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "is_system",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "archived",
@@ -113,11 +123,13 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-20 14:48:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hdxcXxCqIDxwfSHjSr0VUg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-25 09:19:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GESL9hjEPlrQBiuHO4haAw
 
 __PACKAGE__->add_columns(
-    '+is_system' => { is_boolean => 1 }
+    '+is_system'             => { is_boolean => 1 },
+    '+credit_number_enabled' => { is_boolean => 1 },
+    '+archived'              => { is_boolean => 1 }
 );
 
 sub koha_objects_class {
