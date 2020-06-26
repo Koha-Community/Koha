@@ -589,27 +589,27 @@
                             [% IF specific_item %]
                                 <p><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Show all items</a></p>
                             [% ELSE %]
-                            [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
-                              [% IF acquisition_details.total_quantity == 1 %]
-                                <span>1 item is on order.</span>
-                              [% ELSE %]
-                                <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
-                              [% END %]
-                            [% END %]
-                            [% IF holds_count.defined || priority %]
-                                <div id="bib_holds">
-                                    [% IF holds_count.defined %]
-                                        <span>Total holds: [% holds_count | html %]</span>
-                                    [% END %]
-                                    [% IF priority %]
+                                [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
+                                  [% IF acquisition_details.total_quantity == 1 %]
+                                    <span>1 item is on order.</span>
+                                  [% ELSE %]
+                                    <span>[% acquisition_details.total_quantity | html %] items are on order.</span>
+                                  [% END %]
+                                [% END %]
+                                [% IF holds_count.defined || priority %]
+                                    <div id="bib_holds">
                                         [% IF holds_count.defined %]
-                                            <span>(priority [% priority | html %])</span>
-                                        [% ELSE %]
-                                            <span>Overall queue priority: [% priority | html %]</span>
+                                            <span>Total holds: [% holds_count | html %]</span>
                                         [% END %]
-                                    [% END %]
-                                </div>
-                            [% END %]
+                                        [% IF priority %]
+                                            [% IF holds_count.defined %]
+                                                <span>(priority [% priority | html %])</span>
+                                            [% ELSE %]
+                                                <span>Overall queue priority: [% priority | html %]</span>
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                             [% IF ( ALTERNATEHOLDINGS ) %]
