@@ -71,15 +71,24 @@ Koha::Logger->get;
 builder {
     enable "ReverseProxy";
     enable "Plack::Middleware::Static";
-    enable "Log4perl", category => "plack";
-    enable "LogWarn";
 
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
     enable "+Koha::Middleware::RealIP";
 
-    mount '/opac'          => $opac;
-    mount '/intranet'      => $intranet;
-    mount '/api/v1/app.pl' => $apiv1;
-
+    mount '/opac'          => builder {
+        enable 'Log4perl', category => 'plack-opac';
+        enable 'LogWarn';
+        $opac;
+    };
+    mount '/intranet'      => builder {
+        enable 'Log4perl', category => 'plack-intranet';
+        enable 'LogWarn';
+        $intranet;
+    };
+    mount '/api/v1/app.pl' => builder {
+        enable 'Log4perl', category => 'plack-api';
+        enable 'LogWarn';
+        $apiv1;
+    };
 };
