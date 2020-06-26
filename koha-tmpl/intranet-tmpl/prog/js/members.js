@@ -182,6 +182,7 @@ function select_user(borrowernumber, borrower, relationship) {
         if ( guarantor_id ) {
             fieldset.find('.new_guarantor_id').first().val( guarantor_id );
             fieldset.find('.new_guarantor_id_text').first().text( borrower.cardnumber );
+            fieldset.find('.new_guarantor_link').first().attr("href", "/cgi-bin/koha/members/moremember.pl?borrowernumber=" + guarantor_id );
         } else {
             fieldset.find('.guarantor_id').first().hide();
         }

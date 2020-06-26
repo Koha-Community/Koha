@@ -407,45 +407,30 @@ legend:hover {
 
                                 [% IF show_guarantor || guarantor %]
                                     [% SET possible_relationships = Koha.Preference('borrowerRelationship') %]
-                                    <span id="memberentry_guarantor_anchor">
+                                    <div id="memberentry_guarantor_anchor">
                                         <fieldset id="memberentry_guarantor" class="rows">
                                             <legend>Guarantor information</legend>
 
-                                            <span id="guarantor_relationships">
+                                            <div id="guarantor_relationships">
                                                 [% FOREACH r IN relationships %]
-                                                    <fieldset class="rows">
+                                                    <fieldset>
                                                         <ol>
                                                             [% IF category_type == 'I' %]
                                                                 <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
-                                                                    <span class="label">Organization #:</span> [% IF ( r.guarantor_id ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor_id | html %]</a>[% END %]
+                                                                    <span class="label">Organization:</span>
+                                                                    [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
                                                                 </li>
-
                                                                 <li>
-                                                                    <label for="guarantor_surname">Organization name: </label>
-                                                                    <span>[% r.guarantor.surname | html %]</span>
+                                                                    <span class="label">Relationship:</span>
+                                                                    <span>[% r.relationship | html %]</span>
                                                                 </li>
                                                             [% ELSE %]
                                                                 <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
-                                                                    <span class="label">Patron card number:</span>
-                                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor.cardnumber | html %]</a>
+                                                                    <span class="label">Guarantor:</span>
+                                                                    [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
                                                                 </li>
-
-                                                                [% IF r.guarantor.surname %]
-                                                                    <li>
-                                                                        <label for="guarantor_surname">Surname: </label>
-                                                                        <span>[% r.guarantor.surname | html %]</span>
-                                                                    </li>
-                                                                [% END %]
-
-                                                                [% IF r.guarantor.firstname %]
-                                                                    <li>
-                                                                        <label for="guarantor_firstname">First name: </label>
-                                                                        <span>[% r.guarantor.firstname | html %]</span>
-                                                                    </li>
-                                                                [% END %]
-
                                                                 <li>
-                                                                    <label for="relationship">Relationship: </label>
+                                                                    <span class="label">Relationship:</span>
                                                                     <span>[% r.relationship | html %]</span>
                                                                 </li>
 
@@ -464,16 +449,6 @@ legend:hover {
                                                                 <span class="label">Patron card number:</span>
                                                                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.cardnumber | html %]</a>
                                                                 <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
-                                                            </li>
-
-                                                            <li>
-                                                                <label for="guarantor_surname">Surname: </label>
-                                                                <span class="new_guarantor_surname_text">[% guarantor.surname | html %]</span>
-                                                            </li>
-
-                                                            <li>
-                                                                <label for="guarantor_firstname">First name: </label>
-                                                                <span class="new_guarantor_firstname_text">[% guarantor.firstname | html %]</span>
                                                             </li>
 
                                                             <li>
@@ -503,24 +478,17 @@ legend:hover {
                                                         </ol>
                                                     </fieldset>
                                                 [% END %]
-                                            </span> <!-- #/guarantor_relationships -->
+                                            </div> <!-- #/guarantor_relationships -->
 
-                                            <fieldset class="rows guarantor" id="guarantor_template">
+                                            <fieldset class="guarantor" id="guarantor_template">
                                                 <ol>
                                                     <li class="guarantor-details" data-borrowernumber="0">
-                                                        <span class="label">Patron card number:</span>
-                                                        <span class="new_guarantor_id_text"></span>
+                                                        <span class="label">Guarantor:</span>
+                                                        <a class="new_guarantor_link" href="#" target="blank">
+                                                            <span class="new_guarantor_firstname_text"></span> <span class="new_guarantor_surname_text"></span>
+                                                            (<span class="new_guarantor_id_text"></span>)
+                                                         </a>
                                                         <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
-                                                    </li>
-
-                                                    <li>
-                                                        <label for="guarantor_surname">Surname: </label>
-                                                        <span class="new_guarantor_surname_text"></span>
-                                                    </li>
-
-                                                    <li>
-                                                        <label for="guarantor_firstname">First name: </label>
-                                                        <span class="new_guarantor_firstname_text"></span>
                                                     </li>
 
                                                     <li>
@@ -545,7 +513,7 @@ legend:hover {
 
                                                     <li>
                                                         <label for="guarantor_cancel">&nbsp;</label>
-                                                        <span><a href="#" class="guarantor_cancel">Remove</a></span>
+                                                        <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash"></i> Remove</a></span>
                                                     </li>
                                                 </ol>
                                             </fieldset>
@@ -591,7 +559,7 @@ legend:hover {
                                                 [% END %]
                                             </ol>
                                         </fieldset> <!-- /#memberentry_guarantor -->
-                                    </span> <!-- #/memberentry_guarantor_anchor -->
+                                    </div> <!-- #/memberentry_guarantor_anchor -->
                                 [% END # /IF show_guarantor || guarantor  %]
 
                                 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
