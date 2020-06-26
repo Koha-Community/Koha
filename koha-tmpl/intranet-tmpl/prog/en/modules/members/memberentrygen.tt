@@ -409,7 +409,7 @@ legend:hover {
                                     [% SET possible_relationships = Koha.Preference('borrowerRelationship') %]
                                     <div id="memberentry_guarantor_anchor">
                                         <fieldset id="memberentry_guarantor" class="rows">
-                                            <legend>Guarantor information</legend>
+                                            <legend>Patron guarantor</legend>
 
                                             <div id="guarantor_relationships">
                                                 [% FOREACH r IN relationships %]
@@ -560,6 +560,65 @@ legend:hover {
                                             </ol>
                                         </fieldset> <!-- /#memberentry_guarantor -->
                                     </div> <!-- #/memberentry_guarantor_anchor -->
+
+                                    [% UNLESS nocontactname && nocontactfirstname && norelationship %]
+                                        <fieldset class="rows" id="non_patron_guarantor">
+                                            <legend>Non-patron guarantor</legend>
+                                            <ol>
+                                                [% UNLESS nocontactname %]
+                                                    <li>
+                                                        [% IF ( mandatorycontactname ) %]
+                                                            <label for="contactname" class="required">
+                                                        [% ELSE %]
+                                                            <label for="contactname">
+                                                        [% END %]
+                                                            Guarantor surname:
+                                                        </label>
+                                                        <input type="text" id="contactname" name="contactname" value="[% patron.contactname | html %]" />
+                                                        [% IF ( mandatorycontactname ) %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                        <div class="hint">Non-patron guarantor surname</div>
+                                                    </li>
+                                                [% END # /UNLESS nocontactname %]
+
+                                                [% UNLESS nocontactfirstname %]
+                                                    <li>
+                                                        [% IF ( mandatorycontactfirstname ) %]
+                                                            <label for="contactfirstname" class="required">
+                                                        [% ELSE %]
+                                                            <label for="contactfirstname">
+                                                        [% END %]
+                                                            Guarantor first name:
+                                                        </label>
+                                                        <input type="text" id="contactfirstname" name="contactfirstname" value="[% patron.contactfirstname | html %]" />
+                                                        [% IF ( mandatorycontactfirstname ) %]
+                                                            <span class="required">Required</span>
+                                                        [% END %]
+                                                        <div class="hint">Non-patron guarantor first name</div>
+                                                    </li>
+                                                [% END # /UNLESS noaltcontactfirstname %]
+
+                                                [% UNLESS norelationship %]
+                                                    [% IF possible_relationships %]
+                                                        <li>
+                                                            <label for="relationship">Relationship: </label>
+                                                            <select class="relationship" name="relationship">
+                                                                <option value=""></option>
+                                                                [% FOREACH pr IN possible_relationships.split('\|') %]
+                                                                    [% IF pr == relationship %]
+                                                                        <option value="[% pr | html %]" selected="selected">[% pr | html %]</option>
+                                                                    [% ELSE %]
+                                                                        <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                    [% END %]
+                                                                [% END %]
+                                                            </select>
+                                                        </li>
+                                                    [% END #/IF possible_relationships %]
+                                                [% END # /UNLESS norelationship %]
+                                            </ol>
+                                        </fieldset> <!-- /#non_patron_guarantor -->
+                                    [% END # /UNLESS nocontactname && nocontactfirstname && norelationship %]
                                 [% END # /IF show_guarantor || guarantor  %]
 
                                 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
@@ -570,58 +629,6 @@ legend:hover {
                                     <fieldset class="rows" id="memberentry_contact">
                                         <legend id="contact_lgd">Contact</legend>
                                         <ol>
-                                            [% UNLESS nocontactname %]
-                                                <li>
-                                                    [% IF ( mandatorycontactname ) %]
-                                                        <label for="contactname" class="required">
-                                                    [% ELSE %]
-                                                        <label for="contactname">
-                                                    [% END %]
-                                                        Guarantor surname:
-                                                    </label>
-                                                    <input type="text" id="contactname" name="contactname" value="[% patron.contactname | html %]" />
-                                                    [% IF ( mandatorycontactname ) %]
-                                                        <span class="required">Required</span>
-                                                    [% END %]
-                                                    <div class="hint">Non-patron guarantor surname</div>
-                                                </li>
-                                            [% END # /UNLESS nocontactname %]
-
-                                            [% UNLESS nocontactfirstname %]
-                                                <li>
-                                                    [% IF ( mandatorycontactfirstname ) %]
-                                                        <label for="contactfirstname" class="required">
-                                                    [% ELSE %]
-                                                        <label for="contactfirstname">
-                                                    [% END %]
-                                                        Guarantor first name:
-                                                    </label>
-                                                    <input type="text" id="contactfirstname" name="contactfirstname" value="[% patron.contactfirstname | html %]" />
-                                                    [% IF ( mandatorycontactfirstname ) %]
-                                                        <span class="required">Required</span>
-                                                    [% END %]
-                                                    <div class="hint">Non-patron guarantor first name</div>
-                                                </li>
-                                            [% END # /UNLESS noaltcontactfirstname %]
-
-                                            [% UNLESS norelationship %]
-                                                [% IF possible_relationships %]
-                                                    <li>
-                                                        <label for="relationship">Relationship: </label>
-                                                        <select class="relationship" name="relationship">
-                                                            <option value=""></option>
-                                                            [% FOREACH pr IN possible_relationships.split('\|') %]
-                                                                [% IF pr == relationship %]
-                                                                    <option value="[% pr | html %]" selected="selected">[% pr | html %]</option>
-                                                                [% ELSE %]
-                                                                    <option value="[% pr | html %]">[% pr | html %]</option>
-                                                                [% END %]
-                                                            [% END %]
-                                                        </select>
-                                                    </li>
-                                                [% END #/IF possible_relationships %]
-                                            [% END # /UNLESS norelationship %]
-
                                             [% UNLESS nophone %]
                                                 <li>
                                                     [% IF ( mandatoryphone ) %]
