@@ -201,6 +201,8 @@ my $strsth =
             GROUP_CONCAT(DISTINCT items.copynumber
                     ORDER BY items.itemnumber SEPARATOR '|') l_copynumber,
             biblio.title,
+            biblio.copyrightdate,
+            biblioitems.publicationyear,
             biblio.subtitle,
             biblio.medium,
             biblio.part_number,
@@ -273,6 +275,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             holdingbranch    => $data->{holdingbranch},
             homebranch       => $data->{homebranch},
             itemnumber       => $data->{itemnumber},
+            publicationyear  => C4::Context->preference('marcflavour') eq "MARC21" ? $data->{copyrightdate} : $data->{publicationyear},
         }
     );
 }
