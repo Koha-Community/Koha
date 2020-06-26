@@ -17,8 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Time::Fake;
+
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use DateTime;
@@ -328,6 +330,62 @@ subtest 'is_holiday' => sub {
             $dow++;
             $dow = 0 if $dow == 7;
             $sth->execute($dow, $library->branchcode);
+        }
+    };
+};
+
+subtest 'get_push_amt' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('useDaysMode', 'Dayweek');
+
+    subtest 'weekday holidays' => sub {
+        plan tests => 7;
+
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+        my $day = DateTime->now();
+        my $dow = scalar $day->day_of_week;
+        $dow = 0 if $dow == 7;
+
+        # Closed this day of the week
+        my $dbh = C4::Context->dbh;
+        $dbh->do(
+            q|
+            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
+            VALUES ( ?, ?, NULL, NULL, ?, '' )
+        |, undef, $library->branchcode, $dow, "TEST"
+        );
+
+        # Iterate 7 days
+        my $sth = $dbh->prepare(
+"UPDATE repeatable_holidays SET weekday = ? WHERE branchcode = ? AND title = 'TEST'"
+        );
+        for my $i ( 0 .. 6 ) {
+            my $calendar =
+              Koha::Calendar->new( branchcode => $library->branchcode, days_mode => 'Dayweek' );
+
+            my $npa;
+            eval {
+                local $SIG{ALRM} = sub { die "alarm\n" };    # NB: \n required
+                alarm 2;
+                $npa = $calendar->next_open_days( $day, 0 );
+                alarm 0;
+            };
+            if ($@) {
+                die unless $@ eq "alarm\n";    # propagate unexpected errors
+                # timed out
+                ok(0, "next_push_amt succeeded for ".$day->day_name()." weekday holiday");
+            }
+            else {
+                ok($npa, "next_push_amt succeeded for ".$day->day_name()." weekday holiday");
+            }
+
+            # Increment the date and holiday day
+            $day->add( days => 1 );
+            $dow++;
+            $dow = 0 if $dow == 7;
+            $sth->execute( $dow, $library->branchcode );
         }
     };
 };
