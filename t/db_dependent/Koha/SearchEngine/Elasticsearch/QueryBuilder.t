@@ -216,7 +216,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 52;
+    plan tests => 53;
 
     my $qb;
 
@@ -480,6 +480,13 @@ subtest 'build_query tests' => sub {
     );
     is($query_cgi, 'idx=&q=title%3A%22donald%20duck%22', 'query cgi');
     is($query_desc, 'title:"donald duck"', 'query desc ok');
+
+    ( undef, $query ) = $qb->build_query_compat( ['AND'], ['title:"donald duck"'], undef, ['author:Dillinger Escaplan', 'mc-itype,phr:BOOK', 'mc-itype,phr:CD'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:"donald duck") AND (author:("Dillinger Escaplan")) AND itype:(("BOOK") OR ("CD"))',
+        "Limits quoted correctly when passed as phrase"
+    );
 
     # Scan queries
     ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['new'], ['au'], undef, undef, 1 );
