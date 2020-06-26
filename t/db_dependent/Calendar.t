@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Time::Fake;
 use t::lib::TestBuilder;
 
@@ -289,6 +289,47 @@ subtest 'hours_between | days_between' => sub {
 
     };
 
+    Time::Fake->reset;
+};
+
+subtest 'is_holiday' => sub {
+    plan tests => 1;
+
+    subtest 'weekday holidays' => sub {
+        plan tests => 7;
+
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+        my $day = DateTime->now();
+        my $dow = scalar $day->day_of_week;
+        $dow = 0 if $dow == 7;
+
+        # Closed this day of the week
+        my $dbh = C4::Context->dbh;
+        $dbh->do(
+            q|
+            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
+            VALUES ( ?, ?, NULL, NULL, ?, '' )
+        |, undef, $library->branchcode, $dow, "TEST"
+        );
+
+        # Iterate 7 days
+        my $sth = $dbh->prepare(
+"UPDATE repeatable_holidays SET weekday = ? WHERE branchcode = ? AND title = 'TEST'"
+        );
+        for my $i ( 0 .. 6 ) {
+            my $calendar =
+              Koha::Calendar->new( branchcode => $library->branchcode );
+
+            is( $calendar->is_holiday($day), 1, $day->day_name() ." works as a repeatable holiday");
+
+            # Increment the date and holiday day
+            $day->add( days => 1 );
+            $dow++;
+            $dow = 0 if $dow == 7;
+            $sth->execute($dow, $library->branchcode);
+        }
+    };
 };
 
 $schema->storage->txn_rollback();
