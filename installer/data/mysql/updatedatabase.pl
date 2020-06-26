@@ -20650,7 +20650,7 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do(q{
-        UPDATE borrowers SET flags = flags + (1<<12) WHERE flags & (1 << 11) AND !(flags & (1 << 12))
+        UPDATE borrowers SET flags = flags | (1<<12) WHERE flags & (1 << 11)
     });
 
     NewVersion( $DBversion, 22868, 'Move suggestions_manage subpermission out of acquisition permission' );
