@@ -1014,6 +1014,7 @@ sub _fix_limit_special_cases {
         }
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
+            $field =~ s/,phr$//; #We are quoting all the limits as phrase, this prevents from quoting again later
             if ( defined($field) && defined($term) ) {
                 push @new_lim, "$field:(\"$term\")";
             }
