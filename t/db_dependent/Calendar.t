@@ -302,7 +302,7 @@ subtest 'is_holiday' => sub {
 
         my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-        my $day = dt_from_string();
+        my $day = DateTime->now();
         my $dow = scalar $day->day_of_week;
         $dow = 0 if $dow == 7;
 
