@@ -4,19 +4,19 @@
 [% CASE 'no_checkout' %]
     Item is not checked out
 [% CASE 'too_soon' %]
-    Cannot yet be renewed
+    Cannot be renewed yet
 [% CASE 'too_many' %]
     Renewed the maximum number of times
 [% CASE 'auto_too_soon' %]
-    Scheduled for automatic renewal and cannot yet be renewed
+    Scheduled for automatic renewal and cannot be renewed yet
 [% CASE 'auto_too_late' %]
-    Scheduled for automatic renewal and cannot yet be any more
+    Scheduled for automatic renewal and cannot be renewed any more
 [% CASE 'auto_account_expired' %]
     Scheduled for automatic renewal and cannot be renewed because the patron's account has expired
 [% CASE 'auto_renew' %]
     Scheduled for automatic renewal
 [% CASE 'auto_too_much_oweing' %]
-    Scheduled for automatic renewal
+    Scheduled for automatic renewal and cannot be renewed because the patron has too many outstanding charges
 [% CASE 'on_reserve' %]
     On hold for another patron
 [% CASE 'patron_restricted' %]
