@@ -18,6 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 use Modern::Perl;
+use Parallel::ForkManager;
+use Sys::CPU;
 
 use C4::Installer::PerlModules;
 
@@ -42,15 +44,22 @@ my %ignore = (
 
 my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl5/[0-9.]+)";
 
+my $pm   = new Parallel::ForkManager( Sys::CPU::cpu_count() );
+
 my $modules = C4::Installer::PerlModules->new();
 my $prereqs = $modules->prereqs;
 foreach my $phase ($prereqs->phases) {
     foreach my $type ($prereqs->types_in($phase)) {
         my $reqs = $prereqs->requirements_for($phase, $type);
+
+        MODULE_LOOP:
         foreach my $module ( $reqs->required_modules ) {
+            my $pid = $pm->start and next MODULE_LOOP;
+
             next if $ignore{$module};
             my $subpath = $module;
             $subpath =~ s,::,/,g;
+
             my $output = qx(apt-file -l -x search "$prefix/$subpath.pm\$");
             my @temp   = split( /\n/, $output );
             my @lines  = ();
@@ -83,18 +92,7 @@ foreach my $phase ($prereqs->phases) {
                 print "\n";
             }
             elsif ( scalar(@temp) != 0 ) {
-
-                # I'm an Essential and I'm OK,
-                # I install all night, and work all day.
-                # I chomp up strings. I eat my bugs.
-                # I go to the base install.
-                # On Fridays I go drinking,
-                # and have buttered commits for git.
-                # (Beer O'Clock is more than two hours
-                # away. I don't even drink beer. There
-                # is no reason to be suspicious of this
-                # commit.)
-                # RM note: suspicious?  me?  always!
+                # hmm, skip module
             }
             elsif ( $type ne 'requires' ) {
                 # Ignore because we don't have it and we don't care.
@@ -102,6 +100,9 @@ foreach my $phase ($prereqs->phases) {
             else {
                 print "EEEK: unknown package for $module\n";
             }
+
+            $pm->finish; # Terminates the child process
         }
     }
 }
+$pm->wait_all_children;
