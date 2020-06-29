@@ -377,7 +377,7 @@ $(document).ready(function() {
                     "bVisible": false,
                 },
                 {
-                    "iDataSort": 9, // Sort on hidden unformatted issuedate column
+                    "iDataSort": 10, // Sort on hidden unformatted issuedate column
                     "mDataProp": "issuedate_formatted",
                 },
                 {
