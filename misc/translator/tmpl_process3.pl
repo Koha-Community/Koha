@@ -379,7 +379,7 @@ if ($action eq 'create')  {
         open(my $infh, '<', $tmpfile2);
         open(my $outfh, '>', $str_file);
         while (<$infh>) {
-        print $outfh;
+        print $outfh $_;
         last if /^\n/s;
         }
         close $infh;
