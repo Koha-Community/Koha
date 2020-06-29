@@ -54,7 +54,7 @@ my $user     = $input->param("user") // '';
 my @actions  = $input->multi_param("actions");
 my @interfaces  = $input->multi_param("interfaces");
 my $object   = $input->param("object");
-my $object_type = $input->param("object_type");
+my $object_type = $input->param("object_type") // '';
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");
 my $dateto   = $input->param("to");
@@ -135,7 +135,6 @@ if ($do_it) {
     $search_params{action} = { -in => [ @actions ] } if ( defined $actions[0] && $actions[0] ne '' );
     $search_params{interface} = { -in => [ @interfaces ] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
 
-
     if ( @modules == 1 && $object_type eq 'biblio' ) {
         # Handle 'Modification log' from cataloguing
         my @itemnumbers = Koha::Items->search({ biblionumber => $object })->get_column('itemnumber');
@@ -144,7 +143,7 @@ if ($do_it) {
             { -and => { object => \@itemnumbers, info => { -like => 'item%' }}},
         ];
     } else {
-        $search_params{info} = $info if $info;
+        $search_params{info} = { -like => '%' . $info . '%' } if $info;
         $search_params{object} = $object if $object;
     }
 
