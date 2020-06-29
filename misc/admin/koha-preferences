@@ -296,7 +296,7 @@ print_usage() if ( $ARGV[0] =~ /^(-h|--help|-help|help)$/ );
 
 print_usage( 1 ) if ( !$ARGV[0] || ref($commands{$ARGV[0]}) ne 'CODE' );
 
-$command = $commands{$ARGV[0]};
+my $command = $commands{$ARGV[0]};
 shift @ARGV;
 $command->(@ARGV);
 
