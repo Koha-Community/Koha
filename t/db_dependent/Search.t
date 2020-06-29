@@ -293,14 +293,14 @@ sub run_marc21_search_tests {
         'UPL' => { 'branchaddress1' => 'Chestnut Hollow', 'branchcode' => 'UPL', 'branchname' => 'Union', },
     );
     my %itemtypes = (
-        'BK' => { 'imageurl' => 'bridge/book.gif', 'summary' => '', 'itemtype' => 'BK', 'description' => 'Books' },
-        'CF' => { 'imageurl' => 'bridge/computer_file.gif', 'summary' => '', 'itemtype' => 'CF', 'description' => 'Computer Files' },
-        'CR' => { 'imageurl' => 'bridge/periodical.gif', 'summary' => '', 'itemtype' => 'CR', 'description' => 'Continuing Resources' },
-        'MP' => { 'imageurl' => 'bridge/map.gif', 'summary' => '', 'itemtype' => 'MP', 'description' => 'Maps' },
-        'MU' => { 'imageurl' => 'bridge/sound.gif', 'summary' => '', 'itemtype' => 'MU', 'description' => 'Music' },
-        'MX' => { 'imageurl' => 'bridge/kit.gif', 'summary' => '', 'itemtype' => 'MX', 'description' => 'Mixed Materials' },
+        'BK' => { 'imageurl' => 'bridge/book.png', 'summary' => '', 'itemtype' => 'BK', 'description' => 'Books' },
+        'CF' => { 'imageurl' => 'bridge/computer_file.png', 'summary' => '', 'itemtype' => 'CF', 'description' => 'Computer Files' },
+        'CR' => { 'imageurl' => 'bridge/periodical.png', 'summary' => '', 'itemtype' => 'CR', 'description' => 'Continuing Resources' },
+        'MP' => { 'imageurl' => 'bridge/map.png', 'summary' => '', 'itemtype' => 'MP', 'description' => 'Maps' },
+        'MU' => { 'imageurl' => 'bridge/sound.png', 'summary' => '', 'itemtype' => 'MU', 'description' => 'Music' },
+        'MX' => { 'imageurl' => 'bridge/kit.png', 'summary' => '', 'itemtype' => 'MX', 'description' => 'Mixed Materials' },
         'REF' => { 'imageurl' => '', 'summary' => '', 'itemtype' => 'REF', 'description' => 'Reference' },
-        'VM' => { 'imageurl' => 'bridge/dvd.gif', 'summary' => '', 'itemtype' => 'VM', 'description' => 'Visual Materials' },
+        'VM' => { 'imageurl' => 'bridge/dvd.png', 'summary' => '', 'itemtype' => 'VM', 'description' => 'Visual Materials' },
     );
 
     index_sample_records_and_launch_zebra($datadir, 'marc21');

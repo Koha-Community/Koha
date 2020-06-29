@@ -20,11 +20,11 @@
 -- along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
-('BK', 'Bøker',0,0,'bridge/book.gif',''),
-('MX', 'Blandet innhold',0,0,'bridge/kit.gif',''),
-('CF', 'Datafiler',0,0,'bridge/computer_file.gif',''),
-('MP', 'Kart',0,0,'bridge/map.gif',''),
-('VM', 'Visuelt materiale',0,1,'bridge/dvd.gif',''),
-('MU', 'Musikk',5,0,'bridge/sound.gif',''),
-('CR', 'Periodika',0,0,'bridge/periodical.gif',''),
+('BK', 'Bøker',0,0,'bridge/book.png',''),
+('MX', 'Blandet innhold',0,0,'bridge/kit.png',''),
+('CF', 'Datafiler',0,0,'bridge/computer_file.png',''),
+('MP', 'Kart',0,0,'bridge/map.png',''),
+('VM', 'Visuelt materiale',0,1,'bridge/dvd.png',''),
+('MU', 'Musikk',5,0,'bridge/sound.png',''),
+('CR', 'Periodika',0,0,'bridge/periodical.png',''),
 ('REF', 'Oppslagsverk',0,1,'','');
