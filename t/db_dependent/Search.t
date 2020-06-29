@@ -111,7 +111,7 @@ my @htdocs = split /\//, $htdocs;
 $htdocs[-2] = 'koha-tmpl';
 $htdocs[-1] = 'opac-tmpl';
 $htdocs = join '/', @htdocs;
-our $contextmodule = new Test::MockModule('C4::Context');
+our $contextmodule = Test::MockModule->new('C4::Context');
 $contextmodule->mock('preference', sub {
     my ($self, $pref) = @_;
     if ($pref eq 'marcflavour') {
@@ -201,7 +201,7 @@ $contextmodule->mock('preference', sub {
     }
 });
 
-our $bibliomodule = new Test::MockModule('C4::Biblio');
+our $bibliomodule = Test::MockModule->new('C4::Biblio');
 
 sub mock_GetMarcSubfieldStructure {
     my $marc_type = shift;
@@ -258,7 +258,7 @@ sub run_marc21_search_tests {
     Koha::Caches->get_instance('config')->flush_all;
 
     mock_GetMarcSubfieldStructure('marc21');
-    my $context = new C4::Context("$datadir/etc/koha-conf.xml");
+    my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
     use_ok('C4::Search');
@@ -275,7 +275,7 @@ sub run_marc21_search_tests {
     is(scalar(grep(/^arl$/, @$indexes)), 1, "Accelerated reading level index supported");
     is(scalar(grep(/^arp$/, @$indexes)), 1, "Accelerated reading point index supported");
 
-    my $bibliomodule = new Test::MockModule('C4::Biblio');
+    my $bibliomodule = Test::MockModule->new('C4::Biblio');
 
     my %branches = (
         'CPL' => { 'branchaddress1' => 'Jefferson Summit', 'branchcode' => 'CPL', 'branchname' => 'Centerville', },
@@ -700,7 +700,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ## Regression test for Bug 10741
 
     # make one of the test items appear to be in transit
-    my $circ_module = new Test::MockModule('C4::Circulation');
+    my $circ_module = Test::MockModule->new('C4::Circulation');
     $circ_module->mock('GetTransfers', sub {
         my $itemnumber = shift // -1;
         if ($itemnumber == 11) {
@@ -832,7 +832,7 @@ sub run_unimarc_search_tests {
     Koha::Caches->get_instance('config')->flush_all;
 
     mock_GetMarcSubfieldStructure('unimarc');
-    my $context = new C4::Context("$datadir/etc/koha-conf.xml");
+    my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
     use_ok('C4::Search');

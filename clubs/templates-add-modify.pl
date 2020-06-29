@@ -32,7 +32,7 @@ use Koha::Club::Template::EnrollmentFields;
 use Koha::Database;
 my $schema = Koha::Database->new()->schema();
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

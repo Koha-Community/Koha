@@ -476,7 +476,7 @@ sub get_po_from_target {
     my $target = shift;
 
     my $po;
-    my $po_head = new Locale::PO;
+    my $po_head = Locale::PO->new;
     $po_head->{msgid}  = "\"\"";
     $po_head->{msgstr} = "".
         "Project-Id-Version: Koha Project - Installation files\\n" .
@@ -516,7 +516,7 @@ sub get_po_from_target {
                                 $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/g;                                   # put placeholders
                                 next if ( $line =~ /^(\s|%s|-|[[:punct:]]|\(|\))*$/ or length($line) < 2 );     # discard non strings
                                 if ( not $po->{ $line } ) {
-                                    my $msg = new Locale::PO(
+                                    my $msg = Locale::PO->new(
                                                 -msgid => $line, -msgstr => '',
                                                 -reference => "$dir/$file:$table_name:$tablec:row:$rowc:mul:$mulc" );
                                     $po->{ $line } = $msg;
@@ -525,7 +525,7 @@ sub get_po_from_target {
                         } else {
                             if ( defined $row->{$field} and length($row->{$field}) > 1                         # discard null values and small strings
                                  and not $po->{ $row->{$field} } ) {
-                                my $msg = new Locale::PO(
+                                my $msg = Locale::PO->new(
                                             -msgid => $row->{$field}, -msgstr => '',
                                             -reference => "$dir/$file:$table_name:$tablec:row:$rowc" );
                                 $po->{ $row->{$field} } = $msg;
@@ -538,7 +538,7 @@ sub get_po_from_target {
             for my $description ( @{ $yaml->{'description'} } ) {
                 $desccount++;
                 if ( length($description) > 1 and not $po->{ $description } ) {
-                    my $msg = new Locale::PO(
+                    my $msg = Locale::PO->new(
                                 -msgid => $description, -msgstr => '',
                                 -reference => "$dir/$file:description:$desccount" );
                     $po->{ $description } = $msg;

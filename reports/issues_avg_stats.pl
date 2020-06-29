@@ -39,7 +39,7 @@ plugin that shows a stats on borrowers
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/issues_avg_stats.tt";
 my $line = $input->param("Line");

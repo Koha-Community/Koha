@@ -10,7 +10,7 @@ use Koha::Database;
 BEGIN {
     use_ok('C4::BackgroundJob');
 }
-my $query = new CGI;
+my $query = CGI->new;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

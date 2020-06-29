@@ -47,7 +47,7 @@ use List::MoreUtils qw/uniq/;
 
 my $maxreserves = C4::Context->preference("maxreserves");
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # if RequestOnOpac (for placing holds) is disabled, leave immediately
 if ( ! C4::Context->preference('RequestOnOpac') ) {

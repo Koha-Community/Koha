@@ -55,7 +55,7 @@ BEGIN {
 	$debug = $ENV{DEBUG} || 0;
 }
 	
-my $input = new CGI;
+my $input = CGI->new;
 ($debug) or $debug = $input->param('debug') || 0;
 my %data;
 

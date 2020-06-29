@@ -689,7 +689,7 @@ sub build_tabs {
 # ========================
 #          MAIN
 #=========================
-my $input = new CGI;
+my $input = CGI->new;
 my $error = $input->param('error');
 my $biblionumber  = $input->param('biblionumber'); # if biblionumber exists, it's a modif, not a new biblio.
 my $parentbiblio  = $input->param('parentbiblionumber');

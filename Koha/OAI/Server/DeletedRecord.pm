@@ -30,7 +30,7 @@ sub new {
     my $self = $class->SUPER::new(%args);
 
     $timestamp =~ s/ /T/, $timestamp .= 'Z';
-    $self->header( new HTTP::OAI::Header(
+    $self->header( HTTP::OAI::Header->new(
         status      => 'deleted',
         identifier  => $args{identifier},
         datestamp   => $timestamp,

@@ -37,7 +37,7 @@ use Koha::BackgroundJob::BatchUpdateAuthority;
 use Koha::MetadataRecord::Authority;
 use Koha::Virtualshelves;
 
-my $input = new CGI;
+my $input = CGI->new;
 our $dbh = C4::Context->dbh;
 my $op = $input->param('op') // q|form|;
 my $recordtype = $input->param('recordtype') // 'biblio';

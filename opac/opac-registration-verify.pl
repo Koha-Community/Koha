@@ -29,7 +29,7 @@ use Koha::Patron::Consent;
 use Koha::Patron::Modifications;
 use Koha::Patron::Categories;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
 
 unless ( C4::Context->preference('PatronSelfRegistration') ) {

@@ -32,7 +32,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Biblio;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $dbh = C4::Context->dbh;
 

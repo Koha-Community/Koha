@@ -25,7 +25,7 @@ use C4::Output;
 use Koha::AudioAlert;
 use Koha::AudioAlerts;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $selector = $cgi->param('selector');
 my $sound    = $cgi->param('sound');

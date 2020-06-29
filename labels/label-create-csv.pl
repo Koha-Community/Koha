@@ -28,7 +28,7 @@ use C4::Debug;
 use C4::Creators;
 use C4::Labels;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $batch_id;
 my @label_ids;

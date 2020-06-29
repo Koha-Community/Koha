@@ -33,7 +33,7 @@ use C4::Installer::PerlModules;
 
 use Koha;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $step  = $query->param('step');
 
 my $language = $query->param('language');

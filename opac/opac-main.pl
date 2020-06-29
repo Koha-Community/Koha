@@ -31,7 +31,7 @@ use Koha::Checkouts;
 use Koha::Holds;
 use Koha::News;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

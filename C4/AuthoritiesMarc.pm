@@ -227,7 +227,7 @@ sub SearchAuthorities {
     my @oAuth;
     my $i;
     $oAuth[0]=C4::Context->Zconn("authorityserver" , 1);
-    my $Anewq= new ZOOM::Query::PQF($query,$oAuth[0]);
+    my $Anewq= ZOOM::Query::PQF->new($query,$oAuth[0]);
     my $oAResult;
     $oAResult= $oAuth[0]->search($Anewq) ;
     while (($i = ZOOM::event(\@oAuth)) != 0) {

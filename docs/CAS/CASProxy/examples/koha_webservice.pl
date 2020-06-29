@@ -44,7 +44,7 @@ use C4::Output;
 use C4::Context;
 use CGI qw ( -utf8 );
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 print CGI::header('-type'=>'text/plain', '-charset'=>'utf-8');
 

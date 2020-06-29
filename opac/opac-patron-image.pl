@@ -25,7 +25,7 @@ use CGI::Cookie;  # need to check cookies before having CGI parse the POST reque
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use Koha::Patron::Images;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 unless (C4::Context->preference('OPACpatronimages')) {
     print $query->header(status => '403 Forbidden - displaying patron images in the OPAC not enabled');

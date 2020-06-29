@@ -29,7 +29,7 @@ use Koha::BiblioFrameworks;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
 
-my $input       = new CGI;
+my $input       = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {

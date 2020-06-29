@@ -33,7 +33,7 @@ use C4::Languages qw(getTranslatedLanguages);
 use Date::Calc qw/Date_to_Days Today/;
 use Koha::DateUtils;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $id             = $cgi->param('id');
 my $title          = $cgi->param('title');

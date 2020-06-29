@@ -28,7 +28,7 @@ use Koha::Club::Enrollment::Fields;
 use Koha::Club::Enrollments;
 use Koha::Clubs;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'enroll' } );

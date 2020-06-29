@@ -36,7 +36,7 @@ use Koha::Patron::Categories;
 
 my $script_name = "/cgi-bin/koha/admin/patron-attr-types.pl";
 
-our $input = new CGI;
+our $input = CGI->new;
 my $op = $input->param('op') || '';
 
 

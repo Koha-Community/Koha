@@ -31,7 +31,7 @@ use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
 use Koha::Libraries;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $id          = $input->param('id');
 my $op          = $input->param('op') || 'list';
 my $searchfield = $input->param('searchfield');

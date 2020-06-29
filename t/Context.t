@@ -63,7 +63,7 @@ subtest 'needs_install() tests' => sub {
     is( C4::Context->needs_install, 1, "->preference(Version) is not defined, need to install" );
 };
 
-my $context = new Test::MockModule('C4::Context');
+my $context = Test::MockModule->new('C4::Context');
 my $userenv = {};
 
 $context->mock('userenv', sub {

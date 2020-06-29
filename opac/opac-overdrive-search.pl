@@ -24,7 +24,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw(:DEFAULT get_session);
 use C4::Output;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # Getting the template and auth
 my ($template, $loggedinuser, $cookie)

@@ -43,7 +43,7 @@ use CGI qw ( -utf8 );
 use C4::Koha;
 use Koha::KeyboardShortcuts;
 
-my $input            = new CGI;
+my $input            = CGI->new;
 my $op               = $input->param('op') || 'list';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

@@ -56,7 +56,7 @@ use Koha::Patrons;
 use Koha::Clubs;
 
 my $dbh = C4::Context->dbh;
-my $input = new CGI;
+my $input = CGI->new;
 my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "reserve/request.tt",

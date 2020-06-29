@@ -7,7 +7,7 @@ use Test::MockModule;
 
 my %configs;
 sub mock_config {
-    my $context = new Test::MockModule('C4::Context');
+    my $context = Test::MockModule->new('C4::Context');
     my ( $conf, $value ) = @_;
     $configs{$conf} = $value;
     $context->mock('config', sub {
@@ -27,7 +27,7 @@ sub mock_preference {
 
     $preferences{lc($pref)} = $value;
 
-    my $context = new Test::MockModule('C4::Context');
+    my $context = Test::MockModule->new('C4::Context');
     $context->mock('preference', sub {
         my ( $self, $pref ) = @_;
         $pref = lc($pref);

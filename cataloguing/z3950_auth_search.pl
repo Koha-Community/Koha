@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Breeding;
 use C4::Koha;
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $dbh          = C4::Context->dbh;
 my $error         = $input->param('error');
 my $authid  = $input->param('authid') || 0;

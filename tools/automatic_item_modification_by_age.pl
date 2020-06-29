@@ -43,7 +43,7 @@ use C4::Koha;
 use Koha::Items;
 use Koha::Biblioitems;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

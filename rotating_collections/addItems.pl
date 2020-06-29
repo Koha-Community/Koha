@@ -28,7 +28,7 @@ use Koha::Items;
 
 use CGI qw ( -utf8 );
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

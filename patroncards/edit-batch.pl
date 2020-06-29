@@ -31,7 +31,7 @@ use C4::Creators;
 use C4::Patroncards;
 use Koha::Patrons;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "patroncards/edit-batch.tt",

@@ -32,7 +32,7 @@ use Koha::AuthorisedValues;
 use Koha::Items;
 use Koha::ItemTypes;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { acquisition => 'order_receive' } );
 unless ($status eq "ok") {

@@ -47,7 +47,7 @@ Plugin that shows reserve stats
 =cut
 
 # my $debug = 1;	# override for now.
-my $input = new CGI;
+my $input = CGI->new;
 my $fullreportname = "reports/reserves_stats.tt";
 my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");

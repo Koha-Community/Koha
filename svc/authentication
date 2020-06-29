@@ -24,7 +24,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use XML::Simple;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # The authentication strategy for the biblios web 
 # services is as follows.

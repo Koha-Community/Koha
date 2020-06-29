@@ -28,7 +28,7 @@ use Koha::Patrons;
 
 use constant GDPR_PROCESSING => 'GDPR_PROCESSING';
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op = $query->param('op') // q{};
 my $gdpr_check = $query->param('gdpr_processing') // q{};
 

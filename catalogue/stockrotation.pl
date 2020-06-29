@@ -38,7 +38,7 @@ use Koha::StockRotationRotas;
 use Koha::StockRotationStages;
 use Koha::Util::StockRotation qw(:ALL);
 
-my $input = new CGI;
+my $input = CGI->new;
 
 unless (C4::Context->preference('StockRotation')) {
     # redirect to Intranet home if self-check is not enabled

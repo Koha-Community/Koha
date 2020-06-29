@@ -224,7 +224,7 @@ sub SimpleSearch {
         eval {
             $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
             $query =~ s/:/=/g unless $options{skip_normalize};
-            $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
+            $zoom_queries[$i] = ZOOM::Query::CCL2RPN->new( $query, $zconns[$i]);
             $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
 
             # error handling
@@ -337,18 +337,18 @@ sub getRecords {
             if ($query_type) {
                 if ($query_type =~ /^ccl/) {
                     $query_to_use =~ s/\:/\=/g;    # change : to = last minute (FIXME)
-                    $results[$i] = $zconns[$i]->search(new ZOOM::Query::CCL2RPN($query_to_use, $zconns[$i]));
+                    $results[$i] = $zconns[$i]->search(ZOOM::Query::CCL2RPN->new($query_to_use, $zconns[$i]));
                 } elsif ($query_type =~ /^cql/) {
-                    $results[$i] = $zconns[$i]->search(new ZOOM::Query::CQL($query_to_use, $zconns[$i]));
+                    $results[$i] = $zconns[$i]->search(ZOOM::Query::CQL->new($query_to_use, $zconns[$i]));
                 } elsif ($query_type =~ /^pqf/) {
-                    $results[$i] = $zconns[$i]->search(new ZOOM::Query::PQF($query_to_use, $zconns[$i]));
+                    $results[$i] = $zconns[$i]->search(ZOOM::Query::PQF->new($query_to_use, $zconns[$i]));
                 } else {
                     warn "Unknown query_type '$query_type'.  Results undetermined.";
                 }
             } elsif ($scan) {
-                    $results[$i] = $zconns[$i]->scan(  new ZOOM::Query::CCL2RPN($query_to_use, $zconns[$i]));
+                    $results[$i] = $zconns[$i]->scan(  ZOOM::Query::CCL2RPN->new($query_to_use, $zconns[$i]));
             } else {
-                    $results[$i] = $zconns[$i]->search(new ZOOM::Query::CCL2RPN($query_to_use, $zconns[$i]));
+                    $results[$i] = $zconns[$i]->search(ZOOM::Query::CCL2RPN->new($query_to_use, $zconns[$i]));
             }
         };
         if ($@) {

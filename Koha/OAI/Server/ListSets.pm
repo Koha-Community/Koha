@@ -54,7 +54,7 @@ sub new {
     }
 
     $self->resumptionToken(
-        new Koha::OAI::Server::ResumptionToken(
+        Koha::OAI::Server::ResumptionToken->new(
             metadataPrefix => $token->{metadata_prefix},
             offset         => $pos
         )

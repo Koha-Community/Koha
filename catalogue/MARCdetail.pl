@@ -65,7 +65,7 @@ use Koha::DateUtils;
 
 use List::MoreUtils qw( uniq );
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $dbh          = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);

@@ -27,7 +27,7 @@ use Koha::Items;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # 404 if feature is disabled
 unless ( C4::Context->preference('SelfCheckInModule') ) {

@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Output;
 use Koha::Patrons;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # if OPACPrivacy is disabled, leave immediately
 if ( ! C4::Context->preference('OPACPrivacy') || ! C4::Context->preference('opacreadinghistory') ) {

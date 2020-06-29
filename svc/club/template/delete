@@ -27,7 +27,7 @@ use C4::Auth qw(check_cookie_auth);
 
 use Koha::Club::Templates;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_templates' } );
 if ( $auth_status ne "ok" ) {

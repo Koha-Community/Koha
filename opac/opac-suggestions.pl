@@ -35,7 +35,7 @@ use Koha::Patrons;
 
 use Koha::DateUtils;
 
-my $input           = new CGI;
+my $input           = CGI->new;
 my $op              = $input->param('op') || 'else';
 my $biblionumber    = $input->param('biblionumber');
 my $suggestion      = $input->Vars;

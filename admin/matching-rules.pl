@@ -29,7 +29,7 @@ use C4::Matcher qw/valid_normalization_routines/;
 
 my $script_name = "/cgi-bin/koha/admin/matching-rules.pl";
 
-our $input = new CGI;
+our $input = CGI->new;
 my $op = $input->param('op') || '';
 
 

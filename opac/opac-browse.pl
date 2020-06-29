@@ -34,7 +34,7 @@ use Koha::SearchEngine::Elasticsearch::Search;
 use JSON;
 use Unicode::Collate;
 
-my $query = new CGI;
+my $query = CGI->new;
 binmode STDOUT, ':encoding(UTF-8)';
 
 # If calling via JS, 'api' is used to route to correct step in process

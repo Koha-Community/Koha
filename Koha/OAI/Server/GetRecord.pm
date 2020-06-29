@@ -92,7 +92,7 @@ sub new {
         {
             return HTTP::OAI::Response->new(
              requestURL  => $repository->self_url(),
-             errors      => [ new HTTP::OAI::Error(
+             errors      => [ HTTP::OAI::Error->new(
                 code    => 'idDoesNotExist',
                 message => "There is no biblio record with this identifier",
                 ) ],

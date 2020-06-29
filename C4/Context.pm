@@ -637,7 +637,7 @@ sub _new_Zconn {
     my $password = $context->{"serverinfo"}->{$server}->{"password"};
     eval {
         # set options
-        my $o = new ZOOM::Options();
+        my $o = ZOOM::Options->new();
         $o->option(user => $user) if $user && $password;
         $o->option(password => $password) if $user && $password;
         $o->option(async => 1) if $async;

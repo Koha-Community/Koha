@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Auth;
 use Koha::ArticleRequests;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

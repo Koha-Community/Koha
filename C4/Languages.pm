@@ -603,7 +603,7 @@ sub getlanguage {
         return $cached if $cached;
     }
 
-    $cgi //= new CGI;
+    $cgi //= CGI->new;
     my $interface = C4::Context->interface;
     my $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
     my $language;

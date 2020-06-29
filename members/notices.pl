@@ -28,7 +28,7 @@ use C4::Letters;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-my $input=new CGI;
+my $input=CGI->new;
 
 
 my $borrowernumber = $input->param('borrowernumber');

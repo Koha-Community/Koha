@@ -66,7 +66,7 @@ my $borrowernumber = $builder->build(
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 # Need to mock userenv for AddIssue
-my $module = new Test::MockModule('C4::Context');
+my $module = Test::MockModule->new('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
 AddIssue($borrower, '0101');
 AddIssue($borrower, '0203');

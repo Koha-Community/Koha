@@ -35,7 +35,7 @@ use C4::Output;
 use C4::Serials::Numberpattern;
 use C4::Serials::Frequency;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'serials/subscription-numberpatterns.tt',
     query           => $input,

@@ -26,7 +26,7 @@ use XML::Simple;
 
 binmode STDOUT, ':encoding(UTF-8)';
 
-my $query = new CGI;
+my $query = CGI->new;
 my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 unless ($status eq 'ok') {
     print $query->header(-type => 'text/xml', -status => '403 Forbidden');

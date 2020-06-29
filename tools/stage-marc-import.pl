@@ -43,7 +43,7 @@ use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
 use Koha::Plugins;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $fileID                     = $input->param('uploadedfileid');
 my $runinbackground            = $input->param('runinbackground');

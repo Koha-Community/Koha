@@ -21,7 +21,7 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Reserves;
 use C4::Auth;
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-account.tt",

@@ -55,7 +55,7 @@ use C4::Biblio qw/GetBiblioData/;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;
 
-my $input=new CGI;
+my $input=CGI->new;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/uncertainprice.tt",

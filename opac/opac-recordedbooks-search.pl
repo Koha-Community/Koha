@@ -24,7 +24,7 @@ use CGI qw( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

@@ -28,7 +28,7 @@ use C4::Calendar;
 use DateTime;
 use Koha::DateUtils;
 
-my $input               = new CGI;
+my $input               = CGI->new;
 my $dbh                 = C4::Context->dbh();
 
 checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');

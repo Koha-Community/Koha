@@ -32,7 +32,7 @@ BEGIN {
     $debug = $ENV{DEBUG} || 0;
 }
 
-my $input = new CGI;
+my $input = CGI->new;
 my $base;
 
 if ( C4::Context->config('supportdir') ) {

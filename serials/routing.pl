@@ -40,7 +40,7 @@ use Koha::Patrons;
 
 use URI::Escape;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
 my $serialseq = $query->param('serialseq');
 my $routingid = $query->param('routingid');

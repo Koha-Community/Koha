@@ -36,7 +36,7 @@ use JSON;
 use C4::Output;
 use C4::Items;
 
-my $input = new CGI;
+my $input = CGI->new;
 my @field = $input->multi_param('field[]');
 my @value = $input->multi_param('value[]');
 

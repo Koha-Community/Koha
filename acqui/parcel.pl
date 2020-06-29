@@ -74,7 +74,7 @@ use Koha::Biblios;
 
 use JSON;
 
-my $input=new CGI;
+my $input=CGI->new;
 my $sticky_filters = $input->param('sticky_filters') || 0;
 
 my ($template, $loggedinuser, $cookie)

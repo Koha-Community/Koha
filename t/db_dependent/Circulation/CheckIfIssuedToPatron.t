@@ -72,7 +72,7 @@ my $borrowernumber2 = Koha::Patron->new({categorycode => $categorycode, branchco
 my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
 my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
 
-my $module = new Test::MockModule('C4::Context');
+my $module = Test::MockModule->new('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
 
 

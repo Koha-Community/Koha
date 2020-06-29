@@ -29,7 +29,7 @@ use C4::Koha;
 use C4::Context;
 use C4::Output;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
 
 my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { tools => 'edit_quotes' } );

@@ -24,7 +24,7 @@ use C4::Acquisition;
 use C4::Output;
 use C4::Context;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name => "acqui/csv/lateorders.tt",
     query => $input,

@@ -52,7 +52,7 @@ my $new_message_1  = Koha::Patron::Message->new(
 )->store;
 is( get_nb_of_logactions(), $nb_of_logaction, 'With BorrowersLog off, no new log should have been added' );
 
-my $context = new Test::MockModule('C4::Context');
+my $context = Test::MockModule->new('C4::Context');
 $context->mock( 'userenv', sub {
     return {
         number => $patron_2->{borrowernumber},

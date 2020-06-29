@@ -44,7 +44,7 @@ use CGI qw ( -utf8 );
 use C4::Koha;
 use Koha::CsvProfiles;
 
-my $input            = new CGI;
+my $input            = CGI->new;
 my $export_format_id = $input->param('export_format_id');
 my $op               = $input->param('op') || 'list';
 my @messages;

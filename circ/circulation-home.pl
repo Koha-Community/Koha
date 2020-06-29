@@ -24,7 +24,7 @@ use C4::Context;
 use Koha::BiblioFrameworks;
 use Koha::Checkouts;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
     {
         template_name   => "circ/circulation-home.tt",

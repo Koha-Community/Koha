@@ -38,7 +38,7 @@ use Koha::Patrons;
 # use Smart::Comments;
 
 my $dbh   = C4::Context->dbh;
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

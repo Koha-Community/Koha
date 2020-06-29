@@ -35,7 +35,7 @@ use Authen::CAS::Client;
 # URL Of the CAS Server
 my $casServerUrl = 'https://localhost:8443/cas/';
 my $cas = Authen::CAS::Client->new($casServerUrl);
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # URL of the service we're requesting a Service Ticket for (typically this very same page)
 my $proxy_service = $cgi->url;

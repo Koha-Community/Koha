@@ -29,7 +29,7 @@ use Koha::RecordProcessor;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {

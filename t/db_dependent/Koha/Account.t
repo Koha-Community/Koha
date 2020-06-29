@@ -972,7 +972,7 @@ subtest 'pay() renews items when appropriate' => sub {
     # Enable renewing upon fine payment
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
     my $called = 0;
-    my $module = new Test::MockModule('C4::Circulation');
+    my $module = Test::MockModule->new('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
     $account->pay(

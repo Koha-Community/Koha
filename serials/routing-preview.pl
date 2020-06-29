@@ -37,7 +37,7 @@ use Koha::Biblios;
 use Koha::Libraries;
 use Koha::Patrons;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
 my $issue = $query->param('issue');
 my $routingid;

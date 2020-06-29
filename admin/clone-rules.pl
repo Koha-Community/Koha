@@ -34,7 +34,7 @@ use C4::Koha;
 use C4::Debug;
 use Koha::CirculationRules;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/clone-rules.tt",

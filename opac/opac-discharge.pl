@@ -30,7 +30,7 @@ use Koha::Patrons;
 use Koha::Patron::Discharge;
 use Koha::DateUtils;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 unless ( C4::Context->preference('useDischarge') ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");

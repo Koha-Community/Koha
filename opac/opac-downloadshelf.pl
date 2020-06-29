@@ -33,7 +33,7 @@ use Koha::RecordProcessor;
 use Koha::Virtualshelves;
 
 use utf8;
-my $query = new CGI;
+my $query = CGI->new;
 
 # if virtualshelves is disabled, leave immediately
 if ( ! C4::Context->preference('virtualshelves') ) {

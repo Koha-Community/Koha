@@ -45,7 +45,7 @@ use Date::Calc qw/Today Add_Delta_YM/;
 use Koha::Patrons;
 use Koha::List::Patron;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # Fetch the paramater list as a hash in scalar context:
 #  * returns paramater list as tied hash ref

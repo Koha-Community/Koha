@@ -36,7 +36,7 @@ svc/problem_reports - Web service for managing OPAC problem reports
 
 # AJAX requests
 my $is_ajax = is_ajax();
-my $query = new CGI;
+my $query = CGI->new;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { problem_reports => 1 } );
 if ( $auth_status ne "ok" ) {
     exit 0;

@@ -94,13 +94,13 @@ subtest "new() tests" => sub {
     my $record = MARC::Record->new();
     my $metadata_record;
 
-    warning_is { $metadata_record = new Koha::MetadataRecord({
+    warning_is { $metadata_record = Koha::MetadataRecord->new({
                         record => $record }) }
                { carped => 'No schema passed' },
         "Metadata schema is mandatory, raise a carped warning if omitted";
     is( $metadata_record, undef, "Metadata schema is mandatory, return undef if omitted");
 
-    $metadata_record = new Koha::MetadataRecord({
+    $metadata_record = Koha::MetadataRecord->new({
         record => $record,
         schema => 'marc21'
     });
@@ -115,7 +115,7 @@ subtest "new() tests" => sub {
     my $weird_record = {};
     bless $weird_record, 'Weird::Class';
 
-    $metadata_record = new Koha::MetadataRecord({
+    $metadata_record = Koha::MetadataRecord->new({
         record => $weird_record,
         schema => 'something',
         format => 'else',
@@ -129,7 +129,7 @@ subtest "new() tests" => sub {
     is( $metadata_record->id, 'an id', 'The id correctly set');
 
     # Having a record object is mandatory
-    warning_is { $metadata_record = new Koha::MetadataRecord({
+    warning_is { $metadata_record = Koha::MetadataRecord->new({
                                         record => undef,
                                         schema => 'something',
                                         format => 'else',

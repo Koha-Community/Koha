@@ -1804,7 +1804,7 @@ sub _get_session_params {
 sub get_session {
     my $sessionID      = shift;
     my $params = _get_session_params();
-    return new CGI::Session( $params->{dsn}, $sessionID, $params->{dsn_args} );
+    return CGI::Session->new( $params->{dsn}, $sessionID, $params->{dsn_args} );
 }
 
 

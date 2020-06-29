@@ -120,7 +120,7 @@ my $borrowernumber =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
-my $module = new Test::MockModule('C4::Context');
+my $module = Test::MockModule->new('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );
 
 my $today = dt_from_string;

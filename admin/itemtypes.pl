@@ -35,7 +35,7 @@ use Koha::ItemTypes;
 use Koha::ItemType;
 use Koha::Localizations;
 
-my $input         = new CGI;
+my $input         = CGI->new;
 my $searchfield   = $input->param('description');
 my $itemtype_code = $input->param('itemtype');
 my $op            = $input->param('op') // 'list';

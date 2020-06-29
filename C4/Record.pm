@@ -375,7 +375,7 @@ sub marc2endnote {
         Year => $marc_rec_obj->publication_date,
         Abstract => $abstract,
     };
-    my $style = new Biblio::EndnoteStyle();
+    my $style = Biblio::EndnoteStyle->new();
     my $template;
     $template.= "DB - DB\n" if C4::Context->preference("LibraryName");
     $template.="T1 - Title\n" if $marc_rec_obj->title();

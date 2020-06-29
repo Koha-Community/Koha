@@ -26,7 +26,7 @@ use C4::Debug;
 use C4::Creators;
 use C4::Labels;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( undef, $loggedinuser, $cookie ) = get_template_and_user({
 								     template_name   => "labels/label-home.tt",

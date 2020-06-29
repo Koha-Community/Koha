@@ -24,7 +24,7 @@ use C4::Serials::Numberpattern;
 use C4::Auth qw/check_cookie_auth/;
 use URI::Escape;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ($auth_status, $sessionID) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
 if ($auth_status ne "ok") {

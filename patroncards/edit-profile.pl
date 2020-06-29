@@ -27,7 +27,7 @@ use C4::Output qw(output_html_with_http_headers);
 use C4::Creators::Lib qw(get_all_templates get_unit_values);
 use C4::Patroncards::Profile;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "patroncards/edit-profile.tt",

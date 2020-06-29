@@ -144,13 +144,13 @@ sub updateMarc {
     unless ($c_marc_field) {
         if ( defined $c_subfield ) {
             $biblio->add_fields(
-                new MARC::Field(
+                MARC::Field->new(
                     $c_field, ' ', ' ', $c_subfield => $c_db_value
                 )
             );
         }
         else {
-            $biblio->add_fields( new MARC::Field( $c_field, $c_db_value ) );
+            $biblio->add_fields( MARC::Field->new( $c_field, $c_db_value ) );
         }
         $debug and warn "[WARN] $c_field did not exist.";
         $c_marc_field = $biblio->field($c_field);
@@ -173,13 +173,13 @@ sub updateMarc {
     unless ($m_marc_field) {
         if ( defined $m_subfield ) {
             $biblio->add_fields(
-                new MARC::Field(
+                MARC::Field->new(
                     $m_field, ' ', ' ', $m_subfield => $m_db_value
                 )
             );
         }
         else {
-            $biblio->add_fields( new MARC::Field( $m_field, $m_db_value ) );
+            $biblio->add_fields( MARC::Field->new( $m_field, $m_db_value ) );
         }
 
         $debug and warn "[WARN] $m_field did not exist.";

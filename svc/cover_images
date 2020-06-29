@@ -25,7 +25,7 @@ use C4::Auth qw/check_cookie_auth/;
 use Koha::CoverImages;
 use JSON qw/to_json/;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) =
         check_cookie_auth(

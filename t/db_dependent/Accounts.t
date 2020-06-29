@@ -62,7 +62,7 @@ $dbh->do(q|DELETE FROM borrowers|);
 
 my $branchcode = $library->{branchcode};
 
-my $context = new Test::MockModule('C4::Context');
+my $context = Test::MockModule->new('C4::Context');
 $context->mock( 'userenv', sub {
     return {
         flags  => 1,
@@ -1151,7 +1151,7 @@ subtest "Payment notice tests" => sub {
     )->store();
 
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
-    my $context = new Test::MockModule('C4::Context');
+    my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', sub {
         return {
             number     => $manager->borrowernumber,

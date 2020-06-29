@@ -53,7 +53,7 @@ use C4::Log;
 
 my $debug = 1;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $fileID = $input->param('uploadedfileid');
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

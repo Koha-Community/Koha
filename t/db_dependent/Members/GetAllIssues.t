@@ -69,7 +69,7 @@ my $borrowernumber2 =
 my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
 my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
 
-my $module = new Test::MockModule('C4::Context');
+my $module = Test::MockModule->new('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );
 
 my $issues = C4::Members::GetAllIssues();

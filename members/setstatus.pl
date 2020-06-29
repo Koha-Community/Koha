@@ -32,7 +32,7 @@ use C4::Auth;
 use Koha::Patrons;
 
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $loggedinuserid ) = checkauth($input, 0, { borrowers => 'edit_borrowers' }, 'intranet');
 

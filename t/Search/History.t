@@ -23,7 +23,7 @@ my $expected_recent_searches = [
 # Create new session and put its id into CGISESSID cookie
 my $session = C4::Auth::get_session("");
 $session->flush;
-my $input = new CookieSimulator({CGISESSID => $session->id});
+my $input = CookieSimulator->new({CGISESSID => $session->id});
 
 my @recent_searches = C4::Search::History::get_from_session({ cgi => $input });
 is_deeply(\@recent_searches, [], 'at start, there is no recent searches');

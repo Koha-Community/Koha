@@ -159,7 +159,7 @@ sub Z3950Search {
         $oResult[$s] =
             $server->{servertype} eq 'zed'?
                 $oConnection[$s]->search_pqf( $server_zquery ):
-                $oConnection[$s]->search(new ZOOM::Query::CQL(
+                $oConnection[$s]->search(ZOOM::Query::CQL->new(
                     _translate_query( $server, $squery )));
         $s++;
     }
@@ -430,7 +430,7 @@ sub _isbn_replace {
 
 sub _create_connection {
     my ( $server ) = @_;
-    my $option1= new ZOOM::Options();
+    my $option1= ZOOM::Options->new();
     $option1->option( 'async' => 1 );
     $option1->option( 'elementSetName', 'F' );
     $option1->option( 'preferredRecordSyntax', $server->{syntax} );
@@ -568,7 +568,7 @@ sub Z3950SearchAuth {
             }
             else {
                 $oResult[$s] = $oConnection[$s]->search(
-                    new ZOOM::Query::CQL(_translate_query( $server, $squery ))
+                    ZOOM::Query::CQL->new(_translate_query( $server, $squery ))
                 );
             }
             $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");

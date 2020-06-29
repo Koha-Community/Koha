@@ -46,7 +46,7 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::SearchEngine::Indexer;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $dbh = C4::Context->dbh;
 my $error        = $input->param('error');
 my @itemnumbers  = $input->multi_param('itemnumber');

@@ -55,7 +55,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Orders;
 use Koha::CsvProfiles;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
         template_name   => "acqui/lateorders.tt",

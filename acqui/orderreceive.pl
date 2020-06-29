@@ -79,7 +79,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Patrons;
 
-my $input      = new CGI;
+my $input      = CGI->new;
 
 my $dbh          = C4::Context->dbh;
 my $invoiceid    = $input->param('invoiceid');

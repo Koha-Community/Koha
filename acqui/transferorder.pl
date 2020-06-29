@@ -28,7 +28,7 @@ use C4::Context;
 use C4::Acquisition;
 use Koha::Acquisition::Booksellers;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "acqui/transferorder.tt",
         query           => $input,

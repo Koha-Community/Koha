@@ -28,7 +28,7 @@ use C4::Letters;
 use C4::Output;
 use C4::Context;
 
-my $query      = new CGI;
+my $query      = CGI->new;
 my $op         = $query->param('op');
 my $dbh        = C4::Context->dbh;
 my $selectview = $query->param('selectview');

@@ -37,7 +37,7 @@ use C4::Output;
 use C4::Acquisition;
 use Koha::Acquisition::Baskets;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'acqui/cancelorder.tt',
     query           => $input,

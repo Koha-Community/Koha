@@ -29,7 +29,7 @@ use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 use Koha::MetadataRecord::Authority;
 
-my $input  = new CGI;
+my $input  = CGI->new;
 my @authid = $input->multi_param('authid');
 my $merge  = $input->param('merge');
 

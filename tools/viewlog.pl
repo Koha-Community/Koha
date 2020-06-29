@@ -45,7 +45,7 @@ plugin that shows stats
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 
 $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');

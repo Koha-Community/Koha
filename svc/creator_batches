@@ -38,7 +38,7 @@ svc/creator_batches - Web service for managing AJAX functionality for patroncard
 
 # AJAX requests
 my $is_ajax = is_ajax();
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { catalogue => 1 } );
 if ( $auth_status ne "ok" ) {
     exit 0;

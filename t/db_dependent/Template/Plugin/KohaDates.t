@@ -13,7 +13,7 @@ BEGIN {
         use_ok('Koha::Template::Plugin::KohaDates');
 }
 
-my $module_context = new Test::MockModule('C4::Context');
+my $module_context = Test::MockModule->new('C4::Context');
 
 my $date = "1973-05-21";
 my $context = C4::Context->new();

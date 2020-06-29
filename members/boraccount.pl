@@ -35,7 +35,7 @@ use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Items;
 
-my $input=new CGI;
+my $input=CGI->new;
 
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user(

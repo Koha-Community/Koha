@@ -36,7 +36,7 @@ use C4::Auth;
 use C4::Debug;
 use Koha::Acquisition::Currencies;
 
-our $input = new CGI;
+our $input = CGI->new;
 ####  $input
 
 my $dbh = C4::Context->dbh;

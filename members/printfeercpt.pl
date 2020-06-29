@@ -35,7 +35,7 @@ use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-my $input=new CGI;
+my $input=CGI->new;
 
 
 my ($template, $loggedinuser, $cookie)

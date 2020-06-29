@@ -50,7 +50,7 @@ Script to control the guided report creation
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $phase = $input->param('phase') // '';

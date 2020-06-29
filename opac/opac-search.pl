@@ -73,7 +73,7 @@ my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
 use CGI qw('-no_undef_params' -utf8);
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $branch_group_limit = $cgi->param("branch_group_limit");
 if ( $branch_group_limit ) {

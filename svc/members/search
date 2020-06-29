@@ -27,7 +27,7 @@ use C4::Utils::DataTables::Members qw( search );
 use Koha::DateUtils qw( output_pref dt_from_string );
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 exit unless $input->param('template_path');
 

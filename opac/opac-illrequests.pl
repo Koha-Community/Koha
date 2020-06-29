@@ -32,7 +32,7 @@ use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Illrequest::Availability;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # Grab all passed data
 # 'our' since Plack changes the scoping

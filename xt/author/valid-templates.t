@@ -74,7 +74,7 @@ if ( $ENV{KOHA_PROVE_CPUS} ) {
     $ncpu = Sys::CPU::cpu_count();
 }
 
-my $pm   = new Parallel::ForkManager($ncpu);
+my $pm   = Parallel::ForkManager->new($ncpu);
 
 # Tests
 foreach my $theme ( @themes ) {

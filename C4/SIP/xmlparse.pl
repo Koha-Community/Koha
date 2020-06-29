@@ -13,7 +13,7 @@ use English;
 use XML::Simple qw(:strict);
 use Data::Dumper;
 
-my $parser = new XML::Simple( KeyAttr   => { login => '+id',
+my $parser = XML::Simple->new( KeyAttr   => { login => '+id',
 					     institution => '+id',
 					     service => '+port', },
 			      GroupTags =>  { listeners => 'service',

@@ -32,7 +32,7 @@ use URI::Escape;
 use POSIX qw(strftime);
 
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # Getting the template and auth
 my ($template, $loggedinuser, $cookie) = get_template_and_user(

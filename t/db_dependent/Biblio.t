@@ -153,7 +153,7 @@ subtest "Authority creation with default linker" => sub {
 
 
 # Mocking variables
-my $biblio_module = new Test::MockModule('C4::Biblio');
+my $biblio_module = Test::MockModule->new('C4::Biblio');
 $biblio_module->mock(
     'GetMarcSubfieldStructure',
     sub {
@@ -185,7 +185,7 @@ $biblio_module->mock(
       }
 );
 
-my $currency = new Test::MockModule('Koha::Acquisition::Currencies');
+my $currency = Test::MockModule->new('Koha::Acquisition::Currencies');
 $currency->mock(
     'get_active',
     sub {

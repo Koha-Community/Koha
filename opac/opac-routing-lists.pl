@@ -23,7 +23,7 @@ use C4::Auth;
 use C4::Output;
 use Koha::Patrons;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 unless ( C4::Context->preference('RoutingSerials') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");

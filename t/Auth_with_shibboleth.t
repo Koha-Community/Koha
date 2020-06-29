@@ -63,7 +63,7 @@ $ENV{'city'} = undef;
 
 # Setup Mocks
 ## Mock Context
-my $context = new Test::MockModule('C4::Context');
+my $context = Test::MockModule->new('C4::Context');
 
 ### Mock ->config
 $context->mock( 'config', \&mockedConfig );
@@ -81,7 +81,7 @@ my $interface = 'opac';
 $context->mock( 'interface', \&mockedInterface );
 
 ## Mock Database
-my $database = new Test::MockModule('Koha::Database');
+my $database = Test::MockModule->new('Koha::Database');
 
 ### Mock ->schema
 $database->mock( 'schema', \&mockedSchema );

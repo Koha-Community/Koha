@@ -29,7 +29,7 @@ use C4::Context;
 use Koha::Authority::Types;
 
 # retrieve parameters
-my $input = new CGI;
+my $input = CGI->new;
 my $authtypecode         = $input->param('authtypecode')         || '';    # set to select framework
 my $existingauthtypecode = $input->param('existingauthtypecode') || '';    # set when we have to create a new framework (in authtype) by copying an old one (in existingauthtype)
 

@@ -34,7 +34,7 @@ to determine whether the new parent budget (or period) has enough unallocated fu
 =cut
 
 my $dbh = C4::Context->dbh;
-my $input = new CGI;
+my $input = CGI->new;
 
 my $total     = $input->param('total');
 my $budget_id = $input->param('budget_id');

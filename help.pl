@@ -24,7 +24,7 @@ use C4::Auth;
 use C4::Context;
 use Koha::Manual;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # We need to call get_template_and_user to let it does the job correctly
 # for the language

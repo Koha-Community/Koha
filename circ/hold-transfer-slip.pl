@@ -31,7 +31,7 @@ BEGIN {
     $debug = $ENV{DEBUG} || 0;
 }
 
-my $input = new CGI;
+my $input = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 

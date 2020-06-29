@@ -127,7 +127,7 @@ sub new {
     # Is metadataPrefix supported by the repository?
     my $mdp = param('metadataPrefix') || '';
     if ( $mdp && !grep { $_ eq $mdp } @{$self->{ koha_metadata_format }} ) {
-        push @errs, new HTTP::OAI::Error(
+        push @errs, HTTP::OAI::Error->new(
             code    => 'cannotDisseminateFormat',
             message => "Dissemination as '$mdp' is not supported",
         );

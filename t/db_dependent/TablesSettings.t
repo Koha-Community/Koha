@@ -14,7 +14,7 @@ my $dbh = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM columns_settings|);
 
-my $module = new Test::MockModule('C4::Utils::DataTables::TablesSettings');
+my $module = Test::MockModule->new('C4::Utils::DataTables::TablesSettings');
 $module->mock(
     'get_yaml',
     sub {

@@ -8,7 +8,7 @@ use C4::Context;
 use C4::Output;
 use C4::ShelfBrowser;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

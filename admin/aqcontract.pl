@@ -30,7 +30,7 @@ use Koha::DateUtils;
 
 use Koha::Acquisition::Booksellers;
 
-my $input          = new CGI;
+my $input          = CGI->new;
 my $contractnumber = $input->param('contractnumber');
 my $booksellerid   = $input->param('booksellerid');
 my $op             = $input->param('op') || 'list';

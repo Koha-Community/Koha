@@ -43,7 +43,7 @@ my $cas = Authen::CAS::Client->new($casServerUrl);
 # URL of the service we'd like to be proxy for (typically the Koha webservice we want to query)
 my $target_service = "https://.../koha_webservice.pl";
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 print $cgi->header({-type  =>  'text/html'});
 print $cgi->start_html("proxy cas");

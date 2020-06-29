@@ -26,7 +26,7 @@ use C4::Output;
 
 use Koha::SharedContent;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "admin/share_content.tt",

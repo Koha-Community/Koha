@@ -28,7 +28,7 @@ use C4::Koha;
 
 use C4::CourseReserves qw(GetCourse GetCourseReserves);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "opac-course-details.tt",

@@ -41,7 +41,7 @@ use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $itemnumber = $input->param('itemnumber');
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(

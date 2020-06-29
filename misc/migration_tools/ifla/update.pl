@@ -84,7 +84,7 @@ my @subfields = @{ $biblio->{subfields} };
 
 my $translations = {};
 if ($dump_pot) {
-    $translations->{''} = new Locale::PO(
+    $translations->{''} = Locale::PO->new(
         -msgid => '',
         -msgstr => "Project-Id-Version: Koha\n" .
             "POT-Creation-Date: " . time2str('%Y-%m-%d %R%z', time) . "\n" .
@@ -94,38 +94,38 @@ if ($dump_pot) {
     );
     while (my ($category, $values) = each %$authorised_values) {
         foreach my $authorised_value (@$values) {
-            $translations->{$authorised_value->{lib}} = new Locale::PO(
+            $translations->{$authorised_value->{lib}} = Locale::PO->new(
                 -msgid => $authorised_value->{lib},
                 -msgstr => '',
             );
         }
     }
     for my $tag (@tags) {
-        $translations->{$tag->{liblibrarian}} = new Locale::PO(
+        $translations->{$tag->{liblibrarian}} = Locale::PO->new(
             -msgid => $tag->{liblibrarian},
             -msgstr => '',
         );
     }
     for my $subfield (@subfields) {
-        $translations->{$subfield->{liblibrarian}} = new Locale::PO(
+        $translations->{$subfield->{liblibrarian}} = Locale::PO->new(
             -msgid => $subfield->{liblibrarian},
             -msgstr => '',
         );
     }
     for my $authtype (@$authtypes) {
-        $translations->{$authtype->{authtypetext}} = new Locale::PO(
+        $translations->{$authtype->{authtypetext}} = Locale::PO->new(
             -msgid => $authtype->{authtypetext},
             -msgstr => '',
         );
     }
     for my $authtag (@authtags) {
-        $translations->{$authtag->{liblibrarian}} = new Locale::PO(
+        $translations->{$authtag->{liblibrarian}} = Locale::PO->new(
             -msgid => $authtag->{liblibrarian},
             -msgstr => '',
         );
     }
     for my $authsubfield (@authsubfields) {
-        $translations->{$authsubfield->{liblibrarian}} = new Locale::PO(
+        $translations->{$authsubfield->{liblibrarian}} = Locale::PO->new(
             -msgid => $authsubfield->{liblibrarian},
             -msgstr => '',
         );;

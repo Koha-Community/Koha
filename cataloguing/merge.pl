@@ -34,7 +34,7 @@ use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::MetadataRecord;
 
-my $input = new CGI;
+my $input = CGI->new;
 my @biblionumbers = $input->multi_param('biblionumber');
 my $merge = $input->param('merge');
 
@@ -207,7 +207,7 @@ if ($merge) {
         foreach my $biblionumber (@biblionumbers) {
             my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
             my $frameworkcode = GetFrameworkCode($biblionumber);
-            my $recordObj = new Koha::MetadataRecord({'record' => $marcrecord, schema => $marcflavour});
+            my $recordObj = Koha::MetadataRecord->new({'record' => $marcrecord, schema => $marcflavour});
             my $record = {
                 recordid => $biblionumber,
                 record => $marcrecord,

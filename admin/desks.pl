@@ -26,7 +26,7 @@ use C4::Output;
 
 use Koha::Desks;
 
-my $input       = new CGI;
+my $input       = CGI->new;
 my $searchfield = $input->param('desk_name') // q||;
 my $desk_id      = $input->param('desk_id') || '';
 my $op          = $input->param('op') || 'list';

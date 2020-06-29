@@ -24,7 +24,7 @@ use C4::Output;
 use Koha::Acquisition::Orders;
 use Koha::Patrons;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     template_name   => "acqui/showorder.tt",
     query           => $cgi,

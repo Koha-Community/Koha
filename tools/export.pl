@@ -32,7 +32,7 @@ use Koha::Exporter::Record;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $dont_export_items = $query->param("dont_export_item") || 0;
 my $record_type       = $query->param("record_type");

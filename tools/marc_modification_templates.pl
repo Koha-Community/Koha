@@ -25,7 +25,7 @@ use C4::Koha;
 use C4::Output;
 use C4::MarcModificationTemplates;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $op = $cgi->param('op') || q{};
 my $template_id = $cgi->param('template_id');

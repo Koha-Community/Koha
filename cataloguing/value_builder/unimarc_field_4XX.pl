@@ -69,7 +69,7 @@ sub plugin_javascript {
 sub plugin {
     my ($input)   = @_;
     my $dbh       = C4::Context->dbh;
-    my $query     = new CGI;
+    my $query     = CGI->new;
     my $op        = $query->param('op');
     my $type      = $query->param('type');
     my $startfrom = $query->param('startfrom');

@@ -62,7 +62,7 @@ unless ($status eq "ok") {
     exit 0;
 }
 
-my $input = new CGI;
+my $input = CGI->new;
 my $name = $input->param('name');
 my $category = $input->param('category');
 my $default = $input->param('default');

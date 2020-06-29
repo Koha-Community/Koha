@@ -40,7 +40,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $item           = $input->param('itemnumber');
 my $borrowernumber = $input->param('borrowernumber');

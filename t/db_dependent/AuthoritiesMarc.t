@@ -21,7 +21,7 @@ BEGIN {
 
 # We are now going to be testing the authorities hierarchy code, and
 # therefore need to pretend that we have consistent data in our database
-my $module = new Test::MockModule('C4::AuthoritiesMarc');
+my $module = Test::MockModule->new('C4::AuthoritiesMarc');
 $module->mock('GetHeaderAuthority', sub {
     return {'authtrees' => ''};
 });

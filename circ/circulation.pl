@@ -65,7 +65,7 @@ use List::MoreUtils qw/uniq/;
 #
 # PARAMETERS READING
 #
-my $query = new CGI;
+my $query = CGI->new;
 
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');

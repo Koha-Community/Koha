@@ -33,7 +33,7 @@ use Koha::ItemTypes;
 use Koha::CirculationRules;
 
 #Setting variables
-my $input = new CGI;
+my $input = CGI->new;
 
 unless ( C4::Context->preference('Version') ) {
     print $input->redirect("/cgi-bin/koha/installer/install.pl");

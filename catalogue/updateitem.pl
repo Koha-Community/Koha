@@ -27,7 +27,7 @@ use C4::Output;
 use C4::Circulation;
 use C4::Reserves;
 
-my $cgi= new CGI;
+my $cgi= CGI->new;
 
 checkauth($cgi, 0, {circulate => 'circulate_remaining_permissions'}, 'intranet');
 

@@ -28,7 +28,7 @@ use Koha::Checkouts;
 use Koha::Items;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

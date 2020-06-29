@@ -27,7 +27,7 @@ use C4::Members;
 use C4::Suggestions;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "members/purchase-suggestions.tt",

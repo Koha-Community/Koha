@@ -12,7 +12,7 @@ use XML::Simple qw(:strict);
 
 use C4::SIP::Sip qw(siplog);
 
-my $parser = new XML::Simple(
+my $parser = XML::Simple->new(
     KeyAttr => {
         login       => '+id',
         institution => '+id',

@@ -29,7 +29,7 @@ use Koha::DateUtils;
 use Koha::Database;
 use Koha::BiblioFrameworks;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
     {

@@ -25,7 +25,7 @@ use C4::Context;
 use Koha::Patrons;
 use Koha::Patron::Modifications;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # FIXME Should be a checkauth call
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

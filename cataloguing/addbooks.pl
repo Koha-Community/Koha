@@ -41,7 +41,7 @@ use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Z3950Servers;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $success = $input->param('biblioitem');
 my $query   = $input->param('q');

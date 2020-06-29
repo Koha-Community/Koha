@@ -45,7 +45,7 @@ BEGIN {
     }
 }
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $type      = $query->param('type');
 my $op        = $query->param('op') || '';

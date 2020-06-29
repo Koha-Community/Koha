@@ -34,7 +34,7 @@ use Koha::List::Patron;
 use Koha::Patrons;
 use Koha::Patron::Images;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
                                                                      template_name   => "labels/label-home.tt",

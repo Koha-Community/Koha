@@ -26,7 +26,7 @@ use C4::Output;
 use C4::Calendar;
 use Koha::DateUtils;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $dbh = C4::Context->dbh();
 # Get the template to use

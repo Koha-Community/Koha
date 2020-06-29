@@ -50,7 +50,7 @@ use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
     template_name => "acqui/addorderiso2709.tt",
     query => $input,

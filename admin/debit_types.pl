@@ -28,7 +28,7 @@ use C4::Output;
 use Koha::Account::DebitType;
 use Koha::Account::DebitTypes;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $code  = $input->param('code');
 my $op    = $input->param('op') || 'list';
 my @messages;

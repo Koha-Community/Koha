@@ -33,7 +33,7 @@ use Koha::DateUtils qw/format_sqldatetime/;
 
 use JSON qw( to_json );
 
-my $input = new CGI;
+my $input = CGI->new;
 my $query = $input->param('term');
 
 binmode STDOUT, ":encoding(UTF-8)";

@@ -38,7 +38,7 @@ plugin that shows a stats on borrowers
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/cat_issues_top.tt";
 my $limit = $input->param("Limit");

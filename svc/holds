@@ -32,7 +32,7 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $input->cookie('CGISESSID'),

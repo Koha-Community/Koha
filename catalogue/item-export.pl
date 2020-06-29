@@ -24,7 +24,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => 'catalogue/itemsearch_csv.tt',

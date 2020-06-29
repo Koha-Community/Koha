@@ -38,7 +38,7 @@ use C4::Serials;
 use C4::Serials::Frequency;
 use Koha::DateUtils;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'serials/showpredictionpattern.tt',
     query           => $input,

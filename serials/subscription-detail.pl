@@ -37,7 +37,7 @@ use Carp;
 
 use Koha::SharedContent;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op = $query->param('op') || q{};
 my $issueconfirmed = $query->param('issueconfirmed');
 my $dbh = C4::Context->dbh;

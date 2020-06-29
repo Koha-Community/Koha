@@ -24,7 +24,7 @@ use C4::Auth;
 use C4::Output;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

@@ -39,7 +39,7 @@ outputs the returned hashref as XML.
 =cut
 
 # Instanciate the CGI request
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 # List of available services, sorted by level
 my @services = (

@@ -165,7 +165,7 @@ sub generate_subfield_form {
         }
 
         if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode' && !$value){
-	    my $input = new CGI;
+	    my $input = CGI->new;
 	    $value = $input->param('barcode');
 	}
 
@@ -395,7 +395,7 @@ sub removeFieldsForPrefill {
 
 }
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $error        = $input->param('error');
 
 my $biblionumber;

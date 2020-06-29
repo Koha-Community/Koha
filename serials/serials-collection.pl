@@ -34,7 +34,7 @@ use Koha::DateUtils qw( dt_from_string );
 use List::MoreUtils qw/uniq/;
 
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op = $query->param('op') || q{};
 my $nbissues=$query->param('nbissues');
 my $date_received_today = $query->param('date_received_today') || 0;

@@ -22,7 +22,7 @@ use CGI qw ( -utf8 );
 
 use Koha::FrameworkPlugin;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $plugin= Koha::FrameworkPlugin->new( {
     name => scalar $input->param("plugin_name"),
 });

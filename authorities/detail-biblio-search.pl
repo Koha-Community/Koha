@@ -51,7 +51,7 @@ use C4::Koha;
 use Koha::Authorities;
 use Koha::Authority::Types;
 
-my $query=new CGI;
+my $query=CGI->new;
 
 my $dbh=C4::Context->dbh;
 

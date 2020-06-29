@@ -39,7 +39,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::Debarments;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') || 'show_form';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "tools/modborrowers.tt",

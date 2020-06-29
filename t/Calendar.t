@@ -49,7 +49,7 @@ $db->mock(
 # We need to mock the C4::Context->preference method for
 # simplicity and re-usability of the session definition. Any
 # syspref fits for syspref-agnostic tests.
-my $module_context = new Test::MockModule('C4::Context');
+my $module_context = Test::MockModule->new('C4::Context');
 $module_context->mock(
     'preference',
     sub {

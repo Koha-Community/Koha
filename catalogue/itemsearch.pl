@@ -33,7 +33,7 @@ use Koha::Item::Search::Field qw(GetItemSearchFields);
 use Koha::ItemTypes;
 use Koha::Libraries;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my %params = $cgi->Vars;
 
 my $format = $cgi->param('format');

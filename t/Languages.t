@@ -31,7 +31,7 @@ my @languages = (); # stores the list of active languages
                     # for the syspref mock
 my $return_undef = 0;
 
-my $module_context = new Test::MockModule('C4::Context');
+my $module_context = Test::MockModule->new('C4::Context');
 
 $module_context->mock(
     preference => sub {

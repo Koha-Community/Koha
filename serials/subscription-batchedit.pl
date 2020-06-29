@@ -29,7 +29,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::AdditionalFields;
 use Koha::DateUtils;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name => 'serials/subscription-batchedit.tt',

@@ -9,7 +9,7 @@ use Koha::SuggestionEngine;
 use Module::Load::Conditional qw(can_load);
 use JSON;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/didyoumean.tt",

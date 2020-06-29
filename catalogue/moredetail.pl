@@ -38,7 +38,7 @@ use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
 
-my $query=new CGI;
+my $query=CGI->new;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {

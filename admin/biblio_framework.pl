@@ -28,7 +28,7 @@ use Koha::BiblioFramework;
 use Koha::BiblioFrameworks;
 use Koha::Caches;
 
-my $input         = new CGI;
+my $input         = CGI->new;
 my $frameworkcode = $input->param('frameworkcode') || q||;
 my $op            = $input->param('op') || q|list|;
 my $cache         = Koha::Caches->get_instance();

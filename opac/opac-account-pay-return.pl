@@ -24,7 +24,7 @@ use CGI;
 use C4::Auth;
 use Koha::Plugins::Handler;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $userid, $cookie, $sessionID, $flags ) = checkauth( $cgi, 0, {}, 'opac' );
 

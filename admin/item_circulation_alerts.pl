@@ -111,7 +111,7 @@ sub dispatch {
         show   => \&show,
         toggle => \&toggle,
     );
-    my $input  = new CGI;
+    my $input  = CGI->new;
     my $action = $input->param('action') || 'show';
     if (not exists $handler{$action}) {
         my $status = 400;

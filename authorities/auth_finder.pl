@@ -31,7 +31,7 @@ use Koha::SearchEngine::QueryBuilder;
 
 use Koha::Authority::Types;
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $op           = $query->param('op') || '';
 my $authtypecode = $query->param('authtypecode') || '';
 my $index        = $query->param('index') || '';

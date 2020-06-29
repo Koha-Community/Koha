@@ -33,7 +33,7 @@ use Koha::Authorities;
 use Koha::Biblios;
 use Koha::Items;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') // q|form|;
 my $recordtype = $input->param('recordtype') // 'biblio';
 

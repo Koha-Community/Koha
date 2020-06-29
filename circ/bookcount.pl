@@ -32,7 +32,7 @@ use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Libraries;
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $itm          = $input->param('itm');
 my $biblionumber = $input->param('biblionumber');
 

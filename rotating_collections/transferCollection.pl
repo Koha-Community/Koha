@@ -25,7 +25,7 @@ use C4::RotatingCollections;
 
 use CGI qw ( -utf8 );
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $colId    = $query->param('colId');
 my $toBranch = $query->param('toBranch');

@@ -33,7 +33,7 @@ use Koha::Plugins;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name => ($plugins_enabled) ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",

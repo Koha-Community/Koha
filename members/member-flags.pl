@@ -19,7 +19,7 @@ use Koha::Patrons;
 use C4::Output;
 use Koha::Token;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $flagsrequired = { permissions => 1 };
 my $member=$input->param('member');

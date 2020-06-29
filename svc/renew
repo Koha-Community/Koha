@@ -28,7 +28,7 @@ use C4::Auth qw(check_cookie_auth);
 
 use Koha::DateUtils qw(output_pref dt_from_string);
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $input->cookie('CGISESSID'),

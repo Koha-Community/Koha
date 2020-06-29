@@ -89,7 +89,7 @@ below the scannable barcode.
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '*' } );
 

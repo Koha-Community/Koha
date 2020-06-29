@@ -38,7 +38,7 @@ use C4::Output;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
 

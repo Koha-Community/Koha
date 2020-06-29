@@ -33,7 +33,7 @@ use Koha::Patrons;
 use Koha::Token;
 use Koha::Patron::Categories;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ($template, $loggedinuser, $cookie)
                 = get_template_and_user({template_name => "members/deletemem.tt",

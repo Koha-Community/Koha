@@ -150,7 +150,7 @@ subtest 'Values should not be erased on editing' => sub {
     my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
     my $itemcallnumber = 'XXXmy itemcallnumberXXX';
 
-    my $item_record    = new MARC::Record;
+    my $item_record    = MARC::Record->new;
 
     $item_record->append_fields(
         MARC::Field->new( '080', '', '', "a" => "default" ),

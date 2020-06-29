@@ -38,7 +38,7 @@ by item location.
 
 =cut
 
-my $input       = new CGI;
+my $input       = CGI->new;
 my $dbh = C4::Context->dbh;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({

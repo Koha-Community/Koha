@@ -41,7 +41,7 @@ use Koha::Patrons;
 
 use Koha::DateUtils;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
     template_name   => 'members/discharge.tt',

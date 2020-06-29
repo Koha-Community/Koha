@@ -45,7 +45,7 @@ $db->mock( _new_schema => sub { return Schema(); } );
 
 use_ok('Koha::SuggestionEngine');
 
-my $module = new Test::MockModule('C4::AuthoritiesMarc');
+my $module = Test::MockModule->new('C4::AuthoritiesMarc');
 $module->mock('SearchAuthorities', sub {
         return [ { 'authid' => '1234',
                     'reported_tag' => undef,

@@ -25,7 +25,7 @@ use C4::Auth;
 use Koha::DateUtils;
 use Koha::Patron::Debarments;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $loggedinuserid, $cookie, $sessionID ) = checkauth( $cgi, 0, { borrowers => 'edit_borrowers' }, 'intranet' );
 

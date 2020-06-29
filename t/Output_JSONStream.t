@@ -12,7 +12,7 @@ BEGIN {
         use_ok('C4::Output::JSONStream');
 }
 
-my $json = new C4::Output::JSONStream;
+my $json = C4::Output::JSONStream->new;
 is($json->output,'{}',"Making sure JSON output is blank just after its created.");
 $json->param( issues => [ 'yes!', 'please', 'no' ] );
 is($json->output,'{"issues":["yes!","please","no"]}',"Making sure JSON output has added what we told it to.");

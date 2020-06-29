@@ -32,7 +32,7 @@ Script to control the guided report creation
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 my $referer = $input->referer();
 
 my $phase = $input->param('phase') || 'View Dictionary';

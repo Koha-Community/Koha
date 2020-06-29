@@ -29,7 +29,7 @@ use C4::Output;
 use C4::Reserves;
 use C4::Auth;
 use Koha::Holds;
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   

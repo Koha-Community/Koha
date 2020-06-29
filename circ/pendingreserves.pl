@@ -33,7 +33,7 @@ use Koha::DateUtils;
 use Koha::Holds;
 use DateTime::Duration;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $startdate = $input->param('from');
 my $enddate = $input->param('to');
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set

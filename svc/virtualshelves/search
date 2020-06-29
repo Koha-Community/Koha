@@ -8,7 +8,7 @@ use C4::Output qw( output_with_http_headers );
 use C4::Utils::DataTables qw( dt_get_params );
 use C4::Utils::DataTables::VirtualShelves qw( search );
 
-my $input = new CGI;
+my $input = CGI->new;
 
 exit unless $input->param('template_path');
 

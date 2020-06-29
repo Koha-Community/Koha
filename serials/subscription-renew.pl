@@ -55,7 +55,7 @@ use C4::Output;
 use C4::Serials;
 use Koha::DateUtils;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $dbh   = C4::Context->dbh;
 
 my $mode           = $query->param('mode') || q{};

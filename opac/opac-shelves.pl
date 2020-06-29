@@ -41,7 +41,7 @@ use Koha::RecordProcessor;
 
 use constant ANYONE => 2;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $template_name = $query->param('rss') ? "opac-shelves-rss.tt" : "opac-shelves.tt";
 

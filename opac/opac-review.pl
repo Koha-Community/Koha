@@ -31,7 +31,7 @@ use Koha::DateUtils;
 use Koha::Review;
 use Koha::Reviews;
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $biblionumber = $query->param('biblionumber');
 my $review       = $query->param('review');
 my $reviewid     = $query->param('reviewid');

@@ -11,7 +11,7 @@ use Koha::Patron::Password::Recovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery DeleteExpiredPasswordRecovery);
 use Koha::Patrons;
 use Koha::Patrons;
-my $query = new CGI;
+my $query = CGI->new;
 use HTML::Entities;
 use Try::Tiny;
 use List::Util qw/any/;

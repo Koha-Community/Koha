@@ -28,7 +28,7 @@ use C4::Koha;
 
 use C4::CourseReserves qw(GetCourse);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "course_reserves/course.tt",

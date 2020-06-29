@@ -32,7 +32,7 @@ use C4::Members;
 use Koha::Items;
 use Koha::Patrons;
 use Date::Calc qw( Today Date_to_Days );
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	{

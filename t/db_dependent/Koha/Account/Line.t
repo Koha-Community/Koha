@@ -324,7 +324,7 @@ subtest 'apply() tests' => sub {
     # Enable renewing upon fine payment
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
     my $called = 0;
-    my $module = new Test::MockModule('C4::Circulation');
+    my $module = Test::MockModule->new('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
     my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
@@ -452,7 +452,7 @@ subtest 'Renewal related tests' => sub {
         }
     );
     my $called = 0;
-    my $module = new Test::MockModule('C4::Circulation');
+    my $module = Test::MockModule->new('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     $module->mock('CanBookBeRenewed', sub { return 1; });
     $line->renew_item;

@@ -342,7 +342,7 @@ subtest 'is_going_to_expire' => sub {
     { # Testing invalid is going to expiry date
         t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 30);
         # mock_config does not work here, because of tz vs timezone subroutines
-        my $context = new Test::MockModule('C4::Context');
+        my $context = Test::MockModule->new('C4::Context');
         $context->mock( 'tz', sub {
             'America/Sao_Paulo';
         });

@@ -27,7 +27,7 @@ use C4::Serials;
 use Koha::Patrons;
 use CGI::Session;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {

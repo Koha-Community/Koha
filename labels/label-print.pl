@@ -28,7 +28,7 @@ use C4::Output qw(output_html_with_http_headers);
 use C4::Creators::Lib qw(get_all_templates get_all_layouts get_output_formats);
 use C4::Labels::Batch;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "labels/label-print.tt",

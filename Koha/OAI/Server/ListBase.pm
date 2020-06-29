@@ -39,7 +39,7 @@ use MARC::File::XML;
 sub GetRecords {
     my ($class, $self, $repository, $metadata, %args) = @_;
 
-    my $token = new Koha::OAI::Server::ResumptionToken( %args );
+    my $token = Koha::OAI::Server::ResumptionToken->new( %args );
     my $dbh = C4::Context->dbh;
     my $set;
     if ( defined $token->{'set'} ) {
@@ -127,7 +127,7 @@ sub GetRecords {
             $count++;
             if ( $count > $max ) {
                 $self->resumptionToken(
-                    new Koha::OAI::Server::ResumptionToken(
+                    Koha::OAI::Server::ResumptionToken->new(
                         metadataPrefix  => $token->{metadata_prefix},
                         from            => $token->{from},
                         until           => $token->{until},
@@ -165,7 +165,7 @@ sub GetRecords {
             } else {
                 $timestamp =~ s/ /T/;
                 $timestamp .= 'Z';
-                $self->identifier( new HTTP::OAI::Header(
+                $self->identifier( HTTP::OAI::Header->new(
                     identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
                     datestamp  => $timestamp,
                     status     => $deleted ? 'deleted' : undef

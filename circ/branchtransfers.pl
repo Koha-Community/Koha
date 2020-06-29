@@ -39,7 +39,7 @@ use Koha::Patrons;
 ###############################################
 #  Getting state
 
-my $query = new CGI;
+my $query = CGI->new;
 
 if (!C4::Context->userenv){
 	my $sessionID = $query->cookie("CGISESSID");

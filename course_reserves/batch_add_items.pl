@@ -29,7 +29,7 @@ use C4::CourseReserves qw(ModCourseItem ModCourseReserve GetCourse);
 
 use Koha::Items;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $action    = $cgi->param('action')    || q{};
 my $course_id = $cgi->param('course_id') || q{};

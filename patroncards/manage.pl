@@ -31,7 +31,7 @@ use C4::Patroncards;
 use C4::Labels;
 use Koha::List::Patron;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "patroncards/manage.tt",

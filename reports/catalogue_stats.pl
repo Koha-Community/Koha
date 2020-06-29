@@ -41,7 +41,7 @@ plugin that shows a stats on borrowers
 =cut
 
 our $debug = 0;
-my $input = new CGI;
+my $input = CGI->new;
 my $fullreportname = "reports/catalogue_stats.tt";
 my $do_it       = $input->param('do_it');
 my $line        = $input->param("Line");

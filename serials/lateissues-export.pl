@@ -27,7 +27,7 @@ use Koha::CsvProfiles;
 
 use Text::CSV_XS;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $supplierid = $query->param('supplierid');
 my @serialids = $query->multi_param('serialid');
 my $op = $query->param('op') || q{};

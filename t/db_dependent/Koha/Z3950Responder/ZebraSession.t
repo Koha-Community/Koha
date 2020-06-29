@@ -46,15 +46,15 @@ subtest 'test_search' => sub {
         MARC::Field->new('999', '', '', c => '1234567'),
     );
 
-    my $context = new Test::MockModule('C4::Context');
+    my $context = Test::MockModule->new('C4::Context');
     $context->mock('Zconn', sub {
-        my $Zconn = new Test::MockObject();
+        my $Zconn = Test::MockObject->new();
         $Zconn->mock('connect', sub {});
         $Zconn->mock('err_code', sub {
             return 0;
         });
         $Zconn->mock('search_pqf', sub {
-            my $results = new Test::MockObject();
+            my $results = Test::MockObject->new();
             $results->mock('size', sub {
                 return 2;
             });
@@ -67,7 +67,7 @@ subtest 'test_search' => sub {
                 } elsif ($index == 1) {
                     $record = $marc_record_2;
                 }
-                my $Zrecord = new Test::MockObject();
+                my $Zrecord = Test::MockObject->new();
                 $Zrecord->mock('raw', sub {
                     return $record->as_xml();
                 });
@@ -90,7 +90,7 @@ subtest 'test_search' => sub {
     }
     sleep(10); # Just a try to see if it fixes Jenkins
 
-    my $o = new ZOOM::Options();
+    my $o = ZOOM::Options->new();
     $o->option(preferredRecordSyntax => 'xml');
     $o->option(elementSetName => 'marcxml');
     $o->option(databaseName => 'biblios');

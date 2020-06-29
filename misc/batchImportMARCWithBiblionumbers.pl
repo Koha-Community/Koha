@@ -78,7 +78,7 @@ sub search {
 		return("error",undef);
 	}
 	my $oAResult;
-	my $Anewq= new ZOOM::Query::PQF($nquery);
+	my $Anewq= ZOOM::Query::PQF->new($nquery);
 	eval {
 	$oAResult= $oAuth->search_pqf($nquery) ; 
 	};

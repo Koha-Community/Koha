@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Context;
 
 
-my $query = new CGI;
+my $query = CGI->new;
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "reports/reports-home.tt",
 				query => $query,

@@ -60,7 +60,7 @@ use C4::Members::Statistics;
 
 #use Smart::Comments '####';
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "about.tt",
@@ -208,7 +208,7 @@ my $warnNoActiveCurrency = (! defined Koha::Acquisition::Currencies->get_active)
 
 my @xml_config_warnings;
 
-my $context = new C4::Context;
+my $context = C4::Context->new;
 
 if (    C4::Context->config('zebra_bib_index_mode')
     and C4::Context->config('zebra_bib_index_mode') eq 'grs1' )

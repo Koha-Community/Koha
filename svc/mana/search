@@ -27,7 +27,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 use CGI;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $input->cookie('CGISESSID'),

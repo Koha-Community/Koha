@@ -38,7 +38,7 @@ if ($auth_status eq 'ok') {
     $authenticated = 1;
 }
 
-my $input = new CGI;
+my $input = CGI->new;
 
 unless ($authenticated) {
     print $input->header(-type => 'text/plain', -status => '403 Forbidden');

@@ -31,7 +31,7 @@ BEGIN {
         use_ok('Koha::RecordProcessor');
 }
 
-my $module = new Test::MockModule('MARC::Record');
+my $module = Test::MockModule->new('MARC::Record');
 $module->mock('new_from_xml', sub {
     my $record = MARC::Record->new;
 
@@ -82,7 +82,7 @@ subtest "EmbedSeeFromHeadings should skip holdings fields" => sub {
     );
 
 
-    my $koha_authority = new Test::MockModule('Koha::MetadataRecord::Authority');
+    my $koha_authority = Test::MockModule->new('Koha::MetadataRecord::Authority');
     $koha_authority->mock( 'get_from_authid', sub {
 
         my $auth_record = MARC::Record->new;

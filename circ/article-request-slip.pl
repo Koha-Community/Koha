@@ -28,7 +28,7 @@ use C4::Letters;
 use Koha::ArticleRequests;
 use Koha::Patrons;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $id = $cgi->param('id');
 

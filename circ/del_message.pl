@@ -25,7 +25,7 @@ use C4::Auth;
 use C4::Output;
 use Koha::Patron::Messages;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "circ/circulation.tt",

@@ -88,7 +88,7 @@ sub new {
     my $self = {};
     my ($class, $timeout, $agent) = @_;
     
-    my $uagent = new LWP::UserAgent;
+    my $uagent = LWP::UserAgent->new;
     $uagent->agent( $agent ) if $agent;
     $uagent->timeout( $timeout) if $timeout;
     $self->{ user_agent } = $uagent;
@@ -192,7 +192,7 @@ sub check_all_url {
     my $checker = C4::URL::Checker->new($timeout,$agent);
     $checker->{ host_default }  = $host;
     
-    my $context = new C4::Context(  );  
+    my $context = C4::Context->new(  );
     my $dbh = $context->dbh;
     my $sth = $dbh->prepare( 
         "SELECT biblionumber FROM biblioitems WHERE url <> ''" );

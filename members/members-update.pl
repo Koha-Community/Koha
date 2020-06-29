@@ -31,7 +31,7 @@ use Koha::Patrons;
 
 use List::MoreUtils qw( uniq );
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {   template_name   => "members/members-update.tt",

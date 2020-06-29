@@ -580,7 +580,7 @@ ok($active_count >= scalar GetBudgetsReport(1), "GetBudgetReport doesn't return 
 
 # "Flavoured" tests (tests that required a run for each marc flavour)
 # Tests should be added to the run_flavoured_tests sub below
-my $biblio_module = new Test::MockModule('C4::Biblio');
+my $biblio_module = Test::MockModule->new('C4::Biblio');
 $biblio_module->mock(
     'GetMarcSubfieldStructure',
     sub {

@@ -188,7 +188,7 @@ cmp_ok $date_string, 'eq', '12/11/2013 06:35 PM', 'as_due_date with hours and ti
 my $now = DateTime->now;
 is( dt_from_string, $now, "Without parameter, dt_from_string should return today" );
 
-my $module_context = new Test::MockModule('C4::Context');
+my $module_context = Test::MockModule->new('C4::Context');
 $module_context->mock(
     'tz',
     sub {

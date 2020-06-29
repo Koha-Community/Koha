@@ -43,7 +43,7 @@ plugin that shows a stats on borrowers
 
 $debug and open my $debugfh, '>', '/tmp/bor_issues_top.debug.log';
 
-my $input = new CGI;
+my $input = CGI->new;
 my $fullreportname = "reports/bor_issues_top.tt";
 my $do_it   = $input->param('do_it');
 my $limit   = $input->param("Limit");

@@ -59,7 +59,7 @@ use C4::Koha;
 use Koha::AdditionalFields;
 use Koha::DateUtils;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $do_search               = $input->param('do_search') || 0;
 
 my $dbh = C4::Context->dbh;

@@ -31,7 +31,7 @@ use List::Util qw/any/;
 use Koha::Account::CreditTypes;
 use Koha::Account::DebitTypes;
 
-my $input            = new CGI;
+my $input            = CGI->new;
 my $dbh              = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user({

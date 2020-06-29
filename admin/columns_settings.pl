@@ -7,7 +7,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Utils::DataTables::TablesSettings qw( get_modules );
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

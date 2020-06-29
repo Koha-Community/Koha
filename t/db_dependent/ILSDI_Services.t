@@ -60,7 +60,7 @@ subtest 'AuthenticatePatron test' => sub {
         }
     });
 
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param( 'username', $borrower->{userid});
     $query->param( 'password', $plain_password);
 
@@ -207,7 +207,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     );
 
     # Prepare and send web request for IL-SDI server:
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param( 'service', 'GetPatronInfo' );
     $query->param( 'patron_id', $brwr->{'borrowernumber'} );
     $query->param( 'show_attributes', '1' );
@@ -316,7 +316,7 @@ subtest 'Holds test' => sub {
         }
     );
 
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $item->biblionumber);
 
@@ -339,7 +339,7 @@ subtest 'Holds test' => sub {
 
     my $biblio_with_no_item = $builder->build_sample_biblio;
 
-    $query = new CGI;
+    $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $biblio_with_no_item->biblionumber);
 
@@ -363,7 +363,7 @@ subtest 'Holds test' => sub {
         }
     );
 
-    $query = new CGI;
+    $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $item2->biblionumber);
     $query->param( 'item_id', $item2->itemnumber);
@@ -395,7 +395,7 @@ subtest 'Holds test' => sub {
         }
     );
 
-    $query = new CGI;
+    $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $item3->biblionumber);
     $query->param( 'item_id', $item4->itemnumber);
@@ -459,7 +459,7 @@ subtest 'Holds test for branch transfer limits' => sub {
         itemtype => $item->effective_itemtype,
     })->store();
 
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param( 'pickup_location', $pickup_branch->{branchcode} );
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $item->biblionumber);
@@ -519,7 +519,7 @@ subtest 'Holds test with start_date and end_date' => sub {
         }
     );
 
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param( 'pickup_location', $pickup_library->branchcode );
     $query->param( 'patron_id', $patron->borrowernumber);
     $query->param( 'bib_id', $item->biblionumber);
@@ -569,7 +569,7 @@ subtest 'GetRecords' => sub {
 
     ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode});
 
-    my $cgi = new CGI;
+    my $cgi = CGI->new;
     $cgi->param(service => 'GetRecords');
     $cgi->param(id => $item->biblionumber);
 
@@ -592,7 +592,7 @@ subtest 'RenewHold' => sub {
 
     $schema->storage->txn_begin;
 
-    my $cgi    = new CGI;
+    my $cgi    = CGI->new;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item   = $builder->build_sample_item;
     $cgi->param( patron_id => $patron->borrowernumber );
@@ -640,7 +640,7 @@ subtest 'GetPatronInfo paginated loans' => sub {
             branchcode => $library->branchcode,
         },
     });
-    my $module = new Test::MockModule('C4::Context');
+    my $module = Test::MockModule->new('C4::Context');
     $module->mock('userenv', sub { { branch => $library->branchcode } });
     my $date_due = DateTime->now->add(weeks => 2);
     my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
@@ -650,7 +650,7 @@ subtest 'GetPatronInfo paginated loans' => sub {
     my $issue3 = C4::Circulation::AddIssue($patron->unblessed, $item3->barcode, $date_due);
     my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 
-    my $cgi = new CGI;
+    my $cgi = CGI->new;
 
     $cgi->param( 'service', 'GetPatronInfo' );
     $cgi->param( 'patron_id', $patron->borrowernumber );

@@ -35,7 +35,7 @@ use C4::Acquisition;
 
 use Koha::Acquisition::Booksellers;
 
-my $input = new CGI;
+my $input = CGI->new;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'acqui/modordernotes.tt',
     query           => $input,

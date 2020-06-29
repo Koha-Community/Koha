@@ -28,7 +28,7 @@ use C4::Koha;
 
 use C4::CourseReserves qw(DelCourseReserve GetCourse GetCourseReserves);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $action = $cgi->param('action') || '';
 my $course_id = $cgi->param('course_id');

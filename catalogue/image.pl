@@ -34,7 +34,7 @@ use Koha::Exceptions;
 $| = 1;
 
 my $DEBUG = 0;
-my $data  = new CGI;
+my $data  = CGI->new;
 my $imagenumber;
 
 =head1 NAME

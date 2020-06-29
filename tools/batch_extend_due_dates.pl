@@ -27,7 +27,7 @@ use C4::Output qw( output_html_with_http_headers );
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') // q|form|;
 my $preview_results = $input->param('preview_results');
 

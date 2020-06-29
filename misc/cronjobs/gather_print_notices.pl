@@ -209,7 +209,7 @@ sub generate_html {
 
     my $template =
       C4::Templates::gettemplate( 'batch/print-notices.tt', 'intranet',
-        new CGI );
+        CGI->new );
 
     $template->param(
         stylesheet => C4::Context->preference("NoticeCSS"),

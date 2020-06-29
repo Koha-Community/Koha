@@ -33,7 +33,7 @@ use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $dbh          = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);

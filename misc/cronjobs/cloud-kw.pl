@@ -78,7 +78,7 @@ for my $cloud ( @clouds ) {
         }
     }
 
-    my $index = new ZebraIndex( $cloud->{ZebraIndex} );
+    my $index = ZebraIndex->new( $cloud->{ZebraIndex} );
     $index->scan( $cloud->{Count} );
 
     open my $fh, ">", $cloud->{Output}

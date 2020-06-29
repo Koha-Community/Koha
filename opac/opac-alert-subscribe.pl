@@ -28,7 +28,7 @@ use C4::Letters;
 use C4::Serials;
 
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op    = $query->param('op') || '';
 my $dbh   = C4::Context->dbh;
 

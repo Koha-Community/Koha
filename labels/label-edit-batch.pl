@@ -30,7 +30,7 @@ use C4::Labels;
 
 use Koha::Items;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "labels/label-edit-batch.tt",

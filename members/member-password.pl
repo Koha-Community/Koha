@@ -21,7 +21,7 @@ use Koha::Patron::Categories;
 
 use Try::Tiny;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $theme = $input->param('theme') || "default";
 

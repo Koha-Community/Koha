@@ -82,7 +82,7 @@ sub printorders {
             . ( $delivery_library ? "delivery at " . $delivery_library->branchname : "" )
         );
 
-        my $pdftable = new PDF::Table();
+        my $pdftable = PDF::Table->new();
         my $abaskets;
         my $arrbasket;
         my @keys = ('Document', 'Qty', 'RRP tax exc.', 'RRP tax inc.', 'Discount', 'Discount price', 'Tax rate', 'Total tax exc.', 'Total tax inc.');
@@ -200,7 +200,7 @@ sub printbaskets {
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
     $text->translate(30/mm,  ($height-28.5)/mm);
     $text->text($libraryname);
-    my $pdftable = new PDF::Table();
+    my $pdftable = PDF::Table->new();
     my $abaskets;
     my $arrbasket;
     # header of the table

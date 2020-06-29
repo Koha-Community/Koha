@@ -22,7 +22,7 @@ use C4::Auth;
 use C4::Output;
 use Koha::Plugins;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");
 my $mana_url        = C4::Context->config('mana_config');

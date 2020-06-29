@@ -49,7 +49,7 @@ my $query_string = 'ticket=foo&bar=baz';
 $ENV{QUERY_STRING} = $query_string;
 $ENV{SCRIPT_NAME} = '/cgi-bin/koha/opac-user.pl';
 
-my $cgi = new CGI($query_string);
+my $cgi = CGI->new($query_string);
 $cgi->delete('ticket');
 
 # _url_with_get_params tests

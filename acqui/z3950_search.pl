@@ -31,7 +31,7 @@ use C4::Koha;
 use Koha::Acquisition::Booksellers;
 use Koha::BiblioFrameworks;
 
-my $input           = new CGI;
+my $input           = CGI->new;
 my $biblionumber    = $input->param('biblionumber')||0;
 my $frameworkcode   = $input->param('frameworkcode') || q{};
 my $title           = $input->param('title');

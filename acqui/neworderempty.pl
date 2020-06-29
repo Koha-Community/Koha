@@ -94,7 +94,7 @@ use Koha::Patrons;
 use Koha::RecordProcessor;
 use Koha::Subscriptions;
 
-our $input           = new CGI;
+our $input           = CGI->new;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
 my $budget_id       = $input->param('budget_id') || 0;
 my $title           = $input->param('title');

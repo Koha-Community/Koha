@@ -35,7 +35,7 @@ use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Token;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 unless (C4::Context->preference('patronimages')) {
     # redirect to intranet home if patronimages is not enabled

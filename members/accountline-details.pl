@@ -26,7 +26,7 @@ use C4::Context;
 use Koha::Patrons;
 use Koha::Account::Lines;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

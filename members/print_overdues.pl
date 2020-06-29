@@ -28,7 +28,7 @@ use C4::Overdues qw(parse_overdues_letter);
 
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $flagsrequired = { circulate => "circulate_remaining_permissions" };
 

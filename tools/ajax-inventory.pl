@@ -5,7 +5,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Items qw( ModDateLastSeen );
 
-my $input = new CGI;
+my $input = CGI->new;
 
 # Authentication
 my ($status, $cookie, $sessionId) = C4::Auth::check_api_auth($input, { tools => 'inventory' });

@@ -30,7 +30,7 @@ use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::DateUtils qw(dt_from_string output_pref);
 
-my $input    = new CGI;
+my $input    = CGI->new;
 my $basketno = $input->param('basketno');
 my $op       = $input->param('op') || 'search';    # search, select, batch_edit
 

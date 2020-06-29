@@ -55,7 +55,7 @@ use Date::Calc qw(
   Date_to_Days
 );
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # CAS single logout handling
 # Will print header and exit

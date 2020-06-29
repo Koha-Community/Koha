@@ -201,7 +201,7 @@ subtest 'checkpw lockout tests' => sub {
     }
 
     # Mock checkauth, build the scenario
-    my $auth = new Test::MockModule( 'C4::Auth' );
+    my $auth = Test::MockModule->new( 'C4::Auth' );
     $auth->mock( 'checkauth', \&MockedCheckauth );
 
     # Make sure 'EnableOpacSearchHistory' is set
@@ -214,7 +214,7 @@ subtest 'checkpw lockout tests' => sub {
     $ENV{"SERVER_PORT"} = 80;
     $ENV{"HTTP_COOKIE"} = 'CGISESSID=nirvana';
 
-    my $query = new CGI;
+    my $query = CGI->new;
     $query->param('language','es-ES');
 
     my ( $template, $loggedinuser, $cookies ) = get_template_and_user(

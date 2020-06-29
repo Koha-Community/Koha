@@ -24,7 +24,7 @@ use C4::Output;
 
 use Koha::Item::Search::Field qw(AddItemSearchField GetItemSearchFields DelItemSearchField);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => 'admin/items_search_fields.tt',

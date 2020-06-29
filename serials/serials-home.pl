@@ -35,7 +35,7 @@ use C4::Context;
 use C4::Output;
 use C4::Serials;
 
-my $query   = new CGI;
+my $query   = CGI->new;
 my $routing = $query->param('routing') || C4::Context->preference("RoutingSerials");
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

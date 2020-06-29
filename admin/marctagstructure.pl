@@ -31,7 +31,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 
 # retrieve parameters
-my $input = new CGI;
+my $input = CGI->new;
 my $frameworkcode         = $input->param('frameworkcode')         || ''; # set to select framework
 my $existingframeworkcode = $input->param('existingframeworkcode') || '';
 my $searchfield           = $input->param('searchfield') || 0;

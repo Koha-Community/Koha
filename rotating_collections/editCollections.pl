@@ -26,7 +26,7 @@ use C4::Context;
 
 use C4::RotatingCollections;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

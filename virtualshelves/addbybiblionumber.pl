@@ -66,7 +66,7 @@ use C4::Auth;
 use Koha::Biblios;
 use Koha::Virtualshelves;
 
-my $query           = new CGI;
+my $query           = CGI->new;
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $newshelf        = $query->param('newshelf');

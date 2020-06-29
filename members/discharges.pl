@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Context;
 use Koha::Patron::Discharge;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') // 'list';
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({

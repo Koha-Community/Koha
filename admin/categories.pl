@@ -31,7 +31,7 @@ use Koha::DateUtils;
 use Koha::Patron::Categories;
 use Koha::Libraries;
 
-my $input         = new CGI;
+my $input         = CGI->new;
 my $searchfield   = $input->param('description') // q||;
 my $categorycode  = $input->param('categorycode');
 my $op            = $input->param('op') // 'list';

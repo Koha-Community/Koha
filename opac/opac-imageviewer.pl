@@ -28,7 +28,7 @@ use Koha::Biblios;
 use Koha::CoverImages;
 use Koha::Items;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-imageviewer.tt",

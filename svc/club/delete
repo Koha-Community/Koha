@@ -26,7 +26,7 @@ use JSON qw(to_json);
 use C4::Auth qw(check_cookie_auth);
 use Koha::Clubs;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { clubs => 'edit_clubs' } );
 if ( $auth_status ne "ok" ) {

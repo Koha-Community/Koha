@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Context;
 use C4::Koha;
 
-my $query = new CGI;
+my $query = CGI->new;
 checkauth( $query, undef, { circulate => "circulate_remaining_permissions" },
     "intranet" );
 

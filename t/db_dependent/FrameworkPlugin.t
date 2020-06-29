@@ -120,14 +120,14 @@ sub test05 {
     my ( $incl ) = @_;
     #mock to simulate some authorization and eliminate lots of output
     my $launched = 0;
-    my $mContext = new Test::MockModule('C4::Context');
-    my $mAuth = new Test::MockModule('C4::Auth');
-    my $mOutput = new Test::MockModule('C4::Output');
+    my $mContext = Test::MockModule->new('C4::Context');
+    my $mAuth = Test::MockModule->new('C4::Auth');
+    my $mOutput = Test::MockModule->new('C4::Output');
     $mContext->mock( 'userenv', \&mock_userenv );
     $mAuth->mock( 'checkauth', sub { return ( 1, undef, 1, all_perms() ); } );
     $mOutput->mock('output_html_with_http_headers',  sub { ++$launched; } );
 
-    my $cgi=new CGI;
+    my $cgi=CGI->new;
     my ( $plugins, $min ) = selected_plugins( $incl );
 
     # test building them

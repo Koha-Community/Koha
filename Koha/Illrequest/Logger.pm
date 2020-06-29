@@ -65,7 +65,7 @@ sub new {
         }
     };
 
-    my $query = new CGI; # To keep C4::Templates::_get_template_file() from complaining
+    my $query = CGI->new; # To keep C4::Templates::_get_template_file() from complaining
     my ( $htdocs, $theme, $lang, $base ) =
         C4::Templates::_get_template_file('ill/log/', 'intranet', $query);
 

@@ -33,7 +33,7 @@ use Koha::Email;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # if virtualshelves is disabled, leave immediately
 if ( ! C4::Context->preference('virtualshelves') ) {

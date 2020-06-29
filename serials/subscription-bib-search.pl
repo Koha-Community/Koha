@@ -61,7 +61,7 @@ use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') || q{};
 my $dbh = C4::Context->dbh;
 

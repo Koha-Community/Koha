@@ -23,7 +23,7 @@ use C4::Koha;
 use C4::Output;
 use Koha::AdditionalFields;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my %flagsrequired;
 $flagsrequired{parameters} = 'manage_additional_fields';

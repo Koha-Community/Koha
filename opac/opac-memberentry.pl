@@ -45,7 +45,7 @@ use Koha::Patron::Modifications;
 use Koha::Patron::Categories;
 use Koha::Token;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my $dbh = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

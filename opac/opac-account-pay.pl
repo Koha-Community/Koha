@@ -33,7 +33,7 @@ use Koha::Acquisition::Currencies;
 use Koha::Database;
 use Koha::Plugins::Handler;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my $payment_method = $cgi->param('payment_method');
 my @accountlines   = $cgi->multi_param('accountline');
 

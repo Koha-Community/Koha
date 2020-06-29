@@ -541,9 +541,9 @@ subtest 'SearchItems test' => sub {
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
-    my $item3_record = new MARC::Record;
+    my $item3_record = MARC::Record->new;
     $item3_record->append_fields(
-        new MARC::Field(
+        MARC::Field->new(
             $itemfield, '', '',
             'z' => 'foobar',
             'y' => $itemtype->{itemtype}
@@ -966,7 +966,7 @@ subtest 'ModItemFromMarc' => sub {
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $biblio = $builder->build_sample_biblio;
     my ( $lost_tag, $lost_sf ) = GetMarcFromKohaField( 'items.itemlost' );
-    my $item_record = new MARC::Record;
+    my $item_record = MARC::Record->new;
     $item_record->append_fields(
         MARC::Field->new(
             $itemfield, '', '',
@@ -985,7 +985,7 @@ subtest 'ModItemFromMarc' => sub {
 
     $item->new_status("this is something")->store;
 
-    my $updated_item_record = new MARC::Record;
+    my $updated_item_record = MARC::Record->new;
     $updated_item_record->append_fields(
         MARC::Field->new(
             $itemfield, '', '',

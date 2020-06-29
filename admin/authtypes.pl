@@ -28,7 +28,7 @@ use C4::Output;
 use Koha::Authorities;
 use Koha::Authority::Types;
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $authtypecode = $input->param('authtypecode');
 my $op           = $input->param('op') || 'list';
 my @messages;

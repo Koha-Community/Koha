@@ -57,7 +57,7 @@ sub protected_letters {
     return { map { $_->[0] => 1 } @{$codes} };
 }
 
-our $input       = new CGI;
+our $input       = CGI->new;
 my $searchfield = $input->param('searchfield');
 my $script_name = '/cgi-bin/koha/tools/letter.pl';
 our $branchcode  = $input->param('branchcode');

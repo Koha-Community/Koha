@@ -36,7 +36,7 @@ use C4::Debug;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $dbh     = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(

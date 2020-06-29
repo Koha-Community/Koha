@@ -32,7 +32,7 @@ use C4::HoldsQueue qw(GetHoldsQueueItems);
 use Koha::BiblioFrameworks;
 use Koha::ItemTypes;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/view_holdsqueue.tt",

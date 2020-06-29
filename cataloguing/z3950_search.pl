@@ -27,7 +27,7 @@ use C4::Context;
 use C4::Breeding;
 use C4::Koha;
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $error         = $input->param('error');
 my $biblionumber  = $input->param('biblionumber') || 0;
 my $frameworkcode = $input->param('frameworkcode');

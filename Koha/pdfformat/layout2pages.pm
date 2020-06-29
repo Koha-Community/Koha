@@ -57,7 +57,7 @@ sub printorders {
     $pdf->mediabox($height/mm, $width/mm);
     my $page = $pdf->page();
     
-    my $pdftable = new PDF::Table();
+    my $pdftable = PDF::Table->new();
     
     my $abaskets;
     my $arrbasket;

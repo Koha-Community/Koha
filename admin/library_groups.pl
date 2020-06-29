@@ -27,7 +27,7 @@ use Koha::Libraries;
 use Koha::Library::Group;
 use Koha::Library::Groups;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

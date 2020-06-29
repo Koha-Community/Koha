@@ -362,7 +362,7 @@ sub delete_all {
 subtest 'LoadSearchHistoryToTheFirstLoggedUser working' => sub {
 plan tests =>2;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -388,10 +388,10 @@ sub myMockedget_from_session {
 
 }
 
-my $getfrom = new Test::MockModule( 'C4::Search::History' );
+my $getfrom = Test::MockModule->new( 'C4::Search::History' );
 $getfrom->mock( 'get_from_session', \&myMockedget_from_session );
 
-my $cgi = new Test::MockModule( 'CGI');
+my $cgi = Test::MockModule->new( 'CGI');
 $cgi->mock('cookie', sub {
    my ($self, $key) = @_;
   if (!ref($key) && $key eq 'CGISESSID'){
@@ -425,7 +425,7 @@ sub MockedCheckauth {
 }
 
 # Mock checkauth
-my $auth = new Test::MockModule( 'C4::Auth' );
+my $auth = Test::MockModule->new( 'C4::Auth' );
 $auth->mock( 'checkauth', \&MockedCheckauth );
 
 $query->param('koha_login_context', 'opac');

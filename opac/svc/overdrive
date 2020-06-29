@@ -29,7 +29,7 @@ use Koha::Library::OverDriveInfos;
 use Koha::ExternalContent::OverDrive;
 
 my $logger = Koha::Logger->get({ interface => 'opac' });
-our $cgi = new CGI;
+our $cgi = CGI->new;
 my $page_url = $cgi->referer();
 
 my ( $user, $cookie, $sessionID, $flags ) = checkauth( $cgi, 1, {}, 'opac' );

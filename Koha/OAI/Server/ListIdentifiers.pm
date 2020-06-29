@@ -35,7 +35,7 @@ sub new {
     unless ($count) {
         return HTTP::OAI::Response->new(
             requestURL => $repository->self_url(),
-            errors     => [ new HTTP::OAI::Error( code => 'noRecordsMatch' ) ],
+            errors     => [ HTTP::OAI::Error->new( code => 'noRecordsMatch' ) ],
         );
     }
 

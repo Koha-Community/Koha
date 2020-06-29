@@ -26,7 +26,7 @@ use C4::Output;
 
 use Koha::Cities;
 
-my $input       = new CGI;
+my $input       = CGI->new;
 my $city_name_filter = $input->param('city_name_filter') // q||;
 my $cityid      = $input->param('cityid');
 my $op          = $input->param('op') || 'list';

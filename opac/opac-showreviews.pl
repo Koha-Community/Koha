@@ -32,7 +32,7 @@ use Koha::Reviews;
 use POSIX qw(ceil floor strftime);
 
 my $template_name;
-my $query = new CGI;
+my $query = CGI->new;
 my $format = $query->param("format") || '';
 my $count = C4::Context->preference('OPACnumSearchResults') || 20;
 my $results_per_page = $query->param('count') || $count;

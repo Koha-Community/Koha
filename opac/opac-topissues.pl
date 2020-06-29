@@ -39,7 +39,7 @@ plugin that shows a stats on borrowers
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 
 # if OpacTopissue is disabled, leave immediately
 if ( ! C4::Context->preference('OpacTopissue') ) {

@@ -38,7 +38,7 @@ use Koha::SearchEngine::QueryBuilder;
 use Koha::Token;
 use Koha::Z3950Servers;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $dbh   = C4::Context->dbh;
 my $op           = $query->param('op')           || '';
 my $authtypecode = $query->param('authtypecode') || '';

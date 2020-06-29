@@ -31,7 +31,7 @@ use Koha::Patron::Images;
 $|=1;
 
 my $DEBUG = 0;
-my $query = new CGI;
+my $query = CGI->new;
 my $borrowernumber;
 
 =head1 NAME

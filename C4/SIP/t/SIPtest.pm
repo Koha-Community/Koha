@@ -263,7 +263,7 @@ sub run_sip_tests {
     $Sip::error_detection = 1;
     $/ = "\015\012";	# must use correct record separator
 
-    $sock = new IO::Socket::INET(PeerAddr => $server,
+    $sock = IO::Socket::INET->new(PeerAddr => $server,
 				 Type     => SOCK_STREAM);
 
     BAIL_OUT('failed to create connection to server') unless $sock;

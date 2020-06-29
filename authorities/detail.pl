@@ -164,7 +164,7 @@ sub build_tabs {
 
 
 # 
-my $query=new CGI;
+my $query=CGI->new;
 
 my $dbh=C4::Context->dbh;
 

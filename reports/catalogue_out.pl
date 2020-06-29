@@ -33,7 +33,7 @@ Report that shows unborrowed items.
 
 =cut
 
-my $input   = new CGI;
+my $input   = CGI->new;
 my $do_it   = $input->param('do_it');
 my $limit   = $input->param("Limit") || 10;
 my $column  = $input->param("Criteria");

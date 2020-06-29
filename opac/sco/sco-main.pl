@@ -51,7 +51,7 @@ use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Token;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 unless (C4::Context->preference('WebBasedSelfCheck')) {
     # redirect to OPAC home if self-check is not enabled

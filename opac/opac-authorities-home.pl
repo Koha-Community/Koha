@@ -35,7 +35,7 @@ use Koha::Authority::Types;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $op           = $query->param('op') || '';
 my $authtypecode = $query->param('authtypecode') || '';
 my $dbh          = C4::Context->dbh;

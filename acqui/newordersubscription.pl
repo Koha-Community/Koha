@@ -27,7 +27,7 @@ use C4::Serials;
 
 use Koha::Acquisition::Booksellers;
 
-my $query        = new CGI;
+my $query        = CGI->new;
 my $title        = $query->param('title_filter');
 my $ISSN         = $query->param('ISSN_filter');
 my $EAN          = $query->param('EAN_filter');

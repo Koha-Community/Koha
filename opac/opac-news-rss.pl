@@ -25,7 +25,7 @@ use C4::Output;
 use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
 
-my $input = new CGI;
+my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

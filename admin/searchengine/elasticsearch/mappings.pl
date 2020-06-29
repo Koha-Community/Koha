@@ -32,7 +32,7 @@ use Try::Tiny;
 use Module::Load::Conditional qw(can_load);
 
 
-my $input = new CGI;
+my $input = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => 'admin/searchengine/elasticsearch/mappings.tt',

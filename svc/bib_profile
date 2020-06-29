@@ -27,7 +27,7 @@ use C4::Koha;
 use Koha::ItemTypes;
 use XML::Simple;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 

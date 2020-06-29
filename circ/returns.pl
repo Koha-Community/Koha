@@ -57,7 +57,7 @@ use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 #getting the template
 my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(

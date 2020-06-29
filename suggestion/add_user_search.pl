@@ -24,7 +24,7 @@ use C4::Members;
 
 use Koha::Patron::Categories;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $dbh = C4::Context->dbh;
 

@@ -38,12 +38,12 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
     my $development;
 
     # Mock Koha::version()
-    my $koha = new Test::MockModule('Koha');
+    my $koha = Test::MockModule->new('Koha');
     $koha->mock( 'version', sub {
         return "$major.$minor.$maintenance.$development";
     });
 
-    my $rnd = new String::Random;
+    my $rnd = String::Random->new;
     # development version test
     $major       = $rnd->randregex('\d');
     $minor       = $rnd->randregex('\d\d');

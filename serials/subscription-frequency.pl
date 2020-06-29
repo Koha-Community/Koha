@@ -24,7 +24,7 @@ use C4::Serials::Frequency;
 use C4::Auth qw/check_cookie_auth/;
 use JSON qw( to_json );
 
-my $input=new CGI;
+my $input=CGI->new;
 my $frqid=$input->param("frequency_id");
 my ($auth_status, $sessionID) = check_cookie_auth($input->cookie('CGISESSID'), { serials => '*' });
 if ($auth_status ne "ok") {

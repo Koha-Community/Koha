@@ -36,7 +36,7 @@ use Koha::Acquisition::Orders;
 
 use List::MoreUtils qw/any/;
 
-my $input=new CGI;
+my $input=CGI->new;
 my $flagsrequired = {acquisition => 'order_receive'};
 
 checkauth($input, 0, $flagsrequired, 'intranet');

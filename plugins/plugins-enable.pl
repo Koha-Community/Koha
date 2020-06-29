@@ -25,7 +25,7 @@ use Koha::Plugins::Handler;
 
 die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $input->cookie('CGISESSID'), { plugins => 'manage' } );

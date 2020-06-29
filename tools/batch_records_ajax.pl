@@ -39,7 +39,7 @@ use C4::Charset;
 use C4::Auth qw/check_cookie_auth/;
 use C4::ImportBatch;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my @sort_columns =
   qw/import_record_id title status overlay_status overlay_status/;

@@ -222,7 +222,7 @@ sub _get_pref_files {
     foreach my $file ( glob( "$htdocs/$theme/$lang/modules/admin/preferences/*.pref" ) ) {
         my ( $tab ) = ( $file =~ /([a-z0-9_-]+)\.pref$/ );
 
-        $results{$tab} = $open_files ? new IO::File( $file, 'r' ) : '';
+        $results{$tab} = $open_files ? IO::File->new( $file, 'r' ) : '';
     }
 
     return %results;
@@ -301,7 +301,7 @@ sub matches {
 }
 
 my $dbh = C4::Context->dbh;
-our $input = new CGI;
+our $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "admin/preferences.tt",

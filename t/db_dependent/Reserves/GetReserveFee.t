@@ -37,7 +37,7 @@ my $builder = t::lib::TestBuilder->new();
 my $library = $builder->build({
     source => 'Branch',
 });
-my $mContext = new Test::MockModule('C4::Context');
+my $mContext = Test::MockModule->new('C4::Context');
 $mContext->mock( 'userenv', sub {
     return { branch => $library->{branchcode} };
 });

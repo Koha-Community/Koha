@@ -99,7 +99,7 @@ use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 # getting the CGI params
 my $basketno        = $input->param('basketno');

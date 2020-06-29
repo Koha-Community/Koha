@@ -30,7 +30,7 @@ use Koha::Libraries;
 
 use Koha::Patron::Categories;
 
-our $input = new CGI;
+our $input = CGI->new;
 my $dbh = C4::Context->dbh;
 
 my @patron_categories = Koha::Patron::Categories->search( { overduenoticerequired => { '>' => 0 } } );

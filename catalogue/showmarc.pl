@@ -35,7 +35,7 @@ use C4::Biblio;
 use C4::ImportBatch;
 use C4::XSLT ();
 
-my $input= new CGI;
+my $input= CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
   {
     template_name   => "catalogue/showmarc.tt",

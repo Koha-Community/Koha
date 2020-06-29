@@ -86,7 +86,7 @@ passed to C<return_success()>.
 sub init {
     my ( $class, %needed_flags ) = @_;
 
-    our $query = new CGI;
+    our $query = CGI->new;
 
     my ( $status, $cookie_, $sessionID ) = check_api_auth( $query, \%needed_flags );
 
@@ -94,7 +94,7 @@ sub init {
 
     $class->return_error( 'auth', $status ) if ( $status ne 'ok' );
 
-    return ( $query, new C4::Output::JSONStream );
+    return ( $query, C4::Output::JSONStream->new );
 }
 
 =head2 return_error
@@ -119,7 +119,7 @@ param => value pairs.
 sub return_error {
     my ( $class, $type, $error, %flags ) = @_;
 
-    my $response = new C4::Output::JSONStream;
+    my $response = C4::Output::JSONStream->new;
 
     $response->param( message => $error ) if ( $error );
     $response->param( type => $type, %flags );
@@ -152,7 +152,7 @@ structure verbatim.
 sub return_multi {
     my ( $class, $responses, @flags ) = @_;
 
-    my $response = new C4::Output::JSONStream;
+    my $response = C4::Output::JSONStream->new;
 
     if ( !@$responses ) {
         $class->return_success( $response );

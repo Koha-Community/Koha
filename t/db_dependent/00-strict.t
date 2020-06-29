@@ -47,7 +47,7 @@ if ( $ENV{KOHA_PROVE_CPUS} ) {
 print "Using $ncpu CPUs...\n"
     if $ENV{DEBUG};
 
-my $pm   = new Parallel::ForkManager($ncpu);
+my $pm   = Parallel::ForkManager->new($ncpu);
 
 foreach my $d (@dirs) {
     $pm->start and next;    # do the fork

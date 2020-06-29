@@ -28,7 +28,7 @@ use Koha::Linktracker;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw(any);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 my $uri = $cgi->param('uri') || '';
 my $biblionumber = $cgi->param('biblionumber') || 0;
 my $itemnumber   = $cgi->param('itemnumber')   || 0;

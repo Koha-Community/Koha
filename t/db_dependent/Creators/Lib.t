@@ -1456,7 +1456,7 @@ subtest '_add_backtics' => sub {
 my %preferences;
 
 sub mock_preference {
-    my $context = new Test::MockModule('C4::Context');
+    my $context = Test::MockModule->new('C4::Context');
     my ( $pref, $value ) = @_;
     $preferences{$pref} = $value;
     $context->mock(

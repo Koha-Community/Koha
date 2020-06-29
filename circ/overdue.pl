@@ -30,7 +30,7 @@ use Koha::DateUtils;
 use DateTime;
 use DateTime::Format::MySQL;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $showall         = $input->param('showall');
 my $bornamefilter   = $input->param('borname') || '';
 my $borcatfilter    = $input->param('borcat') || '';

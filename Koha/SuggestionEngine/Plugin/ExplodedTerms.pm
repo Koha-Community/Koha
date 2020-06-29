@@ -79,7 +79,7 @@ sub get_suggestions {
         'su-br',
         'su-rl'
     );
-    my $cgi = new CGI;
+    my $cgi = CGI->new;
     my $template = C4::Templates::gettemplate('text/explodedterms.tt', 'opac', $cgi);
     my @results;
     foreach my $index (@indexes) {

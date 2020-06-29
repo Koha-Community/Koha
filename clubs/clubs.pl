@@ -27,7 +27,7 @@ use C4::Output;
 use Koha::Clubs;
 use Koha::Club::Templates;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

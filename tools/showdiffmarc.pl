@@ -35,7 +35,7 @@ use C4::ImportBatch;
 use Koha::Biblios;
 
 # Input params
-my $input        = new CGI;
+my $input        = CGI->new;
 my $recordid = $input->param('id');
 my $importid     = $input->param('importid');
 my $batchid      = $input->param('batchid');

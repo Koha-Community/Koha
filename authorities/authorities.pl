@@ -553,7 +553,7 @@ sub build_hidden_data {
 # ======================== 
 #          MAIN 
 #=========================
-my $input = new CGI;
+my $input = CGI->new;
 my $z3950 = $input->param('z3950');
 my $error = $input->param('error');
 my $authid=$input->param('authid'); # if authid exists, it's a modif, not a new authority.

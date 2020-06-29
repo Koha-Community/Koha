@@ -135,7 +135,7 @@ use C4::Barcodes;
 # FIXME: This needs to do actual error checking and possibly return user to the same form,
 # not just blindly call C4 functions and print a redirect.  
 
-my $input = new CGI;
+my $input = CGI->new;
 my $use_ACQ_framework = $input->param('use_ACQ_framework');
 
 # Check if order total amount exceed allowed budget

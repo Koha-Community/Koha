@@ -118,7 +118,7 @@ sub generate_as_pdf {
     $letter->{'title'}   =~ s/<<today>>/$today/g;
     $letter->{'content'} =~ s/<<today>>/$today/g;
 
-    my $tmpl = C4::Templates::gettemplate('batch/print-notices.tt', 'intranet', new CGI);
+    my $tmpl = C4::Templates::gettemplate('batch/print-notices.tt', 'intranet', CGI->new);
     $tmpl->param(
         stylesheet => C4::Context->preference("NoticeCSS"),
         today      => $today,

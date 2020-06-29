@@ -23,7 +23,7 @@ use C4::Output;
 use C4::Tags qw/get_count_by_tag_status/;
 use Koha::Reviews;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "tools/tools-home.tt",

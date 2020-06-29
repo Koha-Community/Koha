@@ -34,7 +34,7 @@ use Koha::Z3950Servers;
 
 # Initialize CGI, template, database
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') || 'list';
 my $id = $input->param('id') || 0;
 my $type = $input->param('type') || '';

@@ -51,7 +51,7 @@ use Koha::Patrons;
 use Koha::RecordProcessor;
 
 
-my $query = new CGI;
+my $query = CGI->new;
 my $dbh = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');

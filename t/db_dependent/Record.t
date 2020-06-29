@@ -21,7 +21,7 @@ t::lib::Mocks::mock_preference( "BibtexExportAdditionalFields", q{} );
 my @marcarray=marc2marc;
 is ($marcarray[0],"Feature not yet implemented\n","error works");
 
-my $marc=new MARC::Record;
+my $marc=MARC::Record->new;
 my $marcxml=marc2marcxml($marc);
 my $testxml=qq(<?xml version="1.0" encoding="UTF-8"?>
 <record

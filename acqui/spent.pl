@@ -38,7 +38,7 @@ use C4::Acquisition;
 use Koha::Acquisition::Invoice::Adjustments;
 
 my $dbh      = C4::Context->dbh;
-my $input    = new CGI;
+my $input    = CGI->new;
 my $bookfund = $input->param('fund');
 my $fund_code = $input->param('fund_code');
 

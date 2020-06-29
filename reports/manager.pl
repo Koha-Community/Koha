@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Circulation;
 
 
-my $input = new CGI;
+my $input = CGI->new;
 my $report_name=$input->param("report_name");
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/".$report_name.".tt";

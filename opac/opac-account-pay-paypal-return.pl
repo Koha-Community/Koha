@@ -32,7 +32,7 @@ use Koha::Acquisition::Currencies;
 use Koha::Database;
 use Koha::Patrons;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 unless ( C4::Context->preference('EnablePayPalOpacPayments') ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");

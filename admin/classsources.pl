@@ -33,7 +33,7 @@ use Koha::ClassSplitRules;
 
 my $script_name = "/cgi-bin/koha/admin/classsources.pl";
 
-my $input            = new CGI;
+my $input            = CGI->new;
 my $op               = $input->param('op') || 'list';
 my $cn_source        = $input->param('cn_source');
 my $class_sort_rule  = $input->param('class_sort_rule');

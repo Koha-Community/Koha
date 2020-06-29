@@ -58,7 +58,7 @@ use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Booksellers;
 use CGI qw ( -utf8 );
 
-my $input=new CGI;
+my $input=CGI->new;
 
 checkauth( $input, 0, { acquisition => 'vendors_manage' }, 'intranet' );
 

@@ -3313,7 +3313,7 @@ subtest 'Incremented fee tests' => sub {
     my $library =
       $builder->build_object( { class => 'Koha::Libraries' } )->store;
 
-    my $module = new Test::MockModule('C4::Context');
+    my $module = Test::MockModule->new('C4::Context');
     $module->mock( 'userenv', sub { { branch => $library->id } } );
 
     my $patron = $builder->build_object(

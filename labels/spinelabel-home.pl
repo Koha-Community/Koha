@@ -23,7 +23,7 @@ use C4::Context;
 
 # use Smart::Comments;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "labels/spinelabel-home.tt",
         query           => $query,

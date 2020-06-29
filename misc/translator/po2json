@@ -165,7 +165,7 @@ sub main
     }
 
 
-    my $jsonobj = new JSON;
+    my $jsonobj = JSON->new;
     my $basename = basename($src);
     $basename =~ s/\.pot?$//;
     if ($pretty)

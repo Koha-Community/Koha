@@ -205,7 +205,7 @@ sub GetPrefParams {
     return $params;
 }
 
-my $input       = new CGI;
+my $input       = CGI->new;
 my $searchfield = $input->param('searchfield') || '';
 my $Tvalue      = $input->param('Tvalue');
 my $offset      = $input->param('offset') || 0;

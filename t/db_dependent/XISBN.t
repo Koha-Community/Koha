@@ -23,7 +23,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
-my $search_module = new Test::MockModule("Koha::SearchEngine::${engine}::Search");
+my $search_module = Test::MockModule->new("Koha::SearchEngine::${engine}::Search");
 
 $search_module->mock('simple_search_compat', \&Mock_simple_search_compat );
 

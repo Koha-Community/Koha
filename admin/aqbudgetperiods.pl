@@ -61,7 +61,7 @@ use Koha::Acquisition::Currencies;
 
 my $dbh = C4::Context->dbh;
 
-my $input       = new CGI;
+my $input       = CGI->new;
 
 my $searchfield          = $input->param('searchfield') // '';
 my $budget_period_id     = $input->param('budget_period_id');

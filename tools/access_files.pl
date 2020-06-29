@@ -32,7 +32,7 @@ use File::stat qw(stat);
 use Digest::MD5 qw(md5_hex);
 use Encode;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $file_id = $input->param("id");
 my $access_dirs = C4::Context->config('access_dirs');
 

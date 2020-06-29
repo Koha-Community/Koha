@@ -42,7 +42,7 @@ svc/checkout_notes - Web service for setting patron notes on items
 
 # AJAX requests
 my $is_ajax = is_ajax();
-my $query = new CGI;
+my $query = CGI->new;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), {} );
 if ( $auth_status ne "ok" ) {
     exit 0;

@@ -33,7 +33,7 @@ use Storable qw(nstore_fd);
 my $casServerUrl = 'https://localhost:8443/cas/';
 my $cas = Authen::CAS::Client->new($casServerUrl);
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $proxy_service = $cgi->url;
 

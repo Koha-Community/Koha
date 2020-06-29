@@ -74,7 +74,7 @@ the supplier this script have to display the basket.
 
 =cut
 
-our $query        = new CGI;
+our $query        = CGI->new;
 our $basketno     = $query->param('basketno');
 our $ean          = $query->param('ean');
 our $booksellerid = $query->param('booksellerid');

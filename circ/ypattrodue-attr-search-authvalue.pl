@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Auth qw/check_cookie_auth/;
 use C4::Debug;
 
-my $input    = new CGI;
+my $input    = CGI->new;
 my $query    = $input->param('term');
 my $attrcode = $input->path_info || '';
 $attrcode =~ s|^/||;

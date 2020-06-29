@@ -32,7 +32,7 @@ use C4::Acquisition qw/GetOrdersByBiblionumber/;
 use Koha::DateUtils;
 use Koha::Acquisition::Baskets;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $startdate       = $input->param('from');
 my $enddate         = $input->param('to');
 my $ratio           = $input->param('ratio');

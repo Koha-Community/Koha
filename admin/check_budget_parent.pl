@@ -31,7 +31,7 @@ called by aqbudgets.pl and neworderempty.pl
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my $budget_id     = $input->param('budget_id');
 my $new_parent_id = $input->param('new_parent');

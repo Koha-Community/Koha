@@ -27,7 +27,7 @@ use C4::Output;
 
 use C4::Calendar;
 
-my $input               = new CGI;
+my $input               = CGI->new;
 my $dbh                 = C4::Context->dbh();
 
 checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');

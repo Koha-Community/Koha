@@ -31,7 +31,7 @@ use Koha::Util::Navigation;
 use URI::Escape;
 use Encode;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

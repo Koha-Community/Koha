@@ -30,7 +30,7 @@ fetches the budget amount fron the DB
 
 =cut
 
-my $input = new CGI;
+my $input = CGI->new;
 my $budget_id = $input->param('budget_id');
 my $total   = $input->param('total');
 

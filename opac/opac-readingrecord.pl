@@ -36,7 +36,7 @@ use Koha::Patrons;
 use Koha::ItemTypes;
 use Koha::Ratings;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 # if opacreadinghistory is disabled, leave immediately
 if ( ! C4::Context->preference('opacreadinghistory') ) {

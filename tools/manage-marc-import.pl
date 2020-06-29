@@ -39,7 +39,7 @@ use Koha::BiblioFrameworks;
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
-my $input = new CGI;
+my $input = CGI->new;
 my $op = $input->param('op') || '';
 my $completedJobID = $input->param('completedJobID');
 our $runinbackground = $input->param('runinbackground');

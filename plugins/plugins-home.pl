@@ -32,7 +32,7 @@ use C4::Context;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");
 
-my $input  = new CGI;
+my $input  = CGI->new;
 my $method = $input->param('method');
 my $plugin_search = $input->param('plugin-search');
 

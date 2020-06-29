@@ -61,7 +61,7 @@ sub marc_subfield_structure_exists {
     return @$rows > 0;
 }
 
-my $input         = new CGI;
+my $input         = CGI->new;
 my $tagfield      = $input->param('tagfield');
 my $tagsubfield   = $input->param('tagsubfield');
 my $frameworkcode = $input->param('frameworkcode');

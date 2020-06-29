@@ -51,7 +51,7 @@ subtest 'test_search' => sub {
         MARC::Field->new('999', '', '', c => '1234567'),
     );
 
-    my $yaml = new Test::MockModule('YAML');
+    my $yaml = Test::MockModule->new('YAML');
     $yaml->mock('LoadFile', sub {
         return {
             biblios => {
@@ -64,14 +64,14 @@ subtest 'test_search' => sub {
         };
     });
 
-    my $builder = new Test::MockModule('Koha::SearchEngine::Elasticsearch::QueryBuilder');
+    my $builder = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::QueryBuilder');
     $builder->mock('build_query_compat', sub {
         my ( $self, $operators, $operands ) = @_;
 
         return (undef, $operands->[0]);
     });
 
-    my $search = new Test::MockModule('Koha::SearchEngine::Elasticsearch::Search');
+    my $search = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Search');
     $search->mock('simple_search_compat', sub {
         my ( $self, $query ) = @_;
 
@@ -93,7 +93,7 @@ subtest 'test_search' => sub {
     sleep(10); # Just a try to see if it fixes Jenkins
 
     # Z39.50 protocol tests
-    my $o = new ZOOM::Options();
+    my $o = ZOOM::Options->new();
     $o->option(preferredRecordSyntax => 'xml');
     $o->option(elementSetName => 'marcxml');
     $o->option(databaseName => 'biblios');

@@ -10,7 +10,7 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
-my $contextModule = new Test::MockModule('C4::Context');
+my $contextModule = Test::MockModule->new('C4::Context');
 $contextModule->mock('preference', sub {
     return '';
 });
@@ -40,12 +40,12 @@ sub get_where {
 
 my $langModule;
 if (! defined $ENV{KOHA_CONF}) {
-    warning_like { $langModule = new Test::MockModule('C4::Languages'); }
+    warning_like { $langModule = Test::MockModule->new('C4::Languages'); }
         qr /unable to locate Koha configuration file koha-conf.xml/,
         'Expected warning for unset $KOHA_CONF';
 }
 else {
-    $langModule = new Test::MockModule('C4::Languages');
+    $langModule = Test::MockModule->new('C4::Languages');
 }
 $langModule->mock('regex_lang_subtags', sub {
     return {
@@ -89,12 +89,12 @@ $langModule->mock('getTranslatedLanguages', sub {
 });
 my $tmplModule;
 if (! defined $ENV{KOHA_CONF}) {
-    warning_like { $tmplModule = new Test::MockModule('C4::Templates'); }
+    warning_like { $tmplModule = Test::MockModule->new('C4::Templates'); }
         qr /unable to locate Koha configuration file koha-conf.xml/,
         'Expected warning for unset $KOHA_CONF';
 }
 else {
-    $tmplModule = new Test::MockModule('C4::Templates');
+    $tmplModule = Test::MockModule->new('C4::Templates');
 }
 $tmplModule->mock('_get_template_file', sub {
     my ($tmplbase, $interface, $query) = @_;

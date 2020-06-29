@@ -34,7 +34,7 @@ plugin that shows a stats on serials
 
 =cut
 
-my $input      = new CGI;
+my $input      = CGI->new;
 my $templatename   = "reports/serials_stats.tt";
 my $do_it      = $input->param("do_it");
 my $bookseller = $input->param("bookseller");

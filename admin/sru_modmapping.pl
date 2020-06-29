@@ -24,7 +24,7 @@ use C4::Output;
 
 # Initialize CGI, template
 
-my $input = new CGI;
+my $input = CGI->new;
 my $mapstr = $input->param('mapping')//'';
 my $type = $input->param('type')//'';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {

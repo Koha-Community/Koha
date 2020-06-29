@@ -27,7 +27,7 @@ use C4::Output;
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {

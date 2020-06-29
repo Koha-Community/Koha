@@ -59,7 +59,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::ItemTypes;
 use Koha::Patrons;
 
-our $input=new CGI;
+our $input=CGI->new;
 
 our ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basketgroup.tt",
