@@ -18,91 +18,92 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-package C4::Barcodes::ValueBuilder::incremental;
+{
+    package C4::Barcodes::ValueBuilder::incremental;
 
-use Modern::Perl;
-use C4::Context;
-my $DEBUG = 0;
+    use Modern::Perl;
+    use C4::Context;
+    my $DEBUG = 0;
 
-sub get_barcode {
-    my ($args) = @_;
-    my $nextnum;
-    # not the best, two catalogers could add the same barcode easily this way :/
-    my $query = "select max(abs(barcode)) from items";
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute();
-    while (my ($count)= $sth->fetchrow_array) {
-        $nextnum = $count;
+    sub get_barcode {
+        my ($args) = @_;
+        my $nextnum;
+        # not the best, two catalogers could add the same barcode easily this way :/
+        my $query = "select max(abs(barcode)) from items";
+        my $sth = C4::Context->dbh->prepare($query);
+        $sth->execute();
+        while (my ($count)= $sth->fetchrow_array) {
+            $nextnum = $count;
+        }
+        $nextnum++;
+        return $nextnum;
     }
-    $nextnum++;
-    return $nextnum;
 }
 
-1;
+{
+    package C4::Barcodes::ValueBuilder::hbyymmincr;
+    use C4::Context;
+    my $DEBUG = 0;
 
-package C4::Barcodes::ValueBuilder::hbyymmincr;
-use C4::Context;
-my $DEBUG = 0;
-
-sub get_barcode {
-    my ($args) = @_;
-    my $nextnum = 0;
-    my $year = substr($args->{year}, -2);
-    my $month = $args->{mon};
-    my $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute("^[-a-zA-Z]{1,}$year$month");
-    while (my ($count)= $sth->fetchrow_array) {
-        $nextnum = $count if $count;
-        $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 9999 items per month
-            warn "Existing incremental number = $nextnum" if $DEBUG;
-    }
-    $nextnum++;
-    $nextnum = sprintf("%0*d", "4",$nextnum);
-    $nextnum = $year . $month . $nextnum;
-    warn "New hbyymmincr Barcode = $nextnum" if $DEBUG;
-    my $scr = "
-        var form = document.getElementById('f');
-        if ( !form ) {
-            form = document.getElementById('serials_edit');
+    sub get_barcode {
+        my ($args) = @_;
+        my $nextnum = 0;
+        my $year = substr($args->{year}, -2);
+        my $month = $args->{mon};
+        my $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
+        my $sth = C4::Context->dbh->prepare($query);
+        $sth->execute("^[-a-zA-Z]{1,}$year$month");
+        while (my ($count)= $sth->fetchrow_array) {
+            $nextnum = $count if $count;
+            $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 9999 items per month
+                warn "Existing incremental number = $nextnum" if $DEBUG;
         }
-        if ( !form ) {
-            form = document.getElementById('Aform');
-        }
-        for (i=0 ; i<form.field_value.length ; i++) {
-            if (form.tag[i].value == '$args->{loctag}' && form.subfield[i].value == '$args->{locsubfield}') {
-                fnum = i;
+        $nextnum++;
+        $nextnum = sprintf("%0*d", "4",$nextnum);
+        $nextnum = $year . $month . $nextnum;
+        warn "New hbyymmincr Barcode = $nextnum" if $DEBUG;
+        my $scr = "
+            var form = document.getElementById('f');
+            if ( !form ) {
+                form = document.getElementById('serials_edit');
             }
+            if ( !form ) {
+                form = document.getElementById('Aform');
+            }
+            for (i=0 ; i<form.field_value.length ; i++) {
+                if (form.tag[i].value == '$args->{loctag}' && form.subfield[i].value == '$args->{locsubfield}') {
+                    fnum = i;
+                }
+            }
+        if (\$('#' + id).val() == '') {
+            \$('#' + id).val(form.field_value[fnum].value + '$nextnum');
         }
-    if (\$('#' + id).val() == '') {
-        \$('#' + id).val(form.field_value[fnum].value + '$nextnum');
+        ";
+        return $nextnum, $scr;
     }
-    ";
-    return $nextnum, $scr;
 }
 
+{
+    package C4::Barcodes::ValueBuilder::annual;
+    use C4::Context;
+    my $DEBUG = 0;
 
-package C4::Barcodes::ValueBuilder::annual;
-use C4::Context;
-my $DEBUG = 0;
-
-sub get_barcode {
-    my ($args) = @_;
-    my $nextnum;
-    my $query = "select max(cast( substring_index(barcode, '-',-1) as signed)) from items where barcode like ?";
-    my $sth=C4::Context->dbh->prepare($query);
-    $sth->execute($args->{year} . '-%');
-    while (my ($count)= $sth->fetchrow_array) {
-        warn "Examining Record: $count" if $DEBUG;
-        $nextnum = $count if $count;
+    sub get_barcode {
+        my ($args) = @_;
+        my $nextnum;
+        my $query = "select max(cast( substring_index(barcode, '-',-1) as signed)) from items where barcode like ?";
+        my $sth=C4::Context->dbh->prepare($query);
+        $sth->execute($args->{year} . '-%');
+        while (my ($count)= $sth->fetchrow_array) {
+            warn "Examining Record: $count" if $DEBUG;
+            $nextnum = $count if $count;
+        }
+        $nextnum++;
+        $nextnum = sprintf("%0*d", "4",$nextnum);
+        $nextnum = "$args->{year}-$nextnum";
+        return $nextnum;
     }
-    $nextnum++;
-    $nextnum = sprintf("%0*d", "4",$nextnum);
-    $nextnum = "$args->{year}-$nextnum";
-    return $nextnum;
 }
-
-1;
 
 
 =head1 Barcodes::ValueBuilder
