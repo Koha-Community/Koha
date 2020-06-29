@@ -206,16 +206,21 @@
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr>
                                             [% # Cell 1: Checkbox %]
+                                            [% IF ( SEARCH_RESULT.title ) %]
+                                                [% check_title = SEARCH_RESULT.title %]
+                                            [% ELSE %]
+                                                [% check_title = SEARCH_RESULT.biblionumber %]
+                                            [% END %]
                                             <td class="select selectcol">
                                                 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                                    <input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" /> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                    <input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" aria-label="Select search result: [% check_title | html %]" /> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
                                                 [% ELSE %]
                                                     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
-                                                        <input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" /> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                        <input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" aria-label="Select search result: [% check_title | html %]"/> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
                                                     [% ELSE %]
                                                         [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                                                             [% UNLESS ( SEARCH_RESULT.norequests ) %]
-                                                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" /> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
+                                                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" aria-label="Select search result: [% check_title | html %]"/> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
                                                                 [% END %]
                                                             [% END %]
                                                         [% END # IF RequestOnOpac %]
