@@ -793,12 +793,15 @@
 
             [% UNLESS ( patron ) %]
                 [% IF ( reserveloop ) %]
-                    <form name="T[% time | html %]" action="modrequest.pl" method="post">
+                    <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
                         [% IF ( multi_hold ) %]
                             <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                         [% END %]
 
                         <h2>Existing holds</h2>
+                        <div id="toolbar" class="btn-toolbar">
+                            <input type="submit" name="submit" value="Update hold(s)" />
+                        </div>
 
                         [% FOREACH biblioloo IN biblioloop %]
                             [% IF ( biblioloo.reserveloop ) %]
@@ -906,10 +909,6 @@
 
                             [% END # /IF biblioloo.reserveloop %]
                         [% END # FOREACH biblioloo %]
-
-                        <fieldset class="action">
-                            <input type="submit" name="submit" value="Update hold(s)" />
-                        </fieldset>
                     </form> <!-- /name=TTime -->
                 [% END # IF reserveloop %]
             [% END # UNLESS patron %]
@@ -933,8 +932,10 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     <script>
+        var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
@@ -1252,7 +1253,11 @@
                 };
                 [% END %]
             [% END %]
-
+            Sticky = $("#toolbar");
+            Sticky.hcSticky({
+                stickTo: "#existing_holds",
+                stickyClass: "floating"
+            });
         });
     </script>
 [% END %]
