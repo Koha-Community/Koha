@@ -28,6 +28,7 @@ my @ignored = qw(
     .editorconfig
     .gitignore
     .mailmap
+    .perlcriticrc
     LICENSE
     README.md
     README.robots
