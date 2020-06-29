@@ -128,7 +128,7 @@
             </span>
         [% END %]
 
-        [% IF ( illrequests ) %]
+        [% IF ( Koha.Preference( 'ILLModule' ) && illrequests.count ) %]
             <span class="results_summary">
                 <span class="label">ILL requests:</span>
                 [% IF CAN_user_ill %]
