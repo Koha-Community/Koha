@@ -293,6 +293,7 @@ sub _handle_one_result {
     if( $servhref->{servertype} eq 'sru' ) {
         $marcrecord= MARC::Record->new_from_xml( $raw, 'UTF-8',
             $servhref->{syntax} );
+        $marcrecord->encoding('UTF-8');
     } else {
         ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
     }
@@ -598,6 +599,7 @@ sub Z3950SearchAuth {
                             my ($charset_result, $charset_errors);
                             if( $servers[$k]->{servertype} eq 'sru' ) {
                                 $marcrecord = MARC::Record->new_from_xml( $marcdata, 'UTF-8', $servers[$k]->{syntax} );
+                                $marcrecord->encoding('UTF-8');
                             } else {
                                 ( $marcrecord, $charset_result, $charset_errors ) = MarcToUTF8Record( $marcdata, $marc_type, $encoding[$k] );
                             }
