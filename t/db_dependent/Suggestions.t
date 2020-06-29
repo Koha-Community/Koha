@@ -48,14 +48,14 @@ t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0");
 $dbh->do(q|DELETE FROM itemtypes;|);
 my $sql = qq|
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
-('BK', 'Books',5,0,'bridge/book.gif',''),
-('MX', 'Mixed Materials',5,0,'bridge/kit.gif',''),
-('CF', 'Computer Files',5,0,'bridge/computer_file.gif',''),
-('MP', 'Maps',5,0,'bridge/map.gif',''),
-('VM', 'Visual Materials',5,1,'bridge/dvd.gif',''),
-('MU', 'Music',5,0,'bridge/sound.gif',''),
-('CR', 'Continuing Resources',5,0,'bridge/periodical.gif',''),
-('REF', 'Reference',0,1,'bridge/reference.gif','');|;
+('BK', 'Books',5,0,'bridge/book.png',''),
+('MX', 'Mixed Materials',5,0,'bridge/kit.png',''),
+('CF', 'Computer Files',5,0,'bridge/computer_file.png',''),
+('MP', 'Maps',5,0,'bridge/map.png',''),
+('VM', 'Visual Materials',5,1,'bridge/dvd.png',''),
+('MU', 'Music',5,0,'bridge/sound.png',''),
+('CR', 'Continuing Resources',5,0,'bridge/periodical.png',''),
+('REF', 'Reference',0,1,'bridge/reference.png','');|;
 $dbh->do($sql);
 $dbh->do(q|DELETE FROM suggestions|);
 $dbh->do(q|DELETE FROM issues|);
