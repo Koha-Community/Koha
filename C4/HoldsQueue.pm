@@ -137,7 +137,7 @@ sub GetHoldsQueueItems {
                          biblio.copyrightdate, biblio.subtitle, biblio.medium,
                          biblio.part_number, biblio.part_name,
                          biblioitems.publicationyear, biblioitems.pages, biblioitems.size,
-                         biblioitems.isbn, items.copynumber
+                         biblioitems.isbn, biblioitems.editionstatement, items.copynumber
                   FROM tmp_holdsqueue
                        JOIN biblio      USING (biblionumber)
                   LEFT JOIN biblioitems USING (biblionumber)

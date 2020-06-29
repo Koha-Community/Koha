@@ -131,6 +131,7 @@
                 <p>
                     <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
                     <div class="hq-author">[% itemsloo.author | html %]</div>
+                    [% IF ( itemsloo.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.editionstatement | html %]</div>[% END %]
                     <div class="hq-pubdata">
                         [% IF ( itemsloo.publishercode ) %][% itemsloo.publishercode | html %][% END %]
 
