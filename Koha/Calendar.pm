@@ -236,11 +236,18 @@ sub get_push_amt {
     my ( $self, $base_date) = @_;
 
     my $dow = $base_date->day_of_week;
+    # Representation fix
+    # DateTime object dow (1-7) where Monday is 1
+    # Arrays are 0-based where 0 = Sunday, not 7.
+    if ( $dow == 7 ) {
+        $dow = 0;
+    }
+
     return (
         # We're using Dayweek useDaysMode option
         $self->{days_mode} eq 'Dayweek' &&
         # It's not a permanently closed day
-        !$self->{weekly_closed_days}->[$dow % 7]
+        !$self->{weekly_closed_days}->[$dow]
     ) ? 7 : 1;
 }
 
