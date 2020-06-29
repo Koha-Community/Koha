@@ -798,122 +798,118 @@
                             <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                         [% END %]
 
-                        <fieldset class="rows">
-                            <legend>Existing holds</legend>
+                        <h2>Existing holds</h2>
 
-                            [% FOREACH biblioloo IN biblioloop %]
-                                [% IF ( biblioloo.reserveloop ) %]
-                                    [% IF ( multi_hold ) %]
-                                        <h3>
-                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]">
-                                                [% biblioloo.title | html %]
-                                            </a>
-                                        </h3>
+                        [% FOREACH biblioloo IN biblioloop %]
+                            [% IF ( biblioloo.reserveloop ) %]
+                                [% IF ( multi_hold ) %]
+                                    <h3>
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]">
+                                            [% biblioloo.title | html %]
+                                        </a>
+                                    </h3>
+                                [% END %]
+
+                                [% IF Koha.Preference('HoldsSplitQueue') == 'branch' %]
+                                    [% SET branchcodes = [] %]
+
+                                    [% FOREACH h IN biblioloo.reserveloop %]
+                                        [% branchcodes.push( h.branchcode ) %]
                                     [% END %]
+                                    [% branchcodes = branchcodes.unique %]
 
-                                    [% IF Koha.Preference('HoldsSplitQueue') == 'branch' %]
-                                        [% SET branchcodes = [] %]
-
+                                    [% FOREACH b IN branchcodes.sort %]
+                                        [% SET holds_by_branch = [] %]
                                         [% FOREACH h IN biblioloo.reserveloop %]
-                                            [% branchcodes.push( h.branchcode ) %]
+                                            [% IF h.branchcode == b %]
+                                                [% holds_by_branch.push( h ) %]
+                                            [% END %]
                                         [% END %]
-                                        [% branchcodes = branchcodes.unique %]
+                                        <fieldset>
+                                            <legend>[% Branches.GetName( b ) | html %]</legend>
+                                            [% INCLUDE holds_table.inc holds=holds_by_branch %]
+                                        </fieldset>
+                                    [% END # /FOREACh b %]
+                                [% ELSIF Koha.Preference('HoldsSplitQueue') == 'itemtype' %]
+                                    [% SET itemtypes = [] %]
 
-                                        [% FOREACH b IN branchcodes.sort %]
+                                    [% FOREACH h IN biblioloo.reserveloop %]
+                                        [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
+                                        [% itemtypes.push( hold_itemtype ) %]
+                                    [% END %]
+                                    [% itemtypes = itemtypes.unique %]
+
+                                    [% FOREACH i IN itemtypes.sort %]
+                                        [% SET holds_by_itemtype = [] %]
+                                        [% FOREACH h IN biblioloo.reserveloop %]
+                                            [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
+                                            [% IF hold_itemtype == i %]
+                                                [% holds_by_itemtype.push( h ) %]
+                                            [% END %]
+                                        [% END %]
+
+                                        <fieldset>
+                                            [% IF i %]
+                                                <legend>[% ItemTypes.GetDescription( i ) | html %]</legend>
+                                            [% ELSE %]
+                                                <legend>Any item type</legend>
+                                            [% END %]
+                                            [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
+                                        </fieldset>
+                                    [% END # /FOREACH i %]
+                                [% ELSIF Koha.Preference('HoldsSplitQueue') == 'branch_itemtype' %]
+                                    [% SET branchcodes = [] %]
+
+                                    [% FOREACH h IN biblioloo.reserveloop %]
+                                        [% branchcodes.push( h.branchcode ) %]
+                                    [% END %]
+                                    [% branchcodes = branchcodes.unique %]
+
+                                    [% FOREACH b IN branchcodes.sort %]
+                                        <fieldset>
+                                            <legend>[% Branches.GetName( b ) | html %]</legend>
                                             [% SET holds_by_branch = [] %]
                                             [% FOREACH h IN biblioloo.reserveloop %]
                                                 [% IF h.branchcode == b %]
                                                     [% holds_by_branch.push( h ) %]
                                                 [% END %]
                                             [% END %]
-                                            <fieldset>
-                                                <legend>[% Branches.GetName( b ) | html %]</legend>
-                                                [% INCLUDE holds_table.inc holds=holds_by_branch %]
-                                            </fieldset>
-                                        [% END # /FOREACh b %]
-                                    [% ELSIF Koha.Preference('HoldsSplitQueue') == 'itemtype' %]
-                                        [% SET itemtypes = [] %]
 
-                                        [% FOREACH h IN biblioloo.reserveloop %]
-                                            [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                            [% itemtypes.push( hold_itemtype ) %]
-                                        [% END %]
-                                        [% itemtypes = itemtypes.unique %]
-
-                                        [% FOREACH i IN itemtypes.sort %]
-                                            [% SET holds_by_itemtype = [] %]
-                                            [% FOREACH h IN biblioloo.reserveloop %]
+                                            [% SET itemtypes = [] %]
+                                            [% FOREACH h IN holds_by_branch %]
                                                 [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                [% IF hold_itemtype == i %]
-                                                    [% holds_by_itemtype.push( h ) %]
-                                                [% END %]
+                                                [% itemtypes.push( hold_itemtype ) %]
                                             [% END %]
+                                            [% itemtypes = itemtypes.unique %]
 
-                                            <fieldset>
+                                            [% FOREACH i IN itemtypes.sort %]
                                                 [% IF i %]
-                                                    <legend>[% ItemTypes.GetDescription( i ) | html %]</legend>
+                                                    <h3>[% ItemTypes.GetDescription( i ) | html %]</h3>
                                                 [% ELSE %]
-                                                    <legend>Any item type</legend>
-                                                [% END %]
-                                                [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
-                                            </fieldset>
-                                        [% END # /FOREACH i %]
-                                    [% ELSIF Koha.Preference('HoldsSplitQueue') == 'branch_itemtype' %]
-                                        [% SET branchcodes = [] %]
-
-                                        [% FOREACH h IN biblioloo.reserveloop %]
-                                            [% branchcodes.push( h.branchcode ) %]
-                                        [% END %]
-                                        [% branchcodes = branchcodes.unique %]
-
-                                        [% FOREACH b IN branchcodes.sort %]
-                                            <fieldset class="contrast">
-                                                <legend>[% Branches.GetName( b ) | html %]</legend>
-                                                [% SET holds_by_branch = [] %]
-                                                [% FOREACH h IN biblioloo.reserveloop %]
-                                                    [% IF h.branchcode == b %]
-                                                        [% holds_by_branch.push( h ) %]
-                                                    [% END %]
+                                                    <h3>Any item type</h3>
                                                 [% END %]
 
-                                                [% SET itemtypes = [] %]
+                                                [% SET holds_by_itemtype = [] %]
                                                 [% FOREACH h IN holds_by_branch %]
                                                     [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                    [% itemtypes.push( hold_itemtype ) %]
+                                                    [% IF hold_itemtype == i %]
+                                                        [% holds_by_itemtype.push( h ) %]
+                                                    [% END %]
                                                 [% END %]
-                                                [% itemtypes = itemtypes.unique %]
+                                                [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
+                                            [% END %]
+                                        </fieldset>
+                                    [% END # /FOREACH b %]
+                                [% ELSE %]
+                                    [% INCLUDE holds_table.inc holds=biblioloo.reserveloop %]
+                                [% END # /IF HoldsSplitQueue %]
 
-                                                [% FOREACH i IN itemtypes.sort %]
-                                                    <fieldset class="standard">
-                                                        [% IF i %]
-                                                            <legend>[% ItemTypes.GetDescription( i ) | html %]</legend>
-                                                        [% ELSE %]
-                                                            <legend>Any item type</legend>
-                                                        [% END %]
+                            [% END # /IF biblioloo.reserveloop %]
+                        [% END # FOREACH biblioloo %]
 
-                                                        [% SET holds_by_itemtype = [] %]
-                                                        [% FOREACH h IN holds_by_branch %]
-                                                            [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                            [% IF hold_itemtype == i %]
-                                                                [% holds_by_itemtype.push( h ) %]
-                                                            [% END %]
-                                                        [% END %]
-                                                        [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
-                                                    </fieldset>
-                                                [% END %]
-                                            </fieldset>
-                                        [% END # /FOREACH b %]
-                                    [% ELSE %]
-                                        [% INCLUDE holds_table.inc holds=biblioloo.reserveloop %]
-                                    [% END # /IF HoldsSplitQueue %]
-
-                                [% END # /IF biblioloo.reserveloop %]
-                            [% END # FOREACH biblioloo %]
-
-                            <fieldset class="action">
-                                <input type="submit" name="submit" value="Update hold(s)" />
-                            </fieldset>
-                        </fieldset> <!-- /.rows -->
+                        <fieldset class="action">
+                            <input type="submit" name="submit" value="Update hold(s)" />
+                        </fieldset>
                     </form> <!-- /name=TTime -->
                 [% END # IF reserveloop %]
             [% END # UNLESS patron %]
