@@ -908,7 +908,6 @@ sub handle_login {
 sub summary_info {
     my ( $ils, $patron, $summary, $start, $end, $server ) = @_;
     my $resp = '';
-    my $summary_type;
 
     #
     # Map from offsets in the "summary" field of the Patron Information
@@ -923,9 +922,10 @@ sub summary_info {
         { func => $patron->can("unavail_holds"), fid => FID_UNAVAILABLE_HOLD_ITEMS },
     );
 
-    if ( ( $summary_type = index( $summary, 'Y' ) ) == -1 ) {
-        return '';    # No detailed information required
-    }
+    my $summary_type = index( $summary, 'Y' );
+    return q{} if $summary_type == -1;    # No detailed information required.
+    return q{} if $summary_type > 5;      # Positions 6-9 are not defined in the sip spec,
+                                          # and we have no extensions to handle them.
 
     syslog( "LOG_DEBUG", "Summary_info: index == '%d', field '%s'", $summary_type, $summary_map[$summary_type]->{fid} );
 
