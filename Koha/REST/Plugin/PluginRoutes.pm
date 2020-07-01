@@ -47,6 +47,11 @@ sub register {
 
     if ( C4::Context->config("enable_plugins") )
     {
+        my $schema = $app->home->rel_file("api/swagger-v2-schema.json");
+        if ($schema){
+           $self->{'swagger-v2-schema'} = $schema;
+        }
+
         # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(
             {
@@ -55,7 +60,7 @@ sub register {
         );
 
         foreach my $plugin ( @plugins ) {
-            $spec = inject_routes( $spec, $plugin, $validator );
+            $spec = $self->inject_routes( $spec, $plugin, $validator );
         }
 
     }
@@ -68,14 +73,14 @@ sub register {
 =cut
 
 sub inject_routes {
-    my ( $spec, $plugin, $validator ) = @_;
+    my ( $self, $spec, $plugin, $validator ) = @_;
 
     return merge_spec( $spec, $plugin ) unless $validator;
 
     return try {
 
         my $backup_spec = merge_spec( clone($spec), $plugin );
-        if ( spec_ok( $backup_spec, $validator ) ) {
+        if ( $self->spec_ok( $backup_spec, $validator ) ) {
             $spec = merge_spec( $spec, $plugin );
         }
         else {
@@ -139,13 +144,16 @@ sub merge_spec {
 =cut
 
 sub spec_ok {
-    my ( $spec, $validator ) = @_;
+    my ( $self, $spec, $validator ) = @_;
+
+    my $schema = $self->{'swagger-v2-schema'};
 
     return try {
         $validator->load_and_validate_schema(
             $spec,
             {
                 allow_invalid_ref => 1,
+                schema => ( $schema ) ? $schema : undef,
             }
         );
         return 1;

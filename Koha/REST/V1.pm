@@ -72,6 +72,7 @@ sub startup {
 
     # Try to load and merge all schemas first and validate the result just once.
     my $spec;
+    my $swagger_schema = $self->home->rel_file("api/swagger-v2-schema.json");
     try {
         $spec = $validator->bundle(
             {
@@ -91,6 +92,7 @@ sub startup {
             OpenAPI => {
                 spec  => $spec,
                 route => $self->routes->under('/api/v1')->to('Auth#under'),
+                schema => ( $swagger_schema ) ? $swagger_schema : undef,
                 allow_invalid_ref =>
                 1,    # required by our spec because $ref directly under
                         # Paths-, Parameters-, Definitions- & Info-object
@@ -105,6 +107,7 @@ sub startup {
             $self->home->rel_file("api/v1/swagger/swagger.json"),
             {
                 allow_invalid_ref  => 1,
+                schema => ( $swagger_schema ) ? $swagger_schema : undef,
             }
         );
 
