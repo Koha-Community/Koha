@@ -44,8 +44,8 @@
             [% ELSE %]
                 [% SET tab = 'opened' %]
             [% END %]
+          <input type="checkbox" style="vertical-align: middle;" id="show_only_subscription" class="show_only_subscription" data-tableid="[% tab %]resultst"/>
           <label for="show_only_subscription">
-            <input type="checkbox" style="vertical-align: middle;" class="show_only_subscription" data-tableid="[% tab %]resultst"/>
             Show only subscriptions
           </label>
           <table id="[% tab %]resultst" class="result">
@@ -119,7 +119,7 @@
             </tbody>
           </table>
           [% IF CAN_user_acquisition_merge_invoices %]
-              <a class="submit merge" id="merge" href="#merge_invoices">Merge selected invoices</a>
+   +          <a class="btn btn-default submit merge" id="merge" href="#merge_invoices"><i class="fa fa-compress"></i> Merge selected invoices</a>
               [% IF tab == 'closed' %]
                 <a class="btn btn-default" id="open_sel" href="#reopen_selected" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen selected invoices</a>
               [% ELSE  %]
