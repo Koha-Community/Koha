@@ -5,38 +5,38 @@
 //      // other settings
 //  } ) );
 var dataTablesDefaults = {
-    "oLanguage": {
-        "oPaginate": {
-            "sFirst"    : __('First'),
-            "sLast"     : __('Last'),
-            "sNext"     : __('Next'),
-            "sPrevious" : __('Previous'),
+    "language": {
+        "paginate": {
+            "first"    : window.MSG_DT_FIRST || "First",
+            "last"     : window.MSG_DT_LAST || "Last",
+            "next"     : window.MSG_DT_NEXT || "Next",
+            "previous" : window.MSG_DT_PREVIOUS || "Previous"
         },
-        "sEmptyTable"       : __('No data available in table'),
-        "sInfo"             : __('Showing _START_ to _END_ of _TOTAL_ entries'),
-        "sInfoEmpty"        : __('No entries to show'),
-        "sInfoFiltered"     : __('(filtered from _MAX_ total entries)'),
-        "sLengthMenu"       : __('Show _MENU_ entries'),
-        "sLoadingRecords"   : __('Loading...'),
-        "sProcessing"       : __('Processing...'),
-        "sSearch"           : __('Search:'),
-        "sZeroRecords"      : __('No matching records found'),
+        "emptyTable"       : window.MSG_DT_EMPTY_TABLE || "No data available in table",
+        "info"             : window.MSG_DT_INFO || "Showing _START_ to _END_ of _TOTAL_ entries",
+        "infoEmpty"        : window.MSG_DT_INFO_EMPTY || "No entries to show",
+        "infoFiltered"     : window.MSG_DT_INFO_FILTERED || "(filtered from _MAX_ total entries)",
+        "lengthMenu"       : window.MSG_DT_LENGTH_MENU || "Show _MENU_ entries",
+        "loadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
+        "processing"       : window.MSG_DT_PROCESSING || "Processing...",
+        "search"           : window.MSG_DT_SEARCH || "Search:",
+        "zeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found",
         buttons: {
-            "copyTitle"     : __('Copy to clipboard'),
-            "copyKeys"      : __('Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.'),
+            "copyTitle"     : window.MSG_DT_COPY_TO_CLIPBOARD || "Copy to clipboard",
+            "copyKeys"      : window.MSG_DT_COPY_KEYS || "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.",
             "copySuccess": {
-                _: __('Copied %d rows to clipboard'),
-                1: __('Copied one row to clipboard'),
+                _: window.MSG_DT_COPIED_ROWS || "Copied %d rows to clipboard",
+                1: window.MSG_DT_COPIED_ONE_ROW || "Copied one row to clipboard",
             }
         }
     },
-    "dom": '<"top pager"<"table_entries"ilp><"table_controls"fB>>tr<"bottom pager"ip>',
+    "dom": 't',
     "buttons": [{
         fade: 100,
         className: "dt_button_clear_filter",
-        titleAttr: __('Clear filter'),
+        titleAttr: window.MSG_CLEAR_FILTER,
         enabled: false,
-        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __('Clear filter') + '</span>',
+        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + window.MSG_CLEAR_FILTER + '</span>',
         available: function ( dt ) {
             // The "clear filter" button is made available if this test returns true
             if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form
@@ -48,7 +48,7 @@ var dataTablesDefaults = {
             node.addClass("disabled");
         }
     }],
-    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
+    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All" ]],
     "iDisplayLength": 20,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
@@ -355,7 +355,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
      * from a configuration file (in English, "a," "an," and "the")
      */
 
-    var config_exclude_articles_from_sort = __('a an the');
+    var config_exclude_articles_from_sort = window.CONFIG_EXCLUDE_ARTICLES_FROM_SORT || "a an the";
     if (config_exclude_articles_from_sort){
         var articles = config_exclude_articles_from_sort.split(" ");
         var rpattern = "";
