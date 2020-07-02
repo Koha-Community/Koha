@@ -501,8 +501,8 @@
                                             [% FOREACH c IN r.checkouts %]
                                                 <tr>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.item.biblio.biblionumber | uri %]">
-                                                            [% i.item.biblio.title | html %][% IF ( i.item.enumchron ) %] [% i.item.enumchron | html %][% END %]
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% c.item.biblio.biblionumber | uri %]">
+                                                            [% c.item.biblio.title | html %][% IF ( c.item.enumchron ) %] [% c.item.enumchron | html %][% END %]
                                                         </a>
                                                     </td>
 
