@@ -283,7 +283,6 @@ if ($zebraqueue_days) {
 if ($mail) {
     my $count = 0;
     print "Mail queue purge triggered for $mail days.\n" if $verbose;
-    $count = 0;
     $sth = $dbh->prepare(
         q{
             DELETE FROM message_queue
