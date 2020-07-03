@@ -64,7 +64,7 @@ sub text_replace_tag {
     # value [tag=input], meta
     my $tag = ($t =~ /^<(\S+)/s) ? lc($1) : undef;
     my $translated_p = 0;
-    for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder') {
+    for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder', 'aria-label') {
     if ($attr->{$a}) {
         next if $a eq 'label' && $tag ne 'optgroup';
         next if $a eq 'content' && $tag ne 'meta';
@@ -73,7 +73,7 @@ sub text_replace_tag {
         my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
         if ($val =~ /\S/s) {
             # for selected attributes replace '[%..%]' with '%s' and remember matches
-            if ( $a =~ /title|value|alt|content|placeholder/ ) {
+            if ( $a =~ /title|value|alt|content|placeholder|aria-label/ ) {
                 while ( $val =~ s/(\[\%.*?\%\])/\%s/ ) {
                     my $var = $1;
                     push @ttvar, $1;
@@ -82,7 +82,7 @@ sub text_replace_tag {
             # find translation for transformed attributes
             my $s = find_translation($val);
             # replace '%s' with original content (in order) on translated string, this is fragile!
-            if ( $a =~ /title|value|alt|content|placeholder/ and @ttvar ) {
+            if ( $a =~ /title|value|alt|content|placeholder|aria-label/ and @ttvar ) {
                 while ( @ttvar ) {
                     my $var = shift @ttvar;
                     $s =~ s/\%s/$var/;
