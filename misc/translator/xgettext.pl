@@ -117,7 +117,7 @@ sub text_extract {
             # value [tag=input], meta
             my $tag;
             $tag = lc($1) if $t =~ /^<(\S+)/s;
-            for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder', 'arial-label') {
+            for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder', 'aria-label') {
                 if ($attr->{$a}) {
                     next if $a eq 'label' && $tag ne 'optgroup';
                     next if $a eq 'content' && $tag ne 'meta';
