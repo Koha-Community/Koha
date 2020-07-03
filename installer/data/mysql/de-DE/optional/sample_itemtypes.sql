@@ -1,9 +1,9 @@
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
-('BK', 'Bücher',0,0,'bridge/book.gif',''),
-('MX', 'Medienkombinationen',0,0,'bridge/kit.gif',''),
-('CF', 'Datenträger',0,0,'bridge/computer_file.gif',''),
-('MP', 'Karten',0,0,'bridge/map.gif',''),
-('VM', 'AV-Medien',0,1,'bridge/dvd.gif',''),
-('MU', 'Musik',0,0,'bridge/sound.gif',''),
-('CR', 'Zeitschriften',0,0,'bridge/periodical.gif',''),
-('REF', 'Nachschlagewerke',0,1,'bridge/reference.gif','');
+('BK', 'Bücher',0,0,'bridge/book.png',''),
+('MX', 'Medienkombinationen',0,0,'bridge/kit.png',''),
+('CF', 'Datenträger',0,0,'bridge/computer_file.png',''),
+('MP', 'Karten',0,0,'bridge/map.png',''),
+('VM', 'AV-Medien',0,1,'bridge/dvd.png',''),
+('MU', 'Musik',0,0,'bridge/sound.png',''),
+('CR', 'Zeitschriften',0,0,'bridge/periodical.png',''),
+('REF', 'Nachschlagewerke',0,1,'bridge/reference.png','');
