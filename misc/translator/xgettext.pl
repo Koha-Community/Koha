@@ -117,7 +117,7 @@ sub text_extract {
             # value [tag=input], meta
             my $tag;
             $tag = lc($1) if $t =~ /^<(\S+)/s;
-            for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder') {
+            for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder', 'arial-label') {
                 if ($attr->{$a}) {
                     next if $a eq 'label' && $tag ne 'optgroup';
                     next if $a eq 'content' && $tag ne 'meta';
@@ -126,7 +126,7 @@ sub text_extract {
                     my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
                     $val = TmplTokenizer::trim($val);
                     # for selected attributes replace '[%..%]' with '%s' globally
-                    if ( $a =~ /title|value|alt|content|placeholder/ ) {
+                    if ( $a =~ /title|value|alt|content|placeholder|aria-label/ ) {
                         $val =~ s/\[\%.*?\%\]/\%s/g;
                     }
                     # save attribute text for translation
