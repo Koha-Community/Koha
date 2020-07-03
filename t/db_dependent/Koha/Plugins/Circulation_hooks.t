@@ -17,6 +17,7 @@
 use Modern::Perl;
 
 use Test::More tests => 4;
+use Test::MockModule;
 use Test::Warn;
 
 use File::Basename;
@@ -43,7 +44,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'post_renewal_action() hook tests' => sub {
 
-    plan tests => 4;
+    plan tests => 1;
 
     $schema->storage->txn_begin;
 
@@ -61,23 +62,17 @@ subtest 'post_renewal_action() hook tests' => sub {
         }
     );
 
-    my ($biblio, $item);
+    # Avoid testing useless warnings
+    my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin->mock( 'after_item_action', undef );
+    $test_plugin->mock( 'after_biblio_action', undef );
 
-    warning_like { $biblio = $builder->build_sample_biblio(); }
-            qr/after_biblio_action called with action: create, ref: Koha::Biblio/,
-            'AddBiblio calls the hook with action=create';
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    AddIssue( $patron->unblessed, $item->barcode );
 
-    warning_like { $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber }); }
-            qr/after_item_action called with action: create, ref: Koha::Item/,
-            'AddItem calls the hook with action=create';
-
-    warning_like { AddIssue( $patron->unblessed, $item->barcode ); }
-            qr/after_item_action called with action: modify, ref: Koha::Item/,
-            'AddItem calls the hook with action=modify';
-
-    warnings_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
-            [ qr/after_item_action called with action: modify, ref: Koha::Item/,
-              qr/post_renewal_action .* DateTime/ ],
+    warning_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
+            qr/after_circ_action called with action: renewal, ref: DateTime/,
             'AddRenewal calls the post_renewal_action hook';
 
     $schema->storage->txn_rollback;

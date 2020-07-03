@@ -155,29 +155,22 @@ sub after_item_action {
     }
 }
 
-sub post_renewal_action {
+sub after_circ_action {
     my ( $self, $params ) = @_;
 
-    my $renewal_library_id = $params->{renewal_library_id};
-    my $charge             = $params->{charge};
-    my $item_id            = $params->{item_id};
-    my $item_type          = $params->{item_type};
-    my $shelving_location  = $params->{shelving_location};
-    my $patron_id          = $params->{patron_id};
-    my $collection_code    = $params->{collection_code};
-    my $date_due           = $params->{date_due};
+    my $action  = $params->{action};
+    my $payload = $params->{payload};
 
-    Koha::Exceptions::Exception->throw(
-        "post_renewal_action " .
-        "$renewal_library_id " .
-        "$charge " .
-        "$item_id " .
-        "$item_type " .
-        "$shelving_location " .
-        "$patron_id " .
-        "$collection_code " .
-        ref($date_due)
-    );
+    my $renewal_library_id = $payload->{renewal_library_id};
+    my $charge             = $payload->{charge};
+    my $item_id            = $payload->{item_id};
+    my $item_type          = $payload->{item_type};
+    my $shelving_location  = $payload->{shelving_location};
+    my $patron_id          = $payload->{patron_id};
+    my $collection_code    = $payload->{collection_code};
+    my $date_due           = $payload->{date_due};
+
+    Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($date_due));
 }
 
 sub api_routes {
