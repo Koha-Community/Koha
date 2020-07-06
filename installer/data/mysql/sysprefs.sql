@@ -335,7 +335,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('noItemTypeImages','0',NULL,'If ON, disables itemtype images in the staff interface','YesNo'),
 ('NoRefundOnLostReturnedItemsAge','','','Do not refund lost item fees if item is lost for more than this number of days','Integer'),
 ('NoRenewalBeforePrecision','exact_time','date|exact_time','Calculate "No renewal before" based on date only or exact time of due date','Choice'),
-('NotesBlacklist','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
+('NotesToHide','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
 ('NotHighlightedWords','and|or|not',NULL,'List of words to NOT highlight when OpacHitHighlight is enabled','free'),
 ('NoticeBcc','','','Email address to bcc outgoing notices sent by email','free'),
 ('NoticeCSS','',NULL,'Notices CSS url.','free'),
