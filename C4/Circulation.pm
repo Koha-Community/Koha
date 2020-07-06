@@ -1509,6 +1509,23 @@ sub AddIssue {
                 }
             }
 
+            _after_circ_actions(
+                {
+                    action  => 'checkout',
+                    payload => {
+                        type              => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
+                        library_id        => C4::Context->userenv->{'branch'},
+                        charge            => $charge,
+                        item_id           => $item_object->itemnumber,
+                        item_type         => $item_object->effective_itemtype,
+                        shelving_location => $item_object->location // q{},
+                        patron_id         => $borrower->{'borrowernumber'},
+                        collection_code   => $item_object->ccode // q{},
+                        date_due          => $datedue
+                    }
+                }
+            ) if C4::Context->config("enable_plugins");
+
             # Record the fact that this book was issued.
             &UpdateStats(
                 {
