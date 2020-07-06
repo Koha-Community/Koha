@@ -44,7 +44,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'after_circ_action() hook tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -86,6 +86,17 @@ subtest 'after_circ_action() hook tests' => sub {
         warning_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
                 qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
                 'AddRenewal calls the after_circ_action hook';
+    };
+
+    subtest 'AddReturn' => sub {
+        plan tests => 1;
+
+        warning_like {
+            AddReturn( $patron->borrowernumber, $item->id,
+                $patron->branchcode );
+        }
+        qr/after_circ_action called with action: checkin, ref: DateTime/,
+          'AddReturn calls the after_circ_action hook';
     };
 
     $schema->storage->txn_rollback;
