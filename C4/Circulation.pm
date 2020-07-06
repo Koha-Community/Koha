@@ -2143,6 +2143,22 @@ sub AddReturn {
         $messages->{'ResFound'} = $resrec;
     }
 
+    _after_circ_actions(
+        {
+            action  => 'checkin',
+            payload => {
+                library_id        => C4::Context->userenv->{'branch'},
+                item_id           => $item->itemnumber,
+                item_type         => $item->effective_itemtype,
+                shelving_location => $item->location // q{},
+                patron_id         => $borrowernumber,
+                collection_code   => $item->ccode // q{},
+                date_returned     => $return_date,
+                date_due          => $issue ? $issue->date_due : q{}
+            }
+        }
+    ) if C4::Context->config("enable_plugins");
+
     # Record the fact that this book was returned.
     UpdateStats({
         branch         => $branch,
