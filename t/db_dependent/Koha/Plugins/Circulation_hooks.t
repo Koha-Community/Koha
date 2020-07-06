@@ -44,7 +44,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'after_circ_action() hook tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -53,7 +53,7 @@ subtest 'after_circ_action() hook tests' => sub {
 
     my $plugin = Koha::Plugin::Test->new->enable;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     t::lib::Mocks::mock_userenv(
         {
@@ -64,16 +64,29 @@ subtest 'after_circ_action() hook tests' => sub {
 
     # Avoid testing useless warnings
     my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
-    $test_plugin->mock( 'after_item_action', undef );
+    $test_plugin->mock( 'after_item_action',   undef );
     $test_plugin->mock( 'after_biblio_action', undef );
 
     my $biblio = $builder->build_sample_biblio();
-    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
-    AddIssue( $patron->unblessed, $item->barcode );
+    my $item =
+      $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
-    warning_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
-            qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
-            'AddRenewal calls the after_circ_action hook';
+    subtest 'AddIssue' => sub {
+        plan tests => 1;
+
+        warning_like { AddIssue( $patron->unblessed, $item->barcode ); }
+        qr/after_circ_action called with action: checkout, ref: DateTime/,
+          'AddIssue calls the after_circ_action hook';
+
+    };
+
+    subtest 'AddRenewal' => sub {
+        plan tests => 1;
+
+        warning_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
+                qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
+                'AddRenewal calls the after_circ_action hook';
+    };
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
