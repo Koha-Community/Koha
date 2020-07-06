@@ -6,5 +6,5 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+    print "Upgrade to $DBversion done (Bug 20815: Add NoRefundOnLostReturnedItemsAge system preference)\n";
 }
