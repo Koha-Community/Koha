@@ -1519,11 +1519,11 @@ sub GetMarcNotes {
         590 => 1
     );
 
-    my %blacklist = map { $_ => 1 }
-        split( /,/, C4::Context->preference('NotesBlacklist'));
+    my %hiddenlist = map { $_ => 1 }
+        split( /,/, C4::Context->preference('NotesToHide'));
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
-        next if $blacklist{ $tag };
+        next if $hiddenlist{ $tag };
         next if $opac && $maybe_private{$tag} && !$field->indicator(1);
         if( $marcflavour ne 'UNIMARC' && $field->subfield('u') ) {
             # Field 5XX$u always contains URI

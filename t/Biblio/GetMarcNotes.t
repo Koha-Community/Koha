@@ -27,7 +27,7 @@ use C4::Biblio;
 
 subtest 'GetMarcNotes MARC21' => sub {
     plan tests => 11;
-    t::lib::Mocks::mock_preference( 'NotesBlacklist', '520' );
+    t::lib::Mocks::mock_preference( 'NotesToHide', '520' );
 
     my $record = MARC::Record->new;
     $record->append_fields(
@@ -55,7 +55,7 @@ subtest 'GetMarcNotes MARC21' => sub {
 
 subtest 'GetMarcNotes UNIMARC' => sub {
     plan tests => 3;
-    t::lib::Mocks::mock_preference( 'NotesBlacklist', '310' );
+    t::lib::Mocks::mock_preference( 'NotesToHide', '310' );
 
     my $record = MARC::Record->new;
     $record->append_fields(
