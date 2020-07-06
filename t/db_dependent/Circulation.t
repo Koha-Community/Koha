@@ -4131,10 +4131,10 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge = undef' => sub {
         }
     );
     ok( $a, "Found accountline for lost fee" );
-    is( $a->amountoutstanding, '42.000000', "Lost fee charged correctly" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode}, undef, dt_from_string );
     $a = Koha::Account::Lines->find( $a->id );
-    is( $a->amountoutstanding, '0.000000', "Lost fee was refunded" );
+    is( $a->amountoutstanding + 0, 0, "Lost fee was refunded" );
 };
 
 subtest 'Tests for NoRefundOnLostReturnedItemsAge > length of days item has been lost' => sub {
@@ -4206,10 +4206,10 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge > length of days item has been
         }
     );
     ok( $a, "Found accountline for lost fee" );
-    is( $a->amountoutstanding, '42.000000', "Lost fee charged correctly" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode}, undef, dt_from_string );
     $a = Koha::Account::Lines->find( $a->id );
-    is( $a->amountoutstanding, '0.000000', "Lost fee was refunded" );
+    is( $a->amountoutstanding + 0, 0, "Lost fee was refunded" );
 };
 
 subtest 'Tests for NoRefundOnLostReturnedItemsAge = length of days item has been lost' => sub {
@@ -4281,10 +4281,10 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge = length of days item has been
         }
     );
     ok( $a, "Found accountline for lost fee" );
-    is( $a->amountoutstanding, '42.000000', "Lost fee charged correctly" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode}, undef, dt_from_string );
     $a = Koha::Account::Lines->find( $a->id );
-    is( $a->amountoutstanding, '42.000000', "Lost fee was not refunded" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
 };
 
 subtest 'Tests for NoRefundOnLostReturnedItemsAge < length of days item has been lost' => sub {
@@ -4356,10 +4356,10 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge < length of days item has been
         }
     );
     ok( $a, "Found accountline for lost fee" );
-    is( $a->amountoutstanding, '42.000000', "Lost fee charged correctly" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode}, undef, dt_from_string );
     $a = Koha::Account::Lines->find( $a->id );
-    is( $a->amountoutstanding, '42.000000', "Lost fee was not refunded" );
+    is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
 };
 
 $schema->storage->txn_rollback;
