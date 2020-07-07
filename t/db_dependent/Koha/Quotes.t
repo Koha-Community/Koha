@@ -50,35 +50,35 @@ my $expected_quote = {
     id          => $quote_3->id,
     source      => 'Abraham Lincoln',
     text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
-    timestamp   => dt_from_string,
+    timestamp   => $timestamp,
 };
 
 $quote = Koha::Quote->get_daily_quote('id'=>$quote_3->id);
-cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Correctly got quote by ID");
+cmp_ok($quote->id, '==', $expected_quote->{'id'}, "Correctly got quote by ID");
 is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
 
 $quote = Koha::Quote->get_daily_quote('random'=>1);
 ok($quote, "Got a random quote.");
-cmp_ok($quote->{'id'}, '>', 0, 'Id is greater than 0');
+cmp_ok($quote->id, '>', 0, 'Id is greater than 0');
 
 $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string->add( seconds => 1 )); # To make it the last one
 Koha::Quotes->search({ id => $expected_quote->{'id'} })->update({ timestamp => $timestamp });
 $expected_quote->{'timestamp'} = $timestamp;
 
-$quote = Koha::Quote->get_daily_quote(); # this is the "default" mode of selection
+$quote = Koha::Quote->get_daily_quote()->unblessed; # this is the "default" mode of selection
 cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
 is($quote->{'source'}, $expected_quote->{'source'}, "Source is correct");
 is($quote->{'timestamp'}, $expected_quote->{'timestamp'}, "Timestamp $timestamp is correct");
 
-$dbh->do(q|DELETE FROM quotes|);
+Koha::Quotes->search()->delete();
 $quote = eval {Koha::Quote->get_daily_quote();};
 is( $@, '', 'get_daily_quote does not die if no quote exist' );
-is_deeply( $quote, {}, 'get_daily_quote return an empty hashref is no quote exist'); # Is it what we expect?
+is_deeply( $quote, undef, 'return undef if quotes do not exists'); # Is it what we expect?
 
 my $quote_6 = Koha::Quote->new({ source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  dt_from_string() })->store;
 
 $quote = Koha::Quote->get_daily_quote();
-is( $quote->{id}, $quote_6->id, ' get_daily_quote returns the only existing quote' );
+is( $quote->id, $quote_6->id, ' get_daily_quote returns the only existing quote' );
 
 $schema->storage->txn_rollback;
 
@@ -112,7 +112,7 @@ subtest "get_daily_quote_for_interface" => sub {
 
     ##Set 'QuoteOfTheDay'-syspref to include current interface 'opac'
     t::lib::Mocks::mock_preference('QuoteOfTheDay', 'opac,intranet');
-    $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
+    $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id)->unblessed;
     is_deeply($quote, $expected_quote, "Got the expected quote");
 
     $schema->storage->txn_rollback;

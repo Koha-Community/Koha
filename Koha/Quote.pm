@@ -23,6 +23,7 @@ use DBI qw(:sql_types);
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Exceptions::UnknownProgramState;
+use Koha::Quotes;
 
 use base qw(Koha::Object);
 
@@ -46,15 +47,6 @@ Currently supported options are:
 'random'    Select a random quote
 noop        When no option is passed in, this sub will return the quote timestamped for the current day
 
-The function returns an anonymous hash following this format:
-
-        {
-          'source' => 'source-of-quote',
-          'timestamp' => 'timestamp-value',
-          'text' => 'text-of-quote',
-          'id' => 'quote-id'
-        };
-
 =cut
 
 # This is definitely a candidate for some sort of caching once we finally settle caching/persistence issues...
@@ -62,47 +54,46 @@ The function returns an anonymous hash following this format:
 
 sub get_daily_quote {
     my ($self, %opts) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = '';
-    my $sth = undef;
+
     my $quote = undef;
+
     if ($opts{'id'}) {
-        $query = 'SELECT * FROM quotes WHERE id = ?';
-        $sth = $dbh->prepare($query);
-        $sth->execute($opts{'id'});
-        $quote = $sth->fetchrow_hashref();
+        $quote = Koha::Quotes->find({ id => $opts{'id'} });
     }
     elsif ($opts{'random'}) {
         # Fall through... we also return a random quote as a catch-all if all else fails
     }
     else {
-        $query = 'SELECT * FROM quotes WHERE timestamp LIKE CONCAT(CURRENT_DATE,\'%\') ORDER BY timestamp DESC LIMIT 0,1';
-        $sth = $dbh->prepare($query);
-        $sth->execute();
-        $quote = $sth->fetchrow_hashref();
+        my $dt = dt_from_string()->ymd();
+        $quote = Koha::Quotes->search(
+            {
+                timestamp => { -like => "$dt%" },
+            },
+            {
+                order_by => { -desc => 'timestamp' },
+                rows => 1,
+            }
+        )->single;
     }
     unless ($quote) {        # if there are not matches, choose a random quote
-        # get a list of all available quote ids
-        $sth = C4::Context->dbh->prepare('SELECT count(*) FROM quotes;');
-        $sth->execute;
-        my $range = ($sth->fetchrow_array)[0];
-        # chose a random id within that range if there is more than one quote
+        my $range = Koha::Quotes->search->count;
         my $offset = int(rand($range));
-        # grab it
-        $query = 'SELECT * FROM quotes ORDER BY id LIMIT 1 OFFSET ?';
-        $sth = C4::Context->dbh->prepare($query);
-        # see http://www.perlmonks.org/?node_id=837422 for why
-        # we're being verbose and using bind_param
-        $sth->bind_param(1, $offset, SQL_INTEGER);
-        $sth->execute();
-        $quote = $sth->fetchrow_hashref();
+        $quote = Koha::Quotes->search(
+            {},
+            {
+                order_by => 'id',
+                rows => 1,
+                offset => $offset,
+            }
+        )->single;
+
+        unless($quote){
+            return;
+        }
+
         # update the timestamp for that quote
-        $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
-        $sth = C4::Context->dbh->prepare($query);
-        $sth->execute(
-            DateTime::Format::MySQL->format_datetime( dt_from_string() ),
-            $quote->{'id'}
-        );
+        my $dt = DateTime::Format::MySQL->format_datetime(dt_from_string());
+        $quote->update({ timestamp => $dt });
     }
     return $quote;
 }
