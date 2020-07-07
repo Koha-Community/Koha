@@ -7,6 +7,7 @@
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 [% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 [% SET OpacCustomSearch = KohaNews.get( location => "OpacCustomSearch", lang => lang, library => branchcode, blocktitle => 0 ) %]
+[% SET OpacLoginInstructions = KohaNews.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
 
 <div id="wrap">
     <div id="header-region" class="noprint">
@@ -358,9 +359,9 @@
                 <fieldset class="brief">
                     <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
                     <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
-                    [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
+                    [% IF ( OpacLoginInstructions ) %]
                         <div id="nologininstructions-modal" class="nologininstructions">
-                            [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
+                            [% PROCESS koha_news_block news => OpacLoginInstructions %]
                         </div>
                     [% END %]
                     [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
