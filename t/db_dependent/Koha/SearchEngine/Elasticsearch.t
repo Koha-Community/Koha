@@ -132,7 +132,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 59;
+    plan tests => 61;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -635,6 +635,21 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     ok(defined $exception, "Exception has been thrown when processing mapping with unmatched closing parenthesis");
     ok($exception->isa("Koha::Exceptions::Elasticsearch::MARCFieldExprParseError"), "Exception is of correct class");
     ok($exception->message =~ /Unmatched closing parenthesis/, "Exception has the correct message");
+
+    pop @mappings;
+    my $marc_record_with_blank_field = MARC::Record->new();
+    $marc_record_with_blank_field->leader('     cam  22      a 4500');
+
+    $marc_record_with_blank_field->append_fields(
+        MARC::Field->new('100', '', '', a => ''),
+        MARC::Field->new('210', '', '', a => 'Title 1'),
+        MARC::Field->new('245', '', '', a => 'Title:', b => 'large record'),
+        MARC::Field->new('999', '', '', c => '1234567'),
+    );
+    $docs = $see->marc_records_to_documents([$marc_record_with_blank_field]);
+    is_deeply( $docs->[0]->{author},[],'No value placed into field if mapped marc field is blank');
+    is_deeply( $docs->[0]->{author__suggestion},[],'No value placed into suggestion if mapped marc field is blank');
+
 };
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () tests' => sub {
