@@ -46,14 +46,14 @@ foreach my $index ( ('biblios','authorities') ){
 
     my $searcher = Koha::SearchEngine::Elasticsearch->new({ index => $index });
     my $es = $searcher->get_elasticsearch();
-    my $count = $es->indices->stats( index => $searcher->get_elasticsearch_params->{index_name} )
+    my $count = $es->indices->stats( index => $searcher->index_name )
         ->{_all}{primaries}{docs}{count};
     print "Count in db for $index is " . scalar @db_records . ", count in Elasticsearch is $count\n";
 
     # Now we get all the ids from Elasticsearch
     # The scroll lets us iterate through, it fetches chunks of 'size' as we move through
     my $scroll = $es->scroll_helper(
-        index => $searcher->get_elasticsearch_params->{index_name},
+        index => $searcher->index_name,
         size => 5000,
         body => {
             query => {
@@ -79,7 +79,7 @@ foreach my $index ( ('biblios','authorities') ){
 
     # Fetch values for providing record links
     my $es_params = $searcher->get_elasticsearch_params;
-    my $es_base   = "$es_params->{nodes}[0]/$es_params->{index_name}";
+    my $es_base   = "$es_params->{nodes}[0]/".$searcher->index_name;
     my $opac_base = C4::Context->preference('OPACBaseURL');
 
     print "\nComparing arrays, this may take a while\n";
