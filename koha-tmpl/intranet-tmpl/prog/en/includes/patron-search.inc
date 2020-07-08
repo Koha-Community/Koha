@@ -8,8 +8,8 @@
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
     <div id="patron_search" class="residentsearch">
-    <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/members/member.pl" method="post">
+        <label class="tip" for="searchmember">Enter patron card number or partial name:</label>
     <div class="autocomplete">
         <input id="searchmember" data-toggle="tooltip" size="25" class="head-searchbox focus" name="searchmember" type="text" value="[% searchmember | html %]" autocomplete="off" />
         <input type="hidden" name="quicksearch" value="1" />
@@ -30,9 +30,9 @@
                   [% display_name = PROCESS patron_fields name=s_o %]
                   [% NEXT IF !display_name.length %]
                   [% IF searchfieldstype == s_o %]
-                      <option selected="selected" value=[% s_o | html %]>[% display_name | $raw %]</option>
+                      <option selected="selected" value="[% s_o | html %]">[% display_name | $raw %]</option>
                   [% ELSE %]
-                      <option value=[% s_o | html %]>[% display_name | $raw %]</option>
+                      <option value="[% s_o | html %]">[% display_name | $raw %]</option>
                   [% END %]
               [% END %]
             </select>
@@ -82,15 +82,15 @@
 
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     <div id="checkin_search" class="residentsearch">
-    <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+        <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
     <input class="head-searchbox" name="barcode" id="ret_barcode" size="40" accesskey="r" type="text" />
     <input value="Submit" class="submit" type="submit" />
     </form>
     </div>
         <div id="renew_search" class="residentsearch">
-        <p class="tip">Scan a barcode to renew:</p>
             <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+                <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
                 <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" type="text" />
                 <input value="Submit" class="submit" type="submit" />
             </form>
@@ -99,9 +99,13 @@
 
     [% IF ( CAN_user_catalogue ) %]
     <div id="catalog_search" class="residentsearch">
-    <p class="tip">Enter search keywords:</p>
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-             [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
+            [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
+                <label class="tip" for="idx">Enter search keywords:</label>
+                [% INCLUDE 'search_indexes.inc' %]
+            [% ELSE %]
+                <label class="tip" for="search-form">Enter search keywords:</label>
+            [% END %]
              <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
              <input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
         </form>

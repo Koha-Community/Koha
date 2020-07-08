@@ -28,8 +28,8 @@
 
     [% IF ( CAN_user_catalogue ) %]
     <div id="catalog_search" class="residentsearch">
-    <p class="tip">Enter search keywords:</p>
         <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+            <label class="tip" for="search-form">Enter search keywords:</label>
              [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
              <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="query form-text" />
                 <input type="submit" value="Submit"  class="submit" />

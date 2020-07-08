@@ -6,14 +6,14 @@
         [% INCLUDE 'patron-search-box.inc' %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             <div id="checkin_search" class="residentsearch">
-                <p class="tip">Scan a barcode to check in:</p>
+                <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
                 <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
                     <input type="text" name="barcode" class="head-searchbox" id="ret_barcode" size="40" accesskey="r" />
                     <input value="Submit" class="submit" type="submit" />
                 </form>
             </div>
             <div id="renew_search" class="residentsearch">
-                <p class="tip">Scan a barcode to renew:</p>
+                <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
                 <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
                     <input type="text" class="head-searchbox" name="barcode" id="ren_barcode" size="40" />
                     <input value="Submit" class="submit" type="submit" />
@@ -23,7 +23,7 @@
 
         [% IF CAN_user_borrowers_edit_borrowers %]
             <div id="patron_search" class="residentsearch">
-                <p class="tip">Enter patron card number or partial name:</p>
+                <label class="tip" for="searchmember">Enter patron card number or partial name:</label>
                 <form action="/cgi-bin/koha/members/member.pl" method="post">
                     <input name="searchmember" class="head-searchbox" id="searchmember" size="40" type="text" />
                     <input type="hidden" name="quicksearch" value="1" />
