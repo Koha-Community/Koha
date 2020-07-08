@@ -81,9 +81,10 @@ sub get_real_ip {
 
     my $trusted_proxies = get_trusted_proxies();
 
+    #X-Forwarded-For: <client>, <proxy1>, <proxy2>
+    my $real_ip = shift @forwarded_for;
     my @unconfirmed = ( @forwarded_for, $remote_addr );
 
-    my $real_ip;
     while (my $addr = pop @unconfirmed) {
         my $has_matched = 0;
         foreach my $netmask (@$trusted_proxies) {
