@@ -34,7 +34,9 @@ object class
 
 =cut
 
-=head3 type
+=head2 Internal Methods
+
+=head3 _type
 
 =cut
 

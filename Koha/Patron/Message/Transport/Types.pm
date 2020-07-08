@@ -35,13 +35,19 @@ object class
 
 =cut
 
-=head3 type
+=head2 Internal Methods
+
+=head3 _type
 
 =cut
 
 sub _type {
     return 'MessageTransportType';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Patron::Message::Transport::Type';

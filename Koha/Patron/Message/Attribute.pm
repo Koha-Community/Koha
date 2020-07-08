@@ -33,7 +33,7 @@ Koha::Patron::Message::Attribute - Koha Patron Message Attribute object class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
