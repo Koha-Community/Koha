@@ -29,9 +29,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+                [% IF ( browser_upload_enabled.defined ) && ( browser_upload_enabled == 0 ) %]
+                <h1>Plugin browser upload disabled</h1>
+                <p>To enable Koha plugin browser upload, the flag enable_plugin_browser_upload must be set in the Koha configuration file</p>
+                [% ELSE %]
                 <h1>Plugins disabled</h1>
-
                 <p>To enable Koha plugins, the flag enable_plugins must be set in the Koha configuration file</p>
+                [% END %]
             </div>
         </div>
 

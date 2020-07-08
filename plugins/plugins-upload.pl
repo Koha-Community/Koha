@@ -31,16 +31,21 @@ use Koha::Logger;
 use Koha::Plugins;
 
 my $plugins_enabled = C4::Context->config("enable_plugins");
+my $browser_upload_enabled = C4::Context->config('enable_plugin_browser_upload');
 
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name => ($plugins_enabled) ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
+    {   template_name => ($plugins_enabled && $browser_upload_enabled) ? "plugins/plugins-upload.tt" : "plugins/plugins-disabled.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired   => { plugins => 'manage' },
     }
 );
+
+if ($plugins_enabled){
+    $template->param( browser_upload_enabled => $browser_upload_enabled );
+}
 
 my $uploadfilename = $input->param('uploadfile');
 my $uploadfile     = $input->upload('uploadfile');
@@ -51,7 +56,7 @@ my ( $tempfile, $tfh );
 
 my %errors;
 
-if ($plugins_enabled) {
+if ($plugins_enabled && $browser_upload_enabled) {
     if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
         my $plugins_dir = C4::Context->config("pluginsdir");
         $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;

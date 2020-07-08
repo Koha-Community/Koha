@@ -46,7 +46,9 @@
 
                     [% IF ( CAN_user_plugins_manage ) %]
                         <div class="btn-toolbar" id="toolbar">
+                            [% IF ( enable_browser_upload ) %]
                             <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default"><i class="fa fa-upload"></i> Upload plugin</a>
+                            [% END %]
 
                             <div class="btn-group">
                                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa-solid fa-eye"></i> View plugins by class <span class="caret"></span></button>
