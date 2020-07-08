@@ -59,8 +59,11 @@ use Koha::ItemTypes;
 use Koha::Acquisition::Orders;
 use Koha::Virtualshelves;
 use Koha::Patrons;
+use Koha::Plugins;
 use Koha::Ratings;
 use Koha::Reviews;
+
+use Try::Tiny;
 
 my $query = CGI->new();
 
@@ -181,6 +184,31 @@ if ( $xslfile ) {
     my $variables = {
         anonymous_session => ($borrowernumber) ? 0 : 1
     };
+
+    if ( C4::Context->config("enable_plugins") ) {
+
+        my @plugins = Koha::Plugins->new->GetPlugins({
+            method => 'opac_detail_xslt_variables',
+        });
+
+        if (@plugins) {
+            foreach my $plugin ( @plugins ) {
+                try {
+                    my $plugin_variables = $plugin->opac_detail_xslt_variables(
+                        {
+                            biblio_id  => $biblionumber,
+                            lang       => $lang,
+                            patron_id  => $borrowernumber
+                        }
+                    );
+                    $variables = { %$variables, %$plugin_variables };
+                }
+                catch {
+                    warn "$_";
+                };
+            }
+        }
+    }
 
     $template->param(
         XSLTBloc => XSLTParse4Display(

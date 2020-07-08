@@ -29,6 +29,7 @@ use Modern::Perl;
 ## load Koha modules
 use C4::Context;
 use List::MoreUtils q/any/;
+use Try::Tiny;
 
 use Data::Dumper; # TODO remove
 
@@ -60,6 +61,7 @@ use Koha::Ratings;
 use Koha::Virtualshelves;
 use Koha::Library::Groups;
 use Koha::Patrons;
+use Koha::Plugins;
 use Koha::SearchFields;
 
 use POSIX qw(ceil floor strftime);
@@ -647,6 +649,29 @@ if (C4::Context->preference('OpacHiddenItemsExceptions')){
 }
 
 my $variables = { anonymous_session => ($borrowernumber) ? 0 : 1 };
+if ( C4::Context->config("enable_plugins") ) {
+
+    my @plugins = Koha::Plugins->new->GetPlugins({
+        method => 'opac_results_xslt_variables',
+    });
+
+    if (@plugins) {
+        foreach my $plugin ( @plugins ) {
+            try {
+                my $plugin_variables = $plugin->opac_results_xslt_variables(
+                    {
+                        lang       => $lang,
+                        patron_id  => $borrowernumber
+                    }
+                );
+                $variables = { %$variables, %$plugin_variables };
+            }
+            catch {
+                warn "$_";
+            };
+        }
+    }
+}
 
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
