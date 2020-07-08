@@ -6,8 +6,8 @@
 
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
 <div id="renew_search" class="residentsearch">
-    <p class="tip">Scan a barcode to renew:</p>
     <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+        <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
         <input class="head-searchbox" type="text" name="barcode" id="ren_barcode" size="40" />
         <input value="Submit" class="submit" type="submit" />
     </form>
@@ -16,9 +16,13 @@
 
 [% IF ( CAN_user_catalogue ) %]
 <div id="catalog_search" class="residentsearch">
-    <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-        [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
+        [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
+            <label class="tip" for="idx">Enter search keywords:</label>
+            [% INCLUDE 'search_indexes.inc' %]
+        [% ELSE %]
+            <label class="tip" for="search-form">Enter search keywords:</label>
+        [% END %]
         <input class="head-searchbox" type="text" name="q" id="search-form" size="40" />
         <input type="submit" class="submit" value="Submit"/>
     </form>

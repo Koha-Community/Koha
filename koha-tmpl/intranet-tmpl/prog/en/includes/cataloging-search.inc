@@ -3,9 +3,9 @@
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Cataloging Resident Search Box -->
     <div id="header_search">
         <div id="addbooks_search" class="residentsearch">
-        <p class="tip">Search the catalog and the reservoir:</p>
             <form name="search" action="addbooks.pl">
-                <input class="head-searchbox" type="text" name="q" size="40" />
+                <label class="tip" for="cat_search">Search the catalog and the reservoir:</label>
+                <input class="head-searchbox" type="text" name="q" id="cat_search" size="40" />
                 <input type="submit" class="submit" value="Submit" />
             </form>
         </div>
@@ -14,15 +14,15 @@
 
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
         <div id="checkin_search" class="residentsearch">
-            <p class="tip">Scan a barcode to check in:</p>
             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
+                <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
                 <input class="head-searchbox" type="text" name="barcode" id="ret_barcode" size="40" />
                 <input value="Submit" class="submit" type="submit" />
             </form>
         </div>
         <div id="renew_search" class="residentsearch">
-        <p class="tip">Scan a barcode to renew:</p>
             <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
+                <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
                 <input class="head-searchbox" type="text" name="barcode" id="ren_barcode" size="40" />
                 <input value="Submit" class="submit" type="submit" />
             </form>
@@ -31,9 +31,13 @@
 
 
         <div id="catalog_search" class="residentsearch">
-            <p class="tip">Enter search keywords:</p>
             <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-                [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
+                [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
+                    <label class="tip" for="idx">Enter search keywords:</label>
+                    [% INCLUDE 'search_indexes.inc' %]
+                [% ELSE %]
+                    <label class="tip" for="search-form">Enter search keywords:</label>
+                [% END %]
                 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
                 <input type="submit" class="submit" value="Submit" />
             </form>

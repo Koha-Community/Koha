@@ -88,7 +88,7 @@
                     <textarea id="summary" name="summary" cols="55" rows="7">[% authority_type.summary | html %]</textarea>
                 </li>
                 <li>
-                    <p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>
+                    <div class="hint">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</div>
                     <label for="auth_tag_to_report">Authority field to copy: </label>
                     <input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="[% authority_type.auth_tag_to_report | html %]" />
                     <input type="hidden" name="op" value="add_validate" />

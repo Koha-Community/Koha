@@ -1,5 +1,5 @@
 [% USE Koha %]
-<select class="advsearch" name="idx">
+<select class="advsearch" name="idx" id="idx">
     [% IF ms_kw %]
         <option selected="selected" value="kw">Keyword</option>
     [% ELSE %]

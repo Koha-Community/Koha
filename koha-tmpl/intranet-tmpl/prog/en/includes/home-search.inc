@@ -6,14 +6,14 @@
     [% INCLUDE 'patron-search-box.inc' %]
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
 <div id="checkin_search" class="residentsearch">
-    <p class="tip">Scan a barcode to check in:</p>
+    <label class="tip" for="ret_barcode">Scan a barcode to check in:</label>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
         <input name="barcode" class="head-searchbox" id="ret_barcode" size="40" accesskey="r" type="text" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>
 <div id="renew_search" class="residentsearch">
-    <p class="tip">Scan a barcode to renew:</p>
+    <label class="tip" for="ren_barcode">Scan a barcode to renew:</label>
         <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
             <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" type="text" />
             <input value="Submit" class="submit" type="submit" />
@@ -23,7 +23,7 @@
 
 [% IF CAN_user_borrowers_edit_borrowers %]
 <div id="patron_search" class="residentsearch">
-    <p class="tip">Enter patron card number or partial name:</p>
+    <label class="tip" for="searchmember">Enter patron card number or partial name:</label>
     <form action="/cgi-bin/koha/members/member.pl" method="post">
         <input name="searchmember" class="head-searchbox" id="searchmember" size="40" type="text" autocomplete="off" />
         <input type="hidden" name="quicksearch" value="1" />
@@ -32,7 +32,7 @@
 </div>[% END %]
 [% IF ( CAN_user_catalogue ) %]
 <div id="catalog_search" class="residentsearch">
-    <p class="tip">Enter search keywords:</p>
+    <label class="tip" for="search-form">Enter search keywords:</label>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
         <input type="text" name="q" id="search-form" class="head-searchbox" size="40" accesskey="q" />
