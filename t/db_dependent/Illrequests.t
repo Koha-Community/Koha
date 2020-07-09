@@ -715,7 +715,7 @@ subtest 'Backend core methods' => sub {
 
 subtest 'Helpers' => sub {
 
-    plan tests => 21;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -817,62 +817,6 @@ subtest 'Helpers' => sub {
         "Correct error when missing type"
     );
 
-    #get_staff_to_address
-    # Mock a KohaAdminEmailAddress syspref
-    t::lib::Mocks::mock_preference(
-        'KohaAdminEmailAddress',
-        'kohaadmin@nowhere.com'
-    );
-    # No branch addresses defined and no ILLDefaultStaffEmail, so should
-    # fall back to Koha admin address
-    my $email_kohaadmin = $illrq_obj->get_staff_to_address;
-    ok(
-        $email_kohaadmin eq 'kohaadmin@nowhere.com',
-        'get_staff_to_address falls back to Koha admin in the absence of other alternatives'
-    );
-    # General branch address defined, should fall back to that
-    $builder->delete({ source => 'Branch', records => $illbrn });
-    $illbrn = $builder->build({
-        source => 'Branch',
-        value => {
-            branchcode => 'HDE',
-            branchemail => 'branch@nowhere.com',
-            branchillemail => "",
-            branchreplyto => ""
-        }
-    });
-    my $email_gen_branch = $illrq_obj->get_staff_to_address;
-    ok(
-        $email_gen_branch eq 'branch@nowhere.com',
-        'get_staff_to_address falls back to general branch address when defined'
-    );
-    # ILL staff syspref address defined, should fall back to that
-    t::lib::Mocks::mock_preference(
-        'ILLDefaultStaffEmail',
-        'illstaff@nowhere.com'
-    );
-    my $email_syspref = $illrq_obj->get_staff_to_address;
-    ok(
-        $email_syspref eq 'illstaff@nowhere.com',
-        'get_staff_to_address falls back to ILLDefaultStaffEmail when defined'
-    );
-    # Branch ILL address defined, should use that
-    $builder->delete({ source => 'Branch', records => $illbrn });
-    $illbrn = $builder->build({
-        source => 'Branch',
-        value => {
-            branchcode => 'HDE',
-            branchemail => 'branch@nowhere.com',
-            branchillemail => 'branchill@nowhere.com',
-            branchreplyto => ""
-        }
-    });
-    my $email_branch = $illrq_obj->get_staff_to_address;
-    ok(
-        $email_branch eq 'branchill@nowhere.com',
-        'get_staff_to_address uses branch ILL address when defined'
-    );
-
     #send_staff_notice
     # Specify that no staff notices should be send
     t::lib::Mocks::mock_preference('ILLSendStaffNotices', '');
@@ -883,21 +827,25 @@ subtest 'Helpers' => sub {
         { error => 'notice_not_enabled' },
         "Does not send notices that are not enabled"
     );
+    my $queue = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_REQUEST_CANCEL'
+        });
+    is($queue->count, 0, "Notice is not queued");
+
     # Specify that the cancel notice can be sent
     t::lib::Mocks::mock_preference('ILLSendStaffNotices', 'ILL_REQUEST_CANCEL');
     my $return_staff_cancel = $illrq_obj->send_staff_notice(
         'ILL_REQUEST_CANCEL'
     );
-    my $cancel = $schema->resultset('MessageQueue')->search({
-            letter_code => 'ILL_REQUEST_CANCEL',
-            message_transport_type => 'email',
-            to_address => 'branchill@nowhere.com'
-        })->next()->letter_code;
     is_deeply(
         $return_staff_cancel,
         { success => 'notice_queued' },
         "Correct return when staff notice created"
     );
+    $queue = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_REQUEST_CANCEL'
+        });
+    is($queue->count, 1, "Notice queued as expected");
 
     my $return_staff_fail = $illrq_obj->send_staff_notice();
     is_deeply(
@@ -905,6 +853,10 @@ subtest 'Helpers' => sub {
         { error => 'notice_no_type' },
         "Correct error when missing type"
     );
+    $queue = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_REQUEST_CANCEL'
+        });
+    is($queue->count, 1, "Notice is not queued");
 
     #get_notice
     my $not = $illrq_obj->get_notice({

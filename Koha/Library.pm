@@ -134,6 +134,24 @@ sub inbound_email_address {
       || undef;
 }
 
+=head3 inbound_ill_address
+
+  my $to_email = Koha::Library->inbound_ill_address;
+
+Returns an effective email address which should be accessible to librarians at the branch
+for inter library loans communication.
+
+=cut
+
+sub inbound_ill_address {
+    my ($self) = @_;
+
+    return
+         $self->branchillemail
+      || C4::Context->preference('ILLDefaultStaffEmail')
+      || $self->inbound_email_address;
+}
+
 =head3 library_groups
 
 Return the Library groups of this library

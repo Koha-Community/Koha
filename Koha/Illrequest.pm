@@ -29,7 +29,6 @@ use C4::Letters;
 use C4::Members;
 use Koha::Database;
 use Koha::DateUtils qw/ dt_from_string /;
-use Koha::Email;
 use Koha::Exceptions::Ill;
 use Koha::Illcomments;
 use Koha::Illrequestattributes;
@@ -1329,8 +1328,8 @@ sub generic_confirm {
             "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
           if ( !$to );
         # Create the from, replyto and sender headers
-        my $from = $branch->branchillemail || $branch->branchemail;
-        my $replyto = $branch->branchreplyto || $from;
+        my $from = $branch->branchemail;
+        my $replyto = $branch->inbound_ill_address;
         Koha::Exceptions::Ill::NoLibraryEmail->throw(
             "Your library has no usable email address. Please set it.")
           if ( !$from );
@@ -1350,7 +1349,8 @@ sub generic_confirm {
             borrowernumber         => $self->borrowernumber,
             message_transport_type => 'email',
             to_address             => $to,
-            from_address           => $from
+            from_address           => $from,
+            reply_address          => $replyto
         };
 
         if ($letter) {
@@ -1386,45 +1386,6 @@ sub generic_confirm {
     }
 }
 
-=head3 get_staff_to_address
-
-    my $email = $request->get_staff_to_address();
-
-Get the email address to which staff notices should be sent
-
-=cut
-
-sub get_staff_to_address {
-    my ( $self ) = @_;
-
-    # The various places we can get an ILL staff email address from
-    # (In order of preference)
-    #
-    # Dedicated branch address
-    my $library = Koha::Libraries->find( $self->branchcode );
-    my $branch_ill_to = $library->branchillemail;
-    # General purpose ILL address from syspref
-    my $syspref = C4::Context->preference("ILLDefaultStaffEmail");
-    # Branch general email address
-    my $branch_to = $library->branchemail;
-    # Last resort
-    my $koha_admin = C4::Context->preference('KohaAdminEmailAddress');
-
-    my $to;
-    if ($branch_ill_to) {
-        $to = $branch_ill_to;
-    } elsif ($syspref) {
-        $to = $syspref;
-    } elsif ($branch_to) {
-        $to = $branch_to;
-    } elsif ($koha_admin) {
-        $to = $koha_admin;
-    }
-
-    # $to will not be defined if we didn't find a usable address
-    return $to;
-}
-
 =head3 send_patron_notice
 
     my $result = $request->send_patron_notice($notice_code);
@@ -1456,6 +1417,12 @@ sub send_patron_notice {
     });
     my @transports = keys %{ $borrower_preferences->{transports} };
 
+    # Notice should come from the library where the request was placed,
+    # not the patrons home library
+    my $branch = Koha::Libraries->find($self->branchcode);
+    my $from_address = $branch->branchemail;
+    my $reply_address = $branch->inbound_ill_address;
+
     # Send the notice to the patron via the chosen transport methods
     # and record the results
     my @success = ();
@@ -1470,6 +1437,8 @@ sub send_patron_notice {
                 letter                 => $letter,
                 borrowernumber         => $self->borrowernumber,
                 message_transport_type => $transport,
+                from_address           => $from_address,
+                reply_address          => $reply_address
             });
             if ($result) {
                 push @success, $transport;
@@ -1515,7 +1484,7 @@ sub send_staff_notice {
 
     # Get the staff notices that have been assigned for sending in
     # the syspref
-    my $staff_to_send = C4::Context->preference('ILLSendStaffNotices');
+    my $staff_to_send = C4::Context->preference('ILLSendStaffNotices') // q{};
 
     # If it hasn't been enabled in the syspref, we don't want to send it
     if ($staff_to_send !~ /\b$notice_code\b/) {
@@ -1530,7 +1499,8 @@ sub send_staff_notice {
     });
 
     # Try and get an address to which to send staff notices
-    my $to_address = scalar $self->get_staff_to_address;
+    my $branch = Koha::Libraries->find($self->branchcode);
+    my $to_address = $branch->inbound_ill_address;
 
     my $params = {
         letter                 => $letter,
@@ -1540,7 +1510,6 @@ sub send_staff_notice {
 
     if ($to_address) {
         $params->{to_address} = $to_address;
-        $params->{from_address} = $to_address;
     } else {
         return {
             error => 'notice_no_create'
