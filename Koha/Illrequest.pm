@@ -1556,6 +1556,7 @@ sub get_notice {
     my $letter = C4::Letters::GetPreparedLetter(
         module                 => 'ill',
         letter_code            => $params->{notice_code},
+        branchcode             => $self->branchcode,
         message_transport_type => $params->{transport},
         lang                   => $self->patron->lang,
         tables                 => {
@@ -1565,8 +1566,8 @@ sub get_notice {
             branches    => $self->branchcode,
         },
         substitute  => {
-            ill_bib_title      => $title ? $title->value : 'N/A',
-            ill_bib_author     => $author ? $author->value : 'N/A',
+            ill_bib_title      => $title ? $title->value : qw{},
+            ill_bib_author     => $author ? $author->value : qw{},
             ill_full_metadata  => $metastring
         }
     );
