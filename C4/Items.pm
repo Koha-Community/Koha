@@ -293,6 +293,19 @@ sub ModItemFromMarc {
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item_object = Koha::Items->find($itemnumber);
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+
+    # Retrieving the values for the fields that are not linked
+    my @mapped_fields = Koha::MarcSubfieldStructures->search(
+        {
+            frameworkcode => $frameworkcode,
+            kohafield     => { -like => "items.%" }
+        }
+    )->get_column('kohafield');
+    for my $c ( $item_object->_result->result_source->columns ) {
+        next if grep { "items.$c" eq $_ } @mapped_fields;
+        $item->{$c} = $item_object->$c;
+    }
+
     $item->{cn_source} = delete $item->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item->{cn_sort}   = delete $item->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
     $item->{itemnumber} = $itemnumber;

@@ -601,12 +601,12 @@ subtest 'SearchItems test' => sub {
 
     # Make sure the link is used
     my $item3 = Koha::Items->find($item3_itemnumber);
-    ok($item3->itemnotes eq 'foobar', 'itemnotes eq "foobar"');
+    is($item3->itemnotes, 'foobar', 'itemnotes eq "foobar"');
 
     # Do the same search again.
     # This time it will search in items.itemnotes
     ($items, $total_results) = SearchItems($filter);
-    ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
+    is(scalar(@$items), 1, 'found 1 item with itemnotes = "foobar"');
 
     my ($cpl_items_after) = SearchItems( { field => 'homebranch', query => $library1->{branchcode} } );
     is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItems should return something' );
@@ -984,7 +984,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
 };
 
 subtest 'ModItemFromMarc' => sub {
-    plan tests => 2;
+    plan tests => 4;
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
@@ -1009,6 +1009,8 @@ subtest 'ModItemFromMarc' => sub {
     my $item = Koha::Items->find($itemnumber);
     is( $item->itemlost, 1, 'itemlost picked from the item marc');
 
+    $item->paidfor("this is something")->store;
+
     my $updated_item_record = new MARC::Record;
     $updated_item_record->append_fields(
         MARC::Field->new(
@@ -1019,6 +1021,8 @@ subtest 'ModItemFromMarc' => sub {
 
     my $updated_item = ModItemFromMarc($updated_item_record, $biblio->biblionumber, $itemnumber);
     is( $updated_item->{itemlost}, 0, 'itemlost should have been reset to the default value in DB' );
+    is( $updated_item->{paidfor}, "this is something", "Non mapped field has not been reset" );
+    is( Koha::Items->find($itemnumber)->paidfor, "this is something" );
 
     $schema->storage->txn_rollback;
 };
