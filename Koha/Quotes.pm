@@ -41,6 +41,10 @@ sub _type {
     return 'Quote';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
     return 'Koha::Quote';
 }

@@ -113,7 +113,7 @@ sub get_daily_quote {
 
 Is a wrapper for get_daily_quote(), with an extra check for using the correct
 interface defined in the syspref 'QuoteOfTheDay'.
-If the current interface is not allowed to display quotes, then returns undef.
+If the current interface is not allowed to display quotes, then returns nothing.
 
 =cut
 
@@ -126,7 +126,7 @@ sub get_daily_quote_for_interface {
         Koha::Exceptions::UnknownProgramState->throw(error => $cc[3]."()> C4::Context->interface() is not set! Don't know are you in OPAC or staff client?");
     }
     unless ($qotdPref =~ /$interface/) {
-        return undef;
+        return;
     }
 
     return $self->get_daily_quote(%opts);
