@@ -659,6 +659,238 @@ tables:
             - ""
             - "<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received.</order>"
 
+        - module: ill
+          code: ILL_PICKUP_READY
+          branchcode: ""
+          name: "ILL request ready for pickup"
+          is_html: 0
+          title: "Interlibrary loan request ready for pickup"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for:"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "is ready for pick up from [% branches.branchname %]."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
+        - module: ill
+          code: ILL_REQUEST_UNAVAIL
+          branchcode: ""
+          name: "ILL request unavailable"
+          is_html: 0
+          title: "Interlibrary loan request unavailable"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "is unfortunately unavailable."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
+        - module: ill
+          code: ILL_REQUEST_CANCEL
+          branchcode: ""
+          name: "ILL request cancelled"
+          is_html: 0
+          title: "Interlibrary loan request cancelled"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
+            - ""
+            - "[% ill_full_metadata %]"
+
+        - module: ill
+          code: ILL_REQUEST_MODIFIED
+          branchcode: ""
+          name: "ILL request modified"
+          is_html: 0
+          title: "Interlibrary loan request modified"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has modified this ILL request:"
+            - ""
+            - "[% ill_full_metadata %]"
+
+        - module: ill
+          code: ILL_PARTNER_REQ
+          branchcode: ""
+          name: "ILL request to partners"
+          is_html: 0
+          title: "Interlibrary loan request to partners"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear Sir/Madam,"
+            - ""
+            - "We would like to request an interlibrary loan for a title matching the following description:"
+            - ""
+            - "[% ill_full_metadata %]"
+            - ""
+            - "Please let us know if you are able to supply this to us."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
+        - module: ill
+          code: ILL_PICKUP_READY
+          branchcode: ""
+          name: "ILL request ready for pickup"
+          is_html: 0
+          title: "Interlibrary loan request ready for pickup"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for:"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "is ready for pick up from [% branches.branchname %]."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
+        - module: ill
+          code: ILL_REQUEST_UNAVAIL
+          branchcode: ""
+          name: "ILL request unavailable"
+          is_html: 0
+          title: "Interlibrary loan request unavailable"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - ""
+            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for"
+            - ""
+            - "- [% ill_bib_title %] - [% ill_bib_author %]"
+            - ""
+            - "is unfortunately unavailable."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
+        - module: ill
+          code: ILL_REQUEST_CANCEL
+          branchcode: ""
+          name: "ILL request cancelled"
+          is_html: 0
+          title: "Interlibrary loan request cancelled"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
+            - ""
+            - "[% ill_full_metadata %]"
+
+        - module: ill
+          code: ILL_REQUEST_MODIFIED
+          branchcode: ""
+          name: "ILL request modified"
+          is_html: 0
+          title: "Interlibrary loan request modified"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has modified this ILL request:"
+            - ""
+            - "[% ill_full_metadata %]"
+
+        - module: ill
+          code: ILL_PARTNER_REQ
+          branchcode: ""
+          name: "ILL request to partners"
+          is_html: 0
+          title: "Interlibrary loan request to partners"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Dear Sir/Madam,"
+            - ""
+            - "We would like to request an interlibrary loan for a title matching the following description:"
+            - ""
+            - "[% ill_full_metadata %]"
+            - ""
+            - "Please let us know if you are able to supply this to us."
+            - ""
+            - "Kind Regards"
+            - ""
+            - "[% branches.branchname %]"
+            - "[% branches.branchaddress1 %]"
+            - "[% branches.branchaddress2 %]"
+            - "[% branches.branchaddress3 %]"
+            - "[% branches.branchcity %]"
+            - "[% branches.branchstate %]"
+            - "[% branches.branchzip %]"
+            - "[% branches.branchphone %]"
+            - "[% branches.branchillemail %]"
+            - "[% branches.branchemail %]"
+
         - module: members
           code: ACCTDETAILS
           branchcode: ""
