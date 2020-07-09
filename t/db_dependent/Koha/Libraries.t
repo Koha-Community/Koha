@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Biblio;
 use C4::Context;
@@ -156,6 +156,57 @@ subtest '->inbound_email_address' => sub {
     t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', '' );
     is( $library_1->inbound_email_address, undef,
        'Return undef when  email address when branchreplyto, branchemail, ReplytoDefault and KohaAdminEmailAddress are undefined');
+    $schema->storage->txn_rollback;
+};
+
+subtest '->inbound_ill_address' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => {
+                branchemail   => 'from@mylibrary.com',
+                branchreplyto => 'reply@mylibrary.com',
+                branchillemail => 'ill@mylibrary.com'
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'admin@mylibrary.com' );
+    t::lib::Mocks::mock_preference( 'ReplytoDefault', 'reply@mylibrary.com' );
+    t::lib::Mocks::mock_preference( 'ILLDefaultStaffEmail', 'illdefault@mylibrary.com' );
+
+    is( $library_1->inbound_ill_address, $library_1->branchillemail,
+       'If defined, use library branchillemail address');
+
+    $library_1->branchillemail(undef)->store();
+    is( $library_1->inbound_ill_address, 'illdefault@mylibrary.com',
+       'Fallback to ILLDefaultStaffEmail preference when branchillemail is undefined');
+
+    t::lib::Mocks::mock_preference( 'ILLDefaultStaffEmail', undef );
+    is( $library_1->inbound_ill_address, $library_1->branchreplyto,
+       'Fallback to library replyto address when ILLDefaultStaffEmail is undefined');
+
+    $library_1->branchreplyto(undef)->store();
+    is( $library_1->inbound_ill_address, $library_1->branchemail,
+       'Fallback to branches email address when branchreplyto is undefined');
+
+    $library_1->branchemail(undef)->store();
+    is( $library_1->inbound_ill_address, 'reply@mylibrary.com',
+       'Fallback to ReplytoDefault email address when branchreplyto and branchemail are undefined');
+
+    t::lib::Mocks::mock_preference( 'ReplytoDefault', '' );
+    is( $library_1->inbound_ill_address, 'admin@mylibrary.com',
+       'Fallback to KohaAdminEmailAddress email address when branchreplyto, branchemail and ReplytoDefault are undefined');
+
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', '' );
+    is( $library_1->inbound_ill_address, undef,
+       'Return undef when  email address when branchreplyto, branchemail, ReplytoDefault and KohaAdminEmailAddress are undefined');
+
     $schema->storage->txn_rollback;
 };
 
