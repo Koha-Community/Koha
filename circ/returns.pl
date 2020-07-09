@@ -416,19 +416,22 @@ if ( $messages->{'ResFound'}) {
         my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
         ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id} );
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
+
         $template->param(
             hold_auto_filled => 1,
             print_slip       => C4::Context->preference('HoldsAutoFillPrintSlip'),
             reserve_id       => $nextreservinfo->{reserve_id},
+            itemnumber       => $itemnumber,
         );
 
         if ( $messages->{'transfert'} ) {
             $template->param(
-                itemtitle      => $biblio->title,
-                itemnumber     => $item->itemnumber,
+                itemtitle        => $biblio->title,
+                itemnumber       => $item->itemnumber,
                 itembiblionumber => $biblio->biblionumber,
-                iteminfo       => $biblio->author,
-                diffbranch     => 1,
+                iteminfo         => $biblio->author,
+                diffbranch       => 1,
+                itemnumber       => $itemnumber,
             );
         }
     }
@@ -443,6 +446,7 @@ if ( $messages->{'ResFound'}) {
                 transfertodo => $branchCheck ? undef : 1,
                 reserve_id   => $reserve->{reserve_id},
                 reserved     => 1,
+                itemnumber   => $itemnumber,
             );
         }
 
