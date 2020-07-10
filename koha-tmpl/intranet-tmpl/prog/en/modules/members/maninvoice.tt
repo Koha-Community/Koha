@@ -42,7 +42,7 @@
                     </div>
                 [% ELSIF error %]
                     <div id="error_message" class="dialog alert">
-                        An error occured, please try again: [% error %]
+                        An error occurred, please try again: [% error | html %]
                     </div>
                 [% END %]
                 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice">
@@ -63,10 +63,10 @@
                                     [% END %]
                                 </select>
                             </li>
-                            <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode %]" /></li>
-                            <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc %]" /></li>
-                            <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note %]" /></li>
-                            <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" step="any" min="0" value="[% amount %]" /> Example: 5.00</li>
+                            <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode | html %]" /></li>
+                            <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc | html %]" /></li>
+                            <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note | html %]" /></li>
+                            <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" step="any" min="0" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
                         </ol>
                     </fieldset>
                     <fieldset class="action">
