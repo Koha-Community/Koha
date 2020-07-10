@@ -24,7 +24,7 @@
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
                             [% SET table_id = pagename _ '#' _ tablename %]
-                            <div class="datatable_config" id="[% table_id | html %]" style="border:1px solid #7EA6B2; padding: 1em;">
+                            <div class="datatable_config" id="[% table_id | html %]">
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
                                     <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
@@ -162,6 +162,10 @@
 <style>
     caption {
         font-size: 115%;
+    }
+
+    .datatable_config {
+        margin-left: 1em;
     }
     .page_name {
         border-top: 1px solid #b9d8d9;
