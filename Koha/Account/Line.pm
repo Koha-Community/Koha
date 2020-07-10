@@ -293,46 +293,90 @@ sub void {
 
 Cancel a charge. It will mark the debit as 'cancelled' by updating its
 status to 'CANCELLED'.
+
 Charges that have been fully or partially paid cannot be cancelled.
 
-Return self in case of success, undef otherwise
+Returns the cancellation accountline.
 
 =cut
 
 sub cancel {
-    my ($self) = @_;
+    my ( $self, $params ) = @_;
 
-    # Make sure it is a charge we are cancelling
-    return unless $self->is_debit;
-
-    # Make sure it is not already cancelled
-    return if $self->status && $self->status eq 'CANCELLED';
-
-    # Make sure it has not be paid yet
-    return if $self->amount != $self->amountoutstanding;
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction('FINES', 'CANCEL', $self->borrowernumber, Dumper({
-            action => 'cancel_charge',
-            borrowernumber => $self->borrowernumber,
-            amount => $self->amount,
-            amountoutstanding => $self->amountoutstanding,
-            description => $self->description,
-            debit_type_code => $self->debit_type_code,
-            note => $self->note,
-            itemnumber => $self->itemnumber,
-            manager_id => $self->manager_id,
-        }));
+    # Make sure it is a charge we are reducing
+    unless ( $self->is_debit ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $self->id . 'is not a debit' );
+    }
+    if ( $self->debit_type_code eq 'PAYOUT' ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $self->id . 'is a payout' );
     }
 
-    $self->set({
-        status => 'CANCELLED',
-        amountoutstanding => 0,
-        amount => 0,
-    });
-    $self->store();
+    # Make sure it is not already cancelled
+    if ( $self->status && $self->status eq 'CANCELLED' ) {
+        Koha::Exceptions::Account->throw(
+            error => 'Account line ' . $self->id . 'is already cancelled' );
+    }
 
-    return $self;
+    # Make sure it has not be paid yet
+    if ( $self->amount != $self->amountoutstanding ) {
+        Koha::Exceptions::Account->throw(
+            error => 'Account line ' . $self->id . 'is already offset' );
+    }
+
+    # Check for mandatory parameters
+    my @mandatory = ( 'staff_id', 'branch' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    my $cancellation;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+
+            # A 'cancellation' is a 'credit'
+            $cancellation = Koha::Account::Line->new(
+                {
+                    date              => \'NOW()',
+                    amount            => 0 - $self->amount,
+                    credit_type_code  => 'CANCELLATION',
+                    status            => 'ADDED',
+                    amountoutstanding => 0 - $self->amount,
+                    manager_id        => $params->{staff_id},
+                    borrowernumber    => $self->borrowernumber,
+                    interface         => 'intranet',
+                    branchcode        => $params->{branch},
+                }
+            )->store();
+
+            my $cancellation_offset = Koha::Account::Offset->new(
+                {
+                    credit_id => $cancellation->accountlines_id,
+                    type      => 'CANCELLATION',
+                    amount    => $self->amount
+                }
+            )->store();
+
+            # Link cancellation to charge
+            $cancellation->apply(
+                {
+                    debits      => [$self],
+                    offset_type => 'CANCELLATION'
+                }
+            );
+            $cancellation->status('APPLIED')->store();
+
+            # Update status of original debit
+            $self->status('CANCELLED')->store;
+        }
+    );
+
+    $cancellation->discard_changes;
+    return $cancellation;
 }
 
 =head3 reduce
@@ -455,7 +499,8 @@ sub reduce {
             }
             else {
 
-        # Zero amount offset used to link original 'debit' to reduction 'credit'
+                # Zero amount offset used to link original 'debit' to
+                # reduction 'credit'
                 my $link_reduction_offset = Koha::Account::Offset->new(
                     {
                         credit_id => $reduction->accountlines_id,

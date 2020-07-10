@@ -22,4 +22,5 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Credit Applied'),
 ('PAYOUT'),
 ('DISCOUNT'),
-('REFUND');
+('REFUND'),
+('CANCELLATION');

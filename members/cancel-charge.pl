@@ -42,7 +42,12 @@ unless ($csrf_token_is_valid) {
 my $borrowernumber = $cgi->param('borrowernumber');
 my $accountlines_id = $cgi->param('accountlines_id');
 
-my $line = Koha::Account::Lines->find($accountlines_id);
-$line->cancel();
+my $charge = Koha::Account::Lines->find($accountlines_id);
+$charge->cancel(
+    {
+        branch   => C4::Context->userenv->{'branch'},
+        staff_id => $user
+    }
+);
 
 print $cgi->redirect('/cgi-bin/koha/members/boraccount.pl?borrowernumber=' . $borrowernumber);

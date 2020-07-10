@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 use Test::MockModule;
 
@@ -912,7 +912,7 @@ subtest "payout() tests" => sub {
 
 subtest "reduce() tests" => sub {
 
-    plan tests => 27;
+    plan tests => 29;
 
     $schema->storage->txn_begin;
 
@@ -972,7 +972,7 @@ subtest "reduce() tests" => sub {
 
     my $reduce_params = {
         interface      => 'commandline',
-        reduction_type => 'REFUND',
+        reduction_type => 'DISCOUNT',
         amount         => 5,
         staff_id       => $staff->borrowernumber,
         branch         => $branchcode
@@ -1020,7 +1020,7 @@ subtest "reduce() tests" => sub {
       '->reduce() cannot reduce more than original amount';
 
     # Partial Reduction
-    # (Refund 5 on debt of 20)
+    # (Discount 5 on debt of 20)
     my $reduction = $debit1->reduce($reduce_params);
 
     is( ref($reduction), 'Koha::Account::Line',
@@ -1030,6 +1030,7 @@ subtest "reduce() tests" => sub {
         0, "Reduce amountoutstanding is 0" );
     is( $debit1->amountoutstanding() * 1,
         15, "Debit amountoutstanding reduced by 5 to 15" );
+    is( $debit1->status(), 'DISCOUNTED', "Debit status updated to DISCOUNTED");
     is( $account->balance() * 1, -5,        "Account balance is -5" );
     is( $reduction->status(),    'APPLIED', "Reduction status is 'APPLIED'" );
 
@@ -1039,17 +1040,19 @@ subtest "reduce() tests" => sub {
     my $THE_offset = $offsets->next;
     is( $THE_offset->amount * 1,
         -5, 'Correct amount was applied against debit' );
-    is( $THE_offset->type, 'REFUND', "Offset type set to 'REFUND'" );
+    is( $THE_offset->type, 'DISCOUNT', "Offset type set to 'DISCOUNT'" );
 
     # Zero offset created when zero outstanding
     # (Refund another 5 on paid debt of 20)
     $credit1->apply( { debits => [$debit1] } );
     is( $debit1->amountoutstanding + 0,
         0, 'Debit1 amountoutstanding reduced to 0' );
+    $reduce_params->{reduction_type} = 'REFUND';
     $reduction = $debit1->reduce($reduce_params);
     is( $reduction->amount() * 1, -5, "Reduce amount is -5" );
     is( $reduction->amountoutstanding() * 1,
         -5, "Reduce amountoutstanding is -5" );
+    is( $debit1->status(), 'REFUNDED', "Debit status updated to REFUNDED");
 
     $offsets = Koha::Account::Offsets->search(
         { credit_id => $reduction->id, debit_id => $debit1->id } );
@@ -1088,28 +1091,47 @@ subtest "reduce() tests" => sub {
 };
 
 subtest "cancel() tests" => sub {
-    plan tests => 9;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
     # Create a borrower
-    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
-    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+    my $categorycode =
+      $builder->build( { source => 'Category' } )->{categorycode};
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 
-    my $borrower = Koha::Patron->new( {
-        cardnumber => 'dariahall',
-        surname => 'Hall',
-        firstname => 'Daria',
-    } );
-    $borrower->categorycode( $categorycode );
-    $borrower->branchcode( $branchcode );
+    my $borrower = Koha::Patron->new(
+        {
+            cardnumber => 'dariahall',
+            surname    => 'Hall',
+            firstname  => 'Daria',
+        }
+    );
+    $borrower->categorycode($categorycode);
+    $borrower->branchcode($branchcode);
     $borrower->store;
 
-    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, borrowernumber => $borrower->borrowernumber });
+    my $staff = Koha::Patron->new(
+        {
+            cardnumber => 'bobby',
+            surname    => 'Bloggs',
+            firstname  => 'Bobby',
+        }
+    );
+    $staff->categorycode($categorycode);
+    $staff->branchcode($branchcode);
+    $staff->store;
 
-    my $account = Koha::Account->new({ patron_id => $borrower->id });
+    t::lib::Mocks::mock_userenv(
+        {
+            branchcode     => $branchcode,
+            borrowernumber => $borrower->borrowernumber
+        }
+    );
 
-    my $line1 = Koha::Account::Line->new(
+    my $account = Koha::Account->new( { patron_id => $borrower->id } );
+
+    my $debit1 = Koha::Account::Line->new(
         {
             borrowernumber    => $borrower->borrowernumber,
             amount            => 10,
@@ -1118,7 +1140,7 @@ subtest "cancel() tests" => sub {
             debit_type_code   => 'OVERDUE',
         }
     )->store();
-    my $line2 = Koha::Account::Line->new(
+    my $debit2 = Koha::Account::Line->new(
         {
             borrowernumber    => $borrower->borrowernumber,
             amount            => 20,
@@ -1128,27 +1150,68 @@ subtest "cancel() tests" => sub {
         }
     )->store();
 
-    my $id = $account->pay({
-        lines  => [$line2],
-        amount => 5,
-    });
+    my $ret = $account->pay(
+        {
+            lines  => [$debit2],
+            amount => 5,
+        }
+    );
+    my $credit = Koha::Account::Lines->find({ accountlines_id => $ret->{payment_id} });
 
     is( $account->balance(), 25, "Account balance is 25" );
-    is( $line1->amountoutstanding+0, 10, 'First fee has amount outstanding of 10' );
-    is( $line2->amountoutstanding+0, 15, 'Second fee has amount outstanding of 15' );
+    is( $debit1->amountoutstanding + 0,
+        10, 'First fee has amount outstanding of 10' );
+    is( $debit2->amountoutstanding + 0,
+        15, 'Second fee has amount outstanding of 15' );
+    throws_ok {
+        $credit->cancel(
+            { staff_id => $staff->borrowernumber, branch => $branchcode } );
+    }
+    'Koha::Exceptions::Account::IsNotDebit',
+      '->cancel() can only be used with debits';
 
-    my $ret = $line1->cancel();
-    is( ref($ret), 'Koha::Account::Line', 'Cancel returns the account line' );
-    is( $account->balance(), 15, "Account balance is 15" );
-    is( $line1->amount+0, 0, 'First fee has amount of 0' );
-    is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
+    throws_ok {
+        $debit1->reduce( { staff_id => $staff->borrowernumber } );
+    }
+    'Koha::Exceptions::MissingParameter',
+      "->cancel() requires the `branch` parameter is passed";
+    throws_ok {
+        $debit1->reduce( { branch => $branchcode } );
+    }
+    'Koha::Exceptions::MissingParameter',
+      "->cancel() requires the `staff_id` parameter is passed";
 
-    $ret = $line2->cancel();
-    is ($ret, undef, 'cancel returns undef when line cannot be cancelled');
+    throws_ok {
+        $debit2->cancel(
+            { staff_id => $staff->borrowernumber, branch => $branchcode } );
+    }
+    'Koha::Exceptions::Account',
+      '->cancel() can only be used with debits that have not been offset';
 
-    my $account_payment = Koha::Account::Lines->find($id);
-    $ret = $account_payment->cancel();
-    is ($ret, undef, 'payment cannot be cancelled');
+    my $cancellation = $debit1->cancel(
+        { staff_id => $staff->borrowernumber, branch => $branchcode } );
+    is( ref($cancellation), 'Koha::Account::Line',
+        'Cancel returns an account line' );
+    is(
+        $cancellation->amount() * 1,
+        $debit1->amount * -1,
+        "Cancellation amount is " . $debit1->amount
+    );
+    is( $cancellation->amountoutstanding() * 1,
+        0, "Cancellation amountoutstanding is 0" );
+    is( $debit1->amountoutstanding() * 1,
+        0, "Debit amountoutstanding reduced to 0" );
+    is( $debit1->status(), 'CANCELLED', "Debit status updated to CANCELLED" );
+    is( $account->balance() * 1, 15, "Account balance is 15" );
+
+    my $offsets = Koha::Account::Offsets->search(
+        { credit_id => $cancellation->id, debit_id => $debit1->id } );
+    is( $offsets->count, 1, 'Only one offset is generated' );
+    my $THE_offset = $offsets->next;
+    is( $THE_offset->amount * 1,
+        -10, 'Correct amount was applied against debit' );
+    is( $THE_offset->type, 'CANCELLATION',
+        "Offset type set to 'CANCELLATION'" );
 
     $schema->storage->txn_rollback;
 };
