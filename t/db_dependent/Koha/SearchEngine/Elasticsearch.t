@@ -132,7 +132,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 58;
+    plan tests => 59;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -375,14 +375,26 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
-    my $records = [ $marc_record_1, $marc_record_2 ];
+
+    my $marc_record_3 = MARC::Record->new();
+    $marc_record_3->leader('     cam  22      a 4500');
+    $marc_record_3->append_fields(
+        MARC::Field->new('008', '901111s19uu xxk|||| |00| ||eng c'),
+        MARC::Field->new('100', '', '', a => 'Author 2'),
+        # MARC::Field->new('210', '', '', a => 'Title 3'),
+        # MARC::Field->new('245', '', '', a => 'Title: third record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => ' 89 '),
+        MARC::Field->new('999', '', '', c => '1234568'),
+        MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
+    );
+    my $records = [$marc_record_1, $marc_record_2, $marc_record_3];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
     my $docs = $see->marc_records_to_documents($records);
 
     # First record:
-    is(scalar @{$docs}, 2, 'Two records converted to documents');
+    is(scalar @{$docs}, 3, 'Two records converted to documents');
 
     is_deeply($docs->[0]->{control_number}, ['123'], 'First record control number should be set correctly');
 
@@ -539,6 +551,14 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
       $docs->[1]->{'date-of-publication'},
       ['1900'],
       'Second document date-of-publication field should be set correctly'
+    );
+
+    # Third record:
+
+    is_deeply(
+      $docs->[2]->{'copydate'},
+      ['0890'],
+      'Third document copydate field should be set correctly'
     );
 
     # Mappings marc_type:

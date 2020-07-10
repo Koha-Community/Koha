@@ -909,7 +909,7 @@ sub _field_mappings {
         push @{$default_options->{value_callbacks}}, sub {
             my ($value) = @_;
             # Replace "u" with "0" for sorting
-            return map { s/[u]/0/gr } ( $value =~ /[0-9u]{4}/g );
+            return map { s/[u\s]/0/gr } ( $value =~ /[0-9u\s]{4}/g );
         };
     }
 
