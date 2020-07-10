@@ -222,7 +222,7 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 25;
+        plan tests => 40;
 
         $schema->storage->txn_begin;
 
@@ -341,10 +341,45 @@ subtest 'update() tests' => sub {
         $newpatron->{userid}     = $superlibrarian->userid;
         $newpatron->{email}      = 'nosense@no.no';
 
+        # attempt to update
         $authorized_patron->flags( 2**4 )->store; # borrowers flag = 4
         $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
           ->status_is(403, "Non-superlibrarian user change of superlibrarian email forbidden")
           ->json_is( { error => "Not enough privileges to change a superlibrarian's email" } );
+
+        # attempt to unset
+        $newpatron->{email} = undef;
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's email to undefined" } );
+
+        $newpatron->{email}           = $superlibrarian->email;
+        $newpatron->{secondary_email} = 'nonsense@no.no';
+
+        # attempt to update
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian secondary_email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's secondary_email" } );
+
+        # attempt to unset
+        $newpatron->{secondary_email} = undef;
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian secondary_email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's secondary_email to undefined" } );
+
+        $newpatron->{secondary_email}  = $superlibrarian->emailpro;
+        $newpatron->{altaddress_email} = 'nonsense@no.no';
+
+        # attempt to update
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian altaddress_email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's altaddress_email" } );
+
+        # attempt to unset
+        $newpatron->{altaddress_email} = undef;
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian altaddress_email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's altaddress_email to undefined" } );
 
         $schema->storage->txn_rollback;
     };

@@ -198,10 +198,23 @@ sub update {
         my $user = $c->stash('koha.user');
 
         if ( $patron->is_superlibrarian and !$user->is_superlibrarian ) {
+            my $put_email     = $body->{email} // qw{};
+            my $db_email      = $patron->email // qw{};
+            my $put_email_pro = $body->{secondary_email} // qw{};
+            my $db_email_pro  = $patron->emailpro // qw{};
+            my $put_email_B   = $body->{altaddress_email} // qw{};
+            my $db_email_B    = $patron->B_email // qw{};
+
             return $c->render(
                 status  => 403,
-                openapi => { error => "Not enough privileges to change a superlibrarian's email" }
-            ) if $body->{email} ne $patron->email ;
+                openapi => {
+                    error =>
+                      "Not enough privileges to change a superlibrarian's email"
+                }
+              )
+              if ($put_email ne $db_email)
+              || ($put_email_pro ne $db_email_pro)
+              || ($put_email_B ne $db_email_B);
         }
 
         $patron->set_from_api($c->validation->param('body'))->store;
