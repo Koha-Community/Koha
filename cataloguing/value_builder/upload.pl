@@ -35,6 +35,7 @@ my $builder = sub {
     return <<"SCRIPT";
 <script type=\"text/javascript\">
         function Click$params->{id}(event) {
+            event.preventDefault();
             var index = event.data.id;
             var str = document.getElementById(index).value;
             var myurl, term;

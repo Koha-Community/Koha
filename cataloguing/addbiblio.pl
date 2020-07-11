@@ -390,6 +390,7 @@ sub create_input {
                 size           => 67,
                 maxlength      => $subfield_data{maxlength},
                 javascript     => $plugin->javascript,
+                plugin         => $plugin->name,
                 noclick        => $plugin->noclick,
             };
         } else {
