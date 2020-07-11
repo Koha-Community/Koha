@@ -840,7 +840,11 @@
                                                         [% IF mv.noclick %]
                                                             <span class="buttonDot tag_editor disabled" tabindex="-1" title="Field autofilled by plugin"></span>
                                                         [% ELSE %]
-                                                            <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                                                            [% IF mv.plugin == "upload.pl" %]
+                                                                <a href="#" id="buttonDot_[% mv.id | html %]" class="tag_editor upload framework_plugin" tabindex="1"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                                                            [% ELSE %]
+                                                                <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                                                            [% END %]
                                                         [% END %]
                                                     </span>
                                                     [% mv.javascript | $raw %]
