@@ -5,9 +5,50 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Full subscription history for [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
+    [% FILTER collapse %]
     <style>
-        #search-facets fieldset { border: 0; margin: 0;padding:0;}#search-facets ol{padding:.3em;}#search-facets li {list-style-type:none;padding:4px 4px;}#search-facets label{font-weight:bold;display:block;margin:.2em 0;}#search-facets fieldset.action {padding-left:4px;margin:.3em;}div.tabsub { clear:both;}#subtabs a { display:block;float:left;border:1px solid #CCC;padding:.2em .4em;margin:.3em;text-decoration:none;font-size:115%;}#subtabs strong { display:block; float: left; font-size:115%;padding:.2em .4em; margin: 0.3em 0;}#subtabs { margin-top : 1em; }a.currentsubtab { background-color:#FFC;}
+        div.tabsub {
+            clear: both;
+        }
+        #filterform label {
+            font-weight: bold;
+        }
+        #filterform select {
+            width: 100%;
+        }
+        #subtabs a {
+            display: block;
+            float: left;
+            border: 1px solid #CCC;
+            padding: .2em .4em;
+            margin: .3em;
+            text-decoration: none;
+            font-size: 115%;
+        }
+
+        #subtabs strong {
+            display: block;
+            float: left;
+            font-size: 115%;
+            padding: .2em .4em;
+            margin: 0.3em 0;
+        }
+
+        #subtabs {
+            margin-top: 1em;
+        }
+        .action .btn {
+            font-size: 90%;
+            width: 100%;
+        }
+        .menu-collapse {
+            padding: .5em;
+        }
+        a.currentsubtab {
+            background-color: #FFC;
+        }
     </style>
+    [% END %]
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-full-serial-issues' bodyclass='scrollto' %]
@@ -30,12 +71,12 @@
                             <ul class="menu-collapse">
                                 <li>
                                     <label for="libraryfilter">Library: </label>
-                                    <select id="libraryfilter" name="libraryfilter" style="width:10em;"></select>
+                                    <select id="libraryfilter" name="libraryfilter"></select>
                                     <label for="subscriptionidfilter">Subscription: </label>
-                                    <select id="subscriptionidfilter" name="subscriptionfilter" style="width:10em;" disabled="disabled"></select>
+                                    <select id="subscriptionidfilter" name="subscriptionfilter" disabled="disabled"></select>
                                 </li>
                                 <li class="action">
-                                    <input type="reset" id="reset" class="btn" value="Clear" />
+                                    <input type="reset" id="reset" class="btn btn-default" value="Clear" />
                                 </li>
                             </ul>
                             </form>

@@ -2,7 +2,12 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Issues for a subscription</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    .subscriptionline {
+        border-bottom: 1px solid #EEE;
+        padding: 1em 0;
+    }
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-serials-issues' %]
 [% INCLUDE 'masthead.inc' %]
@@ -37,7 +42,7 @@
                         </div>
                         <form method="post" name="f">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
-                                <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" style="border-bottom:1px solid #EEE;">
+                                <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
                                     <h3>Subscription information for [% subscription_LOO.bibliotitle | html %]</h3>
                                     <p>
                                         The current subscription began on [% subscription_LOO.startdate | html %] and is issued
