@@ -388,4 +388,5 @@ $template->param(
     listsview => 1,
 );
 
-output_html_with_http_headers $query, $cookie, $template->output;
+my $content_type = $query->param('rss')? 'rss' : 'html';
+output_with_http_headers $query, $cookie, $template->output, $content_type;
