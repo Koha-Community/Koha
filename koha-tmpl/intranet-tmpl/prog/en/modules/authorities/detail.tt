@@ -110,7 +110,13 @@
     [% END %]
     <script>
         $(document).ready(function() {
-            $('#authoritiestabs').tabs();
+            var editAuth = $("#editAuth");
+            var editAuthLink = editAuth.attr("href");
+            $('#authoritiestabs').tabs({
+                activate: function( event, ui ){
+                    editAuth.attr("href", editAuthLink + "#" + ui.newPanel.attr('id') );
+                }
+            });
             [% IF ( displayhierarchy ) %]
                 var current_nodes = [];
                 $('.currentauth').each(function() {
