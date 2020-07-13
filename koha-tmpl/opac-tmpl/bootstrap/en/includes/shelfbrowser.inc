@@ -28,54 +28,56 @@
                                 [% img_title = item.biblionumber %]
                             [% END %]
 
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
-                                [% IF ( OPACLocalCoverImages ) %]
-                                    <div title="[% img_title | html %]" class="[% item.biblionumber | html %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% item.biblionumber | html %]"></div>
-                                [% END %]
-                                [% IF ( OPACAmazonCoverImages ) %]
-                                    [% IF ( item.browser_normalized_isbn ) %]
-                                        <img src="https://images-na.ssl-images-amazon.com/images/P/[% item.browser_normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
-                                    [% ELSE %]
-                                        <span class="no-image">No cover image available</span>
+                            [% IF ( OPACLocalCoverImages || OPACAmazonCoverImages || ( SyndeticsEnabled && SyndeticsCoverImages ) || GoogleJackets || BakerTaylorEnabled || ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) || ( Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') ) ) %]
+                                <a class="shelfbrowser_cover" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
+                                    [% IF ( OPACLocalCoverImages ) %]
+                                        <div title="[% img_title | html %]" class="[% item.biblionumber | html %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% item.biblionumber | html %]"></div>
                                     [% END %]
-                                [% END %]
-
-                                [% IF ( SyndeticsEnabled ) %]
-                                    [% IF ( SyndeticsCoverImages ) %]
-                                        [% IF ( content_identifier_exists ) %]
-                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc | html %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
+                                    [% IF ( OPACAmazonCoverImages ) %]
+                                        [% IF ( item.browser_normalized_isbn ) %]
+                                            <img src="https://images-na.ssl-images-amazon.com/images/P/[% item.browser_normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" alt="" />
                                         [% ELSE %]
                                             <span class="no-image">No cover image available</span>
                                         [% END %]
                                     [% END %]
-                                [% END %]
 
-                                [% IF ( GoogleJackets ) %]
-                                    [% IF ( item.browser_normalized_isbn ) %]
-                                        <div title="[% img_title | html %]" class="[% item.browser_normalized_isbn | html %]" id="gbs-thumbnail-preview[% loop.count | html %]"></div>
-                                    [% ELSE %]
-                                        <span class="no-image">No cover image available</span>
+                                    [% IF ( SyndeticsEnabled ) %]
+                                        [% IF ( SyndeticsCoverImages ) %]
+                                            [% IF ( content_identifier_exists ) %]
+                                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc | html %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc | html %][% END %]&amp;type=xw10" alt="" />
+                                            [% ELSE %]
+                                                <span class="no-image">No cover image available</span>
+                                            [% END %]
+                                        [% END %]
                                     [% END %]
-                                [% END %]
-                                [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                  [% coce_id = item.browser_normalized_ean || item.browser_normalized_isbn | html %]
-                                  <div title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview-[% coce_id | html %]"></div>
-                                [% END %]
-                                [% IF ( BakerTaylorEnabled ) %]
-                                    [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_isbn ) | html %]
-                                    [% IF ( bt_id ) %]
-                                        <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                    [% ELSE %]
-                                        <span class="no-image">No cover image available</span>
-                                    [% END %]
-                                [% END %]
-                                [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                    <span class="custom_cover_image">
-                                        <img alt="Cover image" src="[% item.biblio_object.custom_cover_image_url | url %]" />
-                                    </span>
-                                [% END %]
 
-                            </a>
+                                    [% IF ( GoogleJackets ) %]
+                                        [% IF ( item.browser_normalized_isbn ) %]
+                                            <div title="[% img_title | html %]" class="[% item.browser_normalized_isbn | html %]" id="gbs-thumbnail-preview[% loop.count | html %]"></div>
+                                        [% ELSE %]
+                                            <span class="no-image">No cover image available</span>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+                                    [% coce_id = item.browser_normalized_ean || item.browser_normalized_isbn | html %]
+                                    <div title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview-[% coce_id | html %]"></div>
+                                    [% END %]
+                                    [% IF ( BakerTaylorEnabled ) %]
+                                        [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_isbn ) | html %]
+                                        [% IF ( bt_id ) %]
+                                            <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
+                                        [% ELSE %]
+                                            <span class="no-image">No cover image available</span>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                                        <span class="custom_cover_image">
+                                            <img alt="Cover image" src="[% item.biblio_object.custom_cover_image_url | url %]" />
+                                        </span>
+                                    [% END %]
+
+                                </a>
+                            [% END %]
                         </td>
                     [% END %]
                     <td class="nav-cell" rowspan="2">
