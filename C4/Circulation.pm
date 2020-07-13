@@ -1552,6 +1552,7 @@ sub AddIssue {
                   );
 
                 if ($lostreturn_policy) {
+
                     if ( $lostreturn_policy eq 'charge' ) {
                         $actualissue //= Koha::Old::Checkouts->search(
                             { itemnumber => $item_unblessed->{itemnumber} },
@@ -2107,6 +2108,7 @@ sub AddReturn {
               );
 
             if ($lostreturn_policy) {
+
                 if ( $lostreturn_policy eq 'charge' ) {
                     $issue //= Koha::Old::Checkouts->search(
                         { itemnumber => $item->itemnumber },
