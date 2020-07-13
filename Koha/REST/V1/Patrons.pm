@@ -198,24 +198,34 @@ sub update {
         my $body = $c->validation->param('body');
         my $user = $c->stash('koha.user');
 
-        if ( $patron->is_superlibrarian and !$user->is_superlibrarian ) {
-            my $put_email     = $body->{email} // qw{};
-            my $db_email      = $patron->email // qw{};
-            my $put_email_pro = $body->{secondary_email} // qw{};
-            my $db_email_pro  = $patron->emailpro // qw{};
-            my $put_email_B   = $body->{altaddress_email} // qw{};
-            my $db_email_B    = $patron->B_email // qw{};
+        if (
+                $patron->is_superlibrarian
+            and !$user->is_superlibrarian
+            and (  exists $body->{email}
+                or exists $body->{secondary_email}
+                or exists $body->{altaddress_email} )
+          )
+        {
+            foreach my $email_field ( qw(email secondary_email altaddress_email) ) {
+                my $exists_email = exists $body->{$email_field};
+                next unless $exists_email;
 
-            return $c->render(
-                status  => 403,
-                openapi => {
-                    error =>
-                      "Not enough privileges to change a superlibrarian's email"
-                }
-              )
-              if ($put_email ne $db_email)
-              || ($put_email_pro ne $db_email_pro)
-              || ($put_email_B ne $db_email_B);
+                # exists, verify if we are asked to change it
+                my $put_email      = $body->{$email_field};
+                # As of writing this patch, 'email' is the only unmapped field
+                # (i.e. it preserves its name, hence this fallback)
+                my $db_email_field = $patron->to_api_mapping->{$email_field} // 'email';
+                my $db_email       = $patron->$db_email_field;
+
+                return $c->render(
+                    status  => 403,
+                    openapi => { error => "Not enough privileges to change a superlibrarian's email" }
+                  )
+                  unless ( !defined $put_email and !defined $db_email )
+                  or (  defined $put_email
+                    and defined $db_email
+                    and $put_email eq $db_email );
+            }
         }
 
         $body = _to_model($c->validation->param('body'));
