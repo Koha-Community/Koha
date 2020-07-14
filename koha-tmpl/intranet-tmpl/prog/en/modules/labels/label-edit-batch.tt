@@ -62,23 +62,28 @@
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li id="description">
-                                        <input type="hidden" name="op" value="add" />
-                                        <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
-                                        <label for="description">Batch description: </label>
-                                        <input type="text" name="description" value="[% description | html %]"> <span id="change-status"></span>
-                                    </li>
+                                            <input type="hidden" name="op" value="add" />
+                                            <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
+                                            <label for="description">Batch description: </label>
+                                            <input type="text" name="description" value="[% description | html %]"> <span id="change-status"></span>
+                                        </li>
                                     <li>
                                         <input type="radio" name="number_type" id="barcode_enter" value="barcode" checked />
-                                        <label for="barcode_enter">Enter by barcode:</label><br/>
+                                        <label for="barcode_enter">Enter by barcode:</label>
+                                    </li>
+                                    <li>
                                         <input type="radio" name="number_type" id="itemnum_enter" value="itemnumber" />
                                         <label for="itemnum_enter">Enter by itemnumber:</label>
                                     </li>
                                     <li>
-                                        <label for="number_list">Add by barcode(s) or itemnumbers(s):
-                                            <br /> <span class="hint">One number per line.</span>
-                                            <br /> <span class="hint">Leave empty to add via item search (itemnumber).</span>
+                                        <label for="number_list">
+                                            Add by barcode(s) or itemnumbers(s):
                                         </label>
                                         <textarea rows="5" id="number_list" name="number_list" tabindex="1" class="focus"></textarea>
+                                        <div class="hint">
+                                            One number per line.
+                                            <br /> Leave empty to add via item search (itemnumber)
+                                        </div>
                                     </li></ol>
                                     </fieldset>
                                 </div>
