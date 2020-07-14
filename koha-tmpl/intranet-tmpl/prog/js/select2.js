@@ -1,7 +1,7 @@
 /* global __ */
 $.fn.select2.defaults.set("allowClear", true);
 $.fn.select2.defaults.set("placeholder", "");
-$.fn.select2.defaults.set("width", "element");
+$.fn.select2.defaults.set("width", select2Width || "element" );
 
 // Internationalization
 $.fn.select2.defaults.set("language", {

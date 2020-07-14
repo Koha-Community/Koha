@@ -20,129 +20,129 @@
     <script>
         $(document).ready(function(){
             [% IF rancor %]
-            function RancorReplaceField( new_text, ind_1, ind_2 ){
-                var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
-                cur_field.setText(new_text);
-                [% IF update_ind1 %]cur_field.setIndicator1(ind_1);[% END %]
-                [% IF update_ind2 %]cur_field.setIndicator2(ind_2);[% END %]
-                return true;
-            }
+                function RancorReplaceField( new_text, ind_1, ind_2 ){
+                    var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
+                    cur_field.setText(new_text);
+                    [% IF update_ind1 %]cur_field.setIndicator1(ind_1);[% END %]
+                    [% IF update_ind2 %]cur_field.setIndicator2(ind_2);[% END %]
+                    return true;
+                }
                 [% IF ( clear ) %]
-                var new_line = "";
+                    var new_line = "";
                 [% ELSE %]
-                var new_line = "
-                [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
-                    [%- To.json( SUBFIELD_LOO.marc_subfield ) | $raw -%]
-                    [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
-                        [%- To.json( marc_value ) | $raw -%]
-                    [%- END -%]
-                [%- END -%]‡9[% authid | html %]";
+                    var new_line = "
+                    [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
+                        [%- To.json( SUBFIELD_LOO.marc_subfield ) | $raw -%]
+                        [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
+                            [%- To.json( marc_value ) | $raw -%]
+                        [%- END -%]
+                    [%- END -%]‡9[% authid | html %]";
                 [% END %]
                 RancorReplaceField( new_line, "[% indicator1 | html %]", "[% indicator2 | html %]" );
             [% ELSE %]
-            var index_start = "[% index | html %]";
-            var whichfield;
-            try {
-                whichfield = opener.opener.document.getElementById(index_start);
-            } catch(e) {
-                return;
-            }
-            var field_start = whichfield.parentNode.parentNode.parentNode;
+                var index_start = "[% index | html %]";
+                var whichfield;
+                try {
+                    whichfield = opener.opener.document.getElementById(index_start);
+                } catch(e) {
+                    return;
+                }
+                var field_start = whichfield.parentNode.parentNode.parentNode.parentNode;
 
-            // Sets the good number of form fields for the specified subfield
-            // Returns false if the cloning failed
-            function SetSubfieldNumber(subfield_name, nb) {
-                // Nothing to do if we only have one value
-                if(nb <= 1) {
+                // Sets the good number of form fields for the specified subfield
+                // Returns false if the cloning failed
+                function SetSubfieldNumber(subfield_name, nb) {
+                    // Nothing to do if we only have one value
+                    if(nb <= 1) {
+                        return true;
+                    }
+
+                    // Find the subfield we want to clone
+                    var re = new RegExp('^subfield' + subfield_name,'g');
+                    var subfields = $(field_start).children('ul').children('li').filter( function() {
+                        return this.id.match(re);
+                    });
+
+                    // Try to add as many clones as needed
+                    try {
+                        for(var i=0; i<nb-subfields.length; i++) {
+                            window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor | html %]');
+                        }
+                    }
+                    catch(err) {
+                        return false;
+                    }
                     return true;
                 }
 
-                // Find the subfield we want to clone
-                var re = new RegExp('^subfield' + subfield_name,'g');
-                var subfields = $(field_start).children('ul').children('li').filter( function() {
-                    return this.id.match(re);
-                });
-
-                // Try to add as many clones as needed
-                try {
-                    for(var i=0; i<nb-subfields.length; i++) {
-                        window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor | html %]');
+                // Fills the subfield with the values entered in argument
+                function SetSubfieldValues() {
+                    // Get the arguments
+                    var subfield_name = arguments[0];
+                    var values = new Array();
+                    for(var i=1; i<arguments.length; i++) {
+                        values.push(arguments[i]);
                     }
+
+                    // Create the correct number of form fields for all values
+                    // If the field cloning failed, only the first value will be added to the form.
+                    SetSubfieldNumber(subfield_name, values.length);
+
+                    // Find the subfields where we will add the new values
+                    var re = new RegExp('^subfield' + subfield_name,'g');
+                    var subfields = $(field_start).children('ul').children('li').filter( function() {
+                        return this.id.match(re);
+                    });
+
+                    // Add the new values to those subfields, empty the additional fields
+                    var i=0;
+                    subfields.each(function() {
+                        if(i in values) {
+                            this.getElementsByTagName('input')[1].value = values[i];
+                        }
+                        else {
+                            this.getElementsByTagName('input')[1].value = "";
+                        }
+                        i++;
+                    });
                 }
-                catch(err) {
-                    return false;
-                }
-                return true;
-            }
-
-            // Fills the subfield with the values entered in argument
-            function SetSubfieldValues() {
-                // Get the arguments
-                var subfield_name = arguments[0];
-                var values = new Array();
-                for(var i=1; i<arguments.length; i++) {
-                    values.push(arguments[i]);
-                }
-
-                // Create the correct number of form fields for all values
-                // If the field cloning failed, only the first value will be added to the form.
-                SetSubfieldNumber(subfield_name, values.length);
-
-                // Find the subfields where we will add the new values
-                var re = new RegExp('^subfield' + subfield_name,'g');
-                var subfields = $(field_start).children('ul').children('li').filter( function() {
-                    return this.id.match(re);
-                });
-
-                // Add the new values to those subfields, empty the additional fields
-                var i=0;
-                subfields.each(function() {
-                    if(i in values) {
-                        this.getElementsByTagName('input')[1].value = values[i];
-                    }
-                    else {
-                        this.getElementsByTagName('input')[1].value = "";
-                    }
-                    i++;
-                });
-            }
-            [% UNLESS ( clear ) %]
-                [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
-                    SetSubfieldValues(
-                        "[% To.json(tag_number) | $raw %][% To.json(SUBFIELD_LOO.marc_subfield) | $raw %]"
-                    [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
-                        ,"[% To.json( marc_value ) | $raw %]"
+                [% UNLESS ( clear ) %]
+                    [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
+                        SetSubfieldValues(
+                            "[% To.json(tag_number) | $raw %][% To.json(SUBFIELD_LOO.marc_subfield) | $raw %]"
+                        [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
+                            ,"[% To.json( marc_value ) | $raw %]"
+                        [% END %]
+                        );
                     [% END %]
-                    );
+                    var indicators = field_start.getElementsByClassName('indicator flat');
+                    [% IF update_ind1 %]
+                        indicators[0].value="[% indicator1 | html %]";
+                    [% END %]
+                    [% IF update_ind2 %]
+                        indicators[1].value="[% indicator2 | html %]";
+                    [% END %]
                 [% END %]
-                var indicators = field_start.getElementsByClassName('indicator flat');
-                [% IF update_ind1 %]
-                    indicators[0].value="[% indicator1 | html %]";
-                [% END %]
-                [% IF update_ind2 %]
-                    indicators[1].value="[% indicator2 | html %]";
-                [% END %]
-            [% END %]
 
-            // browse all its subfields (clear and $9)
-            var subfields = field_start.getElementsByTagName('input');
-            var re = /^tag_\d*_code_/;
-            for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
-                if(subfields[i].hasAttribute('name') == 0 ) {continue; }  // div elements specific to Select2
-                if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
-                    var code     = subfields[i];   // code is the first input
-                    var subfield = subfields[i+1]; // subfield the second
+                // browse all its subfields (clear and $9)
+                var subfields = field_start.getElementsByTagName('input');
+                var re = /^tag_\d*_code_/;
+                for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
+                    if(subfields[i].hasAttribute('name') == 0 ) {continue; }  // div elements specific to Select2
+                    if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
+                        var code     = subfields[i];   // code is the first input
+                        var subfield = subfields[i+1]; // subfield the second
 
-                [% IF ( clear ) %]
-                    if (subfield){subfield.value="" ;}
-                [% ELSE %]
-                    if(code.value=='9'){
-                        subfield.value = "[% To.json(authid) | $raw %]";
-                        break;
+                    [% IF ( clear ) %]
+                        if (subfield){subfield.value="" ;}
+                    [% ELSE %]
+                        if(code.value=='9'){
+                            subfield.value = "[% To.json(authid) | $raw %]";
+                            break;
+                        }
+                    [% END %]
                     }
-                [% END %]
                 }
-            }
             [% END %]
 
             opener.close();

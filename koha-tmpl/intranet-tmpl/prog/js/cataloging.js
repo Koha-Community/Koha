@@ -65,10 +65,10 @@ function ExpandField(index) {
         if(lis[i].getAttribute('id').match(/^subfield/)){  // if it s a subfield
             if (!lis[i].style.display) {
                 // first time => show all subfields
-                lis[i].style.display = 'block';
+                lis[i].style.display = 'flex';
             } else if (lis[i].style.display == 'none') {
                 // show
-                lis[i].style.display = 'block';
+                lis[i].style.display = 'flex';
             } else {
                 // hide
                 lis[i].style.display = 'none';
@@ -174,7 +174,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
     // settings all subfields
     var divslen = divs.length;
     for( i=0; i < divslen ; i++ ){      // foreach div/li
-        if(divs[i].getAttribute("id").match(/^subfield/)){  // if it s a subfield
+        if( divs[i].getAttribute("id") && divs[i].getAttribute("id").match(/^subfield/)){  // if it s a subfield
 
             // set the attribute for the new 'li' subfields
             divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
@@ -195,38 +195,38 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     textareas[j].value = "";
                 }
             }
+            if( inputs.length > 0 ){
+                inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+                inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
 
-            inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
-            inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
-
-            try {
-                id_input = inputs[1].getAttribute('id')+new_key;
-                inputs[1].setAttribute('id',id_input);
-                inputs[1].setAttribute('name',inputs[1].getAttribute('name')+new_key);
-            } catch(e) {
-                try{ // it s a select if it is not an input
-                    var selects = divs[i].getElementsByTagName('select');
-                    id_input = selects[0].getAttribute('id')+new_key;
-                    selects[0].setAttribute('id',id_input);
-                    selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
-                }catch(e2){ // it is a textarea if it s not a select or an input
-                    var textaeras = divs[i].getElementsByTagName('textarea');
-                    id_input = textaeras[0].getAttribute('id')+new_key;
-                    textaeras[0].setAttribute('id',id_input);
-                    textaeras[0].setAttribute('name',textaeras[0].getAttribute('name')+new_key);
+                try {
+                    id_input = inputs[1].getAttribute('id')+new_key;
+                    inputs[1].setAttribute('id',id_input);
+                    inputs[1].setAttribute('name',inputs[1].getAttribute('name')+new_key);
+                } catch(e) {
+                    try{ // it s a select if it is not an input
+                        var selects = divs[i].getElementsByTagName('select');
+                        id_input = selects[0].getAttribute('id')+new_key;
+                        selects[0].setAttribute('id',id_input);
+                        selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
+                    }catch(e2){ // it is a textarea if it s not a select or an input
+                        var textareas = divs[i].getElementsByTagName('textarea');
+                        if( textareas.length > 0 ){
+                            id_input = textareas[0].getAttribute('id')+new_key;
+                            textareas[0].setAttribute('id',id_input);
+                            textareas[0].setAttribute('name',textareas[0].getAttribute('name')+new_key);
+                        }
+                    }
+                }
+                if( $(inputs[1]).hasClass('framework_plugin') ) {
+                    olddiv= original.getElementsByTagName('li')[i];
+                    oldcontrol= olddiv.getElementsByTagName('input')[1];
+                    AddEventHandlers( oldcontrol,inputs[1],id_input );
                 }
             }
-            if( $(inputs[1]).hasClass('framework_plugin') ) {
-                olddiv= original.getElementsByTagName('li')[i];
-                oldcontrol= olddiv.getElementsByTagName('input')[1];
-                AddEventHandlers( oldcontrol,inputs[1],id_input );
-            }
-
-            if (advancedMARCEditor == '0') {
-                // when cloning a subfield, re set its label too.
-                var labels = divs[i].getElementsByTagName('label');
-                labels[0].setAttribute('for',id_input);
-            }
+            // when cloning a subfield, re set its label too.
+            var labels = divs[i].getElementsByTagName('label');
+            labels[0].setAttribute('for', id_input);
 
             // setting its '+' and '-' buttons
             try {
@@ -277,7 +277,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
             }
 
         } else { // it's a indicator div
-            if(divs[i].getAttribute('id').match(/^div_indicator/)){
+            if ( divs[i].getAttribute("id") && divs[i].getAttribute('id').match(/^div_indicator/)) {
 
                 // setting a new id for the indicator div
                 divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
@@ -381,7 +381,9 @@ function CloneSubfield(index, advancedMARCEditor){
     if(advancedMARCEditor == '0') {
         // when cloning a subfield, reset its label too.
         var label = clone.getElementsByTagName('label')[0];
-        label.setAttribute('for',id_input);
+        if( label ){
+            label.setAttribute('for',id_input);
+        }
     }
 
     // setting a new id for the parent div

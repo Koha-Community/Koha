@@ -7,6 +7,7 @@
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 <script>
     var CAN_user_parameters_manage_auth_values = "[% CAN_user_parameters_manage_auth_values | html %]";
+    var select2Width = "100%";
 </script>
 [% INCLUDE 'select2.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
@@ -484,7 +485,6 @@
 
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
-
 </head>
 <body id="cat_addbiblio" class="cat">
 
@@ -789,89 +789,93 @@
                                         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                                             <!--  One line on the marc editor -->
                                             <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
+                                                <div class="subfieldcode">
+                                                    <input type="text"
+                                                            title="[% subfield_loo.marc_lib | $raw %]"
+                                                            style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
+                                                            name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
+                                                            value="[% subfield_loo.subfield | html %]"
+                                                            size="1"
+                                                            maxlength="1"
+                                                            class="flat"
+                                                            tabindex="0" />
+                                                </div>
                                                 [% UNLESS advancedMARCEditor %]
-                                                    [% IF ( subfield_loo.fixedfield ) %]
-                                                        <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
+                                                    [% IF ( subfield_loo.mandatory ) %]
+                                                        <div class="subfield subfield_mandatory">
+                                                    [% ELSIF ( subfield_loo.important ) %]
+                                                        <div class="subfield subfield_important">
                                                     [% ELSE %]
-                                                        <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
+                                                        <div class="subfield">
                                                     [% END %]
-                                                [% END %]
-
-                                                    <span class="subfieldcode">
-                                                            <input type="text"
-                                                                title="[% subfield_loo.marc_lib | $raw %]"
-                                                                style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
-                                                                name="tag_[% subfield_loo.tag | html %]_code_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]"
-                                                                value="[% subfield_loo.subfield | html %]"
-                                                                size="1"
-                                                                maxlength="1"
-                                                                class="flat"
-                                                                tabindex="0" />
-                                                    </span>
-
-                                                [% UNLESS advancedMARCEditor %]
-                                                        [% IF ( subfield_loo.mandatory ) %]
-                                                            <span class="subfield subfield_mandatory">
-                                                        [% ELSIF ( subfield_loo.important ) %]
-                                                            <span class="subfield subfield_important">
+                                                        [% IF ( subfield_loo.fixedfield ) %]
+                                                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
                                                         [% ELSE %]
-                                                            <span class="subfield">
+                                                            <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
                                                         [% END %]
                                                         [% subfield_loo.marc_lib | $raw %]
-                                                        </span>
-                                                    </label>
+                                                        </label>
+                                                    </div>
                                                 [% END %]
 
                                                 [% SET mv = subfield_loo.marc_value %]
-                                                [% IF ( mv.type == 'text' ) %]
-                                                    [% IF ( mv.readonly == 1 ) %]
-                                                        <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor readonly" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" readonly="readonly" />
-                                                    [% ELSE %]
-                                                        <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
-                                                    [% END %]
-
-                                                    [% IF ( mv.authtype ) %]
-                                                        <span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype | html -%]','biblio'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>
-                                                    [% END %]
-                                                [% ELSIF ( mv.type == 'text_complex' ) %]
-                                                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
-                                                    <span class="subfield_controls">
-                                                        [% IF mv.noclick %]
-                                                            <span class="buttonDot tag_editor disabled" tabindex="-1" title="Field autofilled by plugin"></span>
+                                                <div id="field_marceditor[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]" class="field_marceditor">
+                                                    [% IF ( mv.type == 'text' ) %]
+                                                        [% IF ( mv.readonly == 1 ) %]
+                                                            <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor readonly" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" readonly="readonly" />
                                                         [% ELSE %]
-                                                            [% IF mv.plugin == "upload.pl" %]
-                                                                <a href="#" id="buttonDot_[% mv.id | html %]" class="tag_editor upload framework_plugin" tabindex="1"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
-                                                            [% ELSE %]
-                                                                <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
-                                                            [% END %]
+                                                            <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
                                                         [% END %]
-                                                    </span>
-                                                    [% mv.javascript | $raw %]
-                                                [% ELSIF ( mv.type == 'hidden' ) %]
-                                                    <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
-                                                [% ELSIF ( mv.type == 'textarea' ) %]
-                                                    <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1">[%- mv.value | html -%]</textarea>
-                                                [% ELSIF ( mv.type == 'select' ) %]
+
+                                                    [% ELSIF ( mv.type == 'text_complex' ) %]
+                                                        <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
+                                                        [% mv.javascript | $raw %]
+                                                    [% ELSIF ( mv.type == 'hidden' ) %]
+                                                        <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                                                    [% ELSIF ( mv.type == 'textarea' ) %]
+                                                        <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1">[%- mv.value | html -%]</textarea>
+                                                    [% ELSIF ( mv.type == 'select' ) %]
                                                     [% IF mv.category AND CAN_user_parameters_manage_auth_values %]
                                                         <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]" data-category="[% mv.category | html %]">
                                                     [% ELSE %]
                                                         <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
                                                     [% END %]
-                                                    [% FOREACH aval IN mv.values %]
-                                                        [% IF aval == mv.default %]
-                                                        <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
-                                                        [% ELSE %]
-                                                        <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                                        [% FOREACH aval IN mv.values %]
+                                                            [% IF aval == mv.default %]
+                                                            <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                                            [% ELSE %]
+                                                            <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    </select>
-                                                [% END  # /IF (mv.type...) %]
+                                                        </select>
+                                                    [% END  # /IF (mv.type...) %]
+                                                </div>
                                                 [% IF ( subfield_loo.mandatory ) %]
-                                                    <span class="required">Required</span>
+                                                    <div class="subfield_loop_mandatory">
+                                                        <span class="required">Required</span>
+                                                    </div>
                                                 [% ELSIF ( subfield_loo.important ) %]
-                                                    <span class="important">Important</span>
+                                                    <div class="subfield_loop_mandatory">
+                                                        <span class="important">Important</span>
+                                                    </div>
                                                 [% END %]
-                                                <span class="subfield_controls">
+                                                <div class="subfield_controls">
+                                                    [% IF ( mv.type == 'text' ) %]
+                                                        [% IF ( mv.authtype ) %]
+                                                            <a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype | html -%]','biblio'); return false;" tabindex="1" title="Tag editor">Tag editor</a>
+                                                        [% END %]
+                                                    [% ELSIF ( mv.type == 'text_complex' ) %]
+                                                            [% IF mv.noclick %]
+                                                                <span class="buttonDot tag_editor disabled" tabindex="-1" title="Field autofilled by plugin"></span>
+                                                            [% ELSE %]
+                                                                [% IF mv.plugin == "upload.pl" %]
+                                                                    <a href="#" id="buttonDot_[% mv.id | html %]" class="tag_editor upload framework_plugin" tabindex="1"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                                                                [% ELSE %]
+                                                                    <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </span>
+                                                    [% END %]
                                                     [% IF ( subfield_loo.repeatable ) %]
                                                         <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
                                                             <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
@@ -880,7 +884,7 @@
                                                             <img src="[% interface | html %]/[% theme | html %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
                                                         </a>
                                                     [% END %]
-                                                </span>
+                                                </div>
                                             </li> <!-- /.subfield_line -->
                                             <!-- End of the line -->
                                         [% END # /FOREACH subfield_loop %]

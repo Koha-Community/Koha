@@ -109,8 +109,8 @@ li.subfield_line {
 li.subfield_line label {
     font-size:89%;
     float: left;
-	 padding-right : .4em;
-    width: 16em;
+    padding-right: .4em;
+    width: 10em;
     text-align: left;
     clear:left;
 }
@@ -151,17 +151,53 @@ a.tagnum {
 }
 
 .subfieldcode {
-	display: block;
-	float: left;
+    display: block;
+    float: left;
 }
 
 .labelsubfield {
-	float:left;
+    float: left;
+}
+
+#cat_addbiblio .subfieldcode {
+    float: none;
+}
+
+#cat_addbiblio .labelsubfield {
+    font-size: 90%;
+    float: none;
+}
+
+#cat_addbiblio .subfield {
+    float: none;
+    padding: .25em .5em;
+}
+
+#cat_addbiblio .subfield label {
+    color: #00698a;
 }
 
 .input_marceditor {
 	float:left;
 	width:30em;
+}
+
+#cat_addbiblio .input_marceditor {
+    float: none;
+    width: 100%;
+}
+
+#cat_addbiblio .subfield_line {
+    display: flex;
+}
+
+#cat_addbiblio .field_marceditor {
+    flex-grow: 1;
+    padding: .25em .5em;
+}
+
+#cat_addbiblio .subfield_loop_mandatory {
+    padding: .25em .5em;
 }
 
 .indicator {
@@ -177,12 +213,13 @@ a.tagnum {
 #cataloguing_additem_newitem fieldset.rows li {
 	padding-bottom : 3px;
 }
+
 #cataloguing_additem_newitem .input_marceditor {
-	width : auto;
+    width: auto;
 }
 
 #cataloguing_additem_newitem textarea.input_marceditor {
-     width : 31em;
+    width: 31em;
 }
 
 .mandatory_marker {
@@ -193,17 +230,10 @@ a.tagnum {
 .linktools a {margin:0 2px;padding:2px;background-color:#FFF;text-align:center; }
 .linktools a:first-child { border-bottom: 1px solid #DDD; }
 .linktools a:hover { background-color: #FFC; }
-.subfield_controls { margin : 0 .5em; }
+.subfield_controls { margin: 0 .5em; }
 
 #cataloguing_additem_itemlist {
 	margin-bottom : 1em;
-}
-.yui-gf div.first {
-	width : 19%;
-}
-
-.yui-gf .yui-u {
-	width: 79.2%;
 }
 
 tbody tr.active:nth-child(2n+1) td,
