@@ -167,14 +167,15 @@ sub credits {
     my ( $self, $cond, $attr ) = @_;
 
     unless ( $self->is_debit ) {
-        Koha::Exceptions::Account::IsNotCredit->throw(
+        Koha::Exceptions::Account::IsNotDebit->throw(
             error => 'Account line ' . $self->id . ' is not a debit'
         );
     }
 
+    my $cond_m = { map { "credit.".$_ => $cond->{$_} } keys %{$cond}};
     my $rs =
       $self->_result->search_related('account_offsets_debits')
-      ->search_related( 'credit', $cond, $attr );
+      ->search_related( 'credit', $cond_m, $attr );
     return unless $rs;
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
@@ -199,9 +200,10 @@ sub debits {
         );
     }
 
+    my $cond_m = { map { "debit.".$_ => $cond->{$_} } keys %{$cond}};
     my $rs =
       $self->_result->search_related('account_offsets_credits')
-      ->search_related( 'debit', $cond, $attr );
+      ->search_related( 'debit', $cond_m, $attr );
     return unless $rs;
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
