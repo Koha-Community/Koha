@@ -165,8 +165,27 @@ sub after_circ_action {
 
     my $action   = $params->{action};
     my $checkout = $params->{payload}->{checkout};
+    my $payload  = $params->{payload};
 
-    Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
+    my $renewal_library_id = $payload->{renewal_library_id};
+    my $charge             = $payload->{charge};
+    my $item_id            = $payload->{item_id};
+    my $item_type          = $payload->{item_type};
+    my $shelving_location  = $payload->{shelving_location};
+    my $patron_id          = $payload->{patron_id};
+    my $collection_code    = $payload->{collection_code};
+    my $date_due           = $payload->{date_due};
+    my $date_returned      = $payload->{date_returned};
+
+    if ( $action eq 'renewal' ) {
+        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
+    }
+    elsif ( $action eq 'checkout') {
+        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($date_due));
+    }
+    elsif ( $action eq 'checkin' ) {
+        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($date_returned));
+    }
 }
 
 sub api_routes {

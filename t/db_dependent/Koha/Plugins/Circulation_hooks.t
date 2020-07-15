@@ -22,7 +22,7 @@ use Test::Warn;
 
 use File::Basename;
 
-use C4::Circulation qw(AddIssue AddRenewal);
+use C4::Circulation qw(AddIssue AddRenewal AddReturn);
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -92,8 +92,7 @@ subtest 'after_circ_action() hook tests' => sub {
         plan tests => 1;
 
         warning_like {
-            AddReturn( $patron->borrowernumber, $item->id,
-                $patron->branchcode );
+            AddReturn( $item->barcode, $patron->branchcode );
         }
         qr/after_circ_action called with action: checkin, ref: DateTime/,
           'AddReturn calls the after_circ_action hook';
