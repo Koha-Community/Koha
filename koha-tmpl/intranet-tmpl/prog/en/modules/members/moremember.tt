@@ -256,46 +256,6 @@
                                 </div> [% # /div.rows %]
                             </div> [% # /div#patron-information %]
 
-                            [% IF ( patronimages ) %]
-                                [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
-                                    <div id="manage-patron-image" class="patroninfo-section">
-                                        [% IF ( patron.image ) %]
-                                            <div class="patroninfo-heading">
-                                                <h3>Manage patron image</h3>
-                                                <a class="btn btn-default btn-xs" id="show-picture-upload" href="#"><i class="fa fa-pencil"></i> Edit</a>
-                                            </div>
-                                        [% ELSE %]
-                                            <div class="patroninfo-heading">
-                                                <h3>Upload patron image</h3>
-                                                <a class="btn btn-default btn-xs" id="show-picture-upload" href="#"><i class="fa fa-plus"></i> Add</a>
-                                            </div>
-                                        [% END %]
-                                        <form method="post" id="picture-upload" style="display:none;" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
-                                            [% IF ( patron.image ) %]
-                                                <div class="hint">To update the image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
-                                            [% ELSE %]
-                                                <div class="hint">[% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], enter the name of an image file to upload.</div>
-                                            [% END %]
-                                            <p>Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 2MB.</p>
-                                            <label for="uploadfile">Select the file to upload: </label>
-                                            <input type="file" id="uploadfile" name="uploadfile" required="required" />
-                                            <div class="action">
-                                                <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-                                                <input type="hidden" id="image" name="filetype" value="image" />
-                                                <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
-                                                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-                                                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-upload"></i> Upload</button>
-                                                <input name="op" type="hidden" value="Upload" />
-                                                [% IF ( patron.image ) %]
-                                                    <a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;csrf_token=[% csrf_token | html %]" class="btn btn-default btn-xs delete"><i class="fa fa-trash"></i> Delete</a>
-                                                [% END %]
-                                                <a href="#" id="cancel-picture-upload" class="cancel">Cancel</a>
-                                            </div>
-                                        </form>
-                                    </div> [% # /div#manage-patron-image %]
-                                [% END %]
-                            [% END %]
-
                             [% IF Koha.Preference('HouseboundModule') %]
                                 <div id="houseboundroles" class="patroninfo-section">
                                     [% IF ( housebound_role.housebound_chooser == 1 OR housebound_role.housebound_deliverer == 1 ) %]
@@ -943,18 +903,6 @@
             $("#view_restrictions").on("click",function(){
                 $('#debarments-tab-link').click();
             });
-
-            $("#show-picture-upload").on("click", function(e){
-                e.preventDefault();
-                $(this).toggle();
-                $("#picture-upload").toggle();
-            });
-
-            $("#cancel-picture-upload").on("click", function(e){
-                e.preventDefault();
-                $("#picture-upload, #show-picture-upload").toggle();
-            });
-
          });
         function uncheck_sibling(me){
             nodename=me.getAttribute("name");

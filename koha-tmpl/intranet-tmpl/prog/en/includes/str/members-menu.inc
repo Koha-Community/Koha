@@ -1,7 +1,11 @@
+[% USE raw %]
 [% USE scalar %]
 [% USE Koha %]
 [% USE Categories %]
 <!-- str/members-menu.inc -->
+[% IF ( Koha.Preference('patronimages') ) %]
+    [% Asset.js("js/patron-webcam.js") | $raw %]
+[% END %]
 <script>
     var advsearch = "[% advsearch | html %]";
     var destination = "[% destination | html %]";
@@ -26,7 +30,7 @@
         $("body").on("click", "#delpicture", function(){
              return confirm(_("Are you sure you want to delete this patron image? This cannot be undone."));
         });
-        $('#manage-patron-image').find("input[value*=Upload]").click(function(){
+        $('#upload-patron-image').find("input[value*=Upload]").click(function(){
             if($("#uploadfile").val() == ""){
                 alert(_("Please choose a file to upload"));
                 return false;

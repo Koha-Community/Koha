@@ -24,6 +24,7 @@ use Modern::Perl;
 use File::Temp;
 use CGI qw ( -utf8 );
 use GD;
+use MIME::Base64;
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
@@ -51,7 +52,8 @@ my ($template, $loggedinuser, $cookie)
 
 our $filetype      = $input->param('filetype') || '';
 my $cardnumber     = $input->param('cardnumber');
-our $uploadfilename = $input->param('uploadfile') || '';
+our $uploadfilename = $input->param('uploadfile') || $input->param('uploadfilename') || '';
+my $uploadfiletext = $input->param('uploadfiletext') || '';
 my $uploadfile     = $input->upload('uploadfile');
 my $borrowernumber = $input->param('borrowernumber');
 my $op             = $input->param('op') || '';
@@ -83,7 +85,7 @@ our @counts = ();
 our %errors = ();
 
 # Case is important in these operational values as the template must use case to be visually pleasing!
-if ( ( $op eq 'Upload' ) && $uploadfile ) {
+if ( ( $op eq 'Upload' ) && ($uploadfile || $uploadfiletext) ) {
 
     output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
@@ -100,18 +102,35 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
       File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
     my ( @directories, $results );
 
-    $errors{'NOTZIP'} = 1
-      if ( $uploadfilename !~ /\.zip$/i && $filetype =~ m/zip/i );
     $errors{'NOWRITETEMP'} = 1 unless ( -w $dirname );
-    $errors{'EMPTYUPLOAD'} = 1 unless ( length($uploadfile) > 0 );
+    if ( length($uploadfiletext) == 0 ) {
+        $errors{'NOTZIP'} = 1
+          if ( $uploadfilename !~ /\.zip$/i && $filetype =~ m/zip/i );
+        $errors{'EMPTYUPLOAD'} = 1 unless ( length($uploadfile) > 0 );
+    }
 
     if (%errors) {
         $template->param( ERRORS => [ \%errors ] );
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
-    while (<$uploadfile>) {
-        print $tfh $_;
+
+    if ( length($uploadfiletext) == 0 ) {
+        while (<$uploadfile>) {
+            print $tfh $_;
+        }
+    } else {
+        # data type controlled in toDataURL() in template
+        if ( $uploadfiletext =~ /data:image\/jpeg;base64,(.*)/ ) {
+            my $encoded_picture = $1;
+            my $decoded_picture = decode_base64($encoded_picture);
+            print $tfh $decoded_picture;
+        } else {
+            $errors{'BADPICTUREDATA'} = 1;
+            $template->param( ERRORS => [ \%errors ] );
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
+        }
     }
     close $tfh;
     if ( $filetype eq 'zip' ) {
@@ -221,7 +240,9 @@ sub handle_dir {
             return \%direrrors;
         }
 
-        while ( my $line = <$fh> ) {
+        my @lines = <$fh>;
+        close $fh;
+        foreach my $line (@lines) {
             $logger->debug("Reading contents of $file");
             chomp $line;
             $logger->debug("Examining line: $line");
@@ -241,7 +262,6 @@ sub handle_dir {
             $source = "$dir/$filename";
             %counts = handle_file( $cardnumber, $source, $template, %counts );
         }
-        close $fh;
         closedir DIR;
     }
     else {

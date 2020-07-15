@@ -90,22 +90,41 @@ $(document).ready(function(){
         $("#borrower_message").val( $(this).val() );
     });
 
+    $("#patronImageEdit").on("shown.bs.modal", function(){
+        startup();
+    });
+
     $(".edit-patronimage").on("click", function(e){
         e.preventDefault();
         var borrowernumber = $(this).data("borrowernumber");
-        $.get("/cgi-bin/koha/members/moremember.pl", { borrowernumber : borrowernumber }, function( data ){
-            var image_form = $(data).find("#picture-upload");
-            image_form.show().find(".cancel").remove();
-            $("#patronImageEdit .modal-body").html( image_form );
-        });
+        var cardnumber = $(this).data("cardnumber");
         var modalTitle = $(this).attr("title");
-        $("#patronImageEdit .modal-title").text(modalTitle);
-        $("#patronImageEdit").modal("show");
+        $.ajax({
+            url: "/cgi-bin/koha/members/moremember-patronimage.pl",
+            type: "GET",
+            data: { borrowernumber: borrowernumber, cardnumber: cardnumber },
+            success: function ( data ) {
+                $("#patronImageEdit .modal-body").html( data );
+                $("#patronImageEdit .modal-title").text(modalTitle);
+                $("#patronImageEdit").modal("show");
+            },
+            error: function () {
+                location.href="/cgi-bin/koha/members/moremember-patronimage.pl?borrowernumber=" + borrowernumber;
+            }
+        });
+        $("#patronImageEdit").on("hidden.bs.modal", function(){
+            /* Stop using the user's camera when modal is closed */
+            let viewfinder = document.getElementById("viewfinder");
+            if( viewfinder.srcObject ){
+                viewfinder.srcObject.getTracks().forEach( track => {
+                    if( track.readyState == 'live' && track.kind === 'video'){
+                        track.stop();
+                    }
+                });
+            }
+        });
     });
-
 });
-
-
 
 function searchfield_date_tooltip(filter) {
     var field = "#searchmember" + filter;

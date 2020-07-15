@@ -38,12 +38,12 @@
             [% IF ( patron.image ) %]
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
                 <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default edit-patronimage" title="Edit patron image" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
                 </div>
             [% ELSE %]
                 <div class="patronimage empty"></div>
                 <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default edit-patronimage" title="Add patron image" href="#"><i class="fa fa-plus"></i> Add</a></div>
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" data-cardnumber="[% patron.cardnumber | html %]" class="btn btn-default edit-patronimage" title="Patron photo" href="#"><i class="fa fa-plus"></i> Add</a></div>
                 </div>
             [% END %]
         </div>
@@ -186,7 +186,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="patronImageEditLabel">Modal title</h4>
+                <h4 class="modal-title" id="patronImageEditLabel">Patron photo</h4>
             </div>
             <div class="modal-body">
                 <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" />
