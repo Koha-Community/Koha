@@ -2383,7 +2383,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     t::lib::Mocks::mock_preference('MarkLostItemsAsReturned', 'batchmod|moredetail|cronjob|additem|pendingreserves|onpayment');
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
@@ -2695,6 +2695,457 @@ subtest 'AddReturn | is_overdue' => sub {
         # Cleanup
         Koha::Account::Lines->search(
             { borrowernumber => $patron->borrowernumber } )->delete;
+    };
+
+    subtest 'enh 23091 | Lost item return policies' => sub {
+        plan tests => 4;
+
+        my $manager = $builder->build_object({ class => "Koha::Patrons" });
+
+        my $branchcode_false =
+          $builder->build( { source => 'Branch' } )->{branchcode};
+        my $specific_rule_false = $builder->build(
+            {
+                source => 'CirculationRule',
+                value  => {
+                    branchcode   => $branchcode_false,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'lostreturn',
+                    rule_value   => 0
+                }
+            }
+        );
+        my $branchcode_refund =
+          $builder->build( { source => 'Branch' } )->{branchcode};
+        my $specific_rule_refund = $builder->build(
+            {
+                source => 'CirculationRule',
+                value  => {
+                    branchcode   => $branchcode_refund,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'lostreturn',
+                    rule_value   => 'refund'
+                }
+            }
+        );
+        my $branchcode_restore =
+          $builder->build( { source => 'Branch' } )->{branchcode};
+        my $specific_rule_restore = $builder->build(
+            {
+                source => 'CirculationRule',
+                value  => {
+                    branchcode   => $branchcode_restore,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'lostreturn',
+                    rule_value   => 'restore'
+                }
+            }
+        );
+        my $branchcode_charge =
+          $builder->build( { source => 'Branch' } )->{branchcode};
+        my $specific_rule_charge = $builder->build(
+            {
+                source => 'CirculationRule',
+                value  => {
+                    branchcode   => $branchcode_charge,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'lostreturn',
+                    rule_value   => 'charge'
+                }
+            }
+        );
+
+        my $replacement_amount = 99.00;
+        t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+        t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee', 1 );
+        t::lib::Mocks::mock_preference( 'WhenLostForgiveFine',          0 );
+        t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',       0 );
+        t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl',
+            'CheckinLibrary' );
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge',
+            undef );
+
+        subtest 'lostreturn | false' => sub {
+            plan tests => 12;
+
+            t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $branchcode_false });
+
+            my $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode, $ten_days_ago );
+
+            # Fake fines cronjob on this checkout
+            my ($fine) =
+              CalcFine( $item, $patron->categorycode, $library->{branchcode},
+                $ten_days_ago, $now );
+            UpdateFine(
+                {
+                    issue_id       => $issue->issue_id,
+                    itemnumber     => $item->itemnumber,
+                    borrowernumber => $patron->borrowernumber,
+                    amount         => $fine,
+                    due            => output_pref($ten_days_ago)
+                }
+            );
+            my $overdue_fees = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is( $overdue_fees->count, 1, 'Overdue item fee produced' );
+            my $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                10, 'The right OVERDUE amount is generated' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The right OVERDUE amountoutstanding is generated' );
+
+            # Simulate item marked as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountoutstanding is generated' );
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+
+            # Return lost item
+            my ( $returned, $message ) =
+              AddReturn( $item->barcode, $branchcode_false, undef, $five_days_ago );
+
+            $overdue_fee->discard_changes;
+            is( $overdue_fee->amount + 0,
+                10, 'The OVERDUE amount is left intact' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The OVERDUE amountoutstanding is left intact' );
+
+            $lost_fee_line->discard_changes;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The LOST amount is left intact' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The LOST amountoutstanding is left intact' );
+            # FIXME: Should we set the LOST fee status to 'FOUND' regardless of whether we're refunding or not?
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+        };
+
+        subtest 'lostreturn | refund' => sub {
+            plan tests => 12;
+
+            t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $branchcode_refund });
+
+            my $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode, $ten_days_ago );
+
+            # Fake fines cronjob on this checkout
+            my ($fine) =
+              CalcFine( $item, $patron->categorycode, $library->{branchcode},
+                $ten_days_ago, $now );
+            UpdateFine(
+                {
+                    issue_id       => $issue->issue_id,
+                    itemnumber     => $item->itemnumber,
+                    borrowernumber => $patron->borrowernumber,
+                    amount         => $fine,
+                    due            => output_pref($ten_days_ago)
+                }
+            );
+            my $overdue_fees = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is( $overdue_fees->count, 1, 'Overdue item fee produced' );
+            my $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                10, 'The right OVERDUE amount is generated' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The right OVERDUE amountoutstanding is generated' );
+
+            # Simulate item marked as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountoutstanding is generated' );
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+
+            # Return the lost item
+            my ( undef, $message ) =
+              AddReturn( $item->barcode, $branchcode_refund, undef, $five_days_ago );
+
+            $overdue_fee->discard_changes;
+            is( $overdue_fee->amount + 0,
+                10, 'The OVERDUE amount is left intact' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The OVERDUE amountoutstanding is left intact' );
+
+            $lost_fee_line->discard_changes;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The LOST amount is left intact' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                0,
+                'The LOST amountoutstanding is refunded' );
+            is( $lost_fee_line->status, 'FOUND', 'The LOST status was set to FOUND' );
+        };
+
+        subtest 'lostreturn | restore' => sub {
+            plan tests => 13;
+
+            t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $branchcode_restore });
+
+            my $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode , $ten_days_ago);
+
+            # Fake fines cronjob on this checkout
+            my ($fine) =
+              CalcFine( $item, $patron->categorycode, $library->{branchcode},
+                $ten_days_ago, $now );
+            UpdateFine(
+                {
+                    issue_id       => $issue->issue_id,
+                    itemnumber     => $item->itemnumber,
+                    borrowernumber => $patron->borrowernumber,
+                    amount         => $fine,
+                    due            => output_pref($ten_days_ago)
+                }
+            );
+            my $overdue_fees = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is( $overdue_fees->count, 1, 'Overdue item fee produced' );
+            my $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                10, 'The right OVERDUE amount is generated' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The right OVERDUE amountoutstanding is generated' );
+
+            # Simulate item marked as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountoutstanding is generated' );
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+
+            # Simulate refunding overdue fees upon marking item as lost
+            my $overdue_forgive = $patron->account->add_credit(
+                {
+                    amount     => 10.00,
+                    user_id    => $manager->borrowernumber,
+                    library_id => $branchcode_restore,
+                    interface  => 'test',
+                    type       => 'FORGIVEN',
+                    item_id    => $item->itemnumber
+                }
+            );
+            $overdue_forgive->apply(
+                { debits => [$overdue_fee], offset_type => 'Forgiven' } );
+            $overdue_fee->discard_changes;
+            is($overdue_fee->amountoutstanding + 0, 0, 'Overdue fee forgiven');
+
+            # Do nothing
+            my ( undef, $message ) =
+              AddReturn( $item->barcode, $branchcode_restore, undef, $five_days_ago );
+
+            $overdue_fee->discard_changes;
+            is( $overdue_fee->amount + 0,
+                10, 'The OVERDUE amount is left intact' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The OVERDUE amountoutstanding is restored' );
+
+            $lost_fee_line->discard_changes;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The LOST amount is left intact' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                0,
+                'The LOST amountoutstanding is refunded' );
+            is( $lost_fee_line->status, 'FOUND', 'The LOST status was set to FOUND' );
+        };
+
+        subtest 'lostreturn | charge' => sub {
+            plan tests => 16;
+
+            t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $branchcode_charge });
+
+            my $item = $builder->build_sample_item(
+                {
+                    replacementprice => $replacement_amount
+                }
+            );
+
+            # Issue the item
+            my $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode, $ten_days_ago );
+
+            # Fake fines cronjob on this checkout
+            my ($fine) =
+              CalcFine( $item, $patron->categorycode, $library->{branchcode},
+                $ten_days_ago, $now );
+            UpdateFine(
+                {
+                    issue_id       => $issue->issue_id,
+                    itemnumber     => $item->itemnumber,
+                    borrowernumber => $patron->borrowernumber,
+                    amount         => $fine,
+                    due            => output_pref($ten_days_ago)
+                }
+            );
+            my $overdue_fees = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                }
+            );
+            is( $overdue_fees->count, 1, 'Overdue item fee produced' );
+            my $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                10, 'The right OVERDUE amount is generated' );
+            is( $overdue_fee->amountoutstanding + 0,
+                10,
+                'The right OVERDUE amountoutstanding is generated' );
+
+            # Simulate item marked as lost
+            $item->itemlost(3)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountoutstanding is generated' );
+            is( $lost_fee_line->status, undef, 'The LOST status was not set' );
+
+            # Simulate refunding overdue fees upon marking item as lost
+            my $overdue_forgive = $patron->account->add_credit(
+                {
+                    amount     => 10.00,
+                    user_id    => $manager->borrowernumber,
+                    library_id => $branchcode_charge,
+                    interface  => 'test',
+                    type       => 'FORGIVEN',
+                    item_id    => $item->itemnumber
+                }
+            );
+            $overdue_forgive->apply(
+                { debits => [$overdue_fee], offset_type => 'Forgiven' } );
+            $overdue_fee->discard_changes;
+            is($overdue_fee->amountoutstanding + 0, 0, 'Overdue fee forgiven');
+
+            # Do nothing
+            my ( undef, $message ) =
+              AddReturn( $item->barcode, $branchcode_charge, undef, $five_days_ago );
+
+            $lost_fee_line->discard_changes;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The LOST amount is left intact' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                0,
+                'The LOST amountoutstanding is refunded' );
+            is( $lost_fee_line->status, 'FOUND', 'The LOST status was set to FOUND' );
+
+            $overdue_fees = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'OVERDUE'
+                },
+                {
+                    order_by => { '-asc' => 'accountlines_id'}
+                }
+            );
+            is( $overdue_fees->count, 2, 'A second OVERDUE fee has been added' );
+            $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                10, 'The original OVERDUE amount is left intact' );
+            is( $overdue_fee->amountoutstanding + 0,
+                0,
+                'The original OVERDUE amountoutstanding is left as forgiven' );
+            $overdue_fee = $overdue_fees->next;
+            is( $overdue_fee->amount + 0,
+                5, 'The new OVERDUE amount is correct for the backdated return' );
+            is( $overdue_fee->amountoutstanding + 0,
+                5,
+                'The new OVERDUE amountoutstanding is correct for the backdated return' );
+        };
     };
 };
 
