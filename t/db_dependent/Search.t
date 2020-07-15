@@ -669,6 +669,12 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_type ) = buildQuery([], [ 0 ], [ 'su,phr' ], [], [], 0, 'en');
     is($query, 'su,phr=0 ', 'buildQuery should keep 0 value');
 
+    # Bug 23086
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $query_type ) = buildQuery([], [], [], [ 'mc-ccode:NF(IC'], [], 0, 'en');
+    like($query, qr/ccode="NF\(IC"/, "Limit quoted correctly");
+
     # Let's see what happens when we pass bad data into these routines.
     # We have to catch warnings since we're not very good about returning errors.
 
@@ -1015,7 +1021,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 114;
+    plan tests => 115;
     run_marc21_search_tests();
 };
 
