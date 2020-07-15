@@ -3,6 +3,9 @@ package C4::SIP::Logger;
 
 use Modern::Perl;
 
+use base 'Exporter';
+our @EXPORT_OK = qw ( get_logger set_logger );
+
 our $activeSIPServer;
 our $activeLogger;
 
