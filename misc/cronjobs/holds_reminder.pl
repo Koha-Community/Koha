@@ -282,8 +282,8 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
         $sending_params->{letter_params} = $letter_params;
         $sending_params->{test_mode} = $nomail;
         my $result_text = $nomail ? "would have been sent" : "was sent";
-        # send_notice queues the notices, falling back to print for email or SMS, and ignores phone (they are handled by Itiva)
-        my $result = $patron->send_notice( $sending_params );
+        # queue_notice queues the notices, falling back to print for email or SMS, and ignores phone (they are handled by Itiva)
+        my $result = $patron->queue_notice( $sending_params );
         $verbose and print "   borrower " . $patron->surname . ", " . $patron->firstname . " $result_text notices via: @{$result->{sent}}\n" if defined $result->{sent};
         $verbose and print "   borrower " . $patron->surname . ", " . $patron->firstname . " $result_text print fallback for: @{$result->{fallback}}\n" if defined $result->{fallback};
         # Mark this borrower as completed

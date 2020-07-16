@@ -1810,11 +1810,11 @@ sub to_api_mapping {
     };
 }
 
-=head3 send_notice
+=head3 queue_notice
 
-    Koha::Patrons->send_notice({ letter_params => $letter_params, message_name => 'DUE'});
-    Koha::Patrons->send_notice({ letter_params => $letter_params, message_transports => \@message_transports });
-    Koha::Patrons->send_notice({ letter_params => $letter_params, message_transports => \@message_transports, test_mode => 1 });
+    Koha::Patrons->queue_notice({ letter_params => $letter_params, message_name => 'DUE'});
+    Koha::Patrons->queue_notice({ letter_params => $letter_params, message_transports => \@message_transports });
+    Koha::Patrons->queue_notice({ letter_params => $letter_params, message_transports => \@message_transports, test_mode => 1 });
 
     Queue messages to a patron. Can pass a message that is part of the message_attributes
     table or supply the transport to use.
@@ -1829,7 +1829,7 @@ sub to_api_mapping {
 
 =cut
 
-sub send_notice {
+sub queue_notice {
     my ( $self, $params ) = @_;
     my $letter_params = $params->{letter_params};
     my $test_mode = $params->{test_mode};

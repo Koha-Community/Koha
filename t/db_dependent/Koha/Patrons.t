@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 41;
+use Test::More tests => 42;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1981,7 +1981,7 @@ subtest 'anonymize' => sub {
     is( $patron2->firstname, undef, 'First name patron2 cleared' );
 };
 
-subtest 'send_notice' => sub {
+subtest 'queue_notice' => sub {
     plan tests => 11;
 
     my $dbh = C4::Context->dbh;
@@ -2028,26 +2028,26 @@ subtest 'send_notice' => sub {
     };
     my @mtts = ('email');
 
-    is( $patron->send_notice(), undef, "Nothing is done if no params passed");
-    is( $patron->send_notice({ letter_params => $letter_params }),undef, "Nothing done if only letter");
+    is( $patron->queue_notice(), undef, "Nothing is done if no params passed");
+    is( $patron->queue_notice({ letter_params => $letter_params }),undef, "Nothing done if only letter");
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        $patron->queue_notice({ letter_params => $letter_params, message_transports => \@mtts }),
         {sent => ['email'] }, "Email sent"
     );
     $patron->email("")->store;
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        $patron->queue_notice({ letter_params => $letter_params, message_transports => \@mtts }),
         {sent => ['print'],fallback => ['email']}, "Email fallsback to print if no email"
     );
     push @mtts, 'sms';
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        $patron->queue_notice({ letter_params => $letter_params, message_transports => \@mtts }),
         {sent => ['print','sms'],fallback => ['email']}, "Email fallsback to print if no email, sms sent"
     );
     $patron->smsalertnumber("")->store;
     my $counter = Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count;
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        $patron->queue_notice({ letter_params => $letter_params, message_transports => \@mtts }),
         {sent => ['print'],fallback => ['email','sms']}, "Email fallsback to print if no emai, sms fallsback to print if no sms, only one print sent"
     );
     is( Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count, $counter+1,"Count of queued notices went up by one");
@@ -2057,16 +2057,16 @@ subtest 'send_notice' => sub {
     my $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
     $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
 
-    is( $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts, message_name => 'Hold_Filled' }),undef, "Nothing done if transports and name sent");
+    is( $patron->queue_notice({ letter_params => $letter_params, message_transports => \@mtts, message_name => 'Hold_Filled' }),undef, "Nothing done if transports and name sent");
 
     $patron->email(q|awesome@ismymiddle.name|)->store;
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_name => 'Hold_Filled' }),
+        $patron->queue_notice({ letter_params => $letter_params, message_name => 'Hold_Filled' }),
         {sent => ['email'] }, "Email sent when using borrower preferences"
     );
     $counter = Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count;
     is_deeply(
-        $patron->send_notice({ letter_params => $letter_params, message_name => 'Hold_Filled', test_mode => 1 }),
+        $patron->queue_notice({ letter_params => $letter_params, message_name => 'Hold_Filled', test_mode => 1 }),
         {sent => ['email'] }, "Report that email sent when using borrower preferences in test_mode"
     );
     is( Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count, $counter,"Count of queued notices not increased in test mode");
