@@ -1,9 +1,7 @@
 #!/usr/bin/perl
 
-#written 3rd May 2010 by kmkale@anantcorp.com adapted from boraccount.pl by chris@katipo.oc.nz
-#script to print fee receipts
-
-# Copyright Koustubha Kale
+# Copyright Koustubha Kale 2010
+# Copyright PTFS Europe 2020
 #
 # This file is part of Koha.
 #
@@ -24,70 +22,46 @@ use Modern::Perl;
 
 use C4::Auth;
 use C4::Output;
-use Koha::DateUtils;
 use CGI qw ( -utf8 );
-use C4::Members;
-use C4::Accounts;
-
+use C4::Letters;
 use Koha::Account::Lines;
-use Koha::Patrons;
-use Koha::Patron::Categories;
 
 my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/printinvoice.tt",
+    {
+        template_name   => "members/printinvoice.tt",
         query           => $input,
         type            => "intranet",
-        flagsrequired => { borrowers => 'edit_borrowers', updatecharges => 'remaining_permissions' },
-        debug           => 1,
+        flagsrequired   => {
+            borrowers     => 'edit_borrowers',
+            updatecharges => 'remaining_permissions'
+        }
     }
 );
 
-my $borrowernumber  = $input->param('borrowernumber');
-my $action          = $input->param('action') || '';
-my $accountlines_id = $input->param('accountlines_id');
+my $debit_id = $input->param('accountlines_id');
+my $debit = Koha::Account::Lines->find($debit_id);
+my $patron = $debit->patron;
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser );
-my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
+output_and_exit_if_error(
+    $input, $cookie,
+    $template,
+    {
+        module         => 'members',
+        logged_in_user => $logged_in_user,
+        current_patron => $patron
+    }
+);
 
-#get account details
-my $total = $patron->account->balance;
-my $accountline_object = Koha::Account::Lines->find($accountlines_id);
-my $accountline = $accountline_object->unblessed;
-
-my $totalcredit;
-if ( $total <= 0 ) {
-    $totalcredit = 1;
-}
-
-
-$accountline->{'amount'} += 0.00;
-if ( $accountline->{'amount'} <= 0 ) {
-    $accountline->{'amountcredit'} = 1;
-    $accountline->{'amount'} *= -1.00;
-}
-$accountline->{'amountoutstanding'} += 0.00;
-if ( $accountline->{'amountoutstanding'} <= 0 ) {
-    $accountline->{'amountoutstandingcredit'} = 1;
-}
-
-my @account_offsets = Koha::Account::Offsets->search( { debit_id => $accountline_object->id } );
-
-my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_DEBIT', C4::Context::mybranch, 'print', $patron->lang );
+my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_DEBIT',
+    C4::Context::mybranch, 'print', $patron->lang );
 
 $template->param(
     letter  => $letter,
-    patron  => $patron,
-    library => C4::Context::mybranch,
-    offsets => \@account_offsets,
-    debit   => $accountline_object,
+    debit   => $debit
 
-    finesview   => 1,
-    total       => sprintf( "%.2f", $total ),
-    totalcredit => $totalcredit,
-    accounts    => [$accountline],           # FIXME There is always only 1 row!
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
