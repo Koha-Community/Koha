@@ -84,6 +84,14 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLAC
     );
     $sth->execute( $account_credit, $account_credit_old );
 
+    # replace patron variable with credit.patron
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% patron', '[% credit.patron') WHERE code = 'ACCOUNT_CREDIT' ");
+    # replace library variable with credit.library.branchname
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% library', '[% credit.library.branchname') WHERE code = 'ACCOUNT_CREDIT' ");
+    # replace offsets variable with credit.offsets
+    $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' credit.offsets %]') WHERE code = 'ACCOUNT_CREDIT' ");
+    # replace change_given variable with change
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% change_given', '[% change') WHERE code = 'ACCOUNT_CREDIT' ");
 
     # ACCOUNT_DEBIT
     my $account_debit = q{
@@ -170,6 +178,17 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_DEBIT' AND REPLACE(REPLACE
     );
     $sth->execute($account_debit, $account_debit_old);
 
+    # replace patron variable with debit.patron
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% patron', '[% debit.patron') WHERE code = 'ACCOUNT_DEBIT' ");
+    # replace library variable with debit.library.branchname
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% library', '[% debit.library.branchname') WHERE code = 'ACCOUNT_DEBIT' ");
+    # replace offsets variable with debit.offsets
+    $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' debit.offsets %]') WHERE code = 'ACCOUNT_DEBIT' ");
+    # replace total variable with debit.patron.account.balance
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% total ', '[% debit.patron.account.balance ') WHERE code = 'ACCOUNT_DEBIT' ");
+    # replace totalcredit variable with debit.patron.account.balance <= 0
+    $dbh->do("UPDATE letter SET content = REPLACE(content, 'totalcredit', 'debit.patron.account.balance <= 0') WHERE code = 'ACCOUNT_DEBIT' ");
+
     # RECEIPT
     my $receipt = q{
         [% PROCESS "accounts.inc" %]
@@ -243,6 +262,11 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_DEBIT' AND REPLACE(REPLACE
 q{UPDATE letter SET content = ? WHERE code = 'RECEIPT' AND REPLACE(REPLACE(content, ' ', ''), '\n','') = ? }
     );
     $sth->execute($receipt,$receipt_old);
+
+    # replace offsets variable with debit.offsets
+    $dbh->do("UPDATE letter SET content = REPLACE(content, ' offsets %]', ' payment.offsets %]') WHERE code = 'RECEIPT' ");
+    # replace collected variable with tendered
+    $dbh->do("UPDATE letter SET content = REPLACE(content, '[% collected', '[% tendered') WHERE code = 'RECEIPT' ");
 
     NewVersion( $DBversion, 24381, "Update accounts notices" );
 }
