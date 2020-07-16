@@ -18960,7 +18960,7 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do(q{
-        UPDATE borrowers SET flags = flags + (1<<12) WHERE flags & (1 << 11)
+        UPDATE borrowers SET flags = flags + (1<<12) WHERE flags & (1 << 11) AND !(flags & (1 << 12))
     });
 
     SetVersion( $DBversion );
