@@ -39,9 +39,38 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'exception_holidays() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
+
+    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $branch2 = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    $dbh->do("DELETE FROM special_holidays");
+    # Clear cache
+    Koha::Caches->get_instance->flush_all;
+
+    my $holiday2add = dt_from_string("2030-07-07");
+    C4::Calendar->new( branchcode => $branch )->insert_day_month_holiday(
+        day         => $holiday2add->day(),
+        month       => $holiday2add->month(),
+        year        => $holiday2add->year(),
+        title       => 'A holiday',
+        description => "This is a holiday, for now",
+    );
+
+    C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
+        day         => 7,
+        month       => 7,
+        year        => 2020,
+        title       => 'Not a holiday',
+        description => 'This date should not be a holiday',
+    );
+
+    my $calendar = Koha::Calendar->new( branchcode => $branch2 );
+    $calendar->exception_holidays(); #This sets exception holiday in cache
+    $calendar = Koha::Calendar->new( branchcode => $branch );
+    is( $calendar->is_holiday( dt_from_string('2020-07-07') ), 0, "The date is not a holiday");
 
     $dbh->do("DELETE FROM special_holidays");
     # Clear cache
@@ -53,8 +82,7 @@ subtest 'exception_holidays() tests' => sub {
     use POSIX qw(tzset);
     tzset;
 
-    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
-    my $calendar = Koha::Calendar->new( branchcode => $branch );
+    $calendar = Koha::Calendar->new( branchcode => $branch );
 
     C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
         day         => 6,
