@@ -22227,6 +22227,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24156, "Add new table tables_settings" );
 }
 
+$DBversion = '20.06.00.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do("
+        DELETE FROM circulation_rules WHERE rule_name='holdallowed' AND rule_value='';
+    ");
+    NewVersion( $DBversion, 25851, "Remove holdallowed rule if value is an empty string");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
