@@ -233,7 +233,7 @@ foreach my $branchcode (@branchcodes) { #BEGIN BRANCH LOOP
     # If respecting calendar get the correct waiting since date
     my $waiting_date;
     if( $use_calendar ){
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => 'Calendar' );
         my $duration = DateTime::Duration->new( days => -$days );
         $waiting_date = $calendar->addDays($date_to_run,$duration); #Add negative of days
     } else {
