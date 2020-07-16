@@ -85,6 +85,19 @@ sub checkout {
     return $self->{_checkout};
 }
 
+=head3 library
+
+Returns a Koha::Library object representing where the accountline was recorded
+
+=cut
+
+sub library {
+    my ( $self ) = @_;
+    my $rs = $self->_result->branchcode;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
+}
+
 =head3 credit_type
 
 Return the credit_type linked to this account line
