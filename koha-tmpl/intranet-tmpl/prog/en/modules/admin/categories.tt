@@ -123,7 +123,7 @@
                     </select>
                 </li>
                 <li>
-                    <label for="hidelostitems">Lost items in staff client: </label>
+                    <label for="hidelostitems">Lost items in staff interface: </label>
                     <select name="hidelostitems" id="hidelostitems">
                         [% IF category.hidelostitems %]
                             <option value="0">Shown</option>
@@ -345,7 +345,7 @@
                 <tr><th scope="row">Upperage limit: </th><td>[% category.upperagelimit | html %] years</td></tr>
                 <tr><th scope="row">Enrollment fee: </th><td>[% category.enrolmentfee | $Price %]</td></tr>
                 <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
-                <tr><th scope="row">Lost items in staff client</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
+                <tr><th scope="row">Lost items in staff interface</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
                 <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price %]</td></tr>
 
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]

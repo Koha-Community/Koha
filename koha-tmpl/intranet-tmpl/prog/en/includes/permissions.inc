@@ -7,7 +7,7 @@
         <span class="main_permission circulate_permission">Check out and check in items</span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'catalogue' -%]
-        <span class="main_permission catalogue_permission">Staff access, allows viewing of catalogue in staff client</span>
+        <span class="main_permission catalogue_permission">Staff access, allows viewing of catalogue in staff interface</span>
         <span class="permissioncode">([% name | html %])</span> <span class="required">Required for staff login.</span>
     [%- CASE 'parameters' -%]
         <span class="main_permission parameters_permission">Manage Koha system settings (Administration panel)</span>
