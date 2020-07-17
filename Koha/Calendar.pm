@@ -71,7 +71,7 @@ sub _holidays {
 
         # Add holidays for each branch
         my $holidays_sth = $dbh->prepare(
-'SELECT day, month, year, isexception FROM special_holidays WHERE branchcode = ?'
+'SELECT day, month, year, MAX(isexception) FROM special_holidays WHERE branchcode = ? GROUP BY day, month, year'
         );
         $holidays_sth->execute($self->{branchcode});
 
@@ -83,11 +83,10 @@ sub _holidays {
               . sprintf( "%02d", $month )
               . sprintf( "%02d", $day );
 
-            $holidays->{$datestring} = !$exception;
+            $holidays->{$datestring} = $exception ? 0 : 1;
         }
         $cache->set_in_cache( $key, $holidays, { expiry => 76800 } );
     }
-
     return $holidays // {};
 }
 
