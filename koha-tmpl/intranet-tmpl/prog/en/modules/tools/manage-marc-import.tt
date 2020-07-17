@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
@@ -107,7 +108,7 @@
                                 <li><span class="label">File name:</span> [% file_name | html %]</li>
                                 <li><span class="label">Comments:</span> [% IF ( comments ) %][% comments | html %][% ELSE %](none)[% END %]</li>
                                 <li><span class="label">Type:</span> [% IF ( record_type == 'auth' ) %]Authority records[% ELSE %]Bibliographic records[% END %]</li>
-                                <li><span class="label">Staged:</span> [% upload_timestamp | html %]</li>
+                                <li><span class="label">Staged:</span> [% upload_timestamp | $KohaDates with_hours=1 %]</li>
                                 <li><span class="label">Status:</span>
                                     [% IF ( import_status == 'cleaned' ) %]
                                         Cleaned
@@ -357,7 +358,7 @@
                                             [% batch_lis.import_status | html %]
                                         [% END %]
                                     </td>
-                                    <td>[% batch_lis.upload_timestamp | html %]</td>
+                                    <td>[% batch_lis.upload_timestamp | $KohaDates with_hours=1 %]</td>
                                     <td>[% batch_lis.num_records | html %]</td>
                                     <td>[% batch_lis.num_items | html %]
                                         [% IF ( batch_lis.num_items && batch_lis.import_status == 'imported' ) %]
