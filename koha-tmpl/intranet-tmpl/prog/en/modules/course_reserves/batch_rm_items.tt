@@ -1,0 +1,84 @@
+[% SET footerjs = 1 %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Course reserves &rsaquo; Remove items</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="courses_rm_items" class="course">
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Batch remove reserves</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+        [% IF action == 'display_form' %]
+            <form method="post" action="/cgi-bin/koha/course_reserves/batch_rm_items.pl">
+                <input type="hidden" name="action" value="batch_rm" />
+                <fieldset class="rows">
+                    <legend>Remove items: scan barcodes</legend>
+                    <ol>
+                        <li>
+                            <label class="required" for="barcodes">Item barcodes:</label>
+                            <textarea rows="20" cols="50" id="barcodes" name="barcodes" class="focus"></textarea>
+                        </li>
+                    </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <p>All course reserve items will be deleted from all courses to which they are attached.</p>
+                    <input type="submit" value="Submit" class="submit" id="batch_rm_btn" />
+                    <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
+                </fieldset>
+            </form>
+        [% END %]
+
+        [% IF action == 'display_results' %]
+            <h1>Results</h1>
+
+            <h3>Items deleted</h3>
+            [% IF item_and_count > 0 %]
+                <p>The following items were removed from all courses:</p>
+                <ul>
+                    [% FOREACH i IN item_and_count %]
+                      [% IF i.delcount == 1 %]
+                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount %] course.</li>
+                      [% ELSIF i.delcount > 1 %]
+                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount %] courses.</li>
+                      [% END %]
+                    [% END %]
+                </ul>
+            [% ELSE %]
+                No valid item barcodes found.
+            [% END %]
+
+
+            [% IF invalid_barcodes.size > 0 %]
+                <h3>Invalid barcodes</h3>
+                <p>The following invalid barcodes were skipped:</p>
+                <ul>
+                    [% FOREACH b IN invalid_barcodes %]
+                        <li>[% b | html %]</li>
+                    [% END %]
+                </ul>
+            [% END %]
+
+            <p>
+                <a class='btn btn-default'  href="/cgi-bin/koha/course_reserves/course-reserves.pl">Return</a>
+            </p>
+        [% END %]
+    </div>
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(document).ready(function() {
+            $("#batch_rm_btn").click(function(){
+                return confirmDelete(_("Are you sure you want to remove these items from all courses?"));
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

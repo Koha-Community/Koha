@@ -20,10 +20,13 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
 
-                    [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
+                    [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_delete_reserves %]
                     <div id="toolbar">
                         [% IF ( CAN_user_coursereserves_manage_courses ) %]
                             <a class="btn btn-default" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl"><i class="fa fa-plus"></i> New course</a>
+                        [% END %]
+                        [% IF ( CAN_user_coursereserves_delete_reserves ) %]
+                            <a class="btn btn-default" id="batch_rm" href="/cgi-bin/koha/course_reserves/batch_rm_items.pl"><i class="fa fa-minus"></i> Batch remove items</a>
                         [% END %]
                     </div><!-- /toolbar -->
                     [% END %]
