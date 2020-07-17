@@ -132,11 +132,11 @@ sub build_query {
     my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
     if (   $display_library_facets eq 'both'
         or $display_library_facets eq 'home' ) {
-        $res->{aggregations}{homebranch} = { terms => { field => "homebranch__facet" } };
+        $res->{aggregations}{homebranch} = { terms => { field => "homebranch__facet", size => $size } };
     }
     if (   $display_library_facets eq 'both'
         or $display_library_facets eq 'holding' ) {
-        $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet" } };
+        $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet", size => $size } };
     }
     return $res;
 }
