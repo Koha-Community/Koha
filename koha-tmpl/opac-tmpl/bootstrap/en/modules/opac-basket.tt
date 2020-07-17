@@ -81,7 +81,7 @@
                         </div> <!-- /#floating -->
 
                         [% IF ( verbose ) %]
-                            <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
+                            <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
                                 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                     <h2>
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
@@ -256,7 +256,7 @@
 
                         [% ELSE %]
 
-                            <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
+                            <form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
                                 <table id="itemst" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -324,7 +324,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         <script>
@@ -430,26 +429,22 @@
                     tagCanceled();
                 });
 
-                $("#CheckAll").click(function(){
-                    var checked = [];
-                    $(".checkboxed").checkCheckboxes("*", true).each(
-                        function() {
-                            selRecord(this.value,true);
-                        }
-                    );
+                $("#CheckAll").click(function(e){
+                    e.preventDefault();
+                    $(".cb").each(function(){
+                        $(this).prop("checked", true);
+                        selRecord(this.value, true);
+                    });
                     enableCheckboxActions();
-                    return false;
                 });
 
-                $("#CheckNone").click(function(){
-                    var checked = [];
-                    $(".checkboxed").unCheckCheckboxes("*",true).each(
-                        function() {
-                            selRecord(this.value,false);
-                        }
-                    );
+                $("#CheckNone").click(function(e){
+                    e.preventDefault();
+                    $(".cb").each(function(){
+                        $(this).prop("checked", false);
+                        selRecord(this.value, false);
+                    });
                     enableCheckboxActions();
-                    return false;
                 });
 
                 if( $("#itemst").length > 0 ){
@@ -490,8 +485,8 @@
 
             function enableCheckboxActions(){
                 // Enable/disable controls if checkboxes are checked
-                var checkedBoxes = $(".checkboxed input:checkbox:checked");
-                if ($(checkedBoxes).size()) {
+                var checkedBoxes = $(".cb:checked");
+                if ( checkedBoxes.length ) {
                   $("#selections").html(_("With selected titles: "));
                   $("#selections-toolbar .links a").removeClass("disabled");
                 } else {
