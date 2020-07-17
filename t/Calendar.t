@@ -78,7 +78,6 @@ fixtures_ok [
 
 my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache( 'single_holidays' ) ;
-$cache->clear_from_cache( 'exception_holidays' ) ;
 
 # 'MPL' branch is arbitrary, is not used at all but is needed for initialization
 my $cal = Koha::Calendar->new( branchcode => 'MPL' );
@@ -336,5 +335,4 @@ subtest 'days_mode parameter' => sub {
 
 END {
     $cache->clear_from_cache( 'single_holidays' ) ;
-    $cache->clear_from_cache( 'exception_holidays' ) ;
 };

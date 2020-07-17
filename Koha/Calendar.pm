@@ -55,12 +55,13 @@ sub _init {
 sub exception_holidays {
     my ( $self ) = @_;
 
+    my $branch = $self->{branchcode};
     my $cache  = Koha::Caches->get_instance();
-    my $cached = $cache->get_from_cache('exception_holidays');
+    my $key = 'exception_holidays_'.$branch;
+    my $cached = $cache->get_from_cache($key);
     return $cached if $cached;
 
     my $dbh = C4::Context->dbh;
-    my $branch = $self->{branchcode};
     my $exception_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 1'
     );
@@ -77,7 +78,7 @@ sub exception_holidays {
     }
     $self->{exception_holidays} =
       DateTime::Set->from_datetimes( dates => $dates );
-    $cache->set_in_cache( 'exception_holidays', $self->{exception_holidays} );
+    $cache->set_in_cache( $key, $self->{exception_holidays} );
     return $self->{exception_holidays};
 }
 
