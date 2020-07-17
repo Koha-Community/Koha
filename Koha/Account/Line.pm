@@ -93,7 +93,7 @@ Returns a Koha::Library object representing where the accountline was recorded
 
 sub library {
     my ( $self ) = @_;
-    my $rs = $self->_result->branchcode;
+    my $rs = $self->_result->library;
     return unless $rs;
     return Koha::Library->_new_from_dbic($rs);
 }
