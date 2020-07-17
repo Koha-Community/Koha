@@ -127,6 +127,10 @@ sub api_namespace {
     return "testplugin";
 }
 
+sub after_hold_create {
+    return "Koha::Plugin::Test::after_hold_create";
+}
+
 sub after_biblio_action {
     my ( $self, $params ) = @_;
     my $action    = $params->{action} // '';

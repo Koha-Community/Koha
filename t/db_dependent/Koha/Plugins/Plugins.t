@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 52;
+use Test::More tests => 53;
 
 use C4::Context;
 use Koha::Database;
@@ -169,6 +169,7 @@ ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
 ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements');
 ok( $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'), 'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button' );
 ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
+ok( $plugin->can('after_hold_create'), 'Test plugin can after_hold_create' );
 ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
 ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
 ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
