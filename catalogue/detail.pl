@@ -49,6 +49,7 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Plugins;
+use Koha::SearchEngine::Search;
 
 my $query = CGI->new();
 
@@ -143,12 +144,32 @@ my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
 my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
 if ( $xslfile ) {
+
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::BIBLIOS_INDEX }
+    );
+    my $cleaned_title = $biblio->title;
+    $cleaned_title =~ tr|/||;
+    my $query =
+      ( C4::Context->preference('UseControlNumber') and $record->field('001') )
+      ? 'rcn:'. $record->field('001')->data . ' and (bib-level:a or bib-level:b)'
+      : "Host-item:$cleaned_title";
+    my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
+
+    warn "Warning from simple_search_compat: $err"
+        if $err;
+
+    my $variables = {
+        show_analytics_link => $count > 0 ? 1 : 0
+    };
+
     $template->param(
         XSLTDetailsDisplay => '1',
-        XSLTBloc => XSLTParse4Display(
-                        $biblionumber, $record, "XSLTDetailsDisplay",
-                        1, undef, $sysxml, $xslfile, $lang
-                    )
+        XSLTBloc           => XSLTParse4Display(
+            $biblionumber, $record, "XSLTDetailsDisplay", 1,
+            undef,         $sysxml, $xslfile,             $lang,
+            $variables
+        )
     );
 }
 
