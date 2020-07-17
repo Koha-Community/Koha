@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 use Test::MockModule;
 
@@ -101,6 +101,48 @@ subtest 'item() tests' => sub {
 
     $line->itemnumber(undef)->store;
     is( $line->item, undef, 'Koha::Account::Line->item should return undef if no item linked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'library() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    my $line = Koha::Account::Line->new(
+        {
+            borrowernumber  => $patron->{borrowernumber},
+            branchcode      => $library->branchcode,
+            debit_type_code => "OVERDUE",
+            status          => "RETURNED",
+            amount          => 10,
+            interface       => 'commandline',
+        }
+    )->store;
+
+    my $account_line_library = $line->library;
+    is( ref($account_line_library),
+        'Koha::Library',
+        'Koha::Account::Line->library should return a Koha::Library' );
+    is(
+        $line->branchcode,
+        $account_line_library->branchcode,
+        'Koha::Account::Line->library should return the correct library'
+    );
+
+    # Test ON DELETE SET NULL
+    $library->delete;
+    my $found = Koha::Account::Lines->find( $line->accountlines_id );
+    ok( $found, "Koha::Account::Line not deleted when the linked library is deleted" );
+
+    is( $found->library, undef,
+'Koha::Account::Line->library should return undef if linked library has been deleted'
+    );
 
     $schema->storage->txn_rollback;
 };
