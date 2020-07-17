@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Data::Dumper;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -95,6 +95,7 @@ Koha::Localization->new(
 my $type = Koha::ItemTypes->find($child1->itemtype);
 ok( defined($type), 'first result' );
 is_deeply( $type->unblessed, $child1->unblessed, "We got back the same object" );
+is_deeply( $type->parent->unblessed, $parent1->unblessed, 'The parent method returns the correct object');
 
 $type = Koha::ItemTypes->find($child2->itemtype);
 ok( defined($type), 'second result' );
