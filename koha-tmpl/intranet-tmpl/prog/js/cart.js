@@ -66,24 +66,21 @@ function batchModify(){
 
 $(document).ready(function(){
     $("#items-popover").popover();
-    $("#CheckAll").click(function(){
-    var checked = [];
-    $("#bookbag_form").checkCheckboxes("*", true).each(
-        function() {
-            $(this).change();
-        }
-    );
-        return false;
+
+    $("#CheckAll").click(function (e) {
+        e.preventDefault();
+        $(".select_record").each(function () {
+            $(this).prop("checked", true).change();
+        });
     });
-    $("#CheckNone").click(function(){
-    var checked = [];
-    $("#bookbag_form").unCheckCheckboxes("*",true).each(
-        function() {
-            $(this).change();
-        }
-    );
-        return false;
+
+    $("#CheckNone").click(function (e) {
+        e.preventDefault();
+        $(".select_record").each(function () {
+            $(this).prop("checked", false).change();
+        });
     });
+
     $(".holdsep").text("| ");
     $(".hold").text(_("Place hold"));
     $("#downloadcartc").empty();
