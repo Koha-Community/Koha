@@ -31,7 +31,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 39;
+        plan tests => 40;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -73,6 +73,8 @@ fixtures_ok [
         [ 'MPL', 1,  6,  2011, '', '', 0 ],
         [ 'MPL', 4,  7,  2012, '', '', 0 ],
         [ 'CPL', 6,  8,  2012, '', '', 0 ],
+        [ 'MPL', 7,  7,  2012, '', '', 1 ], # holiday exception
+        [ 'MPL', 7,  7,  2012, '', '', 0 ], # holiday
       ],
 ], "add fixtures";
 
@@ -139,6 +141,12 @@ my $holiday_for_another_branch = DateTime->new(
     day => 6, # This is a monday
 );
 
+my $holiday_excepted = DateTime->new(
+    year => 2012,
+    month => 7,
+    day => 7, # Both a holiday and exception
+);
+
 {   # Syspref-agnostic tests
     is ( $saturday->day_of_week, 6, '\'$saturday\' is actually a saturday (6th day of week)');
     is ( $sunday->day_of_week, 7, '\'$sunday\' is actually a sunday (7th day of week)');
@@ -151,6 +159,7 @@ my $holiday_for_another_branch = DateTime->new(
     is ( $cal->is_holiday($notspecial), 0, 'Fixed single date that is not a holiday test' );
     is ( $cal->is_holiday($sunday_exception), 0, 'Exception holiday is not a closed day test' );
     is ( $cal->is_holiday($holiday_for_another_branch), 0, 'Holiday defined for another branch should not be defined as an holiday' );
+    is ( $cal->is_holiday($holiday_excepted), 0, 'Holiday defined and excepted should not be a holiday' );
 }
 
 {   # Bugzilla #8966 - is_holiday truncates referenced date
