@@ -1322,8 +1322,6 @@ sub ItemsAnyAvailableAndNotRestricted {
 
     my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } );
 
-    my $any_available = 0;
-
     foreach my $i (@items) {
         my $reserves_control_branch =
             GetReservesControlBranch( $i->unblessed(), $param->{patron}->unblessed );
@@ -1331,7 +1329,8 @@ sub ItemsAnyAvailableAndNotRestricted {
             C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
         my $item_library = Koha::Libraries->find( { branchcode => $i->homebranch } );
 
-        $any_available = 1
+        # we can return (end the loop) when first one found:
+        return 1
             unless $i->itemlost
             || $i->notforloan > 0
             || $i->withdrawn
@@ -1344,7 +1343,7 @@ sub ItemsAnyAvailableAndNotRestricted {
             || $branchitemrule->{holdallowed} == 3 && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } );
     }
 
-    return $any_available;
+    return 0;
 }
 
 =head2 AlterPriority
