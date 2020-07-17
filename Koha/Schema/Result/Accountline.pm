@@ -370,6 +370,26 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-19 09:20:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BuE4CYsSH4BwXZoQKE2MWw
 
+=head2 library
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 sub koha_objects_class {
     'Koha::Account::Lines';
 }
