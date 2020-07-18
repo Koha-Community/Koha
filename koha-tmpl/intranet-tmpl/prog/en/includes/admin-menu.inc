@@ -16,7 +16,9 @@
             [% IF ( CAN_user_parameters_manage_libraries ) %]
                 <li><a href="/cgi-bin/koha/admin/branches.pl">Libraries</a></li>
                 <li><a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a></li>
-                <li><a href="/cgi-bin/koha/admin/desks.pl">Desks</a></li>
+                [% IF ( Koha.Preference('UseCirculationDesks') ) %]
+                    <li><a href="/cgi-bin/koha/admin/desks.pl">Desks</a></li>
+                [% END %]
             [% END %]
             [% IF ( CAN_user_parameters_manage_itemtypes ) %]
                 <li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>
