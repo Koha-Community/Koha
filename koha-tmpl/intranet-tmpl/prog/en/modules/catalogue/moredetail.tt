@@ -85,7 +85,7 @@
 
             <div class="rows">
             <ol class="bibliodetails">
-            <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
+            <li><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
             [% IF ( ITEM_DAT.issue ) %]Checked out to
                 [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]

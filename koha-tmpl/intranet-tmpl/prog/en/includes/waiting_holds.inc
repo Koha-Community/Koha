@@ -8,7 +8,7 @@
             <th class="anti-the">Title</th>
             <th>Patron</th>
             <th>Home library</th>
-            <th>Current location</th>
+            <th>Current library</th>
             <th>Shelving location</th>
             <th>Call number</th>
             <th>Copy number</th>
