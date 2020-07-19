@@ -1340,7 +1340,8 @@ sub ItemsAnyAvailableAndNotRestricted {
                  && ! C4::Context->preference('AllowHoldsOnDamagedItems') )
             || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
             || $branchitemrule->{holdallowed} == 1 && $param->{patron}->branchcode ne $i->homebranch
-            || $branchitemrule->{holdallowed} == 3 && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } );
+            || $branchitemrule->{holdallowed} == 3 && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } )
+            || CanItemBeReserved( $param->{patron}->borrowernumber, $i->id )->{status} ne 'OK';
     }
 
     return 0;

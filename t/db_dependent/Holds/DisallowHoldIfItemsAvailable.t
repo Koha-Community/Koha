@@ -8,7 +8,7 @@ use C4::Items;
 use Koha::Items;
 use Koha::CirculationRules;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -284,6 +284,85 @@ is( $is, 1, "Items availability: 1 item is available, 1 item held in T" );
 
 $is = IsAvailableForItemLevelRequest( $item3, $patron1);
 is( $is, 1, "Item can be held, items in transit are not available" );
+
+subtest 'Check holds availability with different item types' => sub {
+    plan tests => 6;
+
+    # Check for holds availability when different item types have different
+    # smart rules assigned both with "if all unavailable" set,
+    # and $itemtype rule allows holds, $itemtype2 rule disallows holds.
+    # So, $item should be available for hold when checked out even if $item2
+    # is not checked out, because anyway $item2 unavailable for holds by rule
+    # (Bug 24683):
+
+    my $biblio2       = $builder->build_sample_biblio( { itemtype => $itemtype } );
+    my $biblionumber1 = $biblio2->biblionumber;
+    my $item4         = $builder->build_sample_item(
+        {   biblionumber  => $biblionumber1,
+            itype         => $itemtype,
+            homebranch    => $library_A,
+            holdingbranch => $library_A
+        }
+    );
+    my $item5 = $builder->build_sample_item(
+        {   biblionumber  => $biblionumber1,
+            itype         => $itemtype2,
+            homebranch    => $library_A,
+            holdingbranch => $library_A
+        }
+    );
+
+    # Test hold_fulfillment_policy
+    $dbh->do("DELETE FROM circulation_rules");
+    Koha::CirculationRules->set_rules(
+        {   categorycode => undef,
+            itemtype     => $itemtype,
+            branchcode   => undef,
+            rules        => {
+                issuelength      => 7,
+                lengthunit       => 8,
+                reservesallowed  => 99,
+                holds_per_record => 99,
+                onshelfholds     => 2,
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {   categorycode => undef,
+            itemtype     => $itemtype2,
+            branchcode   => undef,
+            rules        => {
+                issuelength      => 7,
+                lengthunit       => 8,
+                reservesallowed  => 0,
+                holds_per_record => 0,
+                onshelfholds     => 2,
+            }
+        }
+    );
+
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    is( $is, 1, "Items availability: 2 items, one allowed by smart rule but not checked out, another one not allowed to be held by smart rule" );
+
+    $is = IsAvailableForItemLevelRequest( $item4, $patron1 );
+    is( $is, 0, "Item4 cannot be requested to hold: 2 items, Item4 available, Item5 restricted" );
+
+    $is = IsAvailableForItemLevelRequest( $item5, $patron1 );
+    is( $is, 0, "Item5 cannot be requested to hold: 2 items, Item4 available, Item5 restricted" );
+
+    AddIssue( $patron2->unblessed, $item4->barcode );
+
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    is( $is, 0, "Items availability: 2 items, one allowed by smart rule and checked out, another one not allowed to be held by smart rule" );
+
+    $is = IsAvailableForItemLevelRequest( $item4, $patron1 );
+    is( $is, 1, "Item4 can be requested to hold, 2 items, Item4 checked out, Item5 restricted" );
+
+    $is = IsAvailableForItemLevelRequest( $item5, $patron1 );
+    # Note: read IsAvailableForItemLevelRequest sub description about CanItemBeReserved/CanBookBeReserved:
+    is( $is, 1, "Item5 can be requested to hold, 2 items, Item4 checked out, Item5 restricted" );
+};
+
 
 # Cleanup
 $schema->storage->txn_rollback;
