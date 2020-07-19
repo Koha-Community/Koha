@@ -1250,6 +1250,11 @@ a request on the item - in particular,
 this routine does not check IndependentBranches
 and canreservefromotherbranches.
 
+Note also that this subroutine does not checks smart
+rules limits for item by reservesallowed/holds_per_record
+values, this complemented in calling code with calls and
+checks with CanItemBeReserved or CanBookBeReserved.
+
 =cut
 
 sub IsAvailableForItemLevelRequest {
