@@ -96,6 +96,12 @@ __PACKAGE__->table("borrower_attribute_types");
   default_value: 0
   is_nullable: 0
 
+=head2 mandatory
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -122,6 +128,8 @@ __PACKAGE__->add_columns(
   "class",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "keep_for_pseudonymization",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "mandatory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -185,8 +193,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 18:00:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MMozmna9C3PseXF0Qskznw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-20 12:40:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+5TTNyiyjJkADhbkSLvGLw
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
