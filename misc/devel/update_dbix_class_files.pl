@@ -167,6 +167,12 @@ port number for the DB server. (defaults to '3306')
 
 path into which create the schema files. (defaults to './')
 
+=item B<--force>
+
+Force a schema overwrite.
+
+WARNING: Use this at your own risk! it's helpful if you are maintaining a fork or in other such cases. You should always attempt to run the script without force first and only resort to using force if that fails. It is also very much worthwhile checking the diff after running with force to ensure you have not resulted in any unexpected changes.
+
 =item B<-h|--help>
 
 prints this help text
