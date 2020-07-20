@@ -430,7 +430,7 @@ __PACKAGE__->table("borrowers");
 
   data_type: 'integer'
   default_value: 0
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 overdrive_auth_token
 
@@ -628,7 +628,7 @@ __PACKAGE__->add_columns(
     size => 25,
   },
   "login_attempts",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "overdrive_auth_token",
   { data_type => "mediumtext", is_nullable => 1 },
   "anonymized",
@@ -1668,8 +1668,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-25 08:47:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o+gWN0ND3K07hqLwAoNmMA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-20 10:54:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pH5cKJCrjwfiLnk7iCO4tA
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
