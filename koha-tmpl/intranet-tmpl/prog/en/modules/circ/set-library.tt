@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Branches %]
 [% USE Desks %]
+[% USE Registers %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -43,10 +44,16 @@
 <h2>Update succeeded</h2>
 Updated:<ul>
     [% FOREACH update IN updated %]
-    [% IF ( update.updated_branch ) %]
+    [% IF ( update.updated_branch || update.updated_desk ||  update.updated_register ) %]
+        [% IF ( updated.updated.branch ) %]
         <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
-    [% ELSIF (update.updated_desk) %]
+        [% END %]
+        [% IF ( update.updated_desk ) %]
         <li>Desk: [% update.old_desk or "?" | html %] &rArr; [% LoginDeskname or "?" | html %]</li>
+        [% END %]
+        [% IF ( updated.updated_register ) %]
+        <li>Register: [% updated.new_register | html %]</li>
+        [% END %]
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
@@ -91,6 +98,21 @@ Updated:<ul>
     </ol>
 </fieldset>
 [% END %]
+
+[% IF Koha.Preference('UseCashRegisters') %]
+<fieldset class="rows">
+    <legend>Set cash register</legend>
+    <ol>
+        <li>
+            <label for="register_id">Choose cash register:</label>
+            <select name="register_id" id="register_id">
+                [% PROCESS options_for_registers registers => Registers.all() %]
+            </select>
+        </li>
+    </ol>
+</fieldset>
+[% END %]
+
 <fieldset class="action">
     <input type="submit" value="Submit" />
     <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' %]">Cancel</a>
@@ -119,9 +141,38 @@ Updated:<ul>
         </div> <!-- /.col-sm-12 -->
     </div> <!-- /.row -->
 
-
 [% MACRO jsinclude BLOCK %]
   [% Asset.js("js/desk_selection.js") | $raw %]
+  <script>
+    $(document).ready(function() {
+        $("#branch").on("change", function() {
+            var selectedBranch = $("#branch").children(
+                    "option:selected").val();
+
+            $("#register_id").children().each(function() {
+                // default to no-register
+                if ($(this).is("#noregister")) {
+                    $(this).prop("selected", true)
+                }
+                // display branch registers
+                else if ($(this).hasClass(selectedBranch)) {
+                    $(this).prop("disabled", false);
+                    $(this).show();
+                    // default to branch default if there is one
+                    if ($(this).hasClass("default")) {
+                        $(this).prop("selected", true)
+                    }
+                }
+                // hide non-branch registers
+                else
+                {
+                    $(this).hide();
+                    $(this).prop("disabled", true);
+                }
+            });
+        });
+    });
+  </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

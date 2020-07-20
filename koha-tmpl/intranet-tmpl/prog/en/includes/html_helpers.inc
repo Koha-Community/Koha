@@ -19,7 +19,23 @@
           [% END %]
         [% ELSE %]
             <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled hidden>[% d.desk_name | html %]</option>
-        [% END%]
+        [% END %]
+    [% END %]
+[% END %]
+
+[% BLOCK options_for_registers %]
+    <!-- <option hidden disabled selected value> -- select an option -- </option> -->
+    <option id="noregister" value="">-- None --</option>
+    [% FOREACH r IN registers %]
+        [% IF r.branch == branch %]
+            [% IF r.selected %]
+                <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]" selected="selected">[% r.name | html %]</option>
+            [% ELSE %]
+                <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]">[% r.name | html %]</option>
+            [% END%]
+        [% ELSE %]
+            <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]" disabled hidden>[% r.name | html %]</option>
+        [% END %]
     [% END %]
 [% END %]
 
