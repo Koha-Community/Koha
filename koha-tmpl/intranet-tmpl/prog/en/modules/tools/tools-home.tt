@@ -135,11 +135,9 @@
     <dd>Access files stored on the server, like log files or reports</dd>
     [% END %]
 
-    [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_manage_cash_registers ) %]
-        [% IF ( CAN_user_cash_management_manage_cash_registers ) %]
+    [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_cashup ) %]
         <dt><a href="/cgi-bin/koha/pos/registers.pl">Cashup registers</a></dt>
-        <dd>Perfrom cashup actions on cash registers</dd>
-        [% END %]
+        <dd>Perform cashup actions on cash registers</dd>
     [% END %]
 
     [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
