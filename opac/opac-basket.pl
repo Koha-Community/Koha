@@ -166,7 +166,11 @@ my $resultsarray = \@results;
 # my $itemsarray=\@items;
 
 $template->param(
-    csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
+    csv_profiles => [
+        Koha::CsvProfiles->search(
+            { type => 'marc', used_for => 'export_records', staff_only => 0 }
+        )
+    ],
     bib_list => $bib_list,
     BIBLIO_RESULTS => $resultsarray,
 );
