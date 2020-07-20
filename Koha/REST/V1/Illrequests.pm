@@ -56,7 +56,7 @@ sub list {
     }
 
     # Get the pipe-separated string of hidden ILL statuses
-    my $hidden_statuses_string = C4::Context->preference('ILLHiddenRequestStatuses');
+    my $hidden_statuses_string = C4::Context->preference('ILLHiddenRequestStatuses') // q{};
     # Turn into arrayref
     my $hidden_statuses = [ split /\|/, $hidden_statuses_string ];
 
