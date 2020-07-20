@@ -22235,6 +22235,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25851, "Remove holdallowed rule if value is an empty string");
 }
 
+$DBversion = '20.06.00.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE borrowers SET login_attempts=0 WHERE login_attempts IS NULL" );
+    $dbh->do( "ALTER TABLE borrowers MODIFY COLUMN login_attempts int(4) NOT NULL DEFAULT 0" );
+    $dbh->do( "UPDATE deletedborrowers SET login_attempts=0 WHERE login_attempts IS NULL" );
+    $dbh->do( "ALTER TABLE deletedborrowers MODIFY COLUMN login_attempts int(4) NOT NULL DEFAULT 0" );
+    NewVersion( $DBversion, 24379, "Set login_attempts NOT NULL)");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
