@@ -55,7 +55,7 @@ use Koha::Patron::Messages;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS]
+Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS] [--old-reserves DAYS] [--transfers DAYS] [--labels DAYS] [--cards DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -107,6 +107,9 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --pseudo-transactions DAYS   Purge the pseudonymized transactions that have been originally created more than DAYS days ago
                                 DAYS is optional and can be replaced by:
                                     --pseudo-transactions-from YYYY-MM-DD and/or --pseudo-transactions-to YYYY-MM-DD
+   --labels DAYS           Purge item label batches last added to more than DAYS days ago.
+   --cards DAY             Purge card creator batches last added to more than DAYS days ago.
+
 USAGE
     exit $_[0];
 }
@@ -143,6 +146,8 @@ my $pTransfers;
 my ( $pPseudoTransactions, $pPseudoTransactionsFrom, $pPseudoTransactionsTo );
 my $pMessages;
 my $lock_days = C4::Context->preference('LockExpiredDelay');
+my $labels;
+my $cards;
 
 GetOptions(
     'h|help'            => \$help,
@@ -178,6 +183,8 @@ GetOptions(
     'pseudo-transactions:i'      => \$pPseudoTransactions,
     'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
     'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
+    'labels'            => \$labels,
+    'cards'             => \$cards,
 ) || usage(1);
 
 # Use default values
@@ -224,6 +231,8 @@ unless ( $sessions
     || $pPseudoTransactionsTo
     || $pMessages
     || defined $lock_days && $lock_days ne q{}
+    || $labels
+    || $cards
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -612,6 +621,42 @@ if (defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransact
           ? sprintf "Done with purging %d pseudonymized transactions.", $count
           : sprintf "%d pseudonymized transactions would have been purged.", $count;
     }
+}
+
+if ($labels) {
+    print "Purging item label batches last added to more than $labels days ago.\n" if $verbose;
+    $sth = $dbh->prepare(
+        q{
+        DELETE from creator_batches
+        WHERE batch_id in
+            (SELECT batch_id
+            FROM (SELECT batch_id
+                    FROM creator_batches
+                    WHERE creator='labels'
+                    GROUP BY batch_id
+                    HAVING max(timestamp) < date_sub(curdate(),interval ? day)) a)
+        }
+    );
+    $sth->execute($labels) or die $dbh->errstr;
+    print "Done with purging item label batches last added to more than $labels days ago.\n" if $verbose;
+}
+
+if ($cards) {
+    print "Purging card creator batches last added to more than $cards days ago.\n" if $verbose;
+    $sth = $dbh->prepare(
+        q{
+        DELETE from creator_batches
+        WHERE batch_id in
+            (SELECT batch_id
+            FROM (SELECT batch_id
+                    FROM creator_batches
+                    WHERE creator='patroncards'
+                    GROUP BY batch_id
+                    HAVING max(timestamp) < date_sub(curdate(),interval ? day)) a);
+        }
+    );
+    $sth->execute($cards) or die $dbh->errstr;
+    print "Done with purging card creator batches last added to more than $cards days ago.\n" if $verbose;
 }
 
 exit(0);
