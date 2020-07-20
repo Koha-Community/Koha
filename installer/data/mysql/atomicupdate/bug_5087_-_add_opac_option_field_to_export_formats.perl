@@ -8,5 +8,12 @@ if( CheckVersion( $DBversion ) ) {
         |);
     }
 
+    unless ( index_exists( 'export_format', 'used_for_idx' ) ) {
+        $dbh->do(q|
+            ALTER TABLE export_format
+                ADD KEY `used_for_idx` (`used_for` (191));
+        |);
+    }
+
     NewVersion( $DBversion, 5087, "Add export_format.staff_only" );
 }
