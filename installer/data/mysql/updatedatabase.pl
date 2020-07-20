@@ -22336,6 +22336,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23148, "Replace Bridge icons with transparent PNG files" );
 }
 
+$DBversion = '20.06.00.009';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+            INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+            VALUES ('ILLHiddenRequestStatuses',NULL,NULL,'ILL statuses that are considered finished and should not be displayed in the ILL module','multiple')
+    });
+
+    NewVersion( $DBversion, 23391, "Hide finished ILL requests" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
