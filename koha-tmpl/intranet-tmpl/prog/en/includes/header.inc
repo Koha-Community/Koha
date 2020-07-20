@@ -86,7 +86,7 @@
                                 <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             </strong>
                         [% END %]
-                        [% IF Desks.ListForLibrary.count %]
+                        [% IF Koha.Preference('UseCirculationDesks') && Desks.ListForLibrary.count %]
                             <span class="separator">|</span>
                             <strong>
                                 [% IF ( Desks.GetLoggedInDeskName == '' ) %]
@@ -117,6 +117,8 @@
                             <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                         [% END %]
                     </li>
+
+                    [% IF Koha.Preference('UseCirculationDesks') %]
                     <li class="loggedin-menu-label">
                         Desk: <br />
                         [% IF ( Desks.GetLoggedInDeskName == '' AND Desks.ListForLibrary.count ) %]
@@ -126,6 +128,7 @@
                             <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
                         [% END %]
                     </li>
+                    [% END %]
 
                     <li role="separator" class="loggedin-menu-label divider"></li>
                     [% IF ( IndependentBranches ) %]
