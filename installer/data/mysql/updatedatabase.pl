@@ -22316,6 +22316,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24151, "Add pseudonymized_transactions tables and sysprefs for Pseudonymization" );
 }
 
+$DBversion = '20.06.00.007';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'borrower_attribute_types', 'mandatory' ) ) {
+        $dbh->do(q|
+            ALTER TABLE borrower_attribute_types
+            ADD COLUMN mandatory TINYINT(1) NOT NULL DEFAULT 0
+            AFTER keep_for_pseudonymization
+        |);
+    }
+
+    NewVersion( $DBversion, 22844, "Add borrower_attribute_types.mandatory" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
