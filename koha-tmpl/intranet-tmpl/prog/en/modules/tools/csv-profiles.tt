@@ -193,11 +193,11 @@
                 </li>
 
                 <li class="marc_specific">
-                    <label for="opac_option">Show option in OPAC: </label>
-                    [% IF csv_profile.opac_option %]
-                        <input type="checkbox" name="opac_option" id="opac_option" value="1" checked="checked">
+                    <label for="staff_only">Only available on the staff interface: </label>
+                    [% IF csv_profile.staff_only %]
+                        <input type="checkbox" name="staff_only" id="staff_only" value="1" checked="checked">
                     [% ELSE %]
-                        <input type="checkbox" name="opac_option" id="opac_option" value="1">
+                        <input type="checkbox" name="staff_only" id="staff_only" value="1">
                     [% END %]
                 </li>
 

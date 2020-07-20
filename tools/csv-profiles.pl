@@ -84,7 +84,7 @@ if ( $op eq 'add_form' ) {
     my $field_separator    = $input->param("field_separator");
     my $subfield_separator = $input->param("subfield_separator");
     my $encoding           = $input->param("encoding");
-    my $opac_option        = $input->param("opac_option");
+    my $staff_only         = $input->param("staff_only") ? 1 : 0;
 
     if ($export_format_id) {
         my $csv_profile = Koha::CsvProfiles->find($export_format_id)
@@ -98,7 +98,7 @@ if ( $op eq 'add_form' ) {
         $csv_profile->encoding($encoding);
         $csv_profile->type($type);
         $csv_profile->used_for($used_for);
-        $csv_profile->opac_option($opac_option);
+        $csv_profile->staff_only($staff_only);
         eval { $csv_profile->store; };
 
         if ($@) {
@@ -117,7 +117,7 @@ if ( $op eq 'add_form' ) {
                 encoding           => $encoding,
                 type               => $type,
                 used_for           => $used_for,
-                opac_option        => $opac_option
+                staff_only         => $staff_only
             }
         );
         eval { $csv_profile->store; };

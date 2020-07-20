@@ -85,7 +85,7 @@ __PACKAGE__->table("export_format");
   is_nullable: 1
   size: 255
 
-=head2 opac_option
+=head2 staff_only
 
   data_type: 'tinyint'
   default_value: 0
@@ -129,7 +129,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 255,
   },
-  "opac_option",
+  "staff_only",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -146,8 +146,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("export_format_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-20 20:08:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:J2VDj9yI8uanFR9EGv2sXw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-07-20 14:15:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O8kM+dd6GTS2qS39lnDG1g
 
 sub koha_object_class {
     'Koha::CsvProfile';
@@ -157,7 +157,7 @@ sub koha_objects_class {
 }
 
 __PACKAGE__->add_columns(
-    '+opac_option' => { is_boolean => 1 },
+    '+staff_only' => { is_boolean => 1 },
 );
 
 1;
