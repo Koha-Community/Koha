@@ -32,9 +32,18 @@
                             [% END %]
                         </div>
                     [% ELSE %]
+
+                    [% IF ( error_cashup_permission ) %]
+                    <div id="error_message" class="dialog alert">
+                        You do not have permission to perform cashup actions.
+                    </div>
+                    [% END %]
+
+                    [% IF CAN_user_cash_management_cashup %]
                     <div id="toolbar" class="btn-toolbar">
                         <button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button>
                     </div>
+                    [% END %]
 
                     <h1>Library transaction details for [% library.branchname | html %]</h1>
 
@@ -54,7 +63,9 @@
                             <th>Bankable</th>
                             <th>Income (cash)</th>
                             <th>Outgoing (cash)</th>
+                            [% IF CAN_user_cash_management_cashup %]
                             <th>Actions</th>
+                            [% END %]
                         </thead>
                         <tbody>
                             [% SET bankable = 0, ctotal = 0, dtotal = 0, cctotal = 0, cdtotal = 0 %]
@@ -88,9 +99,12 @@
                                     [% rdtotal | $Price %] ([% rcdtotal | $Price %])
                                     [% SET dtotal = dtotal + rdtotal %]
                                     [% SET cdtotal = cdtotal + rcdtotal %]
+                                </td>
+                                [% IF CAN_user_cash_management_cashup %]
                                 <td>
                                     <button type="button" class="cashup_individual btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" data-register="[% register.description | html %]" data-bankable="[% rbankable | $Price %]" data-float="[% register.starting_float | $Price %]" data-registerid="[% register.id | html %]"><i class="fa fa-money"></i> Record cashup</button>
                                 </td>
+                                [% END %]
                             </tr>
                             [% END %]
                         </tbody>
@@ -100,7 +114,11 @@
                                 <td>[% bankable | $Price %]</td>
                                 <td>[% ctotal | $Price %] ([% cctotal | $Price %])</td>
                                 <td>[% dtotal | $Price %] ([% cdtotal | $Price %])</td>
-                                <td><button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button></td>
+                                [% IF CAN_user_cash_management_cashup %]
+                                <td>
+                                    <button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button>
+                                </td>
+                                [% END %]
                             </tr>
                         </tfoot>
                     </table>

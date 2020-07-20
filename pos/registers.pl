@@ -56,18 +56,10 @@ else {
 
 my $op = $input->param('op') // '';
 if ( $op eq 'cashup' ) {
-    my $registerid = $input->param('registerid');
-    if ($registerid) {
-        my $register = Koha::Cash::Registers->find( { id => $registerid } );
-        $register->add_cashup(
-            {
-                manager_id => $logged_in_user->id,
-                amount     => $register->outstanding_accountlines->total
-            }
-        );
-    }
-    else {
-        for my $register ( $registers->as_list ) {
+    if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
+        my $registerid = $input->param('registerid');
+        if ($registerid) {
+            my $register = Koha::Cash::Registers->find( { id => $registerid } );
             $register->add_cashup(
                 {
                     manager_id => $logged_in_user->id,
@@ -75,6 +67,19 @@ if ( $op eq 'cashup' ) {
                 }
             );
         }
+        else {
+            for my $register ( $registers->as_list ) {
+                $register->add_cashup(
+                    {
+                        manager_id => $logged_in_user->id,
+                        amount     => $register->outstanding_accountlines->total
+                    }
+                );
+            }
+        }
+    }
+    else {
+        $template->param( error_cashup_permission => 1 );
     }
 }
 
