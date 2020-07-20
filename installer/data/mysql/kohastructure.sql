@@ -691,6 +691,7 @@ CREATE TABLE `export_format` (
   `used_for` varchar(255) DEFAULT 'export_records',
   `staff_only` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`export_format_id`),
+  KEY `used_for_idx` (`used_for` (191)),
   KEY `staff_only_idx` (`staff_only`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Used for CSV export';
 
