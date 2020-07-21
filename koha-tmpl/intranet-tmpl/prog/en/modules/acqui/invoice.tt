@@ -122,7 +122,7 @@
           <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
             <fieldset class="action">
                 <input type="submit" value="Save" />
-                [% UNLESS orders_loop.size %]
+                [% IF CAN_user_acquisition_delete_invoices AND NOT orders_loop.size %]
                 <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
                 [% END %]
             </fieldset>
