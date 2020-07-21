@@ -1,11 +1,14 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
 [% USE Koha %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% USE Registers %]
 [% SET footerjs = 1 %]
 [% PROCESS 'payments.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
 <title>Koha &rsaquo; Payments</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -20,7 +23,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
 
-        [% IF ( error_registers ) %]
+        [% IF ( registers.size == 0 ) %]
             <div id="error_message" class="dialog message">
                 <p>
                     You must have at least one cash register associated with the library before you can record payments.
@@ -126,13 +129,7 @@
                             <li>
                                 <label for="registerid">Cash register: </label>
                                 <select name="registerid" id="registerid">
-                                    [% FOREACH register IN registers %]
-                                      [% IF register.id == default_register %]
-                                    <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
-                                      [% ELSE %]
-                                    <option value="[% register.id | html %]">[% register.name | html %]</option>
-                                      [% END %]
-                                    [% END %]
+                                    [% PROCESS options_for_registers register_required => 1 %]
                                 </select>
                             </li>
                         </ol>

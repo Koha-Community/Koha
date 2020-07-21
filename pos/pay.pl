@@ -32,28 +32,6 @@ my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 
 my $library_id         = C4::Context->userenv->{'branch'};
 my $registerid         = $input->param('registerid');
-my $default_registerid = $input->param('default_register');
-my $registers          = Koha::Cash::Registers->search(
-    { branch   => $library_id, archived => 0 },
-    { order_by => { '-asc' => 'name' } }
-);
-
-if ( !$registers->count ) {
-    $template->param( error_registers => 1 );
-}
-else {
-    if ( !$default_registerid ) {
-        my $default_register = Koha::Cash::Registers->find(
-            { branch => $library_id, branch_default => 1 } );
-        $default_registerid =
-          $default_register ? $default_register->id : $registers->next->id;
-    }
-
-    $template->param(
-        default_register => $default_registerid,
-        registers        => $registers,
-    );
-}
 
 my $invoice_types =
   Koha::Account::DebitTypes->search_with_library_limits( { can_be_sold => 1 },

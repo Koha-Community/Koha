@@ -25,7 +25,7 @@
 
 [% BLOCK options_for_registers %]
     <!-- <option hidden disabled selected value> -- select an option -- </option> -->
-    <option id="noregister" value="">-- None --</option>
+    <option id="noregister"[% IF register_required %] disabled selected [% END %] value="">-- None --</option>
     [% FOREACH r IN registers %]
         [% IF r.branch == branch %]
             [% IF r.selected %]
