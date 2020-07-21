@@ -407,7 +407,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 15;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
@@ -604,6 +604,29 @@ subtest 'SearchItems test' => sub {
     };
     ($items, $total_results) = SearchItems($filter);
     is($total_results, 1, "Search items.issues issues = 0 returns result (items.issues defaults to 0)");
+
+    # Is null
+    $filter = {
+        conjunction => 'AND',
+        filters     => [
+            {
+                field    => 'new_status',
+                query    => 0,
+                operator => '='
+            },
+            {
+                field    => 'homebranch',
+                query    => $library1->{branchcode},
+                operator => '=',
+            },
+        ],
+    };
+    ($items, $total_results) = SearchItems($filter);
+    is($total_results, 0, 'found no item with new_status=0 without ifnull');
+
+    $filter->{filters}[0]->{ifnull} = 0;
+    ($items, $total_results) = SearchItems($filter);
+    is($total_results, 1, 'found all items of library1 with new_status=0 with ifnull = 0');
 
     $schema->storage->txn_rollback;
 };
