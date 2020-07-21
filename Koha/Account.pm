@@ -279,7 +279,7 @@ sub pay {
         $o->store();
     }
 
-    UpdateStats(
+    C4::Stats::UpdateStats(
         {
             branch         => $library_id,
             type           => lc($type),
@@ -435,7 +435,7 @@ sub add_credit {
                     }
                 )->store();
 
-                UpdateStats(
+                C4::Stats::UpdateStats(
                     {
                         branch         => $library_id,
                         type           => lc($credit_type),
