@@ -41,7 +41,7 @@ subtest 'add' => sub {
     $schema->storage->txn_begin;
 
     my $club = $builder->build_object({ class => 'Koha::Clubs' });
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library = $builder->build_object({ class => 'Koha::Libraries', value => { pickup_location => 1 } });
     my $item1 = $builder->build_sample_item({ library => $library->branchcode });
     my $item2 = $builder->build_sample_item({ library => $library->branchcode });
 
