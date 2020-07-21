@@ -1,8 +1,11 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
+[% USE Registers %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -96,9 +99,15 @@
                             [% END %]
                         [% END %]
                     </select>
-             </td>
-        </tr>
                 </li>
+                [% IF Koha.Preference('UseCashRegisters') %]
+                <li>
+                    <label for="registerid">Cash register: </label>
+                    <select name="registerid" id="registerid">
+                        [% PROCESS options_for_registers registers => Registers.all( selected => registerid ) %]
+                    </select>
+                </li>
+                [% END %]
             </ol>
         </fieldset>
 
@@ -186,6 +195,7 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/register_selection.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script id="js">
         $(document).ready(function() {

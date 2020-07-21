@@ -61,6 +61,7 @@ my @debit_types =
   Koha::Account::DebitTypes->search()->as_list;
 my @credit_types =
   Koha::Account::CreditTypes->search()->as_list;
+my $registerid;
 
 if ($do_it) {
 
@@ -94,6 +95,12 @@ if ($do_it) {
         push @extra_params, $manager_branchcode;
     }
 
+    my $whereRegister = q{};
+    $registerid = $input->param("registerid");
+    if ($registerid) {
+        $whereRegister = q{ AND al.register_id = ?};
+        push @extra_params, $registerid;
+    }
 
     my $query = "
     SELECT round(amount,2) AS amount, description,
@@ -110,6 +117,7 @@ if ($do_it) {
         WHERE CAST(al.date AS DATE) BETWEEN ? AND ?
         $whereTType
         $whereBranchCode
+        $whereRegister
         ORDER BY al.date
     ";
     my $sth_stats = $dbh->prepare($query) or die "Unable to prepare query " . $dbh->errstr;
@@ -191,6 +199,7 @@ $template->param(
     branchloop       => Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed,
     debit_types      => \@debit_types,
     credit_types     => \@credit_types,
+    registerid       => $registerid,
     CGIsepChoice => GetDelimiterChoices,
 );
 

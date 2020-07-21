@@ -91,9 +91,16 @@ sub all {
     $where->{branch} = C4::Context->userenv->{'branch'}
       if ( $filters->{current_branch} && C4::Context->userenv );
     my $registers = Koha::Cash::Registers->search($where)->unblessed();
+
+    my $selected = $params->{selected};
     for my $register ( @{$registers} ) {
-        $register->{selected} = ( defined( $self->session_register_id )
+        if ( defined($selected) ) {
+            $register->{selected} = ( $register->{id} == $selected ) ? 1 : 0;
+        }
+        else {
+            $register->{selected} = ( defined( $self->session_register_id )
               && $register->{id} eq $self->session_register_id ) ? 1 : 0;
+        }
     }
 
     return $registers;
