@@ -1337,6 +1337,7 @@ sub _SearchItems_build_where_fragment {
         if ( (0 < grep { $_ eq $field } @columns) or (substr($field, 0, 5) eq 'marc:') ) {
             my $op = $filter->{operator};
             my $query = $filter->{query};
+            my $ifnull = $filter->{ifnull};
 
             if (!$op or (0 == grep { $_ eq $op } @operators)) {
                 $op = '='; # default operator
@@ -1377,6 +1378,10 @@ sub _SearchItems_build_where_fragment {
                 $column = $field;
             }
 
+            if ( defined $ifnull ) {
+                $column = "IFNULL($column, ?)";
+            }
+
             if (ref $query eq 'ARRAY') {
                 if ($op eq '=') {
                     $op = 'IN';
@@ -1392,6 +1397,10 @@ sub _SearchItems_build_where_fragment {
                     str => "$column $op ?",
                     args => [ $query ],
                 };
+            }
+
+            if ( defined $ifnull ) {
+                unshift @{ $where_fragment->{args} }, $ifnull;
             }
         }
     }

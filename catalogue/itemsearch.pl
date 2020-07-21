@@ -164,12 +164,15 @@ if (scalar keys %params > 0) {
     push @{ $filter->{filters} }, $f;
 
     # Yes/No parameters
-    foreach my $p (qw( damaged )) {
+    foreach my $p (qw( damaged new_status )) {
         my $v = $cgi->param($p) // '';
         my $f = {
             field => $p,
             query => 0,
         };
+        if ( $p eq 'new_status' ) {
+            $f->{ifnull} = 0;
+        }
         if ($v eq 'yes') {
             $f->{operator} = '!=';
             push @{ $filter->{filters} }, $f;
