@@ -43,8 +43,7 @@ sub GetLoggedInBranchcode {
 sub GetLoggedInBranchname {
     my ($self) = @_;
 
-    my $code = $self->GetLoggedInBranchcode;
-    return $code ? $self->GetName($code) : q{};
+    return C4::Context->userenv ? C4::Context->userenv->{'branchname'} : q{};
 }
 
 sub GetURL {

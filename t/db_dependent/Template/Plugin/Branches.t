@@ -71,7 +71,7 @@ subtest 'all() tests' => sub {
     is($plugin->GetLoggedInBranchcode(), '', 'no active library code if there is no active user session');
     is($plugin->GetLoggedInBranchname(), '', 'no active library name if there is no active user session');
 
-    t::lib::Mocks::mock_userenv({ branchcode => 'MYLIBRARY' });
+    t::lib::Mocks::mock_userenv({ branchcode => 'MYLIBRARY', branchname => 'My sweet library' });
     is($plugin->GetLoggedInBranchcode(), 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library code');
     is($plugin->GetLoggedInBranchname(), 'My sweet library', 'GetLoggedInBranchname() returns active library name');
 
