@@ -705,6 +705,11 @@
             Delete invoices
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'merge_invoices' -%]
+        <span class="sub_permission merge_invoices_subpermission">
+            Merge invoices
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_baskets' -%]
         <span class="sub_permission delete_baskets_subpermission">
             Delete baskets

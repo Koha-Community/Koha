@@ -20,6 +20,11 @@ if( CheckVersion( $DBversion ) ) {
         (11, 'delete_invoices', 'Delete invoices')
     |);
 
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'merge_invoices', 'Merge invoices')
+    |);
+
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24157: Add new permissions reopen_closed_invoices, edit_invoices, delete_invoices, delete_baskets)\n";
+    print "Upgrade to $DBversion done (Bug 24157: Add new permissions reopen_closed_invoices, edit_invoices, delete_invoices, merge_invoices, delete_baskets)\n";
 }

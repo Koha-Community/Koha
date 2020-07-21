@@ -103,6 +103,10 @@ elsif ( $op && $op eq 'mod' ) {
     } elsif ($input->param('close')) {
         CloseInvoice($invoiceid);
     } elsif ($input->param('merge')) {
+
+        output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+            unless $logged_in_patron->has_permission( { acquisition => 'merge_invoices' } );
+
         my @sources = $input->multi_param('merge');
         MergeInvoices($invoiceid, \@sources);
         defined($invoice_files) && $invoice_files->MergeFileRecIds(@sources);
