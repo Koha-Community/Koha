@@ -52,7 +52,7 @@
     </form>
     [% END %]
 [% ELSE %]
-    <h1>Batch patron deletion and anonymization for [% Branches.GetName( Branches.GetLoggedInBranchcode ) | html %]</h1>
+    <h1>Batch patron deletion and anonymization for [% Branches.GetLoggedInBranchname | html %]</h1>
 [% END %]
 
 [% IF step == 1 %]
