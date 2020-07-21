@@ -77,33 +77,7 @@ my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
 
-my $cash_register_id;
-if ( C4::Context->preference('UseCashRegisters') ) {
-    $cash_register_id = $input->param('cash_register');
-    my $registers  = Koha::Cash::Registers->search(
-        { branch   => $library_id, archived => 0 },
-        { order_by => { '-asc' => 'name' } }
-    );
-
-    if ( !$registers->count ) {
-        $template->param( error_registers => 1 );
-    }
-    else {
-
-        if ( !$cash_register_id ) {
-            my $default_register = Koha::Cash::Registers->find(
-                { branch => $library_id, branch_default => 1 } );
-            $cash_register_id = $default_register->id if $default_register;
-        }
-        $cash_register_id = $registers->next->id if !$cash_register_id;
-
-        $template->param(
-            default_register => $cash_register_id,
-            registers        => $registers,
-        );
-    }
-}
-
+my $cash_register_id = $input->param('cash_register');
 if ( $pay_individual || $writeoff_individual ) {
     if ($pay_individual) {
         $template->param( pay_individual => 1 );

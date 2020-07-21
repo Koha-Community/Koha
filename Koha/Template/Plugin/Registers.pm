@@ -44,7 +44,7 @@ sub session_register_name {
 =head2
 
     [% SET registers = Registers.all() %]
-    [% SET registers = Registers.all( { branch => branchcode } );
+    [% SET registers = Registers.all( { filters => { current_branch => 1 } } );
 
 Returns a list of all cash registers available that adhere to the passed filters.
 
@@ -53,7 +53,11 @@ Returns a list of all cash registers available that adhere to the passed filters
 sub all {
     my ( $self, $params ) = @_;
 
-    my $registers = Koha::Cash::Registers->search()->unblessed();
+    my $filters = $params->{filters};
+    my $where;
+    $where->{branch} = C4::Context->userenv->{'branch'}
+      if $filters->{current_branch};
+    my $registers = Koha::Cash::Registers->search($where)->unblessed();
     for my $register ( @{$registers} ) {
         $register->{selected} = ( defined( $self->session_register_id )
               && $register->{id} == $self->session_register_id ) ? 1 : 0;

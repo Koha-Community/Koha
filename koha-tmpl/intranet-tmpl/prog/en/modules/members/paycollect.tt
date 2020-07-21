@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Registers %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% PROCESS 'payments.inc' %]
@@ -20,6 +21,7 @@
         [% END %]
     </div>
 [% END %]
+[% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
 <title>Koha &rsaquo; Patrons &rsaquo;
     [% IF type == 'WRITEOFF' %]
         Write off an amount for [% patron.firstname | html %] [% patron.surname | html %]
@@ -86,7 +88,7 @@
 [% END %]
 
 [% IF ( pay_individual ) %]
-    [% IF ( error_registers ) %]
+    [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
         [% PROCESS 'cash_register_required' %]
     [% ELSE %]
 
@@ -153,13 +155,7 @@
     <li>
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
-            [% FOREACH register IN registers %]
-              [% IF register.id == default_register %]
-            <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
-              [% ELSE %]
-            <option value="[% register.id | html %]">[% register.name | html %]</option>
-              [% END %]
-            [% END %]
+            [% PROCESS options_for_registers register_required => 1 %]
         </select>
     </li>
     [% END %]
@@ -225,7 +221,7 @@
         </div>
     </form>
 [% ELSE %]
-    [% IF ( error_registers && type != 'WRITEOFF' ) %]
+    [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) && ( type != 'WRITEOFF' ) %]
         [% PROCESS 'cash_register_required' %]
     [% ELSE %]
 
@@ -289,13 +285,7 @@
     <li>
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
-            [% FOREACH register IN registers %]
-              [% IF register.id == default_register %]
-            <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
-              [% ELSE %]
-            <option value="[% register.id | html %]">[% register.name | html %]</option>
-              [% END %]
-            [% END %]
+            [% PROCESS options_for_registers register_required => 1 %]
         </select>
     </li>
     [% END %]
