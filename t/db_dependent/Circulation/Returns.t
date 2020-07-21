@@ -400,7 +400,7 @@ subtest 'BranchTransferLimitsType' => sub {
 };
 
 subtest 'Backdated returns should reduce fine if needed' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     t::lib::Mocks::mock_preference( "CalculateFinesOnReturn",   0 );
     t::lib::Mocks::mock_preference( "CalculateFinesOnBackdate", 1 );
@@ -434,10 +434,14 @@ subtest 'Backdated returns should reduce fine if needed' => sub {
         branchcode => $patron->branchcode,
     })->store();
 
-    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode, undef, undef, dt_from_string('1999-01-01') );
+    my $account = $patron->account;
+    is( $account->balance+0, 100, "Account balance before return is 100");
 
-    $fine->discard_changes;
-    is( $fine->amountoutstanding+0, 0, "Fine was reduced correctly with a backdated return" );
+    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode, undef, undef, dt_from_string('1999-01-01') );
+    is( $account->balance+0, 0, "Account balance after return is 0");
+
+    $fine = $fine->get_from_storage;
+    is( $fine, undef, "Fine was removed correctly with a backdated return" );
 };
 
 $schema->storage->txn_rollback;
