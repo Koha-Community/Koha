@@ -66,32 +66,7 @@ unless ( $patron ) {
 
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $registerid;
-if ( C4::Context->preference('UseCashRegisters') ) {
-    $registerid = scalar $input->param('registerid');
-    my $registers  = Koha::Cash::Registers->search(
-        { branch   => $library_id, archived => 0 },
-        { order_by => { '-asc' => 'name' } }
-    );
-
-    if ( !$registers->count ) {
-        $template->param( error_registers => 1 );
-    }
-    else {
-
-        if ( !$registerid ) {
-            my $default_register = Koha::Cash::Registers->find(
-                { branch => $library_id, branch_default => 1 } );
-            $registerid = $default_register->id if $default_register;
-        }
-        $registerid = $registers->next->id if !$registerid;
-
-        $template->param(
-            registerid => $registerid,
-            registers  => $registers,
-        );
-    }
-}
+my $registerid = $input->param('registerid');
 
 if ( $action eq 'void' ) {
     my $payment_id = scalar $input->param('accountlines_id');

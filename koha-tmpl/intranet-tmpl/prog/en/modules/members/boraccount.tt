@@ -7,7 +7,9 @@
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE Branches %]
+[% USE Registers %]
 [% SET footerjs = 1 %]
+[% SET registers = Registers.all( filters => { current_branch => 1 } ) %]
 
 [% PROCESS 'accounts.inc' %]
 
@@ -149,6 +151,11 @@
                         <h4 class="modal-title" id="issuePayoutLabel">Issue payout</h4>
                     </div>
                     <div class="modal-body">
+                        [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
+                        <div id="payout_error" class="dialog alert">
+                            You must have at least one cash register associated with this branch before you can record cash payouts.
+                        </div>
+                        [% END %]
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -178,13 +185,7 @@
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="payout_registerid">
-                                        [% FOREACH register IN registers %]
-                                          [% IF register.id == registerid %]
-                                        <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
-                                          [% ELSE %]
-                                        <option value="[% register.id | html %]">[% register.name | html %]</option>
-                                          [% END %]
-                                        [% END %]
+                                        [% PROCESS options_for_registers register_required => 1 %]
                                     </select>
                                 </li>
                                 [% END %]
@@ -215,6 +216,11 @@
                         <h4 class="modal-title" id="issueRefundLabel">Issue refund</h4>
                     </div>
                     <div class="modal-body">
+                        [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
+                        <div id="refund_error" class="dialog alert">
+                            You must have at least one cash register associated with this branch before you can record cash refunds.
+                        </div>
+                        [% END %]
                         <fieldset class="rows">
                             <ol>
                                 <li>
@@ -245,13 +251,7 @@
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="refund_registerid">
-                                        [% FOREACH register IN registers %]
-                                          [% IF register.id == registerid %]
-                                        <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
-                                          [% ELSE %]
-                                        <option value="[% register.id | html %]">[% register.name | html %]</option>
-                                          [% END %]
-                                        [% END %]
+                                        [% PROCESS options_for_registers register_required => 1 %]
                                     </select>
                                 </li>
                                 [% END %]
