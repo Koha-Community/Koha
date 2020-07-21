@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE Desks %]
 [% USE Categories %]
+[% USE Registers %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
@@ -95,6 +96,16 @@
             </select>
         </p>
     [% END %]
+
+    [% IF Koha.Preference('UseCashRegisters') %]
+    <p>
+        <label for="register_id">Cash register:</label>
+        <select name="register_id" id="register_id" class="input" tabindex="4">
+            [% PROCESS options_for_registers registers => Registers.all() %]
+        </select>
+    </p>
+    [% END %]
+
 </fieldset>
 [% END %]
 
@@ -137,6 +148,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/desk_selection.js") | $raw %]
+    [% Asset.js("js/register_selection.js") | $raw %]
     <script type="text/javascript">
         $(document).ready( function() {
             if ( document.location.hash ) {
