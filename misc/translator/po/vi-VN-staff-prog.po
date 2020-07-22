@@ -5,8 +5,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-06-18 07:40-0300\n"
+"Project-Id-Version: Koha 20.05\n"
+"POT-Creation-Date: 2020-07-16 01:22-0300\n"
 "PO-Revision-Date: 2020-06-22 16:30+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-POOTLE-MTIME: 1592843457.311143\n"
-"X-Pootle-Path: /vi/18.05/vi-VN-staff-prog.po\n"
+"X-Pootle-Path: /vi/20.05/vi-VN-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  data.borrowernumber | html 
@@ -115,10 +115,10 @@ msgid ""
 "\"Title\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s\", "
 "\"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ action_block = '"
 msgstr ""
-"\", \"dt_sortby\": %s\"Tác giả\"%s\"Năm\"%s\"Số định danh\"%s\"Ngày thêm "
-"vào\"%s\"Tiêu đề\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \""
-"%s\", \"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ "
-"action_block = '"
+"\", \"dt_sortby\": %s\"Tác giả\"%s\"Năm\"%s\"Số định danh\"%s\"Ngày thêm vào"
+"\"%s\"Tiêu đề\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s"
+"\", \"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ action_block "
+"= '"
 
 #. %1$s:  END 
 #. %2$s:  data.cardnumber | html | $To 
@@ -267,8 +267,8 @@ msgid ""
 "%sPublished by: %s.%s\"%s \"%s x %s = %s (%s)\"%s \"%s (%s)\"%s \"%s\"%s \"%s"
 "\"%s \"%s\"%s \"%s\"%s \"%s\" %s %s %s %s \"Total orders in late\"%s %s "
 msgstr ""
-"%s %s %s %s %s %s \"%s (%s ngày)\"%s\" \"%s\"%s \"%s\"%s \"%s %sTác giả: "
-"%s.%s%sNhà xuất bản: %s.%s\"%s \"%sx %s = %s (%s)\"%s \"%s (%s)\"%s \"%s\"%s "
+"%s %s %s %s %s %s \"%s (%s ngày)\"%s\" \"%s\"%s \"%s\"%s \"%s %sTác giả: %s."
+"%s%sNhà xuất bản: %s.%s\"%s \"%sx %s = %s (%s)\"%s \"%s (%s)\"%s \"%s\"%s "
 "\"%s\"%s \"%s\"%s \"%s\"%s '%s\" %s %s %s %s \"Tổng số đơn hàng chậm\"%s %s "
 
 #. %1$s: - USE raw -
@@ -315,8 +315,8 @@ msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 "%s %s %s %s %s %s%s%s %s %s %s %s %s [%%- span_start = '"
 msgstr ""
-"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %"
-"s %s %s %s %s %s%s%s %s %s %s %s %s [%%- span_start = '"
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
+"%s %s %s %s %s %s%s%s %s %s %s %s %s [%%- span_start = '"
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -417,35 +417,37 @@ msgstr ""
 #. %9$s: - ELSIF invert_name -
 #. %10$s:  data.title | $raw 
 #. %11$s: - data.surname | html 
-#. %12$s:  data.firstname | html 
-#. %13$s:  IF data.othernames 
-#. %14$s:  data.othernames | html 
-#. %15$s:  END -
-#. %16$s: - ELSE -
-#. %17$s:  data.title | $raw 
-#. %18$s: - data.firstname | html 
-#. %19$s:  IF data.othernames 
-#. %20$s:  data.othernames | html 
-#. %21$s:  END 
-#. %22$s:  data.surname | html -
-#. %23$s: - END -
-#. %24$s: - IF display_cardnumber AND data.cardnumber 
-#. %25$s:  data.cardnumber | html 
-#. %26$s:  END -
-#. %27$s: - ELSIF display_cardnumber -
-#. %28$s: - IF data.cardnumber -
-#. %29$s: # FIXME Cardnumber should always be defined, right? -
-#. %30$s: - data.cardnumber | html -
-#. %31$s: - END -
-#. %32$s: - ELSE -
-#. %33$s:  Branches.GetName( patron.branchcode ) | html -
-#. %34$s: - END -
-#. %35$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
+#. %12$s:  IF ( data.firstname ) 
+#. %13$s:  data.firstname | html 
+#. %14$s:  END 
+#. %15$s:  IF data.othernames 
+#. %16$s:  data.othernames | html 
+#. %17$s:  END -
+#. %18$s: - ELSE -
+#. %19$s:  data.title | $raw 
+#. %20$s: - data.firstname | html 
+#. %21$s:  IF data.othernames 
+#. %22$s:  data.othernames | html 
+#. %23$s:  END 
+#. %24$s:  data.surname | html -
+#. %25$s: - END -
+#. %26$s: - IF display_cardnumber AND data.cardnumber 
+#. %27$s:  data.cardnumber | html 
+#. %28$s:  END -
+#. %29$s: - ELSIF display_cardnumber -
+#. %30$s: - IF data.cardnumber -
+#. %31$s: # FIXME Cardnumber should always be defined, right? -
+#. %32$s: - data.cardnumber | html -
+#. %33$s: - END -
+#. %34$s: - ELSE -
+#. %35$s:  Branches.GetName( patron.branchcode ) | html -
+#. %36$s: - END -
+#. %37$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
 #: intranet-tmpl/prog/en/includes/patron-title.inc:56
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
-"(%s)%s %s %s%s %s %s %s A patron from library %s %s %s "
+"%s %s %s %s %s %s (%s)%s %s %s%s%s, %s%s%s (%s) %s %s %s%s %s (%s) %s %s %s "
+"%s (%s)%s %s %s%s %s %s %s A patron from library %s %s %s "
 msgstr ""
 "%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
 "(%s)%s %s %s%s %s %s %s Một độc giả từ thư viện %s %s %s "
@@ -646,12 +648,12 @@ msgid ""
 "%sSIP %sCommand-line %s%s %s %s "
 msgstr ""
 "%s %s %s %s %sXác thực %sBiên mục %sDữ liệu xác thực %sĐộc giả %sMua ấn phẩm "
-"%sẤn phẩm định kỳ %sĐã đặt %s Trao đổi giữa thư viện %sLưu thông %sThư %"
-"sPhạt %sTùy chỉnh hệ thống %sTác vụ tự động %sBáo cáo %s%s %s %s %s %s %"
-"sThêm %sXóa %sSửa %sCheckout %sQuay lại %sTạo %sHủy %sTiếp tục %sĐình chỉ %"
-"sGia hạn %sGia hạn %sĐổi mật khẩu %sThêm thông báo lưu thông %sXóa thông báo "
-"lư thông %sThay đổi tình trạng ILL request %sChạy %s%s %s %s %s %s %"
-"sIntranet %sOPAC %sSIP %sDòng lệnh %s%s %s %s "
+"%sẤn phẩm định kỳ %sĐã đặt %s Trao đổi giữa thư viện %sLưu thông %sThư "
+"%sPhạt %sTùy chỉnh hệ thống %sTác vụ tự động %sBáo cáo %s%s %s %s %s %s "
+"%sThêm %sXóa %sSửa %sCheckout %sQuay lại %sTạo %sHủy %sTiếp tục %sĐình chỉ "
+"%sGia hạn %sGia hạn %sĐổi mật khẩu %sThêm thông báo lưu thông %sXóa thông "
+"báo lư thông %sThay đổi tình trạng ILL request %sChạy %s%s %s %s %s %s "
+"%sIntranet %sOPAC %sSIP %sDòng lệnh %s%s %s %s "
 
 #. %1$s:  USE raw 
 #. %2$s:  SET footerjs = 1 
@@ -1053,8 +1055,8 @@ msgid ""
 "%s %s %s Can't be cancelled when item is in transit %s %sWaiting%sOn hold%s "
 "%s for "
 msgstr ""
-"%s %s %s Không thể hủy bỏ đặt mượn khi tài liệu đang được vận chuyển %s %"
-"sĐang chờ%sĐặt mượn%s %s cho "
+"%s %s %s Không thể hủy bỏ đặt mượn khi tài liệu đang được vận chuyển %s "
+"%sĐang chờ%sĐặt mượn%s %s cho "
 
 #. %1$s:  IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) 
 #. %2$s:  IF loop_receive.cannot_cancel 
@@ -1146,8 +1148,8 @@ msgstr "%s %s %s Không có giỏ đặt hàng với tên, hoặc số : %s %s "
 msgid ""
 "%s %s %s No title %s %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s %s %s Không có tựa đề %s %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %"
-"s %s "
+"%s %s %s Không có tựa đề %s %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s "
+"%s %s "
 
 #. %1$s:  FOREACH field IN fieldstohide.split(',') 
 #. %2$s:  SWITCH field 
@@ -1229,8 +1231,8 @@ msgid ""
 "Registration date: %s Expiry date: %s Circulation note: %s OPAC note: %s "
 "Restriction expiration: %s Restriction comment: %s "
 msgstr ""
-"%s %s %s Họ: %s Tên: %s Thư viện: %s Loại đọc giả %s Số đường: %s Địa chỉ: %"
-"s Địa chỉ 2: %s Thành phố: %s Bang: %s Mã bưu chính: %s Quốc gia: %s Thư "
+"%s %s %s Họ: %s Tên: %s Thư viện: %s Loại đọc giả %s Số đường: %s Địa chỉ: "
+"%s Địa chỉ 2: %s Thành phố: %s Bang: %s Mã bưu chính: %s Quốc gia: %s Thư "
 "điện tử chính: %s Điện thoại: %s Di động: %s Thống kê 1: %s Thống kê 2: %s "
 "Ngày đăng ký: %s Ngày hết hạn: %s Ghi chú lưu thông: %s Ghi chú OPAC: %s "
 "Ngày hết hạn chế: %s Ghi chú về hạn chế: %s "
@@ -1378,8 +1380,8 @@ msgid ""
 "%sBasket billing place%s "
 msgstr ""
 "%s %s %sTài khoản%sTên giỏ%sSố dơn hàng%sTác giả%sNhan đề%sNhà xuất bản%sNăm "
-"xuất bản%sTên bộ sưu tập%sISBN%sSố lượng%sRRP tax included%sRRP tax excluded%"
-"sGiảm giá%sƯớc phí thuế đã bao gồm%sƯớc phí thuế chưa bao gồm%sGhi chú cho "
+"xuất bản%sTên bộ sưu tập%sISBN%sSố lượng%sRRP tax included%sRRP tax excluded"
+"%sGiảm giá%sƯớc phí thuế đã bao gồm%sƯớc phí thuế chưa bao gồm%sGhi chú cho "
 "nhà cung cấp%sNgày%sTên hiệu sách%sĐịa chỉ hiệu sách%sĐịa chỉ bưu điện hiệu "
 "sách%sMã số hợp đồng%sTên hợp đồng%sNơi giao giỏ của nhóm%sNơi ghi hóa đơn "
 "cho giỏ của nhóm%sNởi giao giỏ%sNới ghi hóa đơn cho giỏ%s "
@@ -1408,9 +1410,9 @@ msgid ""
 "%sPublication year%sPublisher%sCollection title%sNote for vendor%sQuantity"
 "%sRRP%sDelivery place%sBilling place%s "
 msgstr ""
-"%s %s %sTên hợp đồng%sSố đơn hàng%sNgày%sISBN%sTác giả%sNhan đề%sNăm xuất "
-"bản%sNhà xuất bản%sTên bộ sưu tập%sGhi chú cho nhà cung cấp%sSố lượng%sRRP%"
-"sNơi giao hàng%sNơi ghi hóa đơn%s "
+"%s %s %sTên hợp đồng%sSố đơn hàng%sNgày%sISBN%sTác giả%sNhan đề%sNăm xuất bản"
+"%sNhà xuất bản%sTên bộ sưu tập%sGhi chú cho nhà cung cấp%sSố lượng%sRRP%sNơi "
+"giao hàng%sNơi ghi hóa đơn%s "
 
 #. %1$s:  BLOCK translate_justification_types 
 #. %2$s:   SWITCH type 
@@ -1444,8 +1446,8 @@ msgid ""
 "%s %s %sORDER DATE%sESTIMATED DELIVERY DATE%sVENDOR%sINFORMATION%sTOTAL COST"
 "%sBASKET%sCLAIMS COUNT%sCLAIMED DATE%sINTERNAL NOTE%sVENDOR NOTE%sISBN%s "
 msgstr ""
-"%s %s %sNGÀY ĐẶT HÀNG%sNGÀY DỰ KIÊN CHUYỂN TỚI%sNHÀ CUNG CẤP%sTHÔNG TIN%"
-"sTỔNG GIÁ%sGIỎ%sSỐ KHIẾU NẠI%sNGÀY KHIẾU NẠI%sGHI CHÚ NỘI BỘ%sGHI CHÚ NHÀ "
+"%s %s %sNGÀY ĐẶT HÀNG%sNGÀY DỰ KIÊN CHUYỂN TỚI%sNHÀ CUNG CẤP%sTHÔNG TIN"
+"%sTỔNG GIÁ%sGIỎ%sSỐ KHIẾU NẠI%sNGÀY KHIẾU NẠI%sGHI CHÚ NỘI BỘ%sGHI CHÚ NHÀ "
 "CUNG CẤP%sISBN%s "
 
 #. %1$s: - IF account.credit_type_code -
@@ -2755,7 +2757,7 @@ msgstr "%s %s Tác giả: %s%s"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:28
 #, c-format
 msgid "%s %s by %s%s (Record #%s)"
 msgstr "%s %s, Tác giả: %s%s (Biểu ghi số %s)"
@@ -3028,8 +3030,8 @@ msgid ""
 "%s %sAuthors %sItem Types %sLocations %sPlaces %sSeries %sTopics "
 "%sCollections %sHolding libraries %sHome libraries %sLanguage %s%s %s "
 msgstr ""
-"%s %sTác giả %sKiểu tài liệu %sĐịa điểm %sKho tài liệu %sSeries %sTopics %"
-"sBộ sưu tập %sThư viện đặt mượn %sThư viện sở hữu %sNgôn ngữ %s%s %s "
+"%s %sTác giả %sKiểu tài liệu %sĐịa điểm %sKho tài liệu %sSeries %sTopics "
+"%sBộ sưu tập %sThư viện đặt mượn %sThư viện sở hữu %sNgôn ngữ %s%s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( errornoitem ) 
@@ -3108,8 +3110,8 @@ msgid ""
 "patron card%sExporting %s patron cards%s %s Exporting from patron list %s %s"
 "%s batch to export%s%s batches to export%s %s "
 msgstr ""
-"%s %sXuất %s thẻ bạn đọc%sXuất %s thẻ bạn đọc%s %s %sXuất %s thẻ bạn đọc%"
-"sXuất %s thẻ bạn đọc%s %s Xuất từ giá sách ảo bạn đọc %s %s%s xuất lô thẻ "
+"%s %sXuất %s thẻ bạn đọc%sXuất %s thẻ bạn đọc%s %s %sXuất %s thẻ bạn đọc"
+"%sXuất %s thẻ bạn đọc%s %s Xuất từ giá sách ảo bạn đọc %s %s%s xuất lô thẻ "
 "bạn đọc%s%s xuất lô thẻ bạn đọc%s %s "
 
 #. %1$s:  END 
@@ -3297,7 +3299,7 @@ msgstr "%s Không có giá trị xác định cho %s %s %s %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  END # /IF CAN_user_circulate_manage_restrictions 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1213
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1235
 #, fuzzy, c-format
 msgid "%s %sYes%sNo%s %s "
 msgstr "%s %s %sCó%sKhông%s %s "
@@ -4143,7 +4145,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:761
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:783
 #, c-format
 msgid "%s Card number: "
 msgstr "%s Số thẻ: "
@@ -4186,7 +4188,7 @@ msgid "%s Checkout(s)"
 msgstr "%s Ghi mượn"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1022
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1044
 #, c-format
 msgid "%s Circulation note: "
 msgstr "%s Ghi chú lưu thông: "
@@ -4244,7 +4246,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "%s Hóa đơn bị đóng vào ngày %s %s Mở %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1136
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1158
 #, c-format
 msgid "%s Confirm password: "
 msgstr "%s Mật khẩu xác nhận: "
@@ -4420,13 +4422,13 @@ msgid "%s Error: "
 msgstr "%s Lỗi: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:982
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1004
 #, fuzzy, c-format
 msgid "%s Expiry date (leave blank for auto calc): "
 msgstr "%s Ngày hết hạn: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:722
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:744
 #, c-format
 msgid "%s Fax: "
 msgstr "%s Số Fax: "
@@ -4515,13 +4517,13 @@ msgid "%s Group %s has been deleted. %s %s has been removed from group. %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:605
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:627
 #, fuzzy, c-format
 msgid "%s Guarantor first name: "
 msgstr "%s Tên: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:588
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:610
 #, fuzzy, c-format
 msgid "%s Guarantor surname: "
 msgstr "%s Tên: "
@@ -4758,7 +4760,7 @@ msgstr "%s Tạo khóa học %s"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1210
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1232
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:734
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:765
 #, fuzzy, c-format
@@ -4996,7 +4998,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1005
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1027
 #, c-format
 msgid "%s OPAC note: "
 msgstr "%s Ghi chú OPAC: "
@@ -5031,7 +5033,7 @@ msgid "%s Other name: "
 msgstr "%s Tên khác: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:673
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:695
 #, fuzzy, c-format
 msgid "%s Other phone: "
 msgstr "%s Tên khác: "
@@ -5080,7 +5082,7 @@ msgid "%s Parsing upload file "
 msgstr "%sĐang phân tích tệp tin tải lên "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1079
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1101
 #, c-format
 msgid "%s Password: "
 msgstr "%s Mật khẩu: "
@@ -5156,13 +5158,13 @@ msgid "%s Phone: "
 msgstr "%s Điện thoại: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:711
 #, c-format
 msgid "%s Primary email: "
 msgstr "%s Thư điện tử: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:640
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:662
 #, c-format
 msgid "%s Primary phone: "
 msgstr "%s Số điện thoại: "
@@ -5193,7 +5195,7 @@ msgid "%s Receive orders from %s %s "
 msgstr "%s Nhận đơn đặt hàng từ nhà cung cấp: %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:959
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:981
 #, c-format
 msgid "%s Registration date: "
 msgstr "%s Ngày đăng kí: "
@@ -5257,7 +5259,7 @@ msgstr "%s Tài liệu đang được bạn đọc %s ("
 #. %4$s:  d.comment | $raw 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1241
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1263
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:131
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
 #, c-format
@@ -5306,13 +5308,13 @@ msgid "%s Searching: %s %s %s "
 msgstr "%s Tìm kiếm: %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:706
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:728
 #, c-format
 msgid "%s Secondary email: "
 msgstr "%s Thư điện tử 2: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:657
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
 #, c-format
 msgid "%s Secondary phone: "
 msgstr "%s Số điện thoại 2:  "
@@ -5349,13 +5351,13 @@ msgid "%s Something went wrong. %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:848
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
 #, c-format
 msgid "%s Sort 1: "
 msgstr "%s Thống kê 1: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:864
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
 #, c-format
 msgid "%s Sort 2: "
 msgstr "%s Thống kê 2: "
@@ -5442,7 +5444,7 @@ msgstr "%s Họ: "
 #. %32$s:  loo.link | html 
 #. %33$s:  END 
 #. %34$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:291
 #, fuzzy, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -5619,14 +5621,14 @@ msgid "%s Used in "
 msgstr "Biểu ghi này được liên kết trong "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1046
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1068
 #, c-format
 msgid "%s Username: "
 msgstr "%s Tên đăng nhập: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1202
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1224
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:727
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:758
 #, fuzzy, c-format
@@ -6040,7 +6042,7 @@ msgstr "%s tài khoản bạn đọc được nhập vào %s(bạn đọc cuối
 
 #. %1$s:  reserveloo.reservedate | $KohaDates 
 #. %2$s:  Branches.GetName ( reserveloo.branch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:147
 #, fuzzy, c-format
 msgid "%s in %s"
 msgstr "%s trong %s"
@@ -6174,13 +6176,13 @@ msgid "%s mandatory fields empty (highlighted)"
 msgstr "%s Các trường bắt buộc chưa khai báo thông tin (được đánh dấu)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "%s month"
 msgstr "tháng"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "%s months"
 msgstr "tháng"
@@ -6533,14 +6535,14 @@ msgid "%s will expire before "
 msgstr "%s sẽ hết hạn vào ngày "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "%s year"
 msgstr "%s tuổi"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:344
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:345
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:454
@@ -7395,7 +7397,7 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1193
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1215
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr "%sThiếu địa chỉ:%s %sMất thẻ thư viện:%s "
@@ -9095,7 +9097,7 @@ msgstr "Sao chép %s"
 msgid "&rsaquo; Duplicate warning"
 msgstr "&rsaquo; Cảnh báo trùng lặp biểu ghi"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
 #, c-format
 msgid "&rsaquo; Edit "
 msgstr "&rsaquo; Chỉnh sửa "
@@ -9912,7 +9914,7 @@ msgstr ""
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:325
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
 #, c-format
 msgid "') | html %%]"
 msgstr ""
@@ -10050,8 +10052,8 @@ msgid "(Current: %s - %s)"
 msgstr "(Hiện tại: %s - %s)"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:339
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:968
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:995
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:990
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1017
 #, c-format
 msgid "(Error)"
 msgstr "(Lỗi)"
@@ -10073,7 +10075,7 @@ msgstr "Miễn giảm tiền phạt"
 
 #. %1$s:  HoldsToPullStartDate | html 
 #. %2$s:  HoldsToPullEndDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:229
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:230
 #, fuzzy, c-format
 msgid ""
 "(Inclusive, default is %s days ago to %s days ahead. Set other date ranges "
@@ -10083,7 +10085,7 @@ msgstr ""
 "thiết lập khoảng thời gian khác nếu cần. )"
 
 #. %1$s:  HoldsToPullStartDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:231
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:232
 #, fuzzy, c-format
 msgid ""
 "(Inclusive, default is %s days ago to today. Set other date ranges as "
@@ -10262,7 +10264,7 @@ msgstr "(Nhập số lượng vào ô) "
 msgid "(exclusive) "
 msgstr "(độc quyền) "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:132
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:142
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:513
 #, c-format
 msgid "(fast cataloging)"
@@ -10788,25 +10790,25 @@ msgstr ": %sgiá sách ảo:%s"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:110
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
 #, c-format
 msgid ": Barcode must be unique."
 msgstr ""
 ": Đăng ký cá biệt trên đã tồn tại, bạn vui lòng nhập đăng ký cá biệt khác."
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:45
 #, c-format
 msgid ": Last item for bibliographic record wich biblio-level hold on it."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
 #, c-format
 msgid ": The items do not belong to your library."
 msgstr ": Bản tài liệu này thuộc về thư viện khác."
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:111
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #, c-format
 msgid ""
 ": Unable to automatically determine values for barcodes. No item has been "
@@ -10816,18 +10818,18 @@ msgstr ""
 "được thêm vào."
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:28
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
 #, c-format
 msgid ": item has a waiting hold."
 msgstr ": Bản tài liệu đang chờ bạn đọc đặt mượn đến lấy."
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
 #, c-format
 msgid ": item has linked "
 msgstr ": Bản tài liệu đã được liên kết tới "
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:27
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #, c-format
 msgid ": item is checked out."
 msgstr ": Bản tài liệu đã được ghi mượn."
@@ -11410,7 +11412,7 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:274
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:275
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:127
@@ -11451,7 +11453,7 @@ msgstr "Thao tác"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:57
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:57
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:84
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:183
@@ -11559,7 +11561,7 @@ msgstr "Giá thanh toán:"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:2
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:24
 #: intranet-tmpl/prog/en/modules/patroncards/tables/members_results.tt:22
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:233
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:243
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:16
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:89
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:248
@@ -11598,7 +11600,7 @@ msgid "Add %s items to %s"
 msgstr "Thêm %s tài liệu vào giá sách ảo %s"
 
 #. INPUT type=submit name=add_duplicate_submit
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:225
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:235
 msgid "Add & duplicate"
 msgstr "Tạo & Sao chép"
 
@@ -11660,7 +11662,7 @@ msgid "Add a new field"
 msgstr "Thêm trường tìm kiếm"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:242
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:252
 #, fuzzy
 msgid "Add a new item"
 msgstr "Thêm trường tìm kiếm"
@@ -11858,14 +11860,14 @@ msgstr "Ghi chú nội bộ"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:2
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:224
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:234
 #: intranet-tmpl/prog/en/modules/labels/result.tt:64
 #, c-format
 msgid "Add item"
 msgstr "Tạo bản tài liệu"
 
 #. %1$s:  IF (circborrowernumber) 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:132
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:142
 #, c-format
 msgid "Add item %s"
 msgstr "Tạo bản tài liệu %s"
@@ -11927,8 +11929,8 @@ msgstr "Main library"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:60
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1270
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1273
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1292
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1295
 #, c-format
 msgid "Add manual restriction"
 msgstr "Hạn chế tài khoản"
@@ -11960,7 +11962,7 @@ msgid "Add modified records to the following list: "
 msgstr "Chỉnh sửa biểu ghi bằng các mẫu sau đây: "
 
 #. INPUT type=button name=add_multiple_copies
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:228
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:238
 #, fuzzy
 msgid "Add multiple copies of this item"
 msgstr "Tạo nhiều bản tài liệu"
@@ -12006,7 +12008,7 @@ msgstr "Thêm trường tìm kiếm"
 msgid "Add new group"
 msgstr "Tạo nhóm giỏ đặt hàng"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:127
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:133
 #, c-format
 msgid "Add new holiday"
 msgstr "Tạo ngày nghỉ cho thư viện"
@@ -12348,7 +12350,7 @@ msgid "Additional SRU options: "
 msgstr "Công cụ bổ trợ"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:66
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1338
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1360
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #, c-format
@@ -12608,7 +12610,7 @@ msgid "Adolescent"
 msgstr "Thanh niên"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:191
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:823
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:845
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:145
 #, c-format
 msgid "Adult"
@@ -12684,7 +12686,7 @@ msgid "Afternoon "
 msgstr "Sau ngày"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:176
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy, c-format
 msgid "Age"
 msgstr "Aug"
@@ -13028,7 +13030,7 @@ msgstr "Cho phép"
 msgid "Allow access to the reports module"
 msgstr "Truy cập báo cáo này từ: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:877
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:899
 #, fuzzy, c-format
 msgid "Allow auto-renewal of items: "
 msgstr "Tổng số gia hạn"
@@ -13038,13 +13040,13 @@ msgstr "Tổng số gia hạn"
 msgid "Allow changes to contents from: "
 msgstr "All images come from "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:552
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:574
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's checkouts from the OPAC"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:589
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
@@ -15165,7 +15167,7 @@ msgstr "Tổng số gia hạn"
 msgid "Auto-renewal: Patron has opted out"
 msgstr "Hiện tại bạn đọc không mượn tài liệu của thư viện."
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:797
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:819
 #, c-format
 msgid ""
 "AutoMemberNum is set to enabled, but cardnumber is marked as mandatory in "
@@ -15227,7 +15229,7 @@ msgid "Available call numbers"
 msgstr "Ký hiệu phân loại"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:189
 msgid "Available copy"
 msgstr "Số bản sao"
 
@@ -15237,7 +15239,7 @@ msgid "Available copy numbers"
 msgstr "Số bản sao sẵn sàng"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:62
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:189
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:190
 #, c-format
 msgid "Available enumeration"
 msgstr "Số kỳ ÂPĐK"
@@ -16087,7 +16089,7 @@ msgstr "Biểu ghi %s"
 msgid "Biblio count"
 msgstr "Số biểu ghi"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:172
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:173
 #, fuzzy, c-format
 msgid "Biblio level hold."
 msgstr "Đặt mượn"
@@ -16914,7 +16916,7 @@ msgstr "Thống kê vào ngày %s. Kết quả thống kê từ ngày %s đến 
 msgid "Calendar"
 msgstr "Lập lịch làm việc"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:200
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:206
 #, c-format
 msgid "Calendar information"
 msgstr "Lịch làm việc của thư viện"
@@ -16962,7 +16964,7 @@ msgstr "Ký hiệu phân loại"
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:187
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:182
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
@@ -17228,8 +17230,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:195
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:39
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:68
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:117
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:187
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:123
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:193
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:100
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:132
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:84
@@ -17264,8 +17266,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:353
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:233
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:243
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:253
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:632
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
@@ -17282,7 +17284,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:296
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:33
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:66
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1286
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1308
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:332
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:44
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:40
@@ -17336,7 +17338,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:92
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:317
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:321
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -17465,7 +17467,7 @@ msgstr "Hủy bộ lọc"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:645
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:217
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:223
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:155
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:156
 #, c-format
 msgid "Cancel hold"
 msgstr "Hủy đặt mượn"
@@ -17476,7 +17478,7 @@ msgid "Cancel hold "
 msgstr "Hủy đặt mượn"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:153
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:154
 #, fuzzy
 msgid "Cancel hold and return to : %s"
 msgstr "Hủy và quay lại giỏ đặt hàng"
@@ -17659,11 +17661,11 @@ msgstr "Hủy bỏ ghi mượn"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:28
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:112
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:45
 #, c-format
 msgid "Cannot delete"
 msgstr "Không thể xóa"
@@ -17832,7 +17834,7 @@ msgstr "Số thẻ bạn đọc đã được sử dụng."
 
 #. %1$s:  maxlength_cardnumber | html 
 #. %2$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:787
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:809
 #, fuzzy, c-format
 msgid "Card number can be up to %s characters. %s "
 msgstr ". Mật khẩu phải có ít nhất %s ký tự."
@@ -17855,23 +17857,23 @@ msgstr "Danh sách thẻ bạn đọc (Mỗi thẻ 1 dòng): "
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #. %3$s:  ELSIF maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:780
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:802
 #, fuzzy, c-format
 msgid "Card number must be between %s and %s characters. %s "
 msgstr ". Mật khẩu phải có ít nhất %s ký tự."
 
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:773
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:795
 #, fuzzy, c-format
 msgid "Card number must be exactly %s characters. %s "
 msgstr ". Mật khẩu phải có ít nhất %s ký tự."
 
 #. For the first occurrence,
 #. %1$s:  maxlength_cardnumber | html 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:779
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:786
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:794
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:801
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
 #, fuzzy, c-format
 msgid "Card number must not be more than %s characters."
 msgstr ". Mật khẩu phải có ít nhất %s ký tự."
@@ -18090,7 +18092,7 @@ msgstr "Báo cáo phân hệ biên mục"
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:7
 #: intranet-tmpl/prog/en/includes/header.inc:35
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:497
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
@@ -18196,7 +18198,7 @@ msgstr "Kiểu:"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:65
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:52
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:817
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:839
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:455
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:156
@@ -18287,7 +18289,7 @@ msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Change"
 msgstr "Sửa"
 
@@ -18334,7 +18336,7 @@ msgid "Change library"
 msgstr "Tất cả"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "Change messaging preferences to default for this category?"
 msgstr "Thiết lập các tin nhắn gửi tới kiểu bạn đọc."
@@ -18546,7 +18548,7 @@ msgstr "Kiểm tra ÂPĐK quá hạn"
 msgid "Check for embedded item record data?"
 msgstr "Kiểm tra dữ liệu bản tài liệu đính kèm?"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:904
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:926
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:257
 #, fuzzy, c-format
 msgid "Check for previous checkouts: "
@@ -19083,7 +19085,7 @@ msgid "Cheshire Libraries, United Kingdom"
 msgstr "software.coop, United Kingdom"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:822
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:844
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:146
 #, c-format
 msgid "Child"
@@ -19274,7 +19276,7 @@ msgstr "Chọn"
 msgid "Chooser:"
 msgstr "Chọn: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1300
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
 #, fuzzy, c-format
 msgid "Chooser: "
 msgstr "Chọn: "
@@ -19634,7 +19636,7 @@ msgstr "Đã xóa dữ liệu lô dữ liệu số %s"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:144
 #: intranet-tmpl/prog/en/modules/members/member.tt:185
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1370
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1392
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:562
@@ -19697,7 +19699,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:64
 #: intranet-tmpl/prog/en/includes/holds_table.inc:205
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1282
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1304
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:440
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #, c-format
@@ -19777,7 +19779,7 @@ msgstr "Tạo dữ liệu kiểm soát"
 msgid "Click ID to select/deselect quote"
 msgstr "Kích vào mã trích dẫn để chọn/bỏ chọn trích dẫn"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:226
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
 #, c-format
 msgid "Click Save to finish."
 msgstr "Kích chuột vào 'Lưu' để kết thúc."
@@ -19910,7 +19912,7 @@ msgstr ""
 "Chọn nút 'Lưu trích dẫn' trên thanh công cụ để lưu lại các trích dẫn mới "
 "được tải lên."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:223
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
 #, c-format
 msgid "Click the date to add or edit a holiday."
 msgstr "Kích chuột vào ngày đó để tạo hoặc chỉnh sửa ngày nghỉ."
@@ -19971,7 +19973,7 @@ msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:329
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:404
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:867
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
@@ -19987,7 +19989,7 @@ msgstr "Sao chép chính sách lưu thông tới:"
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:329
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:404
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:867
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
@@ -20469,7 +20471,7 @@ msgstr "Kiểu văn bản"
 
 #: intranet-tmpl/prog/en/columns.def:62
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:10
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1229
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1251
 #, c-format
 msgid "Comment"
 msgstr "Bình luận"
@@ -20495,7 +20497,7 @@ msgstr "Bình luận:"
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1276
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1298
 #, c-format
 msgid "Comment: "
 msgstr "Bình luận: "
@@ -20814,13 +20816,13 @@ msgstr "Giới hạn"
 msgid "Constrain proportions"
 msgstr "Giới hạn"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:273
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:274
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
 msgstr "Giới hạn"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:581
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:329
 #, c-format
 msgid "Contact"
@@ -21119,7 +21121,7 @@ msgstr "Số lượng bổ sung:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:219
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:190
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
@@ -21131,6 +21133,11 @@ msgstr "Sao chép"
 #, c-format
 msgid "Copy and replace"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
+#, fuzzy, c-format
+msgid "Copy changes to all libraries"
+msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
 
 #: intranet-tmpl/prog/en/includes/keyboard_shortcuts.inc:15
 #, fuzzy, c-format
@@ -21158,7 +21165,7 @@ msgstr "Xóa trường con"
 msgid "Copy existing value"
 msgstr "Thay thế ảnh bìa hiện tại"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:206
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:212
 #, c-format
 msgid "Copy holidays to:"
 msgstr "Sao chép ngày nghỉ tới thư viện:"
@@ -21200,7 +21207,7 @@ msgstr "Sao chép tới %s"
 msgid "Copy to %s"
 msgstr "Sao chép tới %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:181
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:187
 #, c-format
 msgid "Copy to all libraries"
 msgstr "Tạo ngày nghỉ này cho tất cả thư viện"
@@ -22300,8 +22307,8 @@ msgstr "Cơ sở dữ liệu: "
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:12
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:10
 #: intranet-tmpl/prog/en/modules/tags/review.tt:86
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:244
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:315
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:250
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:321
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:228
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
@@ -22600,7 +22607,7 @@ msgstr ""
 msgid "Day"
 msgstr "Ngày"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:266
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:272
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:119
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:107
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:129
@@ -22608,7 +22615,7 @@ msgstr "Ngày"
 msgid "Day of week"
 msgstr "Ngày"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:290
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:296
 #, fuzzy, c-format
 msgid "Day/month"
 msgstr "Ngày/Tháng"
@@ -22672,7 +22679,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:47
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:44
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:927
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:949
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:75
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
@@ -23075,7 +23082,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:78
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:98
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:72
@@ -23108,7 +23115,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:151
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:306
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:309
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -23534,7 +23541,7 @@ msgid "Delete this category"
 msgstr "Xóa kiểu bạn đọc"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Delete this exception."
 msgstr "Khôi phục lại ngày nghỉ."
 
@@ -23545,7 +23552,7 @@ msgstr "Xóa ngày nghỉ này"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Delete this holiday."
 msgstr "Xóa ngày nghỉ này."
 
@@ -23625,7 +23632,7 @@ msgstr ""
 msgid "Delimiter: "
 msgstr "Dấu phân cách: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
 #, c-format
 msgid "Delink"
 msgstr "Delink"
@@ -23635,7 +23642,7 @@ msgstr "Delink"
 msgid "Deliverer"
 msgstr "Nơi giao hàng"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1316
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1338
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:357
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:287
 #, fuzzy, c-format
@@ -23729,10 +23736,10 @@ msgstr "Đơn vị"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:30
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:246
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:268
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:295
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:252
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:301
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:323
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:255
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
@@ -23820,7 +23827,7 @@ msgid "Description of charges"
 msgstr "Thông tin khoản tiền phạt."
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
@@ -24688,7 +24695,7 @@ msgstr "Ngày hết hạn: %s"
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:17
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:93
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:99
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:335
 #, c-format
@@ -24927,7 +24934,7 @@ msgstr "Đặt mượn đầu tiên"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:98
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:282
@@ -24952,7 +24959,7 @@ msgstr "Đặt mượn đầu tiên"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:185
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:150
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:305
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -25022,7 +25029,7 @@ msgstr "Chỉnh sửa "
 #. %2$s:  IF ( barcode ) 
 #. %3$s:  barcode | html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:134
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:144
 #, c-format
 msgid "Edit Item #%s%s / Barcode %s%s"
 msgstr "Chỉnh sửa bản tài liệu số%s%s / Đăng ký cá biệt: %s%s"
@@ -25100,11 +25107,6 @@ msgstr "Chỉnh sửa giỏ đặt hàng %s"
 msgid "Edit basket group %s (%s) for "
 msgstr "Chỉnh sửa nhóm giỏ đặt hàng %s (%s) của "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
-#, c-format
-msgid "Edit biblio"
-msgstr "Chỉnh sửa biểu ghi"
-
 #. %1$s:  budget_period_description | html 
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:23
 #, c-format
@@ -25168,7 +25170,7 @@ msgstr "Sửa lịch sửa"
 msgid "Edit image"
 msgstr "Chỉnh sửa giỏ đặt hàng"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
 #, c-format
 msgid "Edit in host"
 msgstr "Sửa trong tài liệu chủ"
@@ -25271,6 +25273,7 @@ msgstr "Cho phép thủ thư tạo các trích dẫn, thông báo nhanh trên OP
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:504
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:104
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:228
@@ -25339,7 +25342,7 @@ msgid "Edit serials"
 msgstr "Chỉnh sửa ÂPĐK"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:316
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:320
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:221
 #, c-format
@@ -25515,6 +25518,11 @@ msgstr ""
 msgid "Empty and close"
 msgstr "Xóa tất cả và thoát"
 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:487
+#, fuzzy, c-format
+msgid "Empty option"
+msgstr "[Thêm tùy chọn]"
+
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:177
 #, fuzzy, c-format
 msgid "Enable"
@@ -25601,7 +25609,7 @@ msgstr "Ngày kết thúc không phù hợp với chiều dài ấn phẩm đị
 msgid "End date:"
 msgstr "Ngày kết thúc:"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:221
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:222
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:142
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:212
 #, c-format
@@ -25742,7 +25750,7 @@ msgstr ""
 "Nhập thông tin tóm tắt cho kiểu tài liệu. Thông tin này sẽ được hiển thị "
 "thay thế cho giá trị mặc định trong kết quả tìm kiếm. Ví dụ nếu bạn nhập :"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:224
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
 #, c-format
 msgid "Enter a title and description for the holiday."
 msgstr "Nhập tên và mô tả cho kỳ nghỉ của thư viện."
@@ -26007,14 +26015,14 @@ msgstr "Lỗi nhập dữ liệu cho khung mẫu biên mục %s"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:110
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
 #, c-format
 msgid "Error saving item"
 msgstr "Lỗi lưu bản tài liệu"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:111
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #, c-format
 msgid "Error saving items"
 msgstr "Lỗi lưu nhiều bản tài liệu"
@@ -26252,12 +26260,12 @@ msgid "Excel"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, fuzzy
 msgid "Exception: %s"
 msgstr "Loại trừ: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:241
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:247
 #, c-format
 msgid "Exceptions"
 msgstr "Ngày nghỉ bị hủy"
@@ -26309,7 +26317,7 @@ msgstr "Ngày nhận (Dự kiến)"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1230
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:805
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #, c-format
@@ -26349,7 +26357,7 @@ msgstr "Ngày hết hạn: %s"
 msgid "Expiration:"
 msgstr "Tài khoản hết hạn:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1280
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1302
 #, c-format
 msgid "Expiration: "
 msgstr "Ngày hết hạn: "
@@ -27507,7 +27515,7 @@ msgstr "Tên"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:442
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:475
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:511
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:522
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:647
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:33
 #, c-format
@@ -27951,7 +27959,7 @@ msgid "Friday"
 msgstr "Thứ 6"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Fridays"
 msgstr "Thứ 6"
 
@@ -28047,7 +28055,7 @@ msgid "From call number:"
 msgstr "Từ ký hiệu phân loại: "
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:135
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:141
 #, c-format
 msgid "From date:"
 msgstr "Từ ngày:"
@@ -29089,7 +29097,7 @@ msgstr ""
 msgid "Hint:"
 msgstr "Gợi ý:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:226
 #, c-format
 msgid "Hints"
 msgstr "Hướng dẫn"
@@ -29457,45 +29465,45 @@ msgstr "Đặt mượn:"
 msgid "Holds:"
 msgstr "Đặt mượn:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:240
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday exception"
 msgstr "Ngày nghỉ bị hủy"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:155
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:161
 #, c-format
 msgid "Holiday only on this day"
 msgstr "Ngày nghỉ đơn lẻ"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:160
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:166
 #, c-format
 msgid "Holiday repeated every same day of the week"
 msgstr "Ngày nghỉ theo tuần"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:165
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:171
 #, c-format
 msgid "Holiday repeated yearly on the same date"
 msgstr "Ngày nghỉ theo năm"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:238
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday repeating weekly"
 msgstr "Ngày nghỉ hàng tuần"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:233
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:239
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday repeating yearly"
 msgstr "Ngày nghỉ hàng năm"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:170
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:176
 #, c-format
 msgid "Holidays on a range"
 msgstr "Kỳ nghỉ dài đơn lẻ"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:175
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:181
 #, c-format
 msgid "Holidays repeated yearly on a range"
 msgstr "Kỳ nghỉ dài theo năm"
@@ -29575,7 +29583,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:25
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:496
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
@@ -29937,7 +29945,7 @@ msgstr "Thông tin chi tiết đặt mượn"
 msgid "Housebound details for %s"
 msgstr "&rsaquo; Thông tin chi tiết khóa học "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1297
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:368
 #, c-format
@@ -30305,6 +30313,16 @@ msgstr ""
 "biểu ghi bạn đọc khác. Thiết lập này không thể thay đổi sau khi bạn tạo "
 "thành công thuộc tính bạn đọc."
 
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:118
+#, fuzzy, c-format
+msgid ""
+"If checked, changes for this holiday will be copied to all libraries. If the "
+"holiday doesn't exists for a library, no change is made."
+msgstr ""
+"Nếu chọn tùy chọn này, hệ thống sẽ sao chép ngày nghỉ sang tất cả các thư "
+"viện. Nếu thư viện được sao chép đã tồn tại ngày nghỉ khác thì việc này sẽ "
+"không làm thay đổi các ngày nghỉ hiện có."
+
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #, c-format
 msgid ""
@@ -30344,7 +30362,7 @@ msgstr ""
 "%s (Nếu bạn thiết lập kiểu tài liệu là 'Không cho mượn', các tài liệu thuộc "
 "kiểu tài liệu này sẽ không cho bạn đọc mượn)"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:183
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:189
 #, c-format
 msgid ""
 "If checked, this holiday will be copied to all libraries. If the holiday "
@@ -30934,7 +30952,7 @@ msgstr "Kết quả nhập bạn đọc:"
 msgid "Import this batch into the catalog"
 msgstr "Nhập lô biểu ghi"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:207
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:217
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:862
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, fuzzy, c-format
@@ -31121,7 +31139,7 @@ msgid "Increase indent"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:40
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1274
 #, fuzzy, c-format
 msgid "Indefinite"
 msgstr "Không thời hạn"
@@ -31171,9 +31189,9 @@ msgstr "Thông tin:"
 msgid "Information"
 msgstr "Thông tin tài liệu"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:909
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:913
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:917
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
 #, fuzzy, c-format
 msgid "Inherit from settings"
 msgstr "Thông số chung"
@@ -31533,7 +31551,7 @@ msgid "Invalid course!"
 msgstr "Khóa học không hợp lệ!"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "Invalid day entered in field %s"
 msgstr "Giá trị ngày không hợp lệ được nhập vào trường thông tin "
@@ -31550,7 +31568,7 @@ msgid "Invalid input. Enter something like: 245,a"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "Invalid month entered in field %s"
 msgstr "Giá trị tháng không hợp lệ được nhập vào trường thông tin "
@@ -31585,7 +31603,7 @@ msgid "Invalid value for %s"
 msgstr "Tạo giá trị định trước cho %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "Invalid year entered in field %s"
 msgstr "Giá trị năm không hợp lệ được nhập vào trường thông tin "
@@ -32504,7 +32522,7 @@ msgstr "Không tìm thấy thẻ bạn đọc"
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:26
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:143
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:91
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:28
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:29
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:187
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:254
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:43
@@ -32529,7 +32547,7 @@ msgid "Items already on this rota:"
 msgstr "Tên đăng nhập/ Mật khẩu đã tồn tại."
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:55
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Items available"
 msgstr "Tài liệu sẵn sàng"
@@ -32550,7 +32568,7 @@ msgstr "Tài liệu dự kiến"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:36
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:37
 #, c-format
 msgid "Items for %s %s by %s%s (Record #%s)"
 msgstr "Tài liệu đính kèm của biểu ghi %s %s, Tác giả: %s%s (Biểu ghi số %s)"
@@ -32775,7 +32793,7 @@ msgstr "Thay thế ảnh bìa hiện tại"
 msgid "Keep issue number"
 msgstr "Kỳ ấn phẩm đang có"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:228
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
 #, c-format
 msgid "Key"
 msgstr "Chú thích"
@@ -33997,11 +34015,9 @@ msgstr ""
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 #, fuzzy, c-format
-msgid ""
-"Koha &rsaquo; Catalog &rsaquo; %s <span class=\"unknownrecord\">Unknown "
-"record</span> %s <span class=\"titledetails\">Details for %s</span> %s "
+msgid "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Details for %s %s "
 msgstr ""
-"Koha &rsaquo; Tìm kiếm &rsaquo; %s Biểu ghi không tồn tại! %s Hiển thị MARC "
+"Koha &rsaquo; Tìm kiếm &rsaquo; %s Biểu ghi không tồn tại! %s Hiển thị ISBD "
 "của biểu ghi: %s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
@@ -34115,7 +34131,7 @@ msgstr "Koha &rsaquo; Phân hệ biên mục &rsaquo; Nhập biểu ghi MARC"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:7
 #, c-format
 msgid ""
 "Koha &rsaquo; Cataloging &rsaquo; %s %s by %s%s (Record #%s) &rsaquo; Items"
@@ -36129,7 +36145,7 @@ msgstr "Tạo tin nhắn"
 
 #. %1$s:  END 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:821
 #, c-format
 msgid "Leave blank for auto calc during registration %s %s "
 msgstr ""
@@ -36419,7 +36435,7 @@ msgstr "Giới hạn cho thư viện: "
 msgid "Library limitations: "
 msgstr "Giới hạn cho thư viện: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:754
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
 #, c-format
 msgid "Library management"
 msgstr "Thư viện quản lý"
@@ -36444,7 +36460,7 @@ msgstr ""
 msgid "Library of the patron:"
 msgstr "Thư viện của bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:953
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #, c-format
 msgid "Library set-up"
 msgstr "Thông tin tài khoản"
@@ -36474,7 +36490,7 @@ msgstr "Thông tin thư viện"
 
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:31
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:61
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:130
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:136
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:257
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:263
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
@@ -36491,7 +36507,7 @@ msgstr "Thông tin thư viện"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:103
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: intranet-tmpl/prog/en/modules/members/member.tt:173
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:830
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:82
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:281
@@ -36870,7 +36886,7 @@ msgstr "Đang tải dữ liệu..."
 msgid "Loading more results…"
 msgstr "Danh sách các báo cáo được lưu lại"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1389
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1411
 #, c-format
 msgid "Loading new messaging defaults "
 msgstr ""
@@ -37557,7 +37573,7 @@ msgstr "Main library"
 msgid "Make a payment"
 msgstr "Thanh toán"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:177
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:183
 #, c-format
 msgid ""
 "Make a single holiday on a range repeated yearly. For example, selecting "
@@ -37567,7 +37583,7 @@ msgstr ""
 "Tùy chọn này sẽ tạo ra một kỳ nghỉ dài trong một khoảng thời gian nhất định "
 "và kỳ nghỉ này sẽ được lặp lại trong các năm tiếp theo."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:172
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:178
 #, c-format
 msgid ""
 "Make a single holiday on a range. For example, selecting August 1, 2012 and "
@@ -37577,7 +37593,7 @@ msgstr ""
 "Tùy chọn ngày sẽ tạo ra các ngày nghỉ đơn lẻ trong một khoảng thời gian và "
 "kỳ nghỉ này sẽ không được lặp lại."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:163
 #, c-format
 msgid ""
 "Make a single holiday. For example, selecting August 1, 2012 will make it a "
@@ -37607,7 +37623,7 @@ msgstr "Không (mặc định)"
 msgid "Make payment"
 msgstr "Thanh toán"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:162
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:168
 #, c-format
 msgid ""
 "Make this weekday a holiday, every week. For example, if your library is "
@@ -38322,13 +38338,13 @@ msgid "Mark closed"
 msgstr "Đóng"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:165
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:166
 #, fuzzy
 msgid "Mark item as lost"
 msgstr "Tài liệu bị mất"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:168
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:169
 #, fuzzy
 msgid "Mark lost and notify patron"
 msgstr "Quản lý danh sách bạn đọc."
@@ -38800,7 +38816,7 @@ msgid "Minimum Koha version"
 msgstr "Yêu cầu phiên bản Koha tối thiểu"
 
 #. %1$s:  minPasswordLength | html 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1129
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1151
 #, c-format
 msgid "Minimum password length: %s"
 msgstr "Chiều dài mật khẩu tối thiểu: %s"
@@ -39209,7 +39225,7 @@ msgid "Monday"
 msgstr "Thứ 2"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Mondays"
 msgstr "Thứ 2"
 
@@ -39227,7 +39243,7 @@ msgstr "Thứ 2"
 msgid "Month"
 msgstr "Tháng"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:292
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:298
 #, fuzzy, c-format
 msgid "Month/day"
 msgstr "Tháng/Ngày"
@@ -39744,7 +39760,7 @@ msgstr "Chưa có"
 #: intranet-tmpl/prog/en/modules/tools/problem-reports.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:421
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:453
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1372
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1394
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:124
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:262
@@ -40407,10 +40423,10 @@ msgstr "Nicholas Rosasco, (Documentation Compiler)"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:152
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:63
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:130
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:545
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:548
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:560
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:563
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:570
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:582
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:585
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:312
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
@@ -40457,12 +40473,12 @@ msgstr "Nicholas Rosasco, (Documentation Compiler)"
 msgid "No"
 msgstr "Không xóa"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:885
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:894
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1306
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1311
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1320
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1325
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:907
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:916
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1328
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1333
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1342
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1347
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:204
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:211
 #, c-format
@@ -40798,9 +40814,9 @@ msgstr "Quá nhiều đặt mượn: "
 msgid "No holds on this record"
 msgstr "Quá nhiều đặt mượn: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:908
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:916
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:930
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:934
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:938
 #, c-format
 msgid "No if settings allow it"
 msgstr ""
@@ -40889,7 +40905,7 @@ msgstr "Không có tài liệu sẵn sàng"
 msgid "No items for %s"
 msgstr "Không có bản tài liệu của %s"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:198
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:199
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:116
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:47
 #, c-format
@@ -41129,7 +41145,7 @@ msgstr "Không có tính năng bổ trợ dạng công cụ nào được cài �
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:386
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:177
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:187
 #, fuzzy
 msgid "No popup"
 msgstr "Tài liệu phổ biến"
@@ -41417,12 +41433,12 @@ msgstr "Khoa học"
 msgid "Non-musical recording"
 msgstr "Không phải bản thu âm"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:613
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
 #, fuzzy, c-format
 msgid "Non-patron guarantor first name"
 msgstr "Alternate contact: Tên"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:596
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:618
 #, c-format
 msgid "Non-patron guarantor surname"
 msgstr ""
@@ -41468,7 +41484,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:198
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:137
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:72
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:247
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:248
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:136
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:128
@@ -41542,7 +41558,7 @@ msgid "Normal"
 msgstr "Hiển thị đơn giản"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Normal day"
 msgstr "Ngày bình thường"
 
@@ -42154,7 +42170,7 @@ msgstr "Số lần cho mượn"
 msgid "Number of columns:"
 msgstr "Số cột:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:231
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:241
 #, fuzzy, c-format
 msgid "Number of copies of this item to add: "
 msgstr "Số bản tài liệu cần tạo: "
@@ -42547,7 +42563,7 @@ msgid "OPAC tables"
 msgstr "Ghi chú OPAC:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:518
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:108
 #, fuzzy, c-format
 msgid "OPAC view"
 msgstr "Xem hiển thị OPAC:"
@@ -42557,7 +42573,7 @@ msgstr "Xem hiển thị OPAC:"
 msgid "OPAC view:"
 msgstr "Xem hiển thị OPAC:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1039
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1061
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "Tài khoản đăng nhập"
@@ -43276,7 +43292,7 @@ msgid "Orex Digital, Spain"
 msgstr ""
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:825
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:847
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:69
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:148
 #, c-format
@@ -43717,12 +43733,12 @@ msgstr "Số thẻ bạn đọc %s không hợp lệ %s (với bạn đọc có 
 msgid "Password error for patron with borrowernumber %s. "
 msgstr "Số thẻ bạn đọc %s không hợp lệ %s (với bạn đọc có số thứ tự %s)%s "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1127
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1149
 #, c-format
 msgid "Password has leading or trailing whitespaces"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1121
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1143
 #, c-format
 msgid "Password is too short"
 msgstr "Mật khẩu quá ngắn"
@@ -43737,7 +43753,7 @@ msgid ""
 "%s, length is %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1124
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1146
 #, fuzzy, c-format
 msgid "Password is too weak"
 msgstr "Mật khẩu quá ngắn"
@@ -43808,7 +43824,7 @@ msgstr "Mật khẩu:"
 msgid "Password: "
 msgstr "Mật khẩu: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1178
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1200
 #, c-format
 msgid "Passwords do not match"
 msgstr "Mật khẩu không khớp"
@@ -43911,7 +43927,7 @@ msgstr "Bạn đọc '%s' đã có trong danh sách."
 msgid "Patron ID:"
 msgstr "Bạn đọc bảo lãnh:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1189
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1211
 #, c-format
 msgid "Patron account flags"
 msgstr "Thông tin khác"
@@ -43983,7 +43999,7 @@ msgstr "Nhập số thẻ bạn đọc:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:429
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:464
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:500
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:511
 #, fuzzy, c-format
 msgid "Patron card number:"
 msgstr "Nhập số thẻ bạn đọc:"
@@ -44243,7 +44259,7 @@ msgid "Patron has restrictions"
 msgstr "Hạn chế bạn đọc"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:184
 msgid "Patron holds"
 msgstr "Số bạn đọc đặt mượn"
 
@@ -44278,7 +44294,7 @@ msgid "Patron is an adult"
 msgstr "Bạn đọc là người lớn"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:4
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1288
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "Bạn đọc hiện tại không bị hạn chế tài khoản."
@@ -44332,14 +44348,14 @@ msgstr "Danh sách bạn đọc"
 msgid "Patron lists:"
 msgstr "Danh sách bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1387
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1409
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:415
 #, c-format
 msgid "Patron messaging preferences"
 msgstr "Thông báo bạn đọc "
 
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:25
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:184
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:185
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:133
 #, c-format
 msgid "Patron name"
@@ -44444,7 +44460,7 @@ msgstr "Liên quan chi tiết: "
 msgid "Patron request"
 msgstr "Đặt"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1223
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1245
 #, c-format
 msgid "Patron restrictions"
 msgstr "Hạn chế bạn đọc"
@@ -45508,7 +45524,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "Vui lòng xác nhận xem đây có phải là một bạn đọc bị trùng lặp"
 
@@ -46293,7 +46309,7 @@ msgstr "Thông số"
 msgid "Preferences and parameters"
 msgstr "Preferences and parameters"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:925
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:947
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:580
 #, fuzzy, c-format
 msgid "Preferred language for notices: "
@@ -46555,7 +46571,7 @@ msgid "Print card number as text under barcode: "
 msgstr "In số thẻ dưới mã vạch: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:470
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:94
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:100
 #, c-format
 msgid "Print label"
 msgstr "In nhãn gáy"
@@ -46815,7 +46831,7 @@ msgid "Processing..."
 msgstr "Đang xử lý..."
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:826
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:848
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:149
 #, c-format
 msgid "Professional"
@@ -47168,7 +47184,7 @@ msgid "Publisher: %s %s, %s %s %s %s %s %s "
 msgstr "Nhà xuất bản: %s %s vào %s %s %s , %s %s %s , %s %s "
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:54
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:181
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
 #, c-format
 msgid "Pull this many items"
 msgstr "Số bản đặt mượn"
@@ -47277,7 +47293,7 @@ msgstr "Số lượng: "
 msgid "Queued request"
 msgstr "Đặt"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1444
 #, c-format
 msgid "Quick add"
 msgstr ""
@@ -47706,7 +47722,7 @@ msgstr ""
 msgid "Referral:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:213
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:214
 #, c-format
 msgid "Refine results"
 msgstr "Bộ lọc dữ liệu"
@@ -47846,9 +47862,11 @@ msgid "Relationship information"
 msgstr "Thông tin liên quan"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:448
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:480
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:516
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:620
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:481
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:484
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:528
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:531
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:642
 #, c-format
 msgid "Relationship: "
 msgstr "Mối quan hệ: "
@@ -47989,8 +48007,8 @@ msgstr "Hình ảnh khác:"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:255
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:110
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:184
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:490
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:526
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:501
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:548
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:130
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:8
@@ -48135,7 +48153,7 @@ msgstr "loại bỏ hình ảnh này"
 msgid "Remove: "
 msgstr "Loại bỏ "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1233
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1255
 #, c-format
 msgid "Remove?"
 msgstr "Loại bỏ?"
@@ -48733,7 +48751,7 @@ msgstr "Required module missing"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:303
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:699
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:860
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
@@ -48754,29 +48772,31 @@ msgstr "Required module missing"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:336
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:355
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:371
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:594
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:646
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:663
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:695
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:728
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:770
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:777
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:784
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:791
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:812
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:840
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:854
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:965
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:992
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1012
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1029
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1069
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1118
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1175
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:495
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:616
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:633
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:668
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:685
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:701
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:717
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:734
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:750
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:792
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:806
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:813
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:834
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:862
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:876
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:892
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1014
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1034
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1051
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1091
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1140
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1197
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:125
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:139
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:222
@@ -49706,12 +49726,12 @@ msgstr "Số tin nhắn:"
 msgid "SMS cellular providers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1397
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
 #, c-format
 msgid "SMS number should be in the format 1234567890 or +11234567890"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1395
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1417
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:423
 #, c-format
 msgid "SMS number:"
@@ -49722,7 +49742,7 @@ msgstr "Số tin nhắn:"
 msgid "SMS provider"
 msgstr "Mẫu CSV"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1401
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1423
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:427
 #, fuzzy, c-format
 msgid "SMS provider:"
@@ -49801,7 +49821,7 @@ msgid "Saturday"
 msgstr "Thứ 7"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Saturdays"
 msgstr "Thứ 7"
 
@@ -49813,8 +49833,8 @@ msgstr "Thứ 7"
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:186
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:60
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:186
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:122
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:192
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:312
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:222
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:343
@@ -49975,7 +49995,7 @@ msgstr "Lưu mẫu mới"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:146
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:241
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:251
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
@@ -50472,7 +50492,7 @@ msgstr "Tìm quỹ:"
 msgid "Search history"
 msgstr "Lịch sử tìm kiếm"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:222
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:228
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr ""
@@ -50698,7 +50718,7 @@ msgstr "Tìm kiếm tài liệu:"
 msgid "Search title"
 msgstr "Tìm theo nhan đề"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:537
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
 #, fuzzy, c-format
 msgid "Search to add"
 msgstr "Tìm kiếm"
@@ -51568,7 +51588,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, fuzzy
 msgid "Separator must be / in field %s"
 msgstr "Dấu phân cách trong trường thông tin phải là / "
@@ -51894,7 +51914,7 @@ msgstr "Thiết lập mức ưu tiên thấp nhất"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:387
 #, c-format
 msgid "Set to patron"
@@ -52368,7 +52388,7 @@ msgstr "Tổng số ghi mượn"
 msgid "Show checkouts to guarantor"
 msgstr "Tổng số ghi mượn"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
 #, fuzzy, c-format
 msgid "Show checkouts to guarantors"
 msgstr "Tổng số ghi mượn"
@@ -52393,7 +52413,7 @@ msgstr ""
 msgid "Show fines to guarantor"
 msgstr "Tổng số ghi mượn"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:557
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:579
 #, fuzzy, c-format
 msgid "Show fines to guarantors"
 msgstr "Tổng số ghi mượn"
@@ -52508,8 +52528,8 @@ msgstr ""
 msgid "Shown"
 msgstr "Hiển thị"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:648
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:697
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:670
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:719
 #, c-format
 msgid "Shows on transit slips"
 msgstr "Hiển thị trên phiếu vận chuyển"
@@ -52525,7 +52545,7 @@ msgid "Since"
 msgstr "Ngày bắt đầu"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Single holiday: %s"
 msgstr "Ngày nghỉ đơn lẻ: %s"
 
@@ -52906,7 +52926,7 @@ msgstr "Ngày mở lại đặt mượn %s: "
 msgid "Specify due date %s: "
 msgstr "Xác định ngày hết hạn %s: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:225
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
 #, c-format
 msgid "Specify how the holiday should repeat."
 msgstr "Xác định quy luật cho ngày nghỉ."
@@ -52999,7 +53019,7 @@ msgid "Square"
 msgstr ""
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:824
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:846
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:147
 #, c-format
 msgid "Staff"
@@ -53212,7 +53232,7 @@ msgid "Start date:"
 msgstr "Ngày bắt đầu:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:34
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:216
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:217
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:135
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:205
 #, c-format
@@ -53312,7 +53332,7 @@ msgid "Statistic 2: "
 msgstr "Thống kê 2: "
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:827
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:849
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:150
 #, c-format
 msgid "Statistical"
@@ -53604,7 +53624,7 @@ msgid "Sub total "
 msgstr "Tổng đơn hàng "
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:36
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:272
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -53822,7 +53842,7 @@ msgstr "Chủ đề:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:122
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:175
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:234
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:235
 #: intranet-tmpl/prog/en/modules/circ/set-library.tt:71
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:99
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:161
@@ -54315,7 +54335,7 @@ msgid "Sunday"
 msgstr "Chủ nhật"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Sundays"
 msgstr "Chủ nhật"
 
@@ -54357,7 +54377,7 @@ msgstr "Họ"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:435
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:470
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:506
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:517
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:641
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:28
 #, c-format
@@ -54744,8 +54764,8 @@ msgstr "Trường đã bị xóa"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:297
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:382
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:388
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:169
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:179
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:832
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
 #, fuzzy, c-format
@@ -55030,7 +55050,7 @@ msgstr "Tetun (Tetum) Karen Myers"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:272
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:273
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -55336,7 +55356,7 @@ msgstr "Không tìm thấy đăng ký cá biệt %s."
 msgid "The barcode was not found: "
 msgstr "Không tìm thấy đăng ký cá biệt %s."
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:234
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:244
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:266
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:417
 #, c-format
@@ -56573,7 +56593,7 @@ msgstr "Không có ánh xạ cho %s"
 #. %1$s:  END 
 #. %2$s:  IF autoMemberNum 
 #. %3$s:  IF mandatorycardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:815
 #, c-format
 msgid "There is no minimum or maximum character length. %s %s %s "
 msgstr ""
@@ -57087,12 +57107,12 @@ msgstr "Bạn đọc này không tồn tại"
 msgid "This member has no email"
 msgstr "Bạn đọc chưa khai báo địa chỉ thư điện tử"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1010
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1032
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr "Thông báo này hiển thị trên trang OPAC của bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1027
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1049
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr "Thông báo hiển thị khi ghi mượn cho bạn đọc"
@@ -57413,7 +57433,7 @@ msgstr ""
 "tả. Nếu ngày nghỉ được lặp lại theo quy luật, thay đổi này sẽ được áp dụng "
 "trên tất cả các ngày nghỉ của quy luật."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:167
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:173
 #, c-format
 msgid ""
 "This will take this day and month as a reference to make it a holiday. "
@@ -57457,7 +57477,7 @@ msgid "Thursday"
 msgstr "Thứ 5"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Thursdays"
 msgstr "Thứ 5"
 
@@ -57537,10 +57557,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:245
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:267
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:294
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:316
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:273
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:300
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:322
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:113
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:188
@@ -57581,7 +57601,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:104
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:58
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:185
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:186
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:152
@@ -57686,7 +57706,7 @@ msgstr "Nhan đề:"
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:80
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:150
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:156
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
@@ -57806,7 +57826,7 @@ msgstr "Cảnh báo lưu thông"
 msgid "To create circulation rule, go to: "
 msgstr "Cảnh báo lưu thông"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:147
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:153
 #, fuzzy, c-format
 msgid "To date: "
 msgstr "Đến ngày : "
@@ -58722,7 +58742,7 @@ msgid "Tuesday"
 msgstr "Thứ 3"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Tuesdays"
 msgstr "Thứ 3"
 
@@ -58743,7 +58763,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/files.tt:39
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1228
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1250
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:348
@@ -59055,13 +59075,13 @@ msgstr "Uniform Resource Identifier"
 msgid "Uninstall"
 msgstr "Gỡ bỏ ứng dụng"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:237
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Unique holiday"
 msgstr "Ngày nghỉ đặc biệt"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:311
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
 #, fuzzy, c-format
 msgid "Unique holidays"
 msgstr "Ngày nghỉ đặc biệt"
@@ -59176,7 +59196,7 @@ msgid "Université de St Etienne, France"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:99
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1403
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
 #, fuzzy, c-format
 msgid "Unknown"
 msgstr "(Không rõ)"
@@ -60421,7 +60441,7 @@ msgstr "Không có bạn đọc yêu cầu thay đổi thông tin tài khoản."
 msgid "View all plugins"
 msgstr "Thống kê tất cả thư viện"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
 #, c-format
 msgid "View analytics"
 msgstr "Xem tài liệu chủ"
@@ -60793,17 +60813,17 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Duplicate organization"
 msgstr "Cảnh báo: Tổ chức bị trùng lặp"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Duplicate patron"
 msgstr "Cảnh báo: Bạn đọc bị trùng lặp"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Expiration date falls before enrollment date"
 msgstr "Cảnh báo: Ngày hết hạn trước ngày đăng ký"
 
@@ -61048,7 +61068,7 @@ msgid "Wednesday"
 msgstr "Thứ 4"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Wednesdays"
 msgstr "Thứ 4"
 
@@ -61061,13 +61081,13 @@ msgstr "Thứ 4"
 msgid "Week"
 msgstr "Tuần"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:262
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:268
 #, fuzzy, c-format
 msgid "Weekly - Repeatable holidays"
 msgstr "Ngày nghỉ hàng tuần"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Weekly holiday: %s"
 msgstr "Kỳ nghỉ hàng tuần: %s"
 
@@ -61254,7 +61274,7 @@ msgstr ""
 msgid "Words: _({0}"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:236
 #, c-format
 msgid "Working day"
 msgstr "Ngày làm việc"
@@ -61368,13 +61388,13 @@ msgstr "Năm"
 msgid "Year: "
 msgstr "Năm xuất bản: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:285
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:291
 #, fuzzy, c-format
 msgid "Yearly - Repeatable holidays"
 msgstr "Ngày nghỉ hàng năm"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Yearly holiday: %s"
 msgstr "Kỳ nghỉ hàng năm: %s"
 
@@ -61397,10 +61417,10 @@ msgstr "Cho phép"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:40
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:61
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:131
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:546
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:549
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:561
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:586
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:311
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:132
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
@@ -61456,12 +61476,12 @@ msgstr "Cho phép"
 msgid "Yes"
 msgstr "Có"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:881
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:890
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1304
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1309
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1318
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1323
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:903
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1331
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1340
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1345
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:201
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:208
 #, c-format
@@ -61475,9 +61495,9 @@ msgstr "Có "
 msgid "Yes and try to override system preferences"
 msgstr "Tìm tham số hệ thống"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:907
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:911
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:929
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #, fuzzy, c-format
 msgid "Yes if settings allow it"
 msgstr "Chỉnh sửa biểu ghi"
@@ -62680,7 +62700,7 @@ msgstr "[ Tạo giá sách ảo ]"
 msgid "[% discount | format ("
 msgstr "[% discount | định dạng ("
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:325
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr ""
@@ -62922,7 +62942,7 @@ msgstr "Đã có trong CSDL"
 msgid "already has a hold"
 msgstr "đã có một đặt mượn"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
 #, c-format
 msgid "analytics."
 msgstr "tài liệu chủ."
@@ -64771,7 +64791,7 @@ msgid "peso sign"
 msgstr ""
 
 #. INPUT type=submit name=phony_submit
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:218
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:228
 msgid "phony_submit"
 msgstr "phony_submit"
 
@@ -65156,7 +65176,7 @@ msgstr "Trạng thái"
 msgid "styles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:291
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"

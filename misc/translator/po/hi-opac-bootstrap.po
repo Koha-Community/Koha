@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-06-18 07:09-0300\n"
-"PO-Revision-Date: 2020-06-18 11:31+0000\n"
+"Project-Id-Version: Koha 20.05\n"
+"POT-Creation-Date: 2020-07-16 00:45-0300\n"
+"PO-Revision-Date: 2020-07-16 13:58+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1592479899.148329\n"
-"X-Pootle-Path: /hi/18.05/hi-opac-bootstrap.po\n"
+"X-POOTLE-MTIME: 1594907888.204283\n"
+"X-Pootle-Path: /hi/20.05/hi-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  END 
@@ -41,7 +41,7 @@ msgstr "%s %s %s %s आप नए मुद्दों पर ईमेल अ�
 #. %2$s:  END 
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:381
 #, c-format
 msgid "%s %s %s %s by "
 msgstr "%s %s %s %s द्वारा "
@@ -68,11 +68,23 @@ msgstr ""
 "%s %s %s %s अतिदेय है %sआपके प्रति का %s (बारकोड %s) अतिदेय हैं %s %s है देय %sआपकी "
 "प्रति का %s (बारकोड %s) पुस्तकालय में आज वापसी देय हैं %s "
 
+#. %1$s:  IF ( Koha.Preference('OpacFavicon') ) 
+#. %2$s:  Koha.Preference('OpacFavicon') | url 
+#. %3$s:  ELSE 
+#. %4$s:  Koha.Preference('OPACBaseURL') | url 
+#. %5$s:  interface | url 
+#. %6$s:  theme | url 
+#. %7$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:12
+#, c-format
+msgid "%s %s %s %s%s/%s/images/favicon.ico %s "
+msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
+
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:16
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:17
 #, c-format
 msgid "%s %s %s Koha online %s "
 msgstr "%s %s %s कोहा ऑनलाइन %s "
@@ -244,7 +256,7 @@ msgstr "%s %s एक समान दस्तावेज़ पहले स�
 
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:128
 #, c-format
 msgid "%s %s Did you mean: "
 msgstr "%s %s आपका मतलब था: "
@@ -508,16 +520,6 @@ msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s और %s "
 msgid "%s (Record no. %s)"
 msgstr "%s (अभिलेख संख्या %s)"
 
-#. %1$s:  IF ( related ) 
-#. %2$s:  FOREACH relate IN related 
-#. %3$s:  relate.related_search | html 
-#. %4$s:  END 
-#. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:102
-#, c-format
-msgid "%s (related searches: %s %s %s ). %s "
-msgstr "%s (संबंधित खोजों: %s %s %s ). %s "
-
 #. %1$s:  USE raw 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:1
 #, c-format
@@ -648,7 +650,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:449
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:458
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -692,7 +694,7 @@ msgid "%s Holds (%s) "
 msgstr "%s होल्डस (%s) "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:473
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:482
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s इंटरनेट उपयोगकर्ता आलोचक"
@@ -719,7 +721,7 @@ msgstr "%s मद(s) निर्गम करना"
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:316
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:317
 #, c-format
 msgid "%s Library %s Libraries %s "
 msgstr "%s पुस्तकालय %s पुस्तकालय %s "
@@ -829,7 +831,7 @@ msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s विलंभ %s प्रसंस्करण %s पूरा हो गया है %s रद्द हो गया है %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:485
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s पेशेवर आलोचक"
@@ -848,7 +850,7 @@ msgid ""
 msgstr "%s क्रय सुझाव %s %s आपके क्रय सुझाव %s क्रय सुझाव %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:491
 #, c-format
 msgid "%s Quotations"
 msgstr "%s उद्धरण"
@@ -873,19 +875,13 @@ msgid "%s Restriction added by overdues process %s %s %s %s "
 msgstr "%s प्रतिबंध अतिदेय प्रक्रिया से जोड़ा %s %s %s %s "
 
 #. %1$s:  LibraryName | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
-#, c-format
-msgid "%s Search"
-msgstr "%s खोज"
-
-#. %1$s:  LibraryName | html 
 #. %2$s:  IF ( query_desc ) 
 #. %3$s:  query_desc | html 
 #. %4$s:  END 
 #. %5$s:  IF ( limit_desc ) 
 #. %6$s:  limit_desc | html 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:95
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s खोज %sके लिए '%s'%s%s&nbsp;सीमा के साथ (s):&nbsp;'%s'%s"
@@ -977,7 +973,7 @@ msgstr "%s यह ppn नही मिली है idref सेवा पर. %
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
 #, c-format
 msgid "%s This record has no items. %s "
 msgstr "%s यह रिकार्ड में कोई आइटम नहीं है. %s "
@@ -991,7 +987,7 @@ msgid ""
 msgstr "%s दुर्भाग्य से, छवियों इस समय इस सूची के लिए सक्षम नहीं हैं. %s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s वीडियो उद्धरण"
@@ -1876,6 +1872,15 @@ msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; �
 msgid "%s%s%sKoha online%s catalog recent comments"
 msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग नवीनतम टिप्पणियाँ"
 
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
+#, c-format
+msgid "%s%s%sLibrary catalog%s"
+msgstr "%s%s%sलाइब्रेरी केटॉलाग%s"
+
 #. %1$s:  IF Koha.Preference('URLLinkText') 
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
@@ -1897,7 +1902,7 @@ msgstr "%s%s%sसंसाधन से लिंक%s"
 #. %10$s:  SEARCH_RESULT.biblionumber | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:121
 #, c-format
 msgid ""
 "%s%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s%s%s%s/cgi-bin/koha/opac-"
@@ -1934,14 +1939,14 @@ msgstr "%s, द्वारा %s%s "
 
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:50
 #, c-format
 msgid "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
 
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:48
 #, c-format
 msgid "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
@@ -1950,9 +1955,9 @@ msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  i.biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:47
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:124
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 msgstr "%s / cgi-bin/koha/opac-detail.pl? biblionumber =%s"
@@ -1988,7 +1993,7 @@ msgstr "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:94
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
@@ -1996,7 +2001,7 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:26
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:31
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
@@ -2073,7 +2078,7 @@ msgstr "%sसंग्रह%sआइटम प्रकार%s"
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:112
 #, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
@@ -2114,7 +2119,7 @@ msgstr "%sआइटम प्रकार %sसंग्रह %sशैल्व
 #. %1$s:  IF ( singleBranchMode ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-library.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-library.tt:133
 #, c-format
 msgid "%sLibrary%sLibraries%s"
 msgstr "%s पुस्तकालय %s पुस्तकालयों %s "
@@ -2160,7 +2165,7 @@ msgstr "%sयह प्राधिकरण किसी भी रिकॉर
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:301
 #, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%sइस रिकार्ड में कोई आइटम नहीं जुड़ी है. .%s "
@@ -2746,7 +2751,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:479
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (पर %s दरों )"
@@ -2822,7 +2827,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbs; शीर्षक वाक्यांश"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:545
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:554
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s वोटस)"
@@ -2868,7 +2873,7 @@ msgstr "(एकत्रित)"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:142
 msgid "(All)"
 msgstr "(सभी)"
 
@@ -3042,7 +3047,7 @@ msgid "(Voided)"
 msgstr "(अमान्य कर)"
 
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:225
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:353
 #, c-format
 msgid "(done)"
@@ -3055,7 +3060,7 @@ msgstr "(कुल प्रविष्टियों_MAX_ से फ़िल
 
 #. For the first occurrence,
 #. %1$s:  SEARCH_RESULT.timestamp | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:398
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
 #, c-format
 msgid "(modified on %s)"
@@ -3093,6 +3098,14 @@ msgstr "(प्राथमिकता %s)"
 #, c-format
 msgid "(related searches: %s%s%s)"
 msgstr "(संबधित खोजे: %s%s%s)"
+
+#. %1$s:  FOREACH relate IN related 
+#. %2$s:  relate.related_search | html 
+#. %3$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:121
+#, c-format
+msgid "(related searches:%s %s%s)."
+msgstr "(संबधित खोजे:%s %s%s)."
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
@@ -3228,7 +3241,7 @@ msgid "6 months"
 msgstr "6 महीने"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:108
 msgid "9999-12-31"
 msgstr "9999-12-31"
 
@@ -3324,9 +3337,9 @@ msgstr "अधिग्रहण दिनांक: प्राचीनतम
 
 #. INPUT type=submit name=tagbutton
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:224
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:146
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:352
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:307
 #, c-format
@@ -3361,7 +3374,7 @@ msgstr "टैग जोडें(s)"
 msgid "Add to %s"
 msgstr "को जोड़ें %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:47
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:62
 #, c-format
 msgid "Add to a list"
 msgstr "एक सूची में जोड़ें"
@@ -3390,7 +3403,7 @@ msgid "Add to your cart"
 msgstr "अपनी कार्ट में जोड़े"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 msgid "Add to..."
 msgstr "में जोड़ें..."
 
@@ -3445,7 +3458,7 @@ msgid "Adlibris cover image"
 msgstr "Adlibris कवर छवि"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:292
 msgid "Adlibris thumbnail for ISBN: %s"
 msgstr "आईएसबीएन के लिए एडलैब्रिस थंबनेल: %s"
 
@@ -3459,7 +3472,7 @@ msgstr "किशोर"
 msgid "Adult"
 msgstr "प्रौढ़"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:302
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:303
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:17
 #, c-format
@@ -3496,7 +3509,7 @@ msgstr "सभी होल्ड फिर से शुरू होंगे.
 msgid "All item types"
 msgstr "सभी मद प्रकार"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:249
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:250
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:23
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:236
 #, c-format
@@ -3851,8 +3864,8 @@ msgid ""
 msgstr ""
 "एक उपयोगकर्ता के प्रवेश क्रेडेंशियल प्रमाणित करता है और संरक्षक के लिए पहचानकर्ता रिटर्न।"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:193
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:195
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:194
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:196
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:8
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
@@ -3860,7 +3873,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:47
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:250
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:226
@@ -3891,7 +3904,7 @@ msgstr "लेखक (z-ए)"
 msgid "Author notes provided by Syndetics"
 msgstr "लेखक नोटों Syndetics द्वारा प्रदान की"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:89
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:104
 #, c-format
 msgid "Author(s)"
 msgstr "लेखक(s)"
@@ -3931,7 +3944,7 @@ msgstr "लेखक:"
 msgid "Authority"
 msgstr "प्राधिकरण"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:305
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:306
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:16
@@ -3966,7 +3979,7 @@ msgstr "लेखकों"
 msgid "Availability"
 msgstr "उपलब्धता"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:424
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, c-format
 msgid "Availability:"
@@ -4062,6 +4075,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:17
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
 #, c-format
 msgid "BibTeX"
 msgstr "बिबटैक्स"
@@ -4101,7 +4115,7 @@ msgstr "ब्रेल"
 msgid "Brief display"
 msgstr "संक्षिप्त प्रदर्शन"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:35
 #, c-format
 msgid "Brief history"
@@ -4112,7 +4126,7 @@ msgstr "संक्षिप्त इतिहास"
 msgid "Broader Term"
 msgstr "व्यापक शब्द"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:304
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:305
 #, c-format
 msgid "Browse by hierarchy"
 msgstr "पदानुक्रम द्वारा ब्राउज़ करें "
@@ -4128,7 +4142,7 @@ msgstr "ब्राउज़ करें हमारे केटालॉग
 msgid "Browse results"
 msgstr "ब्राउज परिणाम"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:310
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:16
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:40
 #, c-format
@@ -4166,6 +4180,7 @@ msgstr "CGI डिबग पर है."
 #. %1$s:  csv_profile.profile | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:21
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:40
 #, c-format
 msgid "CSV - %s"
 msgstr "सीएसवी - %s"
@@ -4185,10 +4200,10 @@ msgstr "किसी को बुलाओ."
 msgid "Call no.:"
 msgstr "कॉल संख्या.:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:219
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:221
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:225
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:227
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:220
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:222
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:226
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:228
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
@@ -4255,7 +4270,7 @@ msgstr "कॉल संख्या : %s"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
@@ -4267,7 +4282,7 @@ msgstr "कॉल संख्या : %s"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:188
 #, c-format
 msgid "Cancel"
 msgstr "रद्द करें"
@@ -4348,8 +4363,8 @@ msgstr "कार्ड नंबर बिल्कुल %s अक्षरो
 msgid "Card number:"
 msgstr "कार्ड संख्या:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:31
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:32
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #, c-format
 msgid "Cart"
@@ -4548,7 +4563,7 @@ msgstr "शहर:"
 msgid "Claimed"
 msgstr "दावा किया"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:201
 #, c-format
 msgid "Classification"
 msgstr "वर्गीकरण"
@@ -4561,9 +4576,9 @@ msgstr "वर्गीकरण"
 msgid "Classification: %s "
 msgstr "वर्गीकरण: %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:121
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:138
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:37
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:122
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:139
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:931
 #, c-format
 msgid "Clear"
@@ -4571,9 +4586,9 @@ msgstr "स्पष्ट"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:52
@@ -4697,14 +4712,14 @@ msgid "Clubs you can enroll in"
 msgstr "क्लब जिन में आप दाखिला ले सकते हैं"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:30
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:31
 msgid "Collect items you are interested in"
 msgstr "आइटम ले लीजिए आप में रुचि रखते हैं"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:124
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
 #, c-format
 msgid "Collection"
@@ -4863,7 +4878,7 @@ msgstr "के सामग्रियाँ"
 msgid "Copy number"
 msgstr "कापी नंबर"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:156
 #, c-format
 msgid "Copyright"
 msgstr "कॉपीराइट"
@@ -4929,7 +4944,7 @@ msgstr "कोर्स #"
 msgid "Course number:"
 msgstr "कोर्स संख्या:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:303
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:304
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:21
@@ -4951,8 +4966,8 @@ msgstr "कोर्स"
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:74
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:155
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:362
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:285
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:76
@@ -5051,7 +5066,7 @@ msgstr "डीवीडी वीडियो / Videodisc"
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
@@ -5116,13 +5131,13 @@ msgstr "जन्म तिथि:"
 msgid "Date range:"
 msgstr "दिनांक रेंज"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #, c-format
 msgid "Date received"
 msgstr "दिनांक प्राप्त"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:78
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:409
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:418
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:81
 #, c-format
@@ -5151,6 +5166,7 @@ msgstr "दिसंबर"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:64
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:162
 #, c-format
 msgid "Default"
 msgstr "चूक"
@@ -5203,8 +5219,8 @@ msgid "Delete this list"
 msgstr "हटाएँ इस सूची"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:121
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:138
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:122
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:139
 msgid "Delete your search history"
 msgstr "अपने खोज इतिहास को हटाएँ"
 
@@ -5227,7 +5243,7 @@ msgid "Description"
 msgstr "विवरण"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:132
 #, c-format
 msgid "Details"
 msgstr "विवरण"
@@ -5263,7 +5279,7 @@ msgstr "से विवरण %s"
 msgid "Details from library"
 msgstr "पुस्तकालय से विवरण"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:179
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:194
 #, c-format
 msgid "Dewey"
 msgstr "डेवी"
@@ -5334,7 +5350,7 @@ msgstr "एक पुस्तकालय कार्ड नहीं है?"
 msgid "Don't have a password yet?"
 msgstr "अभी तक एक कूटशब्द नहीं है?"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:371
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
@@ -5346,13 +5362,15 @@ msgstr "अभी तक एक खाता नहीं ? "
 msgid "Done"
 msgstr "हो गया"
 
-#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:30
-#, c-format
 msgid "Download"
 msgstr "डाउनलोड"
+
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:32
+#, c-format
+msgid "Download "
+msgstr "डाउनलोड "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:422
 #, c-format
@@ -5491,7 +5509,7 @@ msgstr "ईमेलः"
 msgid "Emails do not match! "
 msgstr "ईमेल मेल नहीं खाते!"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #, c-format
 msgid "Empty and close"
 msgstr "खाली और बन्द"
@@ -5620,7 +5638,7 @@ msgstr ""
 "कोशिश करें।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:38
 #, c-format
@@ -5889,7 +5907,7 @@ msgstr ""
 "हमेशा के लिए: सीमा के बिना मेरे पढ़ने इतिहास रखने के लिए। यह जो कि वे क्या पढ़ रहे हैं का "
 "ट्रैक रखने के लिए चाहते हैं जो उपयोगकर्ताओं के लिए विकल्प है।"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:366
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:367
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
 #, c-format
@@ -5942,7 +5960,7 @@ msgstr "शुक्रवार"
 msgid "From: "
 msgstr "से: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:36
 #, c-format
 msgid "Full history"
@@ -5954,7 +5972,7 @@ msgid "Full subscription history"
 msgstr "पूर्ण सदस्यता इतिहास "
 
 #. %1$s:  bibliotitle | html 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
 #, c-format
 msgid "Full subscription history for %s"
 msgstr "पूर्ण सदस्यता इतिहास के लिए %s"
@@ -6069,9 +6087,9 @@ msgstr ""
 "ग्रंथ सूची या आइटम पहचानकर्ता का एक सेट को देखते हुए पहचानकर्ता के साथ जुड़े वस्तुओं की "
 "उपलब्धता के साथ एक सूची देता है."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:242
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:274
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:185
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:243
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:275
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:194
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:52
@@ -6104,7 +6122,7 @@ msgid "Google login"
 msgstr "Google लॉगिन"
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:263
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:264
 msgid "Groups"
 msgstr "समूह"
 
@@ -6185,13 +6203,13 @@ msgstr "नमस्ते,"
 msgid "Hide options"
 msgstr "विकल्प छिपाना"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:47
 #, c-format
 msgid "Hide window"
 msgstr "विंडो छिपाएँ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:203
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:148
 #, c-format
 msgid "Highlight"
@@ -6388,6 +6406,7 @@ msgstr "आईपी पते जहां अंत उपयोगकर्�
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:18
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #, c-format
 msgid "ISBD"
 msgstr "आईएसबीडी"
@@ -6400,12 +6419,12 @@ msgstr "आईएसबीडी"
 msgid "ISBD view"
 msgstr "आईएसबीडी देखें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:203
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:205
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:204
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:206
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:9
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:97
 #, c-format
 msgid "ISBN"
 msgstr "आईऍसबीऍन"
@@ -6437,13 +6456,13 @@ msgid "ISBN: %s %s %s; %s %s "
 msgstr "आईएसबीएन: %s %s %s; %s %s "
 
 #. %1$s:  SEARCH_RESULT.isbn | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:46
 #, c-format
 msgid "ISBN:%s"
 msgstr "आईएसबीएन: %s"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:208
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:210
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:209
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:211
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:10
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:89
 #, c-format
@@ -6588,7 +6607,7 @@ msgstr "यदि आप एक CAS खाता रखते है, कृप�
 msgid "If you have a CAS account, you may use that below."
 msgstr "यदि आप एक CAS खाता रखते है, आप इसका नीचे उपयोग कर सकते है."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:351
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #, c-format
 msgid "If you have a Shibboleth account, please "
 msgstr "यदि आप के पास एक Shibboleth खाता है, कृपया"
@@ -6698,7 +6717,7 @@ msgstr "निर्देशक:"
 msgid "Interlibrary loan item availability"
 msgstr "अंतर पुस्तकालय ऋण आइटम की उपलब्धता"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
 #, c-format
 msgid "Interlibrary loan request"
@@ -6854,7 +6873,7 @@ msgstr "आइटम वापस "
 msgid "Items available at:"
 msgstr "प्रतियों उपलब्ध यहा:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:417
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:426
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, c-format
 msgid "Items available:"
@@ -6942,7 +6961,7 @@ msgstr "कोहा विकी"
 msgid "Koha administrator"
 msgstr "कोहा प्रशासक"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:208
 #, c-format
 msgid "LCCN"
 msgstr "LCCN"
@@ -7057,13 +7076,13 @@ msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr "स्तर 4: मजबूत/डोमेन विशिष्ट खोज के प्लेटफार्मों"
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:251
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:252
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:70
 #, c-format
 msgid "Libraries"
 msgstr "पुस्तकालय"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:183
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:565
 #, c-format
@@ -7076,16 +7095,16 @@ msgstr "लाइब्रेरी"
 msgid "Library card number:"
 msgstr "पुस्तकालय कार्ड संख्या: "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:183
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:185
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:184
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:186
 #, c-format
 msgid "Library catalog"
 msgstr "लाइब्रेरी केटॉलाग"
 
 #. For the first occurrence,
 #. %1$s:  Koha.Preference('OPACnumSearchResults') | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:183
 #, c-format
 msgid "Library default: %s"
 msgstr "डिफाल्ट लाइब्रेरी: %s"
@@ -7097,7 +7116,7 @@ msgstr "डिफाल्ट लाइब्रेरी: %s"
 msgid "Library:"
 msgstr "लाइब्रेरी:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:32
 #, c-format
 msgid "Library: "
 msgstr "लाइब्रेरी : "
@@ -7174,7 +7193,7 @@ msgstr "सूची अद्यतन"
 msgid "List(s) this item appears in: "
 msgstr "सूची(s) इस मद में प्रकट होता है: "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:40
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
@@ -7183,7 +7202,7 @@ msgstr "सूची(s) इस मद में प्रकट होता ह
 msgid "Lists"
 msgstr "सूचियाँ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:516
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #, c-format
 msgid "Lists:"
@@ -7214,7 +7233,7 @@ msgstr "लोड कर रहा है..."
 msgid "Loading... "
 msgstr "लोड कर रहा है..."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:352
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:353
 #, c-format
 msgid "Local Login"
 msgstr "स्थानीय लॉगइन"
@@ -7230,7 +7249,7 @@ msgstr "स्थानीय लॉगइन"
 msgid "Location"
 msgstr "स्थान"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:267
 #, c-format
 msgid "Location (Status)"
 msgstr "स्थान (स्थिति)"
@@ -7240,7 +7259,7 @@ msgstr "स्थान (स्थिति)"
 msgid "Location and availability: "
 msgstr "स्थान और उपलब्धता: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:218
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:233
 #, c-format
 msgid "Location(s) (Status)"
 msgstr "स्थान (नों) (स्थिति)"
@@ -7259,7 +7278,7 @@ msgid "Locations"
 msgstr "स्थान"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:377
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:378
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:176
@@ -7286,7 +7305,7 @@ msgstr "टैग जोड़ने के लिए में प्रवे�
 msgid "Log in to create a new list"
 msgstr "एक नई सूची बनाने के लिए लॉग इन करें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:75
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:76
 #, c-format
 msgid "Log in to create your own lists"
 msgstr "लॉग इन से अपनी खुद की सूची बनाएँ "
@@ -7302,10 +7321,10 @@ msgstr "लॉग इन-अपने खुद को बचाया टैग
 msgid "Log in to your OverDrive account"
 msgstr "अपने ओवरड्राइव अकाउंट में लॉग इन करें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:101
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:105
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:338
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:102
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:104
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:106
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:339
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:909
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:373
@@ -7324,7 +7343,7 @@ msgstr "अपने खाते में प्रवेश करें:"
 msgid "Log in with Google"
 msgstr "गूगल के साथ लॉगिन"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:125
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:126
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:60
 #, c-format
 msgid "Log out"
@@ -7358,7 +7377,7 @@ msgstr "लॉगइन"
 msgid "Login page"
 msgstr "लॉगइन पृष्ठ"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:357
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:358
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
@@ -7385,6 +7404,7 @@ msgstr "संरक्षकदेखना"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #, c-format
 msgid "MARC"
 msgstr "MARC"
@@ -7426,15 +7446,15 @@ msgstr "MARCXML"
 msgid "Main address"
 msgstr "मुख्य संबोधन"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:580
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:268
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:271
 #, c-format
 msgid "Make a "
 msgstr "एक बनाओ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
 #, c-format
 msgid "Make an "
@@ -7470,7 +7490,7 @@ msgstr "मार्च"
 msgid "March"
 msgstr "मार्च"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:530
 #, c-format
 msgid "Match:"
 msgstr "मिलान:"
@@ -7571,7 +7591,7 @@ msgid "More details"
 msgstr "अधिक जानकारी"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 msgid "More lists"
 msgstr "अधिक सूचियाँ"
 
@@ -7585,7 +7605,7 @@ msgstr "अधिक विकल्प"
 msgid "More searches "
 msgstr "अधिक खोजें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:309
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:310
 #, c-format
 msgid "Most popular"
 msgstr "सर्वाधिक लोकप्रिय"
@@ -7668,7 +7688,7 @@ msgstr "नई टिप्पणी पर %s"
 msgid "New interlibrary loan request"
 msgstr "नया अंतर लाइब्रेरी ऋण अनुरोध"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:73
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:74
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:183
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:515
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:665
@@ -7700,8 +7720,8 @@ msgstr "नई खोज"
 msgid "New tag(s), separated by a comma:"
 msgstr "न्यू टैग(s),  एक अल्पविराम के द्वारा अलग:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:213
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:222
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:74
 #, c-format
 msgid "New tag:"
 msgstr "नई टैग:"
@@ -7792,13 +7812,13 @@ msgstr "कोई चेकआउट नहीं"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:291
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:299
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:324
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:325
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:333
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:342
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:354
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
@@ -7850,7 +7870,7 @@ msgstr "कोई आइटम चुना गया"
 msgid "No items available."
 msgstr "कोई आइटम उपलब्ध है."
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:445
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:454
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:223
 #, c-format
 msgid "No items available:"
@@ -7888,7 +7908,7 @@ msgstr "अन्य आइटम नही "
 msgid "No physical items for this record"
 msgstr "इस रिकॉर्ड के लिए नहीं भौतिक वस्तुओं"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:71
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:72
 #, c-format
 msgid "No private lists"
 msgstr "निजी सूचिया नहीं "
@@ -8030,7 +8050,7 @@ msgstr "निर्दिष्ट कोई नहीं"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:33
@@ -8045,7 +8065,7 @@ msgstr "सामान्य देखें"
 msgid "Not checked in %s"
 msgstr "निर्गम में नही %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:584
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
 #, c-format
 msgid "Not finding what you're looking for? "
@@ -8075,7 +8095,7 @@ msgstr "जारी नहीं किया"
 msgid "Not on hold"
 msgstr "नहीं पकड़ पर"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:128
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr "आप क्या उम्मीद नहीं? के लिए जाँचे"
@@ -8164,10 +8184,10 @@ msgid ""
 msgstr "नोट: आपके टैग मार्कअप कोड है कि हटा दिया गया था। टैग के रूप में जोड़ा गया है"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:39
@@ -8237,7 +8257,7 @@ msgstr "उपन्यासकार का चयन:"
 msgid "November"
 msgstr "नवम्बर"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
 #, c-format
 msgid "Number"
 msgstr "संख्या"
@@ -8520,7 +8540,7 @@ msgid "Password updated"
 msgstr "पासवर्ड अद्यतन"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:358
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:359
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
@@ -8640,10 +8660,10 @@ msgstr "जगह अनुच्छेद अनुरोध फॉर्म %s
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:7
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:10
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:238
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #, c-format
 msgid "Place hold"
@@ -8957,6 +8977,11 @@ msgstr "पूर्व किशोर"
 msgid "Preferred form: "
 msgstr "पसंदीदा फार्म:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
+#, c-format
+msgid "Preferred language for notices: "
+msgstr "नोटिस के लिए पसंदीदा भाषा:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
 #, c-format
 msgid "Preschool"
@@ -9007,7 +9032,7 @@ msgid "Primary phone:"
 msgstr "प्राथमिक फोन:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
 #, c-format
 msgid "Print"
 msgstr "प्रिंट"
@@ -9081,7 +9106,7 @@ msgstr "प्रदाता:"
 msgid "Public"
 msgstr "सार्वजनिक"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:43
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:44
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:77
@@ -9093,7 +9118,7 @@ msgid "Public lists"
 msgstr "सार्वजनिक सूचियाँ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 msgid "Public lists:"
 msgstr "सार्वजनिक सूचियाँ:"
 
@@ -9126,7 +9151,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr "प्रकाशन/कॉपीराइट दिनांक: प्राचीनतम  से नवीनतम "
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:385
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:394
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:449
 #, c-format
 msgid "Publication:"
@@ -9163,7 +9188,7 @@ msgstr "पर प्रकाशित %s %s द्वारा"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:124
 #, c-format
 msgid "Publisher"
 msgstr "प्रकाशक"
@@ -9179,7 +9204,7 @@ msgstr "प्रकाशक स्थान"
 msgid "Publisher:"
 msgstr "प्रकाशक:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:313
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:314
 #, c-format
 msgid "Purchase suggestions"
 msgstr "खरीद सुझाव "
@@ -9197,6 +9222,7 @@ msgstr "दिन का उद्धरण"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:16
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:37
 #, c-format
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote, अन्य)"
@@ -9244,7 +9270,7 @@ msgstr "RecallItem"
 msgid "Received date"
 msgstr "प्राप्ति तिथि"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:306
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:307
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:16
 #, c-format
 msgid "Recent comments"
@@ -9285,7 +9311,7 @@ msgstr "RecordedBooks खोज के लिए '%s'"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:29
 #, c-format
 msgid "Refine your search"
 msgstr "अपनी खोज को परिष्कृत करें"
@@ -9297,7 +9323,7 @@ msgstr "अपनी खोज को परिष्कृत करें"
 msgid "Register a new account"
 msgstr "नया खाता पंजीकृत करें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:371
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:372
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
@@ -9349,7 +9375,7 @@ msgstr "सापेक्षों की जुर्माना"
 msgid "Relevance"
 msgstr "प्रासंगिकता"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:44
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:59
 #, c-format
 msgid "Remove"
 msgstr "हटाना"
@@ -9617,7 +9643,7 @@ msgstr "खोज का परिणाम %sके लिए '%s'%s%s&nbsp;स
 msgid "Results of search for '%s'"
 msgstr "के लिए खोज के परिणाम '%s'"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:177
 #, c-format
 msgid "Results per page: "
 msgstr "प्रति पृष्ठ परिणाम:"
@@ -9664,7 +9690,7 @@ msgid "Return to the catalog home page."
 msgstr "सूची मुख पृष्ठ पर लौटें।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:73
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:144
 #, c-format
 msgid "Return to the last advanced search"
 msgstr "पिछले उन्नत खोज करने के लिए लौटें"
@@ -9772,7 +9798,7 @@ msgstr "शनिवार"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:111
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
@@ -9865,12 +9891,17 @@ msgstr "खोज"
 msgid "Search "
 msgstr "खोज "
 
+#. LINK
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
+msgid "Search %s"
+msgstr "खोज %s"
+
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
 #. %3$s:  Branches.GetName( mylibraryfirst ) | html 
 #. %4$s:  END 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:173
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:174
 #, c-format
 msgid "Search %s %s (in %s only) %s %s "
 msgstr "खोज %s %s (अन्दर %s केवल) %s %s "
@@ -9882,7 +9913,7 @@ msgstr "में इस खिताब के लिए खोजें:"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:388
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:194
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:443
 msgid "Search for works by this author"
@@ -9895,8 +9926,8 @@ msgstr "इस लेखक द्वारा कार्य के लिए 
 msgid "Search for:"
 msgstr "के लिए खोजें:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:119
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:136
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:120
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:137
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:37
 #, c-format
@@ -9919,11 +9950,14 @@ msgstr "खोज परिणाम"
 msgid "Search suggestions"
 msgstr "खोज सुझाव"
 
-#. %1$s:  LibraryName | html 
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:10
 #, c-format
-msgid "Search the %s"
-msgstr "खोज %s"
+msgid "Search the %s%s%sKoha library%s catalog"
+msgstr "खोजें %s%s%sकोहा ऑनलाइन%s केटालॉग"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:45
 #, c-format
@@ -9975,8 +10009,8 @@ msgstr "अनुभाग:"
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:67
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:148
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:331
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:342
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:580
@@ -10016,9 +10050,9 @@ msgstr "एक विशेष आइटम का चयन करें:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:437
@@ -10057,9 +10091,9 @@ msgstr "खोज करने के लिए आइटम(s) का चयन
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:43
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:330
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:296
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 #, c-format
@@ -10125,7 +10159,7 @@ msgstr "सित."
 msgid "September"
 msgstr "सितम्बर"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:187
 #, c-format
 msgid "Serial"
 msgstr "धारावाहिक"
@@ -10144,8 +10178,8 @@ msgstr "सीरियल संग्रह"
 msgid "Serial: %s "
 msgstr "धारावाहिक: %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:213
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:215
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:214
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:216
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:28
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:84
 #, c-format
@@ -10234,7 +10268,7 @@ msgstr "शैल्विंग स्थान"
 msgid "Shibboleth Login"
 msgstr "शिबोलेथ लॉगिन"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:350
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:351
 #, c-format
 msgid "Shibboleth login"
 msgstr "शिबोलेथ लॉगिन"
@@ -10276,7 +10310,7 @@ msgid "Show less"
 msgstr "कम दिखाएं"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:40
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:41
 msgid "Show lists"
 msgstr "सूची दिखाएँ "
 
@@ -10296,7 +10330,7 @@ msgstr "और अधिक विकल्प दिखाएँ "
 msgid "Show the top "
 msgstr "दिखाएँ शीर्ष "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:60
 #, c-format
 msgid "Show year: "
 msgstr "वर्ष दिखाएँ :"
@@ -10342,6 +10376,11 @@ msgstr "इसी प्रकार की वस्तुओं"
 #, c-format
 msgid "Simple DC-RDF"
 msgstr "सरल DC-RDF"
+
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:15
+#, c-format
+msgid "Skip to main content"
+msgstr "मुख्य विषयवस्तु में जाएं"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
@@ -10495,7 +10534,7 @@ msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity."
 msgstr "क्षमा करें, आपकी Shibboleth पहचान एक वैध पुस्तकालय पहचान से मेल नहीं खाती।"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:347
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:348
 #, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity. If "
@@ -10580,7 +10619,7 @@ msgstr "सांख्यिकी"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:121
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:111
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
@@ -10629,8 +10668,8 @@ msgstr "गली संख्या:"
 msgid "Su"
 msgstr "रवि"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:198
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:200
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:199
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:201
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:48
@@ -10638,7 +10677,7 @@ msgstr "रवि"
 msgid "Subject"
 msgstr "विषय"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:308
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:309
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:32
 #, c-format
@@ -10650,7 +10689,7 @@ msgstr "अधीन रहते हुए बादल"
 msgid "Subject phrase"
 msgstr "विषय वाक्यांश"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:131
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:146
 #, c-format
 msgid "Subject(s)"
 msgstr "विषय (ओं)"
@@ -10695,7 +10734,7 @@ msgstr "जमा करें और इस विंडो को बंद"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:188
 msgid "Submit changes"
 msgstr "परिवर्तन भेजें "
 
@@ -10752,13 +10791,13 @@ msgstr "इस सूची के लिए सदस्यता लें"
 
 #. I
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:117
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:121
 msgid "Subscribe to this search"
 msgstr "सदस्यता लें इस खोज के लिए"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:83
 #, c-format
 msgid "Subscription"
 msgstr "सब्सक्रिप्शन"
@@ -10784,7 +10823,7 @@ msgstr "सदस्यता के लिए जानकारी %s"
 msgid "Subscription title"
 msgstr "सदस्यता शीर्षक"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:33
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:34
 #, c-format
 msgid "Subscription: "
 msgstr "सब्सक्रिप्सनः"
@@ -10909,8 +10948,8 @@ msgstr "TOC"
 msgid "Table of contents provided by Syndetics"
 msgstr "सामग्री की तालिका Syndetics द्वारा प्रदान की"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:210
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:219
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:302
 #, c-format
 msgid "Tag"
@@ -10921,18 +10960,18 @@ msgstr "टैग"
 msgid "Tag browser"
 msgstr "टैग ब्राउजर"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:307
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:308
 #, c-format
 msgid "Tag cloud"
 msgstr "टैग क्लाउड"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:281
 #, c-format
 msgid "Tag status here."
 msgstr "टैग स्थिति यहाँ."
 
 #: opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:218
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:227
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:356
 #, c-format
 msgid "Tag status here. "
@@ -10960,7 +10999,7 @@ msgstr "टैग जोड़े गए"
 msgid "Tags from this library:"
 msgstr "पुस्तकालय की ओर से टैगः"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:502
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:488
 #, c-format
 msgid "Tags:"
@@ -11339,9 +11378,8 @@ msgid ""
 "ERROR: You must log in to complete that action. %s ERROR: You cannot delete "
 "the tag %s. "
 msgstr ""
-"इस आपरेशन के साथ एक समस्या थी: %s त्रुटि: अवैध पैरामीटर %s %s त्रुटि: आप उस "
-"क्रिया को पूरा करने के लिए लॉग इन करना होगा. %s त्रुटि: आप टैग हटा नहीं सकते।"
-" %s."
+"इस आपरेशन के साथ एक समस्या थी: %s त्रुटि: अवैध पैरामीटर %s %s त्रुटि: आप उस क्रिया को "
+"पूरा करने के लिए लॉग इन करना होगा. %s त्रुटि: आप टैग हटा नहीं सकते। %s."
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:32
 #, c-format
@@ -11517,8 +11555,8 @@ msgstr "लघु छवि"
 msgid "Thursday"
 msgstr "गुरुवार"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:188
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:190
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:189
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:191
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:12
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
@@ -11530,7 +11568,7 @@ msgstr "गुरुवार"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:491
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
@@ -11680,8 +11718,8 @@ msgid "Type of heading"
 msgstr "शीर्षक के प्रकार "
 
 #. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:236
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:238
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:237
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:239
 msgid "Type search term"
 msgstr "टाइप खोज पद"
 
@@ -11700,7 +11738,7 @@ msgstr "UF"
 msgid "URL"
 msgstr "यूआरएल"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:215
 #, c-format
 msgid "URL(s)"
 msgstr "यूआरएल (ओं)"
@@ -11712,6 +11750,11 @@ msgstr "यूआरएल (ओं)"
 #, c-format
 msgid "URL: %s "
 msgstr "यूआरएल: : %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:11
+#, c-format
+msgid "UTF-8"
+msgstr "यूटीएफ-8"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:124
@@ -11757,13 +11800,13 @@ msgid "Unavailable issues"
 msgstr "अनुपलब्ध इश्यूज"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:202
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:147
 #, c-format
 msgid "Unhighlight"
 msgstr "विशिष्टतारहित"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:180
 #, c-format
 msgid "Unified title"
 msgstr "एकीकृत शीर्षक"
@@ -11876,8 +11919,8 @@ msgstr "सत्यापन"
 msgid "View"
 msgstr "देखें"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:51
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:68
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:52
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:69
 #, c-format
 msgid "View All"
 msgstr "सभी देखें"
@@ -11894,9 +11937,9 @@ msgstr "सभी सुझाव देखें"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:115
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:118
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:370
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:381
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
@@ -11927,8 +11970,8 @@ msgid "View record \"%s\""
 msgstr "रिकार्ड देखें \"%s\""
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:119
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:136
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:120
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:137
 msgid "View your search history"
 msgstr "अपना खोज इतिहास देखें"
 
@@ -11994,7 +12037,7 @@ msgid "Welcome, "
 msgstr "स्वागतम्"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:95
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:96
 #, c-format
 msgid "Welcome, %s"
 msgstr "स्वागतम्, %s"
@@ -12035,8 +12078,8 @@ msgstr "चुने गए सुझाव के साथ: "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:330
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:765
 msgid "With selected titles: "
 msgstr "चुने गए शीर्षक के साथ: "
@@ -12058,7 +12101,7 @@ msgstr "आप एक रसीद प्रिंट करना चाहे�
 msgid "Written on %s by %s"
 msgstr "पर लिखा %s द्वारा %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:266
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:588
 #, c-format
@@ -12171,7 +12214,7 @@ msgstr "तुम %s. के रूप में लॉग इन कर रह�
 msgid "You are logging from a different IP address. Please log in again."
 msgstr "आप एक अलग आईपी पते से प्रवेश कर रहे हैं. कृपया फिर से लॉग इन करें."
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:193
 #, c-format
 msgid "You are not allowed to call this page directly"
 msgstr "आप इस पेज सीधे काल करने की अनुमति नहीं है।"
@@ -12479,7 +12522,7 @@ msgstr "आप बना सकते हैं या सूची में �
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 msgid "You must be logged in to create or add to lists"
 msgstr "आप बना सकते हैं या सूची में जोड़ने के लिए में लॉग इन होना चाहिए"
 
@@ -12542,7 +12585,7 @@ msgstr ""
 msgid "You will receive an email shortly. "
 msgstr "आपको शीघ्र ही एक ईमेल प्राप्त होगा।"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:115
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:116
 #, c-format
 msgid "Your account"
 msgstr "आपका खाता"
@@ -12624,7 +12667,7 @@ msgstr "आपकी कार्ट "
 msgid "Your cart is currently empty"
 msgstr "अपनी गाड़ी वर्तमान में खाली है"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:25
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:26
 #, c-format
 msgid "Your cart is empty."
 msgstr "आपकी गाड़ी खाली है."
@@ -12719,7 +12762,7 @@ msgstr ""
 msgid "Your list : %s "
 msgstr "अपनी सूची: %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:58
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:59
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:71
@@ -12730,7 +12773,7 @@ msgid "Your lists"
 msgstr "आपकी सूचियाँ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 msgid "Your lists:"
 msgstr "आपकी सूचियाँ:"
 
@@ -12873,10 +12916,10 @@ msgid "Your search history"
 msgstr "आपके खोज इतिहास"
 
 #. %1$s:  total | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:114
 #, c-format
-msgid "Your search returned %s results."
-msgstr "आपकी खोज लौटे %s परिणाम ."
+msgid "Your search returned %s results. "
+msgstr "आपकी खोज ने %s परिणाम लौटा दिए. "
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12920,7 +12963,7 @@ msgstr "जिप/डाक कोड:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:289
 msgid "[ New list ]"
 msgstr "[ नई सूची ]"
@@ -12986,7 +13029,7 @@ msgid "bib_id"
 msgstr "bib_id"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:272
 msgid "bonus"
 msgstr "बोनस"
 
@@ -13028,7 +13071,7 @@ msgstr "अपना पासवर्ड बदलें"
 msgid "checkout(s)"
 msgstr "चेकआउट (ओ)"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:351
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:352
 #, c-format
 msgid "click here to login"
 msgstr "लॉग इन करने के लिए यहां क्लिक करें"
@@ -13049,8 +13092,8 @@ msgid "continue creating your request"
 msgstr "अपना अनुरोध बनाते रहें"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:279
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
 "%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
@@ -13257,12 +13300,6 @@ msgstr "आइटम(s) अपनी कार्ट में जोड़ा"
 msgid "item_id"
 msgstr "item_id"
 
-#. %1$s:  LibraryName | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:11
-#, c-format
-msgid "koha opac %s"
-msgstr "कोहा ओपेक %s"
-
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:118
 msgid "koha:biblionumber:%s"
@@ -13352,8 +13389,8 @@ msgstr "प्राथमिक ईमेल पता"
 msgid "privacy policy"
 msgstr "गोपनीयता नीति"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:580
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:268
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:271
 #, c-format
@@ -13486,7 +13523,7 @@ msgstr "शुरू से"
 msgid "subjects "
 msgstr "विषय "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:128
 #, c-format
 msgid "suggestions"
 msgstr "सुझाव"
@@ -13581,7 +13618,7 @@ msgid "to post a comment."
 msgstr "एक टिप्पणी पोस्ट करने के लिए."
 
 #. LINK
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:50
 msgid "unAPI"
 msgstr "unAPI"
 
@@ -13767,7 +13804,7 @@ msgid "your tags"
 msgstr "आपके टैग"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:3
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:337
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:338
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:153
 #: opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:3

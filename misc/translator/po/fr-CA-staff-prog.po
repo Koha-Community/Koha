@@ -14,11 +14,11 @@
 # Eric Bégin <Eric.Begin@inLibro.com>, 2011-2013
 msgid ""
 msgstr ""
-"Project-Id-Version: Koha 18.05\n"
+"Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-18 07:05-0300\n"
-"PO-Revision-Date: 2020-06-19 15:38+0000\n"
-"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
+"POT-Creation-Date: 2020-07-16 00:41-0300\n"
+"PO-Revision-Date: 2020-07-16 19:31+0000\n"
+"Last-Translator: Marjorie  Barry-Vila <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,8 +26,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1592581084.296963\n"
-"X-Pootle-Path: /fr_CA/18.05/fr-CA-staff-prog.po\n"
+"X-POOTLE-MTIME: 1594927907.012226\n"
+"X-Pootle-Path: /fr_CA/20.05/fr-CA-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
 #. %1$s:  data.borrowernumber | html 
@@ -434,38 +434,40 @@ msgstr ""
 #. %9$s: - ELSIF invert_name -
 #. %10$s:  data.title | $raw 
 #. %11$s: - data.surname | html 
-#. %12$s:  data.firstname | html 
-#. %13$s:  IF data.othernames 
-#. %14$s:  data.othernames | html 
-#. %15$s:  END -
-#. %16$s: - ELSE -
-#. %17$s:  data.title | $raw 
-#. %18$s: - data.firstname | html 
-#. %19$s:  IF data.othernames 
-#. %20$s:  data.othernames | html 
-#. %21$s:  END 
-#. %22$s:  data.surname | html -
-#. %23$s: - END -
-#. %24$s: - IF display_cardnumber AND data.cardnumber 
-#. %25$s:  data.cardnumber | html 
-#. %26$s:  END -
-#. %27$s: - ELSIF display_cardnumber -
-#. %28$s: - IF data.cardnumber -
-#. %29$s: # FIXME Cardnumber should always be defined, right? -
-#. %30$s: - data.cardnumber | html -
-#. %31$s: - END -
-#. %32$s: - ELSE -
-#. %33$s:  Branches.GetName( patron.branchcode ) | html -
-#. %34$s: - END -
-#. %35$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
+#. %12$s:  IF ( data.firstname ) 
+#. %13$s:  data.firstname | html 
+#. %14$s:  END 
+#. %15$s:  IF data.othernames 
+#. %16$s:  data.othernames | html 
+#. %17$s:  END -
+#. %18$s: - ELSE -
+#. %19$s:  data.title | $raw 
+#. %20$s: - data.firstname | html 
+#. %21$s:  IF data.othernames 
+#. %22$s:  data.othernames | html 
+#. %23$s:  END 
+#. %24$s:  data.surname | html -
+#. %25$s: - END -
+#. %26$s: - IF display_cardnumber AND data.cardnumber 
+#. %27$s:  data.cardnumber | html 
+#. %28$s:  END -
+#. %29$s: - ELSIF display_cardnumber -
+#. %30$s: - IF data.cardnumber -
+#. %31$s: # FIXME Cardnumber should always be defined, right? -
+#. %32$s: - data.cardnumber | html -
+#. %33$s: - END -
+#. %34$s: - ELSE -
+#. %35$s:  Branches.GetName( patron.branchcode ) | html -
+#. %36$s: - END -
+#. %37$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
 #: intranet-tmpl/prog/en/includes/patron-title.inc:56
 #, c-format
 msgid ""
-"%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
-"(%s)%s %s %s%s %s %s %s A patron from library %s %s %s "
+"%s %s %s %s %s %s (%s)%s %s %s%s%s, %s%s%s (%s) %s %s %s%s %s (%s) %s %s %s "
+"%s (%s)%s %s %s%s %s %s %s A patron from library %s %s %s "
 msgstr ""
-"%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
-"(%s)%s %s %s%s %s %s %s Un usager de la bibliothèque %s %s %s "
+"%s %s %s %s %s %s (%s)%s %s %s%s%s, %s%s%s (%s) %s %s %s%s %s (%s) %s %s %s %"
+"s (%s)%s %s %s%s %s %s %s Un utilisateur de la bibliothèque %s %s %s "
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -1554,7 +1556,7 @@ msgstr ""
 "de renouvellement d'abonnement %sDocument perdu %sFrais manuel %sNouvelle "
 "carte %sAmende %sFrais d'administration pour document perdu %sFrais de "
 "location %sFrais de location quotidien %sRenouvellement d'un document en "
-"location %sRenouvellement de document en location quotidienne %sFrais de "
+"location %sRenouvellement d'un document en location quotidienne %sFrais de "
 "réservation %sRéservation en attente depuis trop longtemps %sDéboursement %s"
 "%s %s %s %s "
 
@@ -3030,7 +3032,7 @@ msgstr "%s %s par %s%s"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:28
 #, c-format
 msgid "%s %s by %s%s (Record #%s)"
 msgstr "%s %s par %s%s (Notice N°%s)"
@@ -3551,7 +3553,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:37
 #, c-format
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
-msgstr "%s %sZone %s Contraintes de la sous-zone%s %s %s %s "
+msgstr "%s %sContraintes des sous-zones de la zone %s%s %s %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'invalid_mimetype' 
@@ -3585,7 +3587,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  END # /IF CAN_user_circulate_manage_restrictions 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1213
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1235
 #, c-format
 msgid "%s %sYes%sNo%s %s "
 msgstr "%s %sOui%sNon%s %s "
@@ -4467,7 +4469,7 @@ msgstr ""
 "bibliographiques ne seront pas supprimées. %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:761
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:783
 #, c-format
 msgid "%s Card number: "
 msgstr "%s Numéro de carte : "
@@ -4510,7 +4512,7 @@ msgid "%s Checkout(s)"
 msgstr "%s Prêt(s)"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1022
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1044
 #, c-format
 msgid "%s Circulation note: "
 msgstr "%s Note de circulation : "
@@ -4568,7 +4570,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "%s Fermé le %s %s Ouvrir %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1136
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1158
 #, c-format
 msgid "%s Confirm password: "
 msgstr "%s Confirmer le mot de passe : "
@@ -4748,13 +4750,13 @@ msgid "%s Error: "
 msgstr "%s Erreur : "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:982
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1004
 #, c-format
 msgid "%s Expiry date (leave blank for auto calc): "
 msgstr "%s Date d'expiration (laissez vide pour un calcul automatique) : "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:722
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:744
 #, c-format
 msgid "%s Fax: "
 msgstr "%s Télécopieur : "
@@ -4843,13 +4845,13 @@ msgid "%s Group %s has been deleted. %s %s has been removed from group. %s "
 msgstr "%s Groupe %s a été supprimé. %s %s a été retiré du groupe. %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:605
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:627
 #, c-format
 msgid "%s Guarantor first name: "
 msgstr "%s Prénom du garant : "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:588
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:610
 #, c-format
 msgid "%s Guarantor surname: "
 msgstr "%s Nom de famille du garant : "
@@ -5090,7 +5092,7 @@ msgstr "%s Nouveau cours %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1210
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1232
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:734
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:765
 #, c-format
@@ -5347,7 +5349,7 @@ msgstr ""
 "référence. %s Il n'y a aucune notice avec le numéro : %s. %s %s %s"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1005
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1027
 #, c-format
 msgid "%s OPAC note: "
 msgstr "%s Note OPAC&nbsp;: "
@@ -5379,7 +5381,7 @@ msgid "%s Other name: "
 msgstr "%s Autre nom&nbsp;: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:673
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:695
 #, c-format
 msgid "%s Other phone: "
 msgstr "%s Autre téléphone&nbsp;: "
@@ -5428,7 +5430,7 @@ msgid "%s Parsing upload file "
 msgstr "%sTraitement du fichier téléversé "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1079
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1101
 #, c-format
 msgid "%s Password: "
 msgstr "%s Mot de passe&nbsp;: "
@@ -5504,13 +5506,13 @@ msgid "%s Phone: "
 msgstr "%s Téléphone&nbsp;: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:711
 #, c-format
 msgid "%s Primary email: "
 msgstr "%s Courriel principal&nbsp;: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:640
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:662
 #, c-format
 msgid "%s Primary phone: "
 msgstr "%s Téléphone principal&nbsp;: "
@@ -5541,7 +5543,7 @@ msgid "%s Receive orders from %s %s "
 msgstr "%s Récapitulatif de réception pour %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:959
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:981
 #, c-format
 msgid "%s Registration date: "
 msgstr "%s Date d'inscription&nbsp;: "
@@ -5607,7 +5609,7 @@ msgstr "%s Réservation trouvée pour %s ("
 #. %4$s:  d.comment | $raw 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1241
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1263
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:131
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
 #, c-format
@@ -5656,13 +5658,13 @@ msgid "%s Searching: %s %s %s "
 msgstr "%s Recherche&nbsp;: %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:706
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:728
 #, c-format
 msgid "%s Secondary email: "
 msgstr "%s Courriel alternatif&nbsp;: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:657
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
 #, c-format
 msgid "%s Secondary phone: "
 msgstr "%s Téléphone alternatif&nbsp;: "
@@ -5699,13 +5701,13 @@ msgid "%s Something went wrong. %s "
 msgstr "%s Quelque chose s'est mal passé. %s"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:848
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
 #, c-format
 msgid "%s Sort 1: "
 msgstr "%s Critère 1&nbsp;: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:864
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
 #, c-format
 msgid "%s Sort 2: "
 msgstr "%s Critère 2&nbsp;: "
@@ -5792,7 +5794,7 @@ msgstr "%s Nom de famille&nbsp;: "
 #. %32$s:  loo.link | html 
 #. %33$s:  END 
 #. %34$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:291
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -5979,14 +5981,14 @@ msgid "%s Used in "
 msgstr "%s Utilisé dans "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1046
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1068
 #, c-format
 msgid "%s Username: "
 msgstr "%s Identifiant&nbsp;: "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1202
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1224
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:727
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:758
 #, c-format
@@ -6414,7 +6416,7 @@ msgstr "%s notice(s) importée(s) %s(dernier était %s)%s"
 
 #. %1$s:  reserveloo.reservedate | $KohaDates 
 #. %2$s:  Branches.GetName ( reserveloo.branch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:146
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:147
 #, c-format
 msgid "%s in %s"
 msgstr "%s sur %s "
@@ -6553,12 +6555,12 @@ msgid "%s mandatory fields empty (highlighted)"
 msgstr "%s champs obligatoires vides (surlignés)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "%s month"
 msgstr "%s mois"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "%s months"
 msgstr "%s mois"
 
@@ -6732,7 +6734,7 @@ msgstr "%s En attente"
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:41
 #, c-format
 msgid "%s preferences"
-msgstr "%s Préférences"
+msgstr "Préférences %s"
 
 #. %1$s:  selected_count | html 
 #: intranet-tmpl/prog/en/modules/tools/problem-reports.tt:35
@@ -6912,13 +6914,13 @@ msgid "%s will expire before "
 msgstr "%s vont expirer avant "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "%s year"
 msgstr "%s ans"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:344
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:345
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:454
@@ -7783,7 +7785,7 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1193
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1215
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr "%sParti sans laisser d'adresse&nbsp;:%s %sCarte perdue&nbsp;:%s "
@@ -8372,7 +8374,7 @@ msgid ""
 "and Serhij Dubyk"
 msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russe) Victor Titarchuk "
-"and Serhij Dubyk"
+"et Serhij Dubyk"
 
 #: intranet-tmpl/prog/en/modules/about.tt:780
 #, c-format
@@ -8381,7 +8383,7 @@ msgid ""
 "(Ukrainian) Victor Titarchuk and Serhij Dubyk"
 msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
-"(Ukrainien) Victor Titarchuk and Serhij Dubyk"
+"(Ukrainien) Victor Titarchuk et Serhij Dubyk"
 
 #: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
@@ -8462,7 +8464,7 @@ msgid ""
 "Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou and Kiriaki Roditi"
 msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
-"Koha Hellenic groupe d'usagers (Georgia Katsarou, Dimitris Antonakis, "
+"Groupe d'utilisateurs Koha Hellenic (Georgia Katsarou, Dimitris Antonakis, "
 "Eugenios Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou et "
 "Kiriaki Roditi"
 
@@ -9494,7 +9496,7 @@ msgstr "&rsaquo; Dupliquer les commandes existantes %s "
 msgid "&rsaquo; Duplicate warning"
 msgstr "&rsaquo; Avertissement doublon"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
 #, c-format
 msgid "&rsaquo; Edit "
 msgstr "&rsaquo; Modifier"
@@ -10310,7 +10312,7 @@ msgstr "' ~%%] %s %s [%%~ action_block = action_block _ ' "
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr "' ~%%] [%%~ action_block = action_block _ '"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:325
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
 #, c-format
 msgid "') | html %%]"
 msgstr "') | html %%]"
@@ -10449,8 +10451,8 @@ msgid "(Current: %s - %s)"
 msgstr "(Poste budgétaire actuel = %s - %s)"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:339
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:968
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:995
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:990
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1017
 #, c-format
 msgid "(Error)"
 msgstr "(Erreur)"
@@ -10472,7 +10474,7 @@ msgstr "(Amnistié)"
 
 #. %1$s:  HoldsToPullStartDate | html 
 #. %2$s:  HoldsToPullEndDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:229
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:230
 #, c-format
 msgid ""
 "(Inclusive, default is %s days ago to %s days ahead. Set other date ranges "
@@ -10482,7 +10484,7 @@ msgstr ""
 "les dates selon vos besoins.) "
 
 #. %1$s:  HoldsToPullStartDate | html 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:231
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:232
 #, c-format
 msgid ""
 "(Inclusive, default is %s days ago to today. Set other date ranges as "
@@ -10662,7 +10664,7 @@ msgstr "(entrer le montant en chiffre) "
 msgid "(exclusive) "
 msgstr "(inclus) "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:132
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:142
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:513
 #, c-format
 msgid "(fast cataloging)"
@@ -10889,12 +10891,12 @@ msgstr ", OH, USA (tests de Koha 3.0 beta)"
 #: intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
-msgstr ", Ohio, USA (MARc, documentation, maintenance des templates)"
+msgstr ", Ohio, USA (MARC, documentation, maintenance des gabarits)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:445
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
-msgstr ", PA, USA (Intégration de zebra dans Koha 3.0)"
+msgstr ", PA, USA (Intégration de Zebra dans Koha 3.0)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
@@ -11194,26 +11196,26 @@ msgstr ": %sune liste&nbsp;:%s"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:110
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
 #, c-format
 msgid ": Barcode must be unique."
 msgstr ": Le code-barres doit être unique."
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:45
 #, c-format
 msgid ": Last item for bibliographic record wich biblio-level hold on it."
 msgstr ""
 ": Dernier exemplaire d'une notice ayant une réservation au niveau de la "
 "notice."
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
 #, c-format
 msgid ": The items do not belong to your library."
 msgstr ": Les exemplaires n'appartiennent pas à votre bibliothèque."
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:111
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #, c-format
 msgid ""
 ": Unable to automatically determine values for barcodes. No item has been "
@@ -11221,18 +11223,18 @@ msgid ""
 msgstr ": impossible de calculer le code-barres. Ajout d'exemplaire abandonné."
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:28
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
 #, c-format
 msgid ": item has a waiting hold."
 msgstr ": le document a une réservation en attente"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
 #, c-format
 msgid ": item has linked "
 msgstr ": l'exemplaire est lié"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:27
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #, c-format
 msgid ": item is checked out."
 msgstr ": le document est prêté."
@@ -11829,7 +11831,7 @@ msgstr "Action s'il n'y a pas de concordance&nbsp;: "
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:274
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:275
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:251
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:127
@@ -11870,7 +11872,7 @@ msgstr "Actions"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:57
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:57
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:84
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:183
@@ -11976,7 +11978,7 @@ msgstr "Coût réel : "
 #: intranet-tmpl/prog/en/includes/additem.js.inc:2
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:24
 #: intranet-tmpl/prog/en/modules/patroncards/tables/members_results.tt:22
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:233
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:243
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:16
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:89
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:248
@@ -12015,7 +12017,7 @@ msgid "Add %s items to %s"
 msgstr "Ajouter %s exemplaires à %s"
 
 #. INPUT type=submit name=add_duplicate_submit
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:225
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:235
 msgid "Add & duplicate"
 msgstr "Ajouter &amp; dupliquer"
 
@@ -12077,7 +12079,7 @@ msgid "Add a new field"
 msgstr "Ajouter un autre champ"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:242
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:252
 msgid "Add a new item"
 msgstr "Ajouter un nouvel exemplaire"
 
@@ -12273,14 +12275,14 @@ msgstr "Ajouter une note interne "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:2
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:224
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:234
 #: intranet-tmpl/prog/en/modules/labels/result.tt:64
 #, c-format
 msgid "Add item"
 msgstr "Ajout exemplaire"
 
 #. %1$s:  IF (circborrowernumber) 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:132
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:142
 #, c-format
 msgid "Add item %s"
 msgstr "Ajouter un exemplaire %s"
@@ -12342,8 +12344,8 @@ msgstr "Ajouter une bibliothèque "
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:60
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1270
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1273
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1292
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1295
 #, c-format
 msgid "Add manual restriction"
 msgstr "Ajouter une restriction manuelle"
@@ -12375,7 +12377,7 @@ msgid "Add modified records to the following list: "
 msgstr "Ajouter les notices modifiées à la liste suivante : "
 
 #. INPUT type=button name=add_multiple_copies
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:228
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:238
 msgid "Add multiple copies of this item"
 msgstr "Ajout de plusieurs copies à cet exemplaire"
 
@@ -12419,7 +12421,7 @@ msgstr "Ajouter un nouveau champ"
 msgid "Add new group"
 msgstr "Ajout d'un groupe"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:127
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:133
 #, c-format
 msgid "Add new holiday"
 msgstr "Ajouter un jour de fermeture"
@@ -12759,7 +12761,7 @@ msgid "Additional SRU options: "
 msgstr "Options SRU supplémentaires&nbsp;:"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:66
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1338
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1360
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:404
 #, c-format
@@ -13018,7 +13020,7 @@ msgid "Adolescent"
 msgstr "Adolescent"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:191
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:823
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:845
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:145
 #, c-format
 msgid "Adult"
@@ -13093,7 +13095,7 @@ msgid "Afternoon "
 msgstr "Après-midi"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:176
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #, c-format
 msgid "Age"
 msgstr "Age"
@@ -13198,7 +13200,7 @@ msgstr "Alignement"
 #: intranet-tmpl/prog/en/modules/about.tt:493
 #, c-format
 msgid "Alingsås Public Library, Sweden"
-msgstr "Bibliothèque municipale à Alingsås, Suède"
+msgstr "Alingsås Public Library, Suède"
 
 #: intranet-tmpl/prog/en/includes/additional-fields-entry.inc:12
 #: intranet-tmpl/prog/en/includes/av-build-dropbox.inc:16
@@ -13416,7 +13418,7 @@ msgstr "Tous les fournisseurs"
 #: intranet-tmpl/prog/en/modules/about.tt:492
 #, c-format
 msgid "Allen Ginsberg Library, USA"
-msgstr "Bibliothèque Allen Ginsberg , États-Unis"
+msgstr "Allen Ginsberg Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:29
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:38
@@ -13431,7 +13433,7 @@ msgstr "Permettre"
 msgid "Allow access to the reports module"
 msgstr "Permet d'accéder au module Rapports"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:877
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:899
 #, c-format
 msgid "Allow auto-renewal of items: "
 msgstr "Permettre le renouvellement automatique des prêts : "
@@ -13441,14 +13443,14 @@ msgstr "Permettre le renouvellement automatique des prêts : "
 msgid "Allow changes to contents from: "
 msgstr "Accepter les changements de :"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:552
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:574
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's checkouts from the OPAC"
 msgstr ""
 "Permettre au(x) garant(s) de cet utilisateur de voir ses prêts à l'OPAC"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:589
 #, c-format
 msgid ""
 "Allow guarantors of this patron to view this patron's fines from the OPAC"
@@ -14291,7 +14293,7 @@ msgstr "Avril"
 #: intranet-tmpl/prog/en/modules/about.tt:495
 #, c-format
 msgid "Arcadia Public Library, USA"
-msgstr "Arcadia Public Library, USA"
+msgstr "Arcadia Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:158
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:157
@@ -15070,7 +15072,7 @@ msgstr "Athens County Public Libraries"
 #: intranet-tmpl/prog/en/modules/about.tt:496
 #, c-format
 msgid "Athens County Public Libraries, USA"
-msgstr "Athens County Public Libraries, USA"
+msgstr "Athens County Public Libraries, États-Unis"
 
 #. %1$s:  IF ( bibliotitle ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:97
@@ -15573,7 +15575,7 @@ msgstr "Renouvellement automatique :"
 msgid "Auto-renewal: Patron has opted out"
 msgstr "Renouvellement automatique : L'utilisateur s'est désinscrit"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:797
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:819
 #, c-format
 msgid ""
 "AutoMemberNum is set to enabled, but cardnumber is marked as mandatory in "
@@ -15641,7 +15643,7 @@ msgid "Available call numbers"
 msgstr "Cotes disponibles "
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:189
 msgid "Available copy"
 msgstr "Copie disponible"
 
@@ -15651,7 +15653,7 @@ msgid "Available copy numbers"
 msgstr "Copies disponibles "
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:62
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:189
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:190
 #, c-format
 msgid "Available enumeration"
 msgstr "Numéro de volume disponible"
@@ -16509,7 +16511,7 @@ msgstr "Biblio %s"
 msgid "Biblio count"
 msgstr "Nombre de notices"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:172
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:173
 #, c-format
 msgid "Biblio level hold."
 msgstr "Réservations au niveau de la notice."
@@ -16910,12 +16912,12 @@ msgstr "Limiter aux bibliothèques : "
 #: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Briar Cliff University, USA"
-msgstr "Briar Cliff University, USA"
+msgstr "Briar Cliff University, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Bridge Material Type Icons Project"
-msgstr "Projet d'icône \"Bridge Material\""
+msgstr "Projet d'icônes de types de documents \"Bridge\""
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:44
 #, c-format
@@ -16945,7 +16947,7 @@ msgstr "Brooke Johnson"
 #: intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid "Brooklyn Law School Library, USA"
-msgstr "Brooklyn Law School Library, USA"
+msgstr "Brooklyn Law School Library, États-Unis"
 
 #. For the first occurrence,
 #. %1$s:  FOREACH letter IN alphabet.split(' ') 
@@ -17126,7 +17128,7 @@ msgstr "Par&nbsp;: "
 #: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "ByWater Solutions, USA"
-msgstr "ByWater Solutions, USA"
+msgstr "ByWater Solutions, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:39
 #, c-format
@@ -17136,7 +17138,7 @@ msgstr "Octets"
 #: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
-msgstr "C &amp; P Bibliography Services, USA"
+msgstr "C &amp; P Bibliography Services, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/about.tt:705
 #, c-format
@@ -17331,7 +17333,7 @@ msgstr "Calculé sur %s entre  %s et %s"
 msgid "Calendar"
 msgstr "Calendrier"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:200
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:206
 #, c-format
 msgid "Calendar information"
 msgstr "Calendrier"
@@ -17339,7 +17341,7 @@ msgstr "Calendrier"
 #: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "California College of the Arts, USA"
-msgstr "California College of the Arts, USA"
+msgstr "California College of the Arts, États-Unis"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:26
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
@@ -17379,7 +17381,7 @@ msgstr "Cote "
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:187
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:182
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
@@ -17477,7 +17479,7 @@ msgstr "Calyx, Australie"
 #: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid "Camden County, USA"
-msgstr "Camden County, USA"
+msgstr "Camden County, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:146
 #, c-format
@@ -17647,8 +17649,8 @@ msgstr "Impossible d'enregistrer la notice, les zones suivantes sont vides:"
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:195
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:39
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:68
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:117
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:187
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:123
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:193
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:100
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:132
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:84
@@ -17683,8 +17685,8 @@ msgstr "Impossible d'enregistrer la notice, les zones suivantes sont vides:"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:353
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:233
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:243
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:253
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:632
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
@@ -17701,7 +17703,7 @@ msgstr "Impossible d'enregistrer la notice, les zones suivantes sont vides:"
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:296
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:33
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:66
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1286
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1308
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:332
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:44
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:40
@@ -17755,7 +17757,7 @@ msgstr "Impossible d'enregistrer la notice, les zones suivantes sont vides:"
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:113
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:92
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:317
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:321
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
@@ -17881,7 +17883,7 @@ msgstr "Annuler le filtre"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:645
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:217
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:223
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:155
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:156
 #, c-format
 msgid "Cancel hold"
 msgstr "Annuler réservation"
@@ -17892,7 +17894,7 @@ msgid "Cancel hold "
 msgstr "Annuler réservation"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:153
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:154
 msgid "Cancel hold and return to : %s"
 msgstr "Annuler la réservation et renvoyer à : %s"
 
@@ -18071,11 +18073,11 @@ msgstr "Prêt impossible! %s "
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:28
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:112
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:41
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:45
 #, c-format
 msgid "Cannot delete"
 msgstr "Impossible de supprimer cet utilisateur "
@@ -18248,7 +18250,7 @@ msgstr "Ce numéro de carte est déjà utilisé."
 
 #. %1$s:  maxlength_cardnumber | html 
 #. %2$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:787
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:809
 #, c-format
 msgid "Card number can be up to %s characters. %s "
 msgstr "Le numéro de carte doit avoir au plus %s caractères. %s "
@@ -18271,23 +18273,23 @@ msgstr "Liste de numéro de carte (un par ligne)&nbsp;: "
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #. %3$s:  ELSIF maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:780
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:802
 #, c-format
 msgid "Card number must be between %s and %s characters. %s "
 msgstr "Le numéro de carte doit contenir entre %s et %s caractères. %s "
 
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:773
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:795
 #, c-format
 msgid "Card number must be exactly %s characters. %s "
 msgstr "Le numéro de carte doit contenir exactement %s caractères. %s "
 
 #. For the first occurrence,
 #. %1$s:  maxlength_cardnumber | html 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:779
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:786
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:794
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:801
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
 #, c-format
 msgid "Card number must not be more than %s characters."
 msgstr "Le numéro de carte ne peut contenir que %s caractères au maximum."
@@ -18364,7 +18366,7 @@ msgstr "Numéros de cartes non trouvés"
 #: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Carnegie Stout Library, USA"
-msgstr "Carnegie Stout Library, USA"
+msgstr "Carnegie Stout Library, États-Unis"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:106
 #: intranet-tmpl/prog/en/includes/header.inc:26
@@ -18508,7 +18510,7 @@ msgstr "Statistiques sur le catalogue"
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:7
 #: intranet-tmpl/prog/en/includes/header.inc:35
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:27
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:497
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
@@ -18614,7 +18616,7 @@ msgstr "Catégorie&nbsp;: "
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:65
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:52
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:817
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:839
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:455
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:156
@@ -18694,7 +18696,7 @@ msgstr "Centre"
 #: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Central Kansas Library System (CKLS), USA"
-msgstr "Central Kansas Library System (CKLS), USA"
+msgstr "Central Kansas Library System (CKLS), États-Unis"
 
 #: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
@@ -18702,7 +18704,7 @@ msgid "Centre collégial des services regroupés (CCSR), Canada"
 msgstr "Collecto (anciennement CCSR), Canada"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Change"
 msgstr "Changer"
 
@@ -18749,7 +18751,7 @@ msgid "Change library"
 msgstr "Changer de bibliothèque"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Change messaging preferences to default for this category?"
 msgstr ""
 "Réinitialiser les préférences de message pour cette catégorie d'utilisateur?"
@@ -18964,7 +18966,7 @@ msgstr "Vérification des dates d'expiration"
 msgid "Check for embedded item record data?"
 msgstr "Vérifier les données exemplaires incluses ?"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:904
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:926
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:257
 #, c-format
 msgid "Check for previous checkouts: "
@@ -19500,7 +19502,7 @@ msgid "Cheshire Libraries, United Kingdom"
 msgstr "Cheshire Libraries, Royaume-Uni"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:822
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:844
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:146
 #, c-format
 msgid "Child"
@@ -19510,7 +19512,7 @@ msgstr "Enfant"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:146
 #, c-format
 msgid "Choice"
-msgstr "Choice"
+msgstr "Choix"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:178
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:59
@@ -19694,7 +19696,7 @@ msgstr "Sélectionneur"
 msgid "Chooser:"
 msgstr "Sélectionneur:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1300
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1322
 #, c-format
 msgid "Chooser: "
 msgstr "Sélectionneur: "
@@ -20052,7 +20054,7 @@ msgstr "Lot d'import #%s effacé"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:144
 #: intranet-tmpl/prog/en/modules/members/member.tt:185
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1370
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1392
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:562
@@ -20116,7 +20118,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:64
 #: intranet-tmpl/prog/en/includes/holds_table.inc:205
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1282
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1304
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:440
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #, c-format
@@ -20194,7 +20196,7 @@ msgstr "Supprimer les autorités utilisées"
 msgid "Click ID to select/deselect quote"
 msgstr "Cliquez ID pour sélectionner/désélectionner le devis"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:226
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
 #, c-format
 msgid "Click Save to finish."
 msgstr "Cliquez sur Enregistrer pour terminer."
@@ -20336,7 +20338,7 @@ msgstr ""
 "Cliquez sur le bouton 'Enregistrer les citations' dans la barre d'outils "
 "pour enregistrer la totalité du lot de citations."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:223
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
 #, c-format
 msgid "Click the date to add or edit a holiday."
 msgstr ""
@@ -20398,7 +20400,7 @@ msgstr "Presse-papier"
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:329
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:404
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:867
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
@@ -20414,7 +20416,7 @@ msgstr "Cloner ces règles pour&nbsp;:"
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:329
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:404
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:867
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
@@ -20663,7 +20665,7 @@ msgstr "Module d'édition CodeMirror"
 #: intranet-tmpl/prog/en/modules/about.tt:514
 #, c-format
 msgid "Coeur d'Alene Public Library, USA"
-msgstr "Coeur d'Alene Public Library, USA"
+msgstr "Coeur d'Alene Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:384
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:73
@@ -20893,7 +20895,7 @@ msgstr "Texte séparé par une virgule (.csv)"
 
 #: intranet-tmpl/prog/en/columns.def:62
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:10
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1229
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1251
 #, c-format
 msgid "Comment"
 msgstr "Commentaire "
@@ -20919,7 +20921,7 @@ msgstr "Commentaire&nbsp;:"
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:103
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1276
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1298
 #, c-format
 msgid "Comment: "
 msgstr "Commentaire&nbsp;: "
@@ -21237,13 +21239,13 @@ msgstr "Consolas"
 msgid "Constrain proportions"
 msgstr "Conserver les proportions"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:273
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:274
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:270
 #, c-format
 msgid "Constraints"
 msgstr "Contraintes"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:581
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:329
 #, c-format
 msgid "Contact"
@@ -21548,7 +21550,7 @@ msgstr "Copies&nbsp;:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:219
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:190
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
@@ -21560,6 +21562,11 @@ msgstr "Copier"
 #, c-format
 msgid "Copy and replace"
 msgstr "Copier et remplacer"
+
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
+#, c-format
+msgid "Copy changes to all libraries"
+msgstr "Copier vers toutes les bibliothèques"
 
 #: intranet-tmpl/prog/en/includes/keyboard_shortcuts.inc:15
 #, c-format
@@ -21586,7 +21593,7 @@ msgstr "Copier la sous-zone"
 msgid "Copy existing value"
 msgstr "Copier la valeur existante"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:206
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:212
 #, c-format
 msgid "Copy holidays to:"
 msgstr "Copier les jours de fermeture à&nbsp;:"
@@ -21627,7 +21634,7 @@ msgstr "Copier la ligne"
 msgid "Copy to %s"
 msgstr "Copier à %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:181
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:187
 #, c-format
 msgid "Copy to all libraries"
 msgstr "Copier vers toutes les bibliothèques"
@@ -21682,7 +21689,7 @@ msgstr "Entreprise"
 #: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Corpus Christi Public Libraries, USA"
-msgstr "Corpus Christi Public Libraries, USA"
+msgstr "Corpus Christi Public Libraries, États-Unis"
 
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:31
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:47
@@ -22722,8 +22729,8 @@ msgstr "Base&nbsp;:"
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:12
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:10
 #: intranet-tmpl/prog/en/modules/tags/review.tt:86
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:244
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:315
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:250
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:321
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:228
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
@@ -23022,7 +23029,7 @@ msgstr ""
 msgid "Day"
 msgstr "Jour"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:266
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:272
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:119
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:107
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:129
@@ -23030,7 +23037,7 @@ msgstr "Jour"
 msgid "Day of week"
 msgstr "Jour de la semaine"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:290
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:296
 #, c-format
 msgid "Day/month"
 msgstr "Jour/Mois"
@@ -23094,7 +23101,7 @@ msgstr "Diminuer le retrait"
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:47
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:44
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:927
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:949
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:75
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
@@ -23504,7 +23511,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:78
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:98
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:870
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:72
@@ -23537,7 +23544,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:78
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:105
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:151
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:306
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:309
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:159
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -23961,7 +23968,7 @@ msgid "Delete this category"
 msgstr "Supprimer cette catégorie"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Delete this exception."
 msgstr "Supprimer cette exception"
 
@@ -23972,7 +23979,7 @@ msgstr "Supprimer ce jour de fermeture"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Delete this holiday."
 msgstr "Supprimer ce jour de fermeture."
 
@@ -24056,7 +24063,7 @@ msgstr ""
 msgid "Delimiter: "
 msgstr "Délimiteur&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
 #, c-format
 msgid "Delink"
 msgstr "Délier"
@@ -24066,7 +24073,7 @@ msgstr "Délier"
 msgid "Deliverer"
 msgstr "Livreur"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1316
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1338
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:357
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:287
 #, c-format
@@ -24162,10 +24169,10 @@ msgstr "Dept."
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:30
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:246
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:268
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:295
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:252
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:301
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:323
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:255
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
@@ -24255,7 +24262,7 @@ msgid "Description of charges"
 msgstr "Description des frais"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
@@ -24442,8 +24449,8 @@ msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
 "Szukics, Mirko Tietgen and Marc Véron"
 msgstr ""
-"Deutsch (Allemagne) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, "
-"Beda Szukics, Mirko Tietgen and Marc Véron"
+"Deutsch (Allemand) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
+"Szukics, Mirko Tietgen et Marc Véron"
 
 #: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
@@ -24756,7 +24763,7 @@ msgstr "Div"
 #: intranet-tmpl/prog/en/modules/about.tt:518
 #, c-format
 msgid "Do Space, USA"
-msgstr "Do Space, USA"
+msgstr "Do Space, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:48
 #, c-format
@@ -24830,7 +24837,7 @@ msgstr "Type de document&nbsp;:"
 #: intranet-tmpl/prog/en/includes/about-team.inc:116
 #, c-format
 msgid "Documentation manager:"
-msgstr "Équipe de documentation:"
+msgstr "Gestionnaire de la documentation :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:120
 #, c-format
@@ -24840,7 +24847,7 @@ msgstr "Gestionnaires de la documentation :"
 #: intranet-tmpl/prog/en/includes/about-team.inc:131
 #, c-format
 msgid "Documentation team:"
-msgstr "Équipe de documentation&nbsp;:"
+msgstr "Équipe de documentation :"
 
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:32
 #, c-format
@@ -24915,7 +24922,7 @@ msgstr "Fait"
 #: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "DoverNet, USA"
-msgstr "DoverNet, USA"
+msgstr "DoverNet, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
@@ -25119,7 +25126,7 @@ msgstr "Dû le %s"
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:17
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:93
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:99
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:335
 #, c-format
@@ -25359,7 +25366,7 @@ msgstr "Première date de réservation "
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:98
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:282
@@ -25384,7 +25391,7 @@ msgstr "Première date de réservation "
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:185
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:150
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:305
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:308
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:200
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:158
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:366
@@ -25454,7 +25461,7 @@ msgstr "Modifier \"%s\""
 #. %2$s:  IF ( barcode ) 
 #. %3$s:  barcode | html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:134
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:144
 #, c-format
 msgid "Edit Item #%s%s / Barcode %s%s"
 msgstr "Modifier l'exemplaire #%s%s / Code-barres %s%s"
@@ -25531,11 +25538,6 @@ msgstr "Modifier le panier %s"
 msgid "Edit basket group %s (%s) for "
 msgstr "Ajouter un bordereau de commande %s (%s) pour "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
-#, c-format
-msgid "Edit biblio"
-msgstr "Modifier la notice"
-
 #. %1$s:  budget_period_description | html 
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:23
 #, c-format
@@ -25600,7 +25602,7 @@ msgstr "Modifier l'historique"
 msgid "Edit image"
 msgstr "Modifier l'image"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:90
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
 #, c-format
 msgid "Edit in host"
 msgstr "Modifier dans l'hôte"
@@ -25701,6 +25703,7 @@ msgstr "Modifier les citations de la fonctionnalité 'Citation du jour'"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:504
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:104
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:228
@@ -25767,7 +25770,7 @@ msgid "Edit serials"
 msgstr "Bulletiner"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:316
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:320
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:221
 #, c-format
@@ -25938,6 +25941,11 @@ msgstr "Émoticônes..."
 msgid "Empty and close"
 msgstr "Vider et Fermer"
 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:487
+#, fuzzy, c-format
+msgid "Empty option"
+msgstr "Options de l'image"
+
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:177
 #, c-format
 msgid "Enable"
@@ -26028,7 +26036,7 @@ msgstr "Vous devez choisir une date de départ et une durée d'abonnement. "
 msgid "End date:"
 msgstr "Date de fin&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:221
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:222
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:142
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:212
 #, c-format
@@ -26169,7 +26177,7 @@ msgstr ""
 "Saisissez un résumé qui effacera celui par défaut dans la liste de résultats "
 "d'une recherche. Exemple pour un type de document \"site web\""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:224
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
 #, c-format
 msgid "Enter a title and description for the holiday."
 msgstr "Saisissez un titre et une description pour le jour de fermeture."
@@ -26427,7 +26435,7 @@ msgstr "Erreur lors de l'import de la grille"
 #: intranet-tmpl/prog/en/modules/about.tt:114
 #, c-format
 msgid "Error message from Zebra: %s "
-msgstr "Message d'erreur de Zebra: %s "
+msgstr "Message d'erreur de Zebra : %s "
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:94
 #, c-format
@@ -26436,14 +26444,14 @@ msgstr "Erreur lors de l'exécution de l'opération"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:110
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
 #, c-format
 msgid "Error saving item"
 msgstr "Erreur lors de l'enregistrement de l'exemplaire"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:111
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:39
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:40
 #, c-format
 msgid "Error saving items"
 msgstr "Erreur lors de l'enregistrement de l'exemplaire"
@@ -26576,8 +26584,8 @@ msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
 "Cohen Arazi, with the help of the koha-es community."
 msgstr ""
-"Espa&ntilde;ol (Espagnol) Alejandro Tiraboschi (UNC), Bernardo González "
-"Kriegel (UNC) et Martín Longo, avec l'aide de la communauté koha-es."
+"Espa&ntilde;ol (Espagnol) Bernardo González Kriegel, Héctor Castro et Tomás "
+"Cohen Arazi, avec l'aide de la communauté koha-es."
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:44
 #, c-format
@@ -26685,11 +26693,11 @@ msgid "Excel"
 msgstr "Excel"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Exception: %s"
 msgstr "Exception&nbsp;: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:241
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:247
 #, c-format
 msgid "Exceptions"
 msgstr "Exceptions"
@@ -26741,7 +26749,7 @@ msgstr "Attendu le"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1230
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:805
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #, c-format
@@ -26781,7 +26789,7 @@ msgstr "Date d'expiration&nbsp;: %s"
 msgid "Expiration:"
 msgstr "Expiration&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1280
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1302
 #, c-format
 msgid "Expiration: "
 msgstr "Expiration&nbsp;:"
@@ -27281,7 +27289,7 @@ msgstr "Fargo Public Library, États-Unis"
 #: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Farmington Public Library, USA"
-msgstr "Farmington Public Library, USA"
+msgstr "Farmington Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:21
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
@@ -27920,7 +27928,7 @@ msgstr "Prénom"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:442
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:475
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:511
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:522
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:647
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:33
 #, c-format
@@ -27962,7 +27970,7 @@ msgstr "Miroir vertical"
 #: intranet-tmpl/prog/en/modules/pos/registers.tt:46
 #, c-format
 msgid "Float"
-msgstr "Float"
+msgstr "Fond"
 
 #. %1$s:  register.starting_float | $Price 
 #: intranet-tmpl/prog/en/modules/pos/register.tt:44
@@ -28044,7 +28052,7 @@ msgstr "Police Awesome"
 #: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "Font Face Observer"
-msgstr "Font Face Observer"
+msgstr "Police Face Observer"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -28246,7 +28254,7 @@ msgstr "Format"
 #: intranet-tmpl/prog/en/modules/about.tt:527
 #, c-format
 msgid "Foundations Bible College &amp; Seminary, USA"
-msgstr "Foundations Bible College &amp; Seminary, USA"
+msgstr "Foundations Bible College &amp; Seminary, États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:3
@@ -28366,7 +28374,7 @@ msgid "Friday"
 msgstr "Vendredi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Fridays"
 msgstr "Vendredi"
 
@@ -28462,7 +28470,7 @@ msgid "From call number:"
 msgstr "À partir de la cote&nbsp;: "
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:135
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:141
 #, c-format
 msgid "From date:"
 msgstr "À partir du&nbsp;:"
@@ -28714,7 +28722,7 @@ msgstr "Taxes&nbsp;:"
 #: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
-msgstr "Galego (Galician) Ignacio Javier"
+msgstr "Galego (Galicien) Ignacio Javier"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -28953,7 +28961,7 @@ msgstr "Remonte"
 #: intranet-tmpl/prog/en/modules/about.tt:528
 #, c-format
 msgid "Goethe-Institut, Germany"
-msgstr "Goethe-Institut, Germany"
+msgstr "Goethe-Institut, Allemagne"
 
 #: intranet-tmpl/prog/en/includes/patronfields.inc:40
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:171
@@ -28969,7 +28977,7 @@ msgstr "Parti sans laisser d'adresse"
 #: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Gothenburg University Library, Sweden"
-msgstr "Gothenburg University Library, Sweden"
+msgstr "Gothenburg University Library, Suède"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:145
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:147
@@ -29139,7 +29147,7 @@ msgstr "Messages HTML:"
 #: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Halland County Library, Sweden"
-msgstr "Halland County Library, Sweden"
+msgstr "Halland County Library, Suède"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:228
 #, c-format
@@ -29165,7 +29173,7 @@ msgstr "Date de retour fixe : "
 #: intranet-tmpl/prog/en/modules/about.tt:531
 #, c-format
 msgid "Harrison Carmel Public Library, USA"
-msgstr "Harrison Carmel Public Library, USA"
+msgstr "Harrison Carmel Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:158
 #, c-format
@@ -29175,7 +29183,7 @@ msgstr "Valeur de hachage"
 #: intranet-tmpl/prog/en/modules/about.tt:532
 #, c-format
 msgid "Hauraki District Libraries, New Zealand"
-msgstr "Hauraki District Libraries, New Zealand"
+msgstr "Hauraki District Libraries, Nouvelle-Zélande"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -29496,7 +29504,7 @@ msgstr ""
 msgid "Hint:"
 msgstr "Conseil&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:220
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:226
 #, c-format
 msgid "Hints"
 msgstr "Astuces"
@@ -29863,45 +29871,45 @@ msgstr "Réservation(s) en attente de retrait: %s"
 msgid "Holds:"
 msgstr "Réservations&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:240
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday exception"
 msgstr "Exception à un jour de fermeture"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:155
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:161
 #, c-format
 msgid "Holiday only on this day"
 msgstr "Fermeture seulement ce jour-là"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:160
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:166
 #, c-format
 msgid "Holiday repeated every same day of the week"
 msgstr "Fermeture répétée le même jour chaque semaine"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:165
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:171
 #, c-format
 msgid "Holiday repeated yearly on the same date"
 msgstr "Fermeture répétée chaque année à la même date"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:238
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday repeating weekly"
 msgstr "Fermeture répétée chaque semaine"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:233
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:239
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Holiday repeating yearly"
 msgstr "Fermeture répétée chaque année à la même date"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:170
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:176
 #, c-format
 msgid "Holidays on a range"
 msgstr "Série de jours de fermeture"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:175
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:181
 #, c-format
 msgid "Holidays repeated yearly on a range"
 msgstr "Série de jours de fermeture répétée chaque année"
@@ -29981,7 +29989,7 @@ msgstr "Série de jours de fermeture répétée chaque année"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:25
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:496
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
@@ -30285,7 +30293,7 @@ msgstr "Adresse du serveur&nbsp;:"
 #: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Hotchkiss School, USA"
-msgstr "Hotchkiss School, USA"
+msgstr "Hotchkiss School, États-Unis"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -30341,7 +30349,7 @@ msgstr "Détail des livraisons à domicile"
 msgid "Housebound details for %s"
 msgstr "Détails des livraisons à domicile pour %s"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1297
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1319
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:368
 #, c-format
@@ -30366,7 +30374,7 @@ msgstr "Que faire avec les notices d'exemplaire&nbsp;:"
 #: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid "Hrvatski (Croatian)"
-msgstr "Hrvatski (croate)"
+msgstr "Hrvatski (Croate)"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:164
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:166
@@ -30711,6 +30719,16 @@ msgstr ""
 "donnée pour un utilisateur, elle ne pourra pas être donnée pour un autre "
 "utilisateur. Ce paramètre ne peut plus être modifié après avoir été défini."
 
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:118
+#, fuzzy, c-format
+msgid ""
+"If checked, changes for this holiday will be copied to all libraries. If the "
+"holiday doesn't exists for a library, no change is made."
+msgstr ""
+"Si activé, ce jour de fermeture sera copié dans toutes les bibliothèques. Si "
+"la fermeture existe déjà dans une bibliothèque, aucun changement ne sera "
+"fait à celle-ci."
+
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:251
 #, c-format
 msgid ""
@@ -30761,7 +30779,7 @@ msgstr ""
 "documents de ce type pourront être prêtés sauf si l'option exclu du prêt est "
 "choisie pour un exemplaire précis."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:183
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:189
 #, c-format
 msgid ""
 "If checked, this holiday will be copied to all libraries. If the holiday "
@@ -31372,7 +31390,7 @@ msgstr "Résultats de l'importation&nbsp;: "
 msgid "Import this batch into the catalog"
 msgstr "Importer dans le catalogue"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:207
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:217
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:862
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:186
 #, c-format
@@ -31570,7 +31588,7 @@ msgid "Increase indent"
 msgstr "Augmenter le retrait"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:40
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1252
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1274
 #, c-format
 msgid "Indefinite"
 msgstr "Indéfini "
@@ -31620,9 +31638,9 @@ msgstr "Info&nbsp;:"
 msgid "Information"
 msgstr "Information"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:909
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:913
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:917
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
 #, c-format
 msgid "Inherit from settings"
 msgstr "Selon les réglages des paramètres"
@@ -31972,7 +31990,7 @@ msgid "Invalid course!"
 msgstr "Cours invalide!"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Invalid day entered in field %s"
 msgstr "Date invalide entrée dans le champ %s"
 
@@ -31987,7 +32005,7 @@ msgid "Invalid input. Enter something like: 245,a"
 msgstr "Entrée non-valide. Veuillez saisir quelque chose comme : 245,a"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Invalid month entered in field %s"
 msgstr "Mois invalide entré dans le champ %s"
 
@@ -32019,7 +32037,7 @@ msgid "Invalid value for %s"
 msgstr "Valeur invalide pour %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Invalid year entered in field %s"
 msgstr "Année invalide entrée dans le champ %s"
 
@@ -32333,8 +32351,8 @@ msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
 "for 3.4 and more: Zeno Tajoli, Stefano Bargioni, Paolo Bizzarri"
 msgstr ""
-"Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
-"for 3.4 and more: Zeno Tajoli, Stefano Bargioni, Paolo Bizzarri"
+"Italiano (Italien) pour 3.2 : Zeno Tajoli, Pietro Gozzetti et Paolo Pozzan; "
+"pour 3.4 et plus : Zeno Tajoli, Stefano Bargioni, Paolo Bizzarri"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -32452,7 +32470,7 @@ msgstr "Détails de l'exemplaire"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:905
 #, c-format
 msgid "Item floats"
-msgstr "Exemplaires perdus"
+msgstr "Exemplaires flottants"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:122
 #, c-format
@@ -32462,17 +32480,17 @@ msgstr "L'exemplaire a été déclaré retourné."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Item has been lost (transaction recorded anyway)"
-msgstr "Cet exemplaire est perdu. Désirez-vous tout de même le prêter ?"
+msgstr "Cet exemplaire est perdu (transaction enregistrée quand même)"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:354
 #, c-format
 msgid "Item has been withdrawn"
-msgstr "Exemplaire pilonné"
+msgstr "L'exemplaire a été élagué"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Item has been withdrawn (transaction recorded anyway)"
-msgstr "Exemplaire retiré (la transaction a été enregistré cependant)"
+msgstr "Cet exemplaire est élagué (transaction enregistrée quand même)"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:220
 #, c-format
@@ -32561,7 +32579,8 @@ msgstr "l'exemplaire est restreint"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Item is restricted (transaction recorded anyway)"
-msgstr "L'exemplaire est limitée (transaction enregistrée)"
+msgstr ""
+"Le prêt de cet exemplaire est restreint (transaction enregistrée quand même)"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:223
 #, c-format
@@ -32618,8 +32637,8 @@ msgid ""
 "Item not listed as checked out in offline database (transaction recorded "
 "anyway)"
 msgstr ""
-"Exemplaire non répertorié comme vérifié dans la base de données hors-ligne "
-"(transaction enregistrée)"
+"Cet exemplaire n'est pas prêté dans la base de données hors-ligne "
+"(transaction enregistrée quand même)"
 
 #: intranet-tmpl/prog/en/columns.def:112
 #, c-format
@@ -32939,7 +32958,7 @@ msgstr "Numéros d'exemplaires non trouvés"
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:26
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:143
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:91
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:28
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:29
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:187
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:254
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:43
@@ -32964,7 +32983,7 @@ msgid "Items already on this rota:"
 msgstr "Les exemplaires existent déjà dans cette rotation :"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:55
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Items available"
 msgstr "Exemplaires disponibles"
@@ -32985,7 +33004,7 @@ msgstr "Document(s) attendu(s)"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:36
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:37
 #, c-format
 msgid "Items for %s %s by %s%s (Record #%s)"
 msgstr "Exemplaires de %s %s par %s%s (Notice N°%s)"
@@ -33097,7 +33116,7 @@ msgstr "Témoin JavaScript"
 #: intranet-tmpl/prog/en/modules/about.tt:694
 #, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
-msgstr "Bibliothèque JavaScript par Vladimir Agafonkinis sous licence"
+msgstr "Bibliothèque JavaScript par Vladimir Agafonkinis sous licence "
 
 #: intranet-tmpl/prog/en/modules/about.tt:700
 #, c-format
@@ -33118,7 +33137,7 @@ msgstr "Gestionnaire de maintenance Jenkins :"
 #: intranet-tmpl/prog/en/includes/about-team.inc:168
 #, c-format
 msgid "Jenkins maintainers:"
-msgstr "Gestionnaire de maintenance Jenkins:"
+msgstr "Gestionnaires de maintenance Jenkins :"
 
 #: intranet-tmpl/prog/en/modules/about.tt:600
 #, c-format
@@ -33209,7 +33228,7 @@ msgstr "Garder le gestionnaire actuel"
 msgid "Keep issue number"
 msgstr "Garder le numéro"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:228
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
 #, c-format
 msgid "Key"
 msgstr "Clé"
@@ -33352,7 +33371,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:6
 #, c-format
 msgid "Koha &rsaquo; About Koha"
-msgstr "Koha &rsaquo; À propos"
+msgstr "Koha &rsaquo; À propos de Koha"
 
 #. %1$s: - IF (type == "vendor") -
 #. %2$s: - ELSE -
@@ -34432,13 +34451,10 @@ msgstr "Koha &rsaquo; Catalogue &rsaquo; %s &rsaquo; Images"
 #. %3$s:  INCLUDE 'biblio-title-head.inc' 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
-#, c-format
-msgid ""
-"Koha &rsaquo; Catalog &rsaquo; %s <span class=\"unknownrecord\">Unknown "
-"record</span> %s <span class=\"titledetails\">Details for %s</span> %s "
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Details for %s %s "
 msgstr ""
-"Koha &rsaquo; Catalogue &rsaquo; %s <span class=\"unknownrecord\">Notice "
-"inconnue</span> %s <span class=\"titledetails\">Détails de %s</span> %s "
+"Koha &rsaquo; Catalogue &rsaquo; %s Notice inconnue %s Détails ISBD de %s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -34549,7 +34565,7 @@ msgstr "Koha &rsaquo; Catalogage &rsaquo;"
 #. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:6
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:7
 #, c-format
 msgid ""
 "Koha &rsaquo; Cataloging &rsaquo; %s %s by %s%s (Record #%s) &rsaquo; Items"
@@ -36064,7 +36080,7 @@ msgstr "Cote de Koha"
 #: intranet-tmpl/prog/en/modules/about.tt:786
 #, c-format
 msgid "Koha history timeline"
-msgstr "Historique "
+msgstr "Historique de Koha"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:133
 #, c-format
@@ -36118,7 +36134,7 @@ msgstr "Extensions Koha"
 #: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Koha release teams"
-msgstr "Équipe responsable de la version"
+msgstr "Équipes responsables de versions"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:14
 #, c-format
@@ -36138,7 +36154,7 @@ msgstr "Koha poste bibliothécaire"
 #: intranet-tmpl/prog/en/modules/about.tt:27
 #, c-format
 msgid "Koha team"
-msgstr "Equipe Koha"
+msgstr "Équipe Koha"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:13
 #, c-format
@@ -36155,7 +36171,7 @@ msgstr "Liens Koha => MARC"
 #: intranet-tmpl/prog/en/modules/about.tt:37
 #, c-format
 msgid "Koha version: "
-msgstr "Version Koha&nbsp;: "
+msgstr "Version Koha : "
 
 #: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
@@ -36569,7 +36585,7 @@ msgstr "Formats"
 #: intranet-tmpl/prog/en/modules/about.tt:694
 #, c-format
 msgid "Leaflet"
-msgstr "Brochure"
+msgstr "Leaflet"
 
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:47
 #, c-format
@@ -36588,7 +36604,7 @@ msgstr "Message"
 
 #. %1$s:  END 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:821
 #, c-format
 msgid "Leave blank for auto calc during registration %s %s "
 msgstr "laisser vide pour le calcule automatique pendant l'inscription %s %s "
@@ -36672,7 +36688,7 @@ msgstr "Texte"
 #: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "LibLime, USA"
-msgstr "LibLime, USA"
+msgstr "LibLime, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:229
 #, c-format
@@ -36879,7 +36895,7 @@ msgstr "Limité aux bibliothèques"
 msgid "Library limitations: "
 msgstr "Limiter aux bibliothèques : "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:754
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
 #, c-format
 msgid "Library management"
 msgstr "Gestion de bibliothèques"
@@ -36897,14 +36913,14 @@ msgstr "Bibliothèque du congrès"
 #: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Library of the Józef Piłsudski Institute of America, USA"
-msgstr "Library of the Józef Piłsudski Institute of America, USA"
+msgstr "Library of the Józef Piłsudski Institute of America, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
 #, c-format
 msgid "Library of the patron:"
 msgstr "Bibliothèque de l'utilisateur :"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:953
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #, c-format
 msgid "Library set-up"
 msgstr "Gestion interne"
@@ -36934,7 +36950,7 @@ msgstr "Usage internet"
 
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:31
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:61
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:130
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:136
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:257
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:263
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
@@ -36951,7 +36967,7 @@ msgstr "Usage internet"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:103
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: intranet-tmpl/prog/en/modules/members/member.tt:173
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:808
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:830
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:82
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:281
@@ -37342,7 +37358,7 @@ msgstr "Chargement des émoticônes..."
 msgid "Loading more results…"
 msgstr "Afficher plus de résultats…"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1389
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1411
 #, c-format
 msgid "Loading new messaging defaults "
 msgstr "Chargement des nouveaux paramètres de messagerie par défaut "
@@ -37586,7 +37602,7 @@ msgstr "Rechercher des notices existantes dans le catalogue ?"
 #: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Los Gatos Public Library, USA"
-msgstr "Los Gatos Public Library, USA"
+msgstr "Los Gatos Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:186
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:30
@@ -38011,7 +38027,7 @@ msgstr "Macros..."
 #: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
-msgstr "Magyar (Hungarian) Agnes Imecs"
+msgstr "Magyar (Hongrois) Agnes Imecs"
 
 #: intranet-tmpl/prog/en/includes/member-main-address-style.inc:4
 #, c-format
@@ -38032,7 +38048,7 @@ msgstr "Bibliothèque principale"
 msgid "Make a payment"
 msgstr "Effectuer un paiement"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:177
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:183
 #, c-format
 msgid ""
 "Make a single holiday on a range repeated yearly. For example, selecting "
@@ -38044,7 +38060,7 @@ msgstr ""
 "paramétré tous les jours entre le 1er et le 10, et également du 1er au 10 "
 "Août des années suivantes."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:172
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:178
 #, c-format
 msgid ""
 "Make a single holiday on a range. For example, selecting August 1, 2012 and "
@@ -38056,7 +38072,7 @@ msgstr ""
 "entre le 1er et le 10, sans répercussion sur la période du 1er au 10 Août "
 "des années suivantes."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:163
 #, c-format
 msgid ""
 "Make a single holiday. For example, selecting August 1, 2012 will make it a "
@@ -38087,7 +38103,7 @@ msgstr "Définir par défaut"
 msgid "Make payment"
 msgstr "Encaisser"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:162
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:168
 #, c-format
 msgid ""
 "Make this weekday a holiday, every week. For example, if your library is "
@@ -38832,12 +38848,12 @@ msgid "Mark closed"
 msgstr "Marquer comme fermé"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:165
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:166
 msgid "Mark item as lost"
 msgstr "Déclarer l’exemplaire perdu"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:168
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:169
 msgid "Mark lost and notify patron"
 msgstr "Déclarer perdu et notifier l'utilisateur"
 
@@ -38894,7 +38910,7 @@ msgstr "Marquer comme vu"
 #: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "MassCat, USA"
-msgstr "MassCat, USA"
+msgstr "MassCat, États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:438
@@ -39272,7 +39288,7 @@ msgstr "Centre"
 #: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Middletown Township Public Library, USA"
-msgstr "Middletown Township Public Library, USA"
+msgstr "Middletown Township Public Library, États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
@@ -39302,7 +39318,7 @@ msgid "Minimum Koha version"
 msgstr "Version minimum de Koha"
 
 #. %1$s:  minPasswordLength | html 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1129
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1151
 #, c-format
 msgid "Minimum password length: %s"
 msgstr "Taille minimale du mot de passe&nbsp;: %s"
@@ -39671,7 +39687,7 @@ msgstr "Module"
 #: intranet-tmpl/prog/en/modules/about.tt:151
 #: intranet-tmpl/prog/en/modules/about.tt:153
 msgid "Module current"
-msgstr "Modifier à jour"
+msgstr "Modules courants"
 
 #. TH
 #: intranet-tmpl/prog/en/modules/about.tt:157
@@ -39713,7 +39729,7 @@ msgid "Monday"
 msgstr "Lundi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Mondays"
 msgstr "Lundis"
 
@@ -39731,7 +39747,7 @@ msgstr "Lundis"
 msgid "Month"
 msgstr "Mois"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:292
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:298
 #, c-format
 msgid "Month/day"
 msgstr "Mois/Jour"
@@ -40214,12 +40230,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
-msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
+msgstr "Nederlands-Belgi&euml; (Néerlandais de Belgique)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
-msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
+msgstr ""
+"Nederlands-Nederland (Néerlandais des Pays-Bas) Commandité par le Rijksmuseum"
 
 #. %1$s:  dbms | $HtmlTags tag=>'code' 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:36
@@ -40248,7 +40265,7 @@ msgstr "Jamais"
 #: intranet-tmpl/prog/en/modules/tools/problem-reports.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:421
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:453
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1372
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1394
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:124
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:262
@@ -40325,12 +40342,12 @@ msgstr "Nouveau serveur Z39.50"
 #: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "New Zealand Central Agencies Library, New Zealand"
-msgstr "New Zealand Central Agencies Library, New Zealand"
+msgstr "New Zealand Central Agencies Library, Nouvelle-Zélande"
 
 #: intranet-tmpl/prog/en/modules/about.tt:550
 #, c-format
 msgid "New Zealand Ministry of Education Library, New Zealand"
-msgstr "New Zealand Ministry of Education Library, New Zealand"
+msgstr "New Zealand Ministry of Education Library, Nouvelle-Zélande"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:47
 #, c-format
@@ -40908,10 +40925,10 @@ msgstr "Nicholas Rosasco (Compilateur de la documentation)"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:152
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:63
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:130
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:545
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:548
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:560
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:563
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:570
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:582
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:585
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:312
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
@@ -40958,12 +40975,12 @@ msgstr "Nicholas Rosasco (Compilateur de la documentation)"
 msgid "No"
 msgstr "Non"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:885
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:894
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1306
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1311
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1320
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1325
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:907
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:916
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1328
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1333
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1342
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1347
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:204
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:211
 #, c-format
@@ -41071,7 +41088,7 @@ msgstr "Aucune devise active n'est définie"
 #: intranet-tmpl/prog/en/modules/about.tt:285
 #, c-format
 msgid "No active currency is defined. Please go to "
-msgstr "Aucune devise active n'est définie. Merci d'aller à"
+msgstr "Aucune devise active n'est définie. Veuillez aller à"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:56
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
@@ -41295,9 +41312,9 @@ msgstr ""
 msgid "No holds on this record"
 msgstr "Pas de réservation sur cette notice"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:908
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:916
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:930
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:934
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:938
 #, c-format
 msgid "No if settings allow it"
 msgstr "Non, si les configurations le permettent"
@@ -41352,8 +41369,8 @@ msgstr "Aucun élément sélectionné"
 msgid ""
 "No item with barcode in offline database (transaction recorded anyway): %s"
 msgstr ""
-"Aucun exemplaire avec un code-barres dans la base de données hors-ligne "
-"(transaction enregistrée quand même)&nbsp;: %s"
+"Aucun exemplaire avec ce code-barres dans la base de données hors-ligne "
+"(transaction enregistrée quand même) : %s"
 
 #. %1$s:  errmsgloo.msg | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:242
@@ -41388,7 +41405,7 @@ msgstr "Pas d'exemplaire disponible "
 msgid "No items for %s"
 msgstr "Pas d'exemplaires à %s"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:198
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:199
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:116
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:47
 #, c-format
@@ -41631,7 +41648,7 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:386
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:177
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:187
 msgid "No popup"
 msgstr "Aucun popup"
 
@@ -41914,12 +41931,12 @@ msgstr "Documentaire"
 msgid "Non-musical recording"
 msgstr "Enregistrement non musical"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:613
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
 #, c-format
 msgid "Non-patron guarantor first name"
 msgstr "Prénom du garant (non abonné)"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:596
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:618
 #, c-format
 msgid "Non-patron guarantor surname"
 msgstr "Nom de famille du garant (non abonné)"
@@ -41965,7 +41982,7 @@ msgstr "Espace insécable"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:198
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:137
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:72
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:247
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:248
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:136
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:128
@@ -42039,7 +42056,7 @@ msgid "Normal"
 msgstr "Normal"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Normal day"
 msgstr "Jour habituel"
 
@@ -42064,22 +42081,22 @@ msgstr "Règle de normalisation&nbsp;:"
 #: intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
-msgstr "Norsk Bokmål (Norwegian) Axel Bojer et Thomas Gramstad"
+msgstr "Norsk Bokmål (Norvégien) Axel Bojer et Thomas Gramstad"
 
 #: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
-msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen et Marit Kristine Ådland"
+msgstr "Norsk Nynorsk (Norvégien) Unni Knutsen et Marit Kristine Ådland"
 
 #: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
 msgid "North Central Regional Library (NCRL), USA"
-msgstr "North Central Regional Library (NCRL), USA"
+msgstr "North Central Regional Library (NCRL), États-Unis"
 
 #: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "Northeast Kansas Library System (NEKLS), USA"
-msgstr "Northeast Kansas Library System (NEKLS), USA"
+msgstr "Northeast Kansas Library System (NEKLS), États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:505
@@ -42301,7 +42318,7 @@ msgid ""
 "$KOHA_CONF file %s "
 msgstr ""
 "Veuillez prendre note que le bon endroit pour définir la configuration de "
-"memcached est dans votre fichier $KOHA_CONF %s"
+"memcached est dans votre fichier $KOHA_CONF %s "
 
 #. %1$s:  END 
 #. %2$s:  IF effective_caching_method != 'Cache::Memcached::Fast::Safe' 
@@ -42317,7 +42334,7 @@ msgstr ""
 "Veuillez prendre note que le bon endroit pour définir la configuration de "
 "memcached est dans votre fichier $KOHA_CONF. Votre configuration de "
 "memcached n'est présentement pas valide. %s %s | Méthode de cache efficace : "
-"%s %s"
+"%s %s "
 
 #. %1$s:  CASE # nowhere 
 #: intranet-tmpl/prog/en/modules/about.tt:101
@@ -42327,10 +42344,10 @@ msgid ""
 "$KOHA_CONF file. To avoid any misunderstanding you should not export the "
 "memcached config from ENV. %s "
 msgstr ""
-"Prenez note que le bon endroit pour définir la configuration de la mémoire "
-"cache est dans votre fichier $KOHA_CONF. Pour éviter toute confusion vous ne "
-"devriez pas exporter votre configuration de mémoire cache à partir de ENV. "
-"%s "
+"Veuillez prendre note que le bon endroit pour définir la configuration de "
+"memcached est dans votre fichier $KOHA_CONF. Pour éviter toute confusion "
+"vous ne devriez pas exporter votre configuration de memcached à partir de "
+"ENV. %s "
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:28
@@ -42571,7 +42588,7 @@ msgstr "Noto"
 #: intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "Noto fonts"
-msgstr "Police Noto"
+msgstr "Polices Noto"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:3
@@ -42671,7 +42688,7 @@ msgstr "Nombre de prêts par type de document"
 msgid "Number of columns:"
 msgstr "Nombre de colonnes&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:231
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:241
 #, c-format
 msgid "Number of copies of this item to add: "
 msgstr "Nombre de copies de cette exemplaire à ajouter&nbsp;: "
@@ -43063,7 +43080,7 @@ msgid "OPAC tables"
 msgstr "Tableaux de l'OPAC"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:518
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:108
 #, c-format
 msgid "OPAC view"
 msgstr "Vue OPAC"
@@ -43073,7 +43090,7 @@ msgstr "Vue OPAC"
 msgid "OPAC view:"
 msgstr "Vue OPAC: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1039
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1061
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "Connexion OPAC/Intranet"
@@ -43802,10 +43819,10 @@ msgstr "Lignes de commande avec des prix indéterminés"
 #: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "Orex Digital, Spain"
-msgstr "Orex Digital, Spain"
+msgstr "Orex Digital, Espagne"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:825
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:847
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:69
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:148
 #, c-format
@@ -43855,7 +43872,7 @@ msgstr "Version originale"
 #: intranet-tmpl/prog/en/modules/about.tt:555
 #, c-format
 msgid "Oslo Public Library, Norway"
-msgstr "Oslo Public Library, Norway"
+msgstr "Oslo Public Library, Norvège"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:51
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:63
@@ -44110,17 +44127,17 @@ msgstr "Après-midi"
 #: intranet-tmpl/prog/en/modules/about.tt:49
 #, c-format
 msgid "PSGI: "
-msgstr "PSGI&nbsp;: "
+msgstr "PSGI : "
 
 #: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
-msgstr "PTFS Europe Ltd, Royaume Uni"
+msgstr "PTFS Europe Ltd, Royaume-Uni"
 
 #: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "PTFS, Maryland, USA"
-msgstr "PTFS, Maryland, USA"
+msgstr "PTFS, Maryland, États-Unis"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:157
 #, c-format
@@ -44249,12 +44266,12 @@ msgstr ""
 "Erreur de mot de passe chez l'utilisateur avec le numéro d'utilisateur "
 "suivant : %s. "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1127
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1149
 #, c-format
 msgid "Password has leading or trailing whitespaces"
 msgstr "Des espaces sont présents avant et/ou après le mot de passe"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1121
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1143
 #, c-format
 msgid "Password is too short"
 msgstr "Mot de passe trop court"
@@ -44271,7 +44288,7 @@ msgstr ""
 "Le mot de passe de l'utilisateur avec le numéro %s est trop court. La "
 "longueur minimale est %s alors que le mot de passe est %s "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1124
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1146
 #, c-format
 msgid "Password is too weak"
 msgstr "Le mot de passe est trop faible"
@@ -44348,7 +44365,7 @@ msgstr "Mot de passe&nbsp;: "
 msgid "Password: "
 msgstr "Mot de passe&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1178
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1200
 #, c-format
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
@@ -44448,7 +44465,7 @@ msgstr "L' utilisateur '%s' est déjà dans la liste."
 msgid "Patron ID:"
 msgstr "N° d'utilisateur&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1189
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1211
 #, c-format
 msgid "Patron account flags"
 msgstr "Indicateurs du compte de l'utilisateur"
@@ -44520,7 +44537,7 @@ msgstr "Numéro de carte de l'utilisateur"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:429
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:464
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:500
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:511
 #, c-format
 msgid "Patron card number:"
 msgstr "Numéro de carte de l'utilisateur :"
@@ -44784,7 +44801,7 @@ msgid "Patron has restrictions"
 msgstr "L'utilisateur est restreint"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:184
 msgid "Patron holds"
 msgstr "Réservations de l'utilisateur"
 
@@ -44819,7 +44836,7 @@ msgid "Patron is an adult"
 msgstr "L'utilisateur est un adulte"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:4
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1266
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1288
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "L'utilisateur est sans restriction."
@@ -44872,14 +44889,14 @@ msgstr "Listes d'utilisateurs"
 msgid "Patron lists:"
 msgstr "Listes d'utilisateurs&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1387
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1409
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:415
 #, c-format
 msgid "Patron messaging preferences"
 msgstr "Préférences des notifications de l'utilisateur"
 
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:25
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:184
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:185
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:133
 #, c-format
 msgid "Patron name"
@@ -44986,7 +45003,7 @@ msgstr "Problèmes de relations entre utilisateurs"
 msgid "Patron request"
 msgstr "Demandes d'utilisateurs"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1223
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1245
 #, c-format
 msgid "Patron restrictions"
 msgstr "Restrictions de l'utilisateur"
@@ -45904,7 +45921,7 @@ msgstr "Planification pour %s %s"
 #: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "Plano Independent School, USA"
-msgstr "Plano Independent School, USA"
+msgstr "Plano Independent School, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
@@ -46062,7 +46079,7 @@ msgstr ""
 "de %s. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Please confirm whether this is a duplicate patron"
 msgstr "Veuillez confirmer que c'est une utilisateur en doublon"
 
@@ -46312,10 +46329,10 @@ msgid ""
 "account, create a library, a patron category 'Staff' and add a new patron. "
 "Then give this patron permissions from 'More' in the toolbar."
 msgstr ""
-"S'il vous plaît connectez-vous plutôt avec un compte du personnel régulier. "
-"Pour créer un compte du personnel, créer une bibliothèque, une catégorie "
-"d'utilisateur 'Personnel' et ajouter un nouvel utilisateur. Ensuite, donner "
-"les permissions de 'Plus' à cet utilisateur, dans la barre d'outils."
+"Veuillez vous connecter avec un compte régulier de personnel. Pour créer un "
+"compte du personnel, créer une bibliothèque, une catégorie d'utilisateur "
+"'Personnel' et ajouter un nouvel utilisateur. Ensuite, à partir de 'Plus' "
+"dans la barre d'outils, donner les permissions cet utilisateur."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
@@ -46839,7 +46856,7 @@ msgstr "Préférences"
 msgid "Preferences and parameters"
 msgstr "Préférences et paramètres"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:925
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:947
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:580
 #, c-format
 msgid "Preferred language for notices: "
@@ -47098,7 +47115,7 @@ msgid "Print card number as text under barcode: "
 msgstr "Imprimer le numéro de carte comme texte sous le code-barres&nbsp;: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:470
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:94
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:100
 #, c-format
 msgid "Print label"
 msgstr "Imprimer l'étiquette"
@@ -47355,7 +47372,7 @@ msgid "Processing..."
 msgstr "En traitement..."
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:826
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:848
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:149
 #, c-format
 msgid "Professional"
@@ -47709,7 +47726,7 @@ msgid "Publisher: %s %s, %s %s %s %s %s %s "
 msgstr "Publié par: %s %s, %s %s %s %s %s %s "
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:54
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:181
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:182
 #, c-format
 msgid "Pull this many items"
 msgstr "Traiter ces exemplaires "
@@ -47751,12 +47768,12 @@ msgstr "Qualificatif:"
 #: intranet-tmpl/prog/en/includes/about-team.inc:99
 #, c-format
 msgid "Quality assurance manager:"
-msgstr "Responsable de l'assurance qualité:"
+msgstr "Responsable de l'assurance qualité :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:105
 #, c-format
 msgid "Quality assurance team:"
-msgstr "Équipe assurance de qualité&nbsp;:"
+msgstr "Équipe d'assurance-qualité :"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:632
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:398
@@ -47817,7 +47834,7 @@ msgstr "Quantité&nbsp;:"
 msgid "Queued request"
 msgstr "Demandes en attente"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1422
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1444
 #, c-format
 msgid "Quick add"
 msgstr "Ajout rapide"
@@ -48242,7 +48259,7 @@ msgstr "Rétablir"
 msgid "Referral:"
 msgstr "Référence :"
 
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:213
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:214
 #, c-format
 msgid "Refine results"
 msgstr "Affiner les résultats"
@@ -48382,9 +48399,11 @@ msgid "Relationship information"
 msgstr "Informations sur les relations"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:448
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:480
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:516
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:620
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:481
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:484
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:528
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:531
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:642
 #, c-format
 msgid "Relationship: "
 msgstr "Relation&nbsp;:"
@@ -48392,30 +48411,30 @@ msgstr "Relation&nbsp;:"
 #: intranet-tmpl/prog/en/includes/about-team.inc:75
 #, c-format
 msgid "Release maintainer:"
-msgstr "Responsable maintenance:"
+msgstr "Responsable de la maintenance de version :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:209
 #, c-format
 msgid "Release maintainers:"
-msgstr "Responsable maintenance&nbsp;:"
+msgstr "Responsables de la maintenance de version :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:63
 #: intranet-tmpl/prog/en/includes/about-team.inc:203
 #, c-format
 msgid "Release manager assistant:"
-msgstr "Assistants responsables de la nouvelle version:"
+msgstr "Assistant au responsable de la nouvelle version :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:55
 #: intranet-tmpl/prog/en/includes/about-team.inc:195
 #, c-format
 msgid "Release manager assistants:"
-msgstr "Assistants responsables de la nouvelle version:"
+msgstr "Assistants au responsable de la nouvelle version :"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:50
 #: intranet-tmpl/prog/en/includes/about-team.inc:190
 #, c-format
 msgid "Release manager:"
-msgstr "Responsable nouvelle version&nbsp;:"
+msgstr "Responsable de la nouvelle version :"
 
 #: intranet-tmpl/prog/en/includes/resort_form.inc:1
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:197
@@ -48529,8 +48548,8 @@ msgstr "Image distante&nbsp;:"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:255
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:110
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:184
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:490
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:526
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:501
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:548
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:130
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:8
@@ -48674,7 +48693,7 @@ msgstr "Supprimer cette règle"
 msgid "Remove: "
 msgstr "Retirer : "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1233
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1255
 #, c-format
 msgid "Remove?"
 msgstr "Enlever "
@@ -49270,7 +49289,7 @@ msgstr "Module JS Require.js"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:303
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:699
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:860
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
@@ -49291,29 +49310,31 @@ msgstr "Module JS Require.js"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:336
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:355
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:371
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:594
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:646
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:663
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:695
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:728
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:770
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:777
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:784
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:791
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:812
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:840
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:854
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:965
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:992
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1012
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1029
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1069
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1118
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1175
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:495
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:616
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:633
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:668
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:685
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:701
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:717
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:734
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:750
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:792
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:806
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:813
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:834
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:862
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:876
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:892
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1014
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1034
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1051
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1091
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1140
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1197
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:125
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:139
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:222
@@ -49455,7 +49476,7 @@ msgstr "Contrôle de concordance requis"
 #. TH
 #: intranet-tmpl/prog/en/modules/about.tt:165
 msgid "Required module missing"
-msgstr "Modules Perl absents"
+msgstr "Modules Perl obligatoire absents"
 
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:72
 #, c-format
@@ -49952,7 +49973,7 @@ msgstr "De droite à gauche"
 #: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
-msgstr "Rijksmuseum, Amsterdam, Le Pays-Bas"
+msgstr "Rijksmuseum, Amsterdam, Pays-Bas"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:419
 #, c-format
@@ -49969,7 +49990,7 @@ msgstr "Robots"
 #: intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid "Rolling Hills Consolidated Libraries, USA"
-msgstr "Rolling Hills Consolidated Libraries, USA"
+msgstr "Rolling Hills Consolidated Libraries, États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:505
@@ -50038,7 +50059,7 @@ msgstr "Rotation des collections"
 #: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Round Rock Public Library, USA"
-msgstr "Round Rock Public Library, USA"
+msgstr "Round Rock Public Library, États-Unis"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:181
 #, c-format
@@ -50240,12 +50261,12 @@ msgstr "Numéro SMS"
 msgid "SMS cellular providers"
 msgstr "Fournisseur de SMS"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1397
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1419
 #, c-format
 msgid "SMS number should be in the format 1234567890 or +11234567890"
 msgstr "Le numéro de SMS doit être au format 1234567890 ou +11234567890"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1395
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1417
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:423
 #, c-format
 msgid "SMS number:"
@@ -50256,7 +50277,7 @@ msgstr "Numéro SMS&nbsp;:"
 msgid "SMS provider"
 msgstr "Fournisseur SMS"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1401
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1423
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:427
 #, c-format
 msgid "SMS provider:"
@@ -50291,7 +50312,7 @@ msgstr "Exemple 2: STARTDATE:January 1 2010,TRACK:Day"
 #: intranet-tmpl/prog/en/modules/about.tt:570
 #, c-format
 msgid "SWITCH Library Consortium, USA"
-msgstr "SWITCH Library Consortium, USA"
+msgstr "SWITCH Library Consortium, États-Unis"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:3
@@ -50335,7 +50356,7 @@ msgid "Saturday"
 msgstr "Samedi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Saturdays"
 msgstr "Samedis"
 
@@ -50347,8 +50368,8 @@ msgstr "Samedis"
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:186
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:60
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:186
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:122
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:192
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:312
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:222
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:343
@@ -50458,7 +50479,7 @@ msgstr "Sauvegarder (si l'extension de sauvegarde est activée)"
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:157
 #, c-format
 msgid "Save all %s preferences"
-msgstr "Sauvegarder toutes les Préférences %s"
+msgstr "Sauvegarder toutes les préférences %s"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:227
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:573
@@ -50509,7 +50530,7 @@ msgstr "Sauvegarder comme nouveau modèle"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:146
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:241
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:251
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:222
@@ -50996,7 +51017,7 @@ msgstr "Rechercher les postes budgétaires&nbsp;:"
 msgid "Search history"
 msgstr "Mon historique de recherche"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:222
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:228
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr ""
@@ -51218,7 +51239,7 @@ msgstr "Recherchez dans le catalogue et le réservoir&nbsp;:"
 msgid "Search title"
 msgstr "Recherche par titre"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:537
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
 #, c-format
 msgid "Search to add"
 msgstr "Rechercher pour ajouter"
@@ -52091,7 +52112,7 @@ msgstr ""
 "aussi http://www.indexdata.com/yaz/doc/zoom.html."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Separator must be / in field %s"
 msgstr "Le séparateur doit être / dans la zone %s"
 
@@ -52277,7 +52298,7 @@ msgstr "Serveur"
 #: intranet-tmpl/prog/en/modules/about.tt:36
 #, c-format
 msgid "Server information"
-msgstr "Information serveur"
+msgstr "Informations sur le serveur"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:58
 #, c-format
@@ -52294,7 +52315,7 @@ msgstr "Serveurs&nbsp;:"
 #: intranet-tmpl/prog/en/modules/about.tt:77
 #, c-format
 msgid "Servers: %s"
-msgstr "Serveurs : %s"
+msgstr "Serveurs : %s"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:25
 #, c-format
@@ -52409,7 +52430,7 @@ msgstr "Positionne en priorité la plus basse"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:387
 #, c-format
 msgid "Set to patron"
@@ -52889,7 +52910,7 @@ msgstr "Afficher les prêts"
 msgid "Show checkouts to guarantor"
 msgstr "Afficher les prêts au garant"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
 #, c-format
 msgid "Show checkouts to guarantors"
 msgstr "Montrer les prêts aux garants"
@@ -52916,7 +52937,7 @@ msgstr "Montrer les zones telles quelles"
 msgid "Show fines to guarantor"
 msgstr "Montrer les amendes au garant"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:557
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:579
 #, c-format
 msgid "Show fines to guarantors"
 msgstr "Montrer les amendes aux garants"
@@ -53030,8 +53051,8 @@ msgstr "Affichage de la page %s de %s"
 msgid "Shown"
 msgstr "Affichés"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:648
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:697
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:670
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:719
 #, c-format
 msgid "Shows on transit slips"
 msgstr "Visible sur les documents de transfert"
@@ -53047,7 +53068,7 @@ msgid "Since"
 msgstr "Depuis"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Single holiday: %s"
 msgstr "Jour férié unique&nbsp;: %s"
 
@@ -53380,7 +53401,7 @@ msgstr "South Taranaki District Council, Nouvelle-Zélande"
 #: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "South-East Kansas Library System (SEKLS), USA"
-msgstr "South-East Kansas Library System (SEKLS), USA"
+msgstr "South-East Kansas Library System (SEKLS), États-Unis"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:69
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:71
@@ -53434,7 +53455,7 @@ msgstr "Indiquez la date à laquelle faire le sommaire %s: "
 msgid "Specify due date %s: "
 msgstr "Spécifier une date de retour %s: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:225
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
 #, c-format
 msgid "Specify how the holiday should repeat."
 msgstr "Spécifiez comment le jour de fermeture est répété."
@@ -53527,7 +53548,7 @@ msgid "Square"
 msgstr "Carré"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:824
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:846
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:147
 #, c-format
 msgid "Staff"
@@ -53745,7 +53766,7 @@ msgid "Start date:"
 msgstr "Date de début&nbsp;: "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:34
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:216
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:217
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:135
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:205
 #, c-format
@@ -53845,7 +53866,7 @@ msgid "Statistic 2: "
 msgstr "Statistique 2&nbsp;: "
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:827
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:849
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:150
 #, c-format
 msgid "Statistical"
@@ -54080,7 +54101,7 @@ msgstr "Détails de la rotation des stocks pour %s"
 #: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Stockholm University Library, Sweden"
-msgstr "Stockholm University Library, Sweden"
+msgstr "Stockholm University Library, Suède"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:207
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:361
@@ -54140,7 +54161,7 @@ msgid "Sub total "
 msgstr "Sous-total"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:36
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:271
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:272
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:268
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:202
@@ -54357,7 +54378,7 @@ msgstr "Sujets: "
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:109
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:122
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:175
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:234
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:235
 #: intranet-tmpl/prog/en/modules/circ/set-library.tt:71
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:99
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:161
@@ -54845,7 +54866,7 @@ msgid "Sunday"
 msgstr "Dimanche"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Sundays"
 msgstr "Dimanches"
 
@@ -54885,7 +54906,7 @@ msgstr "Nom de famille"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:435
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:470
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:506
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:517
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:641
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:28
 #, c-format
@@ -55272,8 +55293,8 @@ msgstr "Zone supprimée"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:297
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:382
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:388
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:169
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:179
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:189
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:832
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:840
 #, c-format
@@ -55559,7 +55580,7 @@ msgstr "Tetun (Tetum) Karen Myers"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:42
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:55
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:272
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:273
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:269
 #, c-format
 msgid "Text"
@@ -55904,7 +55925,7 @@ msgstr "Le code-barres %s n'a pas été trouvé."
 msgid "The barcode was not found: "
 msgstr "Le code-barres n'a pas été trouvé&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:234
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:244
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:266
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:417
 #, c-format
@@ -57215,7 +57236,7 @@ msgstr "Il n'y pas de correspondance pour l'index %s"
 #. %1$s:  END 
 #. %2$s:  IF autoMemberNum 
 #. %3$s:  IF mandatorycardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:815
 #, c-format
 msgid "There is no minimum or maximum character length. %s %s %s "
 msgstr "Il n'y a pas de nombre minimum ou maximum de caractères. %s %s %s "
@@ -57764,12 +57785,12 @@ msgstr "Cette liste n'exise pas."
 msgid "This member has no email"
 msgstr "Ce membre n'a pas de courriel"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1010
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1032
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr "Ce message apparaît dans le compte utilisateur à l'OPAC"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1027
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1049
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr "Ce message apparaît lors d'un prêt à cet utilisateur"
@@ -58108,7 +58129,7 @@ msgstr ""
 "Les changements de titre et de description seront enregistrés, y compris sur "
 "les jours répétés."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:167
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:173
 #, c-format
 msgid ""
 "This will take this day and month as a reference to make it a holiday. "
@@ -58153,7 +58174,7 @@ msgid "Thursday"
 msgstr "Jeudi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Thursdays"
 msgstr "Jeudis"
 
@@ -58233,10 +58254,10 @@ msgstr "Éditeur WYSIWYG TinyMCE v5.0.16"
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:245
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:267
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:294
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:316
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:273
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:300
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:322
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:113
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:188
@@ -58277,7 +58298,7 @@ msgstr "Éditeur WYSIWYG TinyMCE v5.0.16"
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:104
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:58
-#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:185
+#: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:186
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:152
@@ -58382,7 +58403,7 @@ msgstr "Titre&nbsp;:"
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:80
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:150
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:156
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
@@ -58507,7 +58528,7 @@ msgstr "Pour créer un autre utilisateur, allez à :"
 msgid "To create circulation rule, go to: "
 msgstr "Pour créer une règle de circulation, allez à : "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:147
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:153
 #, c-format
 msgid "To date: "
 msgstr "Jusqu'au&nbsp;:"
@@ -59426,7 +59447,7 @@ msgid "Tuesday"
 msgstr "Mardi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Tuesdays"
 msgstr "Mardis"
 
@@ -59447,7 +59468,7 @@ msgstr "Turquoise"
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/files.tt:39
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1228
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1250
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:348
@@ -59750,13 +59771,13 @@ msgstr "Adresse URI"
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:237
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 #, c-format
 msgid "Unique holiday"
 msgstr "Fermeture unique"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:311
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
 #, c-format
 msgid "Unique holidays"
 msgstr "Fermeture unique"
@@ -59871,7 +59892,7 @@ msgid "Université de St Etienne, France"
 msgstr "Université de St Etienne, France"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:99
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1403
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1425
 #, c-format
 msgid "Unknown"
 msgstr "Inconnu"
@@ -61132,7 +61153,7 @@ msgstr "Voir toutes les modifications en attente de lecteurs"
 msgid "View all plugins"
 msgstr "Voir tous les plugiciels"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:96
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:102
 #, c-format
 msgid "View analytics"
 msgstr "Afficher les analytiques"
@@ -61508,17 +61529,17 @@ msgstr ""
 "correctement."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Duplicate organization"
 msgstr "Attention&nbsp;: établissement en double"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Duplicate patron"
 msgstr "Attention&nbsp;: utilisateur en doublon"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1447
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1469
 msgid "Warning: Expiration date falls before enrollment date"
 msgstr ""
 "Attention&nbsp;: la date d'expiration est antérieure à la date d'inscription"
@@ -61763,7 +61784,7 @@ msgid "Wednesday"
 msgstr "Mercredi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Wednesdays"
 msgstr "Mercredis"
 
@@ -61776,13 +61797,13 @@ msgstr "Mercredis"
 msgid "Week"
 msgstr "Semaine"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:262
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:268
 #, c-format
 msgid "Weekly - Repeatable holidays"
 msgstr "Hebdomadaire - Jour de fermeture répétable"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Weekly holiday: %s"
 msgstr "Jour de fermeture hebdomadaire&nbsp;:%s"
 
@@ -61972,7 +61993,7 @@ msgstr "Mots : _({ 0 }"
 msgid "Words: _({0}"
 msgstr "Mots : _({0}"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:236
 #, c-format
 msgid "Working day"
 msgstr "Jour ouvrable"
@@ -62085,13 +62106,13 @@ msgstr "Année"
 msgid "Year: "
 msgstr "Année&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:285
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:291
 #, c-format
 msgid "Yearly - Repeatable holidays"
 msgstr "Jours de fermeture répétables (tous les ans)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:349
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
 msgid "Yearly holiday: %s"
 msgstr "Fermeture annuelle&nbsp;: %s"
 
@@ -62113,10 +62134,10 @@ msgstr "Jaune"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:40
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:61
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:131
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:546
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:549
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:561
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:564
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:568
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:586
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:311
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:132
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
@@ -62172,12 +62193,12 @@ msgstr "Jaune"
 msgid "Yes"
 msgstr "Oui"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:881
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:890
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1304
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1309
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1318
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1323
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:903
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1326
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1331
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1340
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1345
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:201
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:208
 #, c-format
@@ -62191,9 +62212,9 @@ msgstr "Oui "
 msgid "Yes and try to override system preferences"
 msgstr "Oui et essayer d'outrepasser la préférences système"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:907
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:911
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:929
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #, c-format
 msgid "Yes if settings allow it"
 msgstr "Oui, si les paramètres le permettent"
@@ -63446,7 +63467,7 @@ msgstr "[ Nouvelle liste ]"
 msgid "[% discount | format ("
 msgstr "[% discount | format ("
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:325
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
@@ -63473,8 +63494,8 @@ msgid ""
 msgstr ""
 "[%% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles "
 "|| CAN_user_tools_view_system_logs || CAN_user_tools_edit_news || "
-"CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( "
-"Koha.ArePluginsEnabled() && CAN_user_plugins_tool ) || "
+"CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha."
+"ArePluginsEnabled() && CAN_user_plugins_tool ) || "
 "CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %%] "
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:153
@@ -63532,9 +63553,9 @@ msgstr ""
 "CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons || "
 "CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || "
 "CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons || "
-"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || ( "
-"CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') "
-") ) %%] "
+"CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || "
+"( CAN_user_tools_batch_upload_patron_images && Koha."
+"Preference('patronimages') ) ) %%] "
 
 #: intranet-tmpl/prog/en/includes/country-list.inc:1
 #, c-format
@@ -63751,7 +63772,7 @@ msgstr "existe déjà dans la base de données"
 msgid "already has a hold"
 msgstr "A déjà une réservation"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:44
 #, c-format
 msgid "analytics."
 msgstr "analytique."
@@ -65616,7 +65637,7 @@ msgid "peso sign"
 msgstr "symbole du peso"
 
 #. INPUT type=submit name=phony_submit
-#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:218
+#: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:228
 msgid "phony_submit"
 msgstr "phony_submit"
 
@@ -65995,7 +66016,7 @@ msgstr "statut_5"
 msgid "styles"
 msgstr "styles"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:291
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:285
 #, c-format
 msgid "subfield ignored"
