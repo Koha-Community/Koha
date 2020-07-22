@@ -80,5 +80,21 @@
                 }
             });
         });
+
+        // jQuery Datepicker - a11y: Map arrow keys
+        var doKeyDown = $.datepicker._doKeyDown
+        $.extend($.datepicker, {
+            _doKeyDown: function(event) {
+                if (event.which === $.ui.keyCode.LEFT ||
+                    event.which === $.ui.keyCode.RIGHT ||
+                    event.which === $.ui.keyCode.UP ||
+                    event.which === $.ui.keyCode.DOWN) {
+                    event.ctrlKey = true;
+                    doKeyDown(event);
+                } else {
+                    doKeyDown(event);
+                }
+            }
+        });
     //]]>
 </script>
