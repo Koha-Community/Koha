@@ -208,7 +208,7 @@ $holds = $patron->holds;
 my $reserveid = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 ModReserveMinusPriority( $itemnumber, $reserveid );
 $holds = $patron->holds;
-is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
+is( $holds->search({ itemnumber => $itemnumber })->count, 1, "Test ModReserveMinusPriority()" );
 
 $holds = $biblio->holds;
 $hold = $holds->next;
