@@ -540,7 +540,10 @@ my $holds = $biblio->holds;
 $template->param( holdcount => $holds->count );
 
 # Check if there are any ILL requests connected to the biblio
-my $illrequests = Koha::Illrequests->search({ biblio_id => $biblionumber });
+my $illrequests =
+    C4::Context->preference('ILLModule')
+  ? Koha::Illrequests->search( { biblio_id => $biblionumber } )
+  : [];
 $template->param( illrequests => $illrequests );
 
 my $StaffDetailItemSelection = C4::Context->preference('StaffDetailItemSelection');
