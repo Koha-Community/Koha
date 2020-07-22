@@ -1601,8 +1601,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "Use o texto a seguir para editar como os registros de autoridade controlam os indicadores de campos biblio anexados (e possivelmente o subcampo $ 2). <br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/migration_tools/merge_authority.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2041,10 +2041,6 @@ msgstr "Campos de exibição para registros excluídos após a junção"
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(pode ser o código de localização ou ser deixado em branco para desabilitar)."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/cronjobs/cart_to_shelf.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -5834,9 +5830,9 @@ msgstr "Privacidade"
 msgid "opac.pref Restricted page"
 msgstr "Página restrita"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "Auto-registro"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6162,15 +6158,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "Lista de códigos de tipo de exemplar (separados por espaços) para aqueles que você deseja mostrar o link OpenURL:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "Permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "Não permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "que usuários notifiquem a biblioteca sobre mudanças nas suas informações de contato através do OPAC."
 
@@ -6890,119 +6886,131 @@ msgstr "URL completo do OpenURL (começando com <code>http://</code> ou <code>ht
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "Texto de links OpenURL (ou título da imagem se OpenURLImageLocation estiver definido):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(colunas separadas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> campos de banco de dados</a> não apareceram na tela de modificação do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>NOTA:</strong> Isso precisa que PatronSelfRegistrationDefaultCategory seja definido como um código de categoria de usuário válido."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Permitir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Não permitir"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "que usuário da biblioteca possam registrar ou modificar sua conta através do OPAC."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr " Exibir as informações adicionais a seguir para usuários que irão fazer seu próprio registro via OPAC (é permitido utilizar HTML):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr " (separar colunas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>campos do banco de dados</a> devem ser preenchidas obrigatoriamente na tela de cadastro do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(separar colunas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>campos do banco de dados</a> não serão exibidas na tela de cadastro do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Utilize o código de categoria do usuário"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "como o usuário padrão para os registros feitos via OPAC."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "Considerar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "Não considerar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "E-mail do usuário (borrowers.email) como único em auto-registro. Um e-mail não será aceito se já existir no banco de dados."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/cronjobs/cleanup_database.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(branchcode separado com |)."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "Ative o registro automático para as seguintes bibliotecas:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "Se vazio, todas as bibliotecas serão listadas."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "Exibir e prefill"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "Não exiba e prefill"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "senha e formulário de login depois que um usuário se registrou."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTE:</strong> Esta preferência de sistema requer o cronjob do <code>misc/cronjobs/cleanup_database.pl</code>. Peça ao administrador do sistema para avaliar."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "Não exigir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Exigir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "que um usuário auto-cadastrante se verifique via e-mail."
 

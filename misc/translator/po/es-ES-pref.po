@@ -2,9 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2020-05-17 13:48+0000\n"
-"Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community.org>\n"
+"PO-Revision-Date: 2020-07-21 04:18+0000\n"
+"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1589723290.756860\n"
+"X-POOTLE-MTIME: 1595305117.349238\n"
 "X-Pootle-Path: /es/18.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1601,8 +1602,11 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "Utilice el siguiente texto para editar cómo los registros de autoridad controlan los indicadores de los campos bibliográfcos adjuntos (y posiblemente subcampo $2).<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/migration_tools/merge_authority.pl</code>. Pídale al administrador del sistema que lo programe."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
+"programada o cronjob <code>misc/cronjobs/merge_authorities.pl</code>. Pídale "
+"al administrador del sistema que lo programe."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -1770,7 +1774,7 @@ msgstr "Estructura de registro"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref Spine Labels"
-msgstr "Etiquetas de lomo"
+msgstr "Marbetes/Tejuelos"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# Display"
@@ -2043,10 +2047,6 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or 
 msgstr "(debe ser un código de ubicación, o en blanco para deshabilitar)."
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/cart_to_shelf.pl</code>. Pídale al administrador del sistema que la programe."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
 msgstr "Cuando se crean los ítems, asignarles ubicación temporaria en"
 
@@ -2166,7 +2166,7 @@ msgstr "la visualización de los items en dos pestañas, donde la primer pestañ
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# When using the quick spine label printer,"
-msgstr "Cuando utilice la impresión rápida de marbetes,"
+msgstr "Cuando utilice la impresión rápida de marbetes/tejuelos,"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelAutoPrint# automatically pop up a print dialog."
@@ -2186,7 +2186,7 @@ msgstr "(Ingrese en columnas desde las tablas <code>biblio</code>, <code>biblioi
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelFormat# Include the following fields on a quick-printed spine label:"
-msgstr "Incluya los siguientes campos en un marbete rápido:"
+msgstr "Incluya los siguientes campos en un marbete/tejuelo rápido:"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# Display"
@@ -2198,7 +2198,9 @@ msgstr "No mostrar"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# buttons on the bib details page to print item spine labels."
-msgstr "botones en la página de detalles de registros para imprimir etiquetas de lomo."
+msgstr ""
+"botones en la página de detalles de los registros bibliográficos para "
+"imprimir el marbete/tejuelo del ítem."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces."
@@ -4083,15 +4085,15 @@ msgstr "días después de su envío."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
-msgstr ""
+msgstr "No interceptar"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Trap"
-msgstr ""
+msgstr "Interceptar"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
-msgstr ""
+msgstr "ítems que no se prestan pero se pueden reservar ( notforloan < 0 ) para completar reservas"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -5834,9 +5836,9 @@ msgstr "Privacidad"
 msgid "opac.pref Restricted page"
 msgstr "Página restringida"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "Auto-registro"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr "Auto-registro y modificación"
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6162,15 +6164,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "Lista de códigos de tipo de ítem (separados por espacios) para aquellos que quiera mostrar un enlace OpenURL:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "Permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "No permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "a usuarios notificar a la biblioteca los cambios en su información de contacto en el OPAC."
 
@@ -6890,119 +6892,134 @@ msgstr "URL de resolución OpenURL completo (comenzando con <code>http://</code>
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "Texto de los enlaces OpenURL (o el título de imagen si OpenURLImageLocation está definida):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(separar columnas con |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "La siguiente <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>columna de la base de datos</a> no aparecerá en la pantalla de auto-modificación del usuario:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>NOTA:</strong> Esto necesita que PatronSelfRegistrationDefaultCategory esté establecido a un código de categoría de usuario válido."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Permitir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "No permitir"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "que los usuarios de la biblioteca registren o modifiquen su cuenta a través del OPAC."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
+"que los usuarios de la biblioteca se registren y creen una cuenta a través "
+"del OPAC."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "Mostrar las siguientes instrucciones adicionales para aquellos usuarios que se auto-registran a través del OPAC ( se permite HTML ):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "(separar columnas con |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "La siguiente <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>columna de la base de datos</a> debe ser llenada en la pantalla de entrada del usuario:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(separar columnas con |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "La siguiente <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>columna de la base de datos</a> no aparecerá en la pantalla de auto-registrado del usuario:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr "No requerir"
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr "Requerir"
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+"a los usuarios confirmar su dirección de email ingresando la misma dos veces."
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Utilizar el código de categoría de usuario"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "como predeterminado para aquellos usuarios que se registran a través del OPAC."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "Considere"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "No considere"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "el correo electrónico del usuario (borrowers.email) como único en el auto registro. Un correo electrónico no será aceptado si ya existe en la base de datos."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Pídale al administrador que la programe."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr "Eliminar usuarios que estén aun en la categoría indicada por PatronSelfRegistrationDefaultCategory"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr "días luego de la creación de la cuenta."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(separe branchcode con |)."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "Habilite el auto registro para las siguientes bibliotecas:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "Si deja en blanco, todas las bibliotecas serán listadas"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "Mostrar y prellenar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "No mostrar y prellenar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "la contraseña y formulario de inicio de sesión después de que un usuario se haya registrado."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Pídale al administrador que la programe."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "No requerir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Requerir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "que un usuario auto-registrado verifique su identidad a través del correo electrónico."
 
@@ -9065,4 +9082,3 @@ msgstr "Solo devolver"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "filas del reporte solicitado a través del web service de reportes."
-
