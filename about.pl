@@ -43,6 +43,7 @@ use C4::Installer::PerlModules;
 use Koha;
 use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Acquisition::Currencies;
+use Koha::BiblioFrameworks;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Caches;
@@ -50,6 +51,7 @@ use Koha::Config::SysPrefs;
 use Koha::Illrequest::Config;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::Logger;
+use Koha::Filter::MARC::ViewPolicy;
 
 use C4::Members::Statistics;
 
@@ -516,6 +518,32 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
             );
         }
     }
+}
+
+{
+    my @frameworkcodes = Koha::BiblioFrameworks->search->get_column('frameworkcode');
+    my @hidden_biblionumbers;
+    push @frameworkcodes, ""; # it's not in the biblio_frameworks table!
+    for my $frameworkcode ( @frameworkcodes ) {
+        my $shouldhidemarc_opac = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+            {
+                frameworkcode => $frameworkcode,
+                interface     => "opac"
+            }
+        );
+        push @hidden_biblionumbers, { frameworkcode => $frameworkcode, interface => 'opac' }
+          if $shouldhidemarc_opac->{biblionumber};
+
+        my $shouldhidemarc_intranet = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+            {
+                frameworkcode => $frameworkcode,
+                interface     => "intranet"
+            }
+        );
+        push @hidden_biblionumbers, { frameworkcode => $frameworkcode, interface => 'intranet' }
+          if $shouldhidemarc_intranet->{biblionumber};
+    }
+    $template->param( warnHiddenBiblionumbers => \@hidden_biblionumbers );
 }
 
 my %versions = C4::Context::get_versions();
