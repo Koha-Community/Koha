@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2020-05-15 16:51-0300\n"
-"PO-Revision-Date: 2020-06-06 10:52+0000\n"
+"PO-Revision-Date: 2020-07-12 11:39+0000\n"
 "Last-Translator: Alexander <alexjohn2000@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: te\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1591440738.925344\n"
+"X-POOTLE-MTIME: 1594553995.347152\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -1479,7 +1479,7 @@ msgstr "హీ కమ్యూనిటీ వెబ్‌సైట్‌లో 
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# "
-msgstr " "
+msgstr "admin.pref#UsageStatsLibraryType# "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
@@ -1666,8 +1666,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "జతచేయబడిన బిబ్లియో క్షేత్రాల సూచికలను అధికారం రికార్డులు ఎలా నియంత్రిస్తాయో సవరించడానికి క్రింది వచనాన్ని ఉపయోగించండి (మరియు బహుశా సబ్ఫీల్డ్ $2).<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr " <br><strong>NOTE:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/migration_tools/merge_authority.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2106,10 +2106,6 @@ msgstr "విలీనం తర్వాత తొలగించిన రి
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(స్థాన కోడ్ అయి ఉండాలి లేదా నిలిపివేయడానికి ఖాళీగా ఉండాలి)."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr " <br><strong>NOTE:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -6125,9 +6121,9 @@ msgstr "opac.pref గోప్యతా"
 msgid "opac.pref Restricted page"
 msgstr "opac.pref పరిమితం చేయబడిన పేజీ"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "opac.pref స్వీయ నమోదు"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6489,15 +6485,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "మీరు OpenURL లింక్‌ను చూపించాలనుకునేవారి కోసం అంశం రకం కోడ్‌ల జాబితా (ఖాళీలతో వేరుచేయబడింది):"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "అనుమతించు"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "అనుమతించవద్దు"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "ఒపాక్ నుండి వారి సంప్రదింపు సమాచారంలో మార్పుల లైబ్రరీకి తెలియజేయడానికి పోషకులు."
 
@@ -7198,8 +7194,12 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "ప్రారంభించు"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr "కోహా ఒపాక్ పబ్లిక్ గా. ప్రైవేట్ ఒపాక్‌కు ఒపాక్‌ను యాక్సెస్ చేయడానికి ముందు ప్రామాణీకరణ అవసరం."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
+msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7369,119 +7369,131 @@ msgstr " OpenURL పరిష్కరిణి యొక్క పూర్త�
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "OpenURL లింకుల వచనం (లేదా OpenURLImageLocation నిర్వచించబడితే చిత్ర శీర్షిక):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(| తో ప్రత్యేక నిలువు వరుసలు)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr " కిందివి <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>డేటాబేస్ నిలువు వరుసలు</a> పోషకుడి స్వీయ-మార్పు తెరపై కనిపించదు:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr " <br><strong>గమనిక:</strong> దీనికి చెల్లుబాటు అయ్యే పోషక వర్గం కోడ్‌కు సెట్ చేయడానికి PatronSelfRegistrationDefaultCategory అవసరం."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "అనుమతించు"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "అనుమతించవద్దు"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "లైబ్రరీ పోషకులు తమ ఖాతాను ఒపాక్ ద్వారా నమోదు చేసుకోవడానికి లేదా సవరించడానికి."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "ఒపాక్ ద్వారా స్వయంగా నమోదు చేసుకున్న పోషకుల కోసం ఈ క్రింది అదనపు సూచనలను ప్రదర్శించండి (HTML అనుమతించబడుతుంది):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "(| తో ప్రత్యేక నిలువు వరుసలు)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr " కిందివి <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>డేటాబేస్ నిలువు వరుసలు</a> పోషక ప్రవేశ తెరపై తప్పక నింపాలి:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(| తో ప్రత్యేక నిలువు వరుసలు)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr " కిందివి <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> పోషకుడి స్వీయ-నమోదు తెరపై కనిపించదు:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "పోషక వర్గం కోడ్‌ను ఉపయోగించండి"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "ఒపాక్ ద్వారా నమోదు చేయబడిన పోషకుల కోసం డిఫాల్ట్ పోషక వర్గంగా."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "పరిగణించండి"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "పరిగణించవద్దు"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "స్వీయ నమోదులో ప్రత్యేకమైన పోషకుడి ఇమెయిల్ (రుణగ్రహీతలు. ఇమెయిల్). డేటాబేస్లో ఇప్పటికే ఇమెయిల్ ఉంటే అది అంగీకరించబడదు."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr " <br><strong>గమనిక:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/cleanup_database.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr "PatronSelfRegistrationDefaultCategory సూచించిన వర్గంలో ఇప్పటికీ పోషకులను తొలగించండి"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr "ఖాతా సృష్టించిన రోజుల తరువాత."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(| తో ప్రత్యేక బ్రాంచ్‌కోడ్)."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "కింది లైబ్రరీల కోసం స్వీయ నమోదును ప్రారంభించండి:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "ఖాళీగా ఉంటే, అన్ని లైబ్రరీలు జాబితా చేయబడతాయి."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "ప్రదర్శన మరియు ప్రీఫిల్"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "ప్రదర్శించవద్దు మరియు ప్రీఫిల్ చేయవద్దు"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "పాస్వర్డ్ మరియు లాగిన్ ఫారం ఒక పోషకుడు స్వీయ నమోదు చేసిన తర్వాత."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr " <br><strong>గమనిక:</strong> ఈ సిస్టమ్ ప్రాధాన్యత అవసరం <code>misc/cronjobs/cleanup_database.pl</code> cronjob. దీన్ని షెడ్యూల్ చేయడానికి మీ సిస్టమ్ నిర్వాహకుడిని అడగండి."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "అవసరం లేదు"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "అవసరం"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "స్వీయ-రిజిస్ట్రేషన్ పోషకుడు ఇమెయిల్ ద్వారా తమను తాము ధృవీకరించుకుంటాడు."
 
@@ -9596,6 +9608,18 @@ msgstr "ప్రారంభించు"
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
 msgstr " the /public API యొక్క నేమ్‌స్పేస్."
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Enable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
+msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTdefaultPageSize# Set the default number of results returned by the REST API endpoints to"

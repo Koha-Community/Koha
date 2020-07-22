@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-06-17 05:22+0000\n"
+"PO-Revision-Date: 2020-06-30 03:56+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1592371363.183219\n"
+"X-POOTLE-MTIME: 1593489407.141179\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1669,8 +1669,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr ""
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного сценарію <code>misc/cronjobs/merge_authority.pl</code>. Попросіть системного адміністратора запланувати його."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2109,10 +2109,6 @@ msgstr ""
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr " (повинно бути кодом розташування, або порожнім якщо не використовується)."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>Примітка:</strong> цей системний параметр вимагає періодичного сценарію <code>misc/cronjobs/cart_to_shelf.pl</code>. Попросіть системного адміністратора запланувати його."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -2842,7 +2838,7 @@ msgstr ""
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Title"
-msgstr ""
+msgstr "Назва"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# Volume"
@@ -2874,7 +2870,7 @@ msgstr ""
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Title"
-msgstr ""
+msgstr "Назва"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsItemOnly# Volume"
@@ -2906,7 +2902,7 @@ msgstr ""
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Title"
-msgstr ""
+msgstr "Назва"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFieldsRecordOnly# Volume"
@@ -6122,15 +6118,15 @@ msgstr "Правила"
 
 # OPAC > Privacy
 msgid "opac.pref Privacy"
-msgstr "Таємність"
+msgstr "Конфіденційність"
 
 # OPAC > Restricted page
 msgid "opac.pref Restricted page"
 msgstr "Обмежена сторінка"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "Самостійна реєстрація"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6146,7 +6142,7 @@ msgstr "Не дозволяти"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor\"."
-msgstr "користувачам вибирати власні налаштування таємності при показі видач користувача поручителю."
+msgstr "користувачам вибирати власні налаштування конфіденційності при показі видач користувача поручителю."
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
@@ -6158,7 +6154,7 @@ msgstr "Не дозволяти"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor\"."
-msgstr "користувачам вибирати власні налаштування таємності при показі штрафів користувача поручителю."
+msgstr "користувачам вибирати власні налаштування конфіденційності при показі штрафів користувача поручителю."
 
 # OPAC > Policy
 msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# Allow"
@@ -6492,15 +6488,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "Перелік кодів типів одиниць (розділених пробілами) для яких необхідно показувати OpenURL-посилання: "
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "Дозволити"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "Не дозволяти"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "користувачам повідомляти бібліотеку з електронного каталогу про зміну своїх контактних даних."
 
@@ -6698,7 +6694,7 @@ msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr ""
+msgstr "Назва"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACURLOpenInNewWindow# When patrons click on a link to another website from your OPAC (like Amazon or OCLC),"
@@ -7201,7 +7197,11 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "Дозволити"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
 msgstr ""
 
 # OPAC > Policy
@@ -7372,119 +7372,131 @@ msgstr ""
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> не будуть відображатись на екрані самостійної реєстрації користувача: "
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>Примітка:</strong> це потребує встановленні у „PatronSelfRegistrationDefaultCategory“ дійсного коду категорії користувача."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Дозволити"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Не дозволяти"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "користувачам бібліотеки зареєструвати або змінити свій обліковий запис в електронному каталозі."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> є обовʼязковими до заповнення на екрані реєстрації користувача: "
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> не будуть відображатись на екрані самостійної реєстрації користувача: "
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>Примітка: </strong> Для цього системного параметра необхідне виконання сценарію <code>misc/cronjobs/cleanup_database.pl</code> у періодичних завданнях (cronjob). Попросіть системного адміністратора запланувати його."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr ""
 
@@ -7818,7 +7830,7 @@ msgstr "Загальне"
 
 # Patrons > Privacy
 msgid "patrons.pref Privacy"
-msgstr "Таємність"
+msgstr "Конфіденційність"
 
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
@@ -8138,7 +8150,7 @@ msgstr "Використовувати таку URL-адресу "
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)"
-msgstr "щоб послатися на Ваші локальну правила таємності в повідомленнях про таємність та захист даних (якщо Ви застосовуєте правила GDPR, переконайтесь, що ця сторінка не заблокована)."
+msgstr "щоб послатися на Ваші локальні правила конфіденційності в повідомленнях про конфіденційність та захист даних (якщо Ви застосовуєте правила GDPR, переконайтесь, що ця сторінка не заблокована)."
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
@@ -8598,7 +8610,7 @@ msgstr "ранжуванням"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# title"
-msgstr "заголовком"
+msgstr "назвою"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# total number of checkouts"
@@ -8806,7 +8818,7 @@ msgstr "ранжуванням"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# title"
-msgstr "заголовком"
+msgstr "назвою"
 
 # Searching > Results Display
 msgid "searching.pref#defaultSortField# total number of checkouts"
@@ -9598,6 +9610,18 @@ msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Enable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
 msgstr ""
 
 # Web services > REST API

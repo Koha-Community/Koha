@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2020-05-20 17:55+0000\n"
-"Last-Translator: Viviane <viviane.rosa@saobernardo.sp.gov.br>\n"
+"PO-Revision-Date: 2020-07-12 21:47+0000\n"
+"Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1589997354.669858\n"
+"X-POOTLE-MTIME: 1594590446.573022\n"
 "X-Pootle-Path: /pt_BR/18.05/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -26,15 +26,15 @@ msgstr "Política accounting.pref"
 
 # Accounting > Policy
 msgid "accounting.pref#AccountAutoReconcile# Do"
-msgstr "accounting.pref # AccountAutoReconcile # Faça"
+msgstr "Faça"
 
 # Accounting > Policy
 msgid "accounting.pref#AccountAutoReconcile# Do not"
-msgstr "accounting.pref # AccountAutoReconcile # Não faça"
+msgstr "Não faça"
 
 # Accounting > Policy
 msgid "accounting.pref#AccountAutoReconcile# reconcile patron balances automatically on each transaction adding debits or credits."
-msgstr "accounting.pref # AccountAutoReconcile # reconcilia os saldos dos usuários automaticamente em cada transação, adicionando débitos ou créditos."
+msgstr "reconcilia os saldos dos usuários automaticamente em cada transação, adicionando débitos ou créditos."
 
 # Accounting > Policy
 msgid "accounting.pref#FinePaymentAutoPopup# Do"
@@ -1669,8 +1669,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "Use o texto a seguir para editar como os registros de autoridade controlam os indicadores de campos biblio anexados (e possivelmente o subcampo $ 2). <br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/migration_tools/merge_authority.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -1928,7 +1928,7 @@ msgstr "Incluir os seguintes campos ao exportar BibTeX, "
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#BibtexExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
-msgstr "cataloguing.pref#BibtexExportAdditionalFields#  Para especificar multiplas marcações tipo tags/subfields (etiquetas/subcampos), como alvos para uma repetição, use o seguinte formato:  BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+msgstr "Para especificar multiplas marcações tipo tags/subfields (etiquetas/subcampos), como alvos para uma repetição, use o seguinte formato:  BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#BibtexExportAdditionalFields# Use '@' ( with quotes ) as the BT_TAG to replace the bibtex record type with a field value of your choosing."
@@ -2111,10 +2111,6 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or 
 msgstr "(pode ser o código de localização ou ser deixado em branco para desabilitar)."
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/cronjobs/cart_to_shelf.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
 msgstr "Quando exemplares são criados, dê-lhes a localização temporária de"
 
@@ -2198,11 +2194,11 @@ msgstr "Incluir os seguintes campos ao exportar o RIS"
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#RisExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
-msgstr "cataloguing.pref#RisExportAdditionalFields# para especificar multiplas entradas tags/subfields (etiquetas/subcampos) como alvos para uma repetição RIS tag, use o seguinte formato: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+msgstr "para especificar multiplas entradas tags/subfields (etiquetas/subcampos) como alvos para uma repetição RIS tag, use o seguinte formato: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#RisExportAdditionalFields# Use of TY ( record type ) as a key will <i>replace</i> the default TY with the field value of your choosing."
-msgstr "cataloguing.pref#RisExportAdditionalFields# Uso de TY (tipo de registro) como uma chave <i>replace</i> substituirá o padrão TY com o valor do campo de sua escolha."
+msgstr "Uso de TY (tipo de registro) como uma chave <i>replace</i> substituirá o padrão TY com o valor do campo de sua escolha."
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#RisExportAdditionalFields# Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )"
@@ -2250,7 +2246,7 @@ msgstr "não fazer"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelFormat# (Enter in columns from the <code>biblio</code>, <code>biblioitems</code> or <code>items</code> tables, surrounded by &lt; and &gt;.)"
-msgstr "(Insira nas colunas de <code>biblio</code>, <code>biblioitems</code> ou tabelas de <code>itens</code>, rodeadas de &lt; and &gt;.)"
+msgstr "(Insira nas colunas de <code>biblio</code>, <code>biblioitems</code> ou tabelas de <code>exemplares</code>, rodeadas de &lt; and &gt;.)"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelFormat# Include the following fields on a quick-printed spine label:"
@@ -2418,7 +2414,7 @@ msgstr "Mapear o subcampo MARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "cataloguing.pref#itemcallnumber#para o número de chamada de um item. (Isso pode conter vários subcampos para procurar; por exemplo, <code>082ab</code> procuraria nos 082 subcampos a e b.) </br> Nota: A ordem dos subcampos no registro será preservada.<br />Exemplos (para registros MARC21): <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong> LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>do registro do item</strong>: <code>852hi</code>"
+msgstr "para o número de chamada de um item. (Isso pode conter vários subcampos para procurar; por exemplo, <code>082ab</code> procuraria nos 082 subcampos a e b.) </br> Nota: A ordem dos subcampos no registro será preservada.<br />Exemplos (para registros MARC21): <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong> LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>do registro do item</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -3158,7 +3154,7 @@ msgstr "Avise os bibliotecários de que um usuário tem reivindicações de reto
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
-msgstr "ítens"
+msgstr "exemplares."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -3647,11 +3643,11 @@ msgstr "da lista \"Reter para puxar\""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# from the batch item modification tool"
-msgstr "da ferramenta de modificação de itens em lote"
+msgstr "da ferramenta de modificação de exemplares em lote"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# from the items tab of the catalog module"
-msgstr "na guia itens do módulo de catálogo"
+msgstr "na guia exemplares do módulo de catálogo"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# from the longoverdue cronjob"
@@ -4279,7 +4275,7 @@ msgstr "Não bloquear"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TransfersBlockCirc# staff from continuing to checkin items when a transfer is triggered."
-msgstr "funcionários continuem a fazer o check-in de itens quando uma transferência for acionada."
+msgstr "funcionários continuem a fazer o devolução de exemplares quando uma transferência for acionada."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersMaxDaysWarning# Show a warning on the \"Transfers to Receive\" screen if the transfer has not been received"
@@ -4291,15 +4287,15 @@ msgstr "dias após o envio."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
-msgstr "circulation.pref #TrapHoldsOnOrder # Não interceptar"
+msgstr "Não colocar"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Trap"
-msgstr "circulation.pref#TrapHoldsOnOrder# interceptar"
+msgstr "Colocar"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
-msgstr "circulation.pref#TrapHoldsOnOrde # itens que não são para empréstimo, mas são retidos ( notforloan <0 ) para preencher retenções."
+msgstr "exemplares que não são para empréstimo, mas são retidos ( notforloan <0 ) para preencher retenções."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -6128,9 +6124,9 @@ msgstr "Privacidade"
 msgid "opac.pref Restricted page"
 msgstr "Página restrita"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "Auto-registro"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6250,7 +6246,7 @@ msgstr "Exibir"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
-msgstr "opac.pref#DisplayOPACiconsXSLT# os ícones e descrições de formato, público e tipo de material nos resultados XSLT MARC21 e páginas de detalhes no OPAC."
+msgstr "os ícones e descrições de formato, público e tipo de material nos resultados XSLT MARC21 e páginas de detalhes no OPAC."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -6492,15 +6488,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "Lista de códigos de tipo de exemplar (separados por espaços) para aqueles que você deseja mostrar o link OpenURL:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "Permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "Não permitir"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "que usuários notifiquem a biblioteca sobre mudanças nas suas informações de contato através do OPAC."
 
@@ -6806,7 +6802,7 @@ msgstr "para anular configurações específicas da folha de estilos padrão (de
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
-msgstr "Tipos de itens"
+msgstr "Tipos de exemplares"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Language"
@@ -6834,7 +6830,7 @@ msgstr "Subtipos"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Item types"
-msgstr "Tipos de itens"
+msgstr "Tipos de exemplares"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Language"
@@ -7201,8 +7197,12 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "Ativar"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr "Koha OPAC como público. O OPAC privado requer autenticação antes de acessar o OPAC."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
+msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7372,119 +7372,131 @@ msgstr "URL completo do OpenURL (começando com <code>http://</code> ou <code>ht
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "Texto de links OpenURL (ou título da imagem se OpenURLImageLocation estiver definido):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(colunas separadas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> campos de banco de dados</a> não apareceram na tela de modificação do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>NOTA:</strong> Isso precisa que PatronSelfRegistrationDefaultCategory seja definido como um código de categoria de usuário válido."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Permitir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Não permitir"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "que usuário da biblioteca possam registrar ou modificar sua conta através do OPAC."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr " Exibir as informações adicionais a seguir para usuários que irão fazer seu próprio registro via OPAC (é permitido utilizar HTML):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr " (separar colunas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>campos do banco de dados</a> devem ser preenchidas obrigatoriamente na tela de cadastro do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(separar colunas com |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "Os seguintes <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>campos do banco de dados</a> não serão exibidas na tela de cadastro do usuário:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Utilize o código de categoria do usuário"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "como o usuário padrão para os registros feitos via OPAC."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "Considerar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "Não considerar"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "E-mail do usuário (borrowers.email) como único em auto-registro. Um e-mail não será aceito se já existir no banco de dados."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclusão da linha <code>misc/cronjobs/cleanup_database.pl</code> no cronjob. Peça ao administrador do sistema para avaliar."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
-msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Exclua os clientes ainda na categoria indicada por PatronSelfRegistrationDefaultCategory"
+msgstr "Exclua os clientes ainda na categoria indicada por PatronSelfRegistrationDefaultCategory"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
-msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# dias após a criação da conta."
+msgstr "dias após a criação da conta."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(branchcode separado com |)."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "Ative o registro automático para as seguintes bibliotecas:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "Se vazio, todas as bibliotecas serão listadas."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "Exibir e prefill"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "Não exiba e prefill"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "senha e formulário de login depois que um usuário se registrou."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOTE:</strong> Esta preferência de sistema requer o cronjob do <code>misc/cronjobs/cleanup_database.pl</code>. Peça ao administrador do sistema para avaliar."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "Não exigir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Exigir"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "que um usuário auto-cadastrante se verifique via e-mail."
 
@@ -8878,11 +8890,11 @@ msgstr "últimos fascículos de um periódicos no OPAC."
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# Do"
-msgstr "serials.pref#PreserveSerialNotes# Permitir"
+msgstr "Permitir"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# Do not"
-msgstr "serials.pref#PreserveSerialNotes# Não permitir"
+msgstr "Não permitir"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# prefill the notes from the last 'Arrived' serial when generating the next 'Expected' issue."
@@ -9046,7 +9058,7 @@ msgstr "Exibir"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
-msgstr "staff_client.pref#DisplayIconsXSLT# os ícones e descrições de formato, público e tipo de material nos resultados XSLT MARC21 e páginas de detalhes no cliente da equipe."
+msgstr "os ícones e descrições de formato, público e tipo de material nos resultados XSLT MARC21 e páginas de detalhes no cliente da equipe."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9178,7 +9190,7 @@ msgstr "Exibir listas na interface administrativa usando estilo XSLT em:"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>Put a path to define a xslt file</li><li>Put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr "staff_client.pref#XSLTResultsDisplay# <br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" para o padrão</li><li>Coloque um caminho para definir um arquivo xslt</li><li>Coloque um URL para uma folha de estilo específica externa.</li></ul>{langcode} ser substituído pelo idioma atual da interface"
+msgstr "<br />Opções:<ul><li>Insira \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" para o padrão</li><li>Coloque um caminho para definir um arquivo xslt</li><li>Coloque um URL para uma folha de estilo específica externa.</li></ul>{langcode} ser substituído pelo idioma atual da interface"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# Display results in the staff client using XSLT stylesheet at: "
@@ -9318,7 +9330,7 @@ msgstr "Dividir códigos de barras nos seguintes caracteres separadores"
 
 # Tools > Barcodes
 msgid "tools.pref#BarcodeSeparators# in batch item modification and inventory.<br/>Note: Type \\r for carriage return, \\n for newline and \\s for whitespace. Possible candidates to include also are pipe char |, hyphen (precede with backslash), comma, semicolon, dot, etc."
-msgstr "na modificação e no estoque de itens em lote. <br/> Nota: Digite \\ r para retorno de carro, \\ n para nova linha e \\ s para espaço em branco. Os possíveis candidatos a incluir também são pipe |, hífen (preceder com barra invertida), vírgula, ponto e vírgula, ponto etc."
+msgstr "na modificação e no estoque de exemplares em lote. <br/> Nota: Digite \\ r para retorno de carro, \\ n para nova linha e \\ s para espaço em branco. Os possíveis candidatos a incluir também são pipe |, hífen (preceder com barra invertida), vírgula, ponto e vírgula, ponto etc."
 
 # Tools > Patron cards
 msgid "tools.pref#ImageLimit# Limit the number of creator images stored in the database to"
@@ -9599,6 +9611,18 @@ msgstr "Habilitar"
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
 msgstr "o /publico namespace do API."
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Enable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
+msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTdefaultPageSize# Set the default number of results returned by the REST API endpoints to"

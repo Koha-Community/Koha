@@ -1670,8 +1670,8 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "authorities.pref#AuthorityControlledIndicators# Օգտագործիր հետևյալ տեքստը խմբագրելու թե ինչպես են հեղինակավոր գրառումները վերահսկում կցված biblio դաշտերի ինդիկատորներին (և հնարավոր է $2 ենթադաշտը)։<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> Համակարգի այս նախապատվությունը պահանջում է<code>misc/migration_tools/merge_authority.pl</code> կռոն աշխատանք։ Հարցրու համակարգի կառավարչին այն պլանավորելու համար։"
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2110,10 +2110,6 @@ msgstr "cataloguing.pref#MergeReportFields# ձուլումից հետո ջնջվ
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "cataloguing.pref#NewItemsDefaultLocation# (պետք է լինի տեղաբաշխման կոդ կամ դատարկ՝ արգելելու համար)։"
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "ataloguing.pref#NewItemsDefaultLocation# <br><strong>ՆՇՈՒՄ:</strong> Համակարգային այս նախապատվությունը պահանջում է <code>misc/cronjobs/cart_to_shelf.pl</code> կռոն աշխատանք։ Ասա կառավարչին, որ այն նախատեսի։"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -6129,9 +6125,9 @@ msgstr "opac.pref Անձնական գաղտնիություն"
 msgid "opac.pref Restricted page"
 msgstr "opac.pref Արգելված էջ"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "opac.pref Ինքնա գրանցում"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr ""
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6493,15 +6489,15 @@ msgstr "opac.pref#OPACOpenURLItemTypes# <br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "opac.pref#OPACOpenURLItemTypes# Նյութերի տեսակների կոդերի ցանկը (առանձնացված բացատներով), որոնց համար ցանկանում եք ցույց տալ OpenURL հղումը:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "opac.pref#OPACPatronDetails# Թույլատրի"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "opac.pref#OPACPatronDetails# Մի թույլատրի"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "opac.pref#OPACPatronDetails# ընթերցողները ՀՕԱՔ-ից պետք է զգուշացնեն գրադարանին իրենց կապի տեղեկատվության փոփոխության մասին։"
 
@@ -7202,8 +7198,12 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "opac.pref#OpacPublic# Թույլատրի"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr "opac.pref#OpacPublic# Կոհա ՀՕԱՔ-ը հանրային է։ Մասնավոր ՀՕԱՔ-ը պահանջում է մինչ ՀՕԱՔ մուտքը փոխճանարում։"
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
+msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7373,119 +7373,131 @@ msgstr "opac.pref#OpenURLResolverURL# OpenURL լուծիչի ամբողջակա�
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "opac.pref#OpenURLText# OpenURL հղումների տեքստը (կամ պատկերի վերնագիրը, եթե OpenURLImageLocation սահմանված է):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "opac.pref#PatronSelfModificationBorrowerUnwantedField# (բաժանիր սյունակները ըստ |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "opac.pref#PatronSelfModificationBorrowerUnwantedField# Հետևյալը <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> չի հայտնվի ընթերցողի ինքնաթարմացման պաստառին:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "opac.pref#PatronSelfRegistration# <br><strong>ՆՇՈՒՄ:</strong> Սա պահանջում է PatronSelfRegistrationDefaultCategory կարգաբերվի հաճախորդի վավեր դասի կոդի։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "opac.pref#PatronSelfRegistration# Թույլատրի"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "opac.pref#PatronSelfRegistration# Մի թույլատրի"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "opac.pref#PatronSelfRegistration# գրադարանի հաճախորդները ՀՕԱՔից գրանցեն կամ ձևափոխեն իրենց հաշիվը։"
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr ""
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (բաժանիր սյունակները ըստ |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# Հետևյալը <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> պետք է լրացվի ընթերցողի մուտքի պաստառից:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (բաժանիր սյունակները ըստ |)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# Հետևյալը <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> չի հայտնվի ընթերցողի ինքնագրանցման պաստառին:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr ""
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr ""
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "opac.pref#PatronSelfRegistrationDefaultCategory# Օգտագործի ընթերցողի դասի կոդը"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "opac.pref#PatronSelfRegistrationDefaultCategory# որպես օգտատիրոջ լռակյաց դաս այն օգտատերերի համար ովքեր գրանցվել են ՀՕԱՔ-ից։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Համարիր"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Մի համարիր"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# (borrowers.email) որպես եզակի ինքնագրանցման ժամանակ։ էլ․ հասցեն չի ընդունվի, եթե այն արդեն առկա է շտեմարանում։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>ՆՇՈՒՄ:</strong> Համակարգային այս նախապատվությունը պահանջում է <code>misc/cronjobs/cleanup_database.pl</code> cronjob։ Հարցրու քո համակարգի կառավարիչին, որ այն նախատեսի։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 msgstr "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "opac.pref#PatronSelfRegistrationLibraryList# (առանձին branchcode որն ունի |)։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "opac.pref#PatronSelfRegistrationLibraryList# Թույլատրի ինքնագրանցումը հետևյալ գրադարանների համար․"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "opac.pref#PatronSelfRegistrationLibraryList# եթե դատարկ է, կթվարկվեն բոլոր գրադարանները։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# Արտածիր և նախապես լրացրու"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# Մի արտածիր և նախապես մի լրացրու"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# գաղտնաբառի և գրանցաբառի ձև ընթերցողի ինքնագրանցումից հետո։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>ՆՇՈՒՄ:</strong> Համակարգի սույն նախապատվությունը պահանջում է <code>misc/cronjobs/cleanup_database.pl</code> միջուկի աշխատանք։ Տեղեկացրու համակարգի կառավարիչին, որ այն նախատեսի։"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# Չի պահանջվում"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# Պահանջվում է"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# որպեսզի ինքնագրանցվող ընթերցողները էլ․ փոստով իրենց հաստատեն։"
 
@@ -9600,6 +9612,18 @@ msgstr "web_services.pref#RESTPublicAPI# Թույլատրել"
 # Web services > REST API
 msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
 msgstr "web_services.pref#RESTPublicAPI# the /public namespace of the API."
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Enable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
+msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTdefaultPageSize# Set the default number of results returned by the REST API endpoints to"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2020-04-03 15:30+0000\n"
+"PO-Revision-Date: 2020-07-17 11:38+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1585927816.264672\n"
+"X-POOTLE-MTIME: 1594985900.064118\n"
 "X-Pootle-Path: /tr/18.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1669,8 +1669,11 @@ msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to
 msgstr "Otorite kayıtlarının ekli bibliyografik kayıt alanlarının (ve muhtemelen $2 alt alanının) göstergelerini nasıl kontrol ettiğini düzenlemek için aşağıdaki metni kullanın.<br>"
 
 # Authorities > General
-msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOT:</strong>Bu sistem tercihi <code>misc/migration_tools/merge_authority.pl</code> cronjob'u nu gerektirir. Sistem yöneticinizden ayarlamasını isteyin."
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+"<br><strong>NOT:</strong>Bu sistem tercihi "
+"<code>misc/cronjobs/merge_authorities.pl</code> cronjob'u nu gerektirir. "
+"Sistem yöneticinizden ayarlamasını isteyin."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2109,10 +2112,6 @@ msgstr "Birleştirmeden sonra silinen kayıtlar için görüntülenecek alanlar"
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(bir yer kodu olmalı, ya da devredışı bırakmak için boş bırakın)."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOT:</strong> Bu sistem tercihi <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob'u nu gerektirir. Sistem yöneticinizden ayarlamasını isteyin."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -4291,15 +4290,15 @@ msgstr "gönderildiğinden sonraki günler."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Don't trap"
-msgstr ""
+msgstr "Tetikleme"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# Trap"
-msgstr ""
+msgstr "Tetikle"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable ( notforloan < 0 ) to fill holds."
-msgstr ""
+msgstr "Ödünç verilmeyen ancak üzerinde ayırtma yapılabilen ( notforloan < 0 ) materyaller."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Examples:<br/>"
@@ -4679,7 +4678,7 @@ msgstr "Dolaşım sayfasındaki bugünkü ödünç verme işlemlerini sıralayı
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# checkout time."
-msgstr ""
+msgstr "Ödünç alma zamanı."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
@@ -6128,9 +6127,9 @@ msgstr "Gizlilik"
 msgid "opac.pref Restricted page"
 msgstr "Kısıtlı sayfa"
 
-# OPAC > Self Registration
-msgid "opac.pref Self Registration"
-msgstr "Self Registration"
+# OPAC > Self registration and modification
+msgid "opac.pref Self registration and modification"
+msgstr "Kendi kendine kayıt ve değişiklik"
 
 # OPAC > Shelf Browser
 msgid "opac.pref Shelf Browser"
@@ -6250,7 +6249,7 @@ msgstr "Göster"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the OPAC."
-msgstr ""
+msgstr "XSLT MARC21 sonuçlarındaki biçim, kullanıcı kitlesi ve materyal türü simgeleri ve açıklamaları ve OPAC'daki ayrıntı sayfaları."
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -6492,15 +6491,15 @@ msgstr "<br />"
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
 msgstr "OpenURL bağlantısını göstermek isteyenler için materyal türü kodlarının (boşluklarla ayrılmış) listesi:"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Allow"
 msgstr "İzin ver"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# Don't allow"
 msgstr "İzin verme"
 
-# OPAC > Features
+# OPAC > Self registration and modification
 msgid "opac.pref#OPACPatronDetails# patrons to notify the library of changes to their contact information from the OPAC."
 msgstr "OPAC üzerindeki iletişim bilgilerini değiştirmek için kütüphaneyi uyaracak kullanıcılar."
 
@@ -7201,8 +7200,16 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "Etkinleştir"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr "Koha OPAC genel olarak. Özel OPAC, OPAC'a erişmeden önce kimlik doğrulaması gerektirir."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
+msgstr ""
+"Genel erişime açık olarak Koha OPAC. Özel OPAC, OPAC'a erişmeden önce kimlik "
+"doğrulaması gerektirir."
+
+# OPAC > Appearance
+msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
+msgstr ""
+"Not: Bu genel API'yi etkilemez, API'yi kontrol etmek için "
+"<code>RESTPublicAnonymousRequests</code>'e bakın."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7372,119 +7379,131 @@ msgstr "OpenURL çözümleyicisinin tam URL'si (<code> http://</code> veya <code
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
 msgstr "OpenURL bağlantılarının metni (veya OpenURLImageLocation tanımlanmışsa resim başlığı):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(sütunları | ile ayırın)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr "Aşağıdaki <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>veritabanı sütunları</a> self-modifikasyon ekranında görünmeyecektir:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
 msgstr "<br><strong>NOT:</strong>Bu, PatronSelfRegistrationDefaultCategory sistem tercihinin geçerli bir kullanıcı kategorisi koduna ayarlanmasını gerektirir."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "İzin ver"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "İzin verme"
 
-# OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "Kütüphane kullanıcılarının OPAC aracılığıyla hesaplarına kayıt olmalarına veya değiştirmelerine."
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
+msgstr "Kütüphane kullanıcılarının OPAC üzerinden bir hesaba kaydolmalarını."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
 msgstr "OPAC vasıtasıyla kendi kaydolan kullanıcılara yönelik aşağıdaki ek talimatları göster (HTML izinli):"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
 msgstr "(sütunları | ile ayırın)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr "Aşağıdaki <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>veritabanı sütunları</a> kullanıcı giriş ekranında doldurulmalıdır:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "(sütunları | ile ayırın)"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr "Aşağıdaki <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>veritabanı sütunları</a> kullanıcının kendi kayıt olma ekranında görünmeyecektir: "
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Do not require"
+msgstr "Gerektirme"
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# Require"
+msgstr "Gerektir"
+
+# OPAC > Self registration and modification
+msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
+msgstr "kullanıcılar e-posta adreslerini iki kez girerek onaylayabilirler."
+
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
 msgstr "Kullanıcı kategori kodunu kullanın"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# as the default patron category for patrons registered via the OPAC."
 msgstr "OPAC aracılığı ile kaydolmuş kullanıcılar için geçerli kullanıcı kategorisi olarak."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Consider"
 msgstr "Dikkate alın"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# Do not consider"
 msgstr "Dikkate almayın"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
 msgstr "Kendi kendine kayıt olmada kullanıcının e-postası (borrowers.email) özgün olmalıdır. Bir e-posta zaten veri tabanında bulunuyorsa kabul edilmeyecektir."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOT:</strong>Bu sistem tercihi, <code>misc/cronjobs/cleanup_database.pl</code> cronjob uygulamasını gerektirir. Sistem yöneticinizden programlamasını isteyin."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
-msgstr ""
+msgstr "Halen PatronSelfRegistrationDefaultCategory tarafından belirtilen kategori içinde bulunan kullanıcıları silin"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days after account creation."
-msgstr ""
+msgstr "hesap oluşturulduktan sonraki günler."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# (separate branchcode with |)."
 msgstr "(şube kodunu | ile ayır)."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# Enable the self registration for the following libraries:"
 msgstr "Aşağıdaki kütüphaneler için kendi kendine kayıt olma işlemini etkinleştirin:"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationLibraryList# If empty, all libraries will be listed."
 msgstr "Boş ise, tüm kütüphaneler listelenir."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Display and prefill"
 msgstr "Görüntüle ve ön dolgu yap"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# Do not display and prefill"
 msgstr "Görüntüleme ve ön dolgu yapma"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "Bir kullanıcı kendi kendini kaydettikten sonra şifre ve giriş formu."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr "<br><strong>NOT:</strong> Bu sistem tercihi, <code>misc/cronjobs/cleanup_database.pl </code> cronjob uygulamasını gerektirir. Sistem yöneticinizden programlamasını isteyin."
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
 msgstr "zorunlu kılma"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "zorunlu kıl"
 
-# OPAC > Self Registration
+# OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "Kendi kendine kaydolan bir kullanıcının e-postayla kendisini doğruladığını."
 
@@ -9046,7 +9065,7 @@ msgstr "Göster"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
-msgstr ""
+msgstr "personel istemcideki XSLT MARC21 sonuçlarındaki ve ayrıntı sayfalarındaki biçim, kitle ve materyal türü simgeleri ve açıklamaları."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9601,6 +9620,20 @@ msgid "web_services.pref#RESTPublicAPI# the /public namespace of the API."
 msgstr "API'nin /public ad alanı."
 
 # Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Disable"
+msgstr "Devre dışı bırak"
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# Enable"
+msgstr "Etkinleştir"
+
+# Web services > REST API
+msgid "web_services.pref#RESTPublicAnonymousRequests# anonymous access to public routes (that don't require authenticated access)"
+msgstr ""
+"genel erişime açık rotalara anonim erişim (kimlik doğrulamalı erişim "
+"gerektirmeyen)"
+
+# Web services > REST API
 msgid "web_services.pref#RESTdefaultPageSize# Set the default number of results returned by the REST API endpoints to"
 msgstr "REST API uç noktaları tarafından döndürülen varsayılan sonuç sayısını ayarla"
 
@@ -9615,4 +9648,3 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
-
