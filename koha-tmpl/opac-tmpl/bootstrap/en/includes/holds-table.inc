@@ -37,16 +37,10 @@
                     [% UNLESS ( HOLD.is_waiting || HOLD.is_in_transit ) %]
                         [% SET all_holds_waiting = 0 %]
                     [% END %]
-                    [% IF ( HOLD.is_waiting ) %]
-                        [% IF ( HOLD.is_at_destination ) %]
-                            [% IF ( HOLD.is_found ) %]
-                                <tr class="reserved">
-                            [% ELSE %]
-                                <tr>
-                            [% END %]
-                        [% ELSE %]
-                            <tr class="transfered">
-                        [% END %]
+                    [% IF ( HOLD.is_at_destination ) %]
+                        <tr class="reserved">
+                    [% ELSIF HOLD.is_in_transit %]
+                        <tr class="transfered">
                     [% ELSE %]
                         <tr>
                     [% END %]
