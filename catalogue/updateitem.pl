@@ -56,6 +56,8 @@ for ($damaged,$itemlost,$withdrawn) {
     }
 }
 
+my $alerts = q{};
+
 # modify MARC item if input differs from items table.
 if ( $op eq "set_non_public_note" ) {
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
@@ -74,6 +76,7 @@ elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from for
     $item->withdrawn($withdrawn);
 } elsif ( $op eq "set_exclude_priority" && $exclude_from_local_holds_priority ne $item_data_hashref->{'exclude_from_local_holds_priority'}) {
     $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
+    $alerts = "updated_exclude_from_local_holds_priority=$exclude_from_local_holds_priority&";
 } elsif ( $op eq "set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
     $item->damaged($damaged);
 } else {
@@ -86,4 +89,4 @@ $item->store;
 
 LostItem($itemnumber, 'moredetail') if $op eq "set_lost";
 
-print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
+print $cgi->redirect("moredetail.pl?" . $alerts . "biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");

@@ -55,6 +55,13 @@
         <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View All</a></div>
     [% END %]
 
+    [% IF updated_exclude_from_local_holds_priority.defined %]
+    <div class="dialog message">
+        <i>Exclude from local holds priority</i> updated to
+        [% IF updated_exclude_from_local_holds_priority %]<i>Yes</i>[% ELSE %]<i>No</i>[% END %]
+    </div>
+    [% END %]
+
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
         <div class="listgroup">
         <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
