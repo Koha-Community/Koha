@@ -1161,9 +1161,9 @@ sub ModReserveAffect {
     my $already_on_shelf = $hold->found && $hold->found eq 'W';
 
     $hold->itemnumber($itemnumber);
-    $hold->set_waiting($transferToDo);
 
     if( !$transferToDo ){
+        $hold->set_waiting();
         _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
         my $transfers = Koha::Item::Transfers->search({
             itemnumber => $itemnumber,
@@ -1172,7 +1172,9 @@ sub ModReserveAffect {
         while( my $transfer = $transfers->next ){
             $transfer->datearrived( dt_from_string() )->store;
         };
-    }
+     } else {
+        $hold->set_transfer();
+     }
 
 
     _FixPriority( { biblionumber => $biblionumber } );

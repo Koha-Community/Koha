@@ -153,19 +153,28 @@ sub delete {
     return $deleted;
 }
 
+=head3 set_transfer
+
+=cut
+
+sub set_transfer {
+    my ( $self ) = @_;
+
+    $self->priority(0);
+    $self->found('T');
+    $self->store();
+
+    return $self;
+}
+
 =head3 set_waiting
 
 =cut
 
 sub set_waiting {
-    my ( $self, $transferToDo ) = @_;
+    my ( $self ) = @_;
 
     $self->priority(0);
-
-    if ($transferToDo) {
-        $self->found('T')->store();
-        return $self;
-    }
 
     my $today = dt_from_string();
     my $values = {

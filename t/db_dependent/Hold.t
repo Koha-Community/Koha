@@ -224,7 +224,7 @@ subtest 'suspend() tests' => sub {
     is( $@->status, 'W', 'Exception gets the \'status\' parameter set correctly' );
 
     # set hold found=T
-    $hold->set_waiting(1);
+    $hold->set_transfer;
     throws_ok
         { $hold->suspend_hold; }
         'Koha::Exceptions::Hold::CannotSuspendFound',
