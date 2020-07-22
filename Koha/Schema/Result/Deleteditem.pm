@@ -156,8 +156,8 @@ __PACKAGE__->table("deleteditems");
 =head2 issues
 
   data_type: 'smallint'
-  is_nullable: 0
   default_value: 0
+  is_nullable: 1
 
 =head2 renewals
 
@@ -342,10 +342,7 @@ __PACKAGE__->add_columns(
   "coded_location_qualifier",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
-   { data_type => "smallint",
-    is_nullable => 0,
-    default_value => 0,
-  },
+  { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "renewals",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
@@ -410,8 +407,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-18 22:07:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cIWMKg2PVVOrSp1uLtpJbg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-07-22 19:19:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:llTK+rfkEb1xD+BBeYlYmg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
