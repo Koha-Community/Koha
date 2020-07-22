@@ -96,6 +96,9 @@ sub suspend_hold {
         elsif ( $self->is_in_transit ) {
             Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'T' );
         }
+        elsif ( $self->is_in_processing ) {
+            Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'P' );
+        }
         else {
             Koha::Exceptions::Hold::CannotSuspendFound->throw(
                       'Unhandled data exception on found hold (id='
@@ -217,9 +220,23 @@ sub set_waiting {
     return $self;
 }
 
+=head3 set_processing
+
+=cut
+
+sub set_processing {
+    my ( $self ) = @_;
+
+    $self->priority(0);
+    $self->found('P');
+    $self->store();
+
+    return $self;
+}
+
 =head3 is_found
 
-Returns true if hold is a waiting or in transit
+Returns true if hold is waiting, in transit or in processing
 
 =cut
 
@@ -229,6 +246,7 @@ sub is_found {
     return 0 unless $self->found();
     return 1 if $self->found() eq 'W';
     return 1 if $self->found() eq 'T';
+    return 1 if $self->found() eq 'P';
 }
 
 =head3 is_waiting
@@ -257,6 +275,19 @@ sub is_in_transit {
     return $self->found() eq 'T';
 }
 
+=head3 is_in_processing
+
+Returns true if hold is a in_processing hold
+
+=cut
+
+sub is_in_processing {
+    my ($self) = @_;
+
+    return 0 unless $self->found();
+    return $self->found() eq 'P';
+}
+
 =head3 is_cancelable_from_opac
 
 Returns true if hold is a cancelable hold
@@ -271,7 +302,7 @@ sub is_cancelable_from_opac {
     my ($self) = @_;
 
     return 1 unless $self->is_found();
-    return 0; # if ->is_in_transit or if ->is_waiting
+    return 0; # if ->is_in_transit or if ->is_waiting or ->is_in_processing
 }
 
 =head3 is_at_destination

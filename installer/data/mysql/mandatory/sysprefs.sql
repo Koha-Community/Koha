@@ -228,6 +228,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('HoldsAutoFill','0',NULL,'If on, librarian will not be asked if hold should be filled, it will be filled automatically','YesNo'),
 ('HoldsAutoFillPrintSlip','0',NULL,'If on, hold slip print dialog will be displayed automatically','YesNo'),
 ('HoldsLog','0',NULL,'If ON, log create/cancel/suspend/resume actions on holds.','YesNo'),
+('HoldsNeedProcessingSIP', '0', NULL, 'Require staff to check-in before hold is set to waiting state', 'YesNo' ),
 ('HoldsQueueSkipClosed', '0', NULL, 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo'),
 ('HoldsSplitQueue','nothing','nothing|branch|itemtype|branch_itemtype','In the staff interface, split the holds view by the given criteria','Choice'),
 ('HoldsToPullStartDate','2',NULL,'Set the default start date for the Holds to pull list to this many days ago','Integer'),

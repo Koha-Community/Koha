@@ -665,6 +665,7 @@ foreach my $biblionumber (@biblionumbers) {
             $reserve{'wbrname'}       = $res->branch()->branchname();
             $reserve{'atdestination'} = $res->is_at_destination();
             $reserve{'found'}     = $res->is_found();
+            $reserve{'inprocessing'} = $res->is_in_processing();
             $reserve{'intransit'} = $res->is_in_transit();
         }
         elsif ( $res->priority() > 0 ) {

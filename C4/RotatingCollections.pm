@@ -452,7 +452,7 @@ sub TransferCollection {
             barcode => $item->{barcode},
             ignore_reserves => 1,
             trigger => 'RotatingCollection'
-        }) unless ( $status eq 'Waiting' || @transfers );
+        }) unless ( $status eq 'Waiting' || $status eq 'Processing' || @transfers );
     }
 
     return 1;

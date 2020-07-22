@@ -556,6 +556,12 @@ Circulation:
                   no: "Don't"
             - automatically fill holds instead of asking the librarian.
         -
+            - pref: HoldsNeedProcessingSIP
+              choices:
+                  yes: "Don't fulfill"
+                  no: Fulfill
+            - holds automatically if matching item is returned via SIP protocol.
+        -
             - pref: HoldsAutoFillPrintSlip
               choices:
                   yes: Do

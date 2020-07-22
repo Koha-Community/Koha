@@ -29,7 +29,7 @@ use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 29;
+use Test::More tests => 33;
 use Test::Exception;
 use Test::Warn;
 
@@ -112,10 +112,15 @@ isnt( $hold->is_waiting, 1, 'The hold is not waiting (T)' );
 is( $hold->is_found, 1, 'The hold is found');
 is( $hold->is_in_transit, 1, 'The hold is in transit' );
 
+$hold->found('P');
+is( $hold->is_found, 1, 'The hold is found');
+is( $hold->is_in_processing, 1, 'The hold is in processing' );
+
 $hold->found(q{});
 isnt( $hold->is_waiting, 1, 'The hold is not waiting (W)' );
 is( $hold->is_found, 0, 'The hold is not found' );
 ok( !$hold->is_in_transit, 'The hold is not in transit' );
+ok( !$hold->is_in_processing, 'The hold is not in processing' );
 
 # Test method is_cancelable_from_opac
 $hold->found(undef);
@@ -124,6 +129,8 @@ $hold->found('W');
 is( $hold->is_cancelable_from_opac, 0, "Waiting hold is not cancelable" );
 $hold->found('T');
 is( $hold->is_cancelable_from_opac, 0, "In transit hold is not cancelable" );
+$hold->found('P');
+is( $hold->is_cancelable_from_opac, 0, "In processing hold is not cancelable" );
 
 # Test method is_at_destination
 $hold->found(undef);
@@ -178,7 +185,7 @@ subtest "delete() tests" => sub {
 
 subtest 'suspend() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -231,6 +238,15 @@ subtest 'suspend() tests' => sub {
         'Exception is thrown when a found hold is tried to suspend';
 
     is( $@->status, 'T', 'Exception gets the \'status\' parameter set correctly' );
+
+    # set hold found=T
+    $hold->set_processing();
+    throws_ok
+        { $hold->suspend_hold; }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown when a found hold is tried to suspend';
+
+    is( $@->status, 'P', 'Exception gets the \'status\' parameter set correctly' );
 
     my $holds_module = Test::MockModule->new('Koha::Hold');
     $holds_module->mock( 'is_found', 1 );

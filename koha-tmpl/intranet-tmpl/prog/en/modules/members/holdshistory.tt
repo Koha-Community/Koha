@@ -102,6 +102,8 @@
                 [% END %]
           [% ELSIF hold.found == 'W' %]
               Waiting
+          [% ELSIF hold.found == 'P' %]
+              Processing
           [% ELSIF hold.found == 'T' %]
               In transit
           [% ELSE %]

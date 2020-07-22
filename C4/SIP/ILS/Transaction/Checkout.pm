@@ -48,7 +48,7 @@ sub new {
 sub do_checkout {
 	my $self = shift;
 	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
-	my $shelf          = $self->{item}->hold_shelf;
+	my $shelf          = $self->{item}->hold_attached;
 	my $barcode        = $self->{item}->id;
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue
@@ -115,8 +115,8 @@ sub do_checkout {
         ($_->{itemnumber} eq $itemnumber) or next;    # skip it if not this item
         ($_->{borrowernumber} == $patron->borrowernumber) and last;
             # if item was waiting for this patron, we're done.  AddIssue takes care of the "W" hold.
-        $debug and warn "Item is on hold shelf for another patron.";
-        $self->screen_msg("Item is on hold shelf for another patron.");
+        $debug and warn "Item is on hold for another patron.";
+        $self->screen_msg("Item is on hold for another patron.");
         $noerror = 0;
     }
     my ($fee, undef) = GetIssuingCharges($itemnumber, $patron->borrowernumber);

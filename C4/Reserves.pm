@@ -714,6 +714,7 @@ sub GetReserveStatus {
 
     if(defined $found) {
         return 'Waiting'  if $found eq 'W' and $priority == 0;
+        return 'Processing'  if $found eq 'P';
         return 'Finished' if $found eq 'F';
     }
 
@@ -828,7 +829,9 @@ sub CheckReserves {
             if ( $res->{'itemnumber'} && $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 if ($res->{'found'} eq 'W') {
                     return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
-                } else {
+                } elsif ($res->{'found'} eq 'P') {
+                    return ( "Processing", $res, \@reserves ); # Found determinated hold, e. g. the tranferred one
+                 } else {
                     return ( "Reserved", $res, \@reserves ); # Found determinated hold, e. g. the tranferred one
                 }
             } else {
@@ -1159,7 +1162,13 @@ sub ModReserveAffect {
 
     $hold->itemnumber($itemnumber);
 
-    if( !$transferToDo ){
+    if ($transferToDo) {
+        $hold->set_transfer();
+    } elsif (C4::Context->preference('HoldsNeedProcessingSIP')
+             && C4::Context->interface eq 'sip'
+             && !$already_on_shelf) {
+        $hold->set_processing();
+    } else {
         $hold->set_waiting();
         _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
         my $transfers = Koha::Item::Transfers->search({
@@ -1169,9 +1178,7 @@ sub ModReserveAffect {
         while( my $transfer = $transfers->next ){
             $transfer->datearrived( dt_from_string() )->store;
         };
-     } else {
-        $hold->set_transfer();
-     }
+    }
 
 
     _FixPriority( { biblionumber => $biblionumber } );
@@ -1550,7 +1557,7 @@ sub _FixPriority {
             UPDATE reserves
             SET    priority = 0
             WHERE reserve_id = ?
-            AND found IN ('W', 'T')
+            AND found IN ('W', 'T', 'P')
         ";
         my $sth = $dbh->prepare($query);
         $sth->execute( $reserve_id );
@@ -1562,7 +1569,7 @@ sub _FixPriority {
         SELECT reserve_id, borrowernumber, reservedate
         FROM   reserves
         WHERE  biblionumber   = ?
-          AND  ((found <> 'W' AND found <> 'T') OR found IS NULL)
+          AND  ((found <> 'W' AND found <> 'T' AND found <> 'P') OR found IS NULL)
         ORDER BY priority ASC
     ";
     my $sth = $dbh->prepare($query);
@@ -1977,7 +1984,7 @@ sub MergeHolds {
 "UPDATE reserves SET priority = ? WHERE biblionumber = ? AND borrowernumber = ?
         AND reservedate = ? AND (itemnumber = ? or itemnumber is NULL) "
         );
-        $sth->execute( $to_biblio, 'W', 'T' );
+        $sth->execute( $to_biblio, 'W', 'T', 'P' );
         my $priority = 1;
         while ( my $reserve = $sth->fetchrow_hashref() ) {
             $upd_sth->execute(
@@ -2147,7 +2154,7 @@ sub CalculatePriority {
         AND   priority > 0
         AND   (found IS NULL OR found = '')
     };
-    #skip found==W or found==T (waiting or transit holds)
+    #skip found==W or found==T or found==P (waiting, transit or processing holds)
     if( $resdate ) {
         $sql.= ' AND ( reservedate <= ? )';
     }

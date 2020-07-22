@@ -41,6 +41,8 @@
                     [% IF ( hold.found ) %]
                         [% IF ( hold.intransit ) %]
                             <option value="T" selected="selected">In transit</option>
+                        [% ELSIF (hold.inprocessing) %]
+                            <option value="P" selected="selected">In processing</option>
                         [% ELSE %]
                             <option value="W" selected="selected">Waiting</option>
                         [% END %]
@@ -120,13 +122,11 @@
             <td>
                 [% IF ( hold.found ) %]
                     [% IF ( hold.atdestination ) %]
-                        [% IF ( hold.found ) %]
                             Item waiting at <strong> [% hold.wbrname | html %]</strong> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" /> since [% hold.waiting_date | $KohaDates %]
-                        [% ELSE %]
-                            Waiting to be pulled <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
-                        [% END %]
-                    [% ELSE %]
+                    [% ELSIF (hold.intransit) %]
                         Item being transferred to <strong> [% hold.wbrname | html %]</strong> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
+                    [% ELSIF (hold.inprocessing) %]
+                        Item being processed at <strong> [% hold.wbrname | html %]</strong> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
                     [% END %]
                 [% ELSE %]
                     [% IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 %]

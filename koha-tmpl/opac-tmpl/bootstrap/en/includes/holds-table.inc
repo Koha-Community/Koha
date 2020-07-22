@@ -34,7 +34,7 @@
             <tbody>
                 [% SET all_holds_waiting = 1 %]
                 [% FOREACH HOLD IN HOLDS %]
-                    [% UNLESS ( HOLD.is_waiting || HOLD.is_in_transit ) %]
+                    [% UNLESS ( HOLD.is_waiting || HOLD.is_in_transit || HOLD.is_in_processing) %]
                         [% SET all_holds_waiting = 0 %]
                     [% END %]
                     [% IF ( HOLD.is_at_destination ) %]
@@ -114,6 +114,8 @@
                                     [% SET transfer = HOLD.item.get_transfer %]
                                     Item in transit from <strong> [% Branches.GetName( transfer.frombranch ) | html %]</strong> since
                                     [% transfer.datesent | $KohaDates %]
+                                [% ELSIF ( HOLD.is_in_processing ) %]
+                                    Item in processing
                                 [% ELSIF ( HOLD.suspend ) %]
                                     Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | $KohaDates %] [% END %]
                                 [% ELSE %]

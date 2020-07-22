@@ -108,8 +108,8 @@ sub new {
     my $biblio = Koha::Biblios->find( $self->{biblionumber} );
     my $holds = $biblio->current_holds->unblessed;
     $self->{hold_queue} = $holds;
-    $self->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$self->{hold_queue}} )];
-    $self->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$self->{hold_queue}} )];
+    $self->{hold_attached} = [( grep { defined $_->{found}  and ( $_->{found} eq 'W' or $_->{found} eq 'P' ) } @{$self->{hold_queue}} )];
+    $self->{pending_queue} = [( grep {(! defined $_->{found}) or ( $_->{found} ne 'W' and $_->{found} ne 'P' ) } @{$self->{hold_queue}} )];
     $self->{title} = $biblio->title;
     $self->{author} = $biblio->author;
     bless $self, $type;
@@ -148,8 +148,8 @@ my %fields = (
 
 sub next_hold {
     my $self = shift;
-    # use Data::Dumper; warn "next_hold() hold_shelf: " . Dumper($self->{hold_shelf}); warn "next_hold() pending_queue: " . $self->{pending_queue};
-    foreach (@{$self->hold_shelf}) {    # If this item was taken from the hold shelf, then that reserve still governs
+    # use Data::Dumper; warn "next_hold() hold_attached: " . Dumper($self->{hold_attached}); warn "next_hold() pending_queue: " . $self->{pending_queue};
+    foreach (@{$self->hold_attached}) {    # If this item was taken from the hold shelf, then that reserve still governs
         next unless ($_->{itemnumber} and $_->{itemnumber} == $self->{itemnumber});
         return $_;
     }
@@ -275,7 +275,7 @@ sub sip_circulation_status {
     elsif ( $self->{borrowernumber} ) {
         return '04';    # charged
     }
-    elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_shelf} } ) {
+    elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_attached} } ) {
         return '08';    # waiting on hold shelf
     }
     else {
@@ -314,10 +314,10 @@ sub pending_queue {
 	(defined $self->{pending_queue}) or return [];
     return $self->{pending_queue};
 }
-sub hold_shelf {
+sub hold_attached {
     my $self = shift;
-	(defined $self->{hold_shelf}) or return [];
-    return $self->{hold_shelf};
+	(defined $self->{hold_attached}) or return [];
+    return $self->{hold_attached};
 }
 
 sub hold_queue_position {
@@ -359,7 +359,7 @@ sub hold_pickup_date {
 #    AND no pending (i.e. non-W) hold queue
 # OR
 # 2) not checked out
-#    AND (not on hold_shelf OR is on hold_shelf for patron)
+#    AND (not on hold_attached OR is on hold_attached for patron)
 #
 # What this means is we are consciously allowing the patron to checkout (but not renew) an item that DOES
 # have non-W holds on it, but has not been "picked" from the stacks.  That is to say, the
@@ -371,13 +371,13 @@ sub hold_pickup_date {
 sub available {
 	my ($self, $for_patron) = @_;
 	my $count  = (defined $self->{pending_queue}) ? scalar @{$self->{pending_queue}} : 0;
-	my $count2 = (defined $self->{hold_shelf}   ) ? scalar @{$self->{hold_shelf}   } : 0;
-	$debug and print STDERR "availability check: pending_queue size $count, hold_shelf size $count2\n";
+	my $count2 = (defined $self->{hold_attached}   ) ? scalar @{$self->{hold_attached}   } : 0;
+	$debug and print STDERR "availability check: pending_queue size $count, hold_attached size $count2\n";
     if (defined($self->{borrowernumber})) {
         ($self->{borrowernumber} eq $for_patron) or return 0;
 		return ($count ? 0 : 1);
 	} else {	# not checked out
-        ($count2) and return $self->barcode_is_borrowernumber($for_patron, $self->{hold_shelf}[0]->{borrowernumber});
+        ($count2) and return $self->barcode_is_borrowernumber($for_patron, $self->{hold_attached}[0]->{borrowernumber});
 	}
 	return 0;
 }
