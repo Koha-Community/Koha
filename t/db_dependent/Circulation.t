@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 48;
+use Test::More tests => 49;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -4062,7 +4062,7 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
     is( Koha::Item::Transfers->search({ itemnumber => $item->itemnumber, datearrived => undef })->count, 0, "No outstanding transfers when hold is waiting");
 };
 
-subtest 'Tests for NoRefundOnLostReturnedItemsAge' => sub {
+subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddReturn' => sub {
 
     plan tests => 4;
 
@@ -4243,6 +4243,200 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge' => sub {
         ok( $a, "Found accountline for lost fee" );
         is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
         my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->branchcode, undef, dt_from_string );
+        $a = $a->get_from_storage;
+        is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
+        $a->delete;
+    };
+};
+
+subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddIssue' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference('BlockReturnOfLostItems', 0);
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+    my $patron2  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+
+    my $biblionumber = $builder->build_sample_biblio(
+        {
+            branchcode => $library->branchcode,
+        }
+    )->biblionumber;
+
+    # And the circulation rule
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                issuelength => 14,
+                lengthunit  => 'days',
+            }
+        }
+    );
+    $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => undef,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1
+            }
+        }
+    );
+
+    subtest 'NoRefundOnLostReturnedItemsAge = undef' => sub {
+        plan tests => 3;
+
+        t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee',   1 );
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge', undef );
+
+        my $lost_on = dt_from_string->subtract( days => 7 )->date;
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblionumber,
+                library          => $library->branchcode,
+                replacementprice => '42',
+            }
+        );
+        my $issue = AddIssue( $patron->unblessed, $item->barcode );
+        LostItem( $item->itemnumber, 'cli', 0 );
+        $item->_result->itemlost(1);
+        $item->_result->itemlost_on( $lost_on );
+        $item->_result->update();
+
+        my $a = Koha::Account::Lines->search(
+            {
+                itemnumber     => $item->id,
+                borrowernumber => $patron->borrowernumber
+            }
+        )->next;
+        ok( $a, "Found accountline for lost fee" );
+        is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
+        $issue = AddIssue( $patron2->unblessed, $item->barcode );
+        $a = $a->get_from_storage;
+        is( $a->amountoutstanding + 0, 0, "Lost fee was refunded" );
+        $a->delete;
+        $issue->delete;
+    };
+
+    subtest 'NoRefundOnLostReturnedItemsAge > length of days item has been lost' => sub {
+        plan tests => 3;
+
+        t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee',   1 );
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge', 7 );
+
+        my $lost_on = dt_from_string->subtract( days => 6 )->date;
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblionumber,
+                library          => $library->branchcode,
+                replacementprice => '42',
+            }
+        );
+        my $issue = AddIssue( $patron->unblessed, $item->barcode );
+        LostItem( $item->itemnumber, 'cli', 0 );
+        $item->_result->itemlost(1);
+        $item->_result->itemlost_on( $lost_on );
+        $item->_result->update();
+
+        my $a = Koha::Account::Lines->search(
+            {
+                itemnumber     => $item->id,
+                borrowernumber => $patron->borrowernumber
+            }
+        )->next;
+        ok( $a, "Found accountline for lost fee" );
+        is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
+        $issue = AddIssue( $patron2->unblessed, $item->barcode );
+        $a = $a->get_from_storage;
+        is( $a->amountoutstanding + 0, 0, "Lost fee was refunded" );
+        $a->delete;
+    };
+
+    subtest 'NoRefundOnLostReturnedItemsAge = length of days item has been lost' => sub {
+        plan tests => 3;
+
+        t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee',   1 );
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge', 7 );
+
+        my $lost_on = dt_from_string->subtract( days => 7 )->date;
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblionumber,
+                library          => $library->branchcode,
+                replacementprice => '42',
+            }
+        );
+        my $issue = AddIssue( $patron->unblessed, $item->barcode );
+        LostItem( $item->itemnumber, 'cli', 0 );
+        $item->_result->itemlost(1);
+        $item->_result->itemlost_on( $lost_on );
+        $item->_result->update();
+
+        my $a = Koha::Account::Lines->search(
+            {
+                itemnumber     => $item->id,
+                borrowernumber => $patron->borrowernumber
+            }
+        )->next;
+        ok( $a, "Found accountline for lost fee" );
+        is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
+        $issue = AddIssue( $patron2->unblessed, $item->barcode );
+        $a = $a->get_from_storage;
+        is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
+        $a->delete;
+    };
+
+    subtest 'NoRefundOnLostReturnedItemsAge < length of days item has been lost' => sub {
+        plan tests => 3;
+
+        t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee',   1 );
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostReturnedItemsAge', 7 );
+
+        my $lost_on = dt_from_string->subtract( days => 8 )->date;
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblionumber,
+                library          => $library->branchcode,
+                replacementprice => '42',
+            }
+        );
+        my $issue = AddIssue( $patron->unblessed, $item->barcode );
+        LostItem( $item->itemnumber, 'cli', 0 );
+        $item->_result->itemlost(1);
+        $item->_result->itemlost_on( $lost_on );
+        $item->_result->update();
+
+        my $a = Koha::Account::Lines->search(
+            {
+                itemnumber     => $item->id,
+                borrowernumber => $patron->borrowernumber
+            }
+        );
+        $a = $a->next;
+        ok( $a, "Found accountline for lost fee" );
+        is( $a->amountoutstanding + 0, 42, "Lost fee charged correctly" );
+        $issue = AddIssue( $patron2->unblessed, $item->barcode );
         $a = $a->get_from_storage;
         is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
         $a->delete;
