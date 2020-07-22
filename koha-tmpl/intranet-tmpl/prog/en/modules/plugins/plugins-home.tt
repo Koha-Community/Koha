@@ -90,7 +90,9 @@
                                         <th>Description</th>
                                         <th>Organization</th>
                                         <th>Latest version</th>
+                                        [% IF ( enable_browser_upload ) %]
                                         <th>&nbsp;</th>
+                                        [% END %]
                                     </tr>
                                 </thead>
 
@@ -100,7 +102,9 @@
                                         <td>[% sr.result.description | html %]</td>
                                         <td>[% sr.repo.name | html %]</td>
                                         <td>[% sr.result.tag_name | html %]</td>
+                                        [% IF ( enable_browser_upload ) %]
                                         <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
+                                        [% END %]
                                     </tr>
                                 [% END %]
                             </table>
