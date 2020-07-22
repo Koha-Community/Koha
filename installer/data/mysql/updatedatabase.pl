@@ -20633,6 +20633,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24986 - Switch borrowers address related fields to TINYTEXT or MEDIUMTEXT)\n";
 }
 
+$DBversion = "19.11.08.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (19.11.08 release)\n";
+    SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
