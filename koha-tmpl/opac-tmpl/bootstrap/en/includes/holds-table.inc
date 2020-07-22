@@ -104,18 +104,14 @@
                             [% IF ( HOLD.is_waiting ) %]
                                 <i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i>
                                 [% IF ( HOLD.is_at_destination ) %]
-                                    [% IF ( HOLD.found ) %]
-                                        Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong>
-                                        [% IF ( HOLD.waitingdate ) %]
-                                            since [% HOLD.waitingdate | $KohaDates %]
-                                            [% IF HOLD.expirationdate %]
-                                                until [% HOLD.expirationdate | $KohaDates %]
-                                            [% END %]
+                                    Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong>
+                                    [% IF ( HOLD.waitingdate ) %]
+                                        since [% HOLD.waitingdate | $KohaDates %]
+                                        [% IF HOLD.expirationdate %]
+                                            until [% HOLD.expirationdate | $KohaDates %]
                                         [% END %]
-                                        <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
-                                    [% ELSE %]
-                                        Item waiting to be pulled from <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong>
                                     [% END %]
+                                    <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                                 [% ELSE %]
                                     Item in transit to <strong> [% Branches.GetName( HOLD.branchcode ) | html %]</strong> <input type="hidden" name="pickup" value="[% HOLD.branchcode | html %]" />
                                 [% END %]
