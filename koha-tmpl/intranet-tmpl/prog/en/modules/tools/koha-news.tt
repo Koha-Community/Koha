@@ -1,18 +1,22 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
-<style>
-.CodeMirror {
-    resize: vertical;
-}
-</style>
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( opac_news_count ) %]
+[% END %]
+[% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
+    [% Asset.css("lib/codemirror/codemirror.css") | $raw %]
+    [% Asset.css("lib/codemirror/lint.min.css") | $raw %]
+    <style>
+        .CodeMirror {
+            resize: vertical;
+        }
+    </style>
 [% END %]
 </head>
 
@@ -208,12 +212,12 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
             [% END %]
         </div> <!-- /.row -->
+    </div> <!-- /.main.container-fluid -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% Asset.js("lib/d3c3/d3.min.js") | $raw %]
-    [% Asset.js("lib/d3c3/c3.min.js") | $raw %]
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script>
@@ -300,35 +304,44 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% END %]
-    [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
-    [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
-    [% INCLUDE 'str/tinymce_i18n.inc' %]
-    <script>
-        [% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
-        var editor = CodeMirror.fromTextArea(document.getElementById('content'), {
-            lineNumbers: true,
-            mode: "text/html",
-            lineWrapping: true
-        });
-        [% ELSE %]
-        tinyMCE.init({
-            verify_html: false,
-            force_br_newlines : false,
-            force_p_newlines : false,
-            forced_root_block : '',
-            branding : false,
-            relative_urls : false,
-            content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
-            menubar : "file edit view insert format tools table",
-            mode : "specific_textareas",
-            plugins : "autoresize table hr link image charmap lists code emoticons",
-            toolbar : [
-                "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
-                "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
-            ],
-        });
-        [% END %]
-    </script>
+    [% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
+        [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
+        [% Asset.js( "lib/codemirror/xml.min.js" ) | $raw %]
+        [% Asset.js( "lib/codemirror/lint.min.js" ) | $raw %]
+        [% Asset.js( "lib/linters/htmlhint.min.js" ) | $raw %]
+        [% Asset.js( "lib/codemirror/html-lint.min.js" ) | $raw %]
+        <script>
+            var editor = CodeMirror.fromTextArea(document.getElementById('content'), {
+                lineNumbers: true,
+                lineWrapping: true,
+                lint: true,
+                mode: "text/html",
+                gutters: ["CodeMirror-lint-markers"],
+                viewportMargin: Infinity,
+            });
+        </script>
+    [% ELSE %]
+        [% INCLUDE 'str/tinymce_i18n.inc' %]
+        [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
+        <script>
+            tinyMCE.init({
+                verify_html: false,
+                force_br_newlines : false,
+                force_p_newlines : false,
+                forced_root_block : '',
+                branding : false,
+                relative_urls : false,
+                content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
+                menubar : "file edit view insert format tools table",
+                mode : "specific_textareas",
+                plugins : "autoresize table hr link image charmap lists code emoticons",
+                toolbar : [
+                    "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
+                    "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
+                ],
+            });
+        </script>
+    [% END # /IF NewsToolEditor %]
 [% END %]
 
 [% BLOCK lang_locations %]
