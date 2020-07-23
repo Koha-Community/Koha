@@ -22444,6 +22444,37 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23797, "Extend the opac_news lang column to accommodate longer values" );
 }
 
+$DBversion = '20.06.00.015';
+if( CheckVersion( $DBversion ) ) {
+
+    # get list of installed translations
+    require C4::Languages;
+    my @langs;
+    my $tlangs = C4::Languages::getTranslatedLanguages('opac','bootstrap');
+
+    foreach my $language ( @$tlangs ) {
+        foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
+            push @langs, $sublanguage->{'rfc4646_subtag'};
+        }
+    }
+
+    # Get any existing value from the OpacLoginInstructions system preference
+    my ($opaclogininstructions) = $dbh->selectrow_array( q|
+        SELECT value FROM systempreferences WHERE variable='OpacLoginInstructions';
+    |);
+    if( $opaclogininstructions ){
+        foreach my $lang ( @langs ) {
+            # If there is a value in the OpacLoginInstructions preference, insert it into opac_news
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "OpacLoginInstructions_$lang", $opaclogininstructions);
+        }
+    }
+    # Remove the OpacLoginInstructions system preference
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OpacLoginInstructions'");
+
+    NewVersion( $DBversion, 23797, "Convert OpacLoginInstructions system preference to news block" );
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
