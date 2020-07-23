@@ -167,24 +167,16 @@ sub after_circ_action {
     my $checkout = $params->{payload}->{checkout};
     my $payload  = $params->{payload};
 
-    my $renewal_library_id = $payload->{renewal_library_id};
-    my $charge             = $payload->{charge};
-    my $item_id            = $payload->{item_id};
-    my $item_type          = $payload->{item_type};
-    my $shelving_location  = $payload->{shelving_location};
-    my $patron_id          = $payload->{patron_id};
-    my $collection_code    = $payload->{collection_code};
-    my $date_due           = $payload->{date_due};
-    my $date_returned      = $payload->{date_returned};
+    my $type = $payload->{type};
 
     if ( $action eq 'renewal' ) {
         Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
     }
     elsif ( $action eq 'checkout') {
-        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($date_due));
+        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout) . " type: $type");
     }
     elsif ( $action eq 'checkin' ) {
-        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($date_returned));
+        Koha::Exceptions::Exception->throw("after_circ_action called with action: $action, ref: " . ref($checkout));
     }
 }
 
