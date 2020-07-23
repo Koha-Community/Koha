@@ -3096,23 +3096,6 @@ sub AddRenewal {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
 
-        _after_circ_actions(
-            {
-                action  => 'renewal',
-                payload => {
-                    renewal_library_id =>
-                    $item_object->renewal_branchcode( { branch => $branch } ),
-                    charge            => $charge,
-                    item_id           => $itemnumber,
-                    item_type         => $itemtype,
-                    shelving_location => $item_object->location // q{},
-                    patron_id         => $borrowernumber,
-                    collection_code   => $item_object->ccode // q{},
-                    date_due          => $datedue
-                }
-            }
-        ) if C4::Context->config("enable_plugins");
-
         # Add the renewal to stats
         UpdateStats(
             {
@@ -3129,6 +3112,15 @@ sub AddRenewal {
 
         #Log the renewal
         logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
+
+        _after_circ_actions(
+            {
+                action  => 'renewal',
+                payload => {
+                    checkout  => $issue->get_from_storage
+                }
+            }
+        ) if C4::Context->config("enable_plugins");
     });
 
     return $datedue;

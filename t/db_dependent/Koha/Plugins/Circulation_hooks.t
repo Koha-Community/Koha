@@ -42,7 +42,7 @@ my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
-subtest 'post_renewal_action() hook tests' => sub {
+subtest 'after_circ_action() hook tests' => sub {
 
     plan tests => 1;
 
@@ -72,8 +72,8 @@ subtest 'post_renewal_action() hook tests' => sub {
     AddIssue( $patron->unblessed, $item->barcode );
 
     warning_like { AddRenewal( $patron->borrowernumber, $item->id, $patron->branchcode ); }
-            qr/after_circ_action called with action: renewal, ref: DateTime/,
-            'AddRenewal calls the post_renewal_action hook';
+            qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
+            'AddRenewal calls the after_circ_action hook';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
