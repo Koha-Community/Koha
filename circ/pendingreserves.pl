@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use constant PULL_INTERVAL => 2;
+use List::MoreUtils qw( uniq );
 
 use C4::Context;
 use C4::Output;
@@ -183,16 +184,15 @@ if ( C4::Context->preference('IndependentBranches') ){
 }
 
 # get all distinct unfulfilled reserves
-my @distinct_holds = Koha::Holds->search(
+my $distinct_holds = Koha::Holds->search(
     { %where },
-    { join => 'itembib', group_by => 'reserve.biblionumber', alias => 'reserve' }
+    { join => 'itembib', alias => 'reserve' }
 );
+my @biblionumbers = uniq $distinct_holds->get_column('biblionumber');
 
 # make final reserves hash and fill with info
 my $reserves;
-foreach my $dh ( @distinct_holds ){
-
-    my $bibnum = $dh->biblionumber;
+foreach my $bibnum ( @biblionumbers ){
 
     my @items = Koha::Items->search({ biblionumber => $bibnum });
     foreach my $i ( @items ){
