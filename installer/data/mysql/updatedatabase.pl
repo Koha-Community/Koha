@@ -22346,6 +22346,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23391, "Hide finished ILL requests" );
 }
 
+$DBversion = '20.06.00.010';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('NoRefundOnLostReturnedItemsAge','','','Do not refund lost item fees if item is lost for more than this number of days','Integer')
+    });
+
+    NewVersion( $DBversion, 20815, "Add NoRefundOnLostReturnedItemsAge system preference" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
