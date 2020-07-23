@@ -115,7 +115,9 @@
     <xsl:if test="marc:datafield[@tag=$tag]">
       <span class="results_summary {$spanclass}">
         <span class="label">
-        <xsl:value-of select="$label"/>: </span>
+          <xsl:value-of select="$label"/>
+          <xsl:text>: </xsl:text>
+        </span>
         <xsl:for-each select="marc:datafield[@tag=$tag]">
           <xsl:call-template name="addClassRtl" />
           <xsl:for-each select="marc:subfield">
@@ -219,7 +221,7 @@
 
   <xsl:template name="tag_215">
     <xsl:for-each select="marc:datafield[@tag=215]">
-	  <span class="results_summary description">
+      <span class="results_summary description">
         <span class="label">Description: </span>
         <xsl:if test="marc:subfield[@code='a']">
           <xsl:value-of select="marc:subfield[@code='a']"/>

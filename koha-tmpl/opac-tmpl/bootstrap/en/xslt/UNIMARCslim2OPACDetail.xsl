@@ -163,7 +163,7 @@
   </xsl:if>
 
   <xsl:if test="marc:datafield[@tag=102]">
-	  <span class="results_summary country">
+    <span class="results_summary country">
       <span class="label">Country: </span>
       <xsl:for-each select="marc:datafield[@tag=102]">
         <xsl:for-each select="marc:subfield">
@@ -192,7 +192,8 @@
 
   <!-- Build ISBN -->
   <xsl:if test="marc:datafield[@tag=010]/marc:subfield[@code='a']">
-    <span class="results_summary isbn"><span class="label">ISBN: </span>
+    <span class="results_summary isbn">
+      <span class="label">ISBN: </span>
       <xsl:for-each select="marc:datafield[@tag=010]/marc:subfield[@code='a']">
         <span property="isbn">
           <xsl:value-of select="."/>
@@ -211,7 +212,8 @@
 
   <!-- Build ISSN -->
   <xsl:if test="marc:datafield[@tag=011]/marc:subfield[@code='a']">
-    <span class="results_summary issn"><span class="label">ISSN: </span>
+    <span class="results_summary issn">
+      <span class="label">ISSN: </span>
       <xsl:for-each select="marc:datafield[@tag=011]/marc:subfield[@code='a']">
         <span property="issn">
           <xsl:value-of select="."/>
@@ -236,7 +238,7 @@
 
   <xsl:if test="marc:datafield[@tag=676]">
     <span class="results_summary dewey">
-    <span class="label">Dewey: </span>
+      <span class="label">Dewey: </span>
       <xsl:for-each select="marc:datafield[@tag=676]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:if test="marc:subfield[@code='v']">
@@ -256,7 +258,7 @@
 
   <xsl:if test="marc:datafield[@tag=686]">
     <span class="results_summary classification">
-    <span class="label">Classification: </span>
+      <span class="label">Classification: </span>
       <xsl:for-each select="marc:datafield[@tag=686]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:if test="marc:subfield[@code='b']">
