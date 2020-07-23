@@ -54,7 +54,7 @@ __PACKAGE__->table("opac_news");
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 25
+  size: 50
 
 =head2 timestamp
 
@@ -97,7 +97,7 @@ __PACKAGE__->add_columns(
   "content",
   { data_type => "mediumtext", is_nullable => 0 },
   "lang",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -168,8 +168,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gApTRM/dF6uZSMYyvkt4OQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-23 08:50:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Db/JtTOlAdb+83PKZhbFCQ
 
 sub koha_object_class {
     'Koha::NewsItem';
