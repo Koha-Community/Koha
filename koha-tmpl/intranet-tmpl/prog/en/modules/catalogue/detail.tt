@@ -164,6 +164,7 @@
                             <div class="hint">Image from Adlibris</div>
                         </div>
                     [% END %]
+
                     [% IF ( AmazonCoverImages && normalized_isbn) %]
                         <div class="cover-image" id="amazon-bookcoverimg">
                             <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
@@ -172,6 +173,7 @@
                             <div class="hint">Image from Amazon.com</div>
                         </div>
                     [% END %]
+
                     [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
                         [% coce_id = normalized_ean || normalized_isbn %]
                         <div class="cover-image" id="coce-coverimg">
@@ -936,8 +938,7 @@ Note that permanent location is a code, and location may be an authval.
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
         function verify_images() {
             // Loop over each container in the template which contains covers
-            var coverSlides = $(".cover-image");
-            coverSlides.each( function( index ){
+            $(".cover-image").each( function( index ){
                 var div = $(this);
                 // Find the image in the container
                 var img = div.find("img")[0];
@@ -977,24 +978,26 @@ Note that permanent location is a code, and location may be an authval.
                                 div.find(".hint").html(_("Coce image from Open Library"));
                             }
                         }
-                        // If more that one slide is present, add a navigation link
-                        // for activating the slide
-                        if( coverSlides.length > 1 ){
-                            var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
-                            if( index == 0 ){
-                                // Set the first navigation link as active
-                                $(covernav).addClass("nav-active");
-                            }
-                            $(covernav).html("<i class=\"fa fa-circle\"></i>");
-                            $("#cover-slides").addClass("cover-slides").append( covernav );
-                        }
                     }
                 }
             });
-            if( $(".cover-image").length < 2 ){
-                /* Don't show controls for switching between covers if there is only 1 */
-                $(".cover-nav").remove();
+
+            var coverSlides = $(".cover-image");
+            if( coverSlides.length > 1 ){
+                coverSlides.each(function( index ){
+                    // If more that one slide is present, add a navigation link
+                    // for activating the slide
+                    var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
+                    if( index == 0 ){
+                        // Set the first navigation link as active
+                        $(covernav).addClass("nav-active");
+                    }
+                    $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                    $("#cover-slides").addClass("cover-slides").append( covernav );
+
+                });
             }
+
             if( $(".cover-image:visible").length < 1 ){
                 $("#cover-slides").remove();
             }
