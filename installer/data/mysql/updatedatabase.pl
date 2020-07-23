@@ -22436,6 +22436,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23795, "Convert OpacCustomSearch system preference to news block" );
 }
 
+$DBversion = '20.06.00.014';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "ALTER TABLE opac_news CHANGE lang lang VARCHAR(50)" );
+
+    NewVersion( $DBversion, 23797, "Extend the opac_news lang column to accommodate longer values" );
+}
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
