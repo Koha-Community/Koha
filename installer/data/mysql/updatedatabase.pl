@@ -22320,7 +22320,8 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '20.05.02.006';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER TABLE opac_news CHANGE lang lang VARCHAR(50)" );
+
+    $dbh->do( "ALTER TABLE opac_news CHANGE lang lang VARCHAR(50) NOT NULL DEFAULT ''" );
 
     NewVersion( $DBversion, 23797, "Extend the opac_news lang column to accommodate longer value" );
 }
