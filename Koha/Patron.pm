@@ -707,6 +707,13 @@ sub do_check_for_previous_checkout {
         itemnumber => \@item_nos,
     };
 
+    my $delay = C4::Context->preference('CheckPrevCheckoutDelay') || 0;
+    if ($delay) {
+        my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+        my $newer_than = dt_from_string()->subtract( days => $delay );
+        $criteria->{'returndate'} = { '>'   =>  $dtf->format_datetime($newer_than), };
+    }
+
     # Check current issues table
     my $issues = Koha::Checkouts->search($criteria);
     return 1 if $issues->count; # 0 || N

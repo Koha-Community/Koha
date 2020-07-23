@@ -10,6 +10,10 @@ Patrons:
                hardno: "Do not"
          - " check borrower checkout history to see if the current item has been checked out before."
      -
+         - pref: CheckPrevCheckoutDelay
+           default: 0
+         - "Maximum number of days that will trigger a warning if the patron has borrowed that item in the past when CheckPrevCheckout is enabled. Disabled if 0 or empty."
+     -
          - pref: ExtendedPatronAttributes
            choices:
                yes: Enable

@@ -4,9 +4,10 @@ use Modern::Perl;
 use C4::Members;
 use C4::Circulation;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patrons;
 
-use Test::More tests => 60;
+use Test::More tests => 61;
 
 use_ok('Koha::Patron');
 
@@ -449,5 +450,37 @@ subtest 'Check previous checkouts for serial' => sub {
     is($patron->do_check_for_previous_checkout($item1->unblessed), 1, 'Check only one item if bibliographic record is serial');
     is($patron->do_check_for_previous_checkout($item2->unblessed), 0, 'Check only one item if bibliographic record is serial');
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Check previous checkouts with delay' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+    my $library = $builder->build_object({ class => 'Koha::Libraries'});
+    my $biblio = $builder->build_sample_biblio;
+    my $patron = $builder->build({source => 'Borrower'});
+    my $item_object = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    my $issue = Koha::Checkout->new({ branchcode => $library->branchcode, borrowernumber => $patron->{borrowernumber}, itemnumber => $item_object->itemnumber })->store;
+    my $returndate = dt_from_string()->subtract( days => 3 );
+    my $return = AddReturn($item_object->barcode, $library->branchcode, undef, $returndate);
+
+    t::lib::Mocks::mock_preference('checkprevcheckout', 'hardyes');
+    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 0);
+    my $patron1 = Koha::Patrons->find($patron->{borrowernumber});
+    is(
+            $patron1->do_check_for_previous_checkout($item_object->unblessed),
+            1, "Checking CheckPrevCheckoutDelay disabled"
+    );
+    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 5);
+    is(
+            $patron1->do_check_for_previous_checkout($item_object->unblessed),
+            1, "Checking CheckPrevCheckoutDelay enabled within delay"
+    );
+    t::lib::Mocks::mock_preference('checkprevcheckoutdelay', 1);
+    is(
+            $patron1->do_check_for_previous_checkout($item_object->unblessed),
+            0, "Checking CheckPrevCheckoutDelay enabled after delay"
+    );
     $schema->storage->txn_rollback;
 }
