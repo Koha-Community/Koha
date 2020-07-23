@@ -75,6 +75,13 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
        # CSV
         if ($format =~ /^\d+$/) {
+
+            my $csv_profile = Koha::CsvProfiles->find($format);
+            if ( not $csv_profile or $csv_profile->staff_only ) {
+                print $query->redirect('/cgi-bin/koha/errors/404.pl');
+                exit;
+            }
+
             my @biblios;
             while ( my $content = $contents->next ) {
                 push @biblios, $content->biblionumber;
