@@ -22356,6 +22356,26 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20815, "Add NoRefundOnLostReturnedItemsAge system preference" );
 }
 
+$DBversion = '20.06.00.011';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'export_format', 'staff_only' ) ) {
+        $dbh->do(q|
+            ALTER TABLE export_format
+                ADD staff_only TINYINT(1) NOT NULL DEFAULT 0 AFTER used_for,
+                ADD KEY `staff_only_idx` (`staff_only`);
+        |);
+    }
+
+    unless ( index_exists( 'export_format', 'used_for_idx' ) ) {
+        $dbh->do(q|
+            ALTER TABLE export_format
+                ADD KEY `used_for_idx` (`used_for` (191));
+        |);
+    }
+
+    NewVersion( $DBversion, 5087, "Add export_format.staff_only" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
