@@ -128,7 +128,8 @@ sub api_namespace {
 }
 
 sub after_hold_create {
-    return "Koha::Plugin::Test::after_hold_create";
+    my ( $self, $param ) = @_;
+    Koha::Exceptions::Exception->throw("after_hold_create called with parameter " . ref($param) );
 }
 
 sub after_biblio_action {
