@@ -22474,6 +22474,23 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23797, "Convert OpacLoginInstructions system preference to news block" );
 }
 
+$DBversion = '20.06.00.016';
+if( CheckVersion( $DBversion ) ) {
+
+    unless ( column_exists('branchtransfers', 'daterequested') ) {
+        $dbh->do(
+            qq{
+                ALTER TABLE branchtransfers
+                ADD
+                  `daterequested` timestamp NOT NULL default CURRENT_TIMESTAMP
+                AFTER
+                  `itemnumber`
+              }
+        );
+    }
+
+    NewVersion( $DBversion, 23092, "Add 'daterequested' field to transfers table" );
+}
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
