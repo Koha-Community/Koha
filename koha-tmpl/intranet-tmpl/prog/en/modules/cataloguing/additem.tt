@@ -157,7 +157,7 @@
                 [% IF ( mv.type == 'hidden' ) %]
                     <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
-                    [% IF ( mv.readonly ) %]
+                    [% IF ( mv.readonly || ite.IS_RETURN_CLAIM ) %]
                         <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor" readonly="readonly" disabled="disabled">
                     [% ELSE %]
                         <select name="field_value" id="[%- mv.id | html -%]" size="1" class="input_marceditor">

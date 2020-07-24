@@ -107,7 +107,7 @@ sub _increment_barcode {
 
 
 sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $loop_data, $i, $restrictededition) = @_;
+        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $loop_data, $i, $restrictededition, $item) = @_;
   
         my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -171,13 +171,18 @@ sub generate_subfield_form {
             my %authorised_lib;
             # builds list, depending on authorised value...
             if ( $subfieldlib->{authorised_value} eq "LOST" ) {
-                  $subfield_data{IS_LOST_AV} = 1;
-                  push @authorised_values, qq{};
-                  my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
-                  for my $r ( @$av ) {
-                      push @authorised_values, $r->{authorised_value};
-                      $authorised_lib{$r->{authorised_value}} = $r->{lib};
-                  }
+                my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
+                my $item_is_return_claim = $ClaimReturnedLostValue && $item && $item->itemlost && $ClaimReturnedLostValue eq $item->itemlost;
+                $subfield_data{IS_RETURN_CLAIM} = $item_is_return_claim;
+
+                $subfield_data{IS_LOST_AV} = 1;
+
+                push @authorised_values, qq{};
+                my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
+                for my $r ( @$av ) {
+                    push @authorised_values, $r->{authorised_value};
+                    $authorised_lib{$r->{authorised_value}} = $r->{lib};
+                }
             }
             elsif ( $subfieldlib->{authorised_value} eq "branches" ) {
                 foreach my $thisbranch (@$branches) {
@@ -918,6 +923,8 @@ for my $library ( @$libraries ) {
     $library->{selected} = 1 if $library->{branchcode} eq $branch
 }
 
+my $item = Koha::Items->find($itemnumber);
+
 # We generate form, from actuel record
 @fields = ();
 if($itemrecord){
@@ -931,7 +938,7 @@ if($itemrecord){
 
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
-            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition, $item);
             push @fields, "$tag$subfieldtag";
             push (@loop_data, $subfield_data);
             $i++;
@@ -955,15 +962,13 @@ foreach my $tag ( keys %{$tagslib}){
         my @values = (undef);
         @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)) && defined($itemrecord->field($tag)->subfield($subtag)));
         for my $value (@values){
-            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
+            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition, $item);
             push (@loop_data, $subfield_data);
             $i++;
         }
   }
 }
 @loop_data = sort {$a->{subfield} cmp $b->{subfield} } @loop_data;
-
-my $item = Koha::Items->find($itemnumber); # We certainly want to fetch it earlier
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
