@@ -1548,15 +1548,13 @@ sub AddIssue {
                 $item_object->itemnumber,
             ) if C4::Context->preference("IssueLog");
 
-            _after_circ_actions(
-                {
-                    action  => 'checkout',
-                    payload => {
-                        type     => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
-                        checkout => $issue->get_from_storage
-                    }
+            Koha::Plugins->call('after_circ_action', {
+                action  => 'checkout',
+                payload => {
+                    type     => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
+                    checkout => $issue->get_from_storage
                 }
-            ) if C4::Context->config("enable_plugins");
+            });
         }
     }
     return $issue;
@@ -2210,14 +2208,12 @@ sub AddReturn {
 
     my $checkin = Koha::Old::Checkouts->find($issue->id);
 
-    _after_circ_actions(
-        {
-            action  => 'checkin',
-            payload => {
-                checkout=> $checkin
-            }
+    Koha::Plugins->call('after_circ_action', {
+        action  => 'checkin',
+        payload => {
+            checkout=> $checkin
         }
-    ) if C4::Context->config("enable_plugins");
+    });
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ));
 }
@@ -3134,14 +3130,12 @@ sub AddRenewal {
         #Log the renewal
         logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
 
-        _after_circ_actions(
-            {
-                action  => 'renewal',
-                payload => {
-                    checkout  => $issue->get_from_storage
-                }
+        Koha::Plugins->call('after_circ_action', {
+            action  => 'renewal',
+            payload => {
+                checkout  => $issue->get_from_storage
             }
-        ) if C4::Context->config("enable_plugins");
+        });
     });
 
     return $datedue;
@@ -4350,30 +4344,6 @@ sub _item_denied_renewal {
         }
     }
     return 0;
-}
-
-=head3 _after_circ_actions
-
-Internal method that calls the after_circ_action plugin hook on configured
-plugins.
-
-=cut
-
-sub _after_circ_actions {
-    my ($params) = @_;
-
-    my @plugins = Koha::Plugins->new->GetPlugins({
-        method => 'after_circ_action',
-    });
-
-    foreach my $plugin ( @plugins ) {
-        try {
-            $plugin->after_circ_action( $params );
-        }
-        catch {
-            warn "$_";
-        };
-    }
 }
 
 1;
