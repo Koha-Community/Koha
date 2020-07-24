@@ -299,6 +299,7 @@ if ($barcode) {
          C4::Context->preference("CircConfirmItemParts")
       && $item->materials
       && !$query->param('multiple_confirm');
+    $template->param('multiple_confirmed' => 1) if $query->param('multiple_confirm');
 
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
