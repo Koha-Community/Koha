@@ -898,10 +898,10 @@ sub CanBookBeIssued {
     }
 
     # Additional Materials Check
-    if ( C4::Context->preference("CircConfirmItemParts") ) {
-        if ( $item_object->materials ) {
-            $needsconfirmation{additional_materials} = $item_object->materials;
-        }
+    if ( C4::Context->preference("CircConfirmItemParts")
+        && $item_object->materials )
+    {
+        $needsconfirmation{additional_materials} = $item_object->materials;
     }
 
     #

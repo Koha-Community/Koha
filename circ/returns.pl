@@ -295,17 +295,15 @@ if ($barcode) {
     my $return_date = $dropboxmode ? $dropboxdate : $return_date_override_dt;
 
     # Block return if multi-part and confirm has not been received
-    my $needs_confirm = 0;
-    if ( C4::Context->preference("CircConfirmItemParts") ) {
-        if ( $item->materials && !$query->param('multiple_confirm') ) {
-                $needs_confirm = 1;
-        }
-    }
+    my $needs_confirm =
+         C4::Context->preference("CircConfirmItemParts")
+      && $item->materials
+      && !$query->param('multiple_confirm');
 
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date )
-      unless $needs_confirm;
+          unless $needs_confirm;
 
     if ($returned) {
         my $time_now = dt_from_string()->truncate( to => 'minute');
