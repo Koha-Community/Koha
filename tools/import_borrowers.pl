@@ -62,7 +62,7 @@ my $extended = C4::Context->preference('ExtendedPatronAttributes');
 
 my @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } Koha::Patrons->columns();
 push( @columnkeys, 'patron_attributes' ) if $extended;
-push( @columnkeys, qw( relationship guarantor_id  guarantor_firstname guarantor_surname ) );
+push( @columnkeys, qw( guarantor_relationship guarantor_id ) );
 
 my $input = CGI->new();
 
@@ -123,9 +123,9 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             file                         => $handle,
             defaults                     => \%defaults,
             matchpoint                   => $matchpoint,
-            overwrite_cardnumber         => $input->param('overwrite_cardnumber'),
+            overwrite_cardnumber         => scalar $input->param('overwrite_cardnumber'),
             overwrite_passwords          => $overwrite_passwords,
-            preserve_extended_attributes => $input->param('ext_preserve') || 0,
+            preserve_extended_attributes => scalar $input->param('ext_preserve') || 0,
         }
     );
 
