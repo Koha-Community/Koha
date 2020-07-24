@@ -58,7 +58,10 @@ my $op        = $input->param('op');
 
 output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
   if $op
-  && not $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
+  && ! $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } )
+  && ! $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } )
+  && ! $logged_in_patron->has_permission( { acquisition => 'merge_invoices' } )
+  && ! $logged_in_patron->has_permission( { acquisition => 'delete_invoices' } );
 
 my $invoice_files;
 if ( C4::Context->preference('AcqEnableFiles') ) {
@@ -67,6 +70,8 @@ if ( C4::Context->preference('AcqEnableFiles') ) {
 }
 
 if ( $op && $op eq 'close' ) {
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
     CloseInvoice($invoiceid);
     my $referer = $input->param('referer');
     if ($referer) {
@@ -101,6 +106,10 @@ elsif ( $op && $op eq 'mod' ) {
         ReopenInvoice($invoiceid)
             if $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
     } elsif ($input->param('close')) {
+
+        output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+            unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
+
         CloseInvoice($invoiceid);
     } elsif ($input->param('merge')) {
 
@@ -127,11 +136,19 @@ elsif ( $op && $op eq 'delete' ) {
     }
 }
 elsif ( $op && $op eq 'del_adj' ) {
+
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
+
     my $adjustment_id  = $input->param('adjustment_id');
     my $del_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id );
     $del_adj->delete() if ($del_adj);
 }
 elsif ( $op && $op eq 'mod_adj' ) {
+
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
+
     my @adjustment_id  = $input->multi_param('adjustment_id');
     my @adjustment     = $input->multi_param('adjustment');
     my @reason         = $input->multi_param('reason');
