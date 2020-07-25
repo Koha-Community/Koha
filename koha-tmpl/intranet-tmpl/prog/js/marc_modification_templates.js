@@ -1,3 +1,4 @@
+/* global __ */
 $(document).ready(function() {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
     window.action_submit_value = $("#action_submit").val();
@@ -13,50 +14,50 @@ $(document).ready(function() {
         var action = $("#action").val();
         if ( action == 'move_field' || action == 'copy_field' || action == 'copy_and_replace_field') {
             if ( $("#from_subfield").val().length != $("#to_subfield").val().length ) {
-                alert( MSG_MMT_SUBFIELDS_MATCH );
+                alert( __("Both subfield values should be filled or empty.") );
                 return false;
             }
             if ( $("#to_field").val().length <= 0 ) {
-                alert( MSG_MMT_DESTINATION_REQUIRED );
+                alert( __("The destination should be filled.") );
                 return false;
             }
             if ( ( $("#to_field").val()   < 10 && $("#to_subfield").val().length   > 0 ) ||
-                 ( $("#from_field").val() < 10 && $("#from_subfield").val().length > 0 ) ) {
-                 alert( MSG_MMT_CONTROL_FIELD_EMPTY );
-                 return false;
+                ( $("#from_field").val() < 10 && $("#from_subfield").val().length > 0 ) ) {
+                alert( __("If the field is a control field, the subfield should be empty") );
+                return false;
             }
             if ( ( $("#from_field").val() < 10 && $("#to_field").val()   >= 10 ) ||
                  ( $("#to_field").val()   < 10 && $("#from_field").val() >= 10 ) ) {
-                alert( MSG_MMT_CONTROL_FIELD );
+                alert( __("A control field cannot be used with a regular field.") );
                 return false;
-             }
+            }
         }
         if ( action == 'update_field' ) {
             if ( $("#from_subfield").val().length <= 0 ) {
-                alert( MSG_MMT_SOURCE_SUBFIELD );
+                alert( __("The source subfield should be filled for update.") );
                 return false;
             }
         }
         if ( $("#from_field").val().length <= 0 ) {
-            alert( MSG_MMT_SOURCE_FIELD );
+            alert( __("The source field should be filled.") );
             return false;
         }
         if ( $("#conditional").val() == 'if' || $("#conditional").val() == 'unless' ) {
             if ( $("#conditional_field").val() == '' ) {
-                alert( MSG_MMT_CONDITIONAL_FIELD_REQUIRED );
+                alert( __("The conditional field should be filled.") );
                 return false;
             }
             if ( $("#conditional_comparison").val() == '' ) {
-                alert( MSG_MMT_CONDITIONAL_COMPARISON_REQUIRED );
+                alert( __("The conditional comparison operator should be filled.") );
                 return false
             }
             if ( $("#conditional_value").val() == '' &&
                  ( $("#conditional_comparison").val() == 'equals' || $("#conditional_comparison").val() == 'not_equals' ) ) {
                 if ( document.getElementById('conditional_regex').checked == true ) {
-                    alert( MSG_MMT_CONDITIONAL_VALUE_REGEX_REQUIRED );
+                    alert( __("The conditional regular expression should be filled.") );
                     return false;
                 } else {
-                    alert( MSG_MMT_CONDITIONAL_VALUE_REQUIRED );
+                    alert( __("The conditional value should be filled.") );
                     return false;
                 }
             }
@@ -112,9 +113,9 @@ $(document).ready(function() {
 function updateAllEvery(){
     if ( $("#conditional_field").is(":visible") ) {
         if ( $("#conditional_field").val() == $("#from_field").val() && $("#from_field").val().length > 0 ) {
-            $("#field_number option[value='0']").html( MSG_MMT_EVERY );
+            $("#field_number option[value='0']").html( __("Every") );
         } else {
-            $("#field_number option[value='0']").html( MSG_MMT_ALL );
+            $("#field_number option[value='0']").html( __("All") );
         }
     }
 }
@@ -256,11 +257,11 @@ function clearFormElements(divId) {
 }
 
 function confirmDeleteAction() {
-    return confirm( MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION );
+    return confirm( __("Are you sure you wish to delete this template action?") );
 }
 
 function confirmDelete() {
-    return confirm( MSG_MMT_CONFIRM_DEL_TEMPLATE );
+    return confirm( __("Are you sure you wish to delete this template?") );
 }
 
 var modaction_legend_innerhtml;
@@ -306,10 +307,10 @@ function editAction( mmta ) {
     document.getElementById('description').value = mmta['description'];
 
     window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerHTML;
-    document.getElementById('modaction_legend').innerHTML = MSG_MMT_EDIT_ACTION.format(mmta['ordering']);
+    document.getElementById('modaction_legend').innerHTML = __("Edit action %s").format(mmta['ordering']);
 
     window.action_submit_value = document.getElementById('action_submit').value;
-    document.getElementById('action_submit').value = MSG_MMT_UPDATE_ACTION;
+    document.getElementById('action_submit').value = __("Update action");
 }
 
 function cancelEditAction() {
