@@ -258,10 +258,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         //]]>
     </script>
 [% END %]
-[% IF ( GoogleIndicTransliteration ) %]
-    <script src="https://www.google.com/jsapi"></script>
-    [% Asset.js("js/googleindictransliteration.js") | $raw %]
-[% END %]
 
 [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
 <script>

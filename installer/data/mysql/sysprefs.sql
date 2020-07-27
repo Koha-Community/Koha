@@ -199,7 +199,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('FRBRizeEditions','0','','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
 ('GDPR_Policy','','Enforced|Permissive|Disabled','General Data Protection Regulation - policy', 'Choice'),
 ('gist','0','','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','Integer'),
-('GoogleIndicTransliteration','0','','GoogleIndicTransliteration on the OPAC.','YesNo'),
 ('GoogleJackets','0',NULL,'if ON, displays jacket covers from Google Books API','YesNo'),
 ('GoogleOpenIDConnect', '0', NULL, 'if ON, allows the use of Google OpenID Connect for login', 'YesNo'),
 ('GoogleOAuth2ClientID', '', NULL, 'Client ID for the web app registered with Google', 'Free'),

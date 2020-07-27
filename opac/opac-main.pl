@@ -110,9 +110,4 @@ $template->param(
     daily_quote         => $quote,
 );
 
-# If GoogleIndicTransliteration system preference is On Set parameter to load Google's javascript in OPAC search screens
-if (C4::Context->preference('GoogleIndicTransliteration')) {
-        $template->param('GoogleIndicTransliteration' => 1);
-}
-
 output_html_with_http_headers $input, $cookie, $template->output;
