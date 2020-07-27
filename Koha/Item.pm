@@ -38,6 +38,7 @@ use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
+use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Libraries;
@@ -817,6 +818,19 @@ sub to_api_mapping {
         stocknumber              => 'inventory_number',
         new_status               => 'new_status'
     };
+}
+
+=head3 itemtype
+
+    my $itemtype = $item->itemtype({ effective => 1 });
+
+    Returns Koha object for (effective) itemtype
+
+=cut
+
+sub itemtype {
+    my ( $self, $params ) = @_;
+    return Koha::ItemTypes->find( $params->{effective} ?  $self->effective_itemtype : $self->itype ); # no FK
 }
 
 =head2 Internal methods

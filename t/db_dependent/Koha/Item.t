@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Biblio;
 use C4::Circulation;
@@ -500,4 +500,23 @@ subtest 'renewal_branchcode' => sub {
     is( $item->renewal_branchcode, $item->homebranch, "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item");
     is( $item->renewal_branchcode({branch=>'MANATEE'}), $item->homebranch, "If interface opac and OpacRenewalBranch set to itemhomebranch, we get homebranch of item even if branch passed");
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Tests for itemtype' => sub {
+    plan tests => 4;
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, itype => $itemtype->itemtype });
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    is( $item->itemtype({ effective => 1 })->itemtype, $item->itype, 'Pref enabled, effective parameter' );
+    is( $item->itemtype->itemtype, $item->itype, 'Pref enabled, no parameter' );
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    is( $item->itemtype({ effective => 1 })->itemtype, $biblio->biblioitem->itemtype, 'Pref disabled, effective parameter' );
+    is( $item->itemtype->itemtype, $item->itype, 'Pref disabled, no parameter' );
+
+    $schema->storage->txn_rollback;
 };
