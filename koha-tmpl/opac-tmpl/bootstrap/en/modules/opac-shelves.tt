@@ -496,6 +496,7 @@
 
                                                     [% INCLUDE 'title-actions-menu.inc' items=itemsloo %]
 
+                                                    [% INCLUDE "openlibrary-readapi.inc" bib = itemsloo %]
                                                     <!-- COinS / Openurl -->
                                                     <span class="Z3988" title="[% itemsloo.coins | html %]"></span>
                                                 </td>
@@ -762,6 +763,9 @@
 [% BLOCK jsinclude %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
+[% IF OpenLibraryCovers || OpenLibrarySearch %]
+    [% Asset.js("js/openlibrary.js") | $raw %]
+[% END %]
 <script>
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from the list?");

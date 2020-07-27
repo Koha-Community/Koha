@@ -619,7 +619,12 @@
 [% Asset.js("js/authtoresults.js") | $raw %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %]
-[% END %]<script>
+[% END %]
+[% IF OpenLibraryCovers || OpenLibrarySearch %]
+    [% Asset.js("js/openlibrary.js") | $raw %]
+[% END %]
+
+<script>
 [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
 function holdMultiple() {
     var checkedBiblioNums = ""; // Separated by "/"

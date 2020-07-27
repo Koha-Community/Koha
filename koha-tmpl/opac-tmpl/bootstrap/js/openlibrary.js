@@ -112,6 +112,8 @@ var ol_readapi_automator =
 // 'constants'
 var readapi_bibids = ['isbn', 'lccn', 'oclc', 'olid', 'iaid', 'bibkeys'];
 var magic_classname = 'ol_readapi_book';
+var ol_readapi_books = $("." + magic_classname );
+var result;
 
 // added to book divs to correlate with API results
 var magic_bookid = 'ol_bookid';
@@ -171,9 +173,8 @@ function make_read_button(bookdata) {
 function default_decorate_el_fn(el, bookdata) {
     // Note that 'bookdata' may be undefined, if the Read API call
     // didn't return results for this book
-    if (!bookdata) {
-        decoration = 'Not found';
-    } else {
+    var decoration;
+    if (bookdata) {
         decoration = make_read_button(bookdata);
     }
     if (decoration) {
@@ -216,15 +217,17 @@ function do_query(q, decorate_el_fn) {
                 });
 }
 
-// Do stuff
-var q = create_query();
-do_query(q);
+if( ol_readapi_books.length > 0 ){
+    // Do stuff
+    var q = create_query();
+    do_query(q);
 
-result = {
-    do_query: do_query,
-    create_query: create_query,
-    make_read_button: make_read_button
-};
+    result = {
+        do_query: do_query,
+        create_query: create_query,
+        make_read_button: make_read_button
+    };
+}
 
 return result;
 })(); // close anonymous scope
