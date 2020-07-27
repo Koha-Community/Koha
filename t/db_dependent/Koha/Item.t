@@ -504,7 +504,7 @@ subtest 'renewal_branchcode' => sub {
 };
 
 subtest 'Tests for itemtype' => sub {
-    plan tests => 4;
+    plan tests => 2;
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio;
@@ -512,11 +512,9 @@ subtest 'Tests for itemtype' => sub {
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, itype => $itemtype->itemtype });
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
-    is( $item->itemtype({ effective => 1 })->itemtype, $item->itype, 'Pref enabled, effective parameter' );
-    is( $item->itemtype->itemtype, $item->itype, 'Pref enabled, no parameter' );
+    is( $item->itemtype->itemtype, $item->itype, 'Pref enabled' );
     t::lib::Mocks::mock_preference('item-level_itypes', 0);
-    is( $item->itemtype({ effective => 1 })->itemtype, $biblio->biblioitem->itemtype, 'Pref disabled, effective parameter' );
-    is( $item->itemtype->itemtype, $item->itype, 'Pref disabled, no parameter' );
+    is( $item->itemtype->itemtype, $biblio->biblioitem->itemtype, 'Pref disabled' );
 
     $schema->storage->txn_rollback;
 };

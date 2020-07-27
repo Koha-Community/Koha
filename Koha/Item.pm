@@ -822,15 +822,15 @@ sub to_api_mapping {
 
 =head3 itemtype
 
-    my $itemtype = $item->itemtype({ effective => 1 });
+    my $itemtype = $item->itemtype;
 
-    Returns Koha object for (effective) itemtype
+    Returns Koha object for effective itemtype
 
 =cut
 
 sub itemtype {
-    my ( $self, $params ) = @_;
-    return Koha::ItemTypes->find( $params->{effective} ?  $self->effective_itemtype : $self->itype ); # no FK
+    my ( $self ) = @_;
+    return Koha::ItemTypes->find( $self->effective_itemtype );
 }
 
 =head2 Internal methods
