@@ -25,6 +25,7 @@ use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+use t::lib::Dates;
 
 use Time::Fake;
 use C4::Calendar;
@@ -196,7 +197,7 @@ subtest 'new' => sub {
             to_date => $dt_to,
         }
     );
-    is( $fees->from_date, dt_from_string(),
+    is( t::lib::Dates::compare($fees->from_date, dt_from_string()), 0,
         'from_date default set correctly to today' );
 };
 
