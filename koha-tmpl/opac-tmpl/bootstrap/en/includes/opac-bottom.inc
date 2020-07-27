@@ -176,6 +176,10 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var MSG_OVERDRIVE_DOWNLOAD_AS = _( "Download as: " );
         var MSG_OVERDRIVE_CANNOT_CHECKOUT = _("Item cannot be checked out. There are no available formats");
     [% END %]
+    [% IF OpenLibraryCovers || OpenLibrarySearch %]
+        var NO_OL_JACKET = _("No cover image available");
+        var OL_PREVIEW = _("Preview");
+    [% END %]
     [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
         $(window).load(function() {
             verify_images();
@@ -228,16 +232,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         //<![CDATA[
         var NO_COCE_JACKET = _("No cover image available");
         //]]>
-    </script>
-[% END %]
-
-[% IF OpenLibraryCovers || OpenLibrarySearch %]
-    [% Asset.js("js/openlibrary.js") | $raw %]
-    <script>
-    //<![CDATA[
-    var NO_OL_JACKET = _("No cover image available");
-    var OL_PREVIEW = _("Preview");
-    //]]>
     </script>
 [% END %]
 

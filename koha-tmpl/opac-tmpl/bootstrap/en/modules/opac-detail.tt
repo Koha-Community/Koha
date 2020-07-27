@@ -1380,6 +1380,9 @@
     [% Asset.js("js/verovio.js") | $raw %]
 [% END %]
 [% Asset.js("lib/emoji-picker/js/emoji-picker-all.min.js") | $raw %]
+[% IF OpenLibraryCovers || OpenLibrarySearch %]
+    [% Asset.js("js/openlibrary.js") | $raw %]
+[% END %]
 <script>
     window.emojiPicker = new EmojiPicker({
       emojiable_selector: '[data-emojiable=true]',
