@@ -22234,6 +22234,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24379, "Set login_attempts NOT NULL" );
 }
 
+$DBversion = '20.05.02.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE itemtypes SET imageurl = REPLACE (imageurl, '.gif', '.png') WHERE imageurl LIKE 'bridge/%'" );
+
+    NewVersion( $DBversion, 23148, "Replace Bridge icons with transparent PNG files" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
