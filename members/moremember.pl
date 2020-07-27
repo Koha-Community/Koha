@@ -40,6 +40,7 @@ use Koha::Patron::Messages;
 use Koha::DateUtils;
 use Koha::CsvProfiles;
 use Koha::Patrons;
+use Koha::Patron::Files;
 use Koha::Token;
 use Koha::Checkouts;
 
@@ -209,6 +210,7 @@ $template->param(
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
     logged_in_user => $logged_in_user,
+    files => Koha::Patron::Files->new( borrowernumber => $borrowernumber ) ->GetFilesInfo(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

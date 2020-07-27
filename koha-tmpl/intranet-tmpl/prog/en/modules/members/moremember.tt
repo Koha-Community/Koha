@@ -700,6 +700,32 @@
                                     </div>
                                 [% END %]
                             </div> [% # /div#patron-alternative-contact %]
+
+                            [% IF Koha.Preference('EnableBorrowerFiles') %]
+                                <div id="patron-files" class="patroninfo-section">
+                                    <div class="patroninfo-heading">
+                                        <h3>Files</h3>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]"><i class="fa fa-list"></i> Manage</a>
+
+                                        [% IF ( files ) %]
+                                            <div class="rows">
+                                                <ol>
+                                                    [% FOREACH f IN files %]
+                                                        <li>
+                                                            <a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a>
+                                                            [% IF ( f.file_description ) %]
+                                                                - [% f.file_description | html %]
+                                                            [% END %]
+                                                        </li>
+                                                    [% END # /FOREACH f %]
+                                                </ol>
+                                            </div>
+                                        [% END # /IF files %]
+
+                                    </div> <!-- /.patroninfo-heading -->
+                                </div> <!-- /#patron-files -->
+                            [% END # /IF EnableBorrowerFiles %]
+
                         </div> <!-- /div.col-sm-6 -->
                     </div> <!-- /div.row -->
 
