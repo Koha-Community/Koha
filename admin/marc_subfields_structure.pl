@@ -25,6 +25,7 @@ use C4::Context;
 
 use Koha::Authority::Types;
 use Koha::AuthorisedValueCategories;
+use Koha::Filter::MARC::ViewPolicy;
 
 use List::MoreUtils qw( uniq );
 
@@ -191,6 +192,33 @@ if ( $op eq 'add_form' ) {
         $row_data{isurl}             = $data->{isurl};
         $row_data{row}               = $i;
         $row_data{link}              = $data->{'link'};
+
+        if ( defined $data->{kohafield}
+            and $data->{kohafield} eq 'biblio.biblionumber' )
+        {
+            my $hidden_opac = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+                    {
+                        frameworkcode => $frameworkcode,
+                        interface     => "opac",
+                    }
+                )->{biblionumber};
+
+            my $hidden_intranet = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+                    {
+                        frameworkcode => $frameworkcode,
+                        interface     => "intranet",
+                    }
+                )->{biblionumber};
+
+            if ( $hidden_opac or $hidden_intranet ) {
+                # We should allow editing for fixing it
+                $row_data{hidden_protected} = 0;
+            }
+            else {
+                $row_data{hidden_protected} = 1;
+            }
+        }
+
         push( @loop_data, \%row_data );
         $i++;
     }
