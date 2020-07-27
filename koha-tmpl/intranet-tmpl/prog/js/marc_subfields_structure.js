@@ -70,7 +70,10 @@ function setHiddenValue() {
         hidden_value='8';
     }
 
-    enable_cb(tab);
+    var hidden_protected = $('#hidden-'+ tab).attr('data-koha-protected');
+    if ( hidden_protected != 1 ) {
+        enable_cb(tab);
+    }
 
     $('#hidden-' + tab).val(hidden_value);
 
@@ -79,6 +82,7 @@ function setHiddenValue() {
 function populateHiddenCheckboxes(tab) {
     // read the serialized value
     var hidden_value = $('#hidden-' + tab).val();
+    var hidden_protected = $('#hidden-'+ tab).attr('data-koha-protected');
     // deafult to false
     var opac_checked = false;
     var intranet_checked = false;
@@ -143,6 +147,14 @@ function populateHiddenCheckboxes(tab) {
     $("#hidden_collapsed_" + tab).prop('checked',collapsed_checked);
     $("#hidden_flagged_" + tab).prop('checked',flagged_checked);
 
-    enable_cb(tab);
-
+    if ( hidden_protected == 1 ) {
+        $("#hidden_opac_" + tab).prop('disabled','disabled');
+        $("#hidden_intranet_" + tab).prop('disabled','disabled');
+        $("#hidden_editor_" + tab).prop('disabled','disabled');
+        $("#hidden_collapsed_" + tab).prop('disabled','disabled');
+        $("#hidden_flagged_" + tab).prop('disabled','disabled');
+    }
+    else {
+        enable_cb(tab);
+    }
 }
