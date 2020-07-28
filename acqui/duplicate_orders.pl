@@ -104,9 +104,7 @@ elsif ( $op eq 'batch_edit' ) {
     foreach my $r ( @{$budgets_hierarchy} ) {
         next
           unless ( C4::Budgets::CanUserUseBudget( $patron, $r, $userflags ) );
-        if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
-            next;
-        }
+
         push @{$budget_loop},
           {
             b_id            => $r->{budget_id},

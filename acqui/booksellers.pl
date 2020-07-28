@@ -114,9 +114,6 @@ my $userbranch = $userenv->{branch};
 my $budgets = GetBudgetHierarchy;
 my $has_budgets = 0;
 foreach my $r (@{$budgets}) {
-    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
-        next;
-    }
     next unless (CanUserUseBudget($loggedinuser, $r, $userflags));
 
     $has_budgets = 1;

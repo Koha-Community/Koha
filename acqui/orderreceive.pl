@@ -270,9 +270,6 @@ foreach my $period (@$periods) {
     my @funds;
     foreach my $r ( @{$budget_hierarchy} ) {
         next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
-        if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
-            next;
-        }
         push @funds,
           {
             b_id  => $r->{budget_id},

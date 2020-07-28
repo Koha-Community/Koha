@@ -411,9 +411,6 @@ my $budget_loop = [];
 my $budgets_hierarchy = GetBudgetHierarchy;
 foreach my $r ( @{$budgets_hierarchy} ) {
     next unless (CanUserUseBudget($patron, $r, $userflags));
-    if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
-        next;
-    }
     push @{$budget_loop},
       { b_id  => $r->{budget_id},
         b_txt => $r->{budget_name},
