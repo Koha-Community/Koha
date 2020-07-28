@@ -143,6 +143,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DefaultClassificationSource','ddc',NULL,'Default classification scheme used by the collection. E.g., Dewey, LCC, etc.','ClassSources'),
 ('DefaultCountryField008','','','Fill in the default country code for field 008 Range 15-17 of MARC21 - Place of publication, production, or execution. See <a href=\"http://www.loc.gov/marc/countries/countries_code.html\">MARC Code List for Countries</a>','Free'),
 ('DefaultLanguageField008','','','Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)','Free'),
+('DefaultLongOverdueSkipLostStatuses', '', NULL, 'Skip these lost statuses by default in longoverdue.pl', 'Free'),
 ('DefaultLongOverdueChargeValue', '', NULL, "Charge a lost item to the borrower's account when the LOST value of the item changes to n.", 'integer'),
 ('DefaultLongOverdueDays', '', NULL, "Set the LOST value of an item when the item has been overdue for more than n days.", 'integer'),
 ('DefaultLongOverdueLostValue', '', NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer'),
