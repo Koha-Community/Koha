@@ -342,18 +342,20 @@
                     <td>
                         <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
-                        [% FOREACH itemtypeloo IN itemtypeloop %]
-                            [% NEXT IF itemtypeloo.parent_type %]
-                            <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %]</option>
-                            [% SET children = itemtypeloo.children_with_localization %]
-                            [% IF children %]
-                                <optgroup>
-                                [% FOREACH child IN children %]
-                                    <option value="[% child.itemtype | html %]">[% child.translated_description | html %]</option>
+                            [% FOREACH itemtypeloo IN itemtypeloop %]
+                                [% NEXT IF itemtypeloo.parent_type %]
+                                [% SET children = itemtypeloo.children_with_localization %]
+                                [% IF children %]
+                                    <optgroup label="[% itemtypeloo.translated_description | html %]">
+                                        <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %] (All)</option>
+                                        [% FOREACH child IN children %]
+                                            <option value="[% child.itemtype | html %]">[% child.translated_description | html %]</option>
+                                        [% END %]
+                                    </optgroup>
+                                [% ELSE %]
+                                    <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %]</option>
                                 [% END %]
-                                </optgroup>
                             [% END %]
-                        [% END %]
                         </select>
                     </td>
                     <td class="actions">
