@@ -3374,13 +3374,15 @@ DROP TABLE IF EXISTS `biblioimages`;
 
 CREATE TABLE `biblioimages` ( -- local cover images
  `imagenumber` int(11) NOT NULL AUTO_INCREMENT, -- unique identifier for the image
- `biblionumber` int(11) NOT NULL, -- foreign key from biblio table to link to biblionumber
+ `biblionumber` int(11) DEFAULT NULL, -- foreign key from biblio table to link to biblionumber
+ `itemnumber` int(11) DEFAULT NULL, -- foreign key from item table to link to itemnumber
  `mimetype` varchar(15) NOT NULL, -- image type
  `imagefile` mediumblob NOT NULL, -- image file contents
  `thumbnail` mediumblob NOT NULL, -- thumbnail file contents
  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- image creation/update time
  PRIMARY KEY (`imagenumber`),
- CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+ CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+ CONSTRAINT `bibliocoverimage_fk2` FOREIGN KEY (`itemnumber`) REFERENCES `item` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
