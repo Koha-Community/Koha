@@ -145,7 +145,7 @@ if ( $selected_accts ) {
     }
     my @acc = split /,/, $selected_accts;
 
-    @selected_accountlines = Koha::Account::Lines->search(
+    my $selected_accountlines = Koha::Account::Lines->search(
         {
             borrowernumber    => $borrowernumber,
             amountoutstanding => { '<>' => 0 },
@@ -154,8 +154,9 @@ if ( $selected_accts ) {
         { order_by => 'date' }
     );
 
-    $total_due = 0; # Reset and recalculate total due
-    map { $total_due += $_->amountoutstanding } @selected_accountlines;
+    $total_due = $selected_accountlines->_resultset->get_column('amountoutstanding')->sum();
+
+    @selected_accountlines = $selected_accountlines->as_list;
 }
 
 
