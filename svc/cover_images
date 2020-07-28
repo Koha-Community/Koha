@@ -37,28 +37,27 @@ if ( $auth_status ne "ok" ) {
 }
 
 my $action       = $input->param('action');
-my $biblionumber = $input->param('biblionumber');
 my @imagenumbers = $input->param('imagenumber');
 
 # Array to store the reponse JSON
 my $response = [];
 
 if ( $action eq "delete" ) {
-    # Build a hash of valid imagenumbers fr the given biblionumber
-    my %valid_imagenumbers = map {$_ => 1} ListImagesForBiblio($biblionumber);
 
     foreach my $imagenumber ( @imagenumbers ) {
-        if ( exists( $valid_imagenumbers{ $imagenumber } ) ) {
+        eval {
             DelImage($imagenumber);
-            push @$response, {
-                imagenumber => $imagenumber,
-                deleted => 1
-            };
-        } else {
+        };
+        if ( $@ ) {
             push @$response, {
                 imagenumber => $imagenumber,
                 deleted => 0,
                 error => "MSG_INVALID_IMAGENUMBER"
+            };
+        } else {
+            push @$response, {
+                imagenumber => $imagenumber,
+                deleted => 1
             };
         }
     }

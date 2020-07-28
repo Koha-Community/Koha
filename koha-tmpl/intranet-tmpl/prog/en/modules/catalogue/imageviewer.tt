@@ -133,7 +133,7 @@
             thumbnail.find("a.remove").html("<img style='display:inline-block' src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' />");
 
             $.ajax({
-                url: "/cgi-bin/koha/svc/cover_images?action=delete&biblionumber=" + biblionumber + "&imagenumber=" + imagenumber,
+                url: "/cgi-bin/koha/svc/cover_images?action=delete&imagenumber=" + imagenumber,
                 success: function(data) {
                     $(data).each( function() {
                         if ( this.deleted == 1 ) {

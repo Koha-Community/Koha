@@ -46,6 +46,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Images;
+use Koha::Items;
 use Koha::UploadedFiles;
 use C4::Log;
 
@@ -66,6 +67,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $filetype       = $input->param('filetype');
 my $biblionumber   = $input->param('biblionumber');
+my $itemnumber     = $input->param('itemnumber');
 #my $uploadfilename = $input->param('uploadfile'); # obsolete?
 my $replace        = !C4::Context->preference("AllowMultipleCovers")
   || $input->param('replace');
@@ -75,8 +77,11 @@ my $sessionID = $cookies{'CGISESSID'}->value;
 
 my $error;
 
-$template->{VARS}->{'filetype'}     = $filetype;
-$template->{VARS}->{'biblionumber'} = $biblionumber;
+$template->param(
+    filetype     => $filetype,
+    biblionumber => $biblionumber,
+    itemnumber   => $itemnumber,
+);
 
 my $total = 0;
 
@@ -87,7 +92,7 @@ if ($fileID) {
         my $srcimage = GD::Image->new($fh);
         $fh->close if $fh;
         if ( defined $srcimage ) {
-            my $dberror = PutImage( $biblionumber, $srcimage, $replace );
+            my $dberror = PutImage( { biblionumber => $biblionumber, itemnumber => $itemnumber, src_image => $srcimage, replace => $replace } );
             if ($dberror) {
                 $error = 'DBERR';
             }
@@ -157,9 +162,13 @@ if ($fileID) {
                             my $srcimage = GD::Image->new("$dir/$filename");
                             if ( defined $srcimage ) {
                                 $total++;
-                                my $dberror =
-                                  PutImage( $biblionumber, $srcimage,
-                                    $replace );
+                                my $dberror = PutImage(
+                                    {
+                                        biblionumber => $biblionumber,
+                                        src_image    => $srcimage,
+                                        replace      => $replace
+                                    }
+                                );
                                 if ($dberror) {
                                     $error = 'DBERR';
                                 }
@@ -178,10 +187,14 @@ if ($fileID) {
             }
         }
     }
-    $template->{VARS}->{'total'}        = $total;
-    $template->{VARS}->{'uploadimage'}  = 1;
-    $template->{VARS}->{'error'}        = $error;
-    $template->{VARS}->{'biblionumber'} = $biblionumber;
+
+    $template->param(
+        total        => $total,
+        uploadimage  => 1,
+        error        => $error,
+        biblionumber => $biblionumber || Koha::Items->find($itemnumber)->biblionumber,
+        itemnumber   => $itemnumber,
+    );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

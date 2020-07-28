@@ -285,6 +285,9 @@
         <thead>
             <tr>
                 [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
+                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                    <th id="[% tab | html %]_cover" data-colname="[% tab | html %]_cover">Cover image</th>
+                [% END %]
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
                 <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
@@ -323,6 +326,16 @@
                         <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
                     </td>
                 [% END %]
+                    [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                        <td class="cover">
+                            [% IF item.imagenumber %]
+                                <a href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=[% item.imagenumber | uri %]">
+                                    <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1amp;imagenumber=[% item.imagenumber | uri %]" />
+                                </a>
+                            [% END %]
+                        </td>
+                    [% END %]
+
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
                             [% IF !noItemTypeImages && item.imageurl %]
@@ -533,7 +546,12 @@ Note that permanent location is a code, and location may be an authval.
                 [% IF CAN_user_editcatalogue_edit_items %]
                     <td class="actions">
                         [% UNLESS item.cannot_be_edited %]
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a>
+                            <div class="btn-group">
+                                <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% item.itemnumber | uri %]&amp;filetype=image"><i class="fa fa-upload">Upload image</i></a></li>
+                                </ul>
+                            </div>
                         [% END %]
                     </td>
                 [% END %]
@@ -541,6 +559,7 @@ Note that permanent location is a code, and location may be an authval.
             [% END %]
         </tbody>
     </table>
+
 [% END %][%# end of block items_table %]
 
 <div id="holdings">
@@ -1054,7 +1073,7 @@ Note that permanent location is a code, and location may be an authval.
             thumbnail.find("img").css("opacity", ".2");
             thumbnail.find("a.remove").html("<img style='display:inline-block' src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' />");
             $.ajax({
-                url: "/cgi-bin/koha/svc/cover_images?action=delete&biblionumber=" + biblionumber + "&imagenumber=" + imagenumber,
+                url: "/cgi-bin/koha/svc/cover_images?action=delete&imagenumber=" + imagenumber,
                 success: function(data) {
                     $(data).each( function(i) {
                         if ( this.deleted == 1 ) {

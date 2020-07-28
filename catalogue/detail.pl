@@ -322,6 +322,7 @@ if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
     $template->param(SeparateHoldings => 1);
 }
 my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
+my ( $itemloop_has_images, $otheritemloop_has_images );
 foreach my $item (@items) {
     my $itembranchcode = $item->{$separatebranch};
 
@@ -406,16 +407,29 @@ foreach my $item (@items) {
         }
     }
 
+    if ( C4::Context->preference("LocalCoverImages") == 1 ) {
+        $item->{imagenumber} =
+          C4::Images::GetImageForItem( $item->{itemnumber} );
+    }
+
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
         if ($itembranchcode and $itembranchcode eq $currentbranch) {
             push @itemloop, $item;
+            $itemloop_has_images++ if $item->{imagenumber};
         } else {
             push @otheritemloop, $item;
+            $otheritemloop_has_images++ if $item->{imagenumber};
         }
     } else {
         push @itemloop, $item;
+        $itemloop_has_images++ if $item->{imagenumber};
     }
 }
+
+$template->param(
+    itemloop_has_images      => $itemloop_has_images,
+    otheritemloop_has_images => $otheritemloop_has_images,
+);
 
 # Display only one tab if one items list is empty
 if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {

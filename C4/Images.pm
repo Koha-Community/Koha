@@ -18,12 +18,11 @@ package C4::Images;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-use 5.010;
+use Modern::Perl;
 
 use C4::Context;
 use GD;
+use Koha::Exceptions;
 
 use vars qw($debug $noimage @ISA @EXPORT);
 
@@ -47,18 +46,32 @@ BEGIN {
 
 =head2 PutImage
 
-    PutImage($biblionumber, $srcimage, $replace);
+    PutImage({ biblionumber => $biblionumber, itemnumber => $itemnumber, src_image => $srcimage, replace => $replace });
 
-Stores binary image data and thumbnail in database, optionally replacing existing images for the given biblio.
+Stores binary image data and thumbnail in database, optionally replacing existing images for the given biblio or item.
 
 =cut
 
 sub PutImage {
-    my ( $biblionumber, $srcimage, $replace ) = @_;
+    my ( $params ) = @_;
+
+    my $biblionumber = $params->{biblionumber};
+    my $itemnumber   = $params->{itemnumber};
+    my $srcimage     = $params->{src_image};
+    my $replace      = $params->{replace};
+
+    Koha::Exceptions::WrongParameter->throw(
+        'PutImage cannot be called with both biblionumber and itemnumber')
+      if $biblionumber and $itemnumber;
+
+    Koha::Exceptions::WrongParameter->throw(
+        'PutImage must be called with "replace" if itemnumber is passed. Only 1 cover per item is allowed.')
+      if $itemnumber and not $replace;
+
 
     return -1 unless defined($srcimage);
 
-    if ($replace) {
+    if ($biblionumber && $replace) {
         foreach ( ListImagesForBiblio($biblionumber) ) {
             DelImage($_);
         }
@@ -66,7 +79,7 @@ sub PutImage {
 
     my $dbh = C4::Context->dbh;
     my $query =
-"INSERT INTO biblioimages (biblionumber, mimetype, imagefile, thumbnail) VALUES (?,?,?,?);";
+"INSERT INTO biblioimages (biblionumber, itemnumber, mimetype, imagefile, thumbnail) VALUES (?,?,?,?,?);";
     my $sth = $dbh->prepare($query);
 
     my $mimetype = 'image/png'
@@ -79,10 +92,10 @@ sub PutImage {
       ;    # MAX pixel dims are 600 X 800 for full-size image...
     $debug and warn "thumbnail is " . length($thumbnail) . " bytes.";
 
-    $sth->execute( $biblionumber, $mimetype, $fullsize->png(),
+    $sth->execute( $biblionumber, $itemnumber, $mimetype, $fullsize->png(),
         $thumbnail->png() );
     my $dberror = $sth->errstr;
-    warn "Error returned inserting $biblionumber.$mimetype." if $sth->errstr;
+    warn sprintf("Error returned inserting %s.%s.", ($biblionumber || $itemnumber, $mimetype)) if $sth->errstr;
     undef $thumbnail;
     undef $fullsize;
     return $dberror;
@@ -133,6 +146,22 @@ sub ListImagesForBiblio {
         push @imagenumbers, $row->{'imagenumber'};
     }
     return @imagenumbers;
+}
+
+=head2 GetImageForItem
+    my $image  = GetImageForItem($itemnumber);
+
+Gets the image associated with a particular item.
+
+=cut
+
+sub GetImageForItem {
+    my ($itemnumber) = @_;
+
+    my $dbh   = C4::Context->dbh;
+    return $dbh->selectrow_array(
+        'SELECT imagenumber FROM biblioimages WHERE itemnumber = ?',
+        undef, $itemnumber );
 }
 
 =head2 DelImage
