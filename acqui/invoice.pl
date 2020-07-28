@@ -229,10 +229,6 @@ my $budgets     = GetBudgetHierarchy();
 foreach my $r ( @{$budgets} ) {
     next unless ( CanUserUseBudget( $loggedinuser, $r, $flags ) );
 
-    if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
-        next;
-    }
-
     my $selected = $shipmentcost_budgetid ? $r->{budget_id} eq $shipmentcost_budgetid : 0;
 
     push @{$budget_loop},
