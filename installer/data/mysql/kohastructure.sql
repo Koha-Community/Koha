@@ -4584,6 +4584,52 @@ CREATE TABLE advanced_editor_macros (
     CONSTRAINT borrower_macro_fk FOREIGN KEY ( borrowernumber ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table smtp_servers
+--
+
+DROP TABLE IF EXISTS `smtp_servers`;
+CREATE TABLE `smtp_servers` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    -- Unique ID of the server
+    `name` VARCHAR(80) NOT NULL,
+    -- Name of the SMTP server
+    `host` VARCHAR(80) NOT NULL DEFAULT 'localhost',
+    -- FQDN for the SMTP server
+    `port` INT(11) NOT NULL DEFAULT 25,
+    -- TCP port number
+    `timeout` INT(11) NOT NULL DEFAULT 120,
+    -- Maximum time in secs to wait for server
+    `ssl_mode` ENUM('disabled', 'ssl', 'starttls') NOT NULL,
+    -- If STARTTLS needs to be issued
+    `user_name` VARCHAR(80) NULL DEFAULT NULL,
+    -- The username to use for auth; optional
+    `password` VARCHAR(80) NULL DEFAULT NULL,
+    -- The password to use for auth; required if username is provided
+    `debug` TINYINT(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    KEY `host_idx` (`host`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table library_smtp_servers
+--
+
+DROP TABLE IF EXISTS `library_smtp_servers`;
+CREATE TABLE `library_smtp_servers` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    -- Unique ID of the library<->SMTP server link
+    `library_id` VARCHAR(10) NOT NULL,
+    -- Internal identifier for the library
+    `smtp_server_id` INT(11) NOT NULL,
+    -- Internal identifier for the SMTP server
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `library_id_idx` (`library_id`),
+    KEY `smtp_server_id_idx` (`smtp_server_id`),
+    CONSTRAINT `library_id_fk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `smtp_server_id_fk` FOREIGN KEY (`smtp_server_id`) REFERENCES `smtp_servers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
