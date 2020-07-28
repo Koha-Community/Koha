@@ -653,6 +653,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 library_smtp_server
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::LibrarySmtpServer>
+
+=cut
+
+__PACKAGE__->might_have(
+  "library_smtp_server",
+  "Koha::Schema::Result::LibrarySmtpServer",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 opac_news
 
 Type: has_many
@@ -819,8 +834,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07048 @ 2020-06-12 14:01:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hU6Ldf0uN2iV1h7llLH+4g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-23 20:02:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OB75ORKajzt+l0w9mRFX1Q
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
