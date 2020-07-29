@@ -28,14 +28,6 @@
 
 [% IF ( get_items ) %]
 
-<div class="results">
-    [% IF items.count%]
-        [% items.count | html %] lost items found
-    [% ELSE %]
-        No lost items found
-    [% END %]
-</div>
-
     [% IF items.count %]
         [% IF csv_profiles.count %]
             <div class="lostitems-table_table_controls">
@@ -196,7 +188,6 @@
         $(document).ready(function() {
             var columns_settings = [% TablesSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
             var lostitems_table = KohaTable("lostitems-table", {
-                "dom": 'B<"clearfix">t',
                 "aaSorting": [],
                 "aoColumnDefs": [
                     { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
