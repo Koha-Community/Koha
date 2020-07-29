@@ -87,6 +87,7 @@ fieldset.rows label.viewlog {
 [%        CASE 'SIP'         %]SIP
 [%        CASE 'COMMANDLINE' %]Command-line
 [%        CASE 'API'         %]REST API
+[%        CASE 'CRON'        %]Cron job
 [%        CASE %][% log_interface | html %]
 [%    END %]
 [% END %]
@@ -178,7 +179,7 @@ fieldset.rows label.viewlog {
                                     <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value=""> All</label>
                                 [% END %]
 
-                                [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' 'API' ] %]
+                                [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' 'API' 'CRON' ] %]
                                     [% IF interfaces.grep(interf).size %]
                                         <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="[% interf | html %]" checked="checked"> [% PROCESS translate_log_interface log_interface=interf %]</label>
                                     [% ELSE %]
