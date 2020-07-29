@@ -35,6 +35,7 @@ use Koha::Authorities;
 use Koha::Biblios;
 use Koha::Items;
 use Koha::BackgroundJob::BatchDeleteBiblio;
+use Koha::BackgroundJob::BatchDeleteAuthority;
 
 my $input = CGI->new;
 my $op = $input->param('op') // q|form|;

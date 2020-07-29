@@ -27,6 +27,7 @@ use Koha::Exceptions;
 use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::BackgroundJob::BatchUpdateAuthority;
 use Koha::BackgroundJob::BatchDeleteBiblio;
+use Koha::BackgroundJob::BatchDeleteAuthority;
 
 use base qw( Koha::Object );
 
@@ -158,6 +159,8 @@ sub process {
       ? Koha::BackgroundJob::BatchUpdateAuthority->process($args)
       : $job_type eq 'batch_biblio_record_deletion'
       ? Koha::BackgroundJob::BatchDeleteBiblio->process($args)
+      : $job_type eq 'batch_authority_record_deletion'
+      ? Koha::BackgroundJob::BatchDeleteAuthority->process($args)
       : Koha::Exceptions::Exception->throw('->process called without valid job_type');
 }
 
