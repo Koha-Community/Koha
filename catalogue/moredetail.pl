@@ -203,11 +203,7 @@ foreach my $item (@items){
             if ($payment_offsets->count) {
                 my $patron = $accountline->patron;
                 my $payment_offset = $payment_offsets->next;
-                $item->{paidfor} =
-                    $patron->firstname . " "
-                  . $patron->surname . " "
-                  . $patron->cardnumber . " "
-                  . $payment_offset->created_on;
+                $item->{paidfor} = { patron => $patron, created_on => $payment_offset->created_on };
             }
         }
     }
