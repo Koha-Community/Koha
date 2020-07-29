@@ -719,7 +719,8 @@ sub quote_item {
             my $created = 0;
             while ( $created < $order_quantity ) {
                 $item_hash->{biblionumber} = $bib->{biblionumber};
-                my $item = Koha::Item->new( $item_hash );
+                $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
+                my $item = Koha::Item->new( $item_hash )->store;
                 my $itemnumber = $item->itemnumber;
                 $logger->trace("Added item:$itemnumber");
                 $schema->resultset('AqordersItem')->create(
@@ -810,7 +811,8 @@ sub quote_item {
                     }
 
                     $item_hash->{biblionumber} = $bib->{biblionumber};
-                    my $item = Koha::Item->new( $item_hash );
+                    $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
+                    my $item = Koha::Item->new( $item_hash )->store;
                     my $itemnumber = $item->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
@@ -879,7 +881,8 @@ sub quote_item {
                         homebranch => $item->girfield( 'branch', $occurrence ),
                     };
                     $new_item->{biblionumber} = $bib->{biblionumber};
-                    my $item = Koha::Item->new( $new_item );
+                    $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
+                    my $item = Koha::Item->new( $new_item )->store;
                     my $itemnumber = $item->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
