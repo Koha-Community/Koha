@@ -243,6 +243,7 @@ tables:
             - "Pages: <<article_requests.pages>>"
             - "Chapters: <<article_requests.chapters>>"
             - "Notes: <<article_requests.patron_notes>>"
+            - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
             - "Your library"
 
@@ -268,8 +269,9 @@ tables:
             - "Pages: <<article_requests.pages>>"
             - "Chapters: <<article_requests.chapters>>"
             - "Notes: <<article_requests.patron_notes>>"
+            - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
-            - "You may pick your article up at <<branches.branchname>>."
+            - "[% IF article_request.format == 'PHOTOCOPY' %]You may pick up your article at [% branch.branchname %].[% ELSIF article_request.format == 'SCAN' %]You can download the scanned materials via the following url(s): [% article_request.urls %].[% END %]"
             - ""
             - "Thank you!"
 
@@ -295,7 +297,7 @@ tables:
             - "Pages: <<article_requests.pages>>"
             - "Chapters: <<article_requests.chapters>>"
             - "Notes: <<article_requests.patron_notes>>"
-            - ""
+            - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
             - "Thank you!"
 
@@ -321,6 +323,7 @@ tables:
             - "Pages: <<article_requests.pages>>"
             - "Chapters: <<article_requests.chapters>>"
             - "Notes: <<article_requests.patron_notes>>"
+            - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
             - "Thank you!"
 
@@ -349,6 +352,7 @@ tables:
             - "Pages: <<article_requests.pages>>"
             - "Chapters: <<article_requests.chapters>>"
             - "Notes: <<article_requests.patron_notes>>"
+            - "Format: [% IF article_request.format == 'PHOTOCOPY' %]Copy[% ELSIF article_request.format == 'SCAN' %]Scan[% END %]"
             - ""
 
         - module: circulation
