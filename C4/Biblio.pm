@@ -3446,26 +3446,15 @@ sub _after_biblio_action_hooks {
     my $biblio_id = $args->{biblio_id};
     my $action    = $args->{action};
 
-    if ( C4::Context->config("enable_plugins") ) {
-
-        my @plugins = Koha::Plugins->new->GetPlugins({
-            method => 'after_biblio_action',
-        });
-
-        if (@plugins) {
-
-            my $biblio = Koha::Biblios->find( $biblio_id );
-
-            foreach my $plugin ( @plugins ) {
-                try {
-                    $plugin->after_biblio_action({ action => $action, biblio => $biblio, biblio_id => $biblio_id });
-                }
-                catch {
-                    warn "$_";
-                };
-            }
+    my $biblio = Koha::Biblios->find( $biblio_id );
+    Koha::Plugins->call(
+        'after_biblio_action',
+        {
+            action    => $action,
+            biblio    => $biblio,
+            biblio_id => $biblio_id,
         }
-    }
+    );
 }
 
 __END__

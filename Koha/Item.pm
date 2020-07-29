@@ -832,24 +832,14 @@ sub _after_item_action_hooks {
 
     my $action = $params->{action};
 
-    if ( C4::Context->config("enable_plugins") ) {
-
-        my @plugins = Koha::Plugins->new->GetPlugins({
-            method => 'after_item_action',
-        });
-
-        if (@plugins) {
-
-            foreach my $plugin ( @plugins ) {
-                try {
-                    $plugin->after_item_action({ action => $action, item => $self, item_id => $self->itemnumber });
-                }
-                catch {
-                    warn "$_";
-                };
-            }
+    Koha::Plugins->call(
+        'after_item_action',
+        {
+            action  => $action,
+            item    => $self,
+            item_id => $self->itemnumber,
         }
-    }
+    );
 }
 
 =head3 _type

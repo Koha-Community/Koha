@@ -185,29 +185,17 @@ if ( $xslfile ) {
         anonymous_session => ($borrowernumber) ? 0 : 1
     };
 
-    if ( C4::Context->config("enable_plugins") ) {
+    my @plugin_responses = Koha::Plugins->call(
+        'opac_detail_xslt_variables',
+        {
+            biblio_id => $biblionumber,
+            lang      => $lang,
+            patron_id => $borrowernumber
 
-        my @plugins = Koha::Plugins->new->GetPlugins({
-            method => 'opac_detail_xslt_variables',
-        });
-
-        if (@plugins) {
-            foreach my $plugin ( @plugins ) {
-                try {
-                    my $plugin_variables = $plugin->opac_detail_xslt_variables(
-                        {
-                            biblio_id  => $biblionumber,
-                            lang       => $lang,
-                            patron_id  => $borrowernumber
-                        }
-                    );
-                    $variables = { %$variables, %$plugin_variables };
-                }
-                catch {
-                    warn "$_";
-                };
-            }
         }
+    );
+    for my $plugin_variables ( @plugin_responses ) {
+        $variables = { %$variables, %$plugin_variables };
     }
 
     $template->param(
