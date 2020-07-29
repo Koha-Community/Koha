@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "smtp_server_id": {
+      "type": "integer",
+      "description": "Internal SMTP server identifier",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the SMTP server"
+    },
+    "host": {
+      "type": "string",
+      "description": "SMTP host name"
+    },
+    "port": {
+      "type": "integer",
+      "description": "TCP port number"
+    },
+    "timeout": {
+      "type": "integer",
+      "description": "Maximum time in seconds to wait for server"
+    },
+    "ssl_mode": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "ssl",
+        "starttls"
+      ],
+      "description": "If SSL/TLS will be used"
+    },
+    "user_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The user name to use for authentication (optional)"
+    },
+    "password": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The password to use for authentication (optional)"
+    },
+    "debug": {
+      "type": "boolean",
+      "description": "If the SMTP connection is set to debug mode"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,316 @@
+{
+  "/config/smtp_servers": {
+    "get": {
+      "x-mojo-to": "Config::SMTP::Servers#list",
+      "operationId": "listSMTPServers",
+      "tags": [
+        "config",
+        "smtp"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of SMTP servers",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/smtp_server"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_smtp_servers"
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Config::SMTP::Servers#add",
+      "operationId": "addSMTPServer",
+      "tags": [
+        "config",
+        "smtp"
+      ],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object representing a new SMTP server configuration",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/smtp_server"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "An SMTP server object",
+          "schema": {
+            "$ref": "../definitions.json#/smtp_server"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in creating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_smtp_servers"
+        }
+      }
+    }
+  },
+  "/config/smtp_servers/{smtp_server_id}": {
+    "get": {
+      "x-mojo-to": "Config::SMTP::Servers#get",
+      "operationId": "getSMTPServer",
+      "tags": [
+        "config",
+        "smtp"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/smtp_server_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "An SMTP server object",
+          "schema": {
+            "$ref": "../definitions.json#/smtp_server"
+          }
+        },
+        "404": {
+          "description": "Object not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict updating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_smtp_servers"
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Config::SMTP::Servers#update",
+      "operationId": "updateSMTPServer",
+      "tags": [
+        "config",
+        "smtp"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/smtp_server_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "An SMTP server object",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/smtp_server"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "An SMTP server object",
+          "schema": {
+            "$ref": "../definitions.json#/smtp_server"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Object not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_smtp_servers"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Config::SMTP::Servers#delete",
+      "operationId": "deleteSMTPServer",
+      "tags": [
+        "config",
+        "smtp"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/smtp_server_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "SMTP server deleted"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Object not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_smtp_servers"
+        }
+      }
+    }
+  }
+}
