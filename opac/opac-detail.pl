@@ -709,6 +709,7 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
 }
 
 my $allow_onshelf_holds;
+my ( $itemloop_has_images, $otheritemloop_has_images );
 if ( not $viewallitems and @items > $max_items_to_display ) {
     $template->param(
         too_many_items => 1,
@@ -762,15 +763,23 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
           if grep { $_ eq $itm->{itemnumber} } @itemnumbers_on_order;
     }
 
+    if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
+        $itm->{imagenumber} =
+          C4::Images::GetImageForItem( $itm->{itemnumber} );
+    }
+
     my $itembranch = $itm->{$separatebranch};
     if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
         if ($itembranch and $itembranch eq $currentbranch) {
             push @itemloop, $itm;
+            $itemloop_has_images++ if $itm->{imagenumber};
         } else {
             push @otheritemloop, $itm;
+            $otheritemloop_has_images++ if $itm->{imagenumber};
         }
     } else {
         push @itemloop, $itm;
+        $itemloop_has_images++ if $itm->{imagenumber};
     }
   }
 }
@@ -778,6 +787,11 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
 if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
+
+$template->param(
+    itemloop_has_images      => $itemloop_has_images,
+    otheritemloop_has_images => $otheritemloop_has_images,
+);
 
 # Display only one tab if one items list is empty
 if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {

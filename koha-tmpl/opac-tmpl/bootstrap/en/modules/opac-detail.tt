@@ -1212,6 +1212,9 @@
     <table class="table table-bordered table-striped" id="[% table_id | html %]">
         <thead>
             <tr>
+                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                    <th id="item_cover" data-colname="item_cover">Cover image</th>
+                [% END %]
                 [% IF ( item_level_itypes ) %]
                     <th id="item_itemtype" data-colname="item_itemtype" class="itype">Item type</th>
                 [% END %]
@@ -1263,6 +1266,13 @@
                 [% ELSE %]
                   <tr vocab="http://schema.org/" typeof="Offer">
                 [% END %]
+
+                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                    <td class="cover">
+                        <div title="[% ITEM_RESULT.itemnumber | html %]" data-imagenumber="[% ITEM_RESULT.imagenumber | html %]" data-biblionumber="[% ITEM_RESULT.biblionumber %]" class="local-thumbnail-preview"></div>
+                    </td>
+                [% END %]
+
                 [% IF ( item_level_itypes ) %]
                     <td class="itype">
                         [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
@@ -1619,6 +1629,9 @@
             [% END %]
             [% IF OPACLocalCoverImages %]
                 KOHA.LocalCover.GetCoverFromBibnumber(true);
+                [% IF itemloop_has_images OR oheritemloop_has_images %]
+                    KOHA.LocalCover.GetCoverFromItemnumber(true);
+                [% END %]
             [% END %]
             [% IF ( NovelistSelectProfile && ( normalized_isbn || normalized_upc ) ) %]
                 novSelect.loadContentForQuery(

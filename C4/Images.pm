@@ -113,7 +113,7 @@ sub RetrieveImage {
 
     my $dbh = C4::Context->dbh;
     my $query =
-'SELECT imagenumber, mimetype, imagefile, thumbnail FROM biblioimages WHERE imagenumber = ?';
+'SELECT biblionumber, itemnumber, imagenumber, mimetype, imagefile, thumbnail FROM biblioimages WHERE imagenumber = ?';
     my $sth = $dbh->prepare($query);
     $sth->execute($imagenumber);
     my $imagedata = $sth->fetchrow_hashref;

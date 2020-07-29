@@ -49,5 +49,40 @@ KOHA.LocalCover = {
                     }
                 })
         });
-    }
+    },
+    GetCoverFromItemnumber: function(uselink) {
+        $("div[class^=local-thumbnail],span[class^=local-thumbnail]").each(function(i) {
+            var mydiv = this;
+            var message = document.createElement("span");
+            var imagenumber  = $(mydiv).data("imagenumber");
+            var biblionumber = $(mydiv).data("biblionumber");
+            $(message).attr("class","no-image");
+            $(message).html(NO_LOCAL_JACKET);
+            $(mydiv).parent().find('.no-image').remove();
+            $(mydiv).append(message);
+            var img = $("<img />").attr('src',
+                '/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=' + imagenumber)
+                .load(function () {
+                    this.setAttribute("class", "thumbnail");
+                    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+                        //IE HACK
+                        try {
+                            $(mydiv).append(img);
+                            $(mydiv).children('.no-image').remove();
+                        }
+                        catch(err){
+                        };
+                    } else if (this.width > 1) { // don't show the silly 1px "no image" img
+                        if (uselink) {
+                            var a = $("<a />").attr('href', '/cgi-bin/koha/opac-imageviewer.pl?imagenumber=' + imagenumber + '&biblionumber=' + biblionumber);
+                            $(a).append(img);
+                            $(mydiv).empty().append(a);
+                        } else {
+                            $(mydiv).empty().append(img);
+                        }
+                        $(mydiv).children('.no-image').remove();
+                    }
+                })
+        });
+    },
 };
