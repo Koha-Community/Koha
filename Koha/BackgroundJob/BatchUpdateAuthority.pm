@@ -31,7 +31,6 @@ sub process {
         ->store;
 
     my $mmtid = $args->{mmtid};
-    my $record_type = $args->{record_type};
     my @record_ids = @{ $args->{record_ids} };
 
     my $report = {
@@ -85,16 +84,14 @@ sub enqueue {
 
     # TODO Raise exception instead
     return unless exists $args->{mmtid};
-    return unless exists $args->{record_type}; #FIXME RMME
     return unless exists $args->{record_ids};
 
     my $mmtid = $args->{mmtid};
-    my $record_type = $args->{record_type};
     my @record_ids = @{ $args->{record_ids} };
 
     $self->SUPER::enqueue({
         job_size => scalar @record_ids,
-        job_args => {mmtid => $mmtid, record_type => $record_type, record_ids => \@record_ids,}
+        job_args => {mmtid => $mmtid, record_ids => \@record_ids,}
     });
 }
 

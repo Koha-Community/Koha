@@ -152,7 +152,6 @@ if ( $op eq 'form' ) {
     try {
         my $params = {
             mmtid       => $mmtid,
-            record_type => $recordtype,
             record_ids  => \@record_ids,
         };
 
