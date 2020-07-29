@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Price %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Orders by fund</title>
@@ -23,13 +24,6 @@
 [% END %]
 
 [% IF ( get_orders ) %]
-    <div class="results">
-        [% IF ( total ) %]
-            Orders found: [% total | html %]
-        [% ELSE %]
-            No order found
-        [% END %]
-    </div>
 
     [% IF ( ordersloop ) %]<table id="funds">
         <thead>
@@ -150,9 +144,20 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
+        var columns_settings = [% TablesSettings.GetColumns( 'reports', 'orders_by_fund', 'funds-table', 'json' ) | $raw %];
+        [% SET table_settings = TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table' ) %];
         $(document).ready( function () {
-            $('#funds').DataTable($.extend(true, {}, dataTablesDefaults,{"sPaginationType": "full_numbers"}));
+            var funds_table = KohaTable("funds", {
+                "columnDefs": [
+                    { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                    { "type": "title-string", "targets" : [ "title-string" ] }
+                ],
+                "pageLength": [% table_settings.default_display_length | html %],
+                "order": [[ [% table_settings.default_sort_order | html %], 'asc']],
+                'autoWidth': false,
+            }, columns_settings );
 
             showallbudgets = $('#budgetfilter').html();
             $('#budgetfilter .b_inactive').remove();
