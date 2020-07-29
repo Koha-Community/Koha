@@ -29,6 +29,7 @@
     <h2>[% title | html %]</h2>
     [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl | html %][% END %]</h4>[% END %]
     [% IF ( author ) %]<h4>by [% author | html %]</h4>[% END %]
+    <div class="listgroup">
     <div class="rows">
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> [% biblionumber | html %]&nbsp;</li>
@@ -47,15 +48,18 @@
 <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items</a>[% END %]</li>
     </ol>
     </div>
+    </div>
 
-    <br clear="all" />
     [% IF ( ONLY_ONE ) %]
+        <hr />
         <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View All</a></div>
     [% END %]
 
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
+        <div class="listgroup">
         <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
-        <div class="listgroup"><h4>Item information [% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
+
+        <h4>Item information [% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
          [% IF ( CAN_user_editcatalogue_edit_items ) %]
             <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]"><i class="fa fa-pencil"></i> Edit item</a>
          [% END %]
@@ -79,7 +83,7 @@
                 [% IF ( ITEM_DAT.withdrawn ) %]Withdrawn[% END %]
             )[% END %]</h4>
 
-            <span class="rows">
+            <div class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
