@@ -26,14 +26,17 @@
 			[% END %]
 		[% END %]
 		
-		<table>
-			<tr>
-				<th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle | html %]</th>
-				[% END %]
-				<th>TOTAL</th>
-			</tr>
+        <table id="catalogue_stats">
+            <thead>
+                <tr>
+                    <th>[% mainloo.line | html %] / [% mainloo.column | html %]</th>
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        <th>[% loopco.coltitle | html %]</th>
+                    [% END %]
+                    <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
 				[% FOREACH loopro IN mainloo.looprow %]
 					<tr>
 						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
@@ -50,8 +53,10 @@
 						</td>
 					</tr>
 				[% END %]
+            </tbody>
+            <tfoot>
 				<tr>
-					<th>TOTAL</th>
+                    <th>TOTAL (all results)</th>
 					[% FOREACH loopfoote IN mainloo.loopfooter %]
 						<th>
 							[% loopfoote.totalcol | html %]
@@ -59,6 +64,7 @@
 					[% END %]
 					<th>[% mainloo.total | html %]</th>
 				</tr>
+            </tfoot>
 		</table>
 	[% END %]
 [% ELSE %]
@@ -303,6 +309,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function changeRemovedDateTrStatus() {
             var Cellvalue = $("input[name='Cellvalue']:checked").val();
@@ -335,6 +343,36 @@
                 changeRemovedDateTrStatus();
             });
             changeRemovedDateTrStatus();
+
+            columns_settings = [% FILTER collapse %]
+                [
+                    {
+                        "is_hidden": 0,
+                        "columnname": "[% mainloo.line | html %]_[% mainloo.column | html %]",
+                        "cannot_be_toggled": 1,
+                        "cannot_be_modified": 1
+                    },
+                    [% FOREACH loopco IN mainloo.loopcol %]
+                        {
+                            "is_hidden": 0,
+                            "columnname": "[% loopco.coltitle | html %]",
+                            "cannot_be_toggled": 0,
+                            "cannot_be_modified": 0
+                        },
+                    [% END %]
+                    {
+                        "is_hidden": 0,
+                        "columnname": "total",
+                        "cannot_be_toggled": 0,
+                        "cannot_be_modified": 0
+                    },
+                ];
+            [% END %]
+
+            var catalogue_stats = KohaTable("catalogue_stats", {
+                'autoWidth': false,
+                'paging': false,
+            }, columns_settings );
         });
     </script>
 [% END %]
