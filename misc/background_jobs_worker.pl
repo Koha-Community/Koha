@@ -28,7 +28,11 @@ try {
     warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
 };
 
-my @job_types = qw( batch_biblio_record_modification batch_authority_record_modification );
+my @job_types = qw(
+    batch_biblio_record_modification
+    batch_authority_record_modification
+    batch_biblio_record_deletion
+);
 
 if ( $conn ) {
     # FIXME cf note in Koha::BackgroundJob about $namespace

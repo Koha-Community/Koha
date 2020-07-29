@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use CGI;
 use List::MoreUtils qw( uniq );
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -33,6 +34,7 @@ use Koha::Virtualshelves;
 use Koha::Authorities;
 use Koha::Biblios;
 use Koha::Items;
+use Koha::BackgroundJob::BatchDeleteBiblio;
 
 my $input = CGI->new;
 my $op = $input->param('op') // q|form|;
@@ -131,122 +133,29 @@ if ( $op eq 'form' ) {
 } elsif ( $op eq 'delete' ) {
     # We want to delete selected records!
     my @record_ids = $input->multi_param('record_id');
-    my $schema = Koha::Database->new->schema;
 
-    my $error;
-    my $report = {
-        total_records => 0,
-        total_success => 0,
+    try {
+        my $params = {
+            record_ids  => \@record_ids,
+        };
+
+        my $job_id =
+          $recordtype eq 'biblio'
+          ? Koha::BackgroundJob::BatchDeleteBiblio->new->enqueue($params)
+          : Koha::BackgroundJob::BatchDeleteAuthority->new->enqueue($params);
+
+        $template->param(
+            op => 'enqueued',
+            job_id => $job_id,
+        );
+    } catch {
+        push @messages, {
+            type => 'error',
+            code => 'cannot_enqueue_job',
+            error => $_,
+        };
+        $template->param( view => 'errors' );
     };
-    RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
-        $report->{total_records}++;
-        next unless $record_id;
-        $schema->storage->txn_begin;
-
-        if ( $recordtype eq 'biblio' ) {
-            # Biblios
-            my $biblionumber = $record_id;
-            # First, checking if issues exist.
-            # If yes, nothing to do
-            my $biblio = Koha::Biblios->find( $biblionumber );
-
-            # TODO Replace with $biblio->get_issues->count
-            if ( C4::Biblio::CountItemsIssued( $biblionumber ) ) {
-                push @messages, {
-                    type => 'warning',
-                    code => 'item_issued',
-                    biblionumber => $biblionumber,
-                };
-                $schema->storage->txn_rollback;
-                next;
-            }
-
-            # Cancel reserves
-            my $holds = $biblio->holds;
-            while ( my $hold = $holds->next ) {
-                eval{
-                    $hold->cancel;
-                };
-                if ( $@ ) {
-                    push @messages, {
-                        type => 'error',
-                        code => 'reserve_not_cancelled',
-                        biblionumber => $biblionumber,
-                        reserve_id => $hold->reserve_id,
-                        error => $@,
-                    };
-                    $schema->storage->txn_rollback;
-                    next RECORD_IDS;
-                }
-            }
-
-            # Delete items
-            my $items = Koha::Items->search({ biblionumber => $biblionumber });
-            while ( my $item = $items->next ) {
-                my $deleted_item = eval { $item->safe_delete };
-                if ( !ref($deleted_item) or $@ ) {
-                    push @messages, {
-                        type => 'error',
-                        code => 'item_not_deleted',
-                        biblionumber => $biblionumber,
-                        itemnumber => $item->itemnumber,
-                        error => ($@ ? $@ : $error),
-                    };
-                    $schema->storage->txn_rollback;
-                    next RECORD_IDS;
-                }
-            }
-
-            # Finally, delete the biblio
-            my $error = eval {
-                C4::Biblio::DelBiblio( $biblionumber );
-            };
-            if ( $error or $@ ) {
-                push @messages, {
-                    type => 'error',
-                    code => 'biblio_not_deleted',
-                    biblionumber => $biblionumber,
-                    error => ($@ ? $@ : $error),
-                };
-                $schema->storage->txn_rollback;
-                next;
-            }
-
-            push @messages, {
-                type => 'success',
-                code => 'biblio_deleted',
-                biblionumber => $biblionumber,
-            };
-            $report->{total_success}++;
-            $schema->storage->txn_commit;
-        } else {
-            # Authorities
-            my $authid = $record_id;
-            eval { C4::AuthoritiesMarc::DelAuthority({ authid => $authid }) };
-            if ( $@ ) {
-                push @messages, {
-                    type => 'error',
-                    code => 'authority_not_deleted',
-                    authid => $authid,
-                    error => ($@ ? $@ : 0),
-                };
-                $schema->storage->txn_rollback;
-                next;
-            } else {
-                push @messages, {
-                    type => 'success',
-                    code => 'authority_deleted',
-                    authid => $authid,
-                };
-                $report->{total_success}++;
-                $schema->storage->txn_commit;
-            }
-        }
-    }
-    $template->param(
-        op => 'report',
-        report => $report,
-    );
 }
 
 $template->param(
