@@ -166,7 +166,7 @@
                         [% IF aval == mv.default %]
                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                         [% ELSE %]
-                            [% IF ite.IS_LOST_AV && aval == Koha.Preference("ClaimReturnedLostValue") %]
+                            [% IF ite.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
                                 <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
                             [%  ELSE %]
                                 <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
