@@ -180,6 +180,12 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var NO_OL_JACKET = _("No cover image available");
         var OL_PREVIEW = _("Preview");
     [% END %]
+    [% IF (query_desc) %]
+        var query_desc = "[% query_desc | html %]";
+        var querystring = "[% querystring | html %]";
+        var query_cgi = "[% query_cgi | html %]";
+    [% END %]
+
     [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
         $(window).load(function() {
             verify_images();
