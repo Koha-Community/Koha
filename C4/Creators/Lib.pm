@@ -17,8 +17,8 @@ package C4::Creators::Lib;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use Storable qw(dclone);
 
 use autouse 'Data::Dumper' => qw(Dumper);
 
@@ -405,7 +405,7 @@ This function returns a reference to an array of hashes containing all barcode t
 =cut
 
 sub get_barcode_types {
-    return $barcode_types;
+    return dclone $barcode_types;
 }
 
 =head2 C4::Creators::Lib::get_label_types()
@@ -417,7 +417,7 @@ This function returns a reference to an array of hashes containing all label typ
 =cut
 
 sub get_label_types {
-    return $label_types;
+    return dclone $label_types;
 }
 
 =head2 C4::Creators::Lib::get_font_types()
@@ -429,7 +429,7 @@ This function returns a reference to an array of hashes containing all font type
 =cut
 
 sub get_font_types {
-    return $font_types;
+    return dclone $font_types;
 }
 
 =head2 C4::Creators::Lib::get_text_justification_types()
@@ -441,7 +441,7 @@ This function returns a reference to an array of hashes containing all text just
 =cut
 
 sub get_text_justification_types {
-    return $text_justification_types;
+    return dclone $text_justification_types;
 }
 
 =head2 C4::Creators::Lib::get_unit_values()
@@ -455,7 +455,7 @@ There are 72 PS points to the inch.
 =cut
 
 sub get_unit_values {
-    return $unit_values;
+    return dclone $unit_values;
 }
 
 =head2 C4::Creators::Lib::get_output_formats()
@@ -467,7 +467,7 @@ This function returns a reference to an array of hashes containing all label out
 =cut
 
 sub get_output_formats {
-    return $output_formats;
+    return dclone $output_formats;
 }
 
 
