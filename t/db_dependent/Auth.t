@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -389,6 +389,25 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     is( $patron->login_attempts, -1, 'Still locked out' );
     t::lib::Mocks::mock_preference('FailedLoginAttempts', ''); # disable
     is( $patron->account_locked, 1, 'Check administrative lockout without pref' );
+};
+
+subtest '_timeout_syspref' => sub {
+    plan tests => 5;
+
+    t::lib::Mocks::mock_preference('timeout', "100");
+    is( C4::Auth::_timeout_syspref, 100, );
+
+    t::lib::Mocks::mock_preference('timeout', "2d");
+    is( C4::Auth::_timeout_syspref, 2*86400, );
+
+    t::lib::Mocks::mock_preference('timeout', "2D");
+    is( C4::Auth::_timeout_syspref, 2*86400, );
+
+    t::lib::Mocks::mock_preference('timeout', "10h");
+    is( C4::Auth::_timeout_syspref, 10*3600, );
+
+    t::lib::Mocks::mock_preference('timeout', "10x");
+    is( C4::Auth::_timeout_syspref, 600, );
 };
 
 $schema->storage->txn_rollback;
