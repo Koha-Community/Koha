@@ -407,7 +407,7 @@
             <label for="filter_budgetbranch2">Library: </label>
             <select name="filter_budgetbranch" id="filter_budgetbranch2">
                 <option value=""></option>
-                [% PROCESS options_for_libraries libraries => Branches.all( selected => budget_branchcode, unfiltered => 1 ) %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
             </select>
         </li>
         <li class="radio">
