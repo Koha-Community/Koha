@@ -19136,6 +19136,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "19.05.14.001";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET variable='NotesToHide' WHERE variable = 'NotesBlacklist'" );
+    print "Upgrade to $DBversion done (Bug 25709 - Rename systempreference to NotesToHide)\n";
+    SetVersion( $DBversion );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
