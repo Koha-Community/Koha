@@ -118,7 +118,7 @@ subtest 'items() tests' => sub {
 
 subtest 'get_coins and get_openurl' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -127,11 +127,20 @@ subtest 'get_coins and get_openurl' => sub {
             title => 'Title 1',
             author => 'Author 1'
         });
-
     is(
         $biblio->get_coins,
         'ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Title%201&amp;rft.au=Author%201',
         'GetCOinsBiblio returned right metadata'
+    );
+
+    my $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new('100','','','a' => 'Author 2'), MARC::Field->new('880','','','a' => 'Something') );
+    my $biblionumber = C4::Biblio::AddBiblio($record, '');
+    my $biblio_no_title = Koha::Biblios->find($biblionumber);
+    is(
+        $biblio_no_title->get_coins,
+        'ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.au=Author%202',
+        'GetCOinsBiblio returned right metadata if biblio does not have a title'
     );
 
     t::lib::Mocks::mock_preference("OpenURLResolverURL", "https://koha.example.com/");
