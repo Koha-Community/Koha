@@ -22261,6 +22261,32 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 5087, "Add export_format.staff_only" );
 }
 
+$DBversion = '20.05.02.004';
+if( CheckVersion( $DBversion ) ) {
+
+    require C4::Languages;
+    my @langs;
+    my $tlangs = C4::Languages::getTranslatedLanguages();
+
+    foreach my $language ( @$tlangs ) {
+        foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
+            push @langs, $sublanguage->{'rfc4646_subtag'};
+        }
+    }
+
+    my ($opaccredits) = $dbh->selectrow_array( q|
+        SELECT value FROM systempreferences WHERE variable='opaccredits';
+    |);
+    if( $opaccredits ){
+        foreach my $lang ( @langs ) {
+            print "Inserting opaccredits contents into $lang news item...\n";
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opaccredits_$lang", $opaccredits);
+        }
+    }
+    $dbh->do("DELETE FROM systempreferences WHERE variable='opaccredits'");
+    NewVersion ($DBversion, 23795, "Convert OpacCredits system preference to news block");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
