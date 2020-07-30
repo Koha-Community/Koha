@@ -54,6 +54,7 @@ my $holiday = $builder->build(
     }
 );
 
+t::lib::Mocks::mock_preference('useDaysMode', 'Calendar');
 my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
 
 subtest 'days_forward' => sub {
