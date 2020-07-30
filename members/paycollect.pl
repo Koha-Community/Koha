@@ -144,20 +144,26 @@ if ( $selected_accts ) {
     }
     my @acc = split /,/, $selected_accts;
 
-    my $selected_accountlines = Koha::Account::Lines->search(
-        {
-            borrowernumber    => $borrowernumber,
+    my $search_params = {
+        borrowernumber    => $borrowernumber,
             amountoutstanding => { '<>' => 0 },
             accountlines_id   => { 'in' => \@acc },
-        },
+    };
+
+    my @selected_accountlines = Koha::Account::Lines->search(
+        $search_params,
         { order_by => 'date' }
     );
 
-    $total_due = $selected_accountlines->_resultset->get_column('amountoutstanding')->sum();
-
-    @selected_accountlines = $selected_accountlines->as_list;
+    my $sum = Koha::Account::Lines->search(
+        $search_params,
+        {
+            select => [ { sum => 'amountoutstanding' } ],
+            as     => [ 'total_amountoutstanding'],
+        }
+    );
+    $total_due = $sum->_resultset->first->get_column('total_amountoutstanding');
 }
-
 
 if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = $total_due if (abs($total_paid - $total_due) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
