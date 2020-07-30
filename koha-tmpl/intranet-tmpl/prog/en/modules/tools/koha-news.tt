@@ -9,7 +9,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( opac_news_count ) %]
 [% END %]
-[% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
+[% UNLESS ( wysiwyg ) %]
     [% Asset.css("lib/codemirror/codemirror.css") | $raw %]
     [% Asset.css("lib/codemirror/lint.min.css") | $raw %]
     <style>
@@ -159,8 +159,28 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                 [% opac_new.content | $raw %]
                             </td>
                             <td class="actions">
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% opac_new.idnew | uri %]" class="delete_news btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                [% IF ( wysiwyg ) %]
+                                    [% SET editmode = "wysiwyg" %]
+                                [% ELSE %]
+                                    [% SET editmode = "text" %]
+                                [% END %]
+                                <div class="btn-group dropup">
+                                    <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew | uri %]&editmode=[% editmode | uri %]" class="btn btn-default btn-xs"> <i class="fa fa-pencil"></i> Edit</a><button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            [% IF ( wysiwyg ) %]
+                                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew | uri %]&editmode=text"><i class="fa fa-pencil"></i> Edit with text editor</a>
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% opac_new.idnew | uri %]&editmode=wysiwyg"><i class="fa fa-pencil"></i> Edit with WYSIWYG editor</a>
+                                            [% END %]
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% opac_new.idnew | uri %]" class="delete_news btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                </div>
                             </td>
                         </tr>
                     [% END %]</tbody>
@@ -305,7 +325,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% END %]
-    [% IF Koha.Preference('NewsToolEditor') == 'codemirror' %]
+    [% UNLESS ( wysiwyg ) %]
         [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
         [% Asset.js( "lib/codemirror/xml.min.js" ) | $raw %]
         [% Asset.js( "lib/codemirror/lint.min.js" ) | $raw %]
