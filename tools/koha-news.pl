@@ -47,6 +47,12 @@ my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
 my $branchcode     = $cgi->param('branch');
 my $error_message  = $cgi->param('error_message');
+my $wysiwyg;
+if( $cgi->param('editmode') ){
+    $wysiwyg = $cgi->param('editmode') eq "wysiwyg" ? 1 : 0;
+} else {
+    $wysiwyg = C4::Context->preference("NewsToolEditor") eq "tinymce" ? 1 : 0;
+}
 
 # Foreign Key constraints work with NULL, not ''
 # NULL = All branches.
@@ -158,5 +164,8 @@ else {
         opac_news_count => $opac_news_count,
 		);
 }
-$template->param( lang => $lang );
+$template->param(
+    lang => $lang,
+    wysiwyg => $wysiwyg,
+);
 output_html_with_http_headers $cgi, $cookie, $template->output;
