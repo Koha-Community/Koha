@@ -25,7 +25,7 @@ use Koha::CirculationRules;
 
 use Koha::Patrons;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -302,6 +302,12 @@ $dbh->do( $query, {}, $borrower_id1, $item_id2, $samplebranch2->{branchcode} );
 ($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_2',
     $samplebranch2->{branchcode});
 is( $messages->{NeedsTransfer}, $samplebranch1->{branchcode}, "AddReturn respects branch return policy - item2->homebranch policy = 'holdingbranch'" );
+
+# Generate the transfer from above
+ModItemTransfer($item_id2, $samplebranch2->{branchcode}, $samplebranch1->{branchcode}, "ReturnToHolding");
+# Fulfill it
+($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_2',$samplebranch1->{branchcode});
+is( $messages->{NeedsTransfer}, undef, "AddReturn does not generate a new transfer for return policy when resolving an existing transfer" );
 
 # item3 should not trigger transfer - floating collection
 $query =

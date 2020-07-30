@@ -2020,6 +2020,9 @@ sub AddReturn {
                 "UPDATE branchtransfers SET datearrived = now() WHERE itemnumber= ? AND datearrived IS NULL"
             );
             $sth->execute( $item->itemnumber );
+
+            # If we are completing a transfer we should not generate a new transfer from return policy
+            $returnbranch = $branch;
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
