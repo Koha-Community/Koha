@@ -40,57 +40,33 @@ sub calculate {
 	my $branch = @$parameters[0];
 	my $dbh = C4::Context->dbh;
 	my $sth;
-	if ($branch) {
-		if (C4::Context->preference('item-level_itypes')) {
-		$sth = $dbh->prepare("
-        SELECT itemtype, description, items.itype as itemtype, COUNT(*) AS total
-			FROM itemtypes,items         
-		WHERE items.itype=itemtypes.itemtype         
-		AND items.holdingbranch=?            
-		GROUP BY items.itype
-		ORDER BY itemtypes.description");
-
-		}
-		else {
-		$sth = $dbh->prepare("
-        SELECT biblioitems.itemtype, description, biblioitems.itemtype, COUNT(*) AS total
-			FROM itemtypes, biblioitems, items 
-		WHERE biblioitems.itemtype=itemtypes.itemtype 
-		AND items.biblioitemnumber=biblioitems.biblioitemnumber
-		AND items.holdingbranch=?
-			GROUP BY  biblioitems.itemtype
-			ORDER BY itemtypes.description");
-		}
-		$sth->execute($branch);
-	} else {
-		if (C4::Context->preference('item-level_itypes')) {
-		$sth = $dbh->prepare("
-        SELECT biblioitems.itemtype, description,items.itype AS itemtype, COUNT(*) AS total
-			FROM itemtypes,items
-		WHERE items.itype=itemtypes.itemtype
-			GROUP BY items.itype
-			ORDER BY itemtypes.description");
-		}
-		else {
-        $sth = $dbh->prepare("SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
-			FROM itemtypes, biblioitems,items 
-		WHERE biblioitems.itemtype=itemtypes.itemtype 
-		AND biblioitems.biblioitemnumber = items.biblioitemnumber
-			GROUP BY biblioitems.itemtype
-			ORDER BY itemtypes.description");
-		}
-		$sth->execute;
-	}
-    my ($itemtype, $description,$biblioitems,$total);
+    if ( C4::Context->preference('item-level_itypes') ) {
+        $sth = $dbh->prepare( q|
+            SELECT itemtypes.itemtype, description, COUNT(*) AS total
+            FROM itemtypes, items
+            WHERE items.itype=itemtypes.itemtype
+            | . ( $branch ? q| AND items.holdingbranch=? | : () ) . q|
+            GROUP BY itemtypes.itemtype, description, items.itype
+            ORDER BY itemtypes.description
+        |);
+    }
+    else {
+        $sth = $dbh->prepare( q|
+            SELECT itemtypes.itemtype, description, COUNT(*) AS total
+            FROM itemtypes, biblioitems, items
+            WHERE biblioitems.itemtype=itemtypes.itemtype
+            AND items.biblioitemnumber=biblioitems.biblioitemnumber
+            | . ( $branch ? q| AND items.holdingbranch=? | : () ) . q|
+            GROUP BY itemtypes.itemtype, description
+            ORDER BY itemtypes.description
+        |);
+    }
+    $sth->execute($branch || ());
+    my ($itemtype, $description,$total);
 	my $grantotal = 0;
 	my $count = 0;
-    while (($itemtype, $description,$biblioitems,$total) = $sth->fetchrow) {
+    while (($itemtype, $description,$total) = $sth->fetchrow) {
 		my %line;
-		if($count % 2){
-			$line{toggle} = 1;
-			} else {
-				$line{toggle} = 0;
-			}
         $line{itemtype} = $itemtype;
 		$line{count} = $total;
 		$grantotal += $total;
