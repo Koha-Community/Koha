@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 use Graphics::Magick;
-use Test::More tests => 646;
+use Test::More tests => 647;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -1098,6 +1098,11 @@ is( $label_types->[4]->{type},     'BAR',                          'type     is 
 is( $label_types->[4]->{name},     'Barcode',                      'name     is good' );
 is( $label_types->[4]->{desc},     'Only the barcode is printed.', 'desc     is good' );
 is( $label_types->[4]->{selected}, 0,                              'selected is good' );
+
+$label_types->[0]->{selected} = 1;
+$label_types = get_label_types();
+is( $label_types->[0]->{selected}, 0, 'get_label_types must returned a new structure (copied)' );
+
 
 # ---------- Testing get_font_types -----------------------
 my $font_types = get_font_types();
