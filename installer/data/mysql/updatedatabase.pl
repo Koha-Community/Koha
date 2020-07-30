@@ -22498,6 +22498,36 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25709, "Rename systempreference to NotesToHide");
 }
 
+$DBversion = '20.06.00.018';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'reopen_closed_invoices', 'Reopen closed invoices')
+    |);
+
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'edit_invoices', 'Edit invoices')
+    |);
+
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'delete_baskets', 'Delete baskets')
+    |);
+
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'delete_invoices', 'Delete invoices')
+    |);
+
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'merge_invoices', 'Merge invoices')
+    |);
+
+    NewVersion( $DBversion, 24157, "Add new permissions reopen_closed_invoices, edit_invoices, delete_invoices, merge_invoices, delete_basket");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
