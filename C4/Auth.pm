@@ -762,12 +762,22 @@ sub _session_log {
 }
 
 sub _timeout_syspref {
-    my $timeout = C4::Context->preference('timeout') || 600;
+    my $default_timeout = 600;
+    my $timeout = C4::Context->preference('timeout') || $default_timeout;
 
     # value in days, convert in seconds
-    if ( $timeout =~ /(\d+)[dD]/ ) {
+    if ( $timeout =~ /^(\d+)[dD]$/ ) {
         $timeout = $1 * 86400;
     }
+    # value in hours, convert in seconds
+    elsif ( $timeout =~ /^(\d+)[hH]$/ ) {
+        $timeout = $1 * 3600;
+    }
+    elsif ( $timeout !~ m/^\d+$/ ) {
+        warn "The value of the system preference 'timeout' is not correct, defaulting to $default_timeout";
+        $timeout = $default_timeout;
+    }
+
     return $timeout;
 }
 
