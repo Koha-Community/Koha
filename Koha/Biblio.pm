@@ -560,7 +560,8 @@ sub get_coins {
                 push @authors, $au;
             }
         }
-        $title = $record->field('245')->as_string('ab');
+        $title = $record->field('245');
+        $title &&= $title->as_string('ab');
         if ($titletype eq 'a') {
             $pubyear   = $record->field('008') || '';
             $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
