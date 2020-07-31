@@ -22356,6 +22356,12 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion ($DBversion, 23797, "Convert OpacLoginInstructions system preference to news block");
 }
 
+$DBversion = '20.05.02.008';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET variable='NotesToHide' WHERE variable = 'NotesBlacklist'" );
+    NewVersion( $DBversion, 25709, "Rename systempreference to NotesToHide");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
