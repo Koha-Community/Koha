@@ -18,6 +18,9 @@
 use Modern::Perl;
 
 use File::Basename qw/basename/;
+
+use C4::Circulation qw(AddIssue AddReturn);
+
 use Koha::Database;
 use Koha::Illrequestattributes;
 use Koha::Illrequest::Config;
@@ -36,7 +39,7 @@ use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -1157,6 +1160,65 @@ subtest 'Custom statuses' => sub {
     $ill_req->status("COMP");
     is($ill_req->statusalias, undef,
         "Koha::Illrequest->status overloading resetting status_alias");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Checking in hook' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # Build infrastructure
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always('name', 'Mock');
+
+    my $config = Test::MockObject->new;
+    $config->set_always('backend_dir', "/tmp");
+
+    my $item   = $builder->build_sample_item();
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    t::lib::Mocks::mock_userenv(
+        {
+            patron     => $patron,
+            branchcode => $patron->branchcode
+        }
+    );
+
+    my $illrq = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                biblio_id => $item->biblio->biblionumber,
+                status    => 'NEW'
+            }
+        }
+    );
+
+    $illrq->_config($config);
+    $illrq->_backend($backend);
+
+    t::lib::Mocks::mock_preference('CirculateILL', 1);
+
+    # Add an issue
+    AddIssue( $patron->unblessed, $item->barcode );
+    # Make the item withdrawn so checking-in is rejected
+    t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
+    $item->set({ withdrawn => 1 })->store;
+    AddReturn( $item->barcode, $patron->branchcode );
+    # refresh request
+    $illrq->discard_changes;
+    isnt( $illrq->status, 'RET' );
+
+    # allow the check-in
+    $item->set({ withdrawn => 0 })->store;
+    AddReturn( $item->barcode, $patron->branchcode );
+    # refresh request
+    $illrq->discard_changes;
+    is( $illrq->status, 'RET' );
 
     $schema->storage->txn_rollback;
 };
