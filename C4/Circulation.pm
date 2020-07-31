@@ -2206,14 +2206,16 @@ sub AddReturn {
         }
     }
 
-    my $checkin = Koha::Old::Checkouts->find($issue->id);
+    if ( $issue ) {
+        my $checkin = Koha::Old::Checkouts->find($issue->id);
 
-    Koha::Plugins->call('after_circ_action', {
-        action  => 'checkin',
-        payload => {
-            checkout=> $checkin
-        }
-    });
+        Koha::Plugins->call('after_circ_action', {
+            action  => 'checkin',
+            payload => {
+                checkout=> $checkin
+            }
+        });
+    }
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ));
 }
