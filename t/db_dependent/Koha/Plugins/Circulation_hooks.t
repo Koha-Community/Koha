@@ -92,7 +92,17 @@ subtest 'after_circ_action() hook tests' => sub {
     };
 
     subtest 'AddReturn' => sub {
-        plan tests => 1;
+        plan tests => 2;
+
+        t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
+        $item_1->set({ withdrawn => 1 })->store;
+
+        warning_is {
+            AddReturn( $item_1->barcode, $patron->branchcode );
+        } undef, 'No hook called because no return happened';
+
+        t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 0);
+        $item_1->set({ withdrawn => 0 })->store;
 
         warning_like {
             AddReturn( $item_1->barcode, $patron->branchcode );
