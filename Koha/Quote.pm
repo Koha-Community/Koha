@@ -17,12 +17,8 @@ package Koha::Quote;
 
 use Modern::Perl;
 use Carp;
-use DateTime::Format::MySQL;
-use DBI qw(:sql_types);
 
 use Koha::Database;
-use Koha::DateUtils qw(dt_from_string);
-use Koha::Exceptions::UnknownProgramState;
 use Koha::Quotes;
 
 use base qw(Koha::Object);
@@ -36,92 +32,6 @@ Koha::Quote - Koha Quote object class
 =head2 Class methods
 
 =cut
-
-=head2 get_daily_quote($opts)
-
-Takes a hashref of options
-
-Currently supported options are:
-
-'id'        An exact quote id
-'random'    Select a random quote
-noop        When no option is passed in, this sub will return the quote timestamped for the current day
-
-=cut
-
-# This is definitely a candidate for some sort of caching once we finally settle caching/persistence issues...
-# at least for default option
-
-sub get_daily_quote {
-    my ($self, %opts) = @_;
-
-    my $quote = undef;
-
-    if ($opts{'id'}) {
-        $quote = Koha::Quotes->find({ id => $opts{'id'} });
-    }
-    elsif ($opts{'random'}) {
-        # Fall through... we also return a random quote as a catch-all if all else fails
-    }
-    else {
-        my $dt = dt_from_string()->ymd();
-        $quote = Koha::Quotes->search(
-            {
-                timestamp => { -like => "$dt%" },
-            },
-            {
-                order_by => { -desc => 'timestamp' },
-                rows => 1,
-            }
-        )->single;
-    }
-    unless ($quote) {        # if there are not matches, choose a random quote
-        my $range = Koha::Quotes->search->count;
-        my $offset = int(rand($range));
-        $quote = Koha::Quotes->search(
-            {},
-            {
-                order_by => 'id',
-                rows => 1,
-                offset => $offset,
-            }
-        )->single;
-
-        unless($quote){
-            return;
-        }
-
-        # update the timestamp for that quote
-        my $dt = DateTime::Format::MySQL->format_datetime(dt_from_string());
-        $quote->update({ timestamp => $dt });
-    }
-    return $quote;
-}
-
-=head2 get_daily_quote_for_interface
-
-    my $quote = Koha::Quote->get_daily_quote_for_interface();
-
-Is a wrapper for get_daily_quote(), with an extra check for using the correct
-interface defined in the syspref 'QuoteOfTheDay'.
-If the current interface is not allowed to display quotes, then returns nothing.
-
-=cut
-
-sub get_daily_quote_for_interface {
-    my ($self, %opts) = @_;
-    my $qotdPref = C4::Context->preference('QuoteOfTheDay');
-    my $interface = C4::Context->interface();
-    unless ($interface) {
-        my @cc = caller(3);
-        Koha::Exceptions::UnknownProgramState->throw(error => $cc[3]."()> C4::Context->interface() is not set! Don't know are you in OPAC or staff client?");
-    }
-    unless ($qotdPref =~ /$interface/) {
-        return;
-    }
-
-    return $self->get_daily_quote(%opts);
-}
 
 =head3 _type
 

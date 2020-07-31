@@ -24,7 +24,7 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
-use Koha::Quote;
+use Koha::Quotes;
 use C4::Members;
 use C4::Overdues;
 use Koha::Checkouts;
@@ -99,7 +99,7 @@ if ( $patron ) {
 $template->param(
     koha_news           => @all_koha_news,
     branchcode          => $homebranch,
-    daily_quote         => Koha::Quote->get_daily_quote_for_interface(),
+    daily_quote         => Koha::Quotes->get_daily_quote(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

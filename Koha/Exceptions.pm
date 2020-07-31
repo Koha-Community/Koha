@@ -50,10 +50,6 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'Koha is under maintenance.'
     },
-    'Koha::Exceptions::UnknownProgramState' => {
-        isa => 'Koha::Exceptions::Exception',
-        description => 'The running program has done something terribly unpredicatable',
-    },
     # Virtualshelves exceptions
     'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
         isa => 'Koha::Exceptions::DuplicateObject',
