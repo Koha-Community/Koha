@@ -2201,7 +2201,7 @@ sub AddReturn {
 
     # Check if this item belongs to a biblio record that is attached to an
     # ILL request, if it is we need to update the ILL request's status
-    if (C4::Context->preference('CirculateILL')) {
+    if ( $doreturn and C4::Context->preference('CirculateILL')) {
         my $request = Koha::Illrequests->find(
             { biblio_id => $item->biblio->biblionumber }
         );
