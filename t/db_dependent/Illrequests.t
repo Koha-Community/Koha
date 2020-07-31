@@ -35,7 +35,6 @@ use Test::MockModule;
 use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
-use Carp::Always;
 
 use Test::More tests => 12;
 
