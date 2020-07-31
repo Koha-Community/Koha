@@ -135,6 +135,16 @@ my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 output_and_exit( $input, $cookie, $template, 'unknown_basket') unless $basketobj;
 output_and_exit( $input, $cookie, $template, 'unknown_vendor') unless $bookseller;
 
+$template->param(
+    ordernumber  => $ordernumber,
+    basketno     => $basketno,
+    basket       => $basket,
+    booksellerid => $basket->{'booksellerid'},
+    name         => $bookseller->name,
+);
+output_and_exit( $input, $cookie, $template, 'order_cannot_be_edited' )
+    if $ordernumber and $basketobj->closedate;
+
 my $contract = GetContract({
     contractnumber => $basket->{contractnumber}
 });
@@ -397,10 +407,7 @@ $quantity //= 0;
 # fill template
 $template->param(
     existing         => $biblionumber,
-    ordernumber           => $ordernumber,
     # basket informations
-    basketno             => $basketno,
-    basket               => $basket,
     basketname           => $basket->{'basketname'},
     basketnote           => $basket->{'note'},
     booksellerid         => $basket->{'booksellerid'},
@@ -425,7 +432,6 @@ $template->param(
     order_vendornote     => $data->{'order_vendornote'},
     listincgst       => $bookseller->listincgst,
     invoiceincgst    => $bookseller->invoiceincgst,
-    name             => $bookseller->name,
     cur_active_sym   => $active_currency->symbol,
     cur_active       => $active_currency->currency,
     currencies       => \@currencies,
