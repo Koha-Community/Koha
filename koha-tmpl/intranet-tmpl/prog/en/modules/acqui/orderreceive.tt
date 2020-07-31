@@ -429,6 +429,11 @@
                 };
             [% END %]
 
+            if( $("#quantity").val() < 1 ) {
+                alert(_("You must receive at least one item"));
+                return false;
+            }
+
             return true;
         }
 
