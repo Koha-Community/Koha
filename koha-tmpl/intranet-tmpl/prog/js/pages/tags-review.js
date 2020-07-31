@@ -35,22 +35,22 @@ var success_approve = function(tag){
     // window.alert(_("AJAX approved tag: ") + tag);
 };
 var failure_approve = function(tag){
-    window.alert(MSG_AJAX_APPROVE_FAILED.format(decodeURIComponent( tag )));
+    window.alert( __("AJAX failed to approve tag: %s").format(decodeURIComponent(tag)) );
 };
 var success_reject  = function(tag){
     // window.alert(_("AJAX rejected tag: ") + tag);
 };
 var failure_reject  = function(tag){
-    window.alert(MSG_AJAX_REJECTION_FAILED.format(decodeURIComponent( tag )));
+    window.alert( __("AJAX failed to reject tag: %s").format(decodeURIComponent(tag)) );
 };
 var success_test    = function(tag){
-    $('#verdict').html(MSG_AJAX_TAG_PERMITTED.format( decodeURIComponent( tag ) ));
+    $('#verdict').html( __("%s is permitted!").format(decodeURIComponent(tag)) );
 };
 var failure_test    = function(tag){
-    $('#verdict').html(MSG_AJAX_TAG_PROHIBITED.format( decodeURIComponent( tag ) ));
+    $('#verdict').html( __("%s is prohibited!").format(decodeURIComponent(tag)) );
 };
 var indeterminate_test = function(tag){
-    $('#verdict').html(MSG_AJAX_TAG_UNCLASSIFIED.format( decodeURIComponent( tag ) ));
+    $('#verdict').html( __("%s is neither permitted nor prohibited!").format(decodeURIComponent(tag)) );
 };
 
 var success_test_call = function() {
@@ -69,7 +69,7 @@ $(document).ready(function() {
         "sPaginationType": "full"
     }));
     $('.ajax_buttons' ).css({visibility:"visible"});
-    $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\"><\/i> "+ LABEL_SELECT_ALL +"<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\"><\/i> "+ LABEL_CLEAR_ALL +"<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> "+ LABEL_SELECT_ALL_PENDING +"<\/a><\/div>");
+    $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\" aria-hidden=\"false\"><\/i> " + __("Select all") + "<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\" aria-hidden=\"false\"><\/i> " + __("Clear all") + "<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> " + __("Select all pending") + "<\/a><\/div>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -96,12 +96,12 @@ $(document).ready(function() {
                 success: count_approve // success_approve
             });
             $(event.target).next(".rej").prop('disabled', false).css("color","#000");
-            $(event.target).next(".rej").html("<i class='fa fa-remove'></i> " + _("Reject"));
+            $(event.target).next(".rej").html("<i class='fa fa-remove' aria-hidden='false'></i> " + __("Reject"));
             $(event.target).prop('disabled', true).css("color","#666");
-            $(event.target).html("<i class='fa fa-check'></i> " + LABEL_APPROVED );
+            $(event.target).html("<i class='fa fa-check' aria-hidden='false'></i> " + __("Approved") );
             getelement = $(event.target).data("num");
             gettitle = ".status" + getelement;
-            $(gettitle).text( LABEL_APPROVED );
+            $(gettitle).text( __("Approved") );
             if ($(gettitle).hasClass("pending") ){
                 $(gettitle).toggleClass("pending approved");
             } else {
@@ -116,12 +116,12 @@ $(document).ready(function() {
                 success: count_reject // success_reject
             });
             $(event.target).prev(".ok").prop('disabled', false).css("color","#000");
-            $(event.target).prev(".ok").html("<i class='fa fa-check'></i> " + LABEL_APPROVE );
+            $(event.target).prev(".ok").html("<i class='fa fa-check' aria-hidden='false'></i> " + __("Approve"));
             $(event.target).prop('disabled', true).css("color","#666");
-            $(event.target).html("<i class='fa fa-remove'></i> " + LABEL_REJECTED );
+            $(event.target).html("<i class='fa fa-remove' aria-hidden='false'></i> " + __("Rejected"));
             getelement = $(event.target).data("num");
             gettitle = ".status" + getelement;
-            $(gettitle).text( LABEL_REJECTED );
+            $(gettitle).text( __("Rejected") );
             if ($(gettitle).hasClass("pending") ){
                 $(gettitle).toggleClass("pending rejected");
             } else {
@@ -130,7 +130,7 @@ $(document).ready(function() {
             return false;   // cancel submit
         }
         if ($(event.target).is('#test_button')) {
-            $(event.target).text( LABEL_TESTING ).prop('disabled', true);
+            $(event.target).text( __("Testing...") ).prop('disabled', true);
             $.ajax({
                 data: {
                     test: $('#test').attr("value")
@@ -141,7 +141,7 @@ $(document).ready(function() {
         }
     });
     $("*").ajaxError(function(evt, request, settings){
-        if ((alerted +=1) <= 1){ window.alert(MSG_AJAX_ERROR.format(alerted)); }
+        if ((alerted +=1) <= 1){ window.alert( __("AJAX error (%s alert)").format(alerted) ); }
     });
 
     var reviewerField = $("#approver");
