@@ -30,7 +30,7 @@ sub capture {
     my ( $class, $driver ) = @_;
 
     $driver->get_page_source;
-    write_file('/tmp/page_source_from_selenium', $driver->get_page_source);
+    write_file('/tmp/page_source_from_selenium', {binmode => ':utf8'}, $driver->get_page_source );
     my $gdf3_url = qx(cat /tmp/page_source_from_selenium | curl --data-binary \@- https://gdf3.com);
     print STDERR "\nPage source pasted at $gdf3_url";
 
