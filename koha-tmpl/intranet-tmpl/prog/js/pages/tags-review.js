@@ -65,23 +65,37 @@ $(document).ready(function() {
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
-        "aaSorting": [[ 4, "desc" ]],
+        "aaSorting": [[ 2, "desc" ]],
         "sPaginationType": "full"
     }));
     $('.ajax_buttons' ).css({visibility:"visible"});
     $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\" aria-hidden=\"false\"><\/i> " + __("Select all") + "<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\" aria-hidden=\"false\"><\/i> " + __("Clear all") + "<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> " + __("Select all pending") + "<\/a><\/div>");
-    $("#CheckAll").click(function(){
-        $(".checkboxed").checkCheckboxes();
-        return false;
+
+    $("#CheckAll").on("click", function (e) {
+        e.preventDefault();
+        $("#tagst input:checkbox").each(function () {
+            $(this).prop("checked", true);
+        });
     });
-    $("#CheckNone").click(function(){
-        $(".checkboxed").unCheckCheckboxes();
-        return false;
+
+    $("#CheckNone").on("click", function(e){
+        e.preventDefault();
+        $("#tagst input:checkbox").each(function(){
+            $(this).prop("checked", false );
+        });
     });
-    $("#CheckPending").click(function(){
-        $(".checkboxed").checkCheckboxes(".pending");
-        return false;
+
+    $("#CheckPending").on("click", function (e) {
+        e.preventDefault();
+        $("#tagst input:checkbox").each(function () {
+            if( $(this).hasClass("pending") ){
+                $(this).prop("checked", true);
+            } else {
+                $(this).prop("checked", false);
+            }
+        });
     });
+
     $(".approval_btn").on('click',function(event) {
         event.preventDefault();
         pull_counts();
@@ -102,6 +116,7 @@ $(document).ready(function() {
             getelement = $(event.target).data("num");
             gettitle = ".status" + getelement;
             $(gettitle).text( __("Approved") );
+            $("#checkbox" + getelement ).attr("class", "approved");
             if ($(gettitle).hasClass("pending") ){
                 $(gettitle).toggleClass("pending approved");
             } else {
@@ -121,7 +136,8 @@ $(document).ready(function() {
             $(event.target).html("<i class='fa fa-remove' aria-hidden='false'></i> " + __("Rejected"));
             getelement = $(event.target).data("num");
             gettitle = ".status" + getelement;
-            $(gettitle).text( __("Rejected") );
+            $(gettitle).text(__("Rejected"));
+            $("#checkbox" + getelement).attr("class", "rejected");
             if ($(gettitle).hasClass("pending") ){
                 $(gettitle).toggleClass("pending rejected");
             } else {

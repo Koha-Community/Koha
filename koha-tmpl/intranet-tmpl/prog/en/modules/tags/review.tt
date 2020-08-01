@@ -77,7 +77,6 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
     <thead>
         <tr>
             <th class="NoSort">&nbsp;</th>
-            <th class="NoSort">&nbsp;</th>
 		<th>Status</th>
 		<th>Term</th>
 		<th>Weight</th>
@@ -89,18 +88,28 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
     <tbody>
     [% FOREACH tagloo IN tagloop %]
         <tr>
-            <td class="count">[% offset + loop.count | html %]
-            </td>
-                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term | html %]" name="tags" class="pending" /></span>
-                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term | html %]" name="tags" /></span>[% END %]
+            <td>
+                [% IF ( tagloo.approved == 0 ) %]
+                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="pending" />
+                [% ELSIF ( tagloo.approved == 1 ) %]
+                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="approved" />
+                [% ELSE %]
+                    <input id="checkbox[% offset + loop.count | html %]" type="checkbox" value="[% tagloo.term | html %]" name="tags" class="rejected" />
+                [% END %]
             </td>
             <td>
                 [% IF ( tagloo.approved == -1 ) %]
-                    <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
+                    <label for="checkbox[% offset + loop.count | html %]">
+                        <span class="rejected status[% offset + loop.count | html %]">Rejected</span>
+                    </label>
                 [% ELSIF ( tagloo.approved == 1 ) %]
-                    <span class="approved status[% offset + loop.count | html %]">Approved</span>
+                    <label for="checkbox[% offset + loop.count | html %]">
+                        <span class="approved status[% offset + loop.count | html %]">Approved</span>
+                    </label>
                 [% ELSE %]
-                    <span class="pending status[% offset + loop.count | html %]">Pending</span>
+                    <label for="checkbox[% offset + loop.count | html %]">
+                        <span class="pending status[% offset + loop.count | html %]">Pending</span>
+                    </label>
                 [% END %]
             </td>
             <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term | html %]</a>
@@ -228,7 +237,6 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/pages/tags-review.js") | $raw %]
 [% END %]
 
