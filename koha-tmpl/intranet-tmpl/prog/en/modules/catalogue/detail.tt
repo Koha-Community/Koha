@@ -288,6 +288,7 @@
                 <th id="[% tab | html %]_status" data-colname="[% tab | html %]_status">Status</th>
                 <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen" class="title-string">Last seen</th>
                 <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned" class="title-string">Date accessioned</th>
+                <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed" class="title-string">Date last borrowed</th>
                 <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
                 [% IF ( itemdata_uri ) %]<th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>[% END %]
                 [% IF ( itemdata_copynumber ) %]<th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>[% END %]
@@ -450,6 +451,7 @@ Note that permanent location is a code, and location may be an authval.
                     </td>
                     <td class="datelastseen"><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>
                     <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
+                    <td class="datelastborrowed"><span title="[% item.datelastborrowed | html %]">[% item.datelastborrowed | $KohaDates %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
                         [% IF item.uri.split(' \| ').size > 1 %]
