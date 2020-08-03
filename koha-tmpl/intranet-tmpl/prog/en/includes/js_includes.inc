@@ -130,7 +130,7 @@
         }).data( "ui-autocomplete" );
         if( obj ) {
             obj._renderItem = function( ul, item ) {
-                item.link = "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + item.borrowernumber;
+                item.link = "/cgi-bin/koha/members/moremember.pl?borrowernumber=" + item.borrowernumber;
                 var cardnumber = "";
                 if( item.cardnumber != "" ){
                     // Display card number in parentheses if it exists
