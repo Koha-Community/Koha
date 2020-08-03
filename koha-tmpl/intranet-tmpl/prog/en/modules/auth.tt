@@ -1,12 +1,10 @@
 [% USE raw %]
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE Desks %]
 [% USE Categories %]
 [% SET footerjs = 1 %]
-[% IF Desks.all %]
-    [% SET setdesk = 1 %]
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
     [% IF ( nopermission ) %]Access denied[% END %]
@@ -137,6 +135,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/desk_selection.js") | $raw %]
     <script type="text/javascript">
         $(document).ready( function() {
             if ( document.location.hash ) {
