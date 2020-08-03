@@ -662,7 +662,6 @@
 
 <xsl:if test="$DisplayOPACiconsXSLT!='0'">
     <span class="results_summary type">
-
     <xsl:if test="$typeOf008!=''">
     <span class="results_material_type">
         <span class="label">Material type: </span>
