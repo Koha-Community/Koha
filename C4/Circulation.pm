@@ -507,51 +507,31 @@ sub TooMany {
 
         my ( $checkout_count_type, $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef;
-
+        my $checkout_rules = {
+            checkout_count               => $checkout_count,
+            onsite_checkout_count        => $onsite_checkout_count,
+            onsite_checkout              => $onsite_checkout,
+            max_checkouts_allowed        => $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef,
+            max_onsite_checkouts_allowed => $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef,
+            switch_onsite_checkout       => $switch_onsite_checkout,
+        };
         # If parent rules exists
         if ( defined($parent_maxissueqty_rule) and defined($parent_maxissueqty_rule->rule_value) ){
-            my $max_checkouts_allowed = $parent_maxissueqty_rule->rule_value;
-
-            my $qty_over = _check_max_qty({
-                checkout_count => $checkout_count,
-                onsite_checkout_count => $onsite_checkout_count,
-                onsite_checkout => $onsite_checkout,
-                max_checkouts_allowed => $max_checkouts_allowed,
-                max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
-                switch_onsite_checkout       => $switch_onsite_checkout
-            });
+            $checkout_rules->{max_checkouts_allowed} = $parent_maxissueqty_rule ? $parent_maxissueqty_rule->rule_value : undef;
+            my $qty_over = _check_max_qty($checkout_rules);
             return $qty_over if defined $qty_over;
 
-
-           # If the parent rule is less than or equal to the child, we only need check the parent
-           if( $maxissueqty_rule->rule_value < $parent_maxissueqty_rule->rule_value && defined($maxissueqty_rule->itemtype) ) {
-               my $max_checkouts_allowed = $maxissueqty_rule->rule_value;
-               my $qty_over = _check_max_qty({
-                   checkout_count => $checkout_count_type,
-                   onsite_checkout_count => $onsite_checkout_count,
-                   onsite_checkout => $onsite_checkout,
-                   max_checkouts_allowed => $max_checkouts_allowed,
-                   max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
-                   switch_onsite_checkout       => $switch_onsite_checkout
-               });
-               return $qty_over if defined $qty_over;
-           }
-
+            # If the parent rule is less than or equal to the child, we only need check the parent
+            if( $maxissueqty_rule->rule_value < $parent_maxissueqty_rule->rule_value && defined($maxissueqty_rule->itemtype) ) {
+                $checkout_rules->{checkout_count} = $checkout_count_type;
+                $checkout_rules->{max_checkouts_allowed} = $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef;
+                my $qty_over = _check_max_qty($checkout_rules);
+                return $qty_over if defined $qty_over;
+            }
         } else {
-            my $max_checkouts_allowed = $maxissueqty_rule->rule_value;
-            my $qty_over = _check_max_qty({
-                checkout_count => $checkout_count,
-                onsite_checkout_count => $onsite_checkout_count,
-                onsite_checkout => $onsite_checkout,
-                max_checkouts_allowed => $max_checkouts_allowed,
-                max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
-                switch_onsite_checkout       => $switch_onsite_checkout
-            });
+            my $qty_over = _check_max_qty($checkout_rules);
             return $qty_over if defined $qty_over;
         }
-
-
     }
 
     # Now count total loans against the limit for the branch
