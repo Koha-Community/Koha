@@ -460,7 +460,8 @@ sub TooMany {
             if (C4::Context->preference('item-level_itypes')) {
                 $count_query .= " WHERE items.itype NOT IN ( $issuing_itemtypes_query )";
             } else {
-                $count_query .= " WHERE biblioitems.itemtype NOT IN ( $issuing_itemtypes_query )";
+                $count_query .= " JOIN biblioitems USING (biblionumber)
+                                  WHERE biblioitems.itemtype NOT IN ( $issuing_itemtypes_query )";
             }
             push @bind_params, $maxissueqty_rule->branchcode;
             push @bind_params, $maxissueqty_rule->categorycode;
