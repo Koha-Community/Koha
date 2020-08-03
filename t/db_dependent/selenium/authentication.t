@@ -96,6 +96,7 @@ SKIP: {
 
         $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
+        $driver->get($mainpage); # This should not be needed but we the next find_element fails randomly
         $driver->find_element('//div[@id="login"]'); # logged out
 
         # Using the form on the right
