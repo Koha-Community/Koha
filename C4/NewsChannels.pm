@@ -135,7 +135,6 @@ sub get_opac_new {
     my $sth = $dbh->prepare($query);
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
-    $data->{$data->{'lang'}} = 1 if defined $data->{lang};
     $data->{expirationdate} = output_pref({ dt => dt_from_string( $data->{expirationdate} ), dateonly => 1 }) if ( $data->{expirationdate} );
     $data->{publicationdate} = output_pref({ dt => dt_from_string( $data->{publicationdate} ), dateonly => 1 });
     return $data;

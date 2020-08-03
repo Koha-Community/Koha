@@ -74,7 +74,7 @@ my $href_entry1 = {
     content        => $new1,
     lang           => $lang1,
     expirationdate => $expirationdate1,
-    timestamp      => $timestamp1,
+    publicationdate=> $timestamp1,
     number         => $number1,
     branchcode     => 'LIB1',
 };
@@ -89,7 +89,7 @@ my $href_entry2 = {
     content        => $new2,
     lang           => $lang2,
     expirationdate => $expirationdate2,
-    timestamp      => $timestamp2,
+    publicationdate=> $timestamp2,
     number         => $number2,
     borrowernumber => $brwrnmbr,
     branchcode     => 'LIB1',
@@ -103,7 +103,7 @@ my $href_entry3 = {
     title          => $title3,
     content        => $new3,
     lang           => $lang3,
-    timestamp      => $timestamp3,
+    publicationdate=> $timestamp3,
     number         => $number3,
     borrowernumber => $brwrnmbr,
     branchcode     => 'LIB1',
@@ -114,14 +114,14 @@ is( $rv, 1, 'Successfully added the third dummy news item without expiration dat
 # We need to determine the idnew in a non-MySQLism way.
 # This should be good enough.
 my $query =
-q{ SELECT idnew from opac_news WHERE timestamp='2000-01-01' AND expirationdate='2999-12-30'; };
+q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-01' AND expirationdate='2999-12-30'; };
 my ( $idnew1 ) = $dbh->selectrow_array( $query );
 $query =
-q{ SELECT idnew from opac_news WHERE timestamp='2000-01-01' AND expirationdate='2999-12-31'; };
+q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-01' AND expirationdate='2999-12-31'; };
 my ( $idnew2 ) = $dbh->selectrow_array( $query );
 
 $query =
-q{ SELECT idnew from opac_news WHERE timestamp='2000-01-02'; };
+q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-02'; };
 my ( $idnew3 ) = $dbh->selectrow_array( $query );
 
 # Test upd_opac_new
@@ -140,6 +140,7 @@ $expirationdate1 = output_pref( { dt => dt_from_string( $expirationdate1 ), date
 $timestamp2      = output_pref( { dt => dt_from_string( $timestamp2 ), dateonly => 1 } );
 $expirationdate2 = output_pref( { dt => dt_from_string( $expirationdate2) , dateonly => 1 } );
 
+my $updated_on = %{get_opac_new($idnew1)}{updated_on};
 is_deeply(
     get_opac_new($idnew1),
     {
@@ -147,22 +148,19 @@ is_deeply(
         content        => $new1,
         lang           => $lang1,
         expirationdate => $expirationdate1,
-        timestamp      => $timestamp1,
+        publicationdate=> $timestamp1,
         number         => $number1,
         borrowernumber => undef,
         idnew          => $idnew1,
         branchname     => "$addbra branch",
         branchcode     => $addbra,
-        # this represents $lang => 1 in the hash
-        # that's returned... which seems a little
-        # redundant given that there's a perfectly
-        # good 'lang' key in the hash
-        ''             => 1,
+        updated_on     => $updated_on,
     },
     'got back expected news item via get_opac_new - ID 1'
 );
 
 # Test get_opac_new (single news item)
+$updated_on = %{get_opac_new($idnew2)}{updated_on};
 is_deeply(
     get_opac_new($idnew2),
     {  
@@ -170,13 +168,13 @@ is_deeply(
         content        => $new2,
         lang           => $lang2,
         expirationdate => $expirationdate2,
-        timestamp      => $timestamp2,
+        publicationdate=> $timestamp2,
         number         => $number2,
         borrowernumber => $brwrnmbr,
         idnew          => $idnew2,
         branchname     => "$addbra branch",
         branchcode     => $addbra,
-        ''             => 1,
+        updated_on     => $updated_on,
     },
     'got back expected news item via get_opac_new - ID 2'
 );
