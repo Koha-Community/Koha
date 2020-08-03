@@ -31,28 +31,39 @@ my $input             = new CGI;
 my $op                = $input->param('op') || 'list';
 my @messages;
 
+# The "view" view should be accessible for the user who create this job.
+my $flags_required = $op ne 'view' ? { parameters => 'manage_background_jobs' } : undef;
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "admin/background_jobs.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 'manage_background_jobs' }, # Maybe the "view" view should be accessible for the user who create this job.
-                                                                       # But in that case what could the permission to check here? tools => '*' ?
+        flagsrequired   => $flags_required,
         debug           => 1,
     }
 );
 
-my $dbh = C4::Context->dbh;
-
 if ( $op eq 'view' ) {
     my $id = $input->param('id');
     if ( my $job = Koha::BackgroundJobs->find($id) ) {
-        $template->param(
-            job       => $job,
-        );
-        $template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) )
-            if $job->type eq 'batch_biblio_record_modification';
+        if ( $job->borrowernumber ne $loggedinuser
+            && !Koha::Patrons->find($loggedinuser)->has_permission( { parameters => 'manage_background_jobs' } ) )
+        {
+            push @messages, { code => 'cannot_view_job' };
+        }
+        else {
+            $template->param( job => $job, );
+            $template->param(
+                lists => scalar Koha::Virtualshelves->search(
+                    [
+                        { category => 1, owner => $loggedinuser },
+                        { category => 2 }
+                    ]
+                )
+            ) if $job->type eq 'batch_biblio_record_modification';
+        }
     } else {
         $op = 'list';
     }

@@ -12,7 +12,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-    &rsaquo; <a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a>
+    [% IF CAN_user_parameters_manage_background_jobs %]&rsaquo; <a href="/cgi-bin/koha/admin/background_jobs.pl">Background jobs</a>[% END %]
 </div>
 
 <div class="main container-fluid">
@@ -25,6 +25,8 @@
         [% SWITCH m.code %]
         [% CASE 'cannot_retrieve_jobs' %]
             <div><i class="fa fa-exclamation error"></i>Cannot retrieve pending jobs ([% m.error %])</div>
+        [% CASE 'cannot_view_job' %]
+            <div><i class="fa fa-exclamation error"></i>Insufficient permission to see this job.</div>
         [% CASE %]
             [% m.code | html %]
         [% END %]
@@ -132,7 +134,9 @@
         </ol>
     </fieldset>
 
-    <a href="/cgi-bin/koha/admin/background_jobs.pl">Return to the job list</a>
+    [% IF CAN_user_parameters_manage_background_jobs %]
+        <a href="/cgi-bin/koha/admin/background_jobs.pl">Return to the job list</a>
+    [% END %]
 [% END %]
 
 [% IF op == 'list' %]
