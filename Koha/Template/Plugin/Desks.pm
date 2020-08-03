@@ -99,7 +99,7 @@ returns all desks existing at all libraries
 sub all {
 
     my ( $self ) = @_;
-    return Koha::Desks->search( )->unblessed;
+    return Koha::Desks->search();
 }
 
 1;
