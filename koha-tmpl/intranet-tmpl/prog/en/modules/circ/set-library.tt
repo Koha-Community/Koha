@@ -79,7 +79,7 @@ Updated:<ul>
     <ol>
         <li><label for="desk">Choose Desk:</label>
         <select name="desk_id" id="desk_id">
-            [% PROCESS options_for_desks desks => Desks.all( selected => desk_id ) %]
+            [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id  %]
         </select></li>
     </ol>
 </fieldset>

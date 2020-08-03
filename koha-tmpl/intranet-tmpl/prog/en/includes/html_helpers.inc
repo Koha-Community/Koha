@@ -12,7 +12,11 @@
     <option id="nodesk" value="">---</option>
     [% FOREACH d IN desks %]
         [% IF d.branchcode == branch %]
+          [% IF selected == d.desk_id %]
+            <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" selected="selected">[% d.desk_name | html %]</option>
+          [% ELSE %]
             <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" >[% d.desk_name | html %]</option>
+          [% END %]
         [% ELSE %]
             <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled hidden>[% d.desk_name | html %]</option>
         [% END%]
