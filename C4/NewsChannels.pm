@@ -58,6 +58,7 @@ sub add_opac_new {
     my $retval = 0;
 
     if ($href_entry) {
+        $href_entry->{number} = 0 if $href_entry->{number} !~ /^\d+$/;
         my @fields = keys %{$href_entry};
         my @values = values %{$href_entry};
         my $field_string = join ',', @fields;
@@ -85,6 +86,7 @@ sub upd_opac_new {
     my $retval = 0;
 
     if ($href_entry) {
+        $href_entry->{number} = 0 if $href_entry->{number} !~ /^\d+$/;
         # take the keys of hash entry and make a list, but...
         my @fields = keys %{$href_entry};
         my @values;
