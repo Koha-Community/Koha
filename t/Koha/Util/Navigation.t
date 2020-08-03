@@ -7,7 +7,7 @@ use t::lib::Mocks;
 use Koha::Util::Navigation;
 
 subtest 'Tests for local_referer' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     my ( $referer, $base );
     my $cgi = Test::MockObject->new;
@@ -25,6 +25,10 @@ subtest 'Tests for local_referer' => sub {
 
     $referer = 'https://koha.nl/custom/stuff';
     is( Koha::Util::Navigation::local_referer($cgi), '/', 'custom url' );
+
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'http://kohadev.myDNSname.org:8080');
+    $referer = "http://kohadev.mydnsname.org:8080$search";
+    is( Koha::Util::Navigation::local_referer($cgi), $search, 'local_referer is comparing $OPACBaseURL case insensitive' );
 
     # trailing backslash
     t::lib::Mocks::mock_preference('OPACBaseURL', 'http://koha.nl/' );

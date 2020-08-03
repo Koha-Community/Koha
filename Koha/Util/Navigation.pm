@@ -59,7 +59,7 @@ sub local_referer {
 
     # Try ..BaseURL first, otherwise use CGI::url
     if( $base ) {
-        if( substr($referer, 0, length($base)) eq $base &&
+        if( $referer =~ m|^\Q$base\E|i &&
             $referer =~ /\/cgi-bin\/koha\// )
         {
             $rv = substr( $referer, length($base) );
