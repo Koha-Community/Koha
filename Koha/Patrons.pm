@@ -395,8 +395,8 @@ sub search_patrons_to_update_category {
         $query{join} = ["accountlines"];
         $query{columns} = ["borrowernumber"];
         $query{group_by} = ["borrowernumber"];
-        $query{having} = \['IFNULL(sum(accountlines.amountoutstanding),0) <= ?',$params->{fine_max}] if defined $params->{fine_max};
-        $query{having} = \['IFNULL(sum(accountlines.amountoutstanding),0) >= ?',$params->{fine_min}] if defined $params->{fine_min};
+        $query{having} = \['COALESCE(sum(accountlines.amountoutstanding),0) <= ?',$params->{fine_max}] if defined $params->{fine_max};
+        $query{having} = \['COALESCE(sum(accountlines.amountoutstanding),0) >= ?',$params->{fine_min}] if defined $params->{fine_min};
     }
     return $self->search($search_params,\%query);
 }
