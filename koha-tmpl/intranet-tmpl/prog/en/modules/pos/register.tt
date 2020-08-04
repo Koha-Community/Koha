@@ -28,6 +28,18 @@
             </div>
             [% ELSE %]
 
+            [% IF ( error_cashup_permission ) %]
+            <div id="error_message" class="dialog alert">
+                You do not have permission to perform cashup actions.
+            </div>
+            [% END %]
+
+            [% IF ( error_refund_permission ) %]
+            <div id="error_message" class="dialog alert">
+                You do not have permission to perform refund actions.
+            </div>
+            [% END %]
+
             [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
                 <button id="pos_cashup" type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
