@@ -432,14 +432,17 @@ sub TooMany {
     # rule
     if (defined($maxissueqty_rule) and $maxissueqty_rule->rule_value ne "") {
 
-        my $checkouts = $patron->checkouts->search( {}, { prefetch => 'item' } );
+        my $checkouts;
         if ( $maxissueqty_rule->branchcode ) {
             if ( C4::Context->preference('CircControl') eq 'PickupLibrary' ) {
-                $checkouts = $checkouts->search({ 'me.branchcode' => $maxissueqty_rule->branchcode });
+                $checkouts = $patron->checkouts->search(
+                    { 'me.branchcode' => $maxissueqty_rule->branchcode } );
             } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
                 ; # if branch is the patron's home branch, then count all loans by patron
             } else {
-                $checkouts = $checkouts->search({ 'item.homebranch' => $maxissueqty_rule->branchcode });
+                $checkouts = $patron->checkouts->search(
+                    { 'item.homebranch' => $maxissueqty_rule->branchcode },
+                    { prefetch          => 'item' } );
             }
         }
         my $sum_checkouts;
@@ -516,13 +519,15 @@ sub TooMany {
     # Now count total loans against the limit for the branch
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
     if (defined($branch_borrower_circ_rule->{patron_maxissueqty}) and $branch_borrower_circ_rule->{patron_maxissueqty} ne '') {
-        my $checkouts = $patron->checkouts->search({}, { prefetch => 'item' });
+        my $checkouts;
         if ( C4::Context->preference('CircControl') eq 'PickupLibrary' ) {
-            $checkouts = $checkouts->search({ 'me.branchcode' => $branch });
+            $checkouts = $patron->checkouts->search(
+                { 'me.branchcode' => $branch} );
         } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
             ; # if branch is the patron's home branch, then count all loans by patron
         } else {
-            $checkouts = $checkouts->search({ 'item.homebranch' => $branch });
+            $checkouts = $patron->checkouts->search(
+                { 'item.homebranch' => $branch} );
         }
 
         my $checkout_count = $checkouts->count;
