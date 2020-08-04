@@ -1167,7 +1167,7 @@ sub checkauth {
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
                     $session->param('emailaddress'), $session->param('shibboleth'),
-                    $session->param('desk_id'), $session->param('desk_name')
+                    $session->param('desk_id'),      $session->param('desk_name')
                 );
 
             }
@@ -1444,8 +1444,8 @@ sub check_api_auth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('desk_id'),
-                $session->param('desk_name')
+                $session->param('emailaddress'), $session->param('shibboleth'),
+                $session->param('desk_id'),      $session->param('desk_name')
             );
 
             my $ip       = $session->param('ip');
