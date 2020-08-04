@@ -175,12 +175,6 @@ $template->param(
 );
 
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
-my $marcisbnsarray   = GetMarcISBN( $record, $marcflavour );
-my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
-my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
-my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-my $marchostsarray   = GetMarcHosts($record,$marcflavour);
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
 
@@ -417,12 +411,6 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 $template->param( norequests => $norequests );
 $template->param(
     MARCNOTES   => $marcnotesarray,
-    MARCSUBJCTS => $marcsubjctsarray,
-    MARCAUTHORS => $marcauthorsarray,
-    MARCSERIES  => $marcseriesarray,
-    MARCURLS => $marcurlsarray,
-    MARCISBNS => $marcisbnsarray,
-    MARCHOSTS => $marchostsarray,
     itemdata_ccode      => $itemfields{ccode},
     itemdata_enumchron  => $itemfields{enumchron},
     itemdata_uri        => $itemfields{uri},

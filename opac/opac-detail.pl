@@ -783,7 +783,6 @@ if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-    my $marchostsarray   = GetMarcHosts($record,$marcflavour);
 
     $template->param(
         MARCSUBJCTS => $marcsubjctsarray,
@@ -791,7 +790,6 @@ if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
         MARCSERIES  => $marcseriesarray,
         MARCURLS    => $marcurlsarray,
         MARCISBNS   => $marcisbnsarray,
-        MARCHOSTS   => $marchostsarray,
     );
 }
 
