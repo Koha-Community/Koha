@@ -381,9 +381,8 @@ sub TooMany {
     my $switch_onsite_checkout = $params->{switch_onsite_checkout} || 0;
     my $cat_borrower    = $borrower->{'categorycode'};
     my $dbh             = C4::Context->dbh;
-	my $branch;
-	# Get which branchcode we need
-    $branch = _GetCircControlBranch($item_object->unblessed,$borrower);
+    # Get which branchcode we need
+    my $branch = _GetCircControlBranch($item_object->unblessed,$borrower);
     my $type = $item_object->effective_itemtype;
 
     my ($type_object, $parent_type, $parent_maxissueqty_rule);
@@ -414,7 +413,6 @@ sub TooMany {
             rule_name    => 'maxissueqty',
         }
     );
-
 
     my $maxonsiteissueqty_rule = Koha::CirculationRules->get_effective_rule(
         {
@@ -557,40 +555,43 @@ sub TooMany {
 }
 
 sub _check_max_qty {
-    my $params = shift;
-    my $checkout_count = $params->{checkout_count};
-    my $onsite_checkout_count = $params->{onsite_checkout_count};
-    my $onsite_checkout = $params->{onsite_checkout};
-    my $max_checkouts_allowed = $params->{max_checkouts_allowed};
+    my $params                       = shift;
+    my $checkout_count               = $params->{checkout_count};
+    my $onsite_checkout_count        = $params->{onsite_checkout_count};
+    my $onsite_checkout              = $params->{onsite_checkout};
+    my $max_checkouts_allowed        = $params->{max_checkouts_allowed};
     my $max_onsite_checkouts_allowed = $params->{max_onsite_checkouts_allowed};
-    my $switch_onsite_checkout = $params->{switch_onsite_checkout};
+    my $switch_onsite_checkout       = $params->{switch_onsite_checkout};
 
     if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
-        if( $max_onsite_checkouts_allowed eq '' ){ return;}
-        if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
+        if ( $max_onsite_checkouts_allowed eq '' ) { return; }
+        if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed ) {
             return {
-                reason => 'TOO_MANY_ONSITE_CHECKOUTS',
-                count => $onsite_checkout_count,
+                reason      => 'TOO_MANY_ONSITE_CHECKOUTS',
+                count       => $onsite_checkout_count,
                 max_allowed => $max_onsite_checkouts_allowed,
-            }
+            };
         }
     }
     if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
-        if( $max_checkouts_allowed eq '' ){ return;}
+        if ( $max_checkouts_allowed eq '' ) { return; }
         my $delta = $switch_onsite_checkout ? 1 : 0;
         if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
             return {
-                reason => 'TOO_MANY_CHECKOUTS',
-                count => $checkout_count,
+                reason      => 'TOO_MANY_CHECKOUTS',
+                count       => $checkout_count,
                 max_allowed => $max_checkouts_allowed,
             };
         }
-    } elsif ( not $onsite_checkout ) {
-        if( $max_checkouts_allowed eq '' ){ return;}
-        if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed ) {
+    }
+    elsif ( not $onsite_checkout ) {
+        if ( $max_checkouts_allowed eq '' ) { return; }
+        if (
+            $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )
+        {
             return {
-                reason => 'TOO_MANY_CHECKOUTS',
-                count => $checkout_count - $onsite_checkout_count,
+                reason      => 'TOO_MANY_CHECKOUTS',
+                count       => $checkout_count - $onsite_checkout_count,
                 max_allowed => $max_checkouts_allowed,
             };
         }
