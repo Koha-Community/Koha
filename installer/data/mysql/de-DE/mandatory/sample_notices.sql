@@ -87,7 +87,7 @@ Fällig am: <<issues.date_due>><br />
 <div class="newsitem">
 <h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
 <p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
-<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"><<opac_news.timestamp>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"><<opac_news.publicationdate>></p>
 <hr />
 </div>
 </news>', 1),
