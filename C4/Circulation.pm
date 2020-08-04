@@ -436,12 +436,14 @@ sub TooMany {
                 $checkouts = $patron->checkouts->search(
                     { 'me.branchcode' => $maxissueqty_rule->branchcode } );
             } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
-                ; # if branch is the patron's home branch, then count all loans by patron
+                $checkouts = $patron->checkouts; # if branch is the patron's home branch, then count all loans by patron
             } else {
                 $checkouts = $patron->checkouts->search(
                     { 'item.homebranch' => $maxissueqty_rule->branchcode },
                     { prefetch          => 'item' } );
             }
+        } else {
+            $checkouts = $patron->checkouts; # if rule is not branch specific then count all loans by patron
         }
         my $sum_checkouts;
         my $rule_itemtype = $maxissueqty_rule->itemtype;
