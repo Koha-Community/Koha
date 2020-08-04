@@ -83,7 +83,8 @@
             [% END %]
         </select>
     </p>
-    [% IF Desks.all %]
+
+    [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
         <p>
             <label for="desk">Desk:</label>
             <select name="desk_id" id="desk_id" class="input" tabindex="3">
@@ -93,8 +94,8 @@
                     [% END %]
             </select>
         </p>
+    [% END %]
 </fieldset>
-[% END %]
 [% END %]
 
 <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
