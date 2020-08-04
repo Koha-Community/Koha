@@ -321,8 +321,8 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% ELSE %]
-        [% INCLUDE 'str/tinymce_i18n.inc' %]
         [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
+        [% INCLUDE 'str/tinymce_i18n.inc' %]
         <script>
             tinyMCE.init({
                 verify_html: false,
