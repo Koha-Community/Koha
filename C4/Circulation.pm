@@ -426,12 +426,12 @@ sub TooMany {
     );
 
 
+    my $patron = Koha::Patrons->find($borrower->{borrowernumber});
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
     # rule
     if (defined($maxissueqty_rule) and $maxissueqty_rule->rule_value ne "") {
 
-        my $patron = Koha::Patrons->find($borrower->{borrowernumber});
         my $checkouts = $patron->checkouts->search( {}, { prefetch => 'item' } );
         if ( $maxissueqty_rule->branchcode ) {
             if ( C4::Context->preference('CircControl') eq 'PickupLibrary' ) {
@@ -516,38 +516,31 @@ sub TooMany {
     # Now count total loans against the limit for the branch
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
     if (defined($branch_borrower_circ_rule->{patron_maxissueqty}) and $branch_borrower_circ_rule->{patron_maxissueqty} ne '') {
-        my @bind_params = ();
-        my $branch_count_query = q|
-            SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
-            FROM issues
-            JOIN items USING (itemnumber)
-            WHERE borrowernumber = ?
-        |;
-        push @bind_params, $borrower->{borrowernumber};
-
-        if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
-            $branch_count_query .= " AND issues.branchcode = ? ";
-            push @bind_params, $branch;
+        my $checkouts = $patron->checkouts->search({}, { prefetch => 'item' });
+        if ( C4::Context->preference('CircControl') eq 'PickupLibrary' ) {
+            $checkouts = $checkouts->search({ 'me.branchcode' => $branch });
         } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
             ; # if branch is the patron's home branch, then count all loans by patron
         } else {
-            $branch_count_query .= " AND items.homebranch = ? ";
-            push @bind_params, $branch;
+            $checkouts = $checkouts->search({ 'item.homebranch' => $branch });
         }
-        my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $branch_count_query, {}, @bind_params );
+
+        my $checkout_count = $checkouts->count;
+        my $onsite_checkout_count = $checkouts->search({ onsite_checkout => 1 })->count;
         my $max_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxissueqty};
         my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxonsiteissueqty} || undef;
 
-        my $qty_over = _check_max_qty({
-            checkout_count => $checkout_count,
-            onsite_checkout_count => $onsite_checkout_count,
-            onsite_checkout => $onsite_checkout,
-            max_checkouts_allowed => $max_checkouts_allowed,
-            max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
-            switch_onsite_checkout       => $switch_onsite_checkout
-        });
+        my $qty_over = _check_max_qty(
+            {
+                checkout_count               => $checkout_count,
+                onsite_checkout_count        => $onsite_checkout_count,
+                onsite_checkout              => $onsite_checkout,
+                max_checkouts_allowed        => $max_checkouts_allowed,
+                max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
+                switch_onsite_checkout       => $switch_onsite_checkout
+            }
+        );
         return $qty_over if defined $qty_over;
-
     }
 
     if ( not defined( $maxissueqty_rule ) and not defined($branch_borrower_circ_rule->{patron_maxissueqty}) ) {
