@@ -917,6 +917,7 @@
             $("#barcode").focus();
         }
         $(document).ready(function () {
+            $("#checkin-form").preventDoubleFormSubmit();
             $(".modal.block").modal({ backdrop: 'static'}).on('shown.bs.modal', function() {
                 $("#barcode").prop("disabled", true);
                 $(".show_checkin_dialog").show();
