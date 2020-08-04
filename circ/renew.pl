@@ -48,6 +48,7 @@ $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespae
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
 my $override_limit = $cgi->param('override_limit');
 my $override_holds = $cgi->param('override_holds');
+my $hard_due_date  = $cgi->param('hard_due_date');
 
 my ( $item, $issue, $borrower );
 my $error = q{};
@@ -99,6 +100,9 @@ if ($barcode) {
                     if ( $cgi->param('renewonholdduedate') ) {
                         $date_due = dt_from_string( scalar $cgi->param('renewonholdduedate'));
                     }
+                    if ( C4::Context->preference('SpecifyDueDate') && $hard_due_date ) {
+                        $date_due = dt_from_string( $hard_due_date );
+                    }
                     $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode, $date_due );
                     $template->param( date_due => $date_due );
                 }
@@ -125,6 +129,7 @@ if ($barcode) {
     );
 }
 
+$template->param( hard_due_date => ($hard_due_date ? output_pref({ str => $hard_due_date, dateformat => 'iso' }) : undef) );
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
