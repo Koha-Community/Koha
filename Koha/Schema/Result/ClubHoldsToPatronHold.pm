@@ -50,7 +50,7 @@ __PACKAGE__->table("club_holds_to_patron_holds");
 =head2 error_code
 
   data_type: 'enum'
-  extra: {list => ["damaged","ageRestricted","itemAlreadyOnHold","tooManyHoldsForThisRecord","tooManyReservesToday","tooManyReserves","notReservable","cannotReserveFromOtherBranches","libraryNotFound","libraryNotPickupLocation","cannotBeTransferred"]}
+  extra: {list => ["damaged","ageRestricted","itemAlreadyOnHold","tooManyHoldsForThisRecord","tooManyReservesToday","tooManyReserves","notReservable","cannotReserveFromOtherBranches","libraryNotFound","libraryNotPickupLocation","cannotBeTransferred","noReservesAllowed"]}
   is_nullable: 1
 
 =head2 error_message
@@ -86,6 +86,7 @@ __PACKAGE__->add_columns(
         "libraryNotFound",
         "libraryNotPickupLocation",
         "cannotBeTransferred",
+        "noReservesAllowed",
       ],
     },
     is_nullable => 1,
@@ -159,8 +160,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/T626DfqUi7SnXOyieUzYw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-08-04 18:43:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KjJWzFhPwQk0SZqrHQ4Alw
 
 sub koha_objects_class {
     'Koha::Club::Hold::PatronHolds';
