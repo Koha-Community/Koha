@@ -21,7 +21,7 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
-plan tests => 43;
+plan tests => 41;
 
 use_ok('C4::Biblio');
 
@@ -116,12 +116,6 @@ warning_is { $ret = GetMarcSeries() }
            "GetMarcSeries returns carped warning on undef record";
 
 ok( !defined $ret, 'GetMarcSeries returns undef if not passed rec');
-
-warning_is { $ret = GetMarcHosts() }
-           { carped => 'GetMarcHosts called on undefined record'},
-           "GetMarcHosts returns carped warning on undef record";
-
-ok( !defined $ret, 'GetMarcHosts returns undef if not passed rec');
 
 my $hash_ref;
 

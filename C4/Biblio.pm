@@ -38,7 +38,6 @@ BEGIN {
         GetMarcSubjects
         GetMarcAuthors
         GetMarcSeries
-        GetMarcHosts
         GetMarcUrls
         GetUsedMarcStructure
         GetXmlBiblio
@@ -1860,53 +1859,6 @@ sub GetMarcSeries {
     }
     return \@marcseries;
 }    #end getMARCseriess
-
-=head2 GetMarcHosts
-
-  $marchostsarray = GetMarcHosts($record,$marcflavour);
-
-Get all host records (773s MARC21, 461 UNIMARC) from the MARC record and returns them in an array.
-
-=cut
-
-sub GetMarcHosts {
-    my ( $record, $marcflavour ) = @_;
-    if (!$record) {
-        carp 'GetMarcHosts called on undefined record';
-        return;
-    }
-
-    my ( $tag,$title_subf,$bibnumber_subf,$itemnumber_subf);
-    $marcflavour ||="MARC21";
-    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
-        $tag = "773";
-        $title_subf = "t";
-        $bibnumber_subf ="0";
-        $itemnumber_subf='9';
-    }
-    elsif ($marcflavour eq "UNIMARC") {
-        $tag = "461";
-        $title_subf = "t";
-        $bibnumber_subf ="0";
-        $itemnumber_subf='9';
-    };
-
-    my @marchosts;
-
-    foreach my $field ( $record->field($tag)) {
-
-        my @fields_loop;
-
-        my $hostbiblionumber = $field->subfield("$bibnumber_subf");
-        my $hosttitle = $field->subfield($title_subf);
-        my $hostitemnumber=$field->subfield($itemnumber_subf);
-        push @fields_loop, { hostbiblionumber => $hostbiblionumber, hosttitle => $hosttitle, hostitemnumber => $hostitemnumber};
-        push @marchosts, { MARCHOSTS_FIELDS_LOOP => \@fields_loop };
-
-        }
-    my $marchostsarray = \@marchosts;
-    return $marchostsarray;
-}
 
 =head2 UpsertMarcSubfield
 
