@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
 [% USE AuthorisedValues %]
@@ -77,6 +78,13 @@
           </li>
         </ol>
       </fieldset>
+      [% IF Koha.Preference('SpecifyDueDate') %]
+          <fieldset class="rows">
+              <legend>Due date: </legend>
+              <label for="duedatespec">Hard due date [% INCLUDE 'date-format.inc' %]:</label>
+              <input type="text" size="20" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates with_hours => 1 %]" />
+          </fieldset>
+      [% END %]
       <input type="hidden" name="op" value="show" />
       <fieldset class="action">
         <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -259,7 +267,7 @@
               [% END %]
 
               [% IF checkout_info.issue.date_due %]
-                <li>Due on [% checkout_info.issue.date_due | $KohaDates %]</li>
+                <li>Due on [% checkout_info.issue.date_due | $KohaDates as_due_date => 1 %]</li>
               [% END %]
             </td>
           </tr>
@@ -274,6 +282,7 @@
       <input type="hidden" name="issueconfirmed" value="1" />
       <input type="hidden" name="debt_confirmed" value="1" />
       <input type="hidden" name="branch" value="[% branch | html %]" />
+      <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
       <input type="hidden" name="batch" value="1" />
       <input type="submit" id="checkoutrenew" class="approve" value="Checkout or renew" />
         </fieldset>
@@ -315,7 +324,20 @@
                 ],
                 "bPaginate": false
             }));
+
+            [% IF Koha.Preference('SpecifyDueDate') %]
+                $("#duedatespec").datetimepicker({
+                    onClose: function(dateText, inst) {
+                        validate_date(dateText, inst);
+                    },
+                    hour: 23,
+                    minute: 59
+                }).on("change", function(e, value) {
+                    if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+                });
+            [% END %]
         });
+
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
