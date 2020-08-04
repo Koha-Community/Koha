@@ -429,7 +429,7 @@ sub TooMany {
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
     # rule
-    if (defined($maxissueqty_rule) and defined($maxissueqty_rule->rule_value)) {
+    if (defined($maxissueqty_rule) and $maxissueqty_rule->rule_value ne "") {
 
         my @bind_params;
         my $count_query = "";
