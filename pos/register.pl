@@ -102,45 +102,55 @@ else {
 
     my $op = $input->param('op') // '';
     if ( $op eq 'cashup' ) {
-        $cash_register->add_cashup(
-            {
-                manager_id => $logged_in_user->id,
-                amount     => $cash_register->outstanding_accountlines->total
-            }
-        );
+        if ( $logged_in_user->has_permission( { cash_management => 'cashup' } ) ) {
+            $cash_register->add_cashup(
+                {
+                    manager_id => $logged_in_user->id,
+                    amount     => $cash_register->outstanding_accountlines->total
+                }
+            );
+        }
+        else {
+            $template->param( error_cashup_permission => 1 );
+        }
     }
     elsif ( $op eq 'refund' ) {
-        my $amount           = $input->param('amount');
-        my $quantity         = $input->param('quantity');
-        my $accountline_id   = $input->param('accountline');
-        my $transaction_type = $input->param('transaction_type');
+        if ( $logged_in_user->has_permission( { cash_management => 'anonymous_refund' } ) ) {
+            my $amount           = $input->param('amount');
+            my $quantity         = $input->param('quantity');
+            my $accountline_id   = $input->param('accountline');
+            my $transaction_type = $input->param('transaction_type');
 
-        my $accountline = Koha::Account::Lines->find($accountline_id);
-        $schema->txn_do(
-            sub {
+            my $accountline = Koha::Account::Lines->find($accountline_id);
+            $schema->txn_do(
+                sub {
 
-                my $refund = $accountline->reduce(
-                    {
-                        reduction_type => 'Refund',
-                        branch         => $library_id,
-                        staff_id       => $logged_in_user->id,
-                        interface      => 'intranet',
-                        amount         => $amount
-                    }
-                );
-                my $payout = $refund->payout(
-                    {
-                        payout_type   => $transaction_type,
-                        branch        => $library_id,
-                        staff_id      => $logged_in_user->id,
-                        cash_register => $cash_register->id,
-                        interface     => 'intranet',
-                        amount        => $amount
-                    }
-                );
+                    my $refund = $accountline->reduce(
+                        {
+                            reduction_type => 'Refund',
+                            branch         => $library_id,
+                            staff_id       => $logged_in_user->id,
+                            interface      => 'intranet',
+                            amount         => $amount
+                        }
+                    );
+                    my $payout = $refund->payout(
+                        {
+                            payout_type   => $transaction_type,
+                            branch        => $library_id,
+                            staff_id      => $logged_in_user->id,
+                            cash_register => $cash_register->id,
+                            interface     => 'intranet',
+                            amount        => $amount
+                        }
+                    );
 
-            }
-        );
+                }
+            );
+        }
+        else {
+            $template->param( error_refund_permission => 1 );
+        }
     }
 }
 
