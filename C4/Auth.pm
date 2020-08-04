@@ -38,6 +38,7 @@ use Koha::Checkouts;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Library::Groups;
 use Koha::Libraries;
+use Koha::Cash::Registers;
 use Koha::Desks;
 use Koha::Patrons;
 use Koha::Patron::Consents;
@@ -868,7 +869,7 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('shibboleth'),
                 $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id')
+                $session->param('register_id'),  $session->param('register_name')
             );
             C4::Context::set_shelves_userenv( 'bar', $session->param('barshelves') );
             C4::Context::set_shelves_userenv( 'pub', $session->param('pubshelves') );
@@ -1091,7 +1092,7 @@ sub checkauth {
                 }
                 my ( $borrowernumber, $firstname, $surname, $userflags,
                     $branchcode, $branchname, $emailaddress, $desk_id,
-                    $desk_name, $register_id );
+                    $desk_name, $register_id, $register_name );
 
                 if ( $return == 1 ) {
                     my $select = "
@@ -1142,6 +1143,8 @@ sub checkauth {
                     }
                     if ( $query->param('register_id') ) {
                         $register_id = $query->param('register_id');
+                        my $register = Koha::Cash::Registers->find($register_id);
+                        $register_name = $register ? $register->name : '';
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                     if ( $type ne 'opac' and C4::Context->boolean_preference('AutoLocation') ) {
@@ -1188,6 +1191,7 @@ sub checkauth {
                     $session->param( 'interface',    $type);
                     $session->param( 'shibboleth',   $shibSuccess );
                     $session->param( 'register_id',  $register_id );
+                    $session->param( 'register_name',  $register_name );
                     $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map { $session->param($_) } qw(cardnumber firstname surname branch);
                 }
                 $session->param('cas_ticket', $cas_ticket) if $cas_ticket;
@@ -1198,7 +1202,7 @@ sub checkauth {
                     $session->param('branchname'),   $session->param('flags'),
                     $session->param('emailaddress'), $session->param('shibboleth'),
                     $session->param('desk_id'),      $session->param('desk_name'),
-                    $session->param('register_id')
+                    $session->param('register_id'),  $session->param('register_name')
                 );
 
             }
@@ -1478,7 +1482,7 @@ sub check_api_auth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('shibboleth'),
                 $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id')
+                $session->param('register_id'),  $session->param('register_name')
             );
 
             my $ip       = $session->param('ip');
@@ -1642,7 +1646,7 @@ sub check_api_auth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('shibboleth'),
                 $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id')
+                $session->param('register_id'),  $session->param('register_name')
             );
             return ( "ok", $cookie, $sessionID );
         } else {
@@ -1732,7 +1736,7 @@ sub check_cookie_auth {
             $session->param('branchname'),   $session->param('flags'),
             $session->param('emailaddress'), $session->param('shibboleth'),
             $session->param('desk_id'),      $session->param('desk_name'),
-            $session->param('register_id')
+            $session->param('register_id'),  $session->param('register_name')
         );
 
         my $ip       = $session->param('ip');

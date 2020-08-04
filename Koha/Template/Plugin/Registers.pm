@@ -37,8 +37,9 @@ sub session_register_id {
 sub session_register_name {
     my ($self) = @_;
 
-    my $register = Koha::Cash::Registers->find($self->session_register_id);
-    return $register ? $register->name : '';
+    return C4::Context->userenv
+      ? C4::Context->userenv->{'register_name'}
+      : '';
 }
 
 =head2

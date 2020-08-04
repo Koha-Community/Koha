@@ -81,14 +81,14 @@ if ( $branch and my $library = Koha::Libraries->find($branch) ) {
     if ( defined($userenv_register_id)
         && ( $userenv_register_id ne $register_id ) )
     {
+        my $old_register_name = C4::Context->userenv->{'register_name'} || '';
         my $register = Koha::Cash::Registers->find($register_id);
-        $template->param(LoginRegisterID   => $register_id);   # update template for new register
-        $template->param(LoginRegisterName   => $register ? $register->name : '');   # update template for new register
         $session->param( 'register_id', $register_id );
+        $session->param( 'register_name', $register ? $register->name : '' );
         push @updated,
           {
             updated_register => 1,
-            new_register     => $register ? $register->name : ''
+            old_register     => $old_register_name
           };
     }
     $session->flush();

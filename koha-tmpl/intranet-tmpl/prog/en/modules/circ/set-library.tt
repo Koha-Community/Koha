@@ -45,14 +45,14 @@
 Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch || update.updated_desk ||  update.updated_register ) %]
-        [% IF ( updated.updated.branch ) %]
+        [% IF ( updated.updated_branch ) %]
         <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
         [% END %]
         [% IF ( update.updated_desk ) %]
         <li>Desk: [% update.old_desk or "?" | html %] &rArr; [% LoginDeskname or "?" | html %]</li>
         [% END %]
         [% IF ( updated.updated_register ) %]
-        <li>Register: [% updated.new_register | html %]</li>
+        <li>Register: [% updated.old_register or "?" | html %] &rArr; [% Registers.session_register_name or "?" | html %]</li>
         [% END %]
     [% ELSE %]
         <li>ERROR - unknown</li>
