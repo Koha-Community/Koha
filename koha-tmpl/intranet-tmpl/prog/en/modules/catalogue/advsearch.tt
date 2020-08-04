@@ -40,6 +40,9 @@
 <h1>Advanced search</h1>
 <p>
   <a href="/cgi-bin/koha/catalogue/itemsearch.pl">Go to item search</a>
+  [% IF searchid %]
+      <div id="previous_search_link"></div>
+  [% END %]
 </p>
 
 <!-- SEARCH BUTTONS -->
@@ -296,6 +299,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
+    [% Asset.js("js/browser.js") | $raw %]
     <script>
         /**
          *  Function add_field();
@@ -324,6 +328,12 @@
                     document.getElementById("categoryloop").disabled=false;
                 }
             });
+
+            [% IF searchid %]
+                browser = KOHA.browser('[% searchid | html %]');
+                browser.show_back_link();
+            [% END %]
+
         });
     </script>
 [% END %]

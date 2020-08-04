@@ -927,7 +927,7 @@ elsif ( $op eq "delete" ) {
 	exit;
     }
     
-    print $input->redirect('/cgi-bin/koha/catalogue/search.pl');
+    print $input->redirect('/cgi-bin/koha/catalogue/search.pl' . ($searchid ? "?searchid=$searchid" : ""));
     exit;
     
 } else {

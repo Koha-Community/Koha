@@ -109,5 +109,15 @@ KOHA.browser = function (searchid, biblionumber) {
         }
     };
 
+    me.show_back_link = function () {
+        if (current_search) {
+            $(document).ready(function () {
+                var searchURL = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(current_search.query) + '&limit=' + decodeURIComponent(current_search.limit) + '&sort_by=' + current_search.sort + '&searchid=' + me.searchid;
+                $('#previous_search_link').replaceWith('<div><div class="browse-label"><a href="' + searchURL + '"><i class="fa fa-list"></i> ' + __("Go back to the results") + '</a></div></div>');
+            });
+        }
+    };
+
+
     return me;
 };

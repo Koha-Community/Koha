@@ -241,6 +241,8 @@ my $types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
 my $advancedsearchesloop = prepare_adv_search_types($types);
 $template->param(advancedsearchesloop => $advancedsearchesloop);
 
+$template->param( searchid => scalar $cgi->param('searchid'), );
+
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
 
@@ -690,8 +692,6 @@ for (my $i=0;$i<@servers;$i++) {
     $template->param(           outer_sup_results_loop => \@sup_results_array);
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
-
-$template->{'VARS'}->{'searchid'} = $cgi->param('searchid');
 
 my $gotonumber = $cgi->param('gotoNumber');
 if ( $gotonumber && ( $gotonumber eq 'last' || $gotonumber eq 'first' ) ) {
