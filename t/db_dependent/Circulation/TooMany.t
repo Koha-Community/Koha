@@ -919,7 +919,7 @@ subtest 'itemtype group tests' => sub {
         undef, undef, undef );
     like( $issue->issue_id, qr|^\d+$|, 'the issue should have been inserted' );
 
-    #patron has 1 checkoout of childitype1 and 2 of childitype2
+    #patron has 1 checkout of childitype1 and 2 of childitype2
 
     is(
         C4::Circulation::TooMany( $patron, $item_2 ),
