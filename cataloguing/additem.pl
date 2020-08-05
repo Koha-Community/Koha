@@ -35,6 +35,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::SearchEngine::Indexer;
 use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
@@ -629,7 +630,8 @@ if ($op eq "additem") {
 		$oldbarcode = $barcodevalue;
 	    }
 
-        C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
 
 	    undef($itemrecord);
 	}
@@ -707,7 +709,8 @@ if ($op eq "additem") {
         next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
         push @errors,$error;
     }
-    C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
     if ( @errors ) {
         $nextop="additem";
     } else {

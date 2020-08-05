@@ -30,12 +30,12 @@ use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use C4::Circulation;
 use C4::Reserves;
-use C4::Biblio qw( ModZebra ); # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
 use C4::ClassSource; # FIXME We would like to avoid that
 use C4::Log qw( logaction );
 
 use Koha::Checkouts;
 use Koha::CirculationRules;
+use Koha::SearchEngine::Indexer;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
 use Koha::ItemTypes;
@@ -62,7 +62,7 @@ Koha::Item - Koha Item object class
     $item->store;
 
 $params can take an optional 'skip_modzebra_update' parameter.
-If set, the reindexation process will not happen (ModZebra not called)
+If set, the reindexation process will not happen (index_records not called)
 
 NOTE: This is a temporary fix to answer a performance issue when lot of items
 are added (or modified) at the same time.
@@ -195,7 +195,8 @@ sub store {
     }
 
     my $result = $self->SUPER::store;
-    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_modzebra_update};
     $self->get_from_storage->_after_item_action_hooks({ action => $plugin_action });
 
@@ -213,7 +214,8 @@ sub delete {
     # FIXME check the item has no current issues
     # i.e. raise the appropriate exception
 
-    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_modzebra_update};
 
     $self->_after_item_action_hooks({ action => 'delete' });
