@@ -3367,12 +3367,12 @@ CREATE TABLE transport_cost (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `biblioimages`
+-- Table structure for table `cover_images`
 --
 
-DROP TABLE IF EXISTS `biblioimages`;
+DROP TABLE IF EXISTS `cover_images`;
 
-CREATE TABLE `biblioimages` ( -- local cover images
+CREATE TABLE `cover_images` ( -- local cover images
  `imagenumber` int(11) NOT NULL AUTO_INCREMENT, -- unique identifier for the image
  `biblionumber` int(11) DEFAULT NULL, -- foreign key from biblio table to link to biblionumber
  `itemnumber` int(11) DEFAULT NULL, -- foreign key from item table to link to itemnumber

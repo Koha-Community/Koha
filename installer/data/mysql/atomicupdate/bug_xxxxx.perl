@@ -17,4 +17,13 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     NewVersion( $DBversion, 'XXXXX', "Add the biblioimages.itemnumber column");
+
+    if( !TableExists('cover_images') ) {
+        $dbh->do(q|
+            ALTER TABLE biblioimages RENAME cover_images
+        |);
+    }
+
+    # Always end with this (adjust the bug info)
+    NewVersion( $DBversion, "XXXXX", "Rename table biblioimages with cover_images");
 }
