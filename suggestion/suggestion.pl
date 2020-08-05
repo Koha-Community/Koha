@@ -219,7 +219,7 @@ if ( $op =~ /save/i ) {
             }
             # empty fields, to avoid filter in "SearchSuggestion"
         }
-        map{delete $$suggestion_ref{$_}} keys %$suggestion_ref;
+        map{delete $$suggestion_ref{$_} unless $_ eq 'branchcode' } keys %$suggestion_ref;
         $op = 'else';
 
         if( $redirect eq 'purchase_suggestions' ) {
@@ -324,7 +324,7 @@ elsif ( $op eq 'show' ) {
 }
 if ($op=~/else/) {
     $op='else';
-    
+
     $displayby||="STATUS";
     # distinct values of display by
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
