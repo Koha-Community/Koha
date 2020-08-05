@@ -427,7 +427,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'integer'
   default_value: 0
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 overdrive_auth_token
 
@@ -607,7 +607,7 @@ __PACKAGE__->add_columns(
     size => 25,
   },
   "login_attempts",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "overdrive_auth_token",
   { data_type => "mediumtext", is_nullable => 1 },
   "anonymized",
@@ -615,8 +615,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-07-16 16:16:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HiETuS+0kBHCvN7dJ2FDQg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-08-05 12:05:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lVMElQhommNi9Z2aZm6hJA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
