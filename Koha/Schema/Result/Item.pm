@@ -159,8 +159,8 @@ __PACKAGE__->table("items");
 =head2 issues
 
   data_type: 'smallint'
-  is_nullable: 0
   default_value: 0
+  is_nullable: 1
 
 =head2 renewals
 
@@ -249,9 +249,8 @@ __PACKAGE__->table("items");
 
 =head2 uri
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 itype
 
@@ -357,10 +356,7 @@ __PACKAGE__->add_columns(
   "coded_location_qualifier",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "issues",
-  { data_type => "smallint",
-    is_nullable => 0,
-    default_value => 0,
-  },
+  { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "renewals",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
@@ -397,7 +393,7 @@ __PACKAGE__->add_columns(
   "materials",
   { data_type => "mediumtext", is_nullable => 1 },
   "uri",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "itype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "more_subfields_xml",
@@ -751,8 +747,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-10 14:31:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dqUjo9pJysKKBhF8PM5KnA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-08-05 11:43:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HK4vgo7aA1pOjsp6avZrkA
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
