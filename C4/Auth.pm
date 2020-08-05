@@ -451,11 +451,6 @@ sub get_template_and_user {
 
     # these template parameters are set the same regardless of $in->{'type'}
 
-    # Set the using_https variable for templates
-    # FIXME Under Plack the CGI->https method always returns 'OFF'
-    my $https = $in->{query}->https();
-    my $using_https = ( defined $https and $https ne 'OFF' ) ? 1 : 0;
-
     my $minPasswordLength = C4::Context->preference('minPasswordLength');
     $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
@@ -474,7 +469,6 @@ sub get_template_and_user {
         singleBranchMode   => ( Koha::Libraries->search->count == 1 ),
         XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
         XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
-        using_https        => $using_https,
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
