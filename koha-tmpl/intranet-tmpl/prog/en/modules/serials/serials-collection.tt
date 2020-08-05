@@ -307,7 +307,6 @@
         var subscriptionid = "[% subscriptionid | html %]";
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 
     <script>
 
@@ -348,13 +347,13 @@
             $(".CheckAll").on("click", function(e){
                 e.preventDefault();
                 var years = $(this).data("year");
-                $("#subscription-year-" + years ).checkCheckboxes();
+                $("#subscription-year-" + years + " input:checkbox").prop("checked", true );
             });
 
             $(".CheckNone").on("click", function(e){
                 e.preventDefault();
                 var years = $(this).data("year");
-                $("#subscription-year-" + years ).unCheckCheckboxes();
+                $("#subscription-year-" + years + " input:checkbox").prop("checked", false );
             });
 
             $(".generatenext").on("click", function(e){
