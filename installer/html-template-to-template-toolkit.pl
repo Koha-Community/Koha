@@ -27,12 +27,12 @@ my $tmpl_in_dir      = 'koha-tmpl';
 my $tmpl_out_dir     = 'koha-tt';
 
 # template toolkit variables NOT to scope, in other words, variables that need to remain global (case sensitive)
-my @globals = ("themelang","JacketImages","OPACAmazonCoverImages","GoogleJackets","BakerTaylorEnabled",
-"SyndeticsEnabled", "OpacRenewalAllowed", "item_level_itypes","noItemTypeImages",
-"virtualshelves", "RequestOnOpac", "COinSinOPACResults", "OPACXSLTResultsDisplay",
-"OPACItemsResultsDisplay", "LibraryThingForLibrariesID", "opacuserlogin", "TagsEnabled",
-"TagsShowOnList", "TagsInputOnList","loggedinusername","opacbookbag",
-"OPACAmazonEnabled", "SyndeticsCoverImages","using_https");
+my @globals = ( "themelang","JacketImages","OPACAmazonCoverImages","GoogleJackets","BakerTaylorEnabled",
+    "SyndeticsEnabled", "OpacRenewalAllowed", "item_level_itypes","noItemTypeImages",
+    "virtualshelves", "RequestOnOpac", "COinSinOPACResults", "OPACXSLTResultsDisplay",
+    "OPACItemsResultsDisplay", "LibraryThingForLibrariesID", "opacuserlogin", "TagsEnabled",
+    "TagsShowOnList", "TagsInputOnList","loggedinusername","opacbookbag",
+    "OPACAmazonEnabled", "SyndeticsCoverImages" );
 
 # Arguments:
 my $KOHA_ROOT;
