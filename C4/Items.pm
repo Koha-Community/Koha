@@ -70,6 +70,7 @@ use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::SearchEngine;
+use Koha::SearchEngine::Indexer;
 use Koha::SearchEngine::Search;
 use Koha::Libraries;
 
@@ -143,13 +144,13 @@ Given a MARC::Record object containing an embedded item
 record and a biblionumber, create a new item record.
 
 The final optional parameter, C<$params>, expected to contain
-'skip_modzebra_update' key, which relayed down to Koha::Item/store,
-there it prevents calling of ModZebra (and Elasticsearch update),
-which takes most of the time in batch adds/deletes: ModZebra better
+'skip_record_index' key, which relayed down to Koha::Item/store,
+there it prevents calling of index_records,
+which takes most of the time in batch adds/deletes: index_records
 to be called later in C<additem.pl> after the whole loop.
 
 $params:
-    skip_modzebra_update => 1|0
+    skip_record_index => 1|0
 
 =cut
 
@@ -173,7 +174,7 @@ sub AddItemFromMarc {
     $item_values->{biblionumber} = $biblionumber;
     $item_values->{cn_source} = delete $item_values->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item_values->{cn_sort}   = delete $item_values->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
-    my $item = Koha::Item->new( $item_values )->store({ skip_modzebra_update => $params->{skip_modzebra_update} });
+    my $item = Koha::Item->new( $item_values )->store({ skip_record_index => $params->{skip_record_index} });
     return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
 }
 
@@ -281,10 +282,23 @@ sub AddItemBatchFromMarc {
     return (\@itemnumbers, \@errors);
 }
 
+=head2 ModItemFromMarc
+
+my $item = ModItemFromMarc($item_marc, $biblionumber, $itemnumber[, $params]);
+
+The final optional parameter, C<$params>, expected to contain
+'skip_record_index' key, which relayed down to Koha::Item/store,
+there it prevents calling of index_records,
+which takes most of the time in batch adds/deletes: index_records better
+to be called later in C<additem.pl> after the whole loop.
+
+$params:
+    skip_record_index => 1|0
+
+=cut
+
 sub ModItemFromMarc {
-    my $item_marc = shift;
-    my $biblionumber = shift;
-    my $itemnumber = shift;
+    my ( $item_marc, $biblionumber, $itemnumber, $params ) = @_;
 
     my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
@@ -313,7 +327,7 @@ sub ModItemFromMarc {
     $item_object = $item_object->set_or_blank($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields));
-    $item_object->store;
+    $item_object->store({ skip_record_index => $params->{skip_record_index} });
 
     return $item_object->unblessed;
 }
@@ -1094,8 +1108,9 @@ sub MoveItemFromBiblio {
             AND biblionumber = ?
     |, undef, $tobiblioitem, $tobiblio, $itemnumber, $frombiblio );
     if ($return == 1) {
-        ModZebra( $tobiblio, "specialUpdate", "biblioserver" );
-        ModZebra( $frombiblio, "specialUpdate", "biblioserver" );
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $tobiblio, "specialUpdate", "biblioserver" );
+        $indexer->index_records( $frombiblio, "specialUpdate", "biblioserver" );
 	    # Checking if the item we want to move is in an order 
         require C4::Acquisition;
         my $order = C4::Acquisition::GetOrderFromItemnumber($itemnumber);

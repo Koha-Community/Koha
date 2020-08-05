@@ -44,6 +44,7 @@ use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
+use Koha::SearchEngine::Indexer;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -183,6 +184,8 @@ if ($op eq "action") {
 	    }
         }
 
+        my $upd_biblionumbers;
+        my $del_biblionumbers;
         try {
             my $schema = Koha::Database->new->schema;
             $schema->txn_do(
@@ -200,6 +203,7 @@ if ($op eq "action") {
                             my $return = $item->safe_delete;
                             if ( ref( $return ) ) {
                                 $deleted_items++;
+                                push @$upd_biblionumbers, $itemdata->{'biblionumber'};
                             }
                             else {
                                 $not_deleted_items++;
@@ -217,9 +221,10 @@ if ($op eq "action") {
                             if ($del_records) {
                                 my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
                                 if ( $itemscount == 0 ) {
-                                    my $error = DelBiblio( $itemdata->{'biblionumber'} );
+                                    my $error = DelBiblio( $itemdata->{'biblionumber'}, { skip_record_index => 1 } );
                                     unless ($error) {
                                         $deleted_records++;
+                                        push @$del_biblionumbers, $itemdata->{'biblionumber'};
                                         if ( $src eq 'CATALOGUING' ) {
                                             # We are coming catalogue/detail.pl, there were items from a single bib record
                                             $template->param( biblio_deleted => 1 );
@@ -279,15 +284,21 @@ if ($op eq "action") {
                                             my $item = ModItemFromMarc(
                                                 $localmarcitem,
                                                 $itemdata->{biblionumber},
-                                                $itemnumber
+                                                $itemnumber,
+                                                { skip_record_index => 1 },
                                             )
                                           )
                                         {
-                                            LostItem( $itemnumber, 'batchmod' )
-                                              if $item->{itemlost}
+                                            LostItem(
+                                                $itemnumber,
+                                                'batchmod',
+                                                undef,
+                                                { skip_record_index => 1 }
+                                            ) if $item->{itemlost}
                                               and not $itemdata->{itemlost};
                                         }
                                     };
+                                    push @$upd_biblionumbers, $itemdata->{'biblionumber'};
                                 }
                                 if ($runinbackground) {
                                     $modified_items++ if $modified;
@@ -316,7 +327,16 @@ if ($op eq "action") {
             }
             die "Something terrible has happened!"
                 if ($_ =~ /Rollback failed/); # Rollback failed
-        }
+        };
+        $upd_biblionumbers = [ uniq @$upd_biblionumbers ]; # Only update each bib once
+
+        # Don't send specialUpdate for records we are going to delete
+        my %del_bib_hash = map{ $_ => undef } @$del_biblionumbers;
+        @$upd_biblionumbers = grep( ! exists( $del_bib_hash{$_} ), @$upd_biblionumbers );
+
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $upd_biblionumbers, 'specialUpdate', "biblioserver", undef ) if @$upd_biblionumbers;
+        $indexer->index_records( $del_biblionumbers, 'recordDelete', "biblioserver", undef ) if @$del_biblionumbers;
     }
 }
 #

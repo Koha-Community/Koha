@@ -113,8 +113,8 @@ subtest 'Test indexer calls' => sub {
             $item2 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
         } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called for $engine when adding an item (Item->store)";
         warnings_are{
-            $item->store({ skip_modzebra_update => 1 });
-        } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_modzebra_update passed";
+            $item->store({ skip_record_index => 1 });
+        } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_record_index passed";
 
         $builder->build({
             source => 'Branchtransfer',
@@ -132,15 +132,15 @@ subtest 'Test indexer calls' => sub {
                 datearrived => undef}
         });
         warnings_are{
-            LostItem( $item->itemnumber, "tests", undef, { skip_modzebra_update => 1 });
-        } undef, "index_records is not called for $engine when calling LostItem and transfer exists if skip_modzebra_update";
+            LostItem( $item->itemnumber, "tests", undef, { skip_record_index => 1 });
+        } undef, "index_records is not called for $engine when calling LostItem and transfer exists if skip_record_index";
 
         warnings_are{
             $item->delete();
         } [$engine,"Koha::Item"], "index_records is called for $engine when deleting an item (Item->delete)";
         warnings_are{
-            $item2->delete({ skip_modzebra_update => 1 });
-        } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_modzebra_update passed";
+            $item2->delete({ skip_record_index => 1 });
+        } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_record_index passed";
 
         warnings_are{
             DelBiblio( $biblio->biblionumber );

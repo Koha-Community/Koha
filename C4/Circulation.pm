@@ -3775,9 +3775,23 @@ sub ReturnLostItem{
     MarkIssueReturned( $borrowernumber, $itemnum );
 }
 
+=head2 LostItem
+
+  LostItem( $itemnumber, $mark_lost_from, $force_mark_returned, [$params] );
+
+The final optional parameter, C<$params>, expected to contain
+'skip_record_index' key, which relayed down to Koha::Item/store,
+there it prevents calling of ModZebra index_records,
+which takes most of the time in batch adds/deletes: index_records better
+to be called later in C<additem.pl> after the whole loop.
+
+$params:
+    skip_record_index => 1|0
+
+=cut
 
 sub LostItem{
-    my ($itemnumber, $mark_lost_from, $force_mark_returned) = @_;
+    my ($itemnumber, $mark_lost_from, $force_mark_returned, $params) = @_;
 
     unless ( $mark_lost_from ) {
         # Temporary check to avoid regressions
@@ -3828,7 +3842,7 @@ sub LostItem{
 
     #When item is marked lost automatically cancel its outstanding transfers and set items holdingbranch to the transfer source branch (frombranch)
     if (my ( $datesent,$frombranch,$tobranch ) = GetTransfers($itemnumber)) {
-        Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store;
+        Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ skip_record_index => $params->{skip_record_index} });
     }
     my $transferdeleted = DeleteTransfer($itemnumber);
 }

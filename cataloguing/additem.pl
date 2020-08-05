@@ -35,6 +35,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::SearchEngine::Indexer;
 use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
@@ -596,7 +597,7 @@ if ($op eq "additem") {
 		# Adding the item
         if (!$exist_itemnumber) {
             my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) =
-                AddItemFromMarc( $record, $biblionumber, { skip_modzebra_update => 1 } );
+                AddItemFromMarc( $record, $biblionumber, { skip_record_index => 1 } );
             set_item_default_location($oldbibitemnum);
 
             # We count the item only if it was really added
@@ -611,7 +612,8 @@ if ($op eq "additem") {
 		$oldbarcode = $barcodevalue;
 	    }
 
-        C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
 
 	    undef($itemrecord);
 	}
@@ -685,11 +687,12 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
-        $error = $item->safe_delete({ skip_modzebra_update => 1 });
+        $error = $item->safe_delete({ skip_record_index => 1 });
         next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
         push @errors,$error;
     }
-    C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
     if ( @errors ) {
         $nextop="additem";
     } else {
