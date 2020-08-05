@@ -69,13 +69,15 @@ sub register {
             $reserved_params->{_per_page} //= C4::Context->preference('RESTdefaultPageSize');
             $reserved_params->{_page}     //= 1;
 
-            # Merge pagination into query attributes
-            $c->dbic_merge_pagination(
-                {
-                    filter => $attributes,
-                    params => $reserved_params
-                }
-            );
+            unless ( $reserved_params->{_per_page} == -1 ) {
+                # Merge pagination into query attributes
+                $c->dbic_merge_pagination(
+                    {
+                        filter => $attributes,
+                        params => $reserved_params
+                    }
+                );
+            }
 
             # Call the to_model function by reference, if defined
             if ( defined $filtered_params ) {
@@ -102,6 +104,12 @@ sub register {
             if ($objects->is_paged) {
                 $c->add_pagination_headers({
                     total => $objects->pager->total_entries,
+                    params => $args,
+                });
+            }
+            else {
+                $c->add_pagination_headers({
+                    total => $objects->count,
                     params => $args,
                 });
             }
