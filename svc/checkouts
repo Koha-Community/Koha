@@ -104,6 +104,7 @@ my $sql = '
         items.damaged,
         items.location,
         items.enumchron,
+        items.materials,
 
         DATEDIFF( issues.issuedate, CURRENT_DATE() ) AS not_issued_today,
 
@@ -139,6 +140,7 @@ $sth->execute(@parameters);
 
 my $item_level_itypes = C4::Context->preference('item-level_itypes');
 my $claims_returned_lost_value = C4::Context->preference('ClaimReturnedLostValue');
+my $confirm_parts_required = C4::Context->preference("CircConfirmItemParts");
 
 my $itemtypes = { map { $_->{itemtype} => $_->{translated_description} } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
@@ -193,6 +195,11 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         my $av = Koha::AuthorisedValues->get_description_by_koha_field(
             { kohafield => 'items.damaged', authorised_value => $c->{damaged} } );
         $damaged = $av->{lib} ? $av->{lib} : '';
+    }
+    my $materials;
+    if ( $c->{materials} && $confirm_parts_required ) {
+        my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $c->{materials} });
+        $materials = $descriptions->{lib} // $c->{materials};
     }
     my @subtitles = split(/ \| /, $c->{'subtitle'} // '' );
     my $checkout = {
@@ -256,6 +263,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         lost    => $lost,
         claims_returned => $claims_returned,
         damaged => $damaged,
+        materials => $materials,
         borrower => {
             surname    => $c->{surname},
             firstname  => $c->{firstname},

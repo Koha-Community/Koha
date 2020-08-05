@@ -130,6 +130,15 @@ $(document).ready(function() {
             }, "json")
         });
 
+        $(".confirm:checked:visible").each(function() {
+            itemnumber = $(this).val();
+            id = "#checkin_" + itemnumber;
+            materials = $(this).data('materials');
+
+            $(this).replaceWith("<span class='confirm' id='checkin_" + itemnumber + "'>" + __("Confirm") + " (<span>" + materials + "</span>): <input type='checkbox' class='checkin' name='checkin' value='" + itemnumber +"'></input></span>");
+            $(id).parent().parent().addClass('warn');
+        });
+
         $(".renew:checked:visible").each(function() {
             var override_limit = $("#override_limit").is(':checked') ? 1 : 0;
 
@@ -543,6 +552,8 @@ $(document).ready(function() {
                     "mDataProp": function ( oObj ) {
                         if ( oObj.can_renew_error == "on_reserve" ) {
                             return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
+                        } else if ( oObj.materials ) {
+                            return "<input type='checkbox' class='confirm' id='confirm_" + oObj.itemnumber + "' name='confirm' value='" + oObj.itemnumber + "' data-materials='" + oObj.materials.escapeHtml() + "'></input>";
                         } else {
                             return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
                         }
