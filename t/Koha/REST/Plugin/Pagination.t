@@ -70,6 +70,28 @@ get '/pagination_headers_without_page' => sub {
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
+get '/pagination_headers_with_minus_one' => sub {
+    my $c = shift;
+    $c->add_pagination_headers(
+        {
+            total => 10,
+            params => { _per_page => -1, firstname => 'Jonathan' }
+        }
+    );
+    $c->render( json => { ok => 1 }, status => 200 );
+};
+
+get '/pagination_headers_with_minus_one_and_invalid_page' => sub {
+    my $c = shift;
+    $c->add_pagination_headers(
+        {
+            total  => 10,
+            params => { page => 100, _per_page => -1, firstname => 'Jonathan' }
+        }
+    );
+    $c->render( json => { ok => 1 }, status => 200 );
+};
+
 # The tests
 
 use Test::More tests => 2;
@@ -79,7 +101,7 @@ use t::lib::Mocks;
 
 subtest 'add_pagination_headers() tests' => sub {
 
-    plan tests => 75;
+    plan tests => 101;
 
     my $t = Test::Mojo->new;
 
@@ -163,6 +185,34 @@ subtest 'add_pagination_headers() tests' => sub {
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
+
+    $t->get_ok('/pagination_headers_with_minus_one')
+      ->status_is( 200 )
+      ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, with per_page=-1' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="next",/, 'No next page, all resources are fetched' )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
+
+    $t->get_ok('/pagination_headers_with_minus_one_and_invalid_page')
+      ->status_is( 200 )
+      ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, with per_page=-1' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="next",/, 'No next page, all resources are fetched' )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="last"/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
 };
 

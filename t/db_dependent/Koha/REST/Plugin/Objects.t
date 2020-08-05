@@ -91,7 +91,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 44;
+    plan tests => 50;
 
     $schema->storage->txn_begin;
 
@@ -191,6 +191,18 @@ subtest 'objects.search helper' => sub {
 
     $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 5, 'RESTdefaultPageSize is honoured by default (5)' );
+
+    $t->get_ok('/cities?_page=1&_per_page=-1')
+      ->status_is(200);
+
+    $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 24, '_per_page=-1 means all resources' );
+
+    $t->get_ok('/cities?_page=100&_per_page=-1')
+      ->status_is(200);
+
+    $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 24, 'When _per_page=-1 the page param is not considered' );
 
     $schema->storage->txn_rollback;
 };
