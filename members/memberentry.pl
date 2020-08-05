@@ -254,11 +254,10 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
 
 # Test uniqueness of surname, firstname and dateofbirth
 if ( ( $op eq 'insert' ) and !$nodouble ) {
+    my @dup_fields = split '\|', C4::Context->preference('PatronDuplicateMatchingAddFields');
     my $conditions;
-    $conditions->{surname} = $newdata{surname} if $newdata{surname};
-    if ( $category_type ne 'I' ) {
-        $conditions->{firstname} = $newdata{firstname} if $newdata{firstname};
-        $conditions->{dateofbirth} = $newdata{dateofbirth} if $newdata{dateofbirth};
+    for my $f ( @dup_fields ) {
+        $conditions->{$f} = $newdata{$f} if $newdata{$f};
     }
     $nodouble = 1;
     my $patrons = Koha::Patrons->search($conditions); # FIXME Should be search_limited?
