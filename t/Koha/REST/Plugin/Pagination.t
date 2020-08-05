@@ -66,7 +66,7 @@ get '/pagination_headers_without_page_size' => sub {
 
 get '/pagination_headers_without_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _per_page => 4, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, params => { _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
@@ -79,7 +79,7 @@ use t::lib::Mocks;
 
 subtest 'add_pagination_headers() tests' => sub {
 
-    plan tests => 64;
+    plan tests => 75;
 
     my $t = Test::Mojo->new;
 
@@ -151,10 +151,19 @@ subtest 'add_pagination_headers() tests' => sub {
 
     $t->get_ok('/pagination_headers_without_page')
       ->status_is( 200 )
-      ->header_is( 'X-Total-Count' => undef, 'X-Total-Count header absent' )
-      ->header_is( 'Link'          => undef, 'Link header absent' );
-
-
+      ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, even without page param' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
+      ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
 };
 
 subtest 'dbic_merge_pagination() tests' => sub {
