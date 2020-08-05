@@ -47,12 +47,13 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 
 subtest 'call() tests' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
     # Temporarily remove any installed plugins data
     Koha::Plugins::Methods->delete;
 
+    t::lib::Mocks::mock_config('enable_plugins', 1);
     my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
     my @plugins = $plugins->InstallPlugins;
     foreach my $plugin (@plugins) {
@@ -69,6 +70,10 @@ subtest 'call() tests' => sub {
 
     $expected = [ { error => 0 } ];
     is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
+
+    t::lib::Mocks::mock_config('enable_plugins', 0);
+    @responses = Koha::Plugins->call('check_password', { password => '1234' });
+    is_deeply(\@responses, [], 'call() should return an empty array if plugins are disabled');
 
     $schema->storage->txn_rollback;
 };
@@ -352,5 +357,4 @@ subtest 'new() tests' => sub {
     is( ref($result), 'Koha::Plugins', 'calling new with enable_plugins makes it override the config' );
 };
 
-$schema->storage->txn_rollback;
 Koha::Plugins::Methods->delete;

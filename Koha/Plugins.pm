@@ -63,9 +63,9 @@ Calls a plugin method for all enabled plugins
 sub call {
     my ($class, $method, @args) = @_;
 
+    my @responses;
     if (C4::Context->config('enable_plugins')) {
         my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
-        my @responses;
         @plugins = grep { $_->can($method) } @plugins;
         foreach my $plugin (@plugins) {
             my $response = eval { $plugin->$method(@args) };
@@ -77,8 +77,8 @@ sub call {
             push @responses, $response;
         }
 
-        return @responses;
     }
+    return @responses;
 }
 
 =head2 GetPlugins
