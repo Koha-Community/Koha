@@ -1016,8 +1016,6 @@
     [% IF op == 'else' %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
-        [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-
         <script>
             $(document).ready(function() {
                 $('#suggestiontabs').tabs();
@@ -1038,13 +1036,15 @@
 
                 $(".checkall").click(function(e){
                     e.preventDefault();
-                    $(this).parents('form').checkCheckboxes();
-                    return false;
+                    $(this).parents('form').find("input:checkbox").each(function(){
+                        $(this).prop("checked", true);
+                    });
                 });
                 $(".uncheckall").click(function(e){
                     e.preventDefault();
-                    $(this).parents('form').unCheckCheckboxes();
-                    return false;
+                    $(this).parents('form').find("input:checkbox").each(function(){
+                        $(this).prop("checked", false);
+                    });
                 });
                 $(".other_reason").hide();
                 $("select[name='reason']").change(function(){
