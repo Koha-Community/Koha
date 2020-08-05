@@ -183,7 +183,6 @@
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/table_filters.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         $(document).ready(function() {
             var columns_settings = [% TablesSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
@@ -233,13 +232,17 @@
 
             $(".SelectAll").on("click",function(e){
                 e.preventDefault();
-                $("#lostitems-table").checkCheckboxes();
+                $("#lostitems-table input:checkbox").each(function(){
+                    $(this).prop("checked", true);
+                });
                 itemSelectionBuildActionLinks();
             });
 
             $(".ClearAll").on("click",function(e){
                 e.preventDefault();
-                $("#lostitems-table").unCheckCheckboxes();
+                $("#lostitems-table input:checkbox").each(function(){
+                    $(this).prop("checked", false);
+                });
                 itemSelectionBuildActionLinks();
             });
         });
