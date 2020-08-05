@@ -97,21 +97,21 @@
                         </div> <!-- / .span12 -->
 
                         [% IF OPACLocalCoverImages == 1 %]
-                            <div class="col-lg-3">
-                                <div id="thumbnails">
-                                    [% FOREACH img IN images %]
-                                        [% IF img %]
-                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img | uri %]" onclick="showCover([% img | html %]); return false;">
-                                            [% IF ( imagenumber == img ) %]
-                                                <img class="thumbnail selected" id="[% img | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail"/>
+                            [% IF images.count %]
+                                <div class="col-lg-3">
+                                    <div id="thumbnails">
+                                        [% FOREACH image IN images %]
+                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% image.imagenumber| uri %]" onclick="showCover([% image.imagenumber| html %]); return false;">
+                                            [% IF loop.first %]
+                                                <img class="thumbnail selected" id="[% image.imagenumber| html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% ELSE %]
-                                                <img class="thumbnail" id="[% img | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail"/>
+                                                <img class="thumbnail" id="[% image.imagenumber | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% END %]
                                             </a>
                                         [% END %]
-                                    [% END %]
-                                </div> <!-- /#thumbnails -->
-                            </div> <!-- /.col-lg-3 -->
+                                    </div> <!-- /#thumbnails -->
+                                </div> <!-- /.col-lg-3 -->
+                            [% END %]
                         [% ELSE %]
                             Unfortunately, images are not enabled for this catalog at this time.
                         [% END %]

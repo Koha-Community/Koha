@@ -3382,7 +3382,7 @@ CREATE TABLE `cover_images` ( -- local cover images
  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- image creation/update time
  PRIMARY KEY (`imagenumber`),
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
- CONSTRAINT `bibliocoverimage_fk2` FOREIGN KEY (`itemnumber`) REFERENCES `item` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+ CONSTRAINT `bibliocoverimage_fk2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

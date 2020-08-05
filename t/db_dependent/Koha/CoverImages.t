@@ -81,16 +81,13 @@ is( ref( $item->cover_image ),
     'Koha::CoverImage',
     'Koha::Item->cover_image returns a Koha::CoverImage object' );
 
-throws_ok {
-    Koha::CoverImage->new(
-        {
-            biblionumber => $biblio->biblionumber,
-            itemnumber   => $item->itemnumber,
-            src_image    => GD::Image->new($logo_filepath)
-        }
-      )->store
-}
-'Koha::Exceptions::WrongParameter',
-  'Exception is thrown if both biblionumber and itemnumber are passed';
+Koha::CoverImage->new(
+    {
+        biblionumber => $biblio->biblionumber,
+        itemnumber   => $item->itemnumber,
+        src_image    => GD::Image->new($logo_filepath)
+    }
+)->store;
+is( $biblio->cover_images->count, 3, );
 
 $schema->storage->txn_rollback;

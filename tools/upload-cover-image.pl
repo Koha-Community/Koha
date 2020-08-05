@@ -45,7 +45,8 @@ use GD;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Images;
+use Koha::Biblios;
+use Koha::CoverImages;
 use Koha::Items;
 use Koha::UploadedFiles;
 use C4::Log;
@@ -92,8 +93,25 @@ if ($fileID) {
         my $srcimage = GD::Image->new($fh);
         $fh->close if $fh;
         if ( defined $srcimage ) {
-            my $dberror = PutImage( { biblionumber => $biblionumber, itemnumber => $itemnumber, src_image => $srcimage, replace => $replace } );
-            if ($dberror) {
+            eval {
+                if ( $replace && $biblionumber ) {
+                    Koha::Biblios->find($biblionumber)->cover_images->delete;
+                } elsif ( $itemnumber ) {
+                    my $cover_image = Koha::Items->find($itemnumber)->cover_image;
+                    $cover_image->delete if $cover_image;
+                }
+
+                Koha::CoverImage->new(
+                    {
+                        biblionumber => $biblionumber,
+                        itemnumber   => $itemnumber,
+                        src_image    => $srcimage
+                    }
+                )->store;
+            };
+
+            if ($@) {
+                warn $@;
                 $error = 'DBERR';
             }
             else {
@@ -162,14 +180,23 @@ if ($fileID) {
                             my $srcimage = GD::Image->new("$dir/$filename");
                             if ( defined $srcimage ) {
                                 $total++;
-                                my $dberror = PutImage(
-                                    {
-                                        biblionumber => $biblionumber,
-                                        src_image    => $srcimage,
-                                        replace      => $replace
+                                eval {
+                                    if ( $replace && $biblionumber ) {
+                                        Koha::Biblios->find($biblionumber)->cover_images->delete;
+                                    } elsif ( $itemnumber ) {
+                                        Koha::Items->find($itemnumber)->cover_image->delete;
                                     }
-                                );
-                                if ($dberror) {
+
+                                    Koha::CoverImage->new(
+                                        {
+                                            biblionumber => $biblionumber,
+                                            itemnumber   => $itemnumber,
+                                            src_image    => $srcimage
+                                        }
+                                    )->store;
+                                };
+
+                                if ($@) {
                                     $error = 'DBERR';
                                 }
                             }

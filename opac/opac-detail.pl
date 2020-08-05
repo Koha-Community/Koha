@@ -45,7 +45,6 @@ use C4::Letters;
 use MARC::Record;
 use MARC::Field;
 use List::MoreUtils qw/any none/;
-use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
@@ -764,8 +763,8 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     }
 
     if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
-        $itm->{imagenumber} =
-          C4::Images::GetImageForItem( $itm->{itemnumber} );
+        my $cover_image = $item->cover_image;
+        $itm->{imagenumber} = $cover_image ? $cover_image->imagenumber : undef;
     }
 
     my $itembranch = $itm->{$separatebranch};
@@ -1248,8 +1247,7 @@ my $defaulttab =
 $template->param('defaulttab' => $defaulttab);
 
 if (C4::Context->preference('OPACLocalCoverImages') == 1) {
-    my @images = ListImagesForBiblio($biblionumber);
-    $template->{VARS}->{localimages} = \@images;
+    $template->param( localimages => $biblio->cover_images );
 }
 
 $template->{VARS}->{OPACPopupAuthorsSearch} = C4::Context->preference('OPACPopupAuthorsSearch');

@@ -27,7 +27,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );    #qw(:standard escapeHTML);
 use C4::Context;
-use C4::Images;
+use Koha::CoverImages;
+use Koha::Biblios;
+use Koha::Exceptions;
 
 $| = 1;
 
@@ -57,43 +59,38 @@ imagenumber, a random image is selected.
 
 =cut
 
-my ( $image, $mimetype ) = C4::Images->NoImage;
+my ( $image );
 if ( C4::Context->preference("LocalCoverImages") ) {
-    if ( defined $data->param('imagenumber') ) {
+    my $imagenumber = $data->param('imagenumber');
+    my $biblionumber = $data->param('biblionumber');
+    if ( defined $imagenumber ) {
         $imagenumber = $data->param('imagenumber');
+        $image = Koha::CoverImages->find($imagenumber);
     }
-    elsif ( defined $data->param('biblionumber') ) {
-        my @imagenumbers = ListImagesForBiblio( $data->multi_param('biblionumber') );
-        if (@imagenumbers) {
-            $imagenumber = $imagenumbers[0];
-        }
-        else {
+    elsif ( defined $biblionumber ) {
+        my $biblio = Koha::Biblios->find($biblionumber);
+        Koha::Exceptions::ObjectNotFound->throw( 'No bibliographic record for biblionumber ' . $biblionumber ) unless $biblio;
+        my $cover_images = $biblio->cover_images;
+        if ( $cover_images->count ) {
+            $image = $cover_images->next;
+        } else {
             warn "No images for this biblio" if $DEBUG;
         }
     }
-    else {
-        $imagenumber = shift;
-    }
-
-    if ($imagenumber) {
-        warn "imagenumber passed in: $imagenumber" if $DEBUG;
-        my $imagedata = RetrieveImage($imagenumber);
-        if ($imagedata) {
-            if ( $data->param('thumbnail') ) {
-                $image = $imagedata->{'thumbnail'};
-            }
-            else {
-                $image = $imagedata->{'imagefile'};
-            }
-            $mimetype = $imagedata->{'mimetype'};
-        }
-    }
 }
+
+$image ||= Koha::CoverImages->no_image;
+
+my $image_data =
+    $data->param('thumbnail')
+  ? $image->thumbnail
+  : $image->imagefile;
+
 print $data->header(
-    -type            => $mimetype,
+    -type            => $image->mimetype,
     -expires         => '+30m',
-    -Content_Length  => length($image)
-), $image;
+    -Content_Length  => length($image_data)
+), $image_data;
 
 =head1 AUTHOR
 

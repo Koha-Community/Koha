@@ -169,16 +169,14 @@
             <div class="col-xs-3" id="bookcoverimg">
                 <div id="cover-slides">
                     [% IF ( LocalCoverImages ) %]
-                        [% IF ( localimages.0 ) %]
+                        [% IF localimages.count %]
                             [% FOREACH image IN localimages %]
-                                [% IF image %]
-                                    <div class="cover-image local-coverimg">
-                                        <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image | uri %]">
-                                            <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image | uri %]" alt="Local cover image" />
-                                        </a>
-                                        <div class="hint">Local cover image</div>
-                                    </div>
-                                [% END %]
+                                <div class="cover-image local-coverimg">
+                                    <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                    </a>
+                                    <div class="hint">Local cover image</div>
+                                </div>
                             [% END %]
                         [% END %]
                     [% END %]
@@ -248,9 +246,9 @@
 [% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %]
-    [% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]
+    [% IF ( localimages.count || CAN_user_tools_upload_local_cover_images ) %]
         <li>
-            <a href="#images">Images ([% localimages.size() || 0 | html %])</a>
+            <a href="#images">Images ([% localimages.count || 0 | html %])</a>
         </li>
     [% END %]
 [% END %]
@@ -871,14 +869,14 @@ Note that permanent location is a code, and location may be an authval.
 
 [% IF ( LocalCoverImages ) %]
     <div id="images">
-        [% IF ( localimages.0 ) %]
+        [% IF localimages.count %]
             <p>Click on an image to view it in the image viewer</p>
             <ul class="thumbnails">
                 [% FOREACH image IN localimages %]
                     [% IF image %]
-                        <li id="imagenumber-[% image | html %]" class="thumbnail">
-                            <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image | uri %]">
-                                <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image | uri %]" />
+                        <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
+                            <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" />
                             </a>
                             [% IF CAN_user_tools_upload_local_cover_images %]
                                 <a href="#" class="remove"><i class="fa fa-trash"></i> Delete image</a>

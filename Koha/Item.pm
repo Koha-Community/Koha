@@ -35,6 +35,7 @@ use C4::Log qw( logaction );
 
 use Koha::Checkouts;
 use Koha::CirculationRules;
+use Koha::CoverImages;
 use Koha::SearchEngine::Indexer;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
@@ -779,6 +780,21 @@ sub renewal_branchcode {
             ? C4::Context->userenv->{branch} : $params->{branch};
     }
     return $branchcode;
+}
+
+=head3 cover_image
+
+Return the cover image associated with this item.
+
+=cut
+
+sub cover_image {
+    my ( $self ) = @_;
+
+    my $cover_image_rs = $self->_result->cover_images;
+    return unless $cover_image_rs;
+    # So far we allow only 1 cover image per item
+    return Koha::CoverImages->_new_from_dbic($cover_image_rs)->next;
 }
 
 =head3 _set_found_trigger

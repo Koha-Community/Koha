@@ -575,7 +575,7 @@
                             </li>
                         [% END %]
 
-                        [% IF ( OPACLocalCoverImages && localimages.size ) %]
+                        [% IF ( OPACLocalCoverImages && localimages.count ) %]
                             <li id="tab_images"><a href="#images">Images</a></li>
                         [% END %]
 
@@ -1010,13 +1010,11 @@
                             </div>
                         [% END # / IF HTML5MediaEnabled %]
 
-                        [% IF ( OPACLocalCoverImages && localimages.size ) %]
+                        [% IF ( OPACLocalCoverImages && localimages.count ) %]
                             <div id="images">
                                 <p>Click on an image to view it in the image viewer</p>
                                 [% FOREACH image IN localimages %]
-                                    [% IF image %]
-                                        <a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | html %]&amp;imagenumber=[% image | html %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image | html %]" /></a>
-                                    [% END %]
+                                    <a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | html %]" /></a>
                                 [% END %]
                             </div><!-- / #images -->
                         [% END # / IF OPACLocalCoverImages && localimages.size %]

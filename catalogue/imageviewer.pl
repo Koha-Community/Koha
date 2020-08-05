@@ -24,7 +24,6 @@ use C4::Auth;
 use C4::Biblio;
 use C4::Items;
 use C4::Output;
-use C4::Images;
 use C4::Search;
 
 use Koha::Biblios;
@@ -68,19 +67,21 @@ if( $query->cookie("searchToOrder") ){
 
 if ( C4::Context->preference("LocalCoverImages") ) {
     if ( $itemnumber ) {
-        my $image = C4::Images::GetImageForItem($itemnumber);
+        my $item = Koha::Items->find($itemnumber);
+        my $image = $item->cover_image;
         $template->param(
             LocalCoverImages => 1,
             images           => [$image],
-            imagenumber      => $imagenumber,
+            imagenumber      => ($image ? $image->imagenumber : undef),
         );
 
     } else {
-        my @images = ListImagesForBiblio($biblionumber);
+        my $images = $biblio->cover_images->as_list;
+
         $template->param(
             LocalCoverImages => 1,
-            images           => \@images,
-            imagenumber      => $imagenumber || $images[0] || '',
+            images           => $images,
+            imagenumber      => (@$images ? $images->[0]->imagenumber : undef),
         );
     }
 }

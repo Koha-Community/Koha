@@ -36,13 +36,13 @@ use C4::External::Amazon;
 use C4::Search;        # enabled_staff_search_views
 use C4::Tags qw(get_tags);
 use C4::XSLT;
-use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::AuthorisedValues;
 use Koha::Biblios;
+use Koha::CoverImages;
 use Koha::Illrequests;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -408,8 +408,8 @@ foreach my $item (@items) {
     }
 
     if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-        $item->{imagenumber} =
-          C4::Images::GetImageForItem( $item->{itemnumber} );
+        my $cover_image = $item_object->cover_image;
+        $item->{imagenumber} = $cover_image ? $cover_image->imagenumber : undef;
     }
 
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
@@ -531,8 +531,8 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
 }
 
 if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-    my @images = ListImagesForBiblio($biblionumber);
-    $template->{VARS}->{localimages} = \@images;
+    my $images = $biblio->cover_images;
+    $template->param( localimages => $biblio->cover_images );
 }
 
 # HTML5 Media

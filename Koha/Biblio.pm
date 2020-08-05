@@ -780,6 +780,21 @@ sub custom_cover_image_url {
     return $url;
 }
 
+=head3 cover_images
+
+Return the cover images associated with this biblio.
+
+=cut
+
+sub cover_images {
+    my ( $self ) = @_;
+
+    my $cover_images_rs = $self->_result->cover_images;
+    return unless $cover_images_rs;
+    return Koha::CoverImages->_new_from_dbic($cover_images_rs);
+}
+
+
 =head3 to_api
 
     my $json = $biblio->to_api;

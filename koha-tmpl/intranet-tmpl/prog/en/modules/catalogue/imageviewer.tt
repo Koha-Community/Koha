@@ -40,7 +40,7 @@
 <h4>[% biblio.author | html %]</h4>
 
 [% IF ( LocalCoverImages == 1 ) %]
-    [% IF ( images.size > 0 ) %]
+    [% IF images.size %]
         <div class="row">
             <div class="col-md-8">
                 <div id="largeCover">
@@ -55,21 +55,19 @@
 
             <div class="col-md-4">
                 <ul class="thumbnails">
-                    [% FOREACH img IN images %]
-                        [% IF img %]
-                            <li id="imagenumber-[% img | html %]" class="thumbnail">
-                                <a class="show_cover" data-coverimg="[% img | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% img | html %]">
-                                    [% IF ( imagenumber == img ) %]
-                                        <img class="selected" id="thumbnail_[% img | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail" />
-                                    [% ELSE %]
-                                        <img id="thumbnail_[% img | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail" />
-                                    [% END %]
-                                </a>
-                                [% IF CAN_user_tools_upload_local_cover_images %]
-                                    <a href="#" class="remove" data-coverimg="[% img | html %]"><i class="fa fa-trash"></i> Delete image</a>
+                    [% FOREACH image IN images %]
+                            <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
+                            <a class="show_cover" data-coverimg="[% image.imagenumber | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]">
+                                [% IF loop.first %]
+                                    <img class="selected" id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
+                                [% ELSE %]
+                                    <img id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
                                 [% END %]
-                            </li>
-                        [% END # /IF img %]
+                            </a>
+                            [% IF CAN_user_tools_upload_local_cover_images %]
+                                <a href="#" class="remove" data-coverimg="[% image.imagenumber | html %]"><i class="fa fa-trash"></i> Delete image</a>
+                            [% END %]
+                        </li>
                     [% END # /FOREACH img %]
                 </ul> <!-- /ul.thumbnails -->
             </div> <!-- /.col-md-4 -->
