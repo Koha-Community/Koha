@@ -80,14 +80,18 @@ function showColumn(num){
   }
 }
 function showAllColumns(){
-    $("#selections").checkCheckboxes();
+    $("#selections input:checkbox").each(function(){
+        $(this).prop("checked", true);
+    });
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child(3),#itemst tr th:nth-child(3)").nextAll().show();
     $.removeCookie("showColumns", { path: '/' });
     $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 function hideAllColumns(){
-    $("#selections").unCheckCheckboxes();
+    $("#selections input:checkbox").each(function(){
+        $(this).prop("checked", false);
+    });
     $("#selections span").removeClass("selected");
     $("#itemst td:nth-child(3),#itemst th:nth-child(3)").nextAll().hide();
     $("#hideall").prop("checked", true).parent().addClass("selected");
@@ -105,13 +109,17 @@ function hideAllColumns(){
         ],
         "bPaginate": false,
     }));
-    $("#selectallbutton").click(function(){
-      $("#itemst").checkCheckboxes();
-      return false;
+    $("#selectallbutton").click(function(e){
+        e.preventDefault();
+        $("#itemst input:checkbox").each(function(){
+            $(this).prop("checked", true);
+        });
     });
-    $("#clearallbutton").click(function(){
-      $("#itemst").unCheckCheckboxes();
-      return false;
+    $("#clearallbutton").click(function(e){
+        e.preventDefault();
+        $("#itemst input:checkbox").each(function(){
+            $(this).prop("checked", false);
+        });
     });
     $("#clearonloanbutton").click(function(){
       $("#itemst input[name='itemnumber'][data-is-onloan='1']").each(function(){
