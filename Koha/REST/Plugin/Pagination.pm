@@ -61,20 +61,24 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
             my ( $c, $args ) = @_;
 
             my $total    = $args->{total};
-            my $req_page = $args->{params}->{_page};
+            my $req_page = $args->{params}->{_page} // 1;
             my $per_page = $args->{params}->{_per_page} //
                             C4::Context->preference('RESTdefaultPageSize') // 20;
 
-            # do we need to paginate?
-            return $c unless $req_page;
-
-            my $pages = int $total / $per_page;
-            $pages++
-                if $total % $per_page > 0;
+            my $pages;
+            if ( $per_page == -1 ) {
+                $req_page = 1;
+                $pages    = 1;
+            }
+            else {
+                $pages = int $total / $per_page;
+                $pages++
+                    if $total % $per_page > 0;
+            }
 
             my @links;
 
-            if ( $pages > 1 and $req_page > 1 ) {    # Previous exists?
+            if ( $per_page != -1 and $pages > 1 and $req_page > 1 ) {    # Previous exists?
                 push @links,
                     _build_link(
                     $c,
@@ -86,7 +90,7 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
                     );
             }
 
-            if ( $pages > 1 and $req_page < $pages ) {    # Next exists?
+            if ( $per_page != -1 and $pages > 1 and $req_page < $pages ) {    # Next exists?
                 push @links,
                     _build_link(
                     $c,
