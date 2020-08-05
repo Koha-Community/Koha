@@ -274,7 +274,6 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         function checkForm() {
             if ( $('#uploadbarcodes').val() ) {
@@ -351,15 +350,19 @@
                 return false;
             });
 
-
-            $(".checkall").click(function(){
-                    $(".checkboxed").checkCheckboxes();
-                    return false;
+            var checkboxes = $("#inventoryt input:checkbox");
+            $(".checkall").click(function(e){
+                e.preventDefault();
+                checkboxes.each(function(){
+                    $(this).prop("checked", true);
                 });
-            $(".clearall").click(function(){
-                    $(".checkboxed").unCheckCheckboxes();
-                    return false;
+            });
+            $(".clearall").click(function(e){
+                e.preventDefault();
+                checkboxes.each(function(){
+                    $(this).prop("checked", false);
                 });
+            });
             $("#inventory_form").on("submit",function(){
                 return checkForm();
             });
