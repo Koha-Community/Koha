@@ -237,52 +237,6 @@ $template->param(
 );
 
 # load the Type stuff
-my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-# the index parameter is different for item-level itemtypes
-my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
-my @advancedsearchesloop;
-my $cnt;
-my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
-my @advanced_search_types = split(/\|/, $advanced_search_types);
-
-foreach my $advanced_srch_type (@advanced_search_types) {
-    $advanced_srch_type =~ s/^\s*//;
-    $advanced_srch_type =~ s/\s*$//;
-   if ($advanced_srch_type eq 'itemtypes') {
-   # itemtype is a special case, since it's not defined in authorized values
-        my @itypesloop;
-        foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} } keys %$itemtypes ) {
-	    my %row =(  number=>$cnt++,
-		ccl => "$itype_or_itemtype,phr",
-                code => $thisitemtype,
-                description => $itemtypes->{$thisitemtype}->{translated_description},
-                imageurl=> getitemtypeimagelocation( 'intranet', $itemtypes->{$thisitemtype}->{'imageurl'} ),
-            );
-	    push @itypesloop, \%row;
-	}
-        my %search_code = (  advanced_search_type => $advanced_srch_type,
-                             code_loop => \@itypesloop );
-        push @advancedsearchesloop, \%search_code;
-    } else {
-    # covers all the other cases: non-itemtype authorized values
-       my $advsearchtypes = GetAuthorisedValues($advanced_srch_type);
-        my @authvalueloop;
-	for my $thisitemtype (@$advsearchtypes) {
-		my %row =(
-				number=>$cnt++,
-				ccl => $advanced_srch_type,
-                code => $thisitemtype->{authorised_value},
-                description => $thisitemtype->{'lib'},
-                imageurl => getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
-                );
-		push @authvalueloop, \%row;
-	}
-        my %search_code = (  advanced_search_type => $advanced_srch_type,
-                             code_loop => \@authvalueloop );
-        push @advancedsearchesloop, \%search_code;
-    }
-}
-$template->param(advancedsearchesloop => \@advancedsearchesloop);
 my $types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
 my $advancedsearchesloop = prepare_adv_search_types($types);
 $template->param(advancedsearchesloop => $advancedsearchesloop);
