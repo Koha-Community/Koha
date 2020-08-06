@@ -216,7 +216,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 51;
+    plan tests => 52;
 
     my $qb;
 
@@ -248,7 +248,8 @@ subtest 'build_query tests' => sub {
     $query = $qb->build_query('test', %options);
     ok( defined $query->{aggregations}{ccode}{terms}{size},'we need to ask for a size or we get only 5 facet' );
     is( $query->{aggregations}{ccode}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount');
-    is( $query->{aggregations}{homebranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount fir homebranch');
+    is( $query->{aggregations}{homebranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for homebranch');
+    is( $query->{aggregations}{holdingbranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for holdingbranch');
 
     t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
     $query = $qb->build_query();
