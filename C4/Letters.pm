@@ -20,12 +20,13 @@ package C4::Letters;
 use Modern::Perl;
 
 use MIME::Lite;
-use Mail::Sendmail;
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
 use Carp;
 use Template;
 use Module::Load::Conditional qw(can_load);
+
+use Try::Tiny;
 
 use C4::Members;
 use C4::Log;
@@ -39,6 +40,7 @@ use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 use Koha::Patrons;
+use Koha::SMTP::Servers;
 use Koha::Subscriptions;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -337,28 +339,31 @@ sub SendAlerts {
                 want_librarian => 1,
             ) or return;
 
-            # ... then send mail
-            my $message = Koha::Email->new();
-            my %mail = $message->create_message_headers(
+            # FIXME: This 'default' behaviour should be moved to Koha::Email
+            my $mail = Koha::Email->create(
                 {
-                    to      => $email,
-                    from    => $library->branchemail,
-                    replyto => $library->branchreplyto,
-                    sender  => $library->branchreturnpath,
-                    subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
-                    message => $letter->{'is_html'}
-                                ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
-                                              Encode::encode( "UTF-8", "" . $letter->{'title'} ))
-                                : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
-                    contenttype => $letter->{'is_html'}
-                                    ? 'text/html; charset="utf-8"'
-                                    : 'text/plain; charset="utf-8"',
+                    to       => $email,
+                    from     => $library->branchemail,
+                    reply_to => $library->branchreplyto,
+                    sender   => $library->branchreturnpath,
+                    subject  => "" . $letter->{title},
                 }
             );
-            unless( Mail::Sendmail::sendmail(%mail) ) {
-                carp $Mail::Sendmail::error;
-                return { error => $Mail::Sendmail::error };
+
+            if ( $letter->{is_html} ) {
+                $mail->html_body( _wrap_html( $letter->{content}, "" . $letter->{title} ) );
             }
+            else {
+                $mail->text_body( $letter->{content} );
+            }
+
+            try {
+                $mail->send_or_die({ transport => $library->smtp_server->transport });
+            }
+            catch {
+                carp "$_";
+                return { error => "$_" };
+            };
         }
     }
     elsif ( $type eq 'claimacquisition' or $type eq 'claimissues' or $type eq 'orderacquisition' ) {
@@ -477,8 +482,7 @@ sub SendAlerts {
 
         # ... then send mail
         my $library = Koha::Libraries->find( $userenv->{branch} );
-        my $email = Koha::Email->new();
-        my %mail = $email->create_message_headers(
+        my $mail = Koha::Email->create(
             {
                 to => join( ',', @email ),
                 cc => join( ',', @cc ),
@@ -487,27 +491,30 @@ sub SendAlerts {
                         C4::Context->preference("ClaimsBccCopy")
                           && ( $type eq 'claimacquisition'
                             || $type eq 'claimissues' )
-                    ) ? ( bcc => $userenv->{emailaddress} )
+                    )
+                    ? ( bcc => $userenv->{emailaddress} )
                     : ()
                 ),
                 from => $library->branchemail
                   || C4::Context->preference('KohaAdminEmailAddress'),
-                subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
-                message => $letter->{'is_html'} ? _wrap_html(
-                    Encode::encode( "UTF-8", $letter->{'content'} ),
-                    Encode::encode( "UTF-8", "" . $letter->{'title'} )
-                  )
-                : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
-                contenttype => $letter->{'is_html'}
-                ? 'text/html; charset="utf-8"'
-                : 'text/plain; charset="utf-8"',
+                subject => "" . $letter->{title},
             }
         );
 
-        unless ( Mail::Sendmail::sendmail(%mail) ) {
-            carp $Mail::Sendmail::error;
-            return { error => $Mail::Sendmail::error };
+        if ( $letter->{is_html} ) {
+            $mail->html_body( _wrap_html( $letter->{content}, "" . $letter->{title} ) );
         }
+        else {
+            $mail->text_body( "" . $letter->{content} );
+        }
+
+        try {
+            $mail->send_or_die({ transport => $library->smtp_server->transport });
+        }
+        catch {
+            carp "$_";
+            return { error => "$_" };
+        };
 
         logaction(
             "ACQUISITION",
@@ -523,41 +530,46 @@ sub SendAlerts {
     }
    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
-        my $library = Koha::Libraries->find( $externalid->{branchcode} )->unblessed;
+        my $library = Koha::Libraries->find( $externalid->{branchcode} );
         my $letter = GetPreparedLetter (
             module => 'members',
             letter_code => $letter_code,
             branchcode => $externalid->{'branchcode'},
             lang       => $externalid->{lang} || 'default',
             tables => {
-                'branches'    => $library,
+                'branches'    => $library->unblessed,
                 'borrowers' => $externalid->{'borrowernumber'},
             },
             substitute => { 'borrowers.password' => $externalid->{'password'} },
             want_librarian => 1,
         ) or return;
         return { error => "no_email" } unless $externalid->{'emailaddr'};
-        my $email = Koha::Email->new();
-        my %mail  = $email->create_message_headers(
-            {
-                to      => $externalid->{'emailaddr'},
-                from    => $library->{branchemail},
-                replyto => $library->{branchreplyto},
-                sender  => $library->{branchreturnpath},
-                subject => Encode::encode( "UTF-8", "" . $letter->{'title'} ),
-                message => $letter->{'is_html'}
-                            ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
-                                          Encode::encode( "UTF-8", "" . $letter->{'title'}  ) )
-                            : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
-                contenttype => $letter->{'is_html'}
-                                ? 'text/html; charset="utf-8"'
-                                : 'text/plain; charset="utf-8"',
+        try {
+
+            # FIXME: This 'default' behaviour should be moved to Koha::Email
+            my $mail = Koha::Email->create(
+                {
+                    to       => $externalid->{'emailaddr'},
+                    from     => $library->branchemail,
+                    reply_to => $library->branchreplyto,
+                    sender   => $library->branchreturnpath,
+                    subject  => "" . $letter->{'title'},
+                }
+            );
+
+            if ( $letter->{is_html} ) {
+                $mail->html_body( _wrap_html( $letter->{content}, "" . $letter->{title} ) );
             }
-        );
-        unless( Mail::Sendmail::sendmail(%mail) ) {
-            carp $Mail::Sendmail::error;
-            return { error => $Mail::Sendmail::error };
+            else {
+                $mail->text_body( $letter->{content} );
+            }
+
+            $mail->send_or_die({ transport => $library->smtp_server->transport });
         }
+        catch {
+            carp "$_";
+            return { error => "$_" };
+        };
     }
 
     # If we come here, return an OK status
@@ -1296,17 +1308,20 @@ sub _send_message_by_email {
     my $content = encode('UTF-8', $message->{'content'});
     my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
     my $is_html = $content_type =~ m/html/io;
+
     my $branch_email = undef;
     my $branch_replyto = undef;
     my $branch_returnpath = undef;
+    my $library;
+
     if ($patron) {
-        my $library = $patron->library;
+        $library           = $patron->library;
         $branch_email      = $library->branchemail;
         $branch_replyto    = $library->branchreplyto;
         $branch_returnpath = $library->branchreturnpath;
     }
-    my $email = Koha::Email->new();
-    my %sendmail_params = $email->create_message_headers(
+
+    my $email = Koha::Email->create(
         {
             to => $to_address,
             (
@@ -1314,29 +1329,66 @@ sub _send_message_by_email {
                 ? ( bcc => C4::Context->preference('NoticeBcc') )
                 : ()
             ),
-            from    => $message->{'from_address'} || $branch_email,
-            replyto => $message->{'reply_address'} || $branch_replyto,
-            sender  => $branch_returnpath,
-            subject => $subject,
-            message => $is_html ? _wrap_html( $content, $subject ) : $content,
-            contenttype => $content_type
+            from     => $message->{'from_address'}  || $branch_email,
+            reply_to => $message->{'reply_address'} || $branch_replyto,
+            sender   => $branch_returnpath,
+            subject  => "" . $message->{subject}
         }
     );
 
-    $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
-
-    _update_message_to_address($message->{'message_id'},$sendmail_params{To}) if !$message->{to_address} || $message->{to_address} ne $sendmail_params{To}; #if initial message address was empty, coming here means that a to address was found and queue should be updated; same if to address was overriden by create_message_headers
-
-    if ( Mail::Sendmail::sendmail( %sendmail_params ) ) {
-        _set_message_status( { message_id => $message->{'message_id'},
-                status     => 'sent' } );
-        return 1;
-    } else {
-        _set_message_status( { message_id => $message->{'message_id'},
-                status     => 'failed' } );
-        carp $Mail::Sendmail::error;
-        return;
+    if ( $is_html ) {
+        $email->html_body(
+            _wrap_html( $content, $subject )
+        );
     }
+    else {
+        $email->text_body( $content );
+    }
+
+    my $smtp_server;
+    if ( $library ) {
+        $smtp_server = $library->smtp_server;
+    }
+    else {
+        $smtp_server = Koha::SMTP::Servers->get_default;
+    }
+
+    if ( $username ) {
+        $smtp_server->set(
+            {
+                sasl_username => $username,
+                sasl_password => $password,
+            }
+        );
+    }
+
+# if initial message address was empty, coming here means that a to address was found and
+# queue should be updated; same if to address was overriden by create_message_headers
+    _update_message_to_address( $message->{'message_id'}, $email->email->header('To') )
+      if !$message->{to_address}
+      || $message->{to_address} ne $email->email->header('To');
+
+    try {
+        $email->send_or_die({ transport => $smtp_server->transport });
+
+        _set_message_status(
+            {
+                message_id => $message->{'message_id'},
+                status     => 'sent'
+            }
+        );
+        return 1;
+    }
+    catch {
+        _set_message_status(
+            {
+                message_id => $message->{'message_id'},
+                status     => 'failed'
+            }
+        );
+        carp "$_";
+        return;
+    };
 }
 
 sub _wrap_html {
