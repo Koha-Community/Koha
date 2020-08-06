@@ -171,11 +171,20 @@ sub click_when_visible {
     $self->driver->set_implicit_wait_timeout(20000);
     my ($visible, $elt);
     while ( not $visible ) {
-        $elt = $self->driver->find_element($xpath_selector);
-        $visible = $elt->is_displayed;
+        $elt = eval {$self->driver->find_element($xpath_selector) };
+        $visible = $elt && $elt->is_displayed;
         $self->driver->pause(1000) unless $visible;
     }
-    $elt->click;
+
+    my $clicked;
+    $self->remove_error_handler;
+    while ( not $clicked ) {
+        eval { $elt->click };
+        $clicked = !$@;
+        $self->driver->pause(1000) unless $clicked;
+    }
+    $self->add_error_handler;
+    $elt->click unless $clicked; # finally Raise the error
 }
 
 =head1 NAME
