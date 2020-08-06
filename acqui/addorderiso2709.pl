@@ -237,7 +237,7 @@ if ($op eq ""){
                     replacementprice    => $replacementprices[$i],
                     itemcallnumber      => $itemcallnumbers[$i],
                 }
-            );
+            )->store;
             push( @itemnumbers, $item->itemnumber );
         }
         if ($itemcreation == 1) {
