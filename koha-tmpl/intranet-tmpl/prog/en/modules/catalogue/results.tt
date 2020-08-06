@@ -724,7 +724,11 @@
         var biblionumber = "[% biblionumber | html %]";
         var holdfor_cardnumber = "[% holdfor_cardnumber | html %]";
         var holdforclub = "[% holdforclub | html %]";
-        var SEARCH_RESULTS = [% IF (SEARCH_RESULTS) %]1[% ELSE %]0[% END %];
+        [% IF SEARCH_RESULTS %]
+            var SEARCH_RESULTS = 1;
+        [% ELSE %]
+            var SEARCH_RESULTS = 0;
+        [% END %]
         var new_results_browser = [
             [%- FOREACH result IN SEARCH_RESULTS -%]
                 [%- result.biblionumber | html -%],
