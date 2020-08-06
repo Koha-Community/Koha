@@ -224,7 +224,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
         $(document).ready(function() {
@@ -238,27 +237,53 @@
               $("#show_list_option").show();
             }
           });
-          $("#selectall").click(function(e){
-            e.preventDefault();
-            $(".records").checkCheckboxes(":input[type='checkbox']:not(:disabled)");
-          });
-          $("#clearall").click(function(e){
-            e.preventDefault();
-            $(".records").unCheckCheckboxes(":input[type='checkbox']:not(:disabled)");
-          });
-          $("#selectwithoutitems").click(function(e){
-            e.preventDefault();
-            $("#biblios").checkCheckboxes(":input[data-items='0']:not(:disabled)");
-          });
-          $("#selectnotreserved").click(function(e){
-            e.preventDefault();
-            $("#biblios").checkCheckboxes(":input[data-reserves='0']:not(:disabled)");
+            $("#selectall").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    $(this).prop("checked", true);
+                });
+            });
 
-          });
-          $("#clearlinkedtobiblio").click(function(e){
-            e.preventDefault();
-            $("#authorities").unCheckCheckboxes(":not(input[data-usage='0'])");
-          });
+            $("#clearall").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    $(this).prop("checked", false);
+                });
+            });
+
+            $("#selectwithoutitems").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    if( $(this).data("items") == 0 ){
+                        $(this).prop("checked", true );
+                    } else {
+                        $(this).prop("checked", false );
+                    }
+                });
+            });
+
+            $("#selectnotreserved").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    if( $(this).data("reserves") == 0 ){
+                        $(this).prop("checked", true );
+                    } else {
+                        $(this).prop("checked", false );
+                    }
+                });
+            });
+
+            $("#clearlinkedtobiblio").click(function(e){
+                e.preventDefault();
+                $(".records input[type='checkbox']:not(:disabled)").each(function(){
+                    if( $(this).data("usage") == 0 ){
+                        $(this).prop("checked", true );
+                    } else {
+                        $(this).prop("checked", false );
+                    }
+                });
+            });
+
           $("#selectall").click();
 
           [% IF recordtype == 'biblio' %]
