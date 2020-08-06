@@ -346,7 +346,7 @@
                 [% IF warnHiddenBiblionumbers.size %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
                     [% FOR w IN warnHiddenBiblionumbers %]
-                        Biblio framework "[% w.frameworkcode %]" has the biblionumber field hidden at the interface [% w.interface %]<br/>
+                        Biblio framework "[% w.frameworkcode | html %]" has the biblionumber field hidden at the interface [% w.interface | html %]<br/>
                     [% END %]
                     </td></tr>
                 [% END %]
