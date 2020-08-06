@@ -232,10 +232,14 @@ if ($op eq "action") {
                             }
                         }
                         else {
-                            $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store if defined $exclude_from_local_holds_priority;
+                            my $modified_holds_priority = 0;
+                            if (defined $exclude_from_local_holds_priority && $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
+                                $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
+                                $modified_holds_priority = 1;
+                            }
+                            my $modified = 0;
                             if ( $values_to_modify || $values_to_blank ) {
                                 my $localmarcitem = Item2Marc($itemdata);
-                                my $modified = 0;
 
                                 for ( my $i = 0 ; $i < @tags ; $i++ ) {
                                     my $search = $searches[$i];
@@ -293,16 +297,16 @@ if ($op eq "action") {
                                         }
                                     };
                                 }
-                                if ($runinbackground) {
-                                    $modified_items++ if $modified;
-                                    $modified_fields += $modified;
-                                    $job->set(
-                                        {
-                                            modified_items  => $modified_items,
-                                            modified_fields => $modified_fields,
-                                        }
-                                    );
-                                }
+                            }
+                            if ($runinbackground) {
+                                $modified_items++ if $modified || $modified_holds_priority;
+                                $modified_fields += $modified + $modified_holds_priority;
+                                $job->set(
+                                    {
+                                        modified_items  => $modified_items,
+                                        modified_fields => $modified_fields,
+                                    }
+                                );
                             }
                         }
                         $i++;

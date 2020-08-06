@@ -50,8 +50,11 @@
     </div>
     </div>
 
+    [% IF ONLY_ONE || updated_exclude_from_local_holds_priority.defined %]
+    <hr />
+    [% END %]
+
     [% IF ( ONLY_ONE ) %]
-        <hr />
         <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View All</a></div>
     [% END %]
 
