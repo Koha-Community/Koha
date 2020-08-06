@@ -290,14 +290,14 @@
     <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
     <td>
         [% IF ( loo.subfield_ignored ) %]
-            <i>[% loo.liblibrarian | html_entity %]</i>
+            <em>[% loo.liblibrarian | html_entity %]</em>
         [% ELSE %]
             [% loo.liblibrarian | html_entity %]
         [% END %]
     </td>
     <td>
         [% IF ( loo.subfield_ignored ) %]
-            <i>subfield ignored</i>
+            <em>subfield ignored</em>
         [% ELSE %]
             Tab:[% loo.tab | html %],
             [% IF ( loo.kohafield ) %] | Koha field: [% loo.kohafield | html %], [% END %]

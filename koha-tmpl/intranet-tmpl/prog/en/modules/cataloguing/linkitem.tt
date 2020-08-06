@@ -5,7 +5,7 @@
 <body id="catalog_linkitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host record to <i>[% bibliotitle | html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host record to <em>[% bibliotitle | html %]</em></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -22,7 +22,7 @@
     </form>
 [% ELSE %]
     [% IF ( success ) %]
-    <div class="dialog message">The item has successfully been linked to <i>[% bibliotitle | html %]</i>.</div>
+    <div class="dialog message">The item has successfully been linked to <em>[% bibliotitle | html %]</em>.</div>
 	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
 	    <input type="submit" value="OK" />
 	    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />

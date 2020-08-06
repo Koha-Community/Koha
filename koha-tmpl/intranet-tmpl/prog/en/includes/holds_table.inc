@@ -151,7 +151,7 @@
                     </a>
                 [% ELSE %]
                     [% IF ( hold.item_level_hold ) %]
-                        <i>
+                        <em>
                             Only item
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                                 [% IF ( hold.barcodenumber ) %]
@@ -161,12 +161,12 @@
                                     No barcode
                                 [% END %]
                             </a>
-                        </i>
+                        </em>
                     [% ELSE %]
                         [% IF hold.itemtype %]
-                            <i>Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</i>
+                            <em>Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</em>
                         [% ELSE %]
-                            <i>Next available</i>
+                            <em>Next available</em>
                         [% END %]
 
                         <input type="hidden" name="itemnumber" value="" />

@@ -13,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <em><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></em></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -105,7 +105,7 @@
                 </fieldset>
 
                 <p>
-                    Any items with existing course reserves will have their <i>on reserve</i> values updated.
+                    Any items with existing course reserves will have their <em>on reserve</em> values updated.
                 </p>
 
                 <fieldset class="action">

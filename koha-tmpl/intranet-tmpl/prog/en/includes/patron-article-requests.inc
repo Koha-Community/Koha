@@ -27,7 +27,7 @@
                             [% ar.item.enumchron | html %]
                         </a>
                         [% ar.biblio.author | html %]
-                        [% IF ar.itemnumber %] <i>(only [% ar.item.barcode | html %])</i>[% END %]
+                        [% IF ar.itemnumber %] <em>(only [% ar.item.barcode | html %])</em>[% END %]
                     </td>
 
                     <td class="article-request-created_on">

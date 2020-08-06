@@ -99,11 +99,11 @@
             </td>
             <td>
                 <b>[% lateorder.biblio.title | html %]</b>
-                   [% IF ( lateorder.biblio.author ) %]<br/><i>Author:</i> [% lateorder.biblio.author | html %][% END %]
+                   [% IF ( lateorder.biblio.author ) %]<br/><em>Author:</em> [% lateorder.biblio.author | html %][% END %]
                    [% IF ( lateorder.biblio.biblioitem.publishercode ) %]
-                        <br/><i>Published by:</i> [% lateorder.biblio.biblioitem.publishercode | html %]
+                        <br/><em>Published by:</em> [% lateorder.biblio.biblioitem.publishercode | html %]
                         [% IF ( lateorder.biblio.biblioitem.publicationyear ) %]
-                            <i> in </i>[% lateorder.biblio.biblioitem.publicationyear | html %]
+                            <em> in </em>[% lateorder.biblio.biblioitem.publicationyear | html %]
                         [% END %]
                    [% END %]
             </td>

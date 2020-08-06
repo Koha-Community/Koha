@@ -26,7 +26,7 @@ fieldset.rows table { clear: none; margin: 0; }
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
     [% UNLESS blocking_error %]
-        &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><i>[% bibliotitle | html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]
+        &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% bibliotitle | html %]</em></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]
     [% END %]
 </div>
 [% INCLUDE 'blocking_errors.inc' %]
@@ -34,7 +34,7 @@ fieldset.rows table { clear: none; margin: 0; }
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <h1>[% IF ( modify ) %] Modify subscription for <em>[% bibliotitle | html %]</em>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
         </div>
     </div>
     <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">

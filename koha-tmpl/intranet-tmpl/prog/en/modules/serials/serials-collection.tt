@@ -13,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial collection information for  <i>[% bibliotitle | html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial collection information for  <em>[% bibliotitle | html %]</em></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -25,7 +25,7 @@
 [% UNLESS ( popup ) %]
 	[% INCLUDE 'serials-toolbar.inc' %]
 
-	<h1>Serial collection information for  <i>[% bibliotitle | html %]</i>
+    <h1>Serial collection information for  <em>[% bibliotitle | html %]</em>
         [% IF location %] ([% AuthorisedValues.GetByCode( 'LOC', location ) | html %]) [% END %]
 		[% IF ( callnumber ) %]callnumber: [% callnumber | html %][% END %]</h1>
 [% END %]

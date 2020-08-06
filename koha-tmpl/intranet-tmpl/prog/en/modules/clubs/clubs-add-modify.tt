@@ -19,9 +19,9 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="clubs.pl">Patron clubs</a> &rsaquo;
     [% IF club %]
-        Modify club <i>[% club.name | html %]</i>
+        Modify club <em>[% club.name | html %]</em>
     [% ELSE %]
-        Create a new <i>[% club_template.name | html %]</i> club
+        Create a new <em>[% club_template.name | html %]</em> club
     [% END %]
 </div>
 
@@ -37,9 +37,9 @@
 
                     <legend>
                         [% IF club %]
-                            Modify club <i>[% club.name | html %]</i>
+                            Modify club <em>[% club.name | html %]</em>
                         [% ELSE %]
-                            Create a new <i>[% club_template.name | html %]</i> club
+                            Create a new <em>[% club_template.name | html %]</em> club
                         [% END %]
                     </legend>
 

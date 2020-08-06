@@ -18,11 +18,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
     [% IF datereceived %]
-        Receipt summary for <i>[% name | html %]</i>
+        Receipt summary for <em>[% name | html %]</em>
         [% IF ( invoice ) %]
-            <i>[ [% invoice | html %] ]</i>
+            <em>[ [% invoice | html %] ]</em>
         [% END %]
-        on <i>[% datereceived | $KohaDates %]</i>
+        on <em>[% datereceived | $KohaDates %]</em>
     [% ELSE %]
         Receive orders from [% name | html %]
     [% END %]
@@ -46,7 +46,7 @@
 	[% END %]
     <h1>
         [% IF datereceived %]
-            Receipt summary for <i>[% name | html %]</i> [% IF ( invoice ) %] <i> [ [% invoice | html %] ] </i>[% END %] on <i>[% datereceived | $KohaDates %]</i>
+            Receipt summary for <em>[% name | html %]</em> [% IF ( invoice ) %] <em> [ [% invoice | html %] ] </em>[% END %] on <em>[% datereceived | $KohaDates %]</em>
         [% ELSE %]
             Receive orders from [% name | html %]
         [% END %]
@@ -250,7 +250,7 @@
                 [% ELSE %]
                     <td colspan="6" class="total">(Tax exc.)</td>
                 [% END %]
-                <td colspan="3"><i>Subtotal for</i> [% key | html %]</td>
+                <td colspan="3"><em>Subtotal for</em> [% key | html %]</td>
                 <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
                 <td>[% subtotal_for_funds.$key.unitprice | $Price %]</td>
                 <td>&nbsp;</td>

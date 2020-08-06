@@ -111,19 +111,19 @@
                                 [% END %]
 
                                 [% IF ( RENEW_ISSUE ) %]
-                                    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) is currently checked out to this patron.  Renew?</li>
+                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is currently checked out to this patron.  Renew?</li>
                                 [% END %]
 
                                 [% IF ( RESERVE_WAITING ) %]
-                                    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
+                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
                                 [% END %]
 
                                 [% IF ( RESERVED ) %]
-                                    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
+                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
                                 [% END %]
 
                                 [% IF ( ISSUED_TO_ANOTHER ) %]
-                                    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | uri %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
+                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | uri %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check in and check out?
                                         [% END %]
@@ -727,13 +727,13 @@
 
                                             [% IF ( debarredcomment ) %]
                                                 with the explanation: <br/>
-                                                <i>
+                                                <em>
                                                     [% IF debarredcomment.search('OVERDUES_PROCESS') %]
                                                         Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
                                                     [% ELSE %]
                                                         [% debarredcomment | $raw | html_line_break %]
                                                     [% END %]
-                                                </i>
+                                                </em>
                                             [% END %]
                                             <br/>
                                             <a class="btn btn-default" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="fa fa-ban"></i> View restrictions</a>
@@ -827,7 +827,7 @@
                                                     [% IF message.manager_id %]
                                                         ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id | uri %]">[% message.get_column('manager_firstname') | html %] [% message.get_column('manager_surname') | html %]</a> )
                                                     [% END %]
-                                                    <i>"[% message.message | html %]"</i>
+                                                    <em>"[% message.message | html %]"</em>
                                                 </span>
                                                 [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
                                                     <a class="btn btn-link" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id | html %]&amp;borrowernumber=[% message.borrowernumber | html %]" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>

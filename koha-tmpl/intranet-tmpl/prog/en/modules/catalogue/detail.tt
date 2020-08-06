@@ -50,7 +50,7 @@
   [% IF ( unknownbiblionumber ) %]
     <span class="unknownrecord">Unknown record</span>
   [% ELSE %]
-    <span class="titledetails">Details for <i>[% INCLUDE 'biblio-title.inc' %]</i></span>
+    <span class="titledetails">Details for <em>[% INCLUDE 'biblio-title.inc' %]</em></span>
   [% END %]
 </div>
 
@@ -790,8 +790,8 @@ Note that permanent location is a code, and location may be an authval.
                             [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a>
                         <br />
                         [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
-                        [% IF ( suggestion.volumedesc ) %]; Volume:<i>[% suggestion.volumedesc | html %]</i> [% END %]
-                        [% IF ( suggestion.isbn ) %]; ISBN:<i>[% suggestion.isbn | html %]</i> [% END %][% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %][% IF ( suggestion.publicationyear ) %] in <i>[% suggestion.publicationyear | html %]</i> [% END %][% IF ( suggestion.place ) %] in <i>[% suggestion.place | html %]</i> [% END %][% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %][% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
+                        [% IF ( suggestion.volumedesc ) %]; Volume:<em>[% suggestion.volumedesc | html %]</em> [% END %]
+                        [% IF ( suggestion.isbn ) %]; ISBN:<em>[% suggestion.isbn | html %]</em> [% END %][% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %][% IF ( suggestion.publicationyear ) %] in <em>[% suggestion.publicationyear | html %]</em> [% END %][% IF ( suggestion.place ) %] in <em>[% suggestion.place | html %]</em> [% END %][% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %][% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
                     </td>
                     <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>

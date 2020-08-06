@@ -81,7 +81,7 @@
 
                 [% ELSE %]
 
-                    <h2>Actions for <i>[% template_name | html %]</i></h2>
+                    <h2>Actions for <em>[% template_name | html %]</em></h2>
 
                     [% IF ( ActionsLoop ) %]
 
@@ -137,7 +137,7 @@
                                             [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield.length ) %]$[% ActionsLoo.from_subfield | html %][% END %]
 
                                             [% IF ( ActionsLoo.field_value ) %]
-                                                with value <i>[% ActionsLoo.field_value | html %]</i>
+                                                with value <em>[% ActionsLoo.field_value | html %]</em>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.to_field ) %]

@@ -280,14 +280,14 @@
         </td>
         <td>
             [% IF ( loo.subfield_ignored ) %]
-                    <i>[% loo.liblibrarian | html_entity %]</i>
+                    <em>[% loo.liblibrarian | html_entity %]</em>
             [% ELSE %]
                     [% loo.liblibrarian | html_entity %]
             [% END %]
         </td>
         <td>
             [% IF ( loo.subfield_ignored ) %]
-                    <i>subfield ignored</i>
+                    <em>subfield ignored</em>
             [% ELSE %]
                 <strong>Tab:</strong>[% loo.tab | html %],
                 [% IF ( loo.kohafield ) %] | <strong>Koha field:</strong> [% loo.kohafield | html %], [% END %]

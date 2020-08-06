@@ -37,7 +37,7 @@
                 [% d.comment | $raw %]
 			    [% END %]
 			</td>
-                        <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
+                        <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <em>Indefinite</em> [% END %]</td>
                         <td>[% d.created | $KohaDates %]</td>
                         [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>

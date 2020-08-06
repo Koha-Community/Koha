@@ -92,7 +92,7 @@
                                         <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
                                         <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
                                         <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
-                                        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
+                                        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <em>([% bibnum | html %])</em></li>
                                         [% IF ( OPACBaseURL ) %]
                                             <li>
                                                 <span class="label">OPAC view:</span>
@@ -265,11 +265,11 @@
                             <tr>
                                 <td>When more than</td>
                                 <td>[% whenmorethan1 | html %] [% IF ( innerloop1 ) %]<br />
-                                    <i>(is [% innerloop1 | html %])</i>[% END %]</td>
+                                    <em>(is [% innerloop1 | html %])</em>[% END %]</td>
                                 <td>[% whenmorethan2 | html %] [% IF ( innerloop2 ) %]<br />
-                                    <i>(is [% innerloop2 | html %])</i>[% END %]</td>
+                                    <em>(is [% innerloop2 | html %])</em>[% END %]</td>
                                 <td>[% whenmorethan3 | html %] [% IF ( innerloop3 ) %]<br />
-                                    <i>(is [% innerloop3 | html %])</i>[% END %]</td>
+                                    <em>(is [% innerloop3 | html %])</em>[% END %]</td>
                             </tr>
                             <tr>
                                 <td>Set back to</td>

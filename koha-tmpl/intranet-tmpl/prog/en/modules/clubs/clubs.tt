@@ -25,17 +25,17 @@
                 [% IF club_template %]
                     <div class="dialog message">
                         [% IF stored == 'updated' %]
-                            <p>Club template <i>[% club_template.name | html %]</i> was updated.</p>
+                            <p>Club template <em>[% club_template.name | html %]</em> was updated.</p>
                         [% ELSE %]
-                            <p>Club template <i>[% club_template.name | html %]</i> was saved.</p>
+                            <p>Club template <em>[% club_template.name | html %]</em> was saved.</p>
                         [% END %]
                     </div>
                 [% ELSIF club %]
                     <div class="dialog message">
                         [% IF stored == 'updated' %]
-                            <p>Club <i>[% club.name | html %]</i> was updated.</p>
+                            <p>Club <em>[% club.name | html %]</em> was updated.</p>
                         [% ELSE %]
-                            <p>Club <i>[% club.name | html %]</i> was saved.</p>
+                            <p>Club <em>[% club.name | html %]</em> was saved.</p>
                         [% END %]
                     </div>
                 [% END %]

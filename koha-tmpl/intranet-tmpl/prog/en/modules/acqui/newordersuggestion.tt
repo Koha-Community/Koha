@@ -46,12 +46,12 @@
                     <p>[% suggestions_loo.title | html %] - [% suggestions_loo.author | html %]</p>
                     <p>
                         [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]volume: <i>[% suggestions_loo.volumedesc | html %]</i> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]ISBN: <i>[% suggestions_loo.isbn | html %]</i> [% END %]
+                        [% IF ( suggestions_loo.volumedesc ) %]volume: <em>[% suggestions_loo.volumedesc | html %]</em> [% END %]
+                        [% IF ( suggestions_loo.isbn ) %]ISBN: <em>[% suggestions_loo.isbn | html %]</em> [% END %]
                         [% IF ( suggestions_loo.publishercode ) %]<br />published by: [% suggestions_loo.publishercode | html %] [% END %]
-                        [% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %]
-                        [% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %]
-                        [% IF ( suggestions_loo.note ) %]<p><i>([% suggestions_loo.note | html %])</i></p> [% END %]
+                        [% IF ( suggestions_loo.publicationyear ) %] in <em>[% suggestions_loo.publicationyear | html %]</em> [% END %]
+                        [% IF ( suggestions_loo.place ) %] in <em>[% suggestions_loo.place | html %]</em> [% END %]
+                        [% IF ( suggestions_loo.note ) %]<p><em>([% suggestions_loo.note | html %])</em></p> [% END %]
                     </p>
                 </td>
                 <td>

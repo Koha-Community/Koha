@@ -10,7 +10,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo;[% IF is_edit || course_reserve %] Edit [% ELSE %] Reserve [% END %]<i><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></i> for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo;[% IF is_edit || course_reserve %] Edit [% ELSE %] Reserve [% END %]<em><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></em> for <em><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]">[% course.course_name | html %]</a></em></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -26,9 +26,9 @@
 
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
-                    <legend>Edit <i>[% biblio.title | html %]</i> in <i>[% course.course_name | html %]</i></legend>
+                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %]</em></legend>
                 [% ELSE %]
-                    <legend>Add <i>[% biblio.title | html %]</i> to <i>[% course.course_name | html %]</i></legend>
+                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %]</em></legend>
                 [% END %]
                 <ol>
                     <li>

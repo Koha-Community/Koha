@@ -83,7 +83,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial edition <i>[% bibliotitle | html %] [% IF ( callnumber ) %]([% callnumber | html %])[% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial edition <em>[% bibliotitle | html %] [% IF ( callnumber ) %]([% callnumber | html %])[% END %]</em></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -92,7 +92,7 @@ $(document).ready(function() {
 
     [% INCLUDE 'modals/serials_multi_receiving.inc' %]
 
-<h1>Serial edition <i>[% bibliotitle | html %]</i>
+<h1>Serial edition <em>[% bibliotitle | html %]</em>
     [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) | html %])[% END %]
     [% IF ( callnumber ) %] callnumber: [% callnumber | html %][% END %]</h1>
 [% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html | html_line_break %]</p>[% END %]

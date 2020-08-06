@@ -24,7 +24,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Course details for <i>[% course.course_name | html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Course details for <em>[% course.course_name | html %]</em></div>
 
     <div class="main container-fluid">
         <div class="row">
@@ -115,7 +115,7 @@
                                         (<strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype) | html %]</strong>)
                                     [% END %]
                                 [% ELSE %]
-                                     <i>Unchanged</i>
+                                     <em>Unchanged</em>
                                      [% IF cr.item.itype %]
                                          ([% ItemTypes.GetDescription( cr.item.itype ) | html %])
                                      [% END %]
@@ -136,7 +136,7 @@
                                         [% END %]
                                      [% END %]
                                  [% ELSE %]
-                                     <i>Unchanged</i>
+                                     <em>Unchanged</em>
                                      [% IF cr.item.ccode %]
                                          ([% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %])
                                      [% END %]
@@ -156,7 +156,7 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                    <i>Unchanged</i>
+                                    <em>Unchanged</em>
                                     [% IF cr.item.permanent_location %]
                                         ([% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %])
                                     [% END %]
@@ -176,7 +176,7 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                    <i>Unchanged</i>
+                                    <em>Unchanged</em>
                                     [% IF cr.item.homebranch %]
                                         ([% Branches.GetName( cr.item.homebranch ) | html %])
                                     [% END %]
@@ -196,7 +196,7 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                    <i>Unchanged</i>
+                                    <em>Unchanged</em>
                                     [% IF cr.item.holdingbranch %]
                                         ([% Branches.GetName( cr.item.holdingbranch ) | html %])
                                     [% END %]

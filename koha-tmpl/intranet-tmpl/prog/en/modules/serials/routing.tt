@@ -12,7 +12,7 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
     [% UNLESS blocking_error %]
-        &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><i>[% title | html %]</i></a>
+        &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><em>[% title | html %]</em></a>
         &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]
     [% END %]
 </div>
@@ -24,9 +24,9 @@
 [% INCLUDE 'blocking_errors.inc' %]
 
 [% IF ( op ) %]
-<h1>Create routing list for <i>[% title | html %]</i></h1>
+<h1>Create routing list for <em>[% title | html %]</em></h1>
 [% ELSE %]
-<h1>Edit routing list for <i>[% title | html %]</i></h1>
+<h1>Edit routing list for <em>[% title | html %]</em></h1>
 [% END %]
 
 <form method="post" action="routing.pl">

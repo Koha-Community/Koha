@@ -662,7 +662,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'upload_manage' -%]
         <span class="sub_permission upload_manage_subpermission">
-            Manage uploaded files (<i>Useless without upload_general_files</i>)
+            Manage uploaded files (<em>Useless without upload_general_files</em>)
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'access_files' -%]
