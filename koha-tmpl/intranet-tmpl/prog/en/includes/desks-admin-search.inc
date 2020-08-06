@@ -16,7 +16,7 @@
     <div id="catalog_search" class="residentsearch">
                 <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
             [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %]
-                <label class="tip" for="idx">Enter search keywords:</label>
+                <label class="tip" for="search-form">Enter search keywords:</label>
                 [% INCLUDE 'search_indexes.inc' %]
             [% ELSE %]
                 <label class="tip" for="search-form">Enter search keywords:</label>
