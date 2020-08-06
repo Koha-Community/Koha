@@ -36,7 +36,7 @@
                     <a class="btn btn-default" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id | html %]"><i class="fa fa-plus"></i> Add reserves</a>
                     <a class="btn btn-default" id="add_items" href="/cgi-bin/koha/course_reserves/batch_add_items.pl?course_id=[% course.course_id | html %]"><i class="fa fa-plus"></i> Batch add reserves</a>
                 [% END %]
-                [% IF CAN_user_coursereserves_delete_reserves %]
+                [% IF CAN_user_coursereserves_delete_reserves && course_reserves %]
                     <a class="btn btn-default" id="rm_items" href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id | html %]&amp;action=rm_all"><i class="fa fa-minus"></i> Remove all reserves</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
