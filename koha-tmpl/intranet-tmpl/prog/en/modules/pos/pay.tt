@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Price %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% PROCESS 'payments.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -175,6 +176,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
     function moneyFormat(textObj) {
@@ -329,13 +331,14 @@
                 sale_table.DataTable().row($(this).parents('tr')).remove().draw(false);
         });
 
-        var items_table = $("#invoices").dataTable($.extend(true,{}, dataTablesDefaults, {
+        var items_columns_settings = [% TablesSettings.GetColumns('pos', 'pay', 'invoices', 'json') | $raw %];
+        var items_table = KohaTable("invoices", {
+               "sPaginationType": "full",
+               "aaSorting": [[ 0, "asc" ]],
                "aoColumnDefs": [
                   { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable":false },
                ],
-               "aaSorting": [[ 0, "asc" ]],
-               "paginationType": "full",
-        }));
+        }, items_columns_settings);
 
         $(".add_button").on("click", function(e) {
             e.preventDefault();
