@@ -109,9 +109,9 @@
             </tr>
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion | html %]</td></tr>
             [% IF (errZebraConnection == 10000) %]
-            <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
+            <tr><th scope="row"><strong>Error</strong> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
             [% ELSIF (errZebraConnection) %]
-            <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) | html %] </td></tr>
+            <tr><th scope="row"><strong>Warning</strong> </th><td>Error message from Zebra: [% ( errZebraConnection ) | html %] </td></tr>
             [% END %]
             <tr>
               <th scope="row">Date and time: </th>
@@ -264,89 +264,89 @@
             <table>
                 <caption>Preferences and parameters</caption>
                 [% IF (warnPrefBiblioAddsAuthorities) %]
-                <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AutoCreateAuthorities' set, but needs 'BiblioAddsAuthorities' set as well.</td></tr>
+                <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'AutoCreateAuthorities' set, but needs 'BiblioAddsAuthorities' set as well.</td></tr>
                 [% END %]
                 [% IF (warnPrefEasyAnalyticalRecords) %]
-                <tr><th scope="row"><b>Warning</b> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff interface and the OPAC will be broken.</td></tr>
+                <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff interface and the OPAC will be broken.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronOPACPrivacy %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronAnonSuggestions %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnNoActiveCurrency %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>
                 [% END %]
                 [% IF warnStatisticsFieldsError %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'StatisticsFields' contains field names not belonging to the items database table: [% warnStatisticsFieldsError | html %] </td></tr>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'StatisticsFields' contains field names not belonging to the items database table: [% warnStatisticsFieldsError | html %] </td></tr>
                 [% END %]
                 [% IF AutoSelfCheckPatronDoesNotHaveSelfCheckPerm %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The patron used for the self checkout module at the OPAC does not have the self_check => self_checkout_module permission.
                     </td></tr>
                 [% END %]
                 [% IF AutoSelfCheckPatronHasTooManyPerm %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The patron used for the self checkout module at the OPAC has too many permissions. They should only have self_check => self_checkout_module.
                     </td></tr>
                 [% END %]
                 [% IF warnNoTemplateCaching %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml file.
                     That will bring a performance boost to enable it.
                     </td></tr>
                 [% END %]
                 [% IF warnILLConfiguration %]
                   [% IF no_ill_backends %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The ILL module is enabled, but there are no backends available.
                     </td></tr>
                   [% END %]
                   [% IF ill_partner_code_not_defined %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The ILL module is enabled, but no 'partner_code' defined in koha-conf.xml. Falling back to the hardcoded 'ILLLIBS'.
                     </td></tr>
                   [%END %]
                   [% IF ill_branch_not_defined %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The ILL module is enabled, but no 'branch' block is defined in koha-conf.xml. You must define this block before use.
                     </td></tr>
                   [%END %]
                   [% IF ill_partner_code_doesnt_exist %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist | html %]) is not defined on the system.
                     </td></tr>
                   [% END %]
                 [% END %]
                 [% IF oauth2_missing_deps %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     System preference 'RESTOAuth2ClientCredentials' is set, but the required Net::OAuth2::AuthorizationServer dependency is missing. The feature is disabled.
                     </td></tr>
                 [% END %]
                 [% IF bad_yaml_prefs %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     Some system preferences have badly formatted YAML content: [% bad_yaml_prefs.join(', ') | html %]
                     </td></tr>
                 [% END %]
                 [% IF config_bcrypt_settings_no_set %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     System preference 'Pseudonymization' is set, but there is not 'bcrypt_settings' entry defined in the $KOHA_CONF file.
                     </td></tr>
                 [% END %]
                 [% IF config_bcrypt_settings_no_set %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     System preference 'Pseudonymization' is set, but there is not 'bcrypt_settings' entry defined in the $KOHA_CONF file.
                     </td></tr>
                 [% END %]
                 [% IF warnHiddenBiblionumbers.size %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    <tr><th scope="row"><strong>Warning</strong> </th><td>
                     [% FOR w IN warnHiddenBiblionumbers %]
                         Biblio framework "[% w.frameworkcode | html %]" has the biblionumber field hidden at the interface [% w.interface | html %]<br/>
                     [% END %]
@@ -361,7 +361,7 @@
             [% FOREACH config_entry IN xml_config_warnings %]
                 [% IF config_entry.error == 'zebra_bib_index_mode_is_grs1' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer supported.
                         Please use DOM instead. To switch follow this page of wiki:
                         <a href="https://wiki.koha-community.org/wiki/Switching_to_dom_indexing">Switching to dom indexing</a>
@@ -369,7 +369,7 @@
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_index_mode_is_grs1' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer supported.
                         Please use DOM instead. To switch follow this page of wiki:
                         <a href="https://wiki.koha-community.org/wiki/Switching_to_dom_indexing">Switching to dom indexing</a>
@@ -377,42 +377,42 @@
                 </tr>
                 [% ELSIF config_entry.error == 'use_zebra_facets_entry_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>The &lt;use_zebra_facets&gt; entry is missing in your configuration file. Falling back
                         to legacy facet calculation.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'log4perl_entry_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the log4perl.conf file for your Koha instance.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'lockdir_entry_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>You are missing the &lt;lockdir&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to your Koha instance's lock dir.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'lockdir_not_writable' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>The configured &lt;lockdir&gt; entry in your koha-conf.xml file points to a
                         non-writable directory ([% config_entry.lockdir | html %]).
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'uploadpath_entry_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured file upload directory for your Koha instance.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'uploadpath_and_opacbaseurl_entry_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured file upload directory for your Koha instance.
                         Also note that you need to properly set the OPACBaseURL preference for the file upload plugin to work.
@@ -420,7 +420,7 @@
                 </tr>
                 [% ELSIF config_entry.error == 'tmp_path_missing' %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>You are missing the &lt;tmp_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured temporary directory for your Koha instance.
                         The effective temporary directory is '[% config_entry.effective_tmp_dir | html %]'.
@@ -436,7 +436,7 @@
                 <caption>Issuing rules</caption>
                 [% FOREACH unit IN ir_units %]
                 <tr>
-                    <th scope="row"><b>Warning</b></th>
+                    <th scope="row"><strong>Warning</strong></th>
                     <td>The [% unit.branchcode || 'branchcode=default' | html %], [% unit.categorycode || 'categorycode=default' | html %], [% unit.itemtype || 'itemtype=default' | html %]
                         issuingrule will fallback to 'days' for 'lengthunit' as it is incorrectly defined as
                         [% unit.rule_value | html %].

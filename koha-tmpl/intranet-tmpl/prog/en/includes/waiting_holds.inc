@@ -25,7 +25,7 @@
                         [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio %]
                     </a>
                         [% UNLESS ( item_level_itypes ) %]
-                            [% IF ( ItemTypes.GetDescription(reserveloo.item.effective_itemtype) ) %]&nbsp; (<b>[% ItemTypes.GetDescription(reserveloo.item.effective_itemtype) | html %]</b>)
+                            [% IF ( ItemTypes.GetDescription(reserveloo.item.effective_itemtype) ) %]&nbsp; (<strong>[% ItemTypes.GetDescription(reserveloo.item.effective_itemtype) | html %]</strong>)
                             [% END %]
                         [% END %]
                         <br />Barcode: [% reserveloo.item.barcode | html %]

@@ -46,13 +46,13 @@
                         [% ELSE %]
                             <div class="dialog message">
                         [% END %]
-                            <p><b>
+                            <p><strong>
                                 [% IF ( label_batch_msg == "error" ) %]
                                     Error attempting to create label batch. Please ask your system administrator to check the log for more details.
                                 [% ELSE %]
                                     Label <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% label_batch_msg | uri %]" >batch #[% label_batch_msg | html %]</a> created.
                                 [% END %]
-                            </b></p>
+                            </strong></p>
                         </div>
                     [% END %]
 

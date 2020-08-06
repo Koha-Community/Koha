@@ -125,12 +125,12 @@
                                   <li>Transfer is not allowed for:
                                       <ol>
                                           [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
-                                              <li>Item type: <b>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</b></li>
+                                              <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
                                           [% ELSE %]
-                                              <li>Collection: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</b></li>
+                                              <li>Collection: <strong>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</strong></li>
                                           [% END %]
-                                          <li>Originating library: <b>[% Branches.GetName( errmsgloo.fbr ) | html %]</b></li>
-                                          <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) | html %]</b></li>
+                                          <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
+                                          <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
                                       </ol>
                                   </li>
                               [% END %]

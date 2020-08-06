@@ -77,7 +77,7 @@
         [% FOREACH subfiel IN innerloo.subfield %]
             <p>
                 <label class="labelsubfield">&nbsp;
-                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield | html %]</b>[% END %]
+                [% UNLESS ( subfiel.hide_marc ) %]<strong>[% subfiel.marc_subfield | html %]</strong>[% END %]
                 <span title="[% subfiel.long_desc | html %]" class="desc">[% subfiel.short_desc | html %]</span></label>
                 [% IF ( subfiel.is_url ) %]
                     <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>

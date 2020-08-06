@@ -55,7 +55,7 @@
 
                 [% IF Koha.Preference('ExportCircHistory') %]
                     <fieldset>
-                        <label for="issues-table-output-format"><b>Export checkouts using format:</b></label>
+                        <label for="issues-table-output-format"><strong>Export checkouts using format:</strong></label>
                         <select name="issues-table-output-format" id="issues-table-output-format">
                             <option value="iso2709_995">MARC with items</option>
                             <option value="iso2709">MARC without items</option>

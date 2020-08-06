@@ -19,7 +19,7 @@
 	[% FOREACH mainloo IN mainloop %]
 		<h1>Acquisitions statistics </h1>
         [% IF ( mainloo.loopfilter.size ) %]
-            <p><b>Filtered on:</b></p>
+            <p><strong>Filtered on:</strong></p>
             [% FOREACH loopfilte IN mainloo.loopfilter %]
                 <p>
                     [% SWITCH loopfilte.crit %]

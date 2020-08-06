@@ -343,7 +343,7 @@ Item types administration
                     <label for="summary">Summary: </label>
                    <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
                     <p>Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </p>
-                    <p><b>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</b> will show the link just below the title</p>
+                    <p><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</p>
                 </li>
             </ol>
         </fieldset>
@@ -426,7 +426,7 @@ Item types administration
                         [% itemtype.description | html %] (default)<br/>
                         [% FOR description IN itemtype.translated_descriptions %]
                             [% IF description.translation == itemtype.translated_description %]
-                            --    <b>[% description.translation | html %]</b>
+                            --    <strong>[% description.translation | html %]</strong>
                             [% ELSE %]
                             --    [% description.translation | html %] ([% description.lang | html %])
                             [% END %]
@@ -440,7 +440,7 @@ Item types administration
                         [% itemtype.description | html %] (default)<br/>
                         [% FOR description IN itemtype.translated_descriptions %]
                             [% IF description.translation == itemtype.translated_description %]
-                                <b>[% description.translation | html %]</b>
+                                <strong>[% description.translation | html %]</strong>
                             [% ELSE %]
                                 [% description.translation | html %] ([% description.lang | html %])
                             [% END %]

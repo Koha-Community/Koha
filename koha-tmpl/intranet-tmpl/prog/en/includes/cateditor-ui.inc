@@ -1156,7 +1156,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
             var errors = [];
             $.each( result.errors, function() {
-                var error = '<b>' + _("Line ") + (this.line + 1) + ':</b> ';
+                var error = '<strong>' + _("Line ") + (this.line + 1) + ':</strong> ';
 
                 switch ( this.error ) {
                     case 'failed': error += _("failed to run"); break;

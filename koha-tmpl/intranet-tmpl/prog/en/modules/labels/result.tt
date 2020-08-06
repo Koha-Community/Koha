@@ -51,7 +51,7 @@
             <div style="border-bottom:1px solid #CCC;padding:1em 0;">
                     <h4>[% result_se.title | html %]</h4>
                             <p>[% IF ( result_se.author ) %]by [% result_se.author | html %][% END %]
-                            [[% result_se.itemtype | html %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode | html %] [% END %][% IF ( result_se.place ) %][% result_se.place | html %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate | html %], [% END %][% IF ( result_se.pages ) %][% result_se.pages | html %][% END %][% IF ( result_se.isbn ) %], <b>ISBN: </b>[% result_se.isbn | html %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes | html %][% END %]</p>
+                            [[% result_se.itemtype | html %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode | html %] [% END %][% IF ( result_se.place ) %][% result_se.place | html %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate | html %], [% END %][% IF ( result_se.pages ) %][% result_se.pages | html %][% END %][% IF ( result_se.isbn ) %], <strong>ISBN: </strong>[% result_se.isbn | html %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes | html %][% END %]</p>
 
                     <table>
                     [% FOREACH item_tabl IN result_se.item_table %]

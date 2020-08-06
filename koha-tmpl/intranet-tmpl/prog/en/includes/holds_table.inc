@@ -121,12 +121,12 @@
                 [% IF ( hold.found ) %]
                     [% IF ( hold.atdestination ) %]
                         [% IF ( hold.found ) %]
-                            Item waiting at <b> [% hold.wbrname | html %]</b> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" /> since [% hold.waiting_date | $KohaDates %]
+                            Item waiting at <strong> [% hold.wbrname | html %]</strong> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" /> since [% hold.waiting_date | $KohaDates %]
                         [% ELSE %]
                             Waiting to be pulled <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
                         [% END %]
                     [% ELSE %]
-                        Item being transferred to <b> [% hold.wbrname | html %]</b> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
+                        Item being transferred to <strong> [% hold.wbrname | html %]</strong> <input type="hidden" name="pickup" value="[% hold.wbrcode | html %]" />
                     [% END %]
                 [% ELSE %]
                     [% IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 %]

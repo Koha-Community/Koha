@@ -45,7 +45,7 @@
 </ul>
 <div id="bibs">
 <p>
-    <b>Note : The items are exported by this tool unless specified.</b>
+    <strong>Note : The items are exported by this tool unless specified.</strong>
 </p>
 
 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
@@ -230,7 +230,7 @@
 [% IF ( allow_db_export ) %]
 <div id="db">
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
-    <p><b>Note : This export file will be very large, and is generated nightly.</b></p>
+    <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
     <fieldset class="rows">
     <legend> Choose a file </legend>
     [% IF ( dbfiles && (dbfiles.size > 0) ) %]
@@ -256,7 +256,7 @@
 [% IF ( allow_conf_export ) %]
 <div id="conf">
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
-    <p><b>Note : This export file will be very large, and is generated nightly.</b></p>
+    <p><strong>Note : This export file will be very large, and is generated nightly.</strong></p>
     <fieldset class="rows">
     <legend> Choose a file </legend>
     [% IF ( conffiles && (conffiles.size > 0) ) %]

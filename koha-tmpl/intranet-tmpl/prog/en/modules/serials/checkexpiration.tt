@@ -50,15 +50,15 @@
 
 [% IF ( subscriptions_loop ) %]
 <p>
-    <b>[% numsubscription | html %]</b> subscription(s)
+    <strong>[% numsubscription | html %]</strong> subscription(s)
         [% IF ( title ) %]
         with title matching <span class="title">[% title | html %]</class>
         [% IF ( issn ) %]and [% END %]
     [% END %]
     [% IF ( issn ) %]
-        with ISSN matching <b>[% issn | html %]</b>
+        with ISSN matching <strong>[% issn | html %]</strong>
     [% END %]
-        will expire before <b>[% date | $KohaDates %]</b>
+        will expire before <strong>[% date | $KohaDates %]</strong>
 </p>
 
 <div class="checkexpiration-table_table_controls">

@@ -57,15 +57,15 @@
                                 <td>
                                     [% IF ( filename.filerrors ) %]
                                     [% FOREACH filerror IN filename.filerrors %]
-                                        [% IF ( filerror.DBERR ) %]<b>ERROR:</b> Image not imported because the database returned an error. Please refer to the error log for more details.
-                                        [% ELSIF ( filerror.IMGEXISTS ) %]<b>ERROR:</b> Image not imported because this patron does not exist in the database.
-                                        [% ELSIF ( filerror.MIMERR ) %]<b>ERROR:</b> Image not imported because the image format is unrecognized.
-                                        [% ELSIF ( filerror.CORERR ) %]<b>ERROR:</b> Image not imported because the image file is corrupted.
-                                        [% ELSIF ( filerror.OPNERR ) %]<b>ERROR:</b> Image not imported because Koha was unable to open the image for reading.
-                                        [% ELSIF ( filerror.OVRSIZ ) %]<b>ERROR:</b> Image not imported because the image file is too big (see online help for maximum size).
-                                        [% ELSIF ( filerror.CRDFIL ) %]<b>ERROR:</b> Image not imported ([% filerror.CRDFIL | html %] missing).
-                                        [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]<b>ERROR:</b> Image not imported because this patron does not exist in the database.
-                                        [% ELSE %]<b>ERROR:</b> Image not imported because of an unknown error. Please refer to the error log for more details.
+                                        [% IF ( filerror.DBERR ) %]<strong>ERROR:</strong> Image not imported because the database returned an error. Please refer to the error log for more details.
+                                        [% ELSIF ( filerror.IMGEXISTS ) %]<strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
+                                        [% ELSIF ( filerror.MIMERR ) %]<strong>ERROR:</strong> Image not imported because the image format is unrecognized.
+                                        [% ELSIF ( filerror.CORERR ) %]<strong>ERROR:</strong> Image not imported because the image file is corrupted.
+                                        [% ELSIF ( filerror.OPNERR ) %]<strong>ERROR:</strong> Image not imported because Koha was unable to open the image for reading.
+                                        [% ELSIF ( filerror.OVRSIZ ) %]<strong>ERROR:</strong> Image not imported because the image file is too big (see online help for maximum size).
+                                        [% ELSIF ( filerror.CRDFIL ) %]<strong>ERROR:</strong> Image not imported ([% filerror.CRDFIL | html %] missing).
+                                        [% ELSIF ( filerror.CARDNUMBER_DOES_NOT_EXIST ) %]<strong>ERROR:</strong> Image not imported because this patron does not exist in the database.
+                                        [% ELSE %]<strong>ERROR:</strong> Image not imported because of an unknown error. Please refer to the error log for more details.
                                         [% END %]
                                     [% END %]
                                 [% ELSE %] imported successfully.
@@ -88,20 +88,20 @@
                 [% IF ( ERRORS ) %]
                 <div class="dialog alert">
                     [% FOREACH ERROR IN ERRORS %]
-                        [% IF ( ERROR.NOTZIP ) %]<li><b>The upload file does not appear to be a zip file.  The extension is not '.zip'.</b></li>
-                        [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
-                        [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><b>The upload file appears to be empty.</b></li>
-                        [% ELSIF ( ERROR.OPNLINK ) %]<li><b>Cannot open [% ERROR.OPNLINK | html %] to read.<br />Please verify that it exists.</b></li>
-                        [% ELSIF ( ERROR.OPNIMG ) %]<li><b>Cannot open [% ERROR.OPNIMG | html %] to read.<br />Please verify that it exists.</b></li>
-                        [% ELSIF ( ERROR.DELERR ) %]<li><b>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</b></li>
-                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><b>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</b></li>
-                        [% ELSE %]<li><b>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</b></li>[% END %]
+                        [% IF ( ERROR.NOTZIP ) %]<li><strong>The upload file does not appear to be a zip file.  The extension is not '.zip'.</strong></li>
+                        [% ELSIF ( ERROR.NOWRITETEMP ) %]<li><strong>This script is not able to create/write to the necessary temporary directory.</strong></li>
+                        [% ELSIF ( ERROR.EMPTYUPLOAD ) %]<li><strong>The upload file appears to be empty.</strong></li>
+                        [% ELSIF ( ERROR.OPNLINK ) %]<li><strong>Cannot open [% ERROR.OPNLINK | html %] to read.<br />Please verify that it exists.</strong></li>
+                        [% ELSIF ( ERROR.OPNIMG ) %]<li><strong>Cannot open [% ERROR.OPNIMG | html %] to read.<br />Please verify that it exists.</strong></li>
+                        [% ELSIF ( ERROR.DELERR ) %]<li><strong>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</strong></li>
+                        [% ELSIF ( ERROR.UZIPFAIL ) %]<li><strong>[% ERROR.UZIPFAIL | html %] failed to unpack.<br />Please verify the integrity of the ZIP file and retry.</strong></li>
+                        [% ELSE %]<li><strong>[% ERROR.CORERR | html %] An unknown error has occurred.<br />Please review the error log for more details.</strong></li>[% END %]
                     [% END %]
                 </div>
                 [% END %]
             <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data" id="upload_form">
                 <fieldset class="rows">
-                    <p><b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported.</p>
+                    <p><strong>NOTE:</strong> Only PNG, GIF, JPEG, XPM formats are supported.</p>
                         <ol class="radio">
                             <li>
                                 <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> Zip file</label></li>

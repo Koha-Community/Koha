@@ -192,16 +192,16 @@
                         <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
                         [% END %]
                         [% IF ( loop_order.left_item ) %]
-                        <b title="Can't delete catalog record, because of [% loop_order.items | html %] existing item(s)" >[% loop_order.items | html %] item(s) left</b><br>
+                        <strong title="Can't delete catalog record, because of [% loop_order.items | html %] existing item(s)" >[% loop_order.items | html %] item(s) left</strong><br>
                         [% END %]
                         [% IF ( loop_order.left_biblio ) %]
-                        <b title="Can't delete catalog record, delete other orders linked to it first">[% loop_order.biblios | html %] order(s) left</b><br>
+                        <strong title="Can't delete catalog record, delete other orders linked to it first">[% loop_order.biblios | html %] order(s) left</strong><br>
                         [% END %]
                         [% IF ( loop_order.left_subscription ) %]
-                        <b title="Can't delete catalog record, delete subscriptions first">[% loop_order.subscriptions | html %] subscription(s) left</b><br>
+                        <strong title="Can't delete catalog record, delete subscriptions first">[% loop_order.subscriptions | html %] subscription(s) left</strong><br>
                         [% END %]
                         [% IF ( loop_order.left_holds ) %]
-                        <b title="Can't delete catalog record or order, cancel holds first">[% loop_order.holds | html %] hold(s) left</b>
+                        <strong title="Can't delete catalog record or order, cancel holds first">[% loop_order.holds | html %] hold(s) left</strong>
                         [% END %]
                     </td>
                 </tr>

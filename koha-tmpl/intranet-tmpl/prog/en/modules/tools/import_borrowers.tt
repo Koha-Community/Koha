@@ -285,7 +285,7 @@
     <ul>
         <li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
 
-        <li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
+        <li><strong>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</strong>  Values are comma-separated.</li>
 
         <li>
             OR choose which fields you want to supply from the following list:
@@ -298,12 +298,12 @@
 
         [% IF ( Koha.Preference('ExtendedPatronAttributes') ) %]
             <li>
-                If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <b>INSTID:12345,LANG:fr</b> or <b>STARTDATE:January 1 2010,TRACK:Day</b>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <b>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</b>.  The second syntax would be required if the data might have a comma in it, like a date string.
+                If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <strong>INSTID:12345,LANG:fr</strong> or <strong>STARTDATE:January 1 2010,TRACK:Day</strong>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <strong>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</strong>.  The second syntax would be required if the data might have a comma in it, like a date string.
             </li>
         [% END %]
 
         <li>
-            <strong>Required fields:</strong> The fields 'surname', 'branchcode', and 'categorycode' are <em>required</em> and 'branchcode' and 'categorycode' <b>must match</b> valid entries in your database.
+            <strong>Required fields:</strong> The fields 'surname', 'branchcode', and 'categorycode' are <em>required</em> and 'branchcode' and 'categorycode' <strong>must match</strong> valid entries in your database.
         </li>
 
         <li>
@@ -311,7 +311,7 @@
         </li>
 
         <li>
-            Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.  Alternatively,
+            Date formats should match your system preference, and <strong>must</strong> be zero-padded, e.g. '01/02/2008'.  Alternatively,
 you can supply dates in ISO format (e.g., '2010-10-28').
         </li>
     </ul>

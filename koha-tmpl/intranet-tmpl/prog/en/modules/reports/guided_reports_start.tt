@@ -394,7 +394,7 @@
                 [% IF ( build1 ) %]
                     [% IF ( cache_error) %]
                         <div class="dialog alert">
-                            <b> Please choose a cache_expiry less than 30 days </b>
+                            <strong> Please choose a cache_expiry less than 30 days </strong>
                         </div>
                     [% END %]
 
@@ -1207,10 +1207,10 @@
                 [% IF ( errors ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
                         <div class="dialog alert">
-                            <b>The following error was encountered:</b><br />
+                            <strong>The following error was encountered:</strong><br />
                             [% FOREACH error IN errors %]
                                 [% IF ( error.sqlerr ) %]
-                                    This report contains the SQL keyword <b>[% error.sqlerr | html %]</b>.<br />
+                                    This report contains the SQL keyword <strong>[% error.sqlerr | html %]</strong>.<br />
                                     Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.<br />
                                     Please return to the &quot;Saved Reports&quot; screen and delete this report or retry creating a new one.
                                 [% ELSIF ( error.queryerr ) %]

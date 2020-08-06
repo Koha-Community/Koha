@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 <p>
-[% log.timestamp | $KohaDates with_hours => 1 %] : <b>Status changed</b>
+[% log.timestamp | $KohaDates with_hours => 1 %] : <strong>Status changed</strong>
 [% IF log.info.status_before %]
 [% before = log.info.status_before %]
 [% display_before = log.aliases.$before ? log.aliases.$before.lib : request.capabilities.$before.name %]

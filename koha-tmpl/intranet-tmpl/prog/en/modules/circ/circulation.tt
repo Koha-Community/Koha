@@ -69,7 +69,7 @@
                     [% END %]
 
                     [% IF alert.HIGHHOLDS %]
-                        <div class="dialog message">High demand item. <b>Loan period was not shortened due to override.</b> Shortened due date would have been [% alert.HIGHHOLDS.returndate | $KohaDates %] ([% alert.HIGHHOLDS.duration  | html %] days).</div>
+                        <div class="dialog message">High demand item. <strong>Loan period was not shortened due to override.</strong> Shortened due date would have been [% alert.HIGHHOLDS.returndate | $KohaDates %] ([% alert.HIGHHOLDS.duration  | html %] days).</div>
                     [% END %]
 
                     [% IF alert.RETURNED_FROM_ANOTHER %]
@@ -185,7 +185,7 @@
                                 [% END %]
 
                                 [% IF PREVISSUE %]
-                                    <li>Patron has previously checked out this title: <b>[% biblio.title | html %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</b>. Check out anyway?</li>
+                                    <li>Patron has previously checked out this title: <strong>[% biblio.title | html %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</strong>. Check out anyway?</li>
                                 [% END %]
 
                                 [% IF BIBLIO_ALREADY_ISSUED %]

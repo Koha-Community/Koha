@@ -27,12 +27,12 @@
     <li>[% total | html %] images found</li>
     [% IF ( error ) %]
     <div class="dialog alert">
-    [% IF ( error == 'UZIPFAIL' ) %]<p><b>Failed to unzip archive.<br />Please ensure you are uploading a valid zip file and try again.</b></p>
-    [% ELSIF ( error == 'OPNLINK' ) %]<p><b>Cannot open folder index (idlink.txt or datalink.txt) to read.<br />Please verify that it exists.</b></p>
-    [% ELSIF ( error == 'OPNIMG' ) %]<p><b>Cannot process file as an image.<br />Please ensure you only upload GIF, JPEG, PNG, or XPM images.</b></p>
-    [% ELSIF ( error == 'DELERR' ) %]<p><b>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</b></p>
-    [% ELSIF ( error == 'DBERR' ) %]<p><b>Unable to save image to database.</b></p>
-    [% ELSE %]<p><b>An unknown error has occurred.<br />Please review the error log for more details.</b></p>[% END %]
+    [% IF ( error == 'UZIPFAIL' ) %]<p><strong>Failed to unzip archive.<br />Please ensure you are uploading a valid zip file and try again.</strong></p>
+    [% ELSIF ( error == 'OPNLINK' ) %]<p><strong>Cannot open folder index (idlink.txt or datalink.txt) to read.<br />Please verify that it exists.</strong></p>
+    [% ELSIF ( error == 'OPNIMG' ) %]<p><strong>Cannot process file as an image.<br />Please ensure you only upload GIF, JPEG, PNG, or XPM images.</strong></p>
+    [% ELSIF ( error == 'DELERR' ) %]<p><strong>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</strong></p>
+    [% ELSIF ( error == 'DBERR' ) %]<p><strong>Unable to save image to database.</strong></p>
+    [% ELSE %]<p><strong>An unknown error has occurred.<br />Please review the error log for more details.</strong></p>[% END %]
     </div>
     </li>
     [% END %]

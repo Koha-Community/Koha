@@ -100,9 +100,9 @@
                         [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | html %] -->
                             <a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% reserveloo.ratiocalc | html %] to order</a>
                         [% ELSE %]
-                            <b>[% reserveloo.ratiocalc | html %] to order</b>
+                            <strong>[% reserveloo.ratiocalc | html %] to order</strong>
                         [% END %]
-                        [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders | html %] pending</b>[% END %]
+                        [% IF ( reserveloo.pendingorders ) %]<br><strong>[% reserveloo.pendingorders | html %] pending</strong>[% END %]
                     [% ELSE %]
                         0 to order
                     [% END %]
@@ -113,7 +113,7 @@
       </tbody>
     </table>
     [% ELSE %]
-        <b>No items found.</b>
+        <strong>No items found.</strong>
     [% END %]
 
             </main>

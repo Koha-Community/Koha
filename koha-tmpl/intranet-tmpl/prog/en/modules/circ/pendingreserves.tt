@@ -70,7 +70,7 @@
         [% FOREACH reserveloo IN reserveloop %]
         <tr>
         [% IF ( reserveloo.borrowernumber ) %]
-            <td><p><b>[% reserveloo.pullcount | html %]</b></p></td>
+            <td><p><strong>[% reserveloo.pullcount | html %]</strong></p></td>
             <td>[% reserveloo.count | html %]</td>
             <td>[% reserveloo.rcount | html %]</td>
             <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber | uri %]">[% reserveloo.firstname | html %] [% reserveloo.surname | html %]</a></td>
@@ -211,7 +211,7 @@
     </tfoot>
     </table>
     [% ELSE %]
-        <b>No items found.</b>
+        <strong>No items found.</strong>
     [% END %]
 </div>
 
