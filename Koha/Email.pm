@@ -1,4 +1,7 @@
+package Koha::Email;
+
 # Copyright 2014 Catalyst
+#           2020 Theke Solutions
 #
 # This file is part of Koha.
 #
@@ -15,64 +18,122 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-package Koha::Email;
-
 use Modern::Perl;
+
 use Email::Valid;
 use Email::MessageID;
+use Koha::Exceptions;
 
-use base qw(Class::Accessor);
 use C4::Context;
 
-__PACKAGE__->mk_accessors(qw( ));
+use base qw( Email::Stuffer );
 
 =head1 NAME
 
-Koha::Email
+Koha::Email - A wrapper around Email::Stuffer
 
-=head1 SYNOPSIS
+=head1 API
 
-  use Koha::Email;
-  my $email = Koha::Email->new();
-  my %mail = $email->create_message_headers({ to => $to_address, from => $from_address,
-                                             replyto => $replyto });
+=head2 Class methods
 
-=head1 FUNCTIONS
+=head3 create
+
+    my $email = Koha::Email->create(
+        {
+          [ text_body   => $text_message,
+            html_body   => $html_message,
+            body_params => $body_params ]
+            from        => $from,
+            to          => $to,
+            cc          => $cc,
+            bcc         => $bcc,
+            reply_to    => $reply_to,
+            sender      => $sender,
+            subject     => $subject,
+        }
+    );
+
+This method creates a new Email::Stuffer object taking Koha specific configurations
+into account.
+
+The encoding defaults to utf-8. It can be set as part of the body_params hashref. See
+I<Email::Stuffer> and I<Email::MIME> for more details on the available options.
+
+Parameters:
+ - I<from> defaults to the value of the I<KohaAdminEmailAddress> system preference
+ - The I<SendAllEmailsTo> system preference overloads the I<to>, I<cc> and I<bcc> parameters
+ - I<reply_to> defaults to the value of the I<ReplytoDefault> system preference
+ - I<sender> defaults to the value of the I<ReturnpathDefault> system preference
+
+Both I<text_body> and I<html_body> can be set later. I<body_params> will be passed if present
+to the constructor.
 
 =cut
 
-sub create_message_headers {
-    my $self   = shift;
-    my $params = shift;
-    $params->{from} ||= C4::Context->preference('KohaAdminEmailAddress');
-    $params->{charset} ||= 'utf8';
-    my %mail = (
-        To      => $params->{to},
-        From    => $params->{from},
-        charset => $params->{charset}
-    );
+sub create {
+    my ( $self, $params ) = @_;
 
-    if (C4::Context->preference('SendAllEmailsTo') && Email::Valid->address(C4::Context->preference('SendAllEmailsTo'))) {
-        $mail{'To'} = C4::Context->preference('SendAllEmailsTo');
+    my $args = {};
+    $args->{from} = $params->{from} || C4::Context->preference('KohaAdminEmailAddress');
+    Koha::Exceptions::BadParameter->throw("Invalid 'from' parameter: ".$args->{from})
+        unless Email::Valid->address($args->{from}); # from is mandatory
+
+    $args->{subject} = $params->{subject} // '';
+
+    if ( C4::Context->preference('SendAllEmailsTo') ) {
+        $args->{to} = C4::Context->preference('SendAllEmailsTo');
     }
     else {
-        $mail{'Cc'}  = $params->{cc}  if exists $params->{cc};
-        $mail{'Bcc'} = $params->{bcc} if exists $params->{bcc};
+        $args->{to} = $params->{to};
     }
 
-    if ( C4::Context->preference('ReplytoDefault') ) {
-        $params->{replyto} ||= C4::Context->preference('ReplytoDefault');
+    Koha::Exceptions::BadParameter->throw("Invalid 'to' parameter: ".$args->{to})
+        unless Email::Valid->address($args->{to}); # to is mandatory
+
+    my $addresses = {};
+    $addresses->{reply_to} = $params->{reply_to};
+    $addresses->{reply_to} ||= C4::Context->preference('ReplytoDefault')
+        if C4::Context->preference('ReplytoDefault');
+
+    $addresses->{sender} = $params->{sender};
+    $addresses->{sender} ||= C4::Context->preference('ReturnpathDefault')
+        if C4::Context->preference('ReturnpathDefault');
+
+    unless ( C4::Context->preference('SendAllEmailsTo') ) {
+        $addresses->{cc} = $params->{cc}
+            if exists $params->{cc};
+        $addresses->{bcc} = $params->{bcc}
+            if exists $params->{bcc};
     }
-    if ( C4::Context->preference('ReturnpathDefault') ) {
-        $params->{sender} ||= C4::Context->preference('ReturnpathDefault');
+
+    foreach my $address ( keys %{ $addresses } ) {
+        Koha::Exceptions::BadParameter->throw("Invalid '$address' parameter: ".$addresses->{$address})
+            if $addresses->{$address} and !Email::Valid->address($addresses->{$address});
     }
-    $mail{'Reply-to'}     = $params->{replyto}     if $params->{replyto};
-    $mail{'Sender'}       = $params->{sender}      if $params->{sender};
-    $mail{'Message'}      = $params->{message}     if $params->{message};
-    $mail{'Subject'}      = $params->{subject}     if $params->{subject};
-    $mail{'Content-Type'} = $params->{contenttype} if $params->{contenttype};
-    $mail{'X-Mailer'}     = "Koha";
-    $mail{'Message-ID'}   = Email::MessageID->new->in_brackets;
-    return %mail;
+
+    $args->{cc} = $addresses->{cc}
+        if $addresses->{cc};
+    $args->{bcc} = $addresses->{bcc}
+        if $addresses->{bcc};
+
+    my $email = $self->SUPER::new( $args );
+
+    $email->header( 'ReplyTo', $addresses->{reply_to} )
+        if $addresses->{reply_to};
+
+    $email->header( 'Sender'       => $addresses->{sender} ) if $addresses->{sender};
+    $email->header( 'Content-Type' => $params->{contenttype} ) if $params->{contenttype};
+    $email->header( 'X-Mailer'     => "Koha" );
+    $email->header( 'Message-ID'   => Email::MessageID->new->in_brackets );
+
+    if ( $params->{text_body} ) {
+        $email->text_body( $params->{text_body}, %{ $params->{body_params} } );
+    }
+    elsif ( $params->{html_body} ) {
+        $email->html_body( $params->{html_body}, %{ $params->{body_params} } );
+    }
+
+    return $email;
 }
+
 1;
