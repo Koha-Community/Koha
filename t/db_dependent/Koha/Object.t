@@ -620,8 +620,8 @@ subtest 'store() tests' => sub {
 
     my $dbh = $schema->storage->dbh;
     {
-        local $dbh->{PrintError} = 0;
-        local $dbh->{RaiseError} = 0;
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
         throws_ok
             { $api_key->store }
             'Koha::Exceptions::Object::FKConstraint',
@@ -662,6 +662,7 @@ subtest 'store() tests' => sub {
            qr/(api_keys\.)?secret/,
            'Exception field is correct (note that MySQL 8 is displaying the tablename)'
         );
+        close STDERR;
     }
 
     # Successful test
@@ -714,10 +715,12 @@ subtest 'store() tests' => sub {
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
+
         try {
-            local $schema->storage->dbh->{RaiseError} = 0;
-            local $schema->storage->dbh->{PrintError} = 0;
+            local *STDERR;
+            open STDERR, '>', '/dev/null';
             $patron->lastseen('wrong_value')->store;
+            close STDERR;
         } catch {
             ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
             like( $_->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' ); # The table name is not always displayed, it depends on the DBMS version

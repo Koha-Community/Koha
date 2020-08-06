@@ -125,9 +125,16 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related branch is deleted" );
 
     # managerid
-    throws_ok { $suggestion->managedby($nonexistent_borrowernumber)->store; }
-    'Koha::Exceptions::Object::FKConstraint',
-      'store raises an exception on invalid managerid';
+    {   # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok {
+            $suggestion->managedby($nonexistent_borrowernumber)->store;
+        }
+        'Koha::Exceptions::Object::FKConstraint',
+          'store raises an exception on invalid managerid';
+        close STDERR;
+    }
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->managedby( $manager->borrowernumber )->store;
     $manager->delete;
@@ -136,9 +143,16 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related manager is deleted" );
 
     # acceptedby
-    throws_ok { $suggestion->acceptedby($nonexistent_borrowernumber)->store; }
-    'Koha::Exceptions::Object::FKConstraint',
-      'store raises an exception on invalid acceptedby id';
+    {    # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok {
+            $suggestion->acceptedby($nonexistent_borrowernumber)->store;
+        }
+        'Koha::Exceptions::Object::FKConstraint',
+          'store raises an exception on invalid acceptedby id';
+        close STDERR;
+    }
     my $acceptor = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->acceptedby( $acceptor->borrowernumber )->store;
     $acceptor->delete;
@@ -147,9 +161,16 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related acceptor is deleted" );
 
     # rejectedby
-    throws_ok { $suggestion->rejectedby($nonexistent_borrowernumber)->store; }
-    'Koha::Exceptions::Object::FKConstraint',
-      'store raises an exception on invalid rejectedby id';
+    {    # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok {
+            $suggestion->rejectedby($nonexistent_borrowernumber)->store;
+        }
+        'Koha::Exceptions::Object::FKConstraint',
+          'store raises an exception on invalid rejectedby id';
+        close STDERR;
+    }
     my $rejecter = $builder->build_object( { class => "Koha::Patrons" } );
     $suggestion->rejectedby( $rejecter->borrowernumber )->store;
     $rejecter->delete;
@@ -158,9 +179,15 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related rejecter is deleted" );
 
     # budgetid
-    throws_ok { $suggestion->budgetid($nonexistent_borrowernumber)->store; }
-    'Koha::Exceptions::Object::FKConstraint',
-      'store raises an exception on invalid budgetid';
+    {    # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+
+        throws_ok { $suggestion->budgetid($nonexistent_borrowernumber)->store; }
+        'Koha::Exceptions::Object::FKConstraint',
+          'store raises an exception on invalid budgetid';
+        close STDERR;
+    }
     my $fund = $builder->build_object( { class => "Koha::Acquisition::Funds" } );
     $suggestion->budgetid( $fund->id )->store;
     $fund->delete;

@@ -1738,10 +1738,14 @@ subtest '->store' => sub {
     my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
     my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
 
-    throws_ok
-        { $patron_2->userid($patron_1->userid)->store; }
+    {
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok { $patron_2->userid( $patron_1->userid )->store; }
         'Koha::Exceptions::Object::DuplicateID',
-        'Koha::Patron->store raises an exception on duplicate ID';
+          'Koha::Patron->store raises an exception on duplicate ID';
+        close STDERR;
+    }
 
     # Test password
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );

@@ -340,17 +340,23 @@ subtest 'add_debit() tests' => sub {
     ); } 'Koha::Exceptions::Account::AmountNotPositive', 'Expected validation exception thrown (amount)';
 
     throws_ok {
-    $account->add_debit(
-        {
-            amount      => 5,
-            description => 'type validation failure',
-            library_id  => $patron->branchcode,
-            note        => 'this should fail anyway',
-            type        => 'failure',
-            user_id     => $patron->id,
-            interface   => 'commandline'
-        }
-    ); } 'Koha::Exceptions::Account::UnrecognisedType', 'Expected validation exception thrown (type)';
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        $account->add_debit(
+            {
+                amount      => 5,
+                description => 'type validation failure',
+                library_id  => $patron->branchcode,
+                note        => 'this should fail anyway',
+                type        => 'failure',
+                user_id     => $patron->id,
+                interface   => 'commandline'
+            }
+        );
+        close STDERR;
+    }
+    'Koha::Exceptions::Account::UnrecognisedType',
+      'Expected validation exception thrown (type)';
 
     throws_ok {
     $account->add_debit(
