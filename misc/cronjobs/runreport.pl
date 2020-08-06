@@ -318,12 +318,12 @@ foreach my $report_id (@ARGV) {
             $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
             $args->{contenttype} = 'text/html';
         }
-        my $email = Koha::Email->new();
-        my %mail  = $email->create_message_headers($args);
-        $mail{Data} = $message;
-        $mail{Auth} = { user => $username, pass => $password, method => $method } if $username;
+        my $email = Koha::Email->create( $args );
+        my %headers = $email->header_pairs;
+        $headers{Data} = $message;
+        $headers{Auth} = { user => $username, pass => $password, method => $method } if $username;
 
-        my $msg = MIME::Lite->new(%mail);
+        my $msg = MIME::Lite->new(%headers);
 
         $msg->attach(
             Type        => "text/$format",

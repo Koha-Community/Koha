@@ -22,10 +22,8 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Encode qw( encode );
 use Carp;
+use Try::Tiny;
 
-use Mail::Sendmail;
-use MIME::QuotedPrint;
-use MIME::Base64;
 use C4::Auth;
 use C4::Biblio;
 use C4::Items;
@@ -44,19 +42,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $shelfid = $query->param('shelfid');
-my $email   = $query->param('email');
+my $shelfid    = $query->param('shelfid');
+my $to_address = $query->param('email');
 
 my $dbh = C4::Context->dbh;
 
-if ($email) {
+if ($to_address) {
     my $comment = $query->param('comment');
-    my $message = Koha::Email->new();
-    my %mail    = $message->create_message_headers(
-        {
-            to => $email
-        }
-    );
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
         {
@@ -106,68 +98,58 @@ if ($email) {
     my $template_res = $template2->output();
     my $body;
 
+    my $subject;
     # Analysing information and getting mail properties
-    if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
-        $mail{subject} = $1;
-        $mail{subject} =~ s|\n?(.*)\n?|$1|;
+    if ( $template_res =~ /<SUBJECT>(?<subject>.*)<END_SUBJECT>/s ) {
+        $subject = $+{subject};
+        $subject =~ s|\n?(.*)\n?|$1|;
     }
-    else { $mail{'subject'} = "no subject"; }
-    $mail{subject} = encode( 'MIME-Header', $mail{subject} );
+    else {
+        $subject = "no subject";
+    }
+
+    my $email = Koha::Email->create(
+        {
+            to      => $to_address,
+            subject => $subject,
+        }
+    );
 
     my $email_header = "";
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
-        $email_header = encode_qp(Encode::encode("UTF-8", $email_header));
-    }
-
-    my $email_file = "list.txt";
-    if ( $template_res =~ /<FILENAME>(.*)<END_FILENAME>/s ) {
-        $email_file = $1;
-        $email_file =~ s|\n?(.*)\n?|$1|;
+        $email_header = Encode::encode("UTF-8", $email_header);
     }
 
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = encode_qp(Encode::encode("UTF-8", $body));
+        $body = Encode::encode("UTF-8", $body);
     }
 
-    my $boundary = "====" . time() . "====";
-
-    # We set and put the multipart content
-    $mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
-
-    my $isofile = encode_base64( encode( "UTF-8", $iso2709 ) );
-    $boundary = '--' . $boundary;
-
-    $mail{body} = <<END_OF_BODY;
-$boundary
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
+    my $THE_body = <<END_OF_BODY;
 $email_header
 $body
-$boundary
-Content-Type: application/octet-stream; name="shelf.iso2709"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="shelf.iso2709"
-
-$isofile
-$boundary--
 END_OF_BODY
 
-    # Sending mail
-    if ( sendmail %mail ) {
+    $email->text_body( $THE_body );
+    $email->attach(
+        $iso2709,
+        content_type => 'application/octet-stream',
+        name         => 'shelf.iso2709',
+        disposition  => 'attachment',
+    );
 
-        # do something if it works....
+    try {
+        my $library = Koha::Patrons->find( $borrowernumber )->library;
+        $email->send_or_die({ transport => $library->smtp_server->transport });
         $template->param( SENT => "1" );
     }
-    else {
-        # do something if it doesn't work....
-        carp "Error sending mail: $Mail::Sendmail::error \n";
+    catch {
+        carp "Error sending mail: $_";
         $template->param( error => 1 );
-    }
+    };
 
     $template->param( email => $email );
     output_html_with_http_headers $query, $cookie, $template->output;
