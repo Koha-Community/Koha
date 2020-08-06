@@ -27,28 +27,9 @@ use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 
-# A mock response from C4::Log::GetLogs()
-my $logs = [
-    {
-        info      => '{"log_origin": "core"}',
-        action    => 'STATUS_CHANGE',
-        timestamp => '2018-10-02 11:12:22'
-    },
-    {
-        info      => '{"log_origin": "core"}',
-        action    => 'STATUS_CHANGE',
-        timestamp => '2018-10-02 11:12:12'
-    },
-    {
-        info      => '{"log_origin": "core"}',
-        action    => 'STATUS_CHANGE',
-        timestamp => '2018-10-02 11:12:32'
-    }
-];
 # Mock the modules we use
 my $c4_log = Test::MockModule->new('C4::Log');
 $c4_log->mock('logaction', sub { 1 });
-$c4_log->mock('GetLogs', sub { return $logs; });
 my $c4_tpl = Test::MockModule->new('C4::Templates');
 $c4_tpl->mock('_get_template_file',
     sub { return ('htdocs', 'theme', 'lang', 'base/'); });

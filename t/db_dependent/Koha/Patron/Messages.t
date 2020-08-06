@@ -22,7 +22,7 @@ use Modern::Perl;
 use Test::More tests => 12;
 
 use C4::Context;
-use C4::Log;
+use Koha::ActionLogs;
 use Koha::Patron::Message;
 use Koha::Patron::Messages;
 use Koha::Patrons;
@@ -102,6 +102,6 @@ is( get_nb_of_logactions(), $nb_of_logaction + 3, 'With BorrowersLog on, 1 new l
 $schema->storage->txn_rollback;
 
 sub get_nb_of_logactions {
-    return scalar( @{ C4::Log::GetLogs( undef, undef, undef, ['MEMBERS'] ) } );
+    return Koha::ActionLogs->search({ module => 'MEMBERS' })->count;
 }
 

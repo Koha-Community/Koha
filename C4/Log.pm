@@ -35,7 +35,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
         require Exporter;
         @ISA = qw(Exporter);
-        @EXPORT = qw(&logaction &cronlogaction &GetLogs);
+        @EXPORT = qw(&logaction &cronlogaction);
 }
 
 =head1 NAME
@@ -118,81 +118,6 @@ sub cronlogaction {
     my $loginfo = (caller(0))[1];
     $loginfo .= ' ' . $infos if $infos;
     logaction( 'CRONJOBS', 'Run', undef, $loginfo ) if C4::Context->preference('CronjobLog');
-}
-
-=item GetLogs
-
-$logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info,$interfaces);
-
-Return:
-C<$logs> is a ref to a hash which contains all columns from action_logs
-
-=cut
-
-sub GetLogs {
-    my $datefrom = shift;
-    my $dateto   = shift;
-    my $user     = shift;
-    my $modules  = shift;
-    my $action   = shift;
-    my $object   = shift;
-    my $info     = shift;
-    my $interfaces = shift;
-
-    my $iso_datefrom = $datefrom ? output_pref({ dt => dt_from_string( $datefrom ), dateformat => 'iso', dateonly => 1 }) : undef;
-    my $iso_dateto = $dateto ? output_pref({ dt => dt_from_string( $dateto ), dateformat => 'iso', dateonly => 1 }) : undef;
-
-    $user ||= q{};
-
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT *
-        FROM   action_logs
-        WHERE 1
-    ";
-
-    my @parameters;
-    $query .=
-      " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"" . $iso_datefrom . "\" "
-      if $iso_datefrom;    #fix me - mysql specific
-    $query .=
-      " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"" . $iso_dateto . "\" "
-      if $iso_dateto;
-    if ( $user ne q{} ) {
-        $query .= " AND user = ? ";
-        push( @parameters, $user );
-    }
-    if ( $modules && scalar(@$modules) ) {
-        $query .=
-          " AND module IN (" . join( ",", map { "?" } @$modules ) . ") ";
-        push( @parameters, @$modules );
-    }
-    if ( $action && scalar(@$action) ) {
-        $query .= " AND action IN (" . join( ",", map { "?" } @$action ) . ") ";
-        push( @parameters, @$action );
-    }
-    if ($object) {
-        $query .= " AND object = ? ";
-        push( @parameters, $object );
-    }
-    if ($info) {
-        $query .= " AND info LIKE ? ";
-        push( @parameters, "%" . $info . "%" );
-    }
-    if ( $interfaces && scalar(@$interfaces) ) {
-        $query .=
-          " AND interface IN (" . join( ",", map { "?" } @$interfaces ) . ") ";
-        push( @parameters, @$interfaces );
-    }
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@parameters);
-
-    my @logs;
-    while ( my $row = $sth->fetchrow_hashref ) {
-        push @logs, $row;
-    }
-    return \@logs;
 }
 
 1;
