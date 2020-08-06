@@ -167,20 +167,28 @@
                 <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off" >
 
                     <fieldset>
-                        <legend>Renew</legend>
+                        <h2>Renew</h2>
+
+                        <div>
+                            <label for="barcode" class="hint">Enter item barcode: </label>
+                        </div>
+
+                        <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
+
+                        <button type="submit" class="btn btn-default">Submit</button>
 
                         [% IF Koha.Preference('SpecifyDueDate') %]
-                            <label for="hard_due_date">Hard due date [% INCLUDE 'date-format.inc' %]:</label>
-                            <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | $KohaDates with_hours => 1 %]" />
-                            <br/>
+                            <div class="circ-settings show">
+                                <div class="date-select" id="renew_date_override_fields">
+                                    <div><label for="hard_due_date" class="hint">Specify due date [% INCLUDE 'date-format.inc' %]:</label></div>
+                                    <input type="text" size="20" id="hard_due_date" name="hard_due_date" value="[% hard_due_date | $KohaDates with_hours => 1 %]" />
+                                    <button type="button" class="action btn btn-default btn-xs" id="cleardate" name="cleardate">Clear</button>
+                                </div> <!-- /.date-select -->
+                            </div>
                         [% END %]
 
-                        <label for="barcode">Enter item barcode: </label>
-
-                        <input name="barcode" id="barcode" size="14" class="focus" type="text" />
-
-                        <input type="submit" class="submit" value="Submit" />
                     </fieldset>
+
 
                 </form>
             [% END %]
@@ -232,6 +240,11 @@
                     minute: 59
                 }).on("change", function(e, value) {
                     if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+                });
+                $("#cleardate").on("click",function(e){
+                    e.preventDefault();
+                    this.form.hard_due_date.value = '';
+                    this.form.barcode.focus();
                 });
             [% END %]
 
