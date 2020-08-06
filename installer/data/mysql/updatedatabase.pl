@@ -22362,6 +22362,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25709, "Rename systempreference to NotesToHide");
 }
 
+$DBversion = '20.05.02.009';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('NewsToolEditor','tinymce', 'Choose tool for editing News','tinymce|codemirror','Choice')" );
+
+    NewVersion( $DBversion, 22660, "Adds NewsToolEditor system preference");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
