@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE Branches %]
 <div id="navmenu">
     <div id="navmenulist">
@@ -15,7 +16,11 @@
                 <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
             [% END %]
             [% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependentBranches ) %][% ELSE %]
+                [% IF Koha.Preference('UseCirculationDesks') %]
+                <li><a href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a></li>
+                [% ELSE %]
                 <li><a href="/cgi-bin/koha/circ/set-library.pl">Set library</a></li>
+                [% END %]
             [% END %][% END %]
             [% IF ( fast_cataloging ) %][% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
