@@ -72,9 +72,10 @@ sub record {
         chomp $marcxml_error;
         unless ($record) {
             Koha::Exceptions::Metadata::Invalid->throw(
-                id     => $self->id,
-                format => $self->format,
-                schema => $self->schema,
+                id             => $self->id,
+                biblionumber   => $self->biblionumber,
+                format         => $self->format,
+                schema         => $self->schema,
                 decoding_error => $marcxml_error,
             );
         }
