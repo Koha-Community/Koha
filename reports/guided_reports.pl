@@ -55,7 +55,8 @@ my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $phase = $input->param('phase') // '';
 my $flagsrequired;
-if ( ( $phase eq 'Build new' ) || ( $phase eq 'Create report from SQL' ) || ( $phase eq 'Edit SQL' ) ){
+if ( ( $phase eq 'Build new' ) || ( $phase eq 'Create report from SQL' ) || ( $phase eq 'Edit SQL' )
+   || ( $phase eq 'Build new from existing' ) ) {
     $flagsrequired = 'create_reports';
 }
 elsif ( $phase eq 'Use saved' ) {
@@ -973,25 +974,35 @@ elsif ($phase eq 'Export'){
     );
 }
 
-elsif ( $phase eq 'Create report from SQL' ) {
+elsif ( $phase eq 'Create report from SQL' || $phase eq 'Create report from existing' ) {
 
-    my ($group, $subgroup);
-    # allow the user to paste in sql
+    my ($group, $subgroup, $sql, $reportname, $notes);
     if ( $input->param('sql') ) {
-        $group = $input->param('report_group');
-        $subgroup  = $input->param('report_subgroup');
-        $template->param(
-            'sql'           => scalar $input->param('sql') // '',
-            'reportname'    => scalar $input->param('reportname') // '',
-            'notes'         => scalar $input->param('notes') // '',
-        );
+        $group      = $input->param('report_group');
+        $subgroup   = $input->param('report_subgroup');
+        $sql        = $input->param('sql') // '';
+        $reportname = $input->param('reportname') // '';
+        $notes      = $input->param('notes') // '';
     }
+    elsif ( my $report_id = $input->param('report_id') ) {
+        my $report = Koha::Reports->find($report_id);
+        $group      = $report->report_group;
+        $subgroup   = $report->report_subgroup;
+        $sql        = $report->savedsql // '';
+        $reportname = $report->report_name // '';
+        $notes      = $report->notes // '';
+    }
+
     $template->param(
+        sql        => $sql,
+        reportname => $reportname,
+        notes      => $notes,
         'create' => 1,
         'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
         'public' => '0',
         'cache_expiry' => 300,
         'usecache' => $usecache,
+
     );
 }
 
