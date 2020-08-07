@@ -76,6 +76,7 @@
 <form name="f" action="batchMod.pl" method="post">
      <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
      <input type="hidden" name="op" value="[% op | html %]" />
+     <input type="hidden" name="searchid" value="[% searchid | html %]" />
      <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
      <input type="hidden" name="src" id="src" value="[% src | html %]" />
@@ -221,9 +222,16 @@
             [% IF delete_records %] <p>[% deleted_records | html %] record(s) deleted.</p> [% END %]
             [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
                 [% IF biblio_deleted %]
+                    [% IF searchid %]
+                        <div id="previous_search_link"></div>
+                    [% END %]
                     <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Return to the cataloging module</a>
                 [% ELSE %]
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
+                    [% IF searchid %]
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]">Return to the record</a>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
+                    [% END %]
                 [% END %]
             [% ELSIF src %]
                 <a href="[% src | url %]">Return to where you were</a>
@@ -289,6 +297,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/pages/batchMod.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("js/browser.js") | $raw %]
     <script type="text/javascript">
         // Prepare array of all column headers, incrementing each index by
         // two to accommodate control and title columns
@@ -301,6 +310,11 @@
                 return submitBackgroundJob(this.form);
             });
         });
+
+        [% IF searchid %]
+            browser = KOHA.browser('[% searchid | html %]');
+            browser.show_back_link();
+        [% END %]
     </script>
 [% END %]
 

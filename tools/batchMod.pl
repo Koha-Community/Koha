@@ -69,7 +69,6 @@ if (!defined $op) {
     $template_flag = ($del) ? { tools => 'items_batchdel' }   : { tools => 'items_batchmod' };
 }
 
-
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => $template_name,
                  query => $input,
@@ -77,6 +76,8 @@ my ($template, $loggedinuser, $cookie)
                  authnotrequired => 0,
                  flagsrequired => $template_flag,
                  });
+
+$template->param( searchid => scalar $input->param('searchid'), );
 
 # Does the user have a restricted item edition permission?
 my $uid = $loggedinuser ? Koha::Patrons->find( $loggedinuser )->userid : undef;
