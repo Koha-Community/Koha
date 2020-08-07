@@ -242,6 +242,7 @@ if ($deleted_barcodes) {
             SELECT DISTINCT barcode
             FROM deleteditems
             WHERE deleteditems.biblionumber = ?
+            AND barcode IS NOT NULL AND barcode != ''
         |, { Slice => {} }, $record_id );
         say $_->{barcode} for @$barcode;
     }
