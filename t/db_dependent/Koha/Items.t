@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Time::Fake;
 
@@ -924,6 +924,19 @@ subtest 'can_be_transferred' => sub {
        'Item can no longer be transferred between libraries.');
     is($item->can_be_transferred({ to => $library2, from => $library1 }), 0,
        'We get the same result also if we pass the from-library parameter.');
+};
+
+subtest 'filter_by_for_loan' => sub {
+    plan tests => 3;
+
+    my $biblio = $builder->build_sample_biblio;
+    is( $biblio->items->filter_by_for_loan->count, 0, 'no item yet' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
+    is( $biblio->items->filter_by_for_loan->count, 0, 'no item for loan' );
+    $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 0 } );
+    is( $biblio->items->filter_by_for_loan->count, 1, '1 item for loan' );
+
+    $biblio->delete;
 };
 
 # Reset nb_of_items prior to testing delete

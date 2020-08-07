@@ -270,7 +270,6 @@ my $collections =
 my $copynumbers =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
 my (@itemloop, @otheritemloop, %itemfields);
-my $norequests = 1;
 
 my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 if ( $mss->count ) {
@@ -305,9 +304,6 @@ if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
 my $separatebranch = C4::Context->preference('SeparateHoldingsBranch') || 'homebranch';
 foreach my $item (@items) {
     my $itembranchcode = $item->{$separatebranch};
-
-    # can place holds defaults to yes
-    $norequests = 0 unless ( ( $item->{'notforloan'} > 0 ) || ( $item->{'itemnotforloan'} > 0 ) );
 
     $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
                                                : '';
@@ -409,7 +405,6 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
     }
 }
 
-$template->param( norequests => $norequests );
 $template->param(
     MARCNOTES   => $marcnotesarray,
     itemdata_ccode      => $itemfields{ccode},

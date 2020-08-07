@@ -267,7 +267,6 @@ my %witness
   ; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @item_subfield_codes;
 my @item_loop;
-my $norequests = 1;
 
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
@@ -294,8 +293,6 @@ foreach my $field (@fields) {
         } else {
             $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
         }
-
-        $norequests = 0 if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan' and $subf[$i][1] == 0;
 
         my $kohafield = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield};
         $item->{ $subf[$i][0] } = output_pref( { str => $item->{ $subf[$i][0] }, dateonly => 1 } )
@@ -330,7 +327,6 @@ if ($subscriptionscount) {
 }
 
 $template->param (
-    norequests              => $norequests,
     item_loop               => \@item_loop,
     item_header_loop        => \@item_header_loop,
     item_subfield_codes     => \@item_subfield_codes,

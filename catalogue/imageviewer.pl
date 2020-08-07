@@ -47,15 +47,6 @@ my $biblio = Koha::Biblios->find( $biblionumber );
 my $itemcount = $biblio ? $biblio->items->count : 0;
 my @items = GetItemsInfo($biblionumber);
 
-my $norequests = 1;
-foreach my $item (@items) {
-
-    # can place holds defaults to yes
-    $norequests = 0
-      unless ( ( $item->{'notforloan_per_itemtype'} > 0 )
-        || ( $item->{'itemnotforloan'} > 0 ) );
-}
-
 if ( $query->cookie("holdfor") ) {
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
@@ -82,7 +73,6 @@ if ( C4::Context->preference("LocalCoverImages") ) {
 }
 $template->{VARS}->{'count'}        = $itemcount;
 $template->{VARS}->{'biblionumber'} = $biblionumber;
-$template->{VARS}->{'norequests'}   = $norequests;
 $template->param(C4::Search::enabled_staff_search_views);
 $template->{VARS}->{'biblio'} = $biblio;
 

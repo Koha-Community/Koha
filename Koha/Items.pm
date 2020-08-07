@@ -37,6 +37,19 @@ Koha::Items - Koha Item object set class
 
 =cut
 
+=head3 filter_by_for_loan
+
+$items->filter_by_not_for_loan;
+
+Return the items of the set that are not for loan
+
+=cut
+
+sub filter_by_for_loan {
+    my ($self) = @_;
+    return $self->search( { notforloan => [ 0, undef ] } );
+}
+
 =head3 type
 
 =cut
