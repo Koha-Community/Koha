@@ -280,7 +280,7 @@ canned reports and writing custom SQL reports.</p>
                                         <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
                                         [% IF ( CAN_user_reports_create_reports ) %]
                                             <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
-                                            <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
+                                            <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
                                         [% END %]
                                         [% IF (Koha.Preference('Mana') == 1) %]
                                             <li><a class="ShareButton" data-toggle="modal" href="#mana_share_report" title="Share your report with Mana Knowledge Base"><i class="fa fa-share-alt"></i> Share</a></li>

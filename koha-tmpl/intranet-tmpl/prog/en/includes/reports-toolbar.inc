@@ -23,7 +23,7 @@
                 </div>
             [% END %]
             <div class="btn-group">
-                <a class="btn btn-default" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% original_sql || sql |uri %]&amp;reportname=[% reportname |uri %]&amp;notes=[% notes |uri %]">
+                <a class="btn btn-default" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% id | uri %]">
                     <i class="fa fa-copy"></i> Duplicate
                 </a>
             </div>
