@@ -74,7 +74,12 @@ Updated:<ul>
         </select></li>
     </ol>
 </fieldset>
+[% ELSE %]
+<select name="branch" id="branch" style="visibility:hidden;">
+    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+</select>
 [% END %]
+
 [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
 <fieldset class="rows">
     <legend>Set desk</legend>
