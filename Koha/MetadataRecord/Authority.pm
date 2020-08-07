@@ -191,12 +191,17 @@ sub get_all_authorities_iterator {
         };
     }
 
+    my $search_options->{columns} = [qw/ authid authtypecode marcxml /];
+    if ($options{desc}) {
+        $search_options->{order_by} = { -desc => 'authid' };
+    }
+
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
       $schema->resultset('AuthHeader')->search(
         $search_terms,
-        { columns => [qw/ authid authtypecode marcxml /] } );
+        $search_options);
     my $next_func = sub {
         my $row = $rs->next();
         return if !$row;

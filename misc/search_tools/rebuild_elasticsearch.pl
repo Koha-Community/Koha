@@ -31,6 +31,7 @@ B<rebuild_elasticsearch.pl>
 [B<-r|--reset>]
 [B<-a|--authorities>]
 [B<-b|--biblios>]
+[B<--desc>]
 [B<-bn|--bnumber>]
 [B<-ai|--authid>]
 [B<-p|--processes>]
@@ -69,6 +70,12 @@ specifying neither and so both get indexed.
 
 Index the biblios only. Combining this with B<-a> is the same as
 specifying neither and so both get indexed.
+
+=item B<--desc>
+
+Index the records in descending id order. Intended to index newer record before older records.
+Default is to index in ascending order.
+Does not work with --bnumber or --authid
 
 =item B<-bn|--bnumber>
 
@@ -122,6 +129,7 @@ my $commit = 5000;
 my ($delete, $reset, $help, $man, $processes);
 my ($index_biblios, $index_authorities);
 my (@biblionumbers,@authids);
+my $desc;
 
 $|=1; # flushes output
 
@@ -131,8 +139,9 @@ GetOptions(
     'r|reset'       => \$reset,
     'a|authorities' => \$index_authorities,
     'b|biblios'     => \$index_biblios,
-    'bn|bnumber=i' => \@biblionumbers,
-    'ai|authid=i'  => \@authids,
+    'desc'          => \$desc,
+    'bn|bnumber=i'  => \@biblionumbers,
+    'ai|authid=i'   => \@authids,
     'p|processes=i' => \$processes,
     'v|verbose+'    => \$verbose,
     'h|help'        => \$help,
@@ -181,6 +190,10 @@ if ($slice_count > 1) {
     $commit *= 1 + 0.10 * $slice_index;
     _log(1, "Processing slice @{[$slice_index + 1]} of $slice_count\n");
     $iterator_options{slice} = { index => $slice_index, count => $slice_count };
+}
+
+if( $desc ){
+    $iterator_options{desc} = 1;
 }
 
 my $next;

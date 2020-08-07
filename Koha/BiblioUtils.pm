@@ -134,12 +134,17 @@ sub get_all_biblios_iterator {
         $search_terms = \[ 'mod(biblionumber, ?) = ?', $slice_count, $slice_modulo ];
     }
 
+    my $search_options = { columns => [qw/ biblionumber /] };
+    if ( $options{desc} ){
+        $search_options->{order_by}  = { -desc => 'biblionumber' };
+    }
+
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
       $schema->resultset('Biblio')->search(
         $search_terms,
-        { columns => [qw/ biblionumber /] } );
+        $search_options );
     my $next_func = sub {
         # Warn and skip bad records, otherwise we break the loop
         while (1) {
