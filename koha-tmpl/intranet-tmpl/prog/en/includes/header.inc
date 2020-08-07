@@ -118,12 +118,12 @@
                         [% END %]
                     </li>
 
-                    [% IF Koha.Preference('UseCirculationDesks') %]
+                    [% IF Koha.Preference('UseCirculationDesks') && Desks.ListForLibrary.count %]
                     <li class="loggedin-menu-label">
                         Desk: <br />
-                        [% IF ( Desks.GetLoggedInDeskName == '' AND Desks.ListForLibrary.count ) %]
+                        [% IF ( Desks.GetLoggedInDeskName == '' ) %]
                            <span class="logged-in-desk-name">NO DESK SET</span>
-                        [% ELSIF ( Desks.GetLoggedInDeskName != '' ) %]
+                        [% ELSE %]
                             <span class="logged-in-desk-name">[% Desks.GetLoggedInDeskName | html %]</span>
                             <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
                         [% END %]
