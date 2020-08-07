@@ -130,9 +130,8 @@
                     </li>
                     [% END %]
 
+                    [% IF !( Koha.Preference('IndependentBranches') && !CAN_user_superlibrarian && !CAN_user_editcatalogue_edit_catalogue ) %]
                     <li role="separator" class="loggedin-menu-label divider"></li>
-                    [% IF ( IndependentBranches ) %]
-                        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                     <li>
                         [% IF Koha.Preference('UseCirculationDesks') %]
                         <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
@@ -140,14 +139,10 @@
                         <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                         [% END %]
                     </li>
-                        [% END %]
-                    [% ELSE %]
+                    [% ELSIF Koha.Preference('UseCirculationDesks') %]
+                    <li role="separator" class="loggedin-menu-label divider"></li>
                     <li>
-                        [% IF Koha.Preference('UseCirculationDesks') %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
-                        [% ELSE %]
-                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
-                        [% END %]
+                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set desk</a>
                     </li>
                     [% END %]
                     [% IF EnableSearchHistory %]

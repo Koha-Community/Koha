@@ -15,13 +15,15 @@
             [% IF !Koha.Preference('IndependentBranchesTransfers') || CAN_user_superlibrarian %]
                 <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
             [% END %]
-            [% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependentBranches ) %][% ELSE %]
+            [% IF !( Koha.Preference('IndependentBranches') && !CAN_user_superlibrarian && !CAN_user_editcatalogue_edit_catalogue ) %]
                 [% IF Koha.Preference('UseCirculationDesks') %]
                 <li><a href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a></li>
                 [% ELSE %]
                 <li><a href="/cgi-bin/koha/circ/set-library.pl">Set library</a></li>
                 [% END %]
-            [% END %][% END %]
+            [% ELSIF Koha.Preference('UseCirculationDesks') %]
+                <li><a href="/cgi-bin/koha/circ/set-library.pl">Set desk</a></li>
+            [% END %]
             [% IF ( fast_cataloging ) %][% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
             [% END %][% END %]

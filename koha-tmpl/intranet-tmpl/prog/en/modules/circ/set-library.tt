@@ -64,20 +64,18 @@ Updated:<ul>
 [% ELSE %]
 
 <form method="post" action="set-library.pl">
+[% IF !( Koha.Preference('IndependentBranches') && !CAN_user_superlibrarian && !CAN_user_editcatalogue_edit_catalogue ) %]
 <fieldset class="rows">
     <legend>Set library</legend>
     <ol>
-    [% IF ( singleBranchMode && !CAN_user_superlibrarian ) %]
-        <li>SingleBranchMode is ON.</li>
-    [% ELSE %]
         <li><label for="branch">Choose library:</label>
         <select name="branch" id="branch">
             [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
         </select></li>
-    [% END %]
     </ol>
 </fieldset>
-[% IF Desks.all %]
+[% END %]
+[% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
 <fieldset class="rows">
     <legend>Set desk</legend>
     <ol>
