@@ -20656,6 +20656,13 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
 }
 
+$DBversion = "19.11.08.003";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable = 'GoogleIndicTransliteration'");
+    print "Upgrade to $DBversion done (Bug 26070 - Remove references to deprecated Google Transliterate API)\n";
+    SetVersion( $DBversion );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
