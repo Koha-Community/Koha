@@ -1353,7 +1353,7 @@ subtest 'Trivial test for UpdateTransportCostMatrix' => sub {
 };
 
 subtest 'Excludes from local holds priority' => sub {
-    plan tests => 5;
+    plan tests => 8;
 
     Koha::Holds->delete;
 
@@ -1433,6 +1433,7 @@ subtest 'Excludes from local holds priority' => sub {
 
     my $queue_rs = $schema->resultset('TmpHoldsqueue');
     my $next = $queue_rs->next;
+    is($queue_rs->count, 1, 'Only 1 patron queueud' );
     is($next->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
 
     my $item2  = $builder->build_sample_item(
@@ -1445,6 +1446,7 @@ subtest 'Excludes from local holds priority' => sub {
     C4::HoldsQueue::CreateQueue();
 
     $queue_rs = $schema->resultset('TmpHoldsqueue');
+    is( $queue_rs->count, 2, '2 patrons queued' );
     $next = $queue_rs->next;
     is($next->borrowernumber, $local_patron_not_excluded->borrowernumber, 'Not excluded local patron is queued');
     $next = $queue_rs->next;
@@ -1455,6 +1457,7 @@ subtest 'Excludes from local holds priority' => sub {
     C4::HoldsQueue::CreateQueue();
 
     $queue_rs = $schema->resultset('TmpHoldsqueue');
+    is( $queue_rs->count, 2, '2 patrons queued' );
     $next = $queue_rs->next;
     is($next->borrowernumber, $other_patron->borrowernumber, 'Other patron is queued');
     $next = $queue_rs->next;
