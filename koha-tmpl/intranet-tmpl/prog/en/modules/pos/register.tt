@@ -59,7 +59,8 @@
             <h2>Summary</h2>
             <ul>
                 [% IF register.last_cashup %]
-                <li>Last cashup: [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %]</li>
+                <li>Last cashup: [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %] (<a data-toggle="modal" href="#cashupSummaryModal" class="button">Summary</a>)</li>
+
                 [% END %]
                 <li>Float: [% register.starting_float | $Price %]</li>
                 <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => 'CASH') * -1 | $Price %])</li>
@@ -302,6 +303,62 @@
             </div> <!-- /.modal-dialog -->
         </form> <!-- /#refund_form -->
     </div> <!-- /#issueRefundModal -->
+
+    <!-- Cashup summary modal -->
+    [% IF register.last_cashup %]
+    <div class="modal" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="cashupSummaryLabel">Cashup summary</h4>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Cash register: [% register.description | html %]</li>
+                        <li>Period: [% register.last_cashup.cashup_summary.from_date | $KohaDates with_hours => 1 %] to [% register.last_cashup.cashup_summary.to_date | $KohaDates with_hours => 1 %]</li>
+                    </ul>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [%- FOREACH out IN register.last_cashup.cashup_summary.outgoing -%]
+                            <tr>
+                                <td>[%- PROCESS account_type_description account=out -%]</td>
+                                <td>[% out.total * -1 | $Price %]</td>
+                            </tr>
+                            [%- END -%]
+                            [%- FOREACH in IN register.last_cashup.cashup_summary.income -%]
+                            <tr>
+                                <td>[%- PROCESS account_type_description account=in -%]</td>
+                                <td>[% in.total * -1 | $Price %]</td>
+                            </tr>
+                            [%- END -%]
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Total</td>
+                                <td>[% register.last_cashup.cashup_summary.total | $Price %]</td>
+                            </tr>
+                            <tr>
+                                <td>Bankable</td>
+                                <td>[% register.last_cashup.cashup_summary.bankable | $Price %]</td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div> <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div> <!-- /.modal-footer -->
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#cashupSummaryModal -->
+    [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
