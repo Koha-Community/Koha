@@ -443,11 +443,11 @@ legend:hover {
                                                     </fieldset>
                                                 [% END # END relationships foreach %]
                                                 [% IF guarantor && (!relationships) %]
-                                                    <fieldset class="rows">
+                                                    <fieldset class="guarantor">
                                                         <ol>
                                                             <li class="guarantor-details" data-borrowernumber="0">
-                                                                <span class="label">Patron card number:</span>
-                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.cardnumber | html %]</a>
+                                                                <span class="label">Guarantor:</span>
+                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.firstname | html %] [% guarantor.surname | html %] ([% guarantor.cardnumber | html %])</a>
                                                                 <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
                                                             </li>
 
@@ -473,7 +473,7 @@ legend:hover {
 
                                                             <li>
                                                                 <label for="guarantor_cancel">&nbsp;</label>
-                                                                <span><a href="#" class="guarantor_cancel">Remove</a></span>
+                                                                <span><a href="#" class="guarantor_cancel"><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></span>
                                                             </li>
                                                         </ol>
                                                     </fieldset>
