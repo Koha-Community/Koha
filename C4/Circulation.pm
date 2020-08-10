@@ -1448,18 +1448,22 @@ sub AddIssue {
             C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
 
             # Starting process for transfer job (checking transfert and validate it if we have one)
-            my ($datesent) = GetTransfers( $item_object->itemnumber );
-            if ($datesent) {
+            if ( my $transfer = $item_object->get_transfer ) {
                 # updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for visibility of this case (maybe for stats ....)
-                my $sth = $dbh->prepare(
-                    "UPDATE branchtransfers 
-                        SET datearrived = now(),
-                        tobranch = ?,
-                        comments = 'Forced branchtransfer'
-                    WHERE itemnumber= ? AND datearrived IS NULL"
-                );
-                $sth->execute( C4::Context->userenv->{'branch'},
-                    $item_object->itemnumber );
+                $transfer->set(
+                    {
+                        datearrived => dt_from_string,
+                        tobranch    => C4::Context->userenv->{branch},
+                        comments    => 'Forced branchtransfer'
+                    }
+                )->store;
+                if ( $transfer->reason eq 'Reserve' ) {
+                    my $hold = $item_object->holds->search( { found => 'T' } )->next;
+                    if ( $hold ) { # Is this really needed?
+                        $hold->set( { found => undef } )->store;
+                        C4::Reserves::ModReserveMinusPriority($item_object->itemnumber, $hold->reserve_id);
+                    }
+                }
             }
 
             # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
