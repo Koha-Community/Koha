@@ -47,10 +47,7 @@ sub register {
 
     if ( C4::Context->config("enable_plugins") )
     {
-        my $schema = $app->home->rel_file("api/swagger-v2-schema.json");
-        if ($schema){
-           $self->{'swagger-v2-schema'} = $schema;
-        }
+        $self->{'swagger-v2-schema'} = $app->home->rel_file("api/swagger-v2-schema.json");
 
         # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(
