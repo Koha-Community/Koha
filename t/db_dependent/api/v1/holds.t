@@ -24,6 +24,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use DateTime;
+use Mojo::JSON qw(encode_json);
 
 use C4::Context;
 use Koha::Patrons;
@@ -355,15 +356,15 @@ subtest 'test AllowHoldDateInFuture' => sub {
 
 subtest 'test AllowHoldPolicyOverride' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $dbh->do('DELETE FROM reserves');
 
     Koha::CirculationRules->set_rules(
         {
-            itemtype     => undef,
-            branchcode   => undef,
-            rules        => {
+            itemtype   => undef,
+            branchcode => undef,
+            rules      => {
                 holdallowed => 1
             }
         }
@@ -384,7 +385,14 @@ subtest 'test AllowHoldPolicyOverride' => sub {
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
-      ->status_is(201);
+      ->status_is(403);
+
+    $t->post_ok(
+        "//$userid_3:$password@/api/v1/holds" => {
+            'x-koha-override' =>
+              encode_json( { AllowHoldPolicyOverride => Mojo::JSON->true } )
+        } => json => $post_data
+    )->status_is(201);
 };
 
 $schema->storage->txn_rollback;
