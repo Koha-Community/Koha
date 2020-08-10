@@ -27,15 +27,16 @@ use C4::Context;
 use C4::Log;
 use Koha::Email;
 use Koha::DateUtils;
+use Koha::SMTP::Servers;
 
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
-use MIME::Lite;
 use Text::CSV::Encoded;
 use CGI qw ( -utf8 );
 use Carp;
 use Encode;
 use JSON qw( to_json );
+use Try::Tiny;
 
 BEGIN {
     # find Koha's Perl modules
@@ -176,7 +177,7 @@ Reports - Guided Reports
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
-my $email   = 0;
+my $send_email = 0;
 my $attachment = 0;
 my $format  = "text";
 my $to      = "";
@@ -201,7 +202,7 @@ GetOptions(
     'from=s'            => \$from,
     'subject=s'         => \$subject,
     'param=s'           => \@params,
-    'email'             => \$email,
+    'email'             => \$send_email,
     'a|attachment'      => \$attachment,
     'username:s'        => \$username,
     'password:s'        => \$password,
@@ -226,8 +227,8 @@ if ($format eq 'tsv' || $format eq 'text') {
     $separator = "\t";
 }
 
-if ($to or $from or $email) {
-    $email = 1;
+if ($to or $from or $send_email) {
+    $send_email = 1;
     $from or $from = C4::Context->preference('KohaAdminEmailAddress');
     $to   or $to   = C4::Context->preference('KohaAdminEmailAddress');
 }
@@ -312,28 +313,47 @@ foreach my $report_id (@ARGV) {
         my $json = to_json( \@rows_to_store );
         C4::Reports::Guided::store_results( $report_id, $json );
     }
-    if ($email) {
-        my $args = { to => $to, from => $from, subject => $subject };
+    if ($send_email) {
+
+        my $email = Koha::Email->new(
+            {
+                to      => $to,
+                from    => $from,
+                subject => $subject,
+            }
+        );
+
         if ( $format eq 'html' ) {
             $message = "<html><head><style>tr:nth-child(2n+1) { background-color: #ccc;}</style></head><body>$message</body></html>";
-            $args->{contenttype} = 'text/html';
+            $email->html_body($message);
         }
-        my $email = Koha::Email->create( $args );
-        my %headers = $email->header_pairs;
-        $headers{Data} = $message;
-        $headers{Auth} = { user => $username, pass => $password, method => $method } if $username;
+        else {
+            $email->text_body($message);
+        }
 
-        my $msg = MIME::Lite->new(%headers);
-
-        $msg->attach(
-            Type        => "text/$format",
-            Data        => encode( 'utf8', $message ),
-            Filename    => "report$report_id-$date.$format",
-            Disposition => 'attachment',
+        $email->attach(
+            encode( 'utf8', $message ),
+            content_type => "text/$format",
+            name         => "report$report_id-$date.$format",
+            disposition  => 'attachment',
         ) if $attachment;
 
-        $msg->send();
-        carp "Mail not sent" unless $msg->last_send_successful();
+        my $smtp_server = Koha::SMTP::Servers->get_default;
+        $smtp_server->set(
+            {
+                user_name => $username,
+                password  => $password,
+            }
+        )
+            if $username;
+
+        $email->transport( $smtp_server->transport );
+        try {
+            $email->send_or_die;
+        }
+        catch {
+            carp "Mail not sent: $_";
+        };
     }
     else {
         print $message;
