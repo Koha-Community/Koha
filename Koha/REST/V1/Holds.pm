@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Mojo::JSON qw(decode_json);
+
 use C4::Biblio;
 use C4::Reserves;
 
@@ -169,7 +171,12 @@ sub add {
             $can_place_hold->{status} = 'tooManyReserves';
         }
 
-        my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
+        my $override_header = $c->req->headers->header('x-koha-override');
+        $override_header = decode_json($override_header)
+          if $override_header;
+
+        my $can_override = $override_header->{AllowHoldPolicyOverride}
+          and C4::Context->preference('AllowHoldPolicyOverride');
 
         unless ($can_override || $can_place_hold->{status} eq 'OK' ) {
             return $c->render(
