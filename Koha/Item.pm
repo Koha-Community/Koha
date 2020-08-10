@@ -763,6 +763,43 @@ sub renewal_branchcode {
     return $branchcode;
 }
 
+sub set_found {
+    my ($self, $params) = @_;
+
+    my $holdingbranch = $params->{holdingbranch} || $self->holdingbranch;
+    my $borrowernumber = $params->{borrowernumber} || undef;
+
+    ## If item was lost, it has now been found, reverse any list item charges if necessary.
+    my $refund = 1;
+    my $no_refund_after_days =
+      C4::Context->preference('NoRefundOnLostReturnedItemsAge');
+    if ($no_refund_after_days) {
+        my $today = dt_from_string();
+        my $lost_age_in_days =
+          dt_from_string( $self->itemlost_on )->delta_days($today)
+          ->in_units('days');
+
+        $refund = 0 unless ( $lost_age_in_days < $no_refund_after_days );
+    }
+
+    my $refunded;
+    if (
+        $refund
+        && Koha::CirculationRules->get_lostreturn_policy(
+            {
+                current_branch => C4::Context->userenv->{branch},
+                item           => $self,
+            }
+        )
+      )
+    {
+        _FixAccountForLostAndFound( $self->itemnumber, borrowernumber, $self->barcode );
+        $refunded = 1;
+    }
+
+    return $refunded;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Item object

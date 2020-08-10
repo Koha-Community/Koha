@@ -1510,30 +1510,7 @@ sub AddIssue {
 
             ## If item was lost, it has now been found, reverse any list item charges if necessary.
             if ( $item_object->itemlost ) {
-                my $refund = 1;
-                my $no_refund_after_days = C4::Context->preference('NoRefundOnLostReturnedItemsAge');
-                if ($no_refund_after_days) {
-                    my $today = dt_from_string();
-                    my $lost_age_in_days =
-                      dt_from_string( $item_object->itemlost_on )
-                      ->delta_days($today)
-                      ->in_units('days');
-
-                    $refund = 0 unless ( $lost_age_in_days < $no_refund_after_days );
-                }
-
-                if (
-                    $refund && Koha::CirculationRules->get_lostreturn_policy(
-                        {
-                            return_branch => C4::Context->userenv->{branch},
-                            item          => $item_object
-                        }
-                    )
-                  )
-                {
-                    _FixAccountForLostAndFound( $item_object->itemnumber, undef,
-                        $item_object->barcode );
-                }
+                $item_object->set_found;
             }
 
             $item_object->issues( ( $item_object->issues || 0 ) + 1);
@@ -2068,32 +2045,14 @@ sub AddReturn {
     if ( $item->itemlost ) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            my $refund = 1;
-            my $no_refund_after_days = C4::Context->preference('NoRefundOnLostReturnedItemsAge');
-            if ($no_refund_after_days) {
-                my $today = dt_from_string();
-                my $lost_age_in_days =
-                  dt_from_string( $item->itemlost_on )
-                  ->delta_days($today)
-                  ->in_units('days');
+            my $refunded = $item->set_found(
+                {
+                    holdingbranch  => $item_holding_branch,
+                    borrowernumber => $borrowernumber
+                }
+            );
 
-                $refund = 0 unless ( $lost_age_in_days < $no_refund_after_days );
-            }
-
-            if (
-                $refund &&
-                Koha::CirculationRules->get_lostreturn_policy(
-                    {
-                        return_branch => C4::Context->userenv->{branch},
-                        item          => $item,
-                    }
-                  )
-              )
-            {
-                _FixAccountForLostAndFound( $item->itemnumber,
-                    $borrowernumber, $barcode );
-                $messages->{'LostItemFeeRefunded'} = 1;
-            }
+            $messages->{'LostItemFeeRefunded'} = $refunded;
         }
     }
 
