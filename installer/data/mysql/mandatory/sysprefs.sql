@@ -315,6 +315,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LocalHoldsPriority',  '0', NULL,  'Enables the LocalHoldsPriority feature',  'YesNo'),
 ('LocalHoldsPriorityItemControl',  'holdingbranch',  'holdingbranch|homebranch',  'decides if the feature operates using the item''s home or holding library.',  'Choice'),
 ('LocalHoldsPriorityPatronControl',  'PickupLibrary',  'HomeLibrary|PickupLibrary',  'decides if the feature operates using the library set as the patron''s home library, or the library set as the pickup library for the given hold.',  'Choice'),
+('LockExpiredDelay','','','Delay for locking expired patrons (empty means no locking)','Integer'),
 ('makePreviousSerialAvailable','0','','make previous serial automatically available when collecting a new serial. Please note that the item-level_itypes syspref must be set to specific item.','YesNo'),
 ('Mana','2',NULL,'request to Mana Webservice. Mana centralize common information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana.','Choice'),
 ('ManInvInNoissuesCharge','1',NULL,'MANUAL_INV charges block checkouts (added to noissuescharge).','YesNo'),
