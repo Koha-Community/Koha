@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -4058,6 +4058,63 @@ subtest 'transferbook tests' => sub {
     ok( exists $messages->{BadBarcode}, "We get a BadBarcode message if no barcode passed");
     is( $messages->{BadBarcode}, 'BadBarcode', "No barcode passed means undef BadBarcode" );
 
+};
+
+subtest 'Checkout should correctly terminate a transfer' => sub {
+    plan tests => 7;
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_1->branchcode }
+        }
+    );
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library_2->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library_1->branchcode,
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library_1->branchcode } );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $library_2->branchcode,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => $item->itemnumber,
+            priority       => 1,
+        }
+    );
+
+    my $do_transfer = 1;
+    ModItemTransfer( $item->itemnumber, $library_1->branchcode,
+        $library_2->branchcode );
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
+    GetOtherReserves( $item->itemnumber )
+      ;    # To put the Reason, it's what does returns.pl...
+    my $hold = Koha::Holds->find($reserve_id);
+    is( $hold->found, 'T', 'Hold is in transit' );
+    my $transfer = $item->get_transfer;
+    is( $transfer->frombranch, $library_1->branchcode );
+    is( $transfer->tobranch,   $library_2->branchcode );
+    is( $transfer->reason,     'Reserve' );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library_2->branchcode } );
+    AddIssue( $patron_1->unblessed, $item->barcode );
+    $transfer = $transfer->get_from_storage;
+    isnt( $transfer->datearrived, undef );
+    $hold = $hold->get_from_storage;
+    is( $hold->found, undef, 'Hold is waiting' );
+    is( $hold->priority, 1, );
 };
 
 $schema->storage->txn_rollback;
