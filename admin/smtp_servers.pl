@@ -123,6 +123,9 @@ elsif ( $op eq 'edit_save' ) {
         my $password   = $input->param('smtp_password') || undef;
         my $debug      = ( scalar $input->param('smtp_debug_mode') ) ? 1 : 0;
 
+        $password = undef
+            if defined $password and $password eq '****';
+
         try {
             $smtp_server->password( $password )
                 if $password;
