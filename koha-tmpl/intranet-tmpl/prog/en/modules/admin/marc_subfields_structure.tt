@@ -121,7 +121,12 @@
                 <ol><li><label for="defaultvalue[% loo.row | html %]">Default value:</label>
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row | html %]" value="[% loo.defaultvalue | html %]" /></li>
                     <li><label for="maxlength[% loo.row | html %]">Max length:</label><input type="text" id="maxlength[% loo.row | html %]" name="maxlength" value="[% loo.maxlength | html %]" size="4" /></li>
-                <li><input type="hidden" id="hidden-[% loo.row | html %]" name="hidden" value="[% loo.hidden | html %]" [%- IF loo.hidden_protected -%]data-koha-protected="1"[%- END -%] />
+                <li>
+                    [% IF loo.hidden_protected %]
+                        <input type="hidden" id="hidden-[% loo.row | html %]" name="hidden" value="[% loo.hidden | html %]" data-koha-protected="1" />
+                    [% ELSE %]
+                        <input type="hidden" id="hidden-[% loo.row | html %]" name="hidden" value="[% loo.hidden | html %]" />
+                    [% END %]
                     <label for="hidden[% loo.row | html %]" style="float: none;">Visibility: </label>
                     <input type="checkbox" id="hidden_opac_[% loo.row | html %]" class="inclusive_[% loo.row | html %]" name="hidden_opac_[% loo.row | html %]"/>
                     <label for="hidden_opac_[% loo.row | html %]" style="float: none;">OPAC</label>
