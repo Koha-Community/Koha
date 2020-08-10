@@ -166,15 +166,44 @@ sub click {
     $self->click_when_visible( $xpath_selector );
 }
 
-sub click_when_visible {
+sub wait_for_element_visible {
     my ( $self, $xpath_selector ) = @_;
+
     $self->driver->set_implicit_wait_timeout(20000);
     my ($visible, $elt);
+    $self->remove_error_handler;
     while ( not $visible ) {
         $elt = eval {$self->driver->find_element($xpath_selector) };
         $visible = $elt && $elt->is_displayed;
         $self->driver->pause(1000) unless $visible;
     }
+    $self->add_error_handler;
+    return $elt;
+}
+
+sub show_all_entries {
+    my ( $self, $xpath_selector ) = @_;
+
+    $self->driver->find_element( $xpath_selector
+          . '//div[@class="dataTables_length"]/label/select/option[@value="-1"]'
+    )->click;
+    my ($all_displayed);
+    while ( not $all_displayed ) {
+        my $dt_infos = $self->driver->get_text(
+            $xpath_selector . '//div[@class="dataTables_info"]' );
+
+        if ( $dt_infos =~ m|Showing 1 to (\d+) of (\d+) entries| ) {
+            $all_displayed = 1 if $1 == $2;
+        }
+
+        $self->driver->pause(1000) unless $all_displayed;
+    }
+}
+
+sub click_when_visible {
+    my ( $self, $xpath_selector ) = @_;
+
+    my $elt = $self->wait_for_element_visible( $xpath_selector );
 
     my $clicked;
     $self->remove_error_handler;
