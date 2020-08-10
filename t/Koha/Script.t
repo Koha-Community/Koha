@@ -39,7 +39,9 @@ is_deeply(
         'emailaddress'  => undef,
         'number'        => undef,
         'shibboleth'    => undef,
-        'branch'        => undef
+        'branch'        => undef,
+        'desk_id'       => undef,
+        'desk_name'     => undef,
     },
     "Context userenv set correctly with no flags"
 );
