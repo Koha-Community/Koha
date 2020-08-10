@@ -127,7 +127,7 @@ SKIP: {
         $s->submit_form;
 
         # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our library is not hidden
-        $driver->find_element('//select[@name="libraries_length"]/option[@value="-1"]')->click;
+        $s->show_all_entries('//div[@id="libraries_wrapper"]');
         $s->click(
             {
                 href => '/admin/branches.pl?op=add_form&branchcode=' . $branchcode,
@@ -138,7 +138,7 @@ SKIP: {
         $s->submit_form;
 
         # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our library is not hidden
-        $driver->find_element('//select[@name="libraries_length"]/option[@value="-1"]')->click;
+        $s->show_all_entries('//div[@id="libraries_wrapper"]');
         $s->click(
             {
                 id => 'delete_library_'.$branchcode,
@@ -193,7 +193,7 @@ SKIP: {
         $s->submit_form;
 
         # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our category is not hidden
-        $driver->find_element('//select[@name="patron_categories_length"]/option[@value="-1"]')->click;
+        $s->show_all_entries('//div[@id="patron_categories_wrapper"]');
 
         $s->click(
             {
