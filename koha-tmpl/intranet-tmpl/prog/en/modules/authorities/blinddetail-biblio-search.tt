@@ -30,11 +30,11 @@
                 [% IF ( clear ) %]
                     var new_line = "";
                 [% ELSE %]
-                    var new_line = "
+                var new_line = "
                     [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
-                        [%- To.json( SUBFIELD_LOO.marc_subfield ) | $raw -%]
+                        [%- To.json( SUBFIELD_LOO.marc_subfield ) | html -%]
                         [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
-                            [%- To.json( marc_value ) | $raw -%]
+                            [%- To.json( marc_value ) | html -%]
                         [%- END -%]
                     [%- END -%]‡9[% authid | html %]";
                 [% END %]
