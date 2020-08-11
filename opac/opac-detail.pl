@@ -763,22 +763,21 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     }
 
     if ( C4::Context->preference("OPACLocalCoverImages") == 1 ) {
-        my $cover_image = $item->cover_image;
-        $itm->{imagenumber} = $cover_image ? $cover_image->imagenumber : undef;
+        $itm->{cover_images} = $item->cover_images;
     }
 
     my $itembranch = $itm->{$separatebranch};
     if ($currentbranch and C4::Context->preference('OpacSeparateHoldings')) {
         if ($itembranch and $itembranch eq $currentbranch) {
             push @itemloop, $itm;
-            $itemloop_has_images++ if $itm->{imagenumber};
+            $itemloop_has_images++ if $item->cover_images->count;
         } else {
             push @otheritemloop, $itm;
-            $otheritemloop_has_images++ if $itm->{imagenumber};
+            $otheritemloop_has_images++ if $item->cover_images->count;
         }
     } else {
         push @itemloop, $itm;
-        $itemloop_has_images++ if $itm->{imagenumber};
+        $itemloop_has_images++ if $item->cover_images->count;
     }
   }
 }

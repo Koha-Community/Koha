@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 
 use FindBin '$Bin';
@@ -70,16 +70,16 @@ $image = Koha::CoverImage->new(
 )->store;
 is( $biblio->cover_images->count, 2, 'There are now two cover images' );
 
-is( $item->cover_image, undef, 'No cover images yet' );
+is( $item->cover_images->count, 0, 'No cover images yet' );
 $image = Koha::CoverImage->new(
     {
         itemnumber => $item->itemnumber,
         src_image  => GD::Image->new($logo_filepath)
     }
 )->store;
-is( ref( $item->cover_image ),
+is( ref( $item->cover_images->next ),
     'Koha::CoverImage',
-    'Koha::Item->cover_image returns a Koha::CoverImage object' );
+    'Koha::Item->cover_images returns a rs of Koha::CoverImage object' );
 
 Koha::CoverImage->new(
     {
@@ -89,5 +89,6 @@ Koha::CoverImage->new(
     }
 )->store;
 is( $biblio->cover_images->count, 3, );
+is( $item->cover_images->count, 2, );
 
 $schema->storage->txn_rollback;

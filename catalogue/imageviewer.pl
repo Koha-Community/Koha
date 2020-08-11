@@ -66,24 +66,19 @@ if( $query->cookie("searchToOrder") ){
 }
 
 if ( C4::Context->preference("LocalCoverImages") ) {
+    my $images;
     if ( $itemnumber ) {
         my $item = Koha::Items->find($itemnumber);
-        my $image = $item->cover_image;
-        $template->param(
-            LocalCoverImages => 1,
-            images           => [$image],
-            imagenumber      => ($image ? $image->imagenumber : undef),
-        );
-
+        $images = $item->cover_images->as_list;
     } else {
-        my $images = $biblio->cover_images->as_list;
-
-        $template->param(
-            LocalCoverImages => 1,
-            images           => $images,
-            imagenumber      => (@$images ? $images->[0]->imagenumber : undef),
-        );
+        $images = $biblio->cover_images->as_list;
     }
+
+    $template->param(
+        LocalCoverImages => 1,
+        images           => $images,
+        imagenumber      => (@$images ? $images->[0]->imagenumber : undef),
+    );
 }
 $template->{VARS}->{'count'}        = $itemcount;
 $template->{VARS}->{'biblionumber'} = $biblionumber;

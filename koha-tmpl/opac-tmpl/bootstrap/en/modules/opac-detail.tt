@@ -1267,7 +1267,9 @@
 
                 [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <td class="cover">
-                        <div title="[% ITEM_RESULT.itemnumber | html %]" data-imagenumber="[% ITEM_RESULT.imagenumber | html %]" data-biblionumber="[% ITEM_RESULT.biblionumber %]" class="local-thumbnail-preview"></div>
+                        [% FOR image IN ITEM_RESULT.cover_images %]
+                            <div title="[% ITEM_RESULT.itemnumber | html %]" data-imagenumber="[% image.imagenumber | html %]" data-biblionumber="[% ITEM_RESULT.biblionumber | html %]" class="local-thumbnail-preview"></div>
+                        [% END %]
                     </td>
                 [% END %]
 

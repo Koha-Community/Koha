@@ -166,8 +166,8 @@
 
         [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
             </div>
-            <div class="col-xs-3" id="bookcoverimg">
-                <div id="cover-slides">
+            <div class="col-xs-3 bookcoverimg">
+                <div id="biblio-cover-slider" class="cover-slider">
                     [% IF ( LocalCoverImages ) %]
                         [% IF localimages.count %]
                             [% FOREACH image IN localimages %]
@@ -219,8 +219,8 @@
                             <div class="hint">Custom cover image</div>
                         </div>
                     [% END %]
-                </div> <!-- /#cover-slides -->
-            </div> <!-- /#bookcoverimg.col-xs-3 -->
+                </div> <!-- /.cover-slider -->
+            </div> <!-- /.bookcoverimg.col-xs-3 -->
         [% ELSE %]
         </div> <!-- /.col-xs-* -->
         [% END # /IF ( AmazonCoverImages, etc ) %]
@@ -326,11 +326,17 @@
                 [% END %]
                     [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                         <td class="cover">
-                            [% IF item.imagenumber %]
-                                <a href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=[% item.imagenumber | uri %]">
-                                    <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1amp;imagenumber=[% item.imagenumber | uri %]" />
-                                </a>
-                            [% END %]
+                            <div class="bookcoverimg">
+                                <div class="cover-slider">
+                                    [% FOREACH image IN item.cover_images %]
+                                        <div class="cover-image local-coverimg">
+                                            <a href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% image.itemnumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                                <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" />
+                                            </a>
+                                        </div>
+                                    [% END %]
+                                </div>
+                            </div>
                         </td>
                     [% END %]
 
@@ -986,71 +992,75 @@ Note that permanent location is a code, and location may be an authval.
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
         function verify_images() {
             // Loop over each container in the template which contains covers
-            $(".cover-image").each( function( index ){
-                var div = $(this);
-                // Find the image in the container
-                var img = div.find("img")[0];
-                if( $(img).length > 0 ){
-                    if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
-                        // No image loaded in the container. Remove the slide
-                        div.remove();
-                    } else {
-                        // All slides start hidden. If this is the first one, show it.
-                        if( index == 0 ){
-                            div.show();
-                        }
-                        // Check if Amazon image is present
-                        if ( div.attr("id") == "amazon-bookcoverimg"  ) {
-                            w = img.width;
-                            h = img.height;
-                            if ((w == 1) || (h == 1)) {
-                                // Amazon returned single-pixel placeholder
-                                // Remove the container
-                                div.remove();
+            $(".cover-slider").each(function(){
+                $(this).find(".cover-image").each( function( index ){
+                    var div = $(this);
+                    // Find the image in the container
+                    var img = div.find("img")[0];
+                    if( $(img).length > 0 ){
+                        if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
+                            // No image loaded in the container. Remove the slide
+                            div.remove();
+                        } else {
+                            // All slides start hidden. If this is the first one, show it.
+                            if( index == 0 ){
+                                div.show();
                             }
-                        }
-                        if( div.attr("id") == "custom-img" ){
-                            if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
-                                // No image was loaded via the CustomCoverImages system preference
-                                // Remove the container
-                                div.remove();
+                            // Check if Amazon image is present
+                            if ( div.attr("id") == "amazon-bookcoverimg"  ) {
+                                w = img.width;
+                                h = img.height;
+                                if ((w == 1) || (h == 1)) {
+                                    // Amazon returned single-pixel placeholder
+                                    // Remove the container
+                                    div.remove();
+                                }
                             }
-                        }
-                        if( div.attr("id") == "coce-coverimg" ){
-                            // Identify which service's image is being loaded by Coce
-                            if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
-                                div.find(".hint").html(_("Coce image from Amazon.com"));
-                            } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
-                                div.find(".hint").html(_("Coce image from Google Books"));
-                            } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
-                                div.find(".hint").html(_("Coce image from Open Library"));
+                            if( div.attr("id") == "custom-img" ){
+                                if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
+                                    // No image was loaded via the CustomCoverImages system preference
+                                    // Remove the container
+                                    div.remove();
+                                }
+                            }
+                            if( div.attr("id") == "coce-coverimg" ){
+                                // Identify which service's image is being loaded by Coce
+                                if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
+                                    div.find(".hint").html(_("Coce image from Amazon.com"));
+                                } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
+                                    div.find(".hint").html(_("Coce image from Google Books"));
+                                } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
+                                    div.find(".hint").html(_("Coce image from Open Library"));
+                                }
                             }
                         }
                     }
-                }
+                });
             });
 
-            var coverSlides = $(".cover-image");
-            if( coverSlides.length > 1 ){
-                coverSlides.each(function( index ){
-                    // If more that one slide is present, add a navigation link
-                    // for activating the slide
-                    var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
-                    if( index == 0 ){
-                        // Set the first navigation link as active
-                        $(covernav).addClass("nav-active");
-                    }
-                    $(covernav).html("<i class=\"fa fa-circle\"></i>");
-                    $("#cover-slides").append( covernav );
+            $(".cover-slider").each(function(){
+                var coverSlide = this;
+                var coverImages = $(this).find(".cover-image");
+                if( coverImages.length > 1 ){
+                    coverImages.each(function( index ){
+                        // If more that one image is present, add a navigation link
+                        // for activating the slide
+                        var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
+                        if( index == 0 ){
+                            // Set the first navigation link as active
+                            $(covernav).addClass("nav-active");
+                        }
+                        $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                        $(coverSlide).append( covernav );
+                    });
+                }
 
-                });
-            }
-
-            if( $(".cover-image:visible").length < 1 ){
-                $("#cover-slides").remove();
-            } else {
-                $("#cover-slides").addClass("cover-slides");
-            }
+                if( $(coverSlide).find(".cover-image:visible").length < 1 ){
+                    $(coverSlide).remove();
+                } else {
+                    $(coverSlide).addClass("cover-slides");
+                }
+            });
 
             $("#editions img").each(function(i){
                 if ( this.src.indexOf('amazon.com') >= 0 ) {
@@ -1223,14 +1233,15 @@ Note that permanent location is a code, and location may be an authval.
                 link = $(this).attr("href");
                 openWindow(link,"Print spine label",400,400);
              });
-             $("#cover-slides").on("click",".cover-nav", function(e){
+             $(".cover-slider").on("click",".cover-nav", function(e){
                  e.preventDefault();
+                var cover_slider = $(this).parent();
                 // Adding click handler for cover image navigation links
                 var num = $(this).data("num");
-                $(".cover-nav").removeClass("nav-active");
+                $(cover_slider).find(".cover-nav").removeClass("nav-active");
                 $(this).addClass("nav-active");
-                $(".cover-image").hide();
-                $(".cover-image").eq( num ).show();
+                $(cover_slider).find(".cover-image").hide();
+                $(cover_slider).find(".cover-image").eq( num ).show();
              });
         });
 

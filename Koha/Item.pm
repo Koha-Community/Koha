@@ -782,19 +782,18 @@ sub renewal_branchcode {
     return $branchcode;
 }
 
-=head3 cover_image
+=head3 cover_images
 
-Return the cover image associated with this item.
+Return the cover images associated with this item.
 
 =cut
 
-sub cover_image {
+sub cover_images {
     my ( $self ) = @_;
 
     my $cover_image_rs = $self->_result->cover_images;
     return unless $cover_image_rs;
-    # So far we allow only 1 cover image per item
-    return Koha::CoverImages->_new_from_dbic($cover_image_rs)->next;
+    return Koha::CoverImages->_new_from_dbic($cover_image_rs);
 }
 
 =head3 _set_found_trigger

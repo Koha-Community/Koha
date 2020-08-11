@@ -94,11 +94,12 @@ if ($fileID) {
         $fh->close if $fh;
         if ( defined $srcimage ) {
             eval {
-                if ( $replace && $biblionumber ) {
-                    Koha::Biblios->find($biblionumber)->cover_images->delete;
-                } elsif ( $itemnumber ) {
-                    my $cover_image = Koha::Items->find($itemnumber)->cover_image;
-                    $cover_image->delete if $cover_image;
+                if ( $replace ) {
+                    if ( $biblionumber ) {
+                        Koha::Biblios->find($biblionumber)->cover_images->delete;
+                    } elsif ( $itemnumber ) {
+                        Koha::Items->find($itemnumber)->cover_images->delete;
+                    }
                 }
 
                 Koha::CoverImage->new(
@@ -181,10 +182,12 @@ if ($fileID) {
                             if ( defined $srcimage ) {
                                 $total++;
                                 eval {
-                                    if ( $replace && $biblionumber ) {
-                                        Koha::Biblios->find($biblionumber)->cover_images->delete;
-                                    } elsif ( $itemnumber ) {
-                                        Koha::Items->find($itemnumber)->cover_image->delete;
+                                    if ( $replace ) {
+                                        if ( $biblionumber ) {
+                                            Koha::Biblios->find($biblionumber)->cover_images->delete;
+                                        } elsif ( $itemnumber ) {
+                                            Koha::Items->find($itemnumber)->cover_images->delete;
+                                        }
                                     }
 
                                     Koha::CoverImage->new(

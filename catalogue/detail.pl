@@ -408,21 +408,20 @@ foreach my $item (@items) {
     }
 
     if ( C4::Context->preference("LocalCoverImages") == 1 ) {
-        my $cover_image = $item_object->cover_image;
-        $item->{imagenumber} = $cover_image ? $cover_image->imagenumber : undef;
+        $item->{cover_images} = $item_object->cover_images;
     }
 
     if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
         if ($itembranchcode and $itembranchcode eq $currentbranch) {
             push @itemloop, $item;
-            $itemloop_has_images++ if $item->{imagenumber};
+            $itemloop_has_images++ if $item_object->cover_images->count;
         } else {
             push @otheritemloop, $item;
-            $otheritemloop_has_images++ if $item->{imagenumber};
+            $otheritemloop_has_images++ if $item_object->cover_images->count;
         }
     } else {
         push @itemloop, $item;
-        $itemloop_has_images++ if $item->{imagenumber};
+        $itemloop_has_images++ if $item_object->cover_images->count;
     }
 }
 
