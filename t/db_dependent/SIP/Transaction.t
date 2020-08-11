@@ -352,11 +352,11 @@ subtest checkin_lost => sub {
     my $ils = C4::SIP::ILS->new( $instituation );
 
     t::lib::Mocks::mock_preference('BlockReturnOfLostItems', '1');
-    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
     is( $circ->{screen_msg}, 'Item lost, return not allowed', "Got correct screen message" );
 
     t::lib::Mocks::mock_preference('BlockReturnOfLostItems', '0');
-    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
     is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
 };
 
@@ -390,11 +390,11 @@ subtest checkin_withdrawn => sub {
     my $ils = C4::SIP::ILS->new( $instituation );
 
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '1');
-    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    my $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
     is( $circ->{screen_msg}, 'Item withdrawn, return not allowed', "Got correct screen message" );
 
     t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', '0');
-    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp );
+    $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode );
     is( $circ->{screen_msg}, 'Item not checked out', "Got 'Item not checked out' screen message" );
 };
 
