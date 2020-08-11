@@ -742,7 +742,7 @@
         [%- END -%]
 
         var search_result = {
-            query_desc: "[% To.json( query_desc ) | $raw %]",
+            query_desc: "[% To.json( query_desc ) | html %]",
             query_cgi: "[% query_cgi | html %]",
             limit_cgi: "[% limit_cgi | html %]",
             sort_cgi: "[% sort_cgi | html %]",
