@@ -101,7 +101,10 @@
     <p>
         <label for="register_id">Cash register:</label>
         <select name="register_id" id="register_id" class="input" tabindex="4">
-            [% PROCESS options_for_registers registers => Registers.all() %]
+            <option id="noregister" value="" selected="selected">Branch default</option>
+            [% FOREACH r IN Registers.all() %]
+            <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]" disabled hidden>[% r.name | html %]</option>
+            [% END %]
         </select>
     </p>
     [% END %]

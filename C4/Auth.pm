@@ -1141,10 +1141,15 @@ sub checkauth {
                         my $desk = Koha::Desks->find($desk_id);
                         $desk_name = $desk ? $desk->desk_name : '';
                     }
-                    if ( $query->param('register_id') ) {
-                        $register_id = $query->param('register_id');
-                        my $register = Koha::Cash::Registers->find($register_id);
-                        $register_name = $register ? $register->name : '';
+                    if ( C4::Context->preference('UseCashRegisters') ) {
+                        my $register =
+                          $query->param('register_id')
+                          ? Koha::Cash::Registers->find($query->param('register_id'))
+                          : Koha::Cash::Registers->search(
+                            { branch => $branchcode, branch_default => 1 },
+                            { rows   => 1 } )->single;
+                        $register_id   = $register->id   if ($register);
+                        $register_name = $register->name if ($register);
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                     if ( $type ne 'opac' and C4::Context->boolean_preference('AutoLocation') ) {
