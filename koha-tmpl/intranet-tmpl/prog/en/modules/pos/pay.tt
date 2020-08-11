@@ -21,9 +21,17 @@
         <div class="col-sm-10 col-sm-push-2">
 
         [% IF ( error_registers ) %]
-        <div id="error_message" class="dialog alert">
-            You must have at least one cash register associated with this branch before you can record payments.
-        </div>
+            <div id="error_message" class="dialog message">
+                <p>
+                    You must have at least one cash register associated with the library before you can record payments.
+                </p>
+                [% IF ( CAN_user_parameters_manage_cash_registers ) %]
+                    <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
+                        <input type="hidden" name="op" value="add_form" />
+                        <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
+                    </form>
+                [% END %]
+            </div>
         [% ELSE %]
 
         [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]

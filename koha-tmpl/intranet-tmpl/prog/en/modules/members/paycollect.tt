@@ -7,6 +7,19 @@
 [% PROCESS 'payments.inc' %]
 [% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% BLOCK cash_register_required %]
+    <div id="error_message" class="dialog message">
+        <p>
+            You must have at least one cash register associated with the library before you can record payments.
+        </p>
+        [% IF ( CAN_user_parameters_manage_cash_registers ) %]
+            <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
+                <input type="hidden" name="op" value="add_form" />
+                <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
+            </form>
+        [% END %]
+    </div>
+[% END %]
 <title>Koha &rsaquo; Patrons &rsaquo;
     [% IF type == 'WRITEOFF' %]
         Write off an amount for [% patron.firstname | html %] [% patron.surname | html %]
@@ -74,9 +87,7 @@
 
 [% IF ( pay_individual ) %]
     [% IF ( error_registers ) %]
-    <div id="error_message" class="dialog alert">
-        You must have at least one cash register associated with this branch before you can record payments.
-    </div>
+        [% PROCESS 'cash_register_required' %]
     [% ELSE %]
 
     <ul class="nav nav-pills">
@@ -215,9 +226,7 @@
     </form>
 [% ELSE %]
     [% IF ( error_registers && type != 'writeoff' ) %]
-    <div id="error_message" class="dialog alert">
-        You must have at least one cash register associated with this branch before you can record payments.
-    </div>
+        [% PROCESS 'cash_register_required' %]
     [% ELSE %]
 
     [% IF selected_accts %]
