@@ -79,7 +79,7 @@ function AreMandatoriesNotOk(){
     		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
     			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
                     tab.push("[% BIG_LOO.number | html %]");
-                    label.push("[% To.json(subfield_loo.marc_lib) | $raw %]");
+                    label.push("[% To.json(subfield_loo.marc_lib) | html %]");
     			[% END %]
 			[% END %]
 		[% END %]
