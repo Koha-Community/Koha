@@ -585,7 +585,7 @@ fieldset.rows table { clear: none; margin: 0; }
         var MSG_MANA_NO_SUBSCRIPTION_FOUND = _("No subscription found on Mana Knowledge Base");
         var MSG_MANA_SHARE_PATTERN = _("Please feel free to share your pattern with all others librarians once you are done");
 
-        var BOOKSELLER_IDS = [% To.json( bookseller_ids ) || '[]' | $raw %];
+        var BOOKSELLER_IDS = [% To.json( bookseller_ids ) || '[]' | html %];
     </script>
     [% Asset.js("js/subscription-add.js") | $raw %]
     [% Asset.js("js/showpredictionpattern.js") | $raw %]
