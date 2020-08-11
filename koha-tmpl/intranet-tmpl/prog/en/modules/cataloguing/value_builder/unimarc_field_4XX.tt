@@ -1,3 +1,4 @@
+[% USE To %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; 4XX plugin</title>
@@ -167,55 +168,55 @@
                         var subfield = subfields[i+1];
 
                         if(code.value == '9'){
-                                subfield.value = "[% subfield_value_9 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_9 ) | html %]";
                         }
                         if(code.value == '0'){
-                                subfield.value = "[% subfield_value_0 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_0 ) | html %]";
                         }
                         if(code.value == 'a'){
-                                subfield.value = "[% subfield_value_a |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_a ) | html %]";
                         }
                         if(code.value == 'c'){
-                                subfield.value = "[% subfield_value_c |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_c ) | html %]";
                         }
                         if(code.value == 'd'){
-                                subfield.value = "[% subfield_value_d |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_d ) | html %]";
                         }
                         if(code.value == 'e'){
-                                subfield.value = "[% subfield_value_e |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_e ) | html %]";
                         }
                         if(code.value == 'h'){
-                                subfield.value = "[% subfield_value_h |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_h ) | html %]";
                         }
                         if(code.value == 'i'){
-                                subfield.value = "[% subfield_value_i |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_i ) | html %]";
                         }
                         if(code.value == 'l'){
-                                subfield.value = "[% subfield_value_l |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_l ) | html %]";
                         }
                         if(code.value == 'n'){
-                                subfield.value = "[% subfield_value_n |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_n ) | html %]";
                         }
                         if(code.value == 'o'){
-                                subfield.value = "[% subfield_value_o |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_o ) | html %]";
                         }
                         if(code.value == 'p'){
-                                subfield.value = "[% subfield_value_p |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_p ) | html %]";
                         }
                         if(code.value == 't'){
-                                subfield.value = "[% subfield_value_t |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_t ) | html %]";
                         }
                         if(code.value == 'u'){
-                                subfield.value = "[% subfield_value_u |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_u ) | html %]";
                         }
                         if(code.value == 'v'){
-                                subfield.value = "[% subfield_value_v |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_v ) | html %]";
                         }
                         if(code.value == 'x'){
-                                subfield.value = "[% subfield_value_x |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_x ) | html %]";
                         }
                         if(code.value == 'y'){
-                                subfield.value = "[% subfield_value_y |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                                subfield.value = "[% To.json( subfield_value_y ) | html %]";
                         }
                     }
                 }
