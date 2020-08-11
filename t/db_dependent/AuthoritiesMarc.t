@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
@@ -215,3 +215,36 @@ subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+$module->unmock('GetAuthority');
+
+subtest 'ModAuthority() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $auth_type = 'GEOGR_NAME';
+    my $record  = MARC::Record->new;
+    $record->add_fields(
+            [ '001', '1' ],
+            [ '151', ' ', ' ', a => 'United States' ]
+            );
+;
+    my $auth_id = AddAuthority( $record, undef, $auth_type );
+
+    my $mocked_authorities_marc = Test::MockModule->new('C4::AuthoritiesMarc');
+    $mocked_authorities_marc->mock( 'merge', sub { warn 'merge called'; } );
+
+    warning_is
+        { ModAuthority( $auth_id, $record, $auth_type ); }
+        'merge called',
+        'No param, merge called';
+
+    warning_is
+        { ModAuthority( $auth_id, $record, $auth_type, { skip_merge => 1 } ); }
+        undef,
+        'skip_merge passed, merge not called';
+
+    $schema->storage->txn_rollback;
+};
