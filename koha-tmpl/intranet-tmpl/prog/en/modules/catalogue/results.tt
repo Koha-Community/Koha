@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE To %]
 [% USE Koha %]
 [% USE Biblio %]
 [% USE KohaDates %]
@@ -772,7 +773,7 @@
 
             [% IF ( query_desc ) %]
                 toHighlight = $("p,span.results_summary,a.title");
-                var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                var query_desc = "[% To.json( query_desc ) | html %]",
                 q_array = query_desc.split(" ");
                 // ensure that we don't have "" at the end of the array, which can
                 // break the highlighter
