@@ -280,7 +280,7 @@
             });
         });
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
-        var to_highlight = "[% To.json( searchfield ) | $raw %]";
+        var to_highlight = "[% To.json( searchfield ) | html %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
