@@ -280,6 +280,8 @@
         [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
             [% IF biblio_deleted %]
                 <a class="btn btn-default" href="/cgi-bin/koha/cataloguing/addbooks.pl"><i class="fa fa-check-square-o"></i> Return to the cataloging module</a>
+            [% ELSIF searchid %]
+               <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
             [% ELSE %]
                <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
             [% END %]
