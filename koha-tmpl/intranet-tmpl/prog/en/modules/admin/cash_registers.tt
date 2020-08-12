@@ -86,12 +86,10 @@
                             <li>
                                 <label for="branch">Library: </label>
                                 <select id="branch" name="branch">
-                                [% FOREACH branch IN branch_list %]
-                                [% IF cash_register.branch == branch.branchcode %]
-                                    <option value="[% branch.branchcode | html %]" selected="1">[% branch.branchname | html %]</option>
+                                [% IF cash_register %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => cash_register.branch ) %]
                                 [% ELSE %]
-                                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                                [% END %]
+                                    [% PROCESS options_for_libraries libraries => Branches.all() %]
                                 [% END %]
                                 </select>
                             </li>
