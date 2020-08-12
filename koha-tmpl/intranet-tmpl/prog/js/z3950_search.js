@@ -1,16 +1,7 @@
 /* global __ total_pages */
 //z3950_search.js for Authorities, Bib records and Acquisitions module
-function Import(Breeding, recordid, AuthType, FrameworkCode, index) {
 
-    if ( AuthType == false ) {
-        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+recordid+"&z3950=1&frameworkcode="+FrameworkCode+"&breedingid="+Breeding;
-    } else {
-        opener.document.location="../authorities/authorities.pl?breedingid="+Breeding+"&authtypecode="+AuthType+"&authid="+recordid+"&index="+index;
-    }
-    window.close();
-    return false;
-
-}
+var last_action, previewed = 0;
 
 function validate_goto_page() {
     var page = $('#goto_page').val();
@@ -70,16 +61,19 @@ $( document ).ready( function() {
     /* Note: The templates where this is included must have a search results
        table with the id "resultst" and "action" table cells with the class "actions" */
     $("#resultst").on("click", "td", function(event){
+        event.preventDefault();
         var tgt = $(event.target);
-        var row = $(this).parent();
+        var row = $(this).closest('tr');
         /* Remove highlight from all rows and add to the clicked row */
         $("tr").removeClass("highlighted-row");
         row.addClass("highlighted-row");
         /* Remove any menus created on the fly for other rows */
         $(".btn-wrapper").remove();
 
-        if( tgt.is("a") || tgt.hasClass("actions") ){
-            /* Don't show inline links for cells containing links of their own. */
+        if( tgt.hasClass("z3950actions")  ) { // direct button click
+            var link = $( "a[title='" + tgt.text() + "']", row );
+            if( link.length == 1) link.click();
+            row.find('ul.dropdown-menu').hide();
         } else {
             event.stopPropagation();
             /* Remove the "open" class from all dropup menus in case one is open */
@@ -100,6 +94,10 @@ $( document ).ready( function() {
                 The menu must first be wrapped in a block-level div to clear
                 the table cell's text contents and then a relative-positioned
                 div to allow the menu to be positioned correctly */
+            if( tgt.prop('nodeName') != 'TD' ) {
+                // handling click on caret to improve menu position
+                tgt = tgt.closest('td');
+            }
             tgt.append(
                 $('<div/>', {'class': 'btn-wrapper'}).append(
                     $('<div/>', {'class': 'btn-group'}).append(
@@ -110,44 +108,48 @@ $( document ).ready( function() {
         }
     });
 
-    $( "#resultst" ).on("click", ".previewMARC", function(e) {
-        e.preventDefault();
-        var ltitle = $( this ).text();
-        var page = $( this ).attr( "href" );
-        $( "#marcPreviewLabel" ).text( ltitle );
-        $( "#marcPreview .modal-body" ).load( page + " pre" );
-        $( '#marcPreview' ).modal( {show:true} );
-    });
-    $( "#marcPreview" ).on( "hidden", function() {
-        $( "#marcPreviewLabel" ).html( "" );
-        $( "#marcPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + __("Loading") + "</div>" );
-    });
     $( "#resultst" ).on("click", ".previewData", function(e) {
         e.preventDefault();
+        previewed = 1;
+        ChangeLastAction( $(this).attr('title'), 1 );
         var ltitle = $( this ).text();
         var page = $( this ).attr( "href" );
         $( "#dataPreviewLabel" ).text( ltitle );
         $( "#dataPreview .modal-body" ).load( page + " div" );
         $( '#dataPreview' ).modal( {show:true} );
     });
+
     $( "#dataPreview" ).on( "hidden", function() {
         $( "#dataPreviewLabel" ).html( "" );
         $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + __("Loading") + "</div>" );
     });
-    $( "#resultst" ).on("click", ".import_record", function(e) {
-        e.preventDefault();
-        var data_breedingid = $( this ).data( "breedingid" );
-        var data_headingcode = $( this ).data( "heading_code" );
-        var data_authid = $( this ).data( "authid" );
-        var data_biblionumber = $( this ).data( "biblionumber" );
-        var data_frameworkcode = $( this ).data( "frameworkcode" );
-        var data_index = $( this ).data( "index" );
-        if ( data_headingcode == undefined ) {
-            Import( data_breedingid, data_biblionumber, false , data_frameworkcode );
-        } else {
-            Import( data_breedingid, data_authid, data_headingcode, "", data_index );
-        }
-        return false;
-    });
 
+    $( "#resultst" ).on("click", ".chosen", function(e) {
+        e.preventDefault();
+        var title = $(this).attr('title');
+        ChangeLastAction( title, 0 );
+        if( title == 'Order' ) window.location = $(this).attr('href');
+        else {
+            opener.document.location = $(this).attr('href');
+            window.close();
+        }
+    });
 });
+
+function InitLastAction() {
+    if( $("#resultst").length == 0 ) return;
+    try { last_action = localStorage.getItem('z3950search_last_action'); } catch (err) {}
+    if( last_action ) {
+        var linkcount = $(".z3950actions:eq(0)").siblings(".dropdown-menu").find("a[title='"+last_action+"']").length;
+        if( linkcount == 0 ) return;
+        if( last_action != 'MARC' ) $( ".z3950actions" ).text( last_action );
+    }
+}
+
+function ChangeLastAction(title, change_text) {
+    if( last_action && last_action == title ) return;
+    last_action = title;
+    if( change_text ) $( ".z3950actions" ).text( last_action );
+    if( previewed == 0 || change_text == 1 )
+        try { localStorage.setItem('z3950search_last_action', last_action); } catch(err) {}
+}
