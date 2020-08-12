@@ -2048,7 +2048,6 @@ sub AddReturn {
             my $refunded = $item->set_found(
                 {
                     holdingbranch  => $item_holding_branch,
-                    borrowernumber => $borrowernumber
                 }
             );
 
@@ -2490,7 +2489,7 @@ sub _FixOverduesOnReturn {
 
 =head2 _FixAccountForLostAndFound
 
-  &_FixAccountForLostAndFound($itemnumber, [$borrowernumber, $barcode]);
+  &_FixAccountForLostAndFound($itemnumber, [$barcode]);
 
 Finds the most recent lost item charge for this item and refunds the borrower
 appropriatly, taking into account any payments or writeoffs already applied
@@ -2502,7 +2501,6 @@ Internal function, not exported, called only by AddReturn.
 
 sub _FixAccountForLostAndFound {
     my $itemnumber     = shift or return;
-    my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
 
     my $credit;

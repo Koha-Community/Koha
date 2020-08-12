@@ -2747,7 +2747,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         );
         $credit->apply( { debits => [ $debts->as_list ], offset_type => 'Writeoff' } );
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
         is( $credit_return_id, undef, 'No LOST_FOUND account line added' );
 
         $lost_fee_line->discard_changes; # reload from DB
@@ -2809,7 +2809,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         );
         $credit->apply( { debits => [ $debts->as_list ], offset_type => 'Payment' } );
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $credit_return->credit_type_code, 'LOST_FOUND', 'An account line of type LOST_FOUND is added' );
@@ -2867,7 +2867,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         is( $lost_fee_line->amountoutstanding + 0,
             $replacement_amount, 'The right LOST amountountstanding is generated' );
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $credit_return->credit_type_code, 'LOST_FOUND', 'An account line of type LOST_FOUND is added' );
@@ -2953,7 +2953,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         $lost_fee_line->discard_changes;
         my $outstanding = $lost_fee_line->amountoutstanding;
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PROCESSING - PAYMENT (LOST_FOUND)' );
@@ -3050,7 +3050,7 @@ subtest '_FixAccountForLostAndFound' => sub {
 
         t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PROCESSING - payment (LOST_FOUND)' );
@@ -3181,7 +3181,7 @@ subtest '_FixAccountForLostAndFound returns undef if patron is deleted' => sub {
 
     $patron->delete();
 
-    my $return_value = C4::Circulation::_FixAccountForLostAndFound( $patron->id, $item->itemnumber );
+    my $return_value = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber );
 
     is( $return_value, undef, "_FixAccountForLostAndFound returns undef if patron is deleted" );
 

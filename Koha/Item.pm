@@ -767,7 +767,6 @@ sub set_found {
     my ($self, $params) = @_;
 
     my $holdingbranch = $params->{holdingbranch} || $self->holdingbranch;
-    my $borrowernumber = $params->{borrowernumber} || undef;
 
     ## If item was lost, it has now been found, reverse any list item charges if necessary.
     my $refund = 1;
@@ -793,7 +792,7 @@ sub set_found {
         )
       )
     {
-        _FixAccountForLostAndFound( $self->itemnumber, borrowernumber, $self->barcode );
+        C4::Circulation::_FixAccountForLostAndFound( $self->itemnumber, $self->barcode );
         $refunded = 1;
     }
 
