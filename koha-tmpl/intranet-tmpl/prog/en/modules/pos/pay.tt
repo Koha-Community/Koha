@@ -271,7 +271,6 @@
             "bPaginate": false,
             "bFilter": false,
             "bInfo": false,
-            "bAutoWidth": false,
             "aoColumnDefs": [{
                 "aTargets": [-3],
                 "bSortable": false,
@@ -343,7 +342,7 @@
         var items_table = KohaTable("invoices", {
                "sPaginationType": "full",
                "aaSorting": [[ 0, "asc" ]],
-        }, items_columns_settings);
+        }, items_columns_settings, false);
 
         $(".add_button").on("click", function(e) {
             e.preventDefault();
