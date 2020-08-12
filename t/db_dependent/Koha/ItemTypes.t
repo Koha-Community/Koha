@@ -124,13 +124,13 @@ my $item_type = $builder->build_object({ class => 'Koha::ItemTypes' });
 
 is( $item_type->can_be_deleted, 1, 'An item type that is not used can be deleted');
 
-my $item = $builder->build_object({ class => 'Koha::Items', value => { itype => $item_type->itemtype }});
+my $item = $builder->build_sample_item({ itype => $item_type->itemtype });
 is( $item_type->can_be_deleted, 0, 'An item type that is used by an item cannot be deleted' );
 $item->delete;
 
-my $biblioitem = $builder->build_object({ class => 'Koha::Biblioitems', value => { itemtype => $item_type->itemtype }});
+my $biblio = $builder->build_sample_biblio({ itemtype => $item_type->itemtype });
 is ( $item_type->can_be_deleted, 0, 'An item type that is used by an item and a biblioitem cannot be deleted' );
-$biblioitem->delete;
+$biblio->delete;
 
 is ( $item_type->can_be_deleted, 1, 'The item type that was being used by the removed item and biblioitem can now be deleted' );
 
