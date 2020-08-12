@@ -4,19 +4,17 @@
 # It requires a working Koha database with the sample data
 
 use Modern::Perl;
-use DateTime::Format::MySQL;
-use Test::More tests => 6;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils qw(dt_from_string);
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValueCategories;
 
 BEGIN {
-    use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote GetItemTypesCategorized));
+    use_ok('C4::Koha', qw( :DEFAULT GetItemTypesCategorized));
     use_ok('C4::Members');
 }
 
@@ -156,63 +154,6 @@ subtest 'Authorized Values Tests' => sub {
     }
 
 };
-
-### test for C4::Koha->GetDailyQuote()
-SKIP:
-    {
-        eval { require Test::Deep; import Test::Deep; };
-        skip "Test::Deep required to run the GetDailyQuote tests.", 1 if $@;
-
-        subtest 'Daily Quotes Test' => sub {
-            plan tests => 4;
-
-            SKIP: {
-
-                skip "C4::Koha can't \'GetDailyQuote\'!", 3 unless can_ok('C4::Koha','GetDailyQuote');
-
-# Fill the quote table with the default needed and a spare
-$dbh->do("DELETE FROM quotes WHERE id=3 OR id=25;");
-my $sql = "INSERT INTO quotes (id,source,text,timestamp) VALUES
-(25,'Richard Nixon','When the President does it, that means that it is not illegal.',NOW()),
-(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',NOW());";
-$dbh->do($sql);
-
-                my $expected_quote = {
-                    id          => 3,
-                    source      => 'Abraham Lincoln',
-                    text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
-                    timestamp   => re('\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}'),   #'YYYY-MM-DD HH:MM:SS'
-                };
-
-# test quote retrieval based on id
-
-                my $quote = GetDailyQuote('id'=>3);
-                cmp_deeply ($quote, $expected_quote, "Got a quote based on id.") or
-                    diag('Be sure to run this test on a clean install of sample data.');
-
-# test quote retrieval based on today's date
-
-                my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
-                my $sth = C4::Context->dbh->prepare($query);
-                $sth->execute(DateTime::Format::MySQL->format_datetime( dt_from_string() ), $expected_quote->{'id'});
-
-                DateTime::Format::MySQL->format_datetime( dt_from_string() ) =~ m/(\d{4}-\d{2}-\d{2})/;
-                $expected_quote->{'timestamp'} = re("^$1");
-
-#        $expected_quote->{'timestamp'} = DateTime::Format::MySQL->format_datetime( dt_from_string() );   # update the timestamp of expected quote data
-
-                $quote = GetDailyQuote(); # this is the "default" mode of selection
-                cmp_deeply ($quote, $expected_quote, "Got a quote based on today's date.") or
-                    diag('Be sure to run this test on a clean install of sample data.');
-
-# test random quote retrieval
-
-                $quote = GetDailyQuote('random'=>1);
-                ok ($quote, "Got a random quote.");
-            }
-        };
-}
-
 
 subtest 'ISBN tests' => sub {
     plan tests => 6;
