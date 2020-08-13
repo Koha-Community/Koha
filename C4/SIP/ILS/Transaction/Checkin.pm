@@ -16,6 +16,7 @@ use C4::Debug;
 use C4::Items qw( ModItemTransfer );
 use C4::Reserves qw( ModReserveAffect );
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Items;
 
 use parent qw(C4::SIP::ILS::Transaction);
 
@@ -74,8 +75,21 @@ sub do_checkin {
         $return_date = dt_from_string($return_date);
     }
 
+    my ( $return, $messages, $issue, $borrower );
+    my $item = Koha::Items->find( { barcode => $barcode } );
+    my $human_required = 0;
+    if (   C4::Context->preference("CircConfirmItemParts")
+        && defined($item)
+        && $item->materials )
+    {
+        $human_required                   = 1;
+        $messages->{additional_materials} = 1;
+    }
+
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
-    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, $return_date);
+    ( $return, $messages, $issue, $borrower ) =
+      AddReturn( $barcode, $branch, undef, $return_date )
+      unless $human_required;
 
     if ( $checked_in_ok ) {
         delete $messages->{ItemLocationUpdated};
@@ -87,6 +101,9 @@ sub do_checkin {
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
     # cancellationdate, found, reservenotes, priority, timestamp
+    if ($messages->{additional_materials}) {
+        $self->alert_type('99');
+    }
     if( $messages->{DataCorrupted} ) {
         $self->alert_type('98');
     }
