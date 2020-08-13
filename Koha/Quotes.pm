@@ -17,7 +17,6 @@ package Koha::Quotes;
 
 use Modern::Perl;
 use Carp;
-use DateTime::Format::MySQL;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
@@ -93,15 +92,13 @@ sub get_daily_quote {
                 offset => $offset,
             }
         )->single;
-
-        unless($quote){
-            return;
-        }
-
-        # update the timestamp for that quote
-        my $dt = $dtf->format_datetime(dt_from_string);
-        $quote->update({ timestamp => $dt });
     }
+
+    return unless $quote;
+
+    # update the timestamp for that quote
+    $quote->update({timestamp => dt_from_string})->discard_changes;
+
     return $quote;
 }
 

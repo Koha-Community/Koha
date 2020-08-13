@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 14;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
@@ -24,6 +24,7 @@ use Koha::Quote;
 use Koha::Quotes;
 
 use t::lib::TestBuilder;
+use t::lib::Dates;
 use t::lib::Mocks;
 
 BEGIN {
@@ -39,20 +40,12 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 # Ids not starting with 1 to reflect possible deletes, this acts as a regression test for bug 11297
-my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-my $timestamp = $dtf->format_datetime(dt_from_string());
-my $quote_1 = Koha::Quote->new({ source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  $timestamp })->store;
-my $quote_2 = Koha::Quote->new({ source => 'Thomas Jefferson', text => 'When angry, count ten, before you speak; if very angry, an hundred.', timestamp =>  $timestamp })->store;
-my $quote_3 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal', timestamp =>  $timestamp })->store;
-my $quote_4 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'I have always found that mercy bears richer fruits than strict justice.', timestamp =>  $timestamp })->store;
-my $quote_5 = Koha::Quote->new({ source => 'Andrew Johnson', text => 'I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.', timestamp =>  $timestamp })->store;
-
-my $expected_quote = {
-    id          => $quote_3->id,
-    source      => 'Abraham Lincoln',
-    text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
-    timestamp   => $timestamp,
-};
+my $yesterday = dt_from_string()->subtract(days => 1);
+my $quote_1 = Koha::Quote->new({ source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.' })->store;
+my $quote_2 = Koha::Quote->new({ source => 'Thomas Jefferson', text => 'When angry, count ten, before you speak; if very angry, an hundred.' })->store;
+my $quote_3 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal' })->store;
+my $quote_4 = Koha::Quote->new({ source => 'Abraham Lincoln', text => 'I have always found that mercy bears richer fruits than strict justice.' })->store;
+my $quote_5 = Koha::Quote->new({ source => 'Andrew Johnson', text => 'I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.' })->store;
 
 #First test with QuoteOfTheDay disabled
 t::lib::Mocks::mock_preference('QuoteOfTheDay', 0);
@@ -71,21 +64,36 @@ ok(not($quote), "'QuoteOfTheDay'-syspref doesn't include 'opac'");
 t::lib::Mocks::mock_preference('QuoteOfTheDay', 'opac,intranet');
 
 $quote = Koha::Quotes->get_daily_quote('id'=>$quote_3->id);
-cmp_ok($quote->id, '==', $expected_quote->{'id'}, "Correctly got quote by ID");
-is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
+is($quote->id, $quote_3->id, "Correctly got quote by ID");
+is($quote->text, $quote_3->text, "Quote is correct");
+is(t::lib::Dates::compare($quote->timestamp, dt_from_string), 0, "get_daily_quote updated the timestamp/last seen");
 
 $quote = Koha::Quotes->get_daily_quote('random'=>1);
 ok($quote, "Got a random quote.");
 cmp_ok($quote->id, '>', 0, 'Id is greater than 0');
 
-$timestamp = $dtf->format_datetime(dt_from_string->add( seconds => 1 )); # To make it the last one
-Koha::Quotes->search({ id => $expected_quote->{'id'} })->update({ timestamp => $timestamp });
-$expected_quote->{'timestamp'} = $timestamp;
+subtest 'timestamp column is updated' => sub {
+    plan tests => 3;
 
-$quote = Koha::Quotes->get_daily_quote()->unblessed; # this is the "default" mode of selection
-cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
-is($quote->{'source'}, $expected_quote->{'source'}, "Source is correct");
-is($quote->{'timestamp'}, $expected_quote->{'timestamp'}, "Timestamp $timestamp is correct");
+    Koha::Quotes->search->update( { timestamp => $yesterday } );
+
+    my $now = dt_from_string;
+
+    my $expected_quote = {
+        id          => $quote_3->id,
+        source      => 'Abraham Lincoln',
+        text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
+        timestamp   => $yesterday,
+    };
+
+
+    Koha::Quotes->find( $expected_quote->{'id'} )
+                ->update( { timestamp => $now->clone->subtract( seconds => 10 ) } ); ; # To make it the last one
+    $quote = Koha::Quotes->get_daily_quote(); # this is the "default" mode of selection
+    is($quote->id, $expected_quote->{'id'}, "Id is correct");
+    is($quote->source, $expected_quote->{'source'}, "Source is correct");
+    is(t::lib::Dates::compare($quote->timestamp, $now), 0, "get_daily_quote updated the timestamp/last seen");
+};
 
 Koha::Quotes->search()->delete();
 $quote = eval {Koha::Quotes->get_daily_quote();};
