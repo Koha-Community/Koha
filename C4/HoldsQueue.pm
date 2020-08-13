@@ -409,8 +409,8 @@ sub MapItemsToHoldRequests {
                 next
                   if ( !$item->{holdallowed} )
                   || ( $item->{holdallowed} == 1
-                    && $item->{homebranch} ne $request->{borrowerbranch}
-                  || $item->{_object}->exclude_from_local_holds_priority );
+                    && $item->{homebranch} ne $request->{borrowerbranch} )
+                  || $item->{_object}->exclude_from_local_holds_priority;
 
                 next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
 

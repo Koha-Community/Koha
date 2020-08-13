@@ -154,7 +154,7 @@ if ($op eq "action") {
 	my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
 
 	# Calling the template
-        add_saved_job_results_to_template($template, $completedJobID);
+        add_saved_job_results_to_template($template, $completedJobID, $items_display_hashref);
 
     } else {
     # While the job is getting done
@@ -186,12 +186,20 @@ if ($op eq "action") {
 	    }
         }
 
+        my $yesno = Koha::AuthorisedValues->search({category => 'YES_NO'});
+        my $ynhash = {};
+
+        while(my $yn = $yesno->next) {
+            $ynhash->{'av'.$yn->authorised_value} = $yn->lib;
+        }
+
         try {
             my $schema = Koha::Database->new->schema;
             $schema->txn_do(
                 sub {
                     # For each item
                     my $i = 1;
+                    my $extra_headers = {};
                     foreach my $itemnumber (@itemnumbers) {
                         $job->progress($i) if $runinbackground;
                         my $item = Koha::Items->find($itemnumber);
@@ -233,9 +241,13 @@ if ($op eq "action") {
                         }
                         else {
                             my $modified_holds_priority = 0;
-                            if (defined $exclude_from_local_holds_priority && $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
+                            if (defined $exclude_from_local_holds_priority) {
+                                if($item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
                                 $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
                                 $modified_holds_priority = 1;
+                            }
+                                $extra_headers->{exclude_from_local_holds_priority} = {name => 'Exclude from local holds priority', items => {}} unless defined $extra_headers->{exclude_from_local_holds_priority};
+                                $extra_headers->{exclude_from_local_holds_priority}->{items}->{$item->itemnumber} = $ynhash->{'av'.$item->exclude_from_local_holds_priority};
                             }
                             my $modified = 0;
                             if ( $values_to_modify || $values_to_blank ) {
@@ -305,6 +317,7 @@ if ($op eq "action") {
                                     {
                                         modified_items  => $modified_items,
                                         modified_fields => $modified_fields,
+                                        extra_headers => $extra_headers,
                                     }
                                 );
                             }
@@ -772,12 +785,22 @@ sub add_results_to_template {
 sub add_saved_job_results_to_template {
     my $template = shift;
     my $completedJobID = shift;
+    my $items_display_hashref= shift;
     my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
     my $results = $job->results();
     add_results_to_template($template, $results);
 
     my $fields = $job->get("modified_fields");
     my $items = $job->get("modified_items");
+    my $extra_headers = $job->get("extra_headers");
+
+    foreach my $header (keys %{$extra_headers}) {
+        push @{$items_display_hashref->{item_header_loop}}, {header_value => $extra_headers->{$header}->{name}};
+        foreach my $row (@{$items_display_hashref->{item_loop}}) {
+            push @{$row->{item_value}}, {field => $extra_headers->{$header}->{items}->{$row->{itemnumber}}};
+        }
+    }
+
     $template->param(
         modified_items => $items,
         modified_fields => $fields,

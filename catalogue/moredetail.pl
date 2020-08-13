@@ -51,7 +51,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 );
 
 $template->param(
-    updated_exclude_from_local_holds_priority => $query->param('updated_exclude_from_local_holds_priority')
+    updated_exclude_from_local_holds_priority => scalar($query->param('updated_exclude_from_local_holds_priority'))
 );
 
 if($query->cookie("holdfor")){ 

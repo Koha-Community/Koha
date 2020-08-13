@@ -436,6 +436,7 @@
                     <th scope="col">Check previous checkout?</th>
                     [% END %]
                     <th scope="col">Default privacy</th>
+                    <th scope="col">Exclude from local holds priority</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -547,6 +548,13 @@
                                 Never
                             [% CASE 'forever' %]
                                 Forever
+                            [% END %]
+                        </td>
+                        <td>
+                            [% IF category.exclude_from_local_holds_priority %]
+                                Yes
+                            [% ELSE %]
+                                No
                             [% END %]
                         </td>
                         <td class="actions">
