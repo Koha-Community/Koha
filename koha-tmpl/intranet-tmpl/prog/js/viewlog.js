@@ -61,10 +61,4 @@ $(document).ready(function(){
             tickAll('interfaces');
         }
     });
-
-    var logst = KohaTable("logst", {
-        "autoWidth": false,
-        "order": [[0, "desc"]],
-        "pagingType" : "full"
-    }, columns_settings);
 });
