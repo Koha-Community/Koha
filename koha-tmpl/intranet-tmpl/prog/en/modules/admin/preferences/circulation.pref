@@ -846,11 +846,11 @@ Circulation:
                   do_not_allow: "Do not allow to mark items as lost"
                   allow: "Allow to mark items as lost"
                   allow_and_notify: "Allow to mark items as lost and notify the patron"
-            - "from the 'Holds to pull' screen"
+            - "from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
         -
             - Update item's values when marked as lost from the hold to pull screen.
             - This is a list of values to update an item when it is marked as lost from the holds to pull screen.
-            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost'
+            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)'
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
               syntax: text/x-yaml
