@@ -93,8 +93,12 @@ sub do_checkout {
                     $noerror = 0;
                     last;
                 }
-             } elsif ($confirmation eq 'PREVISSUE') {
+            } elsif ($confirmation eq 'PREVISSUE') {
                 $self->screen_msg("This item was previously checked out by you");
+                last;
+            } elsif ( $confirmation eq 'additional_materials' ) {
+                $self->screen_msg('Item must be issued at a circulation desk');
+                $noerror = 0;
                 last;
             } else {
                 # We've been returned a case other than those above
