@@ -169,6 +169,14 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
+        # If item was lost, it has now been found, reverse any list item charges if necessary.
+        if ( exists $updated_columns{itemlost}
+                and $self->itemlost != $updated_columns{itemlost}
+                and $updated_columns{itemlost} >= 1 ) {
+            $self->_set_found_trigger;
+            $self->paidfor('');
+        }
+
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
             unless $params->{skip_modzebra_update};
 
@@ -763,10 +771,20 @@ sub renewal_branchcode {
     return $branchcode;
 }
 
-sub set_found {
-    my ($self, $params) = @_;
+=head3 _set_found_trigger
 
-    my $holdingbranch = $params->{holdingbranch} || $self->holdingbranch;
+    $self->_set_found_trigger
+
+Finds the most recent lost item charge for this item and refunds the patron
+appropriatly, taking into account any payments or writeoffs already applied
+against the charge.
+
+Internal function, not exported, called only by Koha::Item->store.
+
+=cut
+
+sub _set_found_trigger {
+    my ( $self, $params ) = @_;
 
     ## If item was lost, it has now been found, reverse any list item charges if necessary.
     my $refund = 1;
@@ -778,25 +796,93 @@ sub set_found {
           dt_from_string( $self->itemlost_on )->delta_days($today)
           ->in_units('days');
 
-        $refund = 0 unless ( $lost_age_in_days < $no_refund_after_days );
+        return $self unless $lost_age_in_days < $no_refund_after_days;
     }
 
-    my $refunded;
-    if (
-        $refund
-        && Koha::CirculationRules->get_lostreturn_policy(
+    return $self
+      unless Koha::CirculationRules->get_lostreturn_policy(
+        {
+            current_branch => C4::Context->userenv->{branch},
+            item           => $self,
+        }
+      );
+
+    # check for charge made for lost book
+    my $accountlines = Koha::Account::Lines->search(
+        {
+            itemnumber      => $self->itemnumber,
+            debit_type_code => 'LOST',
+            status          => [ undef, { '<>' => 'FOUND' } ]
+        },
+        {
+            order_by => { -desc => [ 'date', 'accountlines_id' ] }
+        }
+    );
+
+    return $self unless $accountlines->count > 0;
+
+    my $accountline     = $accountlines->next;
+    my $total_to_refund = 0;
+
+    return $self unless $accountline->borrowernumber;
+
+    my $patron = Koha::Patrons->find( $accountline->borrowernumber );
+    return $self
+      unless $patron;  # Patron has been deleted, nobody to credit the return to
+                       # FIXME Should not we notify this somehwere
+
+    my $account = $patron->account;
+
+    # Use cases
+    if ( $accountline->amount > $accountline->amountoutstanding ) {
+
+    # some amount has been cancelled. collect the offsets that are not writeoffs
+    # this works because the only way to subtract from this kind of a debt is
+    # using the UI buttons 'Pay' and 'Write off'
+        my $credits_offsets = Koha::Account::Offsets->search(
             {
-                current_branch => C4::Context->userenv->{branch},
-                item           => $self,
+                debit_id  => $accountline->id,
+                credit_id => { '!=' => undef },     # it is not the debit itself
+                type      => { '!=' => 'Writeoff' },
+                amount => { '<' => 0 }    # credits are negative on the DB
             }
-        )
-      )
-    {
-        C4::Circulation::_FixAccountForLostAndFound( $self->itemnumber, $self->barcode );
-        $refunded = 1;
+        );
+
+        $total_to_refund = ( $credits_offsets->count > 0 )
+          ? $credits_offsets->total * -1    # credits are negative on the DB
+          : 0;
     }
 
-    return $refunded;
+    my $credit_total = $accountline->amountoutstanding + $total_to_refund;
+
+    my $credit;
+    if ( $credit_total > 0 ) {
+        my $branchcode =
+          C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        $credit = $account->add_credit(
+            {
+                amount      => $credit_total,
+                description => 'Item found ' . $item_id,
+                type        => 'LOST_FOUND',
+                interface   => C4::Context->interface,
+                library_id  => $branchcode,
+                item_id     => $itemnumber
+            }
+        );
+
+        $credit->apply( { debits => [$accountline] } );
+    }
+
+    # Update the account status
+    $accountline->discard_changes->status('FOUND')
+      ; # FIXME JD Why discard_changes? $accountline has not been modified since last fetch
+    $accountline->store;
+
+    if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
+        $account->reconcile_balance;
+    }
+
+    return $self;
 }
 
 =head3 to_api_mapping

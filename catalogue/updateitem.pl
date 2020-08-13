@@ -68,9 +68,6 @@ elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from for
         $item->itemnotes($itemnotes);
     }
 } elsif ( $op eq "set_lost" && $itemlost ne $item_data_hashref->{'itemlost'}) {
-    $item->set_found
-        if !$itemlost && $item->itemlost && $item->itemlost ge '1';
-
     $item->itemlost($itemlost);
 } elsif ( $op eq "set_withdrawn" && $withdrawn ne $item_data_hashref->{'withdrawn'}) {
     $item->withdrawn($withdrawn);

@@ -1508,11 +1508,6 @@ sub AddIssue {
                 UpdateTotalIssues( $item_object->biblionumber, 1 );
             }
 
-            ## If item was lost, it has now been found, reverse any list item charges if necessary.
-            if ( $item_object->itemlost ) {
-                $item_object->set_found;
-            }
-
             $item_object->issues( ( $item_object->issues || 0 ) + 1);
             $item_object->holdingbranch(C4::Context->userenv->{'branch'});
             $item_object->itemlost(0);
@@ -2485,94 +2480,6 @@ sub _FixOverduesOnReturn {
     );
 
     return $result;
-}
-
-=head2 _FixAccountForLostAndFound
-
-  &_FixAccountForLostAndFound($itemnumber, [$barcode]);
-
-Finds the most recent lost item charge for this item and refunds the borrower
-appropriatly, taking into account any payments or writeoffs already applied
-against the charge.
-
-Internal function, not exported, called only by AddReturn.
-
-=cut
-
-sub _FixAccountForLostAndFound {
-    my $itemnumber     = shift or return;
-    my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
-
-    my $credit;
-
-    # check for charge made for lost book
-    my $accountlines = Koha::Account::Lines->search(
-        {
-            itemnumber      => $itemnumber,
-            debit_type_code => 'LOST',
-            status          => [ undef, { '<>' => 'FOUND' } ]
-        },
-        {
-            order_by => { -desc => [ 'date', 'accountlines_id' ] }
-        }
-    );
-
-    return unless $accountlines->count > 0;
-    my $accountline     = $accountlines->next;
-    my $total_to_refund = 0;
-
-    return unless $accountline->borrowernumber;
-    my $patron = Koha::Patrons->find( $accountline->borrowernumber );
-    return unless $patron; # Patron has been deleted, nobody to credit the return to
-
-    my $account = $patron->account;
-
-    # Use cases
-    if ( $accountline->amount > $accountline->amountoutstanding ) {
-        # some amount has been cancelled. collect the offsets that are not writeoffs
-        # this works because the only way to subtract from this kind of a debt is
-        # using the UI buttons 'Pay' and 'Write off'
-        my $credits_offsets = Koha::Account::Offsets->search({
-            debit_id  => $accountline->id,
-            credit_id => { '!=' => undef }, # it is not the debit itself
-            type      => { '!=' => 'Writeoff' },
-            amount    => { '<'  => 0 } # credits are negative on the DB
-        });
-
-        $total_to_refund = ( $credits_offsets->count > 0 )
-                            ? $credits_offsets->total * -1 # credits are negative on the DB
-                            : 0;
-    }
-
-    my $credit_total = $accountline->amountoutstanding + $total_to_refund;
-
-    if ( $credit_total > 0 ) {
-        my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-        $credit = $account->add_credit(
-            {
-                amount      => $credit_total,
-                description => 'Item found ' . $item_id,
-                type        => 'LOST_FOUND',
-                interface   => C4::Context->interface,
-                library_id  => $branchcode,
-                item_id     => $itemnumber
-            }
-        );
-
-        $credit->apply( { debits => [ $accountline ] } );
-    }
-
-    # Update the account status
-    $accountline->discard_changes->status('FOUND');
-    $accountline->store;
-
-    $accountline->item->paidfor('')->store({ log_action => 0 });
-
-    if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
-        $account->reconcile_balance;
-    }
-
-    return ($credit) ? $credit->id : undef;
 }
 
 =head2 _GetCircControlBranch

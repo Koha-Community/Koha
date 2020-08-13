@@ -751,8 +751,6 @@ if ($op eq "additem") {
         my $newitemlost = $newitem->{itemlost};
         if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
             LostItem( $item->itemnumber, 'additem' )
-        } elsif ( !$newitemlost && $olditemlost && $olditemlost ge '1' ) {
-            $item->set_found;
         }
     }
     $nextop="additem";
