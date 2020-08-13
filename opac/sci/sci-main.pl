@@ -22,6 +22,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw(get_template_and_user checkpw);
 use C4::Circulation;
 use C4::Output;
+use Koha::Items;
 
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
@@ -64,8 +65,20 @@ if ( $op eq 'check_in' ) {
     # Return items
     foreach my $barcode (@barcodes) {
         try {
-            my ( $success, $messages, $checkout, $patron ) =
-              AddReturn( $barcode, $library );
+            my ( $success, $messages, $checkout, $patron );
+            my $item = Koha::Items->find( { barcode => $barcode } );
+            my $human_required = 0;
+            if (   C4::Context->preference("CircConfirmItemParts")
+                && defined($item)
+                && $item->materials )
+            {
+                $human_required                   = 1;
+                $success                          = 0;
+                $messages->{additional_materials} = 1;
+            }
+
+            ( $success, $messages, $checkout, $patron ) =
+              AddReturn( $barcode, $library ) unless $human_required;
             if ($success) {
                 push @success,
                   {

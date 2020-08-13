@@ -14,6 +14,8 @@
         <span>(Item is withdrawn and check-in blocked by policy, please see library staff for assistance)</span>
     [% ELSIF messages.NotIssued %]
         <span>(The book is not currently on loan, please see library staff for assistance)</span>
+    [% ELSIF messages.additional_materials %]
+        <span>(The item cannot be returned at a self service terminal, please see library staff for assistance)</span>
     [% ELSE %]
         <span>(There was a problem returning this item, please see library staff for assistance)</span>
     [% END %]
