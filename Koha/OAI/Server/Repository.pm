@@ -36,6 +36,7 @@ use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
 use C4::Biblio;
+use C4::XSLT qw( transformMARCXML4XSLT );
 use Koha::XSLT::Base;
 
 =head1 NAME
@@ -82,10 +83,11 @@ mode. A configuration file koha-oai.conf can look like that:
       schema: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
       include_items: 1
     marcxml:
-      metadataPrefix: marxml
+      metadataPrefix: marcxml
       metadataNamespace: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim
       schema: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
       include_items: 1
+      expanded_avs: 1
     oai_dc:
       metadataPrefix: oai_dc
       metadataNamespace: http://www.openarchives.org/OAI/2.0/oai_dc/
@@ -166,16 +168,25 @@ sub DESTROY {
 
 
 sub get_biblio_marcxml {
-    my ($self, $biblionumber, $format) = @_;
-    my $with_items = 0;
+    my ( $self, $biblionumber, $format ) = @_;
+    my $with_items   = 0;
+    my $expanded_avs = 0;
     if ( my $conf = $self->{conf} ) {
-        $with_items = $conf->{format}->{$format}->{include_items};
+        $with_items   = $conf->{format}->{$format}->{include_items  };
+        $expanded_avs = $conf->{format}->{$format}->{expanded_avs};
     }
-    my $record = GetMarcBiblio({
-        biblionumber => $biblionumber,
-        embed_items  => $with_items,
-        opac         => 1 });
-    $record ? $record->as_xml_record() : undef;
+
+    my $record = GetMarcBiblio(
+        {
+            biblionumber => $biblionumber,
+            embed_items  => $with_items,
+            opac         => 1
+        }
+    );
+    $record = transformMARCXML4XSLT( $biblionumber, $record )
+        if $expanded_avs;
+
+    return $record ? $record->as_xml_record() : undef;
 }
 
 
