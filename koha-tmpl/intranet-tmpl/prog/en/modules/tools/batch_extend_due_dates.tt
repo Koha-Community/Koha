@@ -51,7 +51,7 @@
                     [% END %]
 
                     [% IF view == 'form' %]
-                        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="extend_due_dates_form">
+                        <form method="post" action="/cgi-bin/koha/tools/batch_extend_due_dates.pl" id="extend_due_dates_form">
                             <fieldset class="rows">
                                 <legend>Checkout criteria:</legend>
                                 <ol>
@@ -198,22 +198,27 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
         $(document).ready(function() {
 
-            $("#selectall").click(function(e) {
+            $("#selectall").click(function(e){
                 e.preventDefault();
-                $("#checkouts").checkCheckboxes();
+                $("#checkouts input[type='checkbox']").each(function(){
+                    $(this).prop("checked", true);
+                });
             });
-            $("#clearall").click(function(e) {
+
+            $("#clearall").click(function(e){
                 e.preventDefault();
-                $("#checkouts").unCheckCheckboxes();
+                $("#checkouts input[type='checkbox']").each(function(){
+                    $(this).prop("checked", false);
+                });
             });
+
             $("#selectall").click();
 
-            $("table#checkouts").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#checkouts").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [0, 3], "bSortable": false, "bSearchable": false },
                     { "aTargets": [1], "sType": "num-html" }
@@ -223,7 +228,7 @@
                 "bPaginate": false
             }));
 
-            $("table#checkouts_result").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#checkouts_result").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [0, 3], "bSortable": false, "bSearchable": false },
                     { "aTargets": [1], "sType": "num-html" }
