@@ -544,13 +544,18 @@
                 });
                 $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
                 $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-check\"></i>"+_(" Select all")+"<\/a>");
-                $("#CheckAll").click(function(){
-                    $(".checkboxed").checkCheckboxes();
-                    return false;
+                $("#CheckAll").click(function(e){
+                    e.preventDefault();
+                    $(".selection").each(function(){
+                        $(this).prop("checked", true);
+                    });
                 });
-                $("#CheckNone").click(function(){
-                    $(".checkboxed").unCheckCheckboxes();
-                    return false;
+
+                $("#CheckNone").click(function(e){
+                    e.preventDefault();
+                    $(".selection").each(function(){
+                        $(this).prop("checked", false);
+                    });
                 });
                 $(".placehold").on("click",function(e){
                     placeHold();
