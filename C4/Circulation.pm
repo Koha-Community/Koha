@@ -2008,7 +2008,6 @@ sub AddReturn {
 
     # the holdingbranch is updated if the document is returned to another location.
     # this is always done regardless of whether the item was on loan or not
-    my $item_holding_branch = $item->holdingbranch;
     if ($item->holdingbranch ne $branch) {
         $item->holdingbranch($branch)->store;
     }
@@ -2040,12 +2039,6 @@ sub AddReturn {
     if ( $item->itemlost ) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            my $refunded = $item->set_found(
-                {
-                    holdingbranch  => $item_holding_branch,
-                }
-            );
-
             $messages->{'LostItemFeeRefunded'} = $refunded;
         }
     }
