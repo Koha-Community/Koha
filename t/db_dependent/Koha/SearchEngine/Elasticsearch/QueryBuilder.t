@@ -216,7 +216,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 53;
+    plan tests => 56;
 
     my $qb;
 
@@ -524,6 +524,12 @@ subtest 'build_query tests' => sub {
     );
     is($query_cgi, 'idx=&q=new&scan=1', 'query cgi');
     is($query_desc, 'new', 'query desc ok');
+
+    my( $limit, $limit_cgi, $limit_desc );
+    ( undef, $query, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( ['AND'], ['kw:""'], undef, ['author:Dillinger Escaplan', 'mc-itype,phr:BOOK', 'mc-itype,phr:CD'] );
+    is( $limit, '(author:("Dillinger Escaplan")) AND itype:(("BOOK") OR ("CD"))', "Limit formed correctly when no search terms");
+    is( $limit_cgi,'&limit=author%3ADillinger%20Escaplan&limit=mc-itype%2Cphr%3ABOOK&limit=mc-itype%2Cphr%3ACD', "Limit CGI formed correctly when no search terms");
+    is( $limit_desc,'(author:("Dillinger Escaplan")) AND itype:(("BOOK") OR ("CD"))',"Limit desc formed correctly when no search terms");
 };
 
 
