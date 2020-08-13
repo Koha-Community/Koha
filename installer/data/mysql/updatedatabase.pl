@@ -22552,6 +22552,27 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25871, "Add library option to OpacItemLocation");
 }
 
+$DBversion = '20.06.00.022';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists('itemtypes', 'parent_type') ) {
+        $dbh->do(q{
+            ALTER TABLE itemtypes
+                ADD COLUMN parent_type VARCHAR(10) NULL DEFAULT NULL
+                AFTER itemtype;
+
+        });
+    }
+    unless ( foreign_key_exists( 'itemtypes', 'itemtypes_ibfk_1') ){
+        $dbh->do(q{
+            ALTER TABLE itemtypes
+            ADD CONSTRAINT itemtypes_ibfk_1
+            FOREIGN KEY (parent_type) REFERENCES itemtypes (itemtype)
+        });
+    }
+
+    NewVersion( $DBversion, 21946, "Add parent type to itemtypes" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
