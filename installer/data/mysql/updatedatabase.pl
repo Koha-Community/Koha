@@ -22576,14 +22576,16 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '20.06.00.023';
 if( CheckVersion( $DBversion ) ) {
 
+    my $QuoteOfTheDay = C4::Context->preference('QuoteOfTheDay');
     $dbh->do( q|
         UPDATE systempreferences
-        SET value = '',
-            options = 'intranet,opac',
+        SET options = 'intranet,opac',
             explanation = 'Enable or disable display of Quote of the Day on the OPAC and staff interface home page',
             type = 'multiple'
         WHERE variable = 'QuoteOfTheDay'
     | );
+
+    C4::Context->set_preference('QuoteOfTheDay', $QuoteOfTheDay ? 'opac' : '');
 
     NewVersion( $DBversion, 16371, "Quote of the Day (QOTD) for the staff interface " );
 }
