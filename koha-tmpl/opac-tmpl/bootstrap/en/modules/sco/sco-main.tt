@@ -83,6 +83,8 @@
                                     Your contact information seems to be incomplete.
                                 [% ELSIF ( circ_error_INVALID_DATE ) %]
                                     Due date is not valid.
+                                [% ELSIF ( circ_error_additional_materials ) %]
+                                    Item must be issued at a circulation desk.
                                 [% END %]
                                 Please see a member of the library staff.
                             </p>
