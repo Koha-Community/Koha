@@ -22573,6 +22573,21 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21946, "Add parent type to itemtypes" );
 }
 
+$DBversion = '20.06.00.023';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q|
+        UPDATE systempreferences
+        SET value = '',
+            options = 'intranet,opac',
+            explanation = 'Enable or disable display of Quote of the Day on the OPAC and staff interface home page',
+            type = 'multiple'
+        WHERE variable = 'QuoteOfTheDay'
+    | );
+
+    NewVersion( $DBversion, 16371, "Quote of the Day (QOTD) for the staff interface " );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
