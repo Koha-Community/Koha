@@ -871,6 +871,7 @@ sub _set_found_trigger {
         );
 
         $credit->apply( { debits => [$accountline] } );
+        $self->{_refunded} = 1;
     }
 
     # Update the account status
