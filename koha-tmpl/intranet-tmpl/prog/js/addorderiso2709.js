@@ -37,15 +37,13 @@ $(document).ready(function() {
     $("div.biblio.unselected select").prop('disabled', false);
     $("div.biblio.unselected input").prop('disabled', false);
 
-    $("#checkAll").click(function(){
-        $("#Aform").checkCheckboxes();
-        $("input:checkbox[name='import_record_id']").change();
-        return false;
+    $("#checkAll").click(function(e){
+        e.preventDefault();
+        $("input:checkbox[name='import_record_id']").prop("checked", true).change();
     });
-    $("#unCheckAll").click(function(){
-        $("#Aform").unCheckCheckboxes();
-        $("input:checkbox[name='import_record_id']").change();
-        return false;
+    $("#unCheckAll").click(function(e){
+        e.preventDefault();
+        $("input:checkbox[name='import_record_id']").prop("checked", false).change();
     });
 
     $("input#add_order").on("click", function(e){
