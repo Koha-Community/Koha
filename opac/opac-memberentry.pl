@@ -532,6 +532,18 @@ sub CheckForInvalidFields {
           }
     }
 
+    if ( $borrower->{'dateofbirth'} ) {
+        my $patron           = Koha::Patron->new( { dateofbirth => $borrower->{'dateofbirth'} } );
+        my $age              = $patron->get_age;
+        my $borrowercategory = Koha::Patron::Categories->find( $borrower->{'categorycode'} );
+        my ( $low, $high ) = ( $borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit );
+        if ( ( $high && ( $age > $high ) ) or ( $age < $low ) ) {
+            push @invalidFields, 'ERROR_age_limitations';
+            $template->param( age_low => $low);
+            $template->param( age_high => $high);
+        }
+    }
+
     return \@invalidFields;
 }
 

@@ -115,6 +115,9 @@
                                 [% IF field == "email_match" %]
                                     <li>Emails do not match! <a href="#borrower_repeat_email">confirm email address</a></li>
                                 [% END %]
+                                [% IF field == "ERROR_age_limitations" %]
+                                    <li>Patron's age is incorrect for their category. Ages allowed are [% age_low | html %]-[% age_high | html %].</li>
+                                [% END %]
                             [% END %]
                         </ul>
                         <span>Please correct and resubmit.</span>
