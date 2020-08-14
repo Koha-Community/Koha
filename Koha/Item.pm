@@ -864,11 +864,12 @@ sub _set_found_trigger {
         $credit = $account->add_credit(
             {
                 amount      => $credit_total,
-                description => 'Item found ' . $item_id,
+                description => 'Item found ' . $self->itemnumber,
                 type        => 'LOST_FOUND',
                 interface   => C4::Context->interface,
                 library_id  => $branchcode,
-                item_id     => $itemnumber
+                item_id     => $self->itemnumber,
+                issue_id    => $accountline->issue_id
             }
         );
 
@@ -877,8 +878,7 @@ sub _set_found_trigger {
     }
 
     # Update the account status
-    $accountline->discard_changes->status('FOUND')
-      ; # FIXME JD Why discard_changes? $accountline has not been modified since last fetch
+    $accountline->status('FOUND');
     $accountline->store;
 
     if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
