@@ -50,14 +50,13 @@
 	</p>
 	[% END %]
     [% SET total = 0 %]
+    [% IF bookseller_filter %]
+        <p><a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Uncheck all</a></p>
+    [% END %]
     <table id="late_orders">
       <thead>
         <tr>
-            [% IF bookseller_filter %]
-                <th><a id="CheckAll" href="#">Check all</a><br /><a id="CheckNone" href="#">Uncheck all</a></th>
-            [% ELSE %]
-                <th></th>
-            [% END %]
+            <th class="NoSort"></th>
             <th>Order line</th>
             <th class="title-string">Order date</th>
             <th class="title-string">Estimated delivery date</th>
@@ -273,7 +272,6 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>
         var late_orderst;
@@ -292,10 +290,11 @@
             var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
             late_orderst = KohaTable("late_orders", {
                 "aoColumnDefs": [
-                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                    { "targets": [ "NoSort" ],"sortable": false,"searchable": false },
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
+                "sorting": [[ 1, "asc" ]],
                 "sPaginationType": "full",
                 "bAutoWidth": false,
                 "fnDrawCallback": function() {
@@ -306,8 +305,14 @@
                 }
             }, columns_settings );
             $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
-            $('#CheckAll').click(function(){ $(late_orderst.fnGetNodes()).find("td").checkCheckboxes();});
-            $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
+            $('#CheckAll').click(function(e){
+                e.preventDefault();
+                $("#late_orders input:checkbox").prop("checked", true);
+            });
+            $('#CheckNone').click(function(e){
+                e.preventDefault();
+                $("#late_orders input:checkbox").prop("checked", false);
+            });
 
             // Generates a dynamic link for exporting the selection's data as CSV
             $("#exportbutton, #export-csv-menu a").click(function() {
