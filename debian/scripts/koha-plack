@@ -328,6 +328,50 @@ set_action()
     fi
 }
 
+_do_instance() {
+    local name=$1
+    local PERL5LIB=$PERL5LIB
+    local KOHA_HOME=$KOHA_HOME
+    local DEV_INSTALL=$DEV_INSTALL
+
+    adjust_paths_dev_install $name
+    PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
+    # If debug mode is enabled, add the debugger lib path
+    # to PERL5LIB if appropriate
+    #FIXME: many of these variables should be set in a higher scope
+    if [ "$debug_mode" = "yes" ]; then
+        if [ "$debugger_path" != "" ]; then
+            PERL5LIB="${debugger_path}":$PERL5LIB
+        fi
+        export PERL5DB="BEGIN { require q(${debugger_path}/perl5db.pl) }"
+        export PERLDB_OPTS="RemotePort=${debugger_location} async=1 LogFile=/var/log/koha/${name}/plack-debug.log"
+        export DBGP_IDEKEY=${debugger_key}
+        export PLACK_DEBUG=1
+        export PERL5OPT="-d"
+    fi
+
+    case $op in
+        "start")
+            start_plack $name
+            ;;
+        "stop")
+            stop_plack $name
+            ;;
+        "restart")
+            restart_plack $name
+            ;;
+        "enable")
+            enable_plack $name
+            ;;
+        "disable")
+            disable_plack $name
+            ;;
+        *)
+            usage
+            ;;
+    esac
+}
+
 STARMAN=$(which starman)
 op=""
 quiet="no"
@@ -383,52 +427,16 @@ done
 
 [ "${quiet}" != "yes" ] && check_env_and_warn
 
+export PERL5LIB
+export DEV_INSTALL
+export KOHA_HOME
+
 if [ $# -gt 0 ]; then
     # We have at least one instance name
     for name in "$@"; do
 
         if is_instance $name; then
-
-            adjust_paths_dev_install $name
-            export DEV_INSTALL
-            export KOHA_HOME
-            PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
-            # If debug mode is enabled, add the debugger lib path
-            # to PERL5LIB if appropriate
-            if [ "$debug_mode" = "yes" ]; then
-                if [ "$debugger_path" != "" ]; then
-                    PERL5LIB="${debugger_path}":$PERL5LIB
-                fi
-                export PERL5DB="BEGIN { require q(${debugger_path}/perl5db.pl) }"
-                export PERLDB_OPTS="RemotePort=${debugger_location} async=1 LogFile=/var/log/koha/${name}/plack-debug.log"
-                export DBGP_IDEKEY=${debugger_key}
-                export PLACK_DEBUG=1
-                export PERL5OPT="-d"
-            fi
-
-            export PERL5LIB
-
-            case $op in
-                "start")
-                    start_plack $name
-                    ;;
-                "stop")
-                    stop_plack $name
-                    ;;
-                "restart")
-                    restart_plack $name
-                    ;;
-                "enable")
-                    enable_plack $name
-                    ;;
-                "disable")
-                    disable_plack $name
-                    ;;
-                *)
-                    usage
-                    ;;
-            esac
-
+            _do_instance $name
         else
             if [ "$quiet" = "no" ]; then
                 log_daemon_msg "Error: Invalid instance name $name"
