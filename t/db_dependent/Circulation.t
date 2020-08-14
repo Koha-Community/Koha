@@ -18,7 +18,8 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
+use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -4447,6 +4448,36 @@ subtest 'Tests for NoRefundOnLostReturnedItemsAge with AddIssue' => sub {
         is( $a->amountoutstanding + 0, 42, "Lost fee was not refunded" );
         $a->delete;
     };
+};
+
+subtest 'transferbook tests' => sub {
+    plan tests => 9;
+
+    throws_ok
+    { C4::Circulation::transferbook({}); }
+    'Koha::Exceptions::MissingParameter',
+    'Koha::Patron->store raises an exception on missing params';
+
+    throws_ok
+    { C4::Circulation::transferbook({to_branch=>'anything'}); }
+    'Koha::Exceptions::MissingParameter',
+    'Koha::Patron->store raises an exception on missing params';
+
+    throws_ok
+    { C4::Circulation::transferbook({from_branch=>'anything'}); }
+    'Koha::Exceptions::MissingParameter',
+    'Koha::Patron->store raises an exception on missing params';
+
+    my ($doreturn,$messages) = C4::Circulation::transferbook({to_branch=>'there',from_branch=>'here'});
+    is( $doreturn, 0, "No return without barcode");
+    ok( exists $messages->{BadBarcode}, "We get a BadBarcode message if no barcode passed");
+    is( $messages->{BadBarcode}, undef, "No barcode passed means undef BadBarcode" );
+
+    ($doreturn,$messages) = C4::Circulation::transferbook({to_branch=>'there',from_branch=>'here',barcode=>'BadBarcode'});
+    is( $doreturn, 0, "No return without barcode");
+    ok( exists $messages->{BadBarcode}, "We get a BadBarcode message if no barcode passed");
+    is( $messages->{BadBarcode}, 'BadBarcode', "No barcode passed means undef BadBarcode" );
+
 };
 
 $schema->storage->txn_rollback;

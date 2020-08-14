@@ -322,6 +322,14 @@ sub transferbook {
     my $dotransfer      = 1;
     my $item = Koha::Items->find( { barcode => $barcode } );
 
+    Koha::Exceptions::MissingParameter->throw(
+        "Missing mandatory parameter: from_branch")
+      unless $fbr;
+
+    Koha::Exceptions::MissingParameter->throw(
+        "Missing mandatory parameter: to_branch")
+      unless $tbr;
+
     # bad barcode..
     unless ( $item ) {
         $messages->{'BadBarcode'} = $barcode;
