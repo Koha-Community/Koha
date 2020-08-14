@@ -10,7 +10,7 @@ Authorities:
         -
             - Use the following text to edit how authority records control indicators of attached bibliographic fields (and possibly subfield $2).<br>
             - "Lines starting with a comment symbol (#) are skipped. Each line should be of the form: (marc21|unimarc), tag, ind1:(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|some_value).<br>"
-            - Here auth1 and auth2 refer to the indicators of the authority record, tag is a biblio field number or an asterisk (*), and some_value is a fixed value (one character).<br>
+            - Here auth1 and auth2 refer to the indicators of the authority record, tag is a bibliographic field number or an asterisk (*), and some_value is a fixed value (one character).<br>
             - The MARC21 option thesaurus refers to indicators controlled by authority field 008/11 and 040$f.
             - pref: AuthorityControlledIndicators
               type: textarea
@@ -28,7 +28,7 @@ Authorities:
               default: yes
               choices:
                   yes: generate
-                  no: "do not generate"
+                  no: "don't generate"
             - authority records that are missing (BiblioAddsAuthorities must be set to "allow" for this to have any effect).
         -
             - When modifying an authority record, do not update attached bibliographic records if the number exceeds
@@ -70,7 +70,7 @@ Authorities:
             - pref: LinkerModule
               default: Default
               choices:
-                  Default: Default
+                  Default: default
                   FirstMatch: "first match"
                   LastMatch: "last match"
             - linker module for matching headings to authority records.
@@ -78,25 +78,25 @@ Authorities:
             - "Set the following options for the authority linker:"
             - pref: LinkerOptions
               class: multi
-            - (separate options with |)
+            - (separate options with |).
         -
             - pref: LinkerRelink
               default: yes
               choices:
                   yes: Do
-                  no: "Do not"
+                  no: "Don't"
             - relink headings that have previously been linked to authority records.
         -
             - pref: LinkerKeepStale
               default: no
               choices:
                   yes: Do
-                  no: "Do not"
+                  no: "Don't"
             - keep existing links to authority records for headings where the linker is unable to find a match.
         -
             - pref: CatalogModuleRelink
               default: no
               choices:
                   yes: Do
-                  no: "Do not"
+                  no: "Don't"
             - automatically relink headings that have previously been linked when saving records in the cataloging module.

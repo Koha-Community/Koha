@@ -25,7 +25,7 @@ Cataloging:
                   yes: Enable
                   no: "Don't enable"
             - the advanced cataloging editor.
-            - "<br/> NOTE:"
+            - "<br/> <strong>NOTE:</strong>"
             - Currently does not include support for UNIMARC or NORMARC fixed fields.
     Spine labels:
         -
@@ -78,7 +78,7 @@ Cataloging:
         -
             - Display MARC subfield
             - pref: AlternateHoldingsField
-            - "as holdings information for records that do not have items (This can contain multiple subfields to look in; for instance <code>852abhi</code> would look in 852 subfields a, b, h, and i.), with the subfields separated by"
+            - "as holdings information for records that do not have items (this can contain multiple subfields to look in, for example <code>852abhi</code> would look in 852 subfields a, b, h, and i), with the subfields separated by"
             - pref: AlternateHoldingsSeparator
             - "."
         -
@@ -137,7 +137,7 @@ Cataloging:
             - 'UNIMARC: "995$f 995$h 995$j"'
             - 'MARC21: "952$a 952$b 952$c"'
             - Note that the FA framework is excluded from the permission.
-            - If the pref is empty, no fields are restricted.
+            - If the system preference is empty, no fields are restricted.
         -
             - Store record's creator borrowernumber in MARC subfield
             - pref: MarcFieldForCreatorId
@@ -148,7 +148,7 @@ Cataloging:
             - pref: MarcFieldForModifierId
             - and record's last modifier name in MARC subfield
             - pref: MarcFieldForModifierName
-            - ". <br/>NOTE: Use a dollar sign between field and subfield like 123$a."
+            - ". <br/><strong>NOTE:</strong> Use a dollar sign between field and subfield like 123$a."
     Display:
         -
             - 'Separate main entry and subdivisions with '
@@ -245,7 +245,7 @@ Cataloging:
         -
             - "Show the following fields for deleted records after a merge:"
             - pref: MergeReportFields
-            - "<br />example: '001,245ab,600'"
+            - ".<br />For example: '001,245ab,600'"
             - "displays:"
             - "<ul>"
             - "<li>value of 001</li>"
@@ -273,25 +273,25 @@ Cataloging:
 
     Exporting:
         -
-            - Include following fields when exporting BibTeX,
+            - "Include the following fields when exporting BibTeX:"
             - pref: BibtexExportAdditionalFields
               type: textarea
               syntax: text/x-yaml
-            - "Use one line per tag in the format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )"
+            - "Use one line per tag in the format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )."
             - "<br/>"
-            - "To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+            - "To specify multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )."
             - "<br/>"
             - "All values of repeating tags and subfields will be printed with the given BibTeX tag."
             - "<br/>"
             - "Use '@' ( with quotes ) as the BT_TAG to replace the bibtex record type with a field value of your choosing."
         -
-            - Include following fields when exporting RIS
+            - "Include the following fields when exporting RIS:"
             - pref: RisExportAdditionalFields
               type: textarea
               syntax: text/x-yaml
-            - "Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )"
+            - "Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )."
             - "<br/>"
-            - "To specificy multiple MARC tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+            - "To specify multiple MARC tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )."
             - "<br/>"
             - "All values of repeating tags and subfields will be printed with the given RIS tag."
             - "<br/>"

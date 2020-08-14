@@ -182,7 +182,7 @@ legend:hover {
                                 <input type="checkbox" id="toggle_hidden_fields" title="These fields are collapsed by default by the CollapseFieldsPatronAddForm system preference"><strong>Show collapsed fields:</strong>
                                 [% FOREACH field IN fieldstohide.split(',') %]
                                     [% SWITCH field %]
-                                        [% CASE 'identity' %] Organization/Patron identity |
+                                        [% CASE 'identity' %] Patron identity |
                                         [% CASE 'guarantor' %] Guarantor information |
                                         [% CASE 'primary_address' %] Main address |
                                         [% CASE 'primary_contact' %] Contact information |
@@ -190,7 +190,7 @@ legend:hover {
                                         [% CASE 'alt_contact' %] Alternate contact |
                                         [% CASE 'lib_mgmt' %] Library management |
                                         [% CASE 'lib_setup' %] Library setup |
-                                        [% CASE 'login' %] OPAC/Staff login |
+                                        [% CASE 'login' %] OPAC/Staff interface login |
                                         [% CASE 'flags' %] Patron account flags |
                                         [% CASE 'debarments' %] Patron restrictions |
                                         [% CASE 'housebound' %] Housebound roles |
@@ -633,7 +633,7 @@ legend:hover {
 
                                 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
                                     <fieldset class="rows" id="memberentry_contact">
-                                        <legend id="contact_lgd">Contact</legend>
+                                        <legend id="contact_lgd">Contact information</legend>
                                         <ol>
                                             [% UNLESS nophone %]
                                                 <li>
@@ -953,7 +953,7 @@ legend:hover {
 
                                 [% UNLESS nodateenrolled &&  noopacnote && noborrowernotes %]
                                     <fieldset class="rows" id="memberentry_subscription">
-                                        <legend id="library_setup_lgd">Library set-up</legend><ol>
+                                        <legend id="library_setup_lgd">Library setup</legend><ol>
                                         [% UNLESS nodateenrolled %]
                                             <li>
                                                 [% IF ( mandatorydateenrolled ) %]
@@ -1039,7 +1039,7 @@ legend:hover {
 
                                 [% UNLESS nouserid && nopassword %]
                                     <fieldset class="rows" id="memberentry_userid">
-                                        <legend id="opac_staff_login_lgd">OPAC/Staff login</legend>
+                                        <legend id="opac_staff_login_lgd">OPAC/Staff interface login</legend>
                                         <ol>
                                             [% UNLESS nouserid %]
                                                 <li>

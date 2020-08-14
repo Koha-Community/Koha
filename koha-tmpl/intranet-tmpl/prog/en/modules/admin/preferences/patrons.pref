@@ -93,7 +93,7 @@ Patrons:
            choices:
                yes: Allow patrons
                no: Allow only staff
-         - "to allow/disallow auto-renewal for account. If allowed a patron will be able to update their own account to allow/disallow auto-renewal"
+         - "to allow/disallow auto-renewal for account. If allowed a patron will be able to update their own account to allow/disallow auto-renewal."
     Membership expiry:
      -
          - When renewing borrowers, base the new expiry date on
@@ -119,7 +119,7 @@ Patrons:
            choices:
                yes: Allow
                no: "Don't allow"
-         - "Staff to manage which notices patrons will receive and when they will receive them."
+         - "staff to manage which notices patrons will receive and when they will receive them."
          - "<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
          - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
      -
@@ -176,7 +176,7 @@ Patrons:
            choices:
                yes: Enable
                no: Disable
-         - Send purchase suggestion messages by SMS if no patron email is defined.
+         - sending purchase suggestion messages by SMS if no patron email is defined.
     Patron forms:
      -
          - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
@@ -222,7 +222,7 @@ Patrons:
          - "When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later):"
          - pref: CollapseFieldsPatronAddForm
            multiple:
-               identity: "Organization/Patron identity"
+               identity: "Patron identity"
                guarantor: "Guarantor information"
                primary_address: "Main address"
                primary_contact: "Contact information"
@@ -230,7 +230,7 @@ Patrons:
                alt_contact: "Alternate contact"
                lib_mgmt: "Library management"
                lib_setup: "Library setup"
-               login: "OPAC/Staff login"
+               login: "OPAC/Staff interface login"
                flags: "Patron account flags (existing patrons)"
                debarments: "Patron restrictions (existing patrons)"
                housebound: "Housebound roles"
@@ -283,7 +283,7 @@ Patrons:
                country: "Main address - Country"
                state: "Main address - State"
                zipcode: "Main address - ZIP/Postal code"
-               streetnumber: "Main address - street number"
+               streetnumber: "Main address - Street number"
      -
          - pref: AllowStaffToSetCheckoutsVisibilityForGuarantor
            choices:
@@ -331,7 +331,7 @@ Patrons:
                yes: "Require"
                no: "Don't require"
          - a strong password for staff and patrons
-         - (Must contain at least one digit, one lowercase and one uppercase).
+         - (must contain at least one digit, one lowercase and one uppercase).
      -
          - Block a patron's account if it reaches
          - pref: FailedLoginAttempts

@@ -19,7 +19,7 @@ Administration:
             - "Email to redirect all messages to: "
             - pref: SendAllEmailsTo
               class: email
-            - "(Leave this field empty to send messages to their normal recipient)"
+            - "(Leave this field empty to send messages to their normal recipient.)"
         -
             - "How much debugging information to show in the browser when an internal error occurs: "
             - pref: DebugLevel
@@ -165,21 +165,23 @@ Administration:
             - "Google OAuth2 Client Secret: "
             - pref: GoogleOAuth2ClientSecret
         -
-            - "Google OpenID Connect Restrict to domain (or subdomain of this domain): "
+            - "Restrict Google OpenID Connect to this domain (or subdomain of this domain): "
             - pref: GoogleOpenIDConnectDomain
-            - Leave blank for all google domains
+            - . Leave blank for all Google domains.
         -
             - pref: GoogleOpenIDConnectAutoRegister
               choices:
                 yes: Allow
-                no: "Don't Allow"
-            - users logging in with Google Open ID to automatically register.
+                no: "Don't allow"
+            - patrons logging in with Google Open ID to automatically register.
         -
+            - "Use this category code when automatically registering a Google Open ID patron: "
             - pref: GoogleOpenIDConnectDefaultCategory
-            - Use this category code when automatically registering a Google Open ID patron.
+            - "."
         -
+            - "Use this branch code when automatically registering a Google Open ID patron: "
             - pref: GoogleOpenIDConnectDefaultBranch
-            - Use this branch code when automatically registering a Google Open ID patron.
+            - "."
     Share anonymous usage statistics:
         -
             - "Share anonymous Koha usage data with the Koha community: "
@@ -189,15 +191,16 @@ Administration:
                   yes: "Yes"
                   no: "No"
                   2: "No, let me think about it"
-            - ". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-            - "<br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
+            - "."
+            - "<br>Website where usage statistics are published: <a href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
+            - "<br><strong>NOTE:</strong> The other UsageStats system preferences have no effect if this system preference is set to \"No\" (don't share)."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
-            - "<br><strong>NOTE:</strong> You should use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit the preference related to Hea."
+            - "<br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit the statisics you share."
         -
             - "Use the following library name to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryName
-            - If this field is empty data will be sent anonymously.
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+            - . If this field is empty the data will be sent anonymously.
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
         -
             - "The country where your library is located to be shown on the Hea Community website: "
             - pref: UsageStatsCountry
@@ -399,12 +402,12 @@ Administration:
                 Zambia         : "Zambia"
                 Zimbabwe       : "Zimbabwe"
 
-            - This will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+            - . This will be shown on the <a href="https://hea.koha-community.org">Hea Koha community website</a>.
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
         -
             - "The library URL to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryUrl
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
         -
             - "The library type to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryType
@@ -421,19 +424,19 @@ Administration:
                   government  : "government"
                   religiousOrg: "religious organization"
                   subscription: "subscription"
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
         -
             - pref: UsageStatsLibrariesInfo
               choices:
                   yes: "Share"
-                  no: "Do not share"
-            - "libraries information (name, URL, country)"
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+                  no: "Don't share"
+            - "libraries information (name, URL, country)."
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
         -
             - "Geolocation of the main library: "
             - pref: UsageStatsGeolocation
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-            - "<br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated admin configuration page</a> to edit this preference."
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - "<br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated configuration page</a> to set and edit this system preference."
     Search engine:
         -
             - "Use following search engine: "

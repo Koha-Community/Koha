@@ -5,7 +5,7 @@ OPAC:
               choices:
                   yes: Show
                   no: "Don't show"
-            - "a summary of a logged in user's checkouts, overdues, holds and fines on the OPAC start page."
+            - "a summary of a logged in patron's checkouts, overdues, holds and charges on the OPAC start page."
         -
             - For search results in the OPAC, show the item's
             - pref: OPACResultsLibrary
@@ -52,12 +52,12 @@ OPAC:
               choices:
                   PatronBranch: "patron's home library"
                   OpacURLBranch: "OPAC's library via the URL"
-            - " by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
+            - " by moving the results to the front and increasing the size or highlighting the rows for those results (non-XSLT only)."
         -
             - "Show star-ratings on"
             - pref: OpacStarRatings
               choices:
-                  all: "results, details, and user"
+                  all: "results, details, and patron"
                   disable: "no"
                   details: "only details"
             - "pages."
@@ -74,7 +74,7 @@ OPAC:
               syntax: text/html
               class: code
         -
-            - By default, show bib records
+            - By default, show bibliographic records
             - pref: BiblioDefaultView
               choices:
                   normal: in simple form.
@@ -97,17 +97,17 @@ OPAC:
             - 'Display lists in the OPAC using XSLT stylesheet at: '
             - pref: OPACXSLTListsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="">leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTListsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - 'Display OPAC results using XSLT stylesheet at: '
             - pref: OPACXSLTResultsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="">leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTResultsDisplay" data-value="default">default</a>" for the default one</li><li> put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - 'Display OPAC details using XSLT stylesheet at: '
             - pref: OPACXSLTDetailsDisplay
               class: file
-            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="">Leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="">leave empty</a> for "no xslt"</li><li>enter "<a href="#" class="set_syspref" data-syspref="OPACXSLTDetailsDisplay" data-value="default">default</a>" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language.'
         -
             - "Show itemtype icons in the OPAC: "
             - pref: OpacNoItemTypeImages
@@ -133,7 +133,7 @@ OPAC:
             - pref: OPACShowUnusedAuthorities
               choices:
                   yes: Show
-                  no: "Do not show"
+                  no: "Don't show"
             - unused authorities in the OPAC authority browser.
         -
             - pref: OPACShowHoldQueueDetails
@@ -201,10 +201,10 @@ OPAC:
               choices:
                   yes: Highlight
                   no: "Don't highlight"
-            - "words the patron searched for in their search results and detail pages; To prevent certain words from ever being highlighted, enter a list of stopwords here:"
+            - "words the patron searched for in their search results and detail pages. To prevent certain words from ever being highlighted, enter a list of stopwords here:"
             - pref: NotHighlightedWords
               class: multi
-            - (separate columns with |)
+            - (separate columns with |).
         -
             - Use the image at
             - pref: OpacFavicon
@@ -220,7 +220,7 @@ OPAC:
             - Include the additional CSS stylesheet
             - pref: OpacAdditionalStylesheet
               class: file
-            - to override specified settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
+            - to override specific settings from the default stylesheet (leave blank to disable). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root.
         -
             - Use the CSS stylesheet
             - pref: opaclayoutstylesheet
@@ -257,7 +257,7 @@ OPAC:
               type: textarea
               class: code
         -
-            - 'Include a "Links" column on the "my summary" and "my reading history" tabs when a user is logged in to the OPAC, with the following HTML (leave blank to disable):'
+            - 'Include a "Links" column on the "my summary" and "my reading history" tabs when a patron is logged in to the OPAC, with the following HTML (leave blank to disable):'
             - '<br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
             - pref: OPACMySummaryHTML
               type: textarea
@@ -291,10 +291,10 @@ OPAC:
             - 'Display the URI in the 856u field as an image on: '
             - pref: OPACDisplay856uAsImage
               choices:
-                  OFF: "Neither detail or result pages"
-                  Details: "Detail page only"
-                  Results: "Result page only"
-                  Both: "Both detail and result pages"
+                  OFF: "neither detail or result pages"
+                  Details: "detail page only"
+                  Results: "result page only"
+                  Both: "both detail and result pages"
             - '. Note: The corresponding OPACXSLT option must be turned on.'
         -
             - 'Select export options that should be available from OPAC detail page:'
@@ -319,14 +319,14 @@ OPAC:
               choices:
                 homebranch: 'home library'
                 holdingbranch: 'holding library'
-            - "is the logged in user's library. The second tab will contain all other items."
+            - "is the logged in patrons's library. The second tab will contain all other items."
         -
             - pref: OPACHoldingsDefaultSortField
               choices:
                   first_column: First column of the table
                   homebranch: Home library
                   holdingbranch: Holding library
-            - "is the default sort field for the holdings table"
+            - "is the default sort field for the holdings table."
         -
             - pref: OpacSuggestionManagedBy
               choices:
@@ -337,7 +337,7 @@ OPAC:
             - Display up to
             - pref: OpacMaxItemsToDisplay
               class: integer
-            - items on the bibliographic record detail page (if the bibliographic record has more items than this, a link is displayed instead that allows the user to choose to display all items).
+            - items on the bibliographic record detail page (if the bibliographic record has more items than this, a link is displayed instead that allows the patron to choose to display all items).
         -
             - "Display language selector on "
             - pref: OpacLangSelectorMode
@@ -377,13 +377,13 @@ OPAC:
                   no: "Don't allow"
             - patrons to change their own password on the OPAC. Note that this must be off to use LDAP authentication.
         -
-            - "Library users are "
+            - "Library patrons are "
             - pref: OpacResetPassword
               default: 1
               choices:
                   yes: "allowed"
                   no: "not allowed"
-            - " to recover their password via e-mail in the OPAC"
+            - " to recover their password via e-mail in the OPAC."
         -
             - pref: OPACpatronimages
               choices:
@@ -394,27 +394,27 @@ OPAC:
             - pref: OPACDetailQRCode
               choices:
                   yes: Enable
-                  no: "Don't enable"
+                  no: Disable
             - the option to show a QR Code on the OPAC bibliographic detail page.
         -
             - pref: OPACFinesTab
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to access the Fines tab on the My Account page on the OPAC.
+            - patrons to access the charges tab on their account page on the OPAC.
         -
             - pref: OpacBrowser
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons to browse subject authorities on OPAC."
+            - "patrons to browse subject authorities on the OPAC."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: OpacCloud
               choices:
                   yes: Show
                   no: "Don't show"
-            - "a subject cloud on OPAC."
+            - "a subject cloud on the OPAC."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: OpacAuthorities
@@ -483,7 +483,7 @@ OPAC:
                 email: Email
                 twitter: Twitter
 
-            - "social network links in opac detail pages."
+            - "social network links on the OPAC detail pages."
         -
             - pref: OpacBrowseResults
               default: 1
@@ -510,8 +510,8 @@ OPAC:
               default: 0
               choices:
                   yes: Allow
-                  no: Do not allow
-            - users to add a note when placing a hold.
+                  no: "Don't allow"
+            - patrons to add a note when placing a hold.
         -
             - pref: OPACAcquisitionDetails
               default: 0
@@ -538,7 +538,7 @@ OPAC:
               choices:
                   yes: Enable
                   no: Disable
-            - "(Elasticsearch only) Enable the interface allowing to browse all holdings."
+            - "interface for browsing all holdings (Elasticsearch only)."
     OpenURL:
         -
             - 'Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):'
@@ -573,18 +573,6 @@ OPAC:
                   yes: Limit
                   no: "Don't limit"
             - "patrons' searches to the library they are registered at."
-#        -
-#            This system preference does not actually affect anything
-#            - pref: OpacBrowser
-#              choices:
-#                  yes: Show
-#                  no: "Don't show"
-#            - a subject browser on the OPAC (generated using <code>misc/cronjobs/build_browser_and_cloud.pl</code>).
-#        -
-#            opac-tags_subject.pl is the only script affected by this, and it is not linked to by any other page
-#            - pref: OpacCloud
-#              choices:
-#            - If ON, enables subject cloud on OPAC
         -
             - pref: OpacRenewalAllowed
               choices:
@@ -611,7 +599,7 @@ OPAC:
               choices:
                   yes: Include
                   no: "Don't include"
-            - "outstanding/unapplied credits when applying the OPACFineNoRenewals rule to users."
+            - "outstanding/unapplied credits when applying the OPACFineNoRenewals rule to patrons."
         -
             - pref: OPACViewOthersSuggestions
               choices:
@@ -833,7 +821,7 @@ OPAC:
             - pref: PatronSelfRegistrationEmailMustBeUnique
               choices:
                   yes: "Consider"
-                  no: "Do not consider"
+                  no: "Don't consider"
             - "patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
         -
             - "Enable the self registration for the following libraries:"
@@ -844,14 +832,14 @@ OPAC:
             - pref: PatronSelfRegistrationPrefillForm
               choices:
                   yes: "Display and prefill"
-                  no: "Do not display and prefill"
+                  no: "Don't display and prefill"
             - "password and login form after a patron has self registered."
         -
             - pref: PatronSelfRegistrationConfirmEmail
               choices:
                   yes: Require
-                  no: "Do not require"
-            - users to confirm their email address by entering it twice.
+                  no: "Don't require"
+            - patrons to confirm their email address by entering it twice.
         -
             - pref: OPACPatronDetails
               choices:
