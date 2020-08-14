@@ -121,37 +121,44 @@ sub store {
 
     } else { # ModItem
 
-        { # Update *_on  fields if needed
-          # Why not for AddItem as well?
-            my @fields = qw( itemlost withdrawn damaged );
-
-            # Only retrieve the item if we need to set an "on" date field
-            if ( $self->itemlost || $self->withdrawn || $self->damaged ) {
-                my $pre_mod_item = $self->get_from_storage;
-                for my $field (@fields) {
-                    if (    $self->$field
-                        and not $pre_mod_item->$field )
-                    {
-                        my $field_on = "${field}_on";
-                        $self->$field_on(
-                          DateTime::Format::MySQL->format_datetime( dt_from_string() )
-                        );
-                    }
-                }
-            }
-
-            # If the field is defined but empty, we are removing and,
-            # and thus need to clear out the 'on' field as well
-            for my $field (@fields) {
-                if ( defined( $self->$field ) && !$self->$field ) {
-                    my $field_on = "${field}_on";
-                    $self->$field_on(undef);
-                }
-            }
-        }
-
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
+
+        # Retreive the item for comparison if we need to
+        my $pre_mod_item = $self->get_from_storage
+          if ( exists $updated_columns{itemlost}
+            or exists $updated_columns{withdrawn}
+            or exists $updated_columns{damaged} );
+
+        # Update *_on  fields if needed
+        # FIXME: Why not for AddItem as well?
+        my @fields = qw( itemlost withdrawn damaged );
+        for my $field (@fields) {
+
+            # If the field is defined but empty or 0, we are
+            # removing/unsetting and thus need to clear out
+            # the 'on' field
+            if (   exists $updated_columns{$field}
+                && defined( $self->$field )
+                && !$self->$field )
+            {
+                my $field_on = "${field}_on";
+                $self->$field_on(undef);
+            }
+            # If the field has changed otherwise, we much update
+            # the 'on' field
+            elsif (exists $updated_columns{$field}
+                && $updated_columns{$field}
+                && !$pre_mod_item->$field )
+            {
+                my $field_on = "${field}_on";
+                $self->$field_on(
+                    DateTime::Format::MySQL->format_datetime(
+                        dt_from_string()
+                    )
+                );
+            }
+        }
 
         if (   exists $updated_columns{itemcallnumber}
             or exists $updated_columns{cn_source} )
@@ -169,13 +176,13 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        # If item was lost, it has now been found, reverse any list item charges if necessary.
-        if ( exists $updated_columns{itemlost}
-                and $self->itemlost != $updated_columns{itemlost}
-                and $self->itemlost >= 1
-                and $updated_columns{itemlost} <= 0
-        ) {
-            $self->_set_found_trigger;
+        # If item was lost and has now been found,
+        # reverse any list item charges if necessary.
+        if (    exists $updated_columns{itemlost}
+            and $updated_columns{itemlost} <= 0
+            and $pre_mod_item->itemlost > 0 )
+        {
+            $self->_set_found_trigger($pre_mod_item);
             $self->paidfor('');
         }
 
@@ -786,16 +793,15 @@ Internal function, not exported, called only by Koha::Item->store.
 =cut
 
 sub _set_found_trigger {
-    my ( $self, $params ) = @_;
+    my ( $self, $pre_mod_item ) = @_;
 
     ## If item was lost, it has now been found, reverse any list item charges if necessary.
-    my $refund = 1;
     my $no_refund_after_days =
       C4::Context->preference('NoRefundOnLostReturnedItemsAge');
     if ($no_refund_after_days) {
         my $today = dt_from_string();
         my $lost_age_in_days =
-          dt_from_string( $self->itemlost_on )->delta_days($today)
+          dt_from_string( $pre_mod_item->itemlost_on )->delta_days($today)
           ->in_units('days');
 
         return $self unless $lost_age_in_days < $no_refund_after_days;
@@ -879,7 +885,7 @@ sub _set_found_trigger {
 
     # Update the account status
     $accountline->status('FOUND');
-    $accountline->store;
+    $accountline->store();
 
     if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
         $account->reconcile_balance;
