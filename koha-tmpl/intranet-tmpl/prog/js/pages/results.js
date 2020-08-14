@@ -164,7 +164,7 @@ $(document).ready(function() {
         }
     });
     $("#bookbag_form").ready(function(){
-        $("#bookbag_form").unCheckCheckboxes();
+        $("#bookbag_form input:checkbox").prop("checked", false);
         var bibnums = getContextBiblioNumbers();
         if (bibnums) {
             for (var i=0; i < bibnums.length; i++) {
@@ -211,18 +211,14 @@ function highlightOn() {
 
 
 function selectAll () {
-    $("#bookbag_form").checkCheckboxes();
     $("#bookbag_form").find("input[type='checkbox'][name='biblionumber']").each(function(){
-        $(this).change();
+        $(this).prop("checked", true ).change();
     } );
-    return false;
 }
 function clearAll () {
-    $("#bookbag_form").unCheckCheckboxes();
     $("#bookbag_form").find("input[type='checkbox'][name='biblionumber']").each(function(){
-        $(this).change();
+        $(this).prop("checked", false).change();
     } );
-    return false;
 }
 function placeHold () {
     var checkedItems = $(".selection:checked");
