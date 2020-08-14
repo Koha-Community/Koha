@@ -1023,7 +1023,7 @@ subtest 'MoveReserve additional test' => sub {
     is($patron_2->holds->next()->reserve_id, $reserve_2, "The 2nd patron has a hold");
 
     # Fake the holds queue
-    $dbh->do(q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?)},undef,($patron_1->borrowernumber,$biblio->biblionumber,$item_1->itemnumber,$item_1->homebranch,0));
+    $dbh->do(q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?,?)},undef,($patron_1->borrowernumber,$biblio->biblionumber,$item_1->itemnumber,$item_1->homebranch,0,$reserve_1));
 
     # The 2nd hold should be filed even if the item is preselected for the first hold
     MoveReserve($item_1->itemnumber,$patron_2->borrowernumber);
@@ -1149,7 +1149,7 @@ subtest 'CheckReserves additional test' => sub {
     is( $status, 'Reserved', "We found a reserve" );
     is( $matched_reserve->{reserve_id},
         $reserve1->reserve_id, "We got the Transit reserve" );
-    is( scalar @$possible_reserves, 1, 'We only get the one matched' );
+    is( scalar @$possible_reserves, 2, 'We do get both reserves' );
 
 };
 
