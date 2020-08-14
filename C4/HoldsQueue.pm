@@ -279,7 +279,7 @@ sub GetPendingHoldRequestsForBib {
 
     my $dbh = C4::Context->dbh;
 
-    my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserves.branchcode,
+    my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserve_id, reserves.branchcode,
                                 reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype, item_level_hold
                          FROM reserves
                          JOIN borrowers USING (borrowernumber)
@@ -441,6 +441,7 @@ sub MapItemsToHoldRequests {
                             holdingbranch  => $item->{holdingbranch},
                             pickup_branch  => $request->{branchcode}
                               || $request->{borrowerbranch},
+                            reserve_id   => $request->{reserve_id},
                             item_level   => $request->{item_level_hold},
                             reservedate  => $request->{reservedate},
                             reservenotes => $request->{reservenotes},
@@ -720,15 +721,15 @@ sub AddToHoldTargetMap {
     my $dbh = C4::Context->dbh;
 
     my $insert_sql = q(
-        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request)
-                               VALUES (?, ?, ?, ?, ?)
+        INSERT INTO hold_fill_targets (borrowernumber, biblionumber, itemnumber, source_branchcode, item_level_request, reserve_id)
+                               VALUES (?, ?, ?, ?, ?, ?)
     );
     my $sth_insert = $dbh->prepare($insert_sql);
 
     foreach my $itemnumber (keys %$item_map) {
         my $mapped_item = $item_map->{$itemnumber};
         $sth_insert->execute($mapped_item->{borrowernumber}, $mapped_item->{biblionumber}, $itemnumber,
-                             $mapped_item->{holdingbranch}, $mapped_item->{item_level});
+                             $mapped_item->{holdingbranch}, $mapped_item->{item_level}, $mapped_item->{reserve_id});
     }
 }
 

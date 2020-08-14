@@ -1655,11 +1655,11 @@ sub _Findgroupreserve {
                reserves.itemtype            AS itemtype
         FROM reserves
         JOIN biblioitems USING (biblionumber)
-        JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
+        JOIN hold_fill_targets USING (reserve_id)
         WHERE found IS NULL
         AND priority > 0
         AND item_level_request = 1
-        AND itemnumber = ?
+        AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
         ORDER BY priority
@@ -1690,7 +1690,7 @@ sub _Findgroupreserve {
                reserves.itemtype            AS itemtype
         FROM reserves
         JOIN biblioitems USING (biblionumber)
-        JOIN hold_fill_targets USING (biblionumber, borrowernumber)
+        JOIN hold_fill_targets USING (reserve_id)
         WHERE found IS NULL
         AND priority > 0
         AND item_level_request = 0
