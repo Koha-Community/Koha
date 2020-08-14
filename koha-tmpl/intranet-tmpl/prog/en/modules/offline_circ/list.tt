@@ -21,8 +21,11 @@
 	    [% IF ( pending_operations ) %]
 
 	        <form>
-             <p><span class="checkall"></span> |
-             <span class="clearall"></span></p>
+                <p>
+                    <a id="CheckAll" href="#"><i class="fa fa-check"></i> Check all</a>
+                    <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Uncheck all</a>
+                </p>
+
 	        <table id="operations">
 	            <thead>
 		            <tr>
@@ -37,8 +40,10 @@
 		        <tbody>
 		            [% FOREACH operation IN pending_operations %]
 		                <tr class="oc-[% operation.action | html %]">
-		                    <td><input type="checkbox" name="operationid" value="[% operation.operationid | html %]" /></td>
-			                <td>[% operation.timestamp | html %]</td>
+                            <td><input type="checkbox" name="operationid" id="operationid[% operation.operationid | html %]" value="[% operation.operationid | html %]" /></td>
+                            <td>
+                                <label for="operationid[% operation.operationid | html %]">[% operation.timestamp | html %]</label>
+                            </td>
                             <td>
                                 [% SWITCH ( operation.action ) -%]
                                     [%   CASE "issue" -%]
@@ -89,19 +94,16 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
 
-        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Uncheck all")+"<\/a>");
-        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Check all")+"<\/a>");
-            $('#CheckNone').click(function() {
-                $("#operations").unCheckCheckboxes();
-                return false;
+            $('#CheckNone').click(function(e) {
+                e.preventDefault();
+                $("#operations input:checkbox").prop("checked", false );
             });
-            $('#CheckAll').click(function() {
-                $("#operations").checkCheckboxes();
-                return false;
+            $('#CheckAll').click(function(e) {
+                e.preventDefault();
+                $("#operations input:checkbox").prop("checked", true );
             });
             $('#process,#delete').click(function() {
                 var action = $(this).attr("id");
