@@ -168,7 +168,6 @@
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending | html %] servers to search</h3>[% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>

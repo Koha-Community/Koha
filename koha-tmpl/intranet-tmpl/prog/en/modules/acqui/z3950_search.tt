@@ -226,7 +226,6 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
