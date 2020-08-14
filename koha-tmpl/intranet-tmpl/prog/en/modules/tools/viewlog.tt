@@ -16,22 +16,49 @@
 	[% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>
-fieldset.rows label.viewlog {
-    float: none;
-    font-weight: normal;
-    margin: 0;
-    min-width: 9em;
-    padding: .5em;
-    text-align: left;
-    white-space: nowrap;
-    width: auto;
-}
-.log_modules {
-    display: flex;
-    flex-wrap: wrap;
-}
-</style>
+[% Asset.css("css/humanmsg.css") | $raw %]
+[% FILTER collapse %]
+    <style>
+        fieldset.rows label.viewlog {
+            float: none;
+            font-weight: normal;
+            margin: 0;
+            min-width: 9em;
+            padding: .5em;
+            text-align: left;
+            white-space: nowrap;
+            width: auto;
+        }
+        .log_modules {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .compare_info {
+            background-color: #E6F0F2;
+            margin: .5em -.5em -.5em -.5em;
+            padding: .5em;
+            text-align: right;
+        }
+        .modal-dialog {
+            width : 90%;
+        }
+        /* jsdiff styles */
+        ins {
+            background-color: #e6ffe6;
+        }
+        del {
+            background-color: #ffe6e6;
+        }
+        #col1 ins,
+        #col2 del {
+            display: none;
+        }
+        pre {
+            overflow: scroll;
+            padding: 10px;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="tools_viewlog" class="tools">
@@ -225,6 +252,10 @@ fieldset.rows label.viewlog {
                 [% IF ( do_it ) %]
                     [% IF ( total ) %]
                         <h3>Log entries</h3>
+                        <div id="toolbar" class="btn-toolbar">
+                            <a href="#" id="select_none" class="btn btn-link disabled"><i class="fa fa-remove"></i> Check none</a>
+                            <button class="btn btn-link disabled compare_link"><i class="fa fa-columns"></i> Compare selected</button>
+                        </div>
                         <table id="logst">
                             <thead>
                                 <tr>
@@ -284,7 +315,18 @@ fieldset.rows label.viewlog {
                                         [% IF ( loopro.module == 'CIRCULATION' ) %]
                                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% loopro.info | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.info | uri %]" title="Display detail for this item">Item [% loopro.barcode | html %]</a>
                                         [% ELSE %]
-                                            [% loopro.info | html %]
+                                            [% IF loopro.module == "SYSTEMPREFERENCE" %]
+                                                <div class="loginfo" id="loginfo[% loopro.action_id | html %]">
+                                                    [% loopro.info | html %]
+                                                </div>
+                                                <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
+                                                    <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN loopro.info.split(' \| ') %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
+                                                </div>
+                                            [% ELSE %]
+                                                <div class="loginfo" id="loginfo[% loopro.action_id | html %]">
+                                                    [% loopro.info | html %]
+                                                </div>
+                                            [% END %]
                                         [% END %]
                                     </td>
                                     <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
@@ -325,15 +367,44 @@ fieldset.rows label.viewlog {
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
+<div class="modal" id="compareInfo" tabindex="-1" role="dialog" aria-labelledby="compareInfoLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="compareInfoLabel">Compare preference values</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="compare_pane col-sm-6" id="col1">
+                        <h5>Older version</h5>
+                        <pre></pre>
+                    </div>
+                    <div class="compare_pane col-sm-6" id="col2">
+                        <h5>Newer version</h5>
+                        <pre></pre>
+                    </div>
+                </div>
+            </div> <!-- /.modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default deny" data-dismiss="modal">Close</button>
+            </div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /#compareInfo -->
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% IF ( circulation ) %]
         [% INCLUDE 'str/members-menu.inc' %]
         [% Asset.js("js/members-menu.js") | $raw %]
     [% END %]
+    [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script>
         var columns_settings = [% TablesSettings.GetColumns('tools', 'logviewer', 'logst', 'json') | $raw %];
     </script>
