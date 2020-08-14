@@ -13,13 +13,13 @@ function Import(Breeding, recordid, AuthType, FrameworkCode) {
 
 $( document ).ready( function() {
 
-    $( "#CheckAll" ).click( function() {
-        $( ".checkboxed" ).checkCheckboxes();
-        return false;
+    $( "#CheckAll" ).click( function(e) {
+        e.preventDefault();
+        $( ".checkboxed input:checkbox" ).prop("checked", true);
     });
-    $( "#CheckNone" ).click( function() {
-        $( ".checkboxed" ).unCheckCheckboxes();
-        return false;
+    $( "#CheckNone" ).click( function(e) {
+        e.preventDefault();
+        $( ".checkboxed input:checkbox" ).prop("checked", false);
     });
 
     $( ".submit" ).on( "click", function() {
