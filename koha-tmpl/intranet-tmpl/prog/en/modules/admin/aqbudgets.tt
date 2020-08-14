@@ -449,13 +449,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acq.js") | $raw %]
-    <script>
-        var MSG_BUDGET_PARENT_ALLOCATION = "- " + _("Fund amount exceeds parent allocation") + "\n";
-        var MSG_BUDGET_PERIOD_ALLOCATION = "- " + _("Fund amount exceeds period allocation") + "\n";
-        var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") + "\n";
-    </script>
-
-    [% Asset.js("js/acq.js") | $raw %]
     [% IF op == 'add_form' %]
         <script>
         //<![CDATA[

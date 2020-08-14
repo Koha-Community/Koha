@@ -4,7 +4,7 @@
 function uncheckbox(form, field) {
     var price = new Number(form.elements['price' + field].value);
     var tmpprice = "";
-    var errmsg = MSG_INVALIDPRICE;
+    var errmsg = __("ERROR: Price is not a valid number, please check the price and try again!");
     if (isNaN(price)) {
         alert(errmsg);
         for(var i=0; i<form.elements['price' + field].value.length; ++i) {
@@ -304,9 +304,9 @@ if ( newBudgetParent  ) { url +=  '&parent_id=' + newBudgetParent};
     var result = eval ( xmlhttp.responseText );
 
     if (result == '1') {
-            return MSG_BUDGET_PARENT_ALLOCATION;
+            return "- " + __("Fund amount exceeds parent allocation") + "\n";
     } else if (result == '2') {
-            return MSG_BUDGET_PERIOD_ALLOCATION;
+            return "- " + __("Fund amount exceeds period allocation") + "\n";
     } else  {
             return false;
     }
@@ -338,7 +338,7 @@ function checkBudgetParent(budgetId, newBudgetParent) {
     var result = eval ( xmlhttp.responseText );
 
     if (result == '1') {
-            return MSG_PARENT_BENEATH_BUDGET;
+            return "- " + __("New budget-parent is beneath budget") + "\n";
 //     } else if (result == '2') {
 //            return "- New budget-parent has insufficent funds\n";
 //     } else  {
