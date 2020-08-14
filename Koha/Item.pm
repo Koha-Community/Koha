@@ -172,7 +172,9 @@ sub store {
         # If item was lost, it has now been found, reverse any list item charges if necessary.
         if ( exists $updated_columns{itemlost}
                 and $self->itemlost != $updated_columns{itemlost}
-                and $updated_columns{itemlost} >= 1 ) {
+                and $self->itemlost >= 1
+                and $updated_columns{itemlost} <= 0
+        ) {
             $self->_set_found_trigger;
             $self->paidfor('');
         }
