@@ -1861,7 +1861,7 @@ sub AddReturn {
     my $messages;
     my $patron;
     my $doreturn       = 1;
-    my $validTransfert = 0;
+    my $validTransfer = 1;
     my $stat_type = 'return';
 
     # get information on item
@@ -2015,19 +2015,18 @@ sub AddReturn {
     # if we have a transfer to do, we update the line of transfers with the datearrived
     my $is_in_rotating_collection = C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber );
     if ($datesent) {
+        # At this point we will either fill the transfer or it is a wrong transfer
+        # either way we should not now generate a new transfer
+        $validTransfer = 0;
         if ( $tobranch eq $branch ) {
             my $sth = C4::Context->dbh->prepare(
                 "UPDATE branchtransfers SET datearrived = now() WHERE itemnumber= ? AND datearrived IS NULL"
             );
             $sth->execute( $item->itemnumber );
-
-            # If we are completing a transfer we should not generate a new transfer from return policy
-            $returnbranch = $branch;
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
         }
-        $validTransfert = 1;
     }
 
     # fix up the accounts.....
@@ -2137,7 +2136,7 @@ sub AddReturn {
     }
 
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
-    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'}){
+    if ($validTransfer && !$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) ){
         my $BranchTransferLimitsType = C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' ? 'effective_itemtype' : 'ccode';
         if  (C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
