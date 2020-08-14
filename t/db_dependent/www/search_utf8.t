@@ -138,7 +138,7 @@ sub test_search{
     $agent->field( 'password', $password );
     $agent->field( 'userid',   $user );
     $agent->field( 'branch',   '' );
-    $agent->click_ok( '', 'login to staff client' );
+    $agent->click_ok( '', 'login to staff interface' );
 
     $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 

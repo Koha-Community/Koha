@@ -48,7 +48,7 @@ my $intranet = $ENV{KOHA_INTRANET_URL};
 if (not defined $intranet) {
     plan skip_all =>
          "You must set the environment variable KOHA_INTRANET_URL to ".
-         "point this test to your staff client. If you do not have ".
+         "point this test to your staff interface. If you do not have ".
          "KOHA_CONF set, you must also set KOHA_USER and KOHA_PASS for ".
          "your username and password";
 }
@@ -66,7 +66,7 @@ $agent->form_name('loginform');
 $agent->field( 'password', $password );
 $agent->field( 'userid',   $user );
 $agent->field( 'branch',   '' );
-$agent->click_ok( '', 'login to staff client' );
+$agent->click_ok( '', 'login to staff interface' );
 
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 

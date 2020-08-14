@@ -1112,7 +1112,7 @@ sub _split_query {
 Generate a list of searchable fields to be used for Elasticsearch queries
 applied to multiple fields.
 
-Returns an arrayref of field names for either OPAC or Staff client, with
+Returns an arrayref of field names for either OPAC or staff interface, with
 possible weights and subfield appended to each field name depending on the
 options provided.
 
@@ -1121,7 +1121,7 @@ options provided.
 =item C<$params>
 
 Hashref with options. The parameter C<is_opac> indicates whether the searchable
-fields for OPAC or Staff client should be retrieved. If C<weighted_fields> is set
+fields for OPAC or staff interface should be retrieved. If C<weighted_fields> is set
 fields weights will be applied on returned fields. C<subfield> can be used to
 provide a subfield that will be appended to fields as "C<field_name>.C<subfield>".
 

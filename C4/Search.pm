@@ -1375,7 +1375,7 @@ sub buildQuery {
 
                 # Add index-specific attributes
 
-                #Afaik, this 'yr' condition will only ever be met in the staff client advanced search
+                #Afaik, this 'yr' condition will only ever be met in the staff interface advanced search
                 #for "Publication date", since typing 'yr:YYYY' into the search box produces a CCL query,
                 #which is processed higher up in this sub. Other than that, year searches are typically
                 #handled as limits which are not processed her either.

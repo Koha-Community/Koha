@@ -1,7 +1,7 @@
 INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (0,'superlibrarian','Access to all librarian functions',0),
 (1,'circulate','Check out and check in items',0),
-(2,'catalogue','<b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff client.',0),
+(2,'catalogue','<b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff interface.',0),
 (3,'parameters','Manage Koha system settings (Administration panel)',0),
 (4,'borrowers','Add or modify patrons',0),
 (5,'permissions','Set user permissions',0),

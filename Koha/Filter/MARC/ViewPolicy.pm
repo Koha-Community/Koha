@@ -273,7 +273,7 @@ sub should_hide_marc {
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-Install Koha. This filter will be used appropriately by the OPAC or Staff client.
+Install Koha. This filter will be used appropriately by the OPAC or staff interface.
 
 =head1 INCOMPATIBILITIES
 

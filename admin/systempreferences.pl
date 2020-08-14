@@ -182,7 +182,7 @@ sub GetPrefParams {
             $theme     = C4::Context->preference('opacthemes');
         } else {
 
-            # this is the staff client
+            # this is the staff interface
             $interface = 'intranet';
             $theme     = C4::Context->preference('template');
         }

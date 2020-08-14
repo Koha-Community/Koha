@@ -113,7 +113,7 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
   `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
   `category` varchar(32) NOT NULL default '', -- key used to identify the authorized value category
   `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
-  `lib` varchar(200) default NULL, -- authorized value description as printed in the staff client
+  `lib` varchar(200) default NULL, -- authorized value description as printed in the staff interface
   `lib_opac` varchar(200) default NULL, -- authorized value description as printed in the OPAC
   `imageurl` varchar(200) default NULL, -- authorized value URL
   PRIMARY KEY  (`id`),
@@ -223,7 +223,7 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
   `unique_id` tinyint(1) NOT NULL default 0, -- defines if this value needs to be unique (1 for yes, 0 for no)
   `opac_display` tinyint(1) NOT NULL default 0, -- defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)
   `opac_editable` tinyint(1) NOT NULL default 0, -- defines if this field is editable by patrons on their account in the OPAC (1 for yes, 0 for no)
-  `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff client (1 for yes, 0 for no)
+  `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff interface (1 for yes, 0 for no)
   `authorised_value_category` varchar(32) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
   `display_checkout` tinyint(1) NOT NULL default 0,-- defines if this field displays in checkout screens
   `category_code` VARCHAR(10) NULL DEFAULT NULL,-- defines a category for an attribute_type
@@ -576,13 +576,13 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
   `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
   `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
-  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff client
+  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff interface
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
-  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff interface log in
+  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff interface
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
@@ -1502,13 +1502,13 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
   `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
   `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
-  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff client
+  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff interface
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's Bcrypt encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
-  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff interface log in
+  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff interface
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
@@ -1722,7 +1722,7 @@ CREATE TABLE `opac_news` ( -- data from the news tool
   `branchcode` varchar(10) default NULL, -- branch code users to create branch specific news, NULL is every branch.
   `title` varchar(250) NOT NULL default '', -- title of the news article
   `content` MEDIUMTEXT NOT NULL, -- the body of your news article
-  `lang` varchar(50) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
+  `lang` varchar(50) NOT NULL default '', -- location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
   `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
   `number` int(11) default NULL, -- the order in which this article appears in that specific location

@@ -154,7 +154,7 @@ if ($steps=~ /1/) {
     my $b0 = HTTPD::Bench::ApacheBench->new;
     $b0->concurrency( $concurrency );    my @mainpage;
     unless ($short_print) {
-        print "Step 1: staff client main page     ";
+        print "Step 1: staff interface main page     ";
     }
     for (my $i=1;$i<=$max_tries;$i++) {
         push @mainpage,"$baseurl/mainpage.pl";

@@ -59,7 +59,7 @@ SKIP: {
         $driver->get($mainpage . q|?logout.x=1|);
         $patron->flags(4)->store; # catalogue permission
         $s->auth( $patron->userid, $password );
-        like( $driver->get_title, qr(Koha staff client), 'Patron with flags catalogue should be able to login' );
+        like( $driver->get_title, qr(Koha staff interface), 'Patron with flags catalogue should be able to login' );
 
         $driver->get($mainpage . q|?logout.x=1|);
         like( $driver->get_title(), qr(Log in to Koha), 'If logout is requested, login form should be displayed' );
