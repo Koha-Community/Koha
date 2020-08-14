@@ -2012,8 +2012,18 @@ sub AddReturn {
         $item->holdingbranch($branch)->store;
     }
 
+    my $item_was_lost = $item->itemlost;
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-    ModDateLastSeen( $item->itemnumber, $leave_item_lost );
+    ModDateLastSeen( $item->itemnumber, $leave_item_lost ); # will unset itemlost if needed
+
+    # fix up the accounts.....
+    if ( $item_was_lost ) {
+        $messages->{'WasLost'} = 1;
+        unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
+            #my $refunded = Koha::Account::Lines->search{(itemnumber => $item->itemnumber, type => 'LOST_FOUND', # FIXME which other parameters to know it has been refunded?
+            $messages->{'LostItemFeeRefunded'} = 1;
+        }
+    }
 
     # check if we have a transfer for this document
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->itemnumber );
@@ -2032,14 +2042,6 @@ sub AddReturn {
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
-        }
-    }
-
-    # fix up the accounts.....
-    if ( $item->itemlost ) {
-        $messages->{'WasLost'} = 1;
-        unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            $messages->{'LostItemFeeRefunded'} = $refunded;
         }
     }
 
