@@ -7,6 +7,7 @@
 <script>
   $.fn.select2.defaults.set("allowClear", true);
   $.fn.select2.defaults.set("placeholder", "");
+  $.fn.select2.defaults.set("dropdownAutoWidth", true);
 
   // Internationalization
   $.fn.select2.defaults.set("language", {
