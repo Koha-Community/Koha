@@ -1,3 +1,5 @@
+/* global __ */
+
 $( document ).ready(function() {
     var checkboxes = $("#delete-alert-form input[type='checkbox']");
     var checkedcheckboxes = 0;
@@ -37,7 +39,7 @@ $( document ).ready(function() {
         if( soundfield.val() !== '' ){
             playSound( soundfield.val() );
         } else {
-            alert( MSG_AUDIO_EMPTY_SOUND );
+            alert( __("Please select or enter a sound.") );
         }
     });
 
@@ -59,9 +61,9 @@ $( document ).ready(function() {
 
     $('#delete-alert-form').on('submit', function() {
         if( checkedcheckboxes == 1 ){
-            return confirm( MSG_AUDIO_CONFIRM_DELETE );
+            return confirm( __("Are you sure you want to delete the selected audio alerts?") );
         } else {
-            alert( MSG_AUDIO_CHECK_CHECKBOXES );
+            alert( __("Check the box next to the alert you want to delete.") );
             return false;
         }
     });
