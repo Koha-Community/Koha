@@ -1,32 +1,20 @@
 /* eslint-env node */
 /* eslint no-console:"off" */
 
-let gulp;
+const { dest, series, src, watch } = require('gulp');
 
-try {
-    gulp = require( "gulp" );
-} catch(e) {
-    console.error("You are missing required Node modules; run `npm install`.");
-    process.exit(1);
-}
-
-const gutil = require( "gulp-util" );
 const sass = require("gulp-sass");
 const cssnano = require("gulp-cssnano");
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
+const args = require('minimist')(process.argv.slice(2));
 
 const STAFF_JS_BASE = "koha-tmpl/intranet-tmpl/prog/js";
 const STAFF_CSS_BASE = "koha-tmpl/intranet-tmpl/prog/css";
 const OPAC_JS_BASE = "koha-tmpl/opac-tmpl/bootstrap/js";
 const OPAC_CSS_BASE = "koha-tmpl/opac-tmpl/bootstrap/css";
 
-var sassOptions = {
-    errLogToConsole: true,
-    precision: 3
-}
-
-if( gutil.env.view == "opac" ){
+if (args.view == "opac") {
     var css_base = OPAC_CSS_BASE;
     var js_base = OPAC_JS_BASE;
 } else {
@@ -34,28 +22,32 @@ if( gutil.env.view == "opac" ){
     var js_base = STAFF_JS_BASE;
 }
 
-gulp.task( "default", ['watch'] );
+var sassOptions = {
+    errLogToConsole: true,
+    precision: 3
+}
 
 // CSS processing for development
-gulp.task('css', function() {
-    return gulp.src( css_base + "/src/**/*.scss" )
-      .pipe(sourcemaps.init())
-      .pipe(sass( sassOptions ).on('error', sass.logError))
-      .pipe(autoprefixer())
-      .pipe(sourcemaps.write('./maps'))
-      .pipe(gulp.dest( css_base ));
-});
+function css() {
+    return src(css_base + "/src/**/*.scss")
+        .pipe(sourcemaps.init())
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(sourcemaps.write('./maps'))
+        .pipe(dest(css_base));
+}
 
 // CSS processing for production
+function build() {
+    return src(css_base + "/src/**/*.scss")
+        .pipe(sass(sassOptions).on('error', sass.logError))
+        .pipe(autoprefixer())
+        .pipe(cssnano({ zindex: false }))
+        .pipe(dest(css_base));
+}
 
-gulp.task('build', function() {
-    return gulp.src( css_base + "/src/**/*.scss" )
-      .pipe(sass( sassOptions ).on('error', sass.logError))
-      .pipe(autoprefixer())
-      .pipe(cssnano({ zindex: false }))
-      .pipe(gulp.dest( css_base ));
-});
-
-gulp.task('watch', function(){
-    gulp.watch( css_base + "/src/**/*.scss", ['css'] );
-});
+exports.build = build;
+exports.css = css;
+exports.default = function () {
+    watch(css_base + "/src/**/*.scss", series('css'));
+}
