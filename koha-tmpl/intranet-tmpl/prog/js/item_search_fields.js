@@ -1,3 +1,4 @@
+/* global __ */
 $(document).ready(function(){
     $("#add_field_form").hide();
     $("#new_search_field").on("click",function(e){
@@ -14,7 +15,7 @@ $(document).ready(function(){
     });
     $(".field-delete").on("click",function(){
         $(this).parent().parent().addClass("highlighted-row");
-        if( confirm( MSG_ITEM_SEARCH_DELETE_CONFIRM )){
+        if (confirm( __("Are you sure you want to delete this field?") )) {
             return true;
         } else {
             $(this).parent().parent().removeClass("highlighted-row");
