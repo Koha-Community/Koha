@@ -69,7 +69,6 @@ $(document).ready(function(){
         multiCopyControl.toggle();
     });
 
-    $('.subfield_line select').select2();
 });
 
 function Check(f) {

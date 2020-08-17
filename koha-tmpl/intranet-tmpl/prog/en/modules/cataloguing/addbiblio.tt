@@ -483,11 +483,6 @@
 [% Asset.css("css/addbiblio.css") | $raw %]
 
 [% INCLUDE 'select2.inc' %]
-<script>
-  $(document).ready(function() {
-    $('.subfield_line select').select2();
-  });
-</script>
 
 </head>
 <body id="cat_addbiblio" class="cat">
@@ -852,7 +847,7 @@
                                                 [% ELSIF ( mv.type == 'textarea' ) %]
                                                     <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1">[%- mv.value | html -%]</textarea>
                                                 [% ELSIF ( mv.type == 'select' ) %]
-                                                    <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]">
+                                                    <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
                                                     [% FOREACH aval IN mv.values %]
                                                         [% IF aval == mv.default %]
                                                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>

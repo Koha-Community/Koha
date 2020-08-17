@@ -31,5 +31,17 @@
       removeAllItems:function(){return _("Remove all items")},
       removeItem:function(){return _("Remove item")}
     });
+
+    $(document).ready(function(){
+        $(".select2").select2();
+        $(".select2").on("select2:clear", function (evt) {
+            $(this).on("select2:opening.cancelOpen", function (evt) {
+                evt.preventDefault();
+
+                $(this).off("select2:opening.cancelOpen");
+            });
+        });
+    });
+
 </script>
 <!-- / select2.inc -->

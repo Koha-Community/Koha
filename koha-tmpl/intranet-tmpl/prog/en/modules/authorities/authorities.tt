@@ -168,11 +168,6 @@ function confirmnotdup(redirect){
 [% Asset.css("css/addbiblio.css") | $raw %]
 
 [% INCLUDE 'select2.inc' %]
-<script>
-  $(document).ready(function() {
-    $('.subfield_line select').select2();
-  });
-</script>
 
 </head>
 <body id="auth_authorities" class="auth">
@@ -375,7 +370,7 @@ function confirmnotdup(redirect){
                 
                 [% SET mv = subfield_loo.marc_value %]
                 [% IF ( mv.type == 'select' ) %]
-                     <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id | html -%]">
+                     <select name="[%- mv.name | html -%]" tabindex="1" size="1" class="input_marceditor select2" id="[%- mv.id | html -%]">
                      [% FOREACH aval IN mv.values %]
                          [% IF aval == mv.default %]
                          <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
