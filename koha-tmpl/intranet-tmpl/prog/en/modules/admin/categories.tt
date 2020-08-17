@@ -624,8 +624,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
-        var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
         var columns_settings = [% TablesSettings.GetColumns( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>
     [% Asset.js("js/categories.js") | $raw %]
