@@ -99,13 +99,15 @@ unless ( $patron and $patron->category->override_hidden_items ) {
 }
 
 my $record      = $biblio->metadata->record;
+my @items = grep { !$_->hidden_in_opac({ rules => $opachiddenitems_rules }) } @{$biblio->items->as_list} ;
 my $marcflavour = C4::Context->preference("marcflavour");
 
 my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
+    filters => [ 'ViewPolicy', 'EmbedItems' ],
     options => {
         interface => 'opac',
-        frameworkcode => $biblio->frameworkcode
+        frameworkcode => $biblio->frameworkcode,
+        items => \@items
     }
 });
 $record_processor->process($record);
