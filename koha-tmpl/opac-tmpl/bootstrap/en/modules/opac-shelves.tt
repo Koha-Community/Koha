@@ -662,6 +662,7 @@
                             <div id="publicshelves" class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="display:block;">
                         [% END %]
 
+                        [% IF category == PRIVATE || Koha.Preference('OpacAllowPublicListCreation') %]
                             [% IF loggedinusername %]
                                 <div id="toolbar" class="toolbar"><a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New list</a></div>
                             [% ELSE %]
@@ -669,6 +670,7 @@
                                     <div class="alert alert-info"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form">Log in to create a new list</a></div>
                                 [% END %]
                             [% END %]
+                        [% END %]
 
                             [% IF shelves.count %]
                                 <table class="table">
