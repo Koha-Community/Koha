@@ -1,3 +1,4 @@
+/* global __ */
 /* Import/Export from/to spreadsheet */
 
     var importing = false;
@@ -32,14 +33,14 @@
 
         var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
         if (matches && matches.length > 1) {
-            alert( MSG_IMPORT_ERROR + " %s".format(decodeURIComponent(matches[1])));
+            alert( __("Error importing the framework") + " %s".format(decodeURIComponent(matches[1])));
         }
 
         $('input.input_import').change( function() {
             var filename = $(this).val();
             if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
                 $(this).css("background-color","yellow");
-                alert( MSG_SELECT_FILE_FORMAT );
+                alert( __("Please select a CSV (.csv) or ODS (.ods) spreadsheet file.") );
                 $(this).val("");
                 $(this).css("background-color","white");
             }
@@ -53,9 +54,9 @@
             var obj = $('#' + id + ' input:file');
             if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
                 var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
-                var MSG_OVERWRITE_WARNING = _("Are you sure you want to replace the fields and subfields for the " + frameworkcode + " framework structure? The existing structure will be overwritten! For safety reasons, it is recommended to use the export option to make a backup first.");
+                var MSG_OVERWRITE_WARNING = __("Are you sure you want to replace the fields and subfields for the %s framework structure? The existing structure will be overwritten! For safety reasons, it is recommended to use the export option to make a backup first.").format( frameworkcode );
                 if (confirm( MSG_OVERWRITE_WARNING )) {
-                    $('#importing_' + frameworkcode).find("span").html(MSG_IMPORTING_TO_FRAMEWORK.format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
+                    $('#importing_' + frameworkcode).find("span").html( __("Importing to framework: %s. Importing from file: %s.").format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"), "") + "</i>"));
                     if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                         var timestamp = new Date().getTime();
                         $('#importing_' + frameworkcode).find("img").attr('src', template_path + '/img/spinner-small.gif' + '?' +timestamp);
@@ -69,7 +70,7 @@
                     return false;
             }
             obj.css("background-color","yellow");
-            alert( MSG_SELECT_FILE_FORMAT );
+            alert( __("Please select a CSV (.csv) or ODS (.ods) spreadsheet file.") );
             obj.val("");
             obj.css("background-color","white");
             return false;

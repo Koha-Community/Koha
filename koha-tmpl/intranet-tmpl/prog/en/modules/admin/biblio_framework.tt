@@ -286,10 +286,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
-        /* Set some variable needed in biblio_framework.js */
-        var MSG_IMPORT_ERROR = _("Error importing the framework");
-        var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv) or ODS (.ods) spreadsheet file.");
-        var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
         var template_path = "[% interface | html %]/[% theme | html %]";
     </script>
     [% Asset.js("js/biblio_framework.js") | $raw %]
