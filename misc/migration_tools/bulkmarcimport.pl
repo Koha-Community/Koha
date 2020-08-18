@@ -395,17 +395,6 @@ RECORD: while (  ) {
 					printlog({id=>$originalid||$id||$authid, op=>"edit",status=>"ok"}) if ($logfile);
 				}
             }  
-            elsif (defined $authid) {
-            ## An authid is defined but no authority in database : add
-                eval { ( $authid ) = AddAuthority($record,$authid, $authtypecode) };
-                if ($@){
-                    warn "Problem with authority $authid Cannot Add ".$@;
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
-                }
-   				else{
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ok"}) if ($logfile);
-				}
-            }
 	        else {
             ## True insert in database
                 eval { ( $authid ) = AddAuthority($record,"", $authtypecode) };
