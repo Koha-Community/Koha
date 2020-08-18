@@ -1,4 +1,4 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers MSG_NO_ITEM_SELECTED MSG_NO_ITEM_SELECTED holdfor_cardnumber holdforclub strQuery MSG_NON_RESERVES_SELECTED PREF_NotHighlightedWords PLACE_HOLD __ */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers holdfor_cardnumber holdforclub strQuery PREF_NotHighlightedWords PLACE_HOLD __ */
 
 if( PREF_AmazonCoverImages ){
     $(window).load(function() {
@@ -223,7 +223,7 @@ function clearAll () {
 function placeHold () {
     var checkedItems = $(".selection:checked");
     if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_ITEM_SELECTED);
+        alert( __("Nothing is selected") );
         return false;
     }
     var bibs = "";
@@ -231,7 +231,7 @@ function placeHold () {
     $(checkedItems).each(function() {
         var bib = $(this).val();
         if ($("#reserve_" + bib).size() == 0) {
-            alert(MSG_NON_RESERVES_SELECTED);
+            alert( __("One or more selected items cannot be placed on hold.") );
             badBibs = true;
             return false;
         }
@@ -259,7 +259,7 @@ function browse_selection () {
         browser.create(1, search_result.query_cgi, search_result.limit_cgi, search_result.sort_by, bibnums, bibnums.length);
         window.location = '/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + bibnums[0] + '&searchid='+browser.searchid;
     } else {
-        alert(MSG_NO_ITEM_SELECTED);
+        alert( __("Nothing is selected") );
     }
     return false;
 }
@@ -267,7 +267,7 @@ function browse_selection () {
 function addToList () {
     var checkedItems = $(".selection:checked");
     if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_ITEM_SELECTED);
+        alert( __("Nothing is selected") );
         return false;
     }
     var bibs = "";
@@ -310,9 +310,9 @@ function verify_images() {
             var w = this.width;
             var h = this.height;
             if ((w == 1) || (h == 1)) {
-                $(this).parent().html('<span class="no-image">'+__("No cover image available")+'</span>');
+                $(this).parent().html('<span class="no-image">'+ __("No cover image available") +'</span>');
             } else if ((this.complete != null) && (!this.complete)) {
-                $(this).parent().html('<span class="no-image">'+__("No cover image available")+'</span>');
+                $(this).parent().html('<span class="no-image">'+ __("No cover image available") +'</span>');
             }
         }
     });

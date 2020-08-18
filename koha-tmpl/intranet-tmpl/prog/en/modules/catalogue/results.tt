@@ -709,8 +709,6 @@
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/coce.js") | $raw %]
     <script>
-        var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-        var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
         var PREF_AmazonCoverImages = parseInt( "[% Koha.Preference('AmazonCoverImages') | html %]", 10);
         var q_array = new Array();  // will hold search terms, if present
         var PREF_LocalCoverImages = parseInt( "[% Koha.Preference('LocalCoverImages') | html %]", 10);
