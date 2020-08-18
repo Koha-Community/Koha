@@ -222,11 +222,6 @@
 
             var columns_settings = [% TablesSettings.GetColumns('members', 'pay', 'pay-fines-table', 'json') | $raw %];
             KohaTable("finest", {
-                "columnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
                 "paging": false,
                 'sorting': [[ 3, "asc" ]],
                 "autoWidth": false

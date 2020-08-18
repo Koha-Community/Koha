@@ -150,10 +150,6 @@
         [% SET table_settings = TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table' ) %];
         $(document).ready( function () {
             var funds_table = KohaTable("funds", {
-                "columnDefs": [
-                    { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                    { "type": "title-string", "targets" : [ "title-string" ] }
-                ],
                 "pageLength": [% table_settings.default_display_length | html %],
                 "order": [[ [% table_settings.default_sort_order | html %], 'asc']],
                 'autoWidth': false,

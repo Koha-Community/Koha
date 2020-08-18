@@ -289,11 +289,6 @@
 
             var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
             late_orderst = KohaTable("late_orders", {
-                "aoColumnDefs": [
-                    { "targets": [ "NoSort" ],"sortable": false,"searchable": false },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
                 "sorting": [[ 1, "asc" ]],
                 "sPaginationType": "full",
                 "bAutoWidth": false,

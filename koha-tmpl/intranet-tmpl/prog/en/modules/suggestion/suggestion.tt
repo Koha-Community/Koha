@@ -1028,10 +1028,6 @@
                         KohaTable("table_[% loop.count| html %]", {
                             "sorting": [[ 1, "asc" ]],
                             "autoWidth": false,
-                            "columnDefs": [
-                                { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
-                                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                            ]
                         }, columns_settings );
                     [% END %]
                 [% END %]

@@ -119,14 +119,14 @@
             <table id="patron-list-table">
                 <thead>
                     <tr>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">&nbsp;</th>
                         <th>Card</th>
                         <th>First name</th>
                         <th>Surname</th>
                         <th>Address</th>
                         <th>Category</th>
                         <th>Library</th>
-                        <th>Expires on</th>
+                        <th class="title-string">Expires on</th>
                         <th>Circ notes</th>
                     </tr>
                 </thead>
@@ -189,12 +189,6 @@
                 var columns_settings_table = [% TablesSettings.GetColumns('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
                 KohaTable('patron-list-table', {
                     "order": [[ 3, "asc" ]],
-                    "aoColumns": [
-                        null,null,null,null,null,null,null,{ "sType": "title-string" },null
-                    ],
-                    "aoColumnDefs": [
-                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                    ],
                     "sPaginationType": "full"
                 }, columns_settings_table);
 

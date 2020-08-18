@@ -321,10 +321,6 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
             $('span.hint').hide();
             var columns_settings;// = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("table_orders", {
-                "aoColumnDefs": [
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
                 "bPaginate": false
             }, columns_settings );
 

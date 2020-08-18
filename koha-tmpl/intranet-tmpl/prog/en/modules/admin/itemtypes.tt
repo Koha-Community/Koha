@@ -404,7 +404,7 @@ Item types administration
             <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
             <th>Library limitations</th>
-            <th class="noExport">Actions</th>
+            <th class="noExport NoSort">Actions</th>
           </thead>
           [% FOREACH itemtype IN itemtypes %]
             <tr>
@@ -538,9 +538,6 @@ Item types administration
 
             $(document).ready(function() {
                 KohaTable("table_item_type", {
-                    "aoColumnDefs": [
-                        { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    ],
                 "aaSorting": [[ 1, "asc" ]],
                 "iDisplayLength": 10,
                 "sPaginationType": "full"

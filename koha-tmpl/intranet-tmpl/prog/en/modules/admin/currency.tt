@@ -183,7 +183,7 @@
             <th class="title-string">Last updated</th>
             <th>Active</th>
             <th>Archived</th>
-            <th>Actions</th>
+            <th class="NoSort">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -249,10 +249,6 @@
             columns_settings = [% TablesSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
             var issuest = KohaTable("currencies-table", {
                 dom: 'B<"clearfix">t',
-                "columnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                    ],
             }, columns_settings );
 
             // prevents users to check active with a currency != 1

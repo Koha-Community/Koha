@@ -217,7 +217,7 @@
                                     <table id="table_reports">
                                         <thead>
                                             <tr>
-                                                <th>&nbsp;</th>
+                                                <th class="NoSort">&nbsp;</th>
                                                 <th>ID</th>
                                                 <th>Report name</th>
                                                 <th>Type</th>
@@ -241,7 +241,7 @@
                                                 [% ELSE %]
                                                     <th class="hidden">&nbsp;</th>
                                                 [% END %]
-                                                <th>Actions</th>
+                                                <th class="NoSort">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1550,10 +1550,8 @@
                     'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
                     'aoColumnDefs': [
-                        { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
                         { 'bSearchable': false, 'aTargets': [3] },
                         { "aTargets": [ 1, 2 ], "sType": "natural"  },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] },
                         { "visible": false, "aTargets" : [ "hidden" ] }
                     ],
                     'oLanguage': {

@@ -244,7 +244,6 @@
             var columns_settings = [% TablesSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
             var thetable = KohaTable("resultst", {
                 "aoColumnDefs": [
-                    { "targets": [ "NoSort" ],"sortable": false,"searchable": false },
                     { "aTargets": [ 1 ], "sType": "nsb-nse" },
                 ],
                 "aaSorting": [[ 1, "asc" ]],

@@ -132,10 +132,6 @@
         $(document).ready(function() {
             var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("histsearcht", {
-                "aoColumnDefs": [
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
                 "sPaginationType": "full"
             }, columns_settings );
 

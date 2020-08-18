@@ -218,7 +218,7 @@
         <th>Description (OPAC)</th>
         <th>Icon</th>
         <th>Library limitations</th>
-        <th class="noExport">Actions</th>
+        <th class="noExport NoSort">Actions</th>
         </tr>
     </thead><tbody>
     [% FOREACH loo IN loop %]
@@ -317,9 +317,6 @@
             var columns_settings = []; // Empty because there are no columns we want to be configurable
 
             KohaTable("categoriest", {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                ],
                 "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "full"
             }, columns_settings);

@@ -127,8 +127,21 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         thead_row.before(clone);
     }
 
-    table.dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
+    var new_parameters = {}
+    $.extend(true, new_parameters, dataTablesDefaults, dt_parameters);
+    var default_column_defs = [
+        { "aTargets": [ "title-string" ], "sType": "title-string" },
+	{ "aTargets": [ "string-sort" ],  "sType": "string" },
+	{ "aTargets": [ "anti-the" ],     "sType": "anti-the" },
+	{ "aTargets": [ "NoSort" ],       "bSortable": false, "bSearchable": false },
+    ];
+    if ( new_parameters["aoColumnDefs"] === undefined ) {
+        new_parameters["aoColumnDefs"] = default_column_defs;
+    } else {
+        $.extend(true, new_parameters, default_column_defs);
+    }
 
+    table.dataTable(new_parameters);
     table.DataTable().on("column-visibility.dt", function(){
         if( typeof columnsInit == 'function' ){
             // This function can be created separately and used to trigger

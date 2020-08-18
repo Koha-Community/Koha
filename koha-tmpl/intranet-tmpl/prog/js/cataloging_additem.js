@@ -45,9 +45,6 @@ $(document).ready(function(){
     columns_settings.unshift( { cannot_be_toggled: "1" } );
 
     var itemst = KohaTable("itemst", {
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-        ],
         'bPaginate': false,
         'bInfo': false,
         "bAutoWidth": false,

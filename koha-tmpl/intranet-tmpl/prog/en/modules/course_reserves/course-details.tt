@@ -77,7 +77,7 @@
             <table id="course_reserves_table">
                 <thead>
                     <tr>
-                        <th class="antithe">Title</th>
+                        <th class="anti-the">Title</th>
                         <th>Author</th>
                         <th>Barcode</th>
                         <th>Call number</th>
@@ -277,10 +277,6 @@
             var rtable = KohaTable("course_reserves_table", {
                 "sPaginationType": "full",
                 "bAutoWidth": false,
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
-                    { 'sType': "anti-the", 'aTargets' : [ 'antithe'] }
-                ]
             }, columns_settings );
 
             $(".delete_item").click(function(){

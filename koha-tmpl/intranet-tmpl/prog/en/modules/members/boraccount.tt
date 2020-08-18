@@ -55,7 +55,7 @@
           <th>Note</th>
           <th>Amount</th>
           <th>Outstanding</th>
-          <th>Actions</th>
+          <th class="NoSort">Actions</th>
         </tr>
     </thead>
 
@@ -318,10 +318,6 @@
                 "sPaginationType": "full",
                 'aaSorting': [[0, 'desc']],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                "aoColumnDefs": [
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                    { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
-                ]
             }, columns_settings);
             $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
             $('#filter_transacs').click(function(e) {

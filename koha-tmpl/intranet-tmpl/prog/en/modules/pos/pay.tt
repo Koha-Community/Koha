@@ -53,8 +53,8 @@
                                 <tr>
                                     <th>Code</th>
                                     <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Action</th>
+                                    <th class="NoSort">Cost</th>
+                                    <th class="NoSort">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -343,9 +343,6 @@
         var items_table = KohaTable("invoices", {
                "sPaginationType": "full",
                "aaSorting": [[ 0, "asc" ]],
-               "aoColumnDefs": [
-                  { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable":false },
-               ],
         }, items_columns_settings);
 
         $(".add_button").on("click", function(e) {

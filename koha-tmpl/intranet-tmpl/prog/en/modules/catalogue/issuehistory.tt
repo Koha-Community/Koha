@@ -116,9 +116,6 @@
             columns_settings.splice(0,1);
             [% END %]
             var table = KohaTable("table_issues", {
-                "aoColumnDefs": [
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "aaSorting": [[ 4, "desc" ]],
                 "sPaginationType": "full_numbers"

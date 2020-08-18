@@ -50,7 +50,7 @@
 <table id="holdst">
 	<thead>
     <tr>
-        <th class="hq-title">Title</th>
+        <th class="hq-title anti-the">Title</th>
         <th class="hq-collection">Collection</th>
         <th class="hq-itemtype">Item type</th>
         <th class="hq-callnumber">Call number</th>
@@ -59,7 +59,7 @@
         <th class="hq-barcode">Barcode</th>
         <th class="hq-patron">Patron</th>
         <th class="hq-sendto">Send to</th>
-        <th class="hq-date">Date</th>
+        <th class="hq-date title-string">Date</th>
         <th class="hq-notes">Notes</th>
     </tr>
     <tr>
@@ -232,9 +232,6 @@
             var columns_settings = [% TablesSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
             var holdst = KohaTable("holdst", {
                 "aaSorting": [[ 3, "asc" ]],
-                "aoColumns": [
-                    { "sType": "anti-the" },null,null,null,null,null,null,null,null,{ "sType": "title-string" },null
-                ],
                 "sDom": 'B<"clearfix">t',
                 "bSortCellsTop": true,
                 "bPaginate": false
