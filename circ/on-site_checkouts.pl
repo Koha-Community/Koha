@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         template_name   => "circ/on-site_checkouts.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired => {circulate => "circulate_remaining_permissions"},
     }
 );

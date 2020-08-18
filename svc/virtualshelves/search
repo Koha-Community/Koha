@@ -16,7 +16,6 @@ my ($template, $user, $cookie) = get_template_and_user({
     template_name   => scalar $input->param('template_path'),
     query           => $input,
     type            => "intranet",
-    authnotrequired => 0,
     flagsrequired   => { catalogue => 1 }
 });
 

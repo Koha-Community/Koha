@@ -59,7 +59,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user (
         template_name   => "serials/checkexpiration.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { serials => 'check_expiration' },
         debug           => 1,
     }

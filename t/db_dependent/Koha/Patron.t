@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 use Koha::Database;
@@ -170,6 +170,29 @@ subtest 'login_attempts tests' => sub {
     delete $patron_info->{login_attempts};
     my $new_patron = Koha::Patron->new($patron_info)->store;
     is( $new_patron->discard_changes->login_attempts, 0, "login_attempts defaults to 0 as expected");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_superlibrarian() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags => 16
+            }
+        }
+    );
+
+    ok( !$patron->is_superlibrarian, 'Patron is not a superlibrarian and the method returns the correct value' );
+
+    $patron->flags(1)->store->discard_changes;
+    ok( $patron->is_superlibrarian, 'Patron is a superlibrarian and the method returns the correct value' );
 
     $schema->storage->txn_rollback;
 };

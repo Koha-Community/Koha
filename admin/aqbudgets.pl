@@ -43,7 +43,6 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     {   template_name   => "admin/aqbudgets.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'budget_manage' },
         debug           => 0,
     }

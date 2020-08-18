@@ -194,6 +194,38 @@ sub update {
      }
 
     return try {
+        my $body = $c->validation->param('body');
+        my $user = $c->stash('koha.user');
+
+        if (
+                $patron->is_superlibrarian
+            and !$user->is_superlibrarian
+            and (  exists $body->{email}
+                or exists $body->{secondary_email}
+                or exists $body->{altaddress_email} )
+          )
+        {
+            foreach my $email_field ( qw(email secondary_email altaddress_email) ) {
+                my $exists_email = exists $body->{$email_field};
+                next unless $exists_email;
+
+                # exists, verify if we are asked to change it
+                my $put_email      = $body->{$email_field};
+                # As of writing this patch, 'email' is the only unmapped field
+                # (i.e. it preserves its name, hence this fallback)
+                my $db_email_field = $patron->to_api_mapping->{$email_field} // 'email';
+                my $db_email       = $patron->$db_email_field;
+
+                return $c->render(
+                    status  => 403,
+                    openapi => { error => "Not enough privileges to change a superlibrarian's email" }
+                  )
+                  unless ( !defined $put_email and !defined $db_email )
+                  or (  defined $put_email
+                    and defined $db_email
+                    and $put_email eq $db_email );
+            }
+        }
 
         $patron->set_from_api($c->validation->param('body'))->store;
         $patron->discard_changes;

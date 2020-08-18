@@ -37,7 +37,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {   template_name   => "members/members-update.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { borrowers => 'edit_borrowers' },
         debug           => 1,
     }

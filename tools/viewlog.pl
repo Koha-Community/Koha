@@ -67,7 +67,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "tools/viewlog.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'view_system_logs' },
         debug           => 1,
     }

@@ -34,7 +34,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/holidays.tt",
                              type => "intranet",
                              query => $input,
-                             authnotrequired => 0,
                              flagsrequired => {tools => 'edit_calendar'},
                              debug => 1,
                            });

@@ -35,7 +35,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/sms_providers.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_sms_providers' },
         debug           => 1,
     }

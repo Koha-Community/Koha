@@ -38,7 +38,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "acqui/ajax.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         debug => 1,    } );
 
 my $budget = GetBudget($budget_id);

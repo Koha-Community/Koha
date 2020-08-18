@@ -103,7 +103,6 @@ if($ok){
 = get_template_and_user({template_name => "serials/routing-preview-slip.tt",
 				query => $query,
 				type => "intranet",
-				authnotrequired => 0,
 				flagsrequired => {serials => '*'},
 				debug => 1,
 				});
@@ -112,7 +111,6 @@ if($ok){
 = get_template_and_user({template_name => "serials/routing-preview.tt",
 				query => $query,
 				type => "intranet",
-				authnotrequired => 0,
 				flagsrequired => {serials => '*'},
 				debug => 1,
 				});

@@ -169,7 +169,9 @@ sub get_template_and_user {
             $in->{'query'},
             $in->{'authnotrequired'},
             $in->{'flagsrequired'},
-            $in->{'type'}
+            $in->{'type'},
+            undef,
+            $in->{template_name},
         );
     }
 
@@ -228,6 +230,7 @@ sub get_template_and_user {
                 -value    => '',
                 -expires  => '',
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
 
             $template->param(
@@ -447,11 +450,6 @@ sub get_template_and_user {
 
     # these template parameters are set the same regardless of $in->{'type'}
 
-    # Set the using_https variable for templates
-    # FIXME Under Plack the CGI->https method always returns 'OFF'
-    my $https = $in->{query}->https();
-    my $using_https = ( defined $https and $https ne 'OFF' ) ? 1 : 0;
-
     my $minPasswordLength = C4::Context->preference('minPasswordLength');
     $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
@@ -471,7 +469,6 @@ sub get_template_and_user {
         singleBranchMode   => ( Koha::Libraries->search->count == 1 ),
         XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
         XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
-        using_https        => $using_https,
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
@@ -791,7 +788,20 @@ sub checkauth {
     my $flagsrequired   = shift;
     my $type            = shift;
     my $emailaddress    = shift;
+    my $template_name   = shift;
     $type = 'opac' unless $type;
+
+    unless ( C4::Context->preference("OpacPublic") ) {
+        my @allowed_scripts_for_private_opac = qw(
+          opac-memberentry.tt
+          opac-registration-email-sent.tt
+          opac-registration-confirmation.tt
+          opac-memberentry-update-submitted.tt
+          opac-password-recovery.tt
+        );
+        $authnotrequired = 0 unless grep { $_ eq $template_name }
+          @allowed_scripts_for_private_opac;
+    }
 
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
@@ -830,6 +840,7 @@ sub checkauth {
             -value    => '',
             -expires  => '',
             -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
         );
         $loggedin = 1;
     }
@@ -930,7 +941,8 @@ sub checkauth {
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => $session->id,
-                -HttpOnly => 1
+                -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             $session->param( 'lasttime', time() );
             unless ( $sessiontype && $sessiontype eq 'anon' ) {    #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
@@ -959,7 +971,8 @@ sub checkauth {
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
             -value    => $session->id,
-            -HttpOnly => 1
+            -HttpOnly => 1,
+            -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
         );
         my $pki_field = C4::Context->preference('AllowPKIAuth');
         if ( !defined($pki_field) ) {
@@ -1127,7 +1140,8 @@ sub checkauth {
                             $cookie = $query->cookie(
                                 -name     => 'CGISESSID',
                                 -value    => '',
-                                -HttpOnly => 1
+                                -HttpOnly => 1,
+                                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
                             );
                             $info{'wrongip'} = 1;
                         }
@@ -1207,7 +1221,8 @@ sub checkauth {
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
-                -HttpOnly => 1
+                -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
         }
 
@@ -1248,8 +1263,8 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
-    my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
-    my $template = C4::Templates::gettemplate( $template_name, $type, $query );
+    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
+    my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
     $template->param(
         login                                 => 1,
         INPUTS                                => \@inputs,
@@ -1475,6 +1490,7 @@ sub check_api_auth {
                     -name     => 'CGISESSID',
                     -value    => $session->id,
                     -HttpOnly => 1,
+                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
                 );
                 $session->param( 'lasttime', time() );
                 my $flags = haspermission( $userid, $flagsrequired );
@@ -1529,6 +1545,7 @@ sub check_api_auth {
                 -name     => 'CGISESSID',
                 -value    => $sessionID,
                 -HttpOnly => 1,
+                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             );
             if ( $return == 1 ) {
                 my (
