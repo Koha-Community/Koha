@@ -1051,8 +1051,8 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Koha::Account::pay() generates credit number' => sub {
-    plan tests => 37;
+subtest 'Koha::Account::pay() generates credit number (Koha::Account::Line->store)' => sub {
+    plan tests => 38;
 
     $schema->storage->txn_begin;
 
@@ -1062,6 +1062,7 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $account = $patron->account;
 
+    #t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
     my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', { branch => $library->id } );
 
@@ -1108,6 +1109,17 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
     $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
     is($accountline->credit_number, undef);
+
+    throws_ok {
+        Koha::Account::Line->new(
+            {
+                credit_type_code => $credit_type->code,
+                credit_number    => 42
+            }
+        )->store;
+    }
+    qr/AutoCreditNumber is enabled but credit_number is already defined!/,
+      'Croaked on bad call to store';
 
     $schema->storage->txn_rollback;
 };
