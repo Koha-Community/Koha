@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -37,6 +37,7 @@ is( Koha::Number::Price->new(1234567890)->format( $format ),
     '1,234,567,890.00', 'US: format 1234567890' );
 
 is( Koha::Number::Price->new(100000000000000)->format, '100000000000000', 'Numbers too big are not formatted');
+is( Koha::Number::Price->new(-100000000000000)->format, '-100000000000000', 'Negative numbers too big are not formatted');
 
 is( Koha::Number::Price->new->format( { %$format, with_symbol => 1 } ),
     '$0.00', 'US: format 0 with symbol' );
