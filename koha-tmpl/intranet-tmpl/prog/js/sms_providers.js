@@ -33,7 +33,7 @@ function clear_form(){
 function add_provider(){
     clear_form();
     $(".dialog").hide();
-    $("legend").text( LABEL_SMS_ADD_PROVIDER );
+    $("legend").text( __("Add an SMS cellular provider") );
     $("#toolbar,#submit_update,#providerst").hide();
     $("#sms_add_form,#submit_save").show();
     $("#name").focus();
@@ -41,7 +41,7 @@ function add_provider(){
 
 function edit_provider( id ) {
     clear_form();
-    $("legend").text( LABEL_SMS_EDIT_PROVIDER.format( $("#name_" + id).text() ) );
+    $("legend").text( __("Edit provider %s").format($("#name_" + id).text()) );
     $("#sms_add_form,#submit_update").show();
 
     $("#id").val( id );
@@ -64,9 +64,9 @@ function cancel_edit() {
 function delete_provider( id, users ) {
     var c;
     if ( users ) {
-        c = confirm( MSG_SMS_PATRONS_USING.format( $("#name_" + id).html(), users ) );
+        c = confirm( __("Are you sure you want to delete %s? %s patron(s) are using it!").format($("#name_" + id).html(), users) );
     } else {
-        c = confirm( MSG_SMS_DELETE_CONFIRM.format( $("#name_" + id).html() ) );
+        c = confirm( __("Are you sure you want to delete %s?").format($("#name_" + id).html()) );
     }
 
     if ( c ) {
