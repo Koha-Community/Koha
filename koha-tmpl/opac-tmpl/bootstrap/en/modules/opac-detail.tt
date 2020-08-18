@@ -1210,7 +1210,8 @@
     <table class="table table-bordered table-striped" id="[% table_id | html %]">
         <thead>
             <tr>
-                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+
+                [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <th id="item_cover" data-colname="item_cover">Cover image</th>
                 [% END %]
                 [% IF ( item_level_itypes ) %]
@@ -1265,7 +1266,7 @@
                   <tr vocab="http://schema.org/" typeof="Offer">
                 [% END %]
 
-                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                [% IF Koha.Preference('OPACLocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <td class="cover">
                         [% FOR image IN ITEM_RESULT.cover_images %]
                             <div title="[% ITEM_RESULT.itemnumber | html %]" data-imagenumber="[% image.imagenumber | html %]" data-biblionumber="[% ITEM_RESULT.biblionumber | html %]" class="local-thumbnail-preview"></div>

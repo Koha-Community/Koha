@@ -283,7 +283,7 @@
         <thead>
             <tr>
                 [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
-                [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                     <th id="[% tab | html %]_cover" data-colname="[% tab | html %]_cover">Cover image</th>
                 [% END %]
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
@@ -324,7 +324,7 @@
                         <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
                     </td>
                 [% END %]
-                    [% IF ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
+                    [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
                         <td class="cover">
                             <div class="bookcoverimg">
                                 <div class="cover-slider">
@@ -550,12 +550,16 @@ Note that permanent location is a code, and location may be an authval.
                 [% IF CAN_user_editcatalogue_edit_items %]
                     <td class="actions">
                         [% UNLESS item.cannot_be_edited %]
-                            <div class="btn-group">
-                                <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% item.itemnumber | uri %]&amp;filetype=image"><i class="fa fa-upload"></i> Upload image</a></li>
-                                </ul>
-                            </div>
+                            [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
+                                <div class="btn-group">
+                                    <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% item.itemnumber | uri %]&amp;filetype=image"><i class="fa fa-upload"></i> Upload image</a></li>
+                                    </ul>
+                                </div>
+                            [% ELSE %]
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a>
+                            [% END %]
                         [% END %]
                     </td>
                 [% END %]
