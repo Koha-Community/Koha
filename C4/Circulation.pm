@@ -2308,7 +2308,7 @@ sub _calculate_new_debar_dt {
 
     # grace period is measured in the same units as the loan
     my $grace =
-      DateTime::Duration->new( $unit => $issuing_rule->{firstremind} );
+      DateTime::Duration->new( $unit => $issuing_rule->{firstremind} // 0);
 
     my $deltadays = DateTime::Duration->new(
         days => $chargeable_units
