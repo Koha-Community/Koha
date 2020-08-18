@@ -246,19 +246,6 @@
                             <span class="results_summary year"><span class="label">Year: </span>[% copyrightdate | html %]</span>
                         [% END %]
 
-                        [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
-                            <span class="results_summary itemtype"><span class="label">Item type: </span>
-                                [% IF ( imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
-                                    <img src="[% imageurl | html %]" alt="" />
-                                [% END %]
-                                [% IF ( description ) %]
-                                    [% description | html %]
-                                [% ELSE %]
-                                    [% itemtype | html %]
-                                [% END %]
-                            </span>
-                        [% END %]
-
                         [% IF ( MARCURLS ) %]
                             <div class="results_summary online_resources"><span class="label">Online resources:</span>
                                 <ul>
@@ -292,6 +279,19 @@
                             </div>
                         [% END # / IF MARCURLS %]
                     [% END # / IF OPACXSLTDetailsDisplay %]
+
+                    [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
+                        <span class="results_summary itemtype"><span class="label">Item type: </span>
+                            [% IF ( imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
+                                <img src="[% imageurl | html %]" alt="" />
+                            [% END %]
+                            [% IF ( description ) %]
+                                [% description | html %]
+                            [% ELSE %]
+                                [% itemtype | html %]
+                            [% END %]
+                        </span>
+                    [% END %]
 
                     <!-- This puts the LTFL reviews in, and if TabbedView is not set, puts the remaining content above the Tabs instead of in them -->
                     [% IF ( LibraryThingForLibrariesID ) %]
