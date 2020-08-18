@@ -1,10 +1,10 @@
-/* global KOHA MSG_MADE_CHANGES CodeMirror MSG_CLICK_TO_EXPAND MSG_CLICK_TO_COLLAPSE to_highlight search_jumped humanMsg MSG_NOTHING_TO_SAVE MSG_MODIFIED MSG_SAVING MSG_SAVED_PREFERENCE dataTablesDefaults themelang */
+/* global KOHA CodeMirror to_highlight search_jumped humanMsg dataTablesDefaults themelang */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
     Save: function ( form ) {
         if ( ! $(form).valid() ) {
-            humanMsg.displayAlert( MSG_INVALID );
+            humanMsg.displayAlert( __("Error: presence of invalid data prevent saving. Please make the corrections and try again.") );
             return;
         }
 
@@ -22,10 +22,10 @@ KOHA.Preferences = {
             data += '&' + $(this).attr('name') + '=';
         });
         if ( !data ) {
-            humanMsg.displayAlert( MSG_NOTHING_TO_SAVE );
+            humanMsg.displayAlert( __("Nothing to save") );
             return;
         }
-        KOHA.AJAX.MarkRunning( $( form ).find( '.save-all' ), MSG_SAVING );
+        KOHA.AJAX.MarkRunning($(form).find('.save-all'), __("Saving...") );
         KOHA.AJAX.Submit( {
             data: data,
             url: '/cgi-bin/koha/svc/config/systempreferences/',
@@ -38,7 +38,7 @@ KOHA.Preferences = {
         modified_prefs.each(function(){
             var modified_pref = $(this).attr("id");
             modified_pref = modified_pref.replace("pref_","");
-            msg += "<strong>"+ MSG_SAVED_PREFERENCE.format(modified_pref) + "</strong>\n";
+            msg += "<strong>" + __("Saved preference %s").format(modified_pref) + "</strong>\n";
         });
         humanMsg.displayAlert(msg);
 
@@ -54,13 +54,13 @@ function mark_modified() {
     $( this ).addClass( 'modified' );
     var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
     if ( !name_cell.find( '.modified-warning' ).length )
-        name_cell.append( '<em class="modified-warning">('+MSG_MODIFIED+')</em>' );
+        name_cell.append('<em class="modified-warning">(' + __("modified") + ')</em>');
     KOHA.Preferences.Modified = true;
 }
 
 window.onbeforeunload = function () {
     if ( KOHA.Preferences.Modified ) {
-        return MSG_MADE_CHANGES;
+        return __("You have made changes to system preferences.");
     }
 };
 
@@ -146,17 +146,17 @@ $( document ).ready( function () {
         $("#pref_" + target ).hide();
     });
 
-    $("h3").attr("class","expanded").attr("title",MSG_CLICK_TO_EXPAND);
+    $("h3").attr("class", "expanded").attr("title", __("Click to collapse this section"));
     var collapsible = $(".collapsed,.expanded");
 
     $(collapsible).on("click",function(){
         var h3Id = $(this).attr("id");
         var panel = $("#collapse_" + h3Id);
         if(panel.is(":visible")){
-            $(this).addClass("collapsed").removeClass("expanded").attr("title",MSG_CLICK_TO_EXPAND);
+            $(this).addClass("collapsed").removeClass("expanded").attr("title", __("Click to expand this section") );
             panel.hide();
         } else {
-            $(this).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
+            $(this).addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
             panel.show();
         }
     });
@@ -168,7 +168,7 @@ $( document ).ready( function () {
         href = href.replace("#","");
         var panel = $("#collapse_" + href );
         if( panel.is(":hidden") ){
-            $("#" + href ).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
+            $("#" + href).addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
             panel.show();
         }
     });
@@ -187,7 +187,7 @@ $( document ).ready( function () {
     $("#pref_UpdateItemLocationOnCheckin").change(function(){
         var the_text = $(this).val();
         var alert_text = '';
-        if ( the_text.indexOf('_ALL_:') != -1 ) alert_text = MSG_ALL_VALUE_WARN + '\n';
+        if (the_text.indexOf('_ALL_:') != -1) alert_text = __("Note: _ALL_ value will override all other values") + '\n';
         var split_text  =the_text.split("\n");
         var alert_issues = '';
         var issue_count = 0;
@@ -198,7 +198,7 @@ $( document ).ready( function () {
                 issue_count++;
             }
         }
-        if (issue_count) alert_text += "\n"+ MSG_UPD_LOC_FORMAT_WARN  +"\n"+alert_issues;
+        if (issue_count) alert_text += "\n" + __("The following values are not formatted correctly:") + "\n" + alert_issues;
         if ( alert_text.length )  alert(alert_text);
     });
 

@@ -251,20 +251,6 @@
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
         var to_highlight = "[% To.json( searchfield ) | $raw %]";
         var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
-        var MSG_NOTHING_TO_SAVE = _("Nothing to save");
-        var MSG_SAVING = _("Saving...");
-        var MSG_SAVED_PREFERENCE = _("Saved preference %s");
-        var MSG_MODIFIED = _("modified");
-        var MSG_MADE_CHANGES = _("You have made changes to system preferences.");
-        var MSG_CLICK_TO_EXPAND = _("Click to expand this section");
-        var MSG_CLICK_TO_COLLAPSE = _("Click to collapse this section");
-        var MSG_INTERNAL_SERVER_ERROR = _( "Internal Server Error, please reload the page" );
-        var MSG_SESSION_TIMED_OUT = _( "You need to log in again, your session has timed out" );
-        var MSG_DATA_NOT_SAVED = _( "Error; your data might not have been saved" );
-        var MSG_LOADING = _( "Loading..." );
-        var MSG_ALL_VALUE_WARN = _("Note: _ALL_ value will override all other values");
-        var MSG_UPD_LOC_FORMAT_WARN = _("The following values are not formatted correctly:");
-        var MSG_INVALID = _( "Error: presence of invalid data prevent saving. Please make the corrections and try again." );
     </script>
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/ajax.js") | $raw %]
