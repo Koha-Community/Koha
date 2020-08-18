@@ -985,8 +985,24 @@ $(document).ready(function() {
                         let resolved = json.resolved;
                         let unresolved = json.unresolved;
 
-                        $('#return-claims-count-resolved').text(resolved);
-                        $('#return-claims-count-unresolved').text(unresolved);
+                        if ( resolved > 0 ) {
+                            $('#return-claims-count-resolved').text(resolved)
+                                                              .removeClass('label-default')
+                                                              .addClass('label-success');
+                        } else {
+                            $('#return-claims-count-resolved').text(resolved)
+                                                              .removeClass('label-success')
+                                                              .addClass('label-default');
+                        }
+                        if ( unresolved > 0 ) {
+                            $('#return-claims-count-unresolved').text(unresolved)
+                                                                .removeClass('label-default')
+                                                                .addClass('label-warning');
+                        } else {
+                            $('#return-claims-count-unresolved').text(unresolved)
+                                                                .removeClass('label-warning')
+                                                                .addClass('label-default');
+                        }
 
                         fnCallback(json)
                     } );
