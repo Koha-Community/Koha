@@ -22590,6 +22590,21 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 16371, "Quote of the Day (QOTD) for the staff interface " );
 }
 
+$DBversion = '20.06.00.024';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "UPDATE marc_subfield_structure SET liblibrarian = 'Home library' WHERE liblibrarian = 'Permanent location'
+        AND tagfield = 952 and tagsubfield = 'a'" );
+    $dbh->do( "UPDATE marc_subfield_structure SET libopac = 'Home library' WHERE libopac = 'Permanent location'
+        AND tagfield = 952 and tagsubfield = 'a'" );
+    $dbh->do( "UPDATE marc_subfield_structure SET liblibrarian = 'Current library' WHERE liblibrarian = 'Current location'
+        AND tagfield = 952 and tagsubfield = 'b'" );
+    $dbh->do( "UPDATE marc_subfield_structure SET libopac = 'Current library' WHERE libopac = 'Current location'
+        AND tagfield = 952 and tagsubfield = 'b'" );
+
+    NewVersion( $DBversion, 25867, "Update subfield descriptions for 952\$a and 952\$b");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
