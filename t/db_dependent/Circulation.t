@@ -2103,7 +2103,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 24;
+    plan tests => 27;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -2152,6 +2152,38 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
         }
     );
 
+    # Same with undef firstremind
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                issuelength => 1,
+                firstremind => undef,    # 0 day of grace
+                finedays    => 2,    # 2 days of fine per day of overdue
+                suspension_chargeperiod => 1,
+                lengthunit              => 'days',
+            }
+        }
+    );
+    {
+    my $now = dt_from_string;
+    my $five_days_ago = $now->clone->subtract( days => 5 );
+    # We want to charge 2 days every day, without grace
+    # With 5 days of overdue: 5 * Z
+    my $expected_expiration = $now->clone->add( days => ( 5 * 2 ) / 1 );
+    test_debarment_on_checkout(
+        {
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
+        }
+    );
+    }
     # We want to charge 2 days every 2 days, without grace
     # With 5 days of overdue: (5 * 2) / 2
     Koha::CirculationRules->set_rule(
