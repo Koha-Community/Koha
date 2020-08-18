@@ -87,7 +87,7 @@ $(document).ready(function() {
 
     // Debarments
     $("div#reldebarments .remove_restriction").on("click",function(){
-        return confirm(_("Remove restriction?"));
+        return confirm( __("Remove restriction?") );
     });
     var mrform = $("#manual_restriction_form");
     var mrlink = $("#add_manual_restriction");
@@ -113,7 +113,7 @@ $(document).ready(function() {
 
 function export_checkouts(format) {
     if ($("input:checkbox[name='biblionumbers']:checked").length < 1){
-        alert(MSG_EXPORT_SELECT_CHECKOUTS);
+        alert( __("You must select checkout(s) to export") );
         return;
     }
 
