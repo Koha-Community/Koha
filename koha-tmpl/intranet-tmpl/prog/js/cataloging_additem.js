@@ -47,6 +47,7 @@ $(document).ready(function(){
     var itemst = KohaTable("itemst", {
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+            { "aTargets": [ "title-string" ], "sType": "title-string" },
         ],
         'bPaginate': false,
         'bInfo': false,
