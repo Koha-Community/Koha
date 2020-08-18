@@ -22605,6 +22605,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25867, "Update subfield descriptions for 952\$a and 952\$b");
 }
 
+$DBversion = '20.06.00.025';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
+        ('PatronDuplicateMatchingAddFields','surname|firstname|dateofbirth', NULL,'A list of fields separated by "|" to deduplicate patrons when created','Free')
+    });
+
+    NewVersion( $DBversion, 6725, "Adds PatronDuplicateMatchingAddFields system preference");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
