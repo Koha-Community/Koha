@@ -284,7 +284,7 @@
             <tr>
                 [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
                 [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
-                    <th id="[% tab | html %]_cover" data-colname="[% tab | html %]_cover">Cover image</th>
+                    <th id="[% tab | html %]_cover_image" data-colname="[% tab | html %]_cover_image">Cover image</th>
                 [% END %]
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
                 <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
@@ -1269,8 +1269,12 @@ Note that permanent location is a code, and location may be an authval.
         $(document).ready(function() {
             var ids = ['holdings_table', 'otherholdings_table'];
             var columns_settings = [ [% TablesSettings.GetColumns('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetColumns('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
+            var has_images = ["[% itemloop_has_images %]", "[% otheritemloop_has_images %]"];
             for (var i in ids) {
                 var id = ids[i];
+                if ( !has_images[i] ) { // remove the cover_image column
+                    columns_settings.splice(1,1);
+                }
                 var dt_parameters = {
                     'sDom': 't',
                     'bPaginate': false,
