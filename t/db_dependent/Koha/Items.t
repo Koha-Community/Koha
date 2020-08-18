@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 11;
 use Test::Exception;
+use Time::Fake;
 
 use C4::Circulation;
 use C4::Context;
@@ -64,7 +65,8 @@ my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
 
 subtest 'store' => sub {
-    plan tests => 4;
+    plan tests => 5;
+
     my $biblio = $builder->build_sample_biblio;
     my $today = dt_from_string->set( hour => 0, minute => 0, second => 0 );
     my $item = Koha::Item->new(
@@ -82,6 +84,51 @@ subtest 'store' => sub {
     is( $item->itype, $biblio->biblioitem->itemtype, 'items.itype must have been set to biblioitem.itemtype is not given');
     is( $item->permanent_location, $item->location, 'permanent_location must have been set to location if not given' );
     $item->delete;
+
+    subtest '*_on updates' => sub {
+        plan tests => 9;
+
+        # Once the '_on' value is set (triggered by the related field turning from false to true)
+        # it should not be re-set for any changes outside of the related field being 'unset'.
+
+        my @fields = qw( itemlost withdrawn damaged );
+        my $today = dt_from_string();
+        my $yesterday = $today->clone()->subtract( days => 1 );
+
+        for my $field ( @fields ) {
+            my $item = $builder->build_sample_item(
+                {
+                    itemlost     => 0,
+                    itemlost_on  => undef,
+                    withdrawn    => 0,
+                    withdrawn_on => undef,
+                    damaged      => 0,
+                    damaged_on   => undef
+                }
+            );
+            my $field_on = $field . '_on';
+
+            # Set field for the first time
+            Time::Fake->offset( $yesterday->epoch );
+            $item->$field(1)->store;
+            $item->get_from_storage;
+            is($item->$field_on, DateTime::Format::MySQL->format_datetime($yesterday), $field_on . " was set upon first truthy setting");
+
+            # Update the field to a new 'true' value
+            Time::Fake->offset( $today->epoch );
+            $item->$field(2)->store;
+            $item->get_from_storage;
+            is($item->$field_on, DateTime::Format::MySQL->format_datetime($yesterday), $field_on . " was not updated upon second truthy setting");
+
+            # Update the field to a new 'false' value
+            $item->$field(0)->store;
+            $item->get_from_storage;
+            is($item->$field_on, undef, $field_on . " was unset upon untruthy setting");
+
+            Time::Fake->reset;
+        }
+    };
+
 };
 
 subtest 'get_transfer' => sub {
@@ -111,7 +158,6 @@ subtest 'holds' => sub {
     my $item   = $builder->build_sample_item({
         biblionumber => $biblio->biblionumber,
     });
-    $nb_of_items++;
     is($item->holds->count, 0, "Nothing returned if no holds");
     my $hold1 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'T' }});
     my $hold2 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
@@ -176,7 +222,6 @@ subtest 'can_be_transferred' => sub {
         homebranch       => $library1->branchcode,
         holdingbranch    => $library1->branchcode,
     });
-    $nb_of_items++;
 
     is(Koha::Item::Transfer::Limits->search({
         fromBranch => $library1->branchcode,
@@ -200,7 +245,11 @@ subtest 'can_be_transferred' => sub {
        'We get the same result also if we pass the from-library parameter.');
 };
 
+# Reset nb_of_items prior to testing delete
+$nb_of_items = Koha::Items->search->count;
+
+# Test delete
 $retrieved_item_1->delete;
-is( Koha::Items->search->count, $nb_of_items + 1, 'Delete should have deleted the item' );
+is( Koha::Items->search->count, $nb_of_items - 1, 'Delete should have deleted the item' );
 
 $schema->storage->txn_rollback;
