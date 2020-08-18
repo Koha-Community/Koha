@@ -274,6 +274,7 @@ sub raw_elasticsearch_mappings {
 
             $mappings->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{mandatory} = $search_field->mandatory;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order if defined $search_field->facet_order;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight if defined $search_field->weight;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{opac} = $search_field->opac if defined $search_field->opac;

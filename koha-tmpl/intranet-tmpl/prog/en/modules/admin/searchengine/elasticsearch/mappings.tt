@@ -200,6 +200,7 @@ a.add, a.delete {
                             <select name="search_field_type" disabled>
                         [% ELSE %]
                             <select name="search_field_type">
+                        [% END %]
                               <option value=""></option>
                               [% IF search_field.type == "string" %]
                                 <option value="string" selected="selected">String</option>
@@ -242,7 +243,6 @@ a.add, a.delete {
                                 <option value="stdno">Std. Number</option>
                               [% END %]
                             </select>
-                        [% END %]
                       </td>
                       <td>
                         <select name="search_field_staff_client">
