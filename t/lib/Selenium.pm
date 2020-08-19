@@ -187,7 +187,8 @@ sub show_all_entries {
     $self->driver->find_element( $xpath_selector
           . '//div[@class="dataTables_length"]/label/select/option[@value="-1"]'
     )->click;
-    my ($all_displayed);
+    my ($all_displayed, $i);
+    my $max_retries = $self->max_retries;
     while ( not $all_displayed ) {
         my $dt_infos = $self->driver->get_text(
             $xpath_selector . '//div[@class="dataTables_info"]' );
@@ -197,6 +198,9 @@ sub show_all_entries {
         }
 
         $self->driver->pause(1000) unless $all_displayed;
+
+        die "Cannot show all entries from table $xpath_selector"
+            if $max_retries <= ++$i
     }
 }
 
@@ -215,6 +219,8 @@ sub click_when_visible {
     $self->add_error_handler;
     $elt->click unless $clicked; # finally Raise the error
 }
+
+sub max_retries { 10 }
 
 =head1 NAME
 
