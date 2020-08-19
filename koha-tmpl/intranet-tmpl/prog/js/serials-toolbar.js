@@ -1,20 +1,20 @@
-/* global MSG_CLOSE_SUBSCRIPTION MSG_REOPEN_SUBSCRIPTION CONFIRM_DELETE_SUBSCRIPTION subscriptionid */
+/* global subscriptionid */
 
 function confirm_close() {
-    var is_confirmed = confirm( MSG_CLOSE_SUBSCRIPTION );
+    var is_confirmed = confirm( __("Are you sure you want to close this subscription?") );
     if (is_confirmed) {
         window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=close";
     }
 }
 function confirm_reopen() {
-    var is_confirmed = confirm( MSG_REOPEN_SUBSCRIPTION );
+    var is_confirmed = confirm( __("Are you sure you want to reopen this subscription?") );
     if (is_confirmed) {
         window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=reopen";
     }
 }
 
 function confirm_deletion() {
-    var is_confirmed = confirm( CONFIRM_DELETE_SUBSCRIPTION );
+    var is_confirmed = confirm( __("Are you sure you want to delete this subscription?") );
     if (is_confirmed) {
         window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=del";
     }
