@@ -33,11 +33,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/serials-toolbar.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var subscriptionid = "[% subscriptionid | html %]";
-        var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
-        var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
-        var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
 [% END %]
 
