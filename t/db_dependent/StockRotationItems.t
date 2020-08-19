@@ -40,13 +40,13 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $itm = $builder->build({ source => 'Item' });
+    my $itm = $builder->build_sample_item;
     my $stage = $builder->build({ source => 'Stockrotationstage' });
 
     my $item = $builder->build({
         source => 'Stockrotationitem',
         value  => {
-            itemnumber_id => $itm->{itemnumber},
+            itemnumber_id => $itm->itemnumber,
             stage_id      => $stage->{stage_id},
         },
     });
@@ -60,7 +60,7 @@ subtest 'Basic object tests' => sub {
 
     # Relationship to rota
     isa_ok( $sritem->itemnumber, 'Koha::Item', "Fetched related item." );
-    is( $sritem->itemnumber->itemnumber, $itm->{itemnumber}, "Related rota OK." );
+    is( $sritem->itemnumber->itemnumber, $itm->itemnumber, "Related rota OK." );
 
     # Relationship to stage
     isa_ok( $sritem->stage, 'Koha::StockRotationStage', "Fetched related stage." );
@@ -77,7 +77,13 @@ subtest 'Tests for needs_repatriating' => sub {
     $schema->storage->txn_begin;
 
     # Setup a pristine stockrotation context.
-    my $sritem = $builder->build({ source => 'Stockrotationitem' });
+    my $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value =>
+              { itemnumber_id => $builder->build_sample_item->itemnumber }
+        }
+    );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id);
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
@@ -130,7 +136,13 @@ subtest 'Tests for needs_repatriating' => sub {
 subtest "Tests for repatriate." => sub {
     plan tests => 3;
     $schema->storage->txn_begin;
-    my $sritem = $builder->build({ source => 'Stockrotationitem' });
+    my $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value =>
+              { itemnumber_id => $builder->build_sample_item->itemnumber }
+        }
+    );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->stage->position(1);
     $dbitem->stage->duration(50);
@@ -151,18 +163,28 @@ subtest "Tests for needs_advancing." => sub {
     $schema->storage->txn_begin;
 
     # Test behaviour of item freshly added to rota.
-    my $sritem = $builder->build({
-        source => 'Stockrotationitem',
-        value  => { 'fresh' => 1, },
-    });
+    my $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                'fresh'       => 1,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            },
+        }
+    );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     is($dbitem->needs_advancing, 1, "An item that is fresh will always need advancing.");
 
     # Setup a pristine stockrotation context.
-    $sritem = $builder->build({
-        source => 'Stockrotationitem',
-        value => { 'fresh' => 0,}
-    });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                'fresh'       => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id);
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
@@ -209,10 +231,15 @@ subtest "Tests for advance." => sub {
     plan tests => 15;
     $schema->storage->txn_begin;
 
-    my $sritem = $builder->build({
-        source => 'Stockrotationitem',
-        value => { 'fresh' => 1 }
-    });
+    my $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                'fresh'       => 1,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
     my $dbstage = $dbitem->stage;
@@ -284,22 +311,43 @@ subtest "Tests for investigate (singular)." => sub {
     $schema->storage->txn_begin;
 
     # Test brand new item's investigation ['initiation']
-    my $sritem = $builder->build({ source => 'Stockrotationitem', value => { fresh => 1 } });
+    my $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                fresh         => 1,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     is($dbitem->investigate->{reason}, 'initiation', "fresh item initiates.");
 
     # Test brand new item at stagebranch ['initiation']
-    $sritem = $builder->build({ source => 'Stockrotationitem', value => { fresh => 1 } });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                fresh         => 1,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
     is($dbitem->investigate->{reason}, 'initiation', "fresh item at stagebranch initiates.");
 
     # Test item not at stagebranch with branchtransfer history ['repatriation']
-    $sritem = $builder->build({
-        source => 'Stockrotationitem',
-        value => { 'fresh'       => 0,}
-    });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                'fresh'       => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     my $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
@@ -312,10 +360,15 @@ subtest "Tests for investigate (singular)." => sub {
     is($dbitem->investigate->{reason}, 'repatriation', "older item repatriates.");
 
     # Test item at stagebranch with branchtransfer history ['not-ready']
-    $sritem = $builder->build({
-        source => 'Stockrotationitem',
-        value => { 'fresh'       => 0,}
-    });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                'fresh'       => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbtransfer = Koha::Item::Transfer->new({
         'itemnumber'  => $dbitem->itemnumber_id,
@@ -330,7 +383,15 @@ subtest "Tests for investigate (singular)." => sub {
     is($dbitem->investigate->{reason}, 'not-ready', "older item at stagebranch not-ready.");
 
     # Test item due for advancement ['advancement']
-    $sritem = $builder->build({ source => 'Stockrotationitem', value => { fresh => 0 } });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                fresh         => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->indemand(0)->store;
     $dbitem->stage->duration(50)->store;
@@ -350,7 +411,15 @@ subtest "Tests for investigate (singular)." => sub {
        "Item ready for advancement.");
 
     # Test item due for advancement but in-demand ['in-demand']
-    $sritem = $builder->build({ source => 'Stockrotationitem', value => { fresh => 0 } });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                fresh         => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->indemand(1)->store;
     $dbitem->stage->duration(50)->store;
@@ -370,7 +439,15 @@ subtest "Tests for investigate (singular)." => sub {
        "Item advances, but in-demand.");
 
     # Test item ready for advancement, but at wrong library ['repatriation']
-    $sritem = $builder->build({ source => 'Stockrotationitem', value => { fresh => 0 } });
+    $sritem = $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                fresh         => 0,
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
+        }
+    );
     $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
     $dbitem->indemand(0)->store;
     $dbitem->stage->duration(50)->store;

@@ -165,18 +165,33 @@ subtest 'Relationship to stockrotationitems' => sub {
     $schema->storage->txn_begin;
     my $stage = $builder->build({ source => 'Stockrotationstage' });
 
-    $builder->build({
-        source => 'Stockrotationitem',
-        value  => { stage_id => $stage->{stage_id} },
-    });
-    $builder->build({
-        source => 'Stockrotationitem',
-        value  => { stage_id => $stage->{stage_id} },
-    });
-    $builder->build({
-        source => 'Stockrotationitem',
-        value  => { stage_id => $stage->{stage_id} },
-    });
+    $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                stage_id      => $stage->{stage_id},
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            },
+        }
+    );
+    $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                stage_id      => $stage->{stage_id},
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            },
+        }
+    );
+    $builder->build(
+        {
+            source => 'Stockrotationitem',
+            value  => {
+                stage_id      => $stage->{stage_id},
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            },
+        }
+    );
 
     my $srstage = Koha::StockRotationStages->find($stage->{stage_id});
     my $sritems = $srstage->stockrotationitems;
@@ -283,14 +298,17 @@ subtest 'Tests for investigate (singular)' => sub {
     while ( my ( $code, $count ) = each %{$spec} ) {
         my $cnt = 0;
         while ( $cnt < $count ) {
-            my $item = $builder->build({
-                source => 'Stockrotationitem',
-                value  => {
-                    stage_id => $stage1->{stage_id},
-                    indemand => 0,
-                    fresh    => 1,
+            my $item = $builder->build(
+                {
+                    source => 'Stockrotationitem',
+                    value  => {
+                        stage_id      => $stage1->{stage_id},
+                        indemand      => 0,
+                        fresh         => 1,
+                        itemnumber_id => $builder->build_sample_item->itemnumber
+                    }
                 }
-            });
+            );
             my $dbitem = Koha::StockRotationItems->find($item);
             $dbitem->itemnumber->homebranch($code)
                 ->holdingbranch($code)->store;
@@ -322,14 +340,17 @@ subtest 'Tests for investigate (singular)' => sub {
     while ( my ( $code, $count ) = each %{$spec} ) {
         my $cnt = 0;
         while ( $cnt < $count ) {
-            my $item = $builder->build({
-                source => 'Stockrotationitem',
-                value  => {
-                    stage_id => $stage2->{stage_id},
-                    indemand => 0,
-                    fresh => 1,
+            my $item = $builder->build(
+                {
+                    source => 'Stockrotationitem',
+                    value  => {
+                        stage_id      => $stage2->{stage_id},
+                        indemand      => 0,
+                        fresh         => 1,
+                        itemnumber_id => $builder->build_sample_item->itemnumber
+                    }
                 }
-            });
+            );
             my $dbitem = Koha::StockRotationItems->find($item);
             $dbitem->itemnumber->homebranch($code)
                 ->holdingbranch($code)->store;
