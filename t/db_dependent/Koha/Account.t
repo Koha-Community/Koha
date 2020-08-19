@@ -1084,42 +1084,44 @@ subtest 'Koha::Account::pay() generates credit number (Koha::Account::Line->stor
     for my $i (1..11) {
         $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
         $accountline = Koha::Account::Lines->find($accountlines_id);
-        is($accountline->credit_number, $i);
+        is($accountline->credit_number, $i, "Incremental format credit number added for payments: $i");
     }
     $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
-    is($accountline->credit_number, undef);
+    is($accountline->credit_number, undef, "Incremental credit number not added for writeoff");
 
     t::lib::Mocks::mock_preference('AutoCreditNumber', 'annual');
     for my $i (1..11) {
         $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
         $accountline = Koha::Account::Lines->find($accountlines_id);
-        is($accountline->credit_number, sprintf('%s-%04d', $year, $i));
+        is($accountline->credit_number, sprintf('%s-%04d', $year, $i), "Annual format credit number added for payments: " . sprintf('%s-%04d', $year, $i));
     }
     $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
-    is($accountline->credit_number, undef);
+    is($accountline->credit_number, undef, "Annual format credit number not aded for writeoff");
 
     t::lib::Mocks::mock_preference('AutoCreditNumber', 'branchyyyymmincr');
     for my $i (1..11) {
         $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
         $accountline = Koha::Account::Lines->find($accountlines_id);
-        is($accountline->credit_number, sprintf('%s%d%02d%04d', $library->id, $year, $month, $i));
+        is($accountline->credit_number, sprintf('%s%d%02d%04d', $library->id, $year, $month, $i), "branchyyyymmincr format credit number added for payment: " . sprintf('%s%d%02d%04d', $library->id, $year, $month, $i));
     }
     $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
-    is($accountline->credit_number, undef);
+    is($accountline->credit_number, undef, "branchyyyymmincr format credit number not added for writeoff");
 
     throws_ok {
         Koha::Account::Line->new(
             {
+                interface        => 'test',
+                amount           => -1,
                 credit_type_code => $credit_type->code,
                 credit_number    => 42
             }
         )->store;
     }
-    qr/AutoCreditNumber is enabled but credit_number is already defined!/,
-      'Croaked on bad call to store';
+    'Koha::Exceptions::Account',
+"Exception thrown when AutoCreditNumber is enabled but credit_number is already defined";
 
     $schema->storage->txn_rollback;
 };
