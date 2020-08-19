@@ -193,7 +193,7 @@ sub show_all_entries {
         my $dt_infos = $self->driver->get_text(
             $xpath_selector . '//div[@class="dataTables_info"]' );
 
-        if ( $dt_infos =~ m|Showing 1 to (\d+) of (\d+) entries| ) {
+        if ( $dt_infos =~ m|Showing 1 to (\d+) of (\d+)(\sentries)?| ) { # FIXME entries is not always displayed
             $all_displayed = 1 if $1 == $2;
         }
 
