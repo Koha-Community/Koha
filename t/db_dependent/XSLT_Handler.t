@@ -63,7 +63,7 @@ is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_5, 'Engine returns error on non-
 
 # Malformed XML tests
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    qr{parser error : Opening and ending tag mismatch: a line (0|1) and b},
     "Malformed XML warning correctly displayed";
 is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_5, 'Engine returns error on malformed xml' );
 
@@ -75,18 +75,18 @@ my $secondengine=Koha::XSLT_Handler->new( {
 });
 $engine->do_not_return_source(1);
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    qr{parser error : Opening and ending tag mismatch: a line (0|1) and b},
     "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Engine respects do_not_return_source==1');
 $secondengine->print_warns(1);
 warning_like { $output = $secondengine->transform( '<a></b>', $xsltfile_1 ) }
-    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    qr{parser error : Opening and ending tag mismatch: a line (0|1) and b},
     "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Second engine respects it too');
 undef $secondengine; #bye
 $engine->do_not_return_source(0);
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    qr{parser error : Opening and ending tag mismatch: a line (0|1) and b},
     "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 1, 'Engine respects do_not_return_source==0');
 
