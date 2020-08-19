@@ -316,6 +316,7 @@ sub buildKohaItemsNamespace {
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
     my $xml = '';
     my %descs = map { $_->{authorised_value} => $_ } Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
+    my $ref_status = C4::Context->preference('Available_NFL') || '1|2';
 
     for my $item (@items) {
         my $status;
@@ -343,13 +344,17 @@ sub buildKohaItemsNamespace {
             $status = "Checked out";
         }
         elsif ( $item->notforloan ) {
-                $status = $item->notforloan < 0 ? "reallynotforloan" : "reference";
-                $substatus = exists $descs{$item->notforloan} ? $descs{$item->notforloan}->{opac_description} : "Not for loan_".$item->notforloan;
+            $status = $item->notforloan =~ /^($ref_status)$/
+                ? "reference"
+                : "reallynotforloan";
+            $substatus = exists $descs{$item->notforloan} ? $descs{$item->notforloan}->{opac_description} : "Not for loan";
         }
         elsif ( exists $itemtypes->{ $item->effective_itemtype }
             && $itemtypes->{ $item->effective_itemtype }->{notforloan} == 1 )
         {
-            $status = "reference";
+            $status = "1" =~ /^($ref_status)$/
+                ? "reference"
+                : "reallynotforloan";
             $substatus = "Not for loan";
         }
         else {
