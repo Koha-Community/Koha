@@ -104,6 +104,12 @@
           "type": "string"
         },
         {
+          "name": "non_priority",
+          "in": "query",
+          "description": "Non priority hold",
+          "type": "boolean"
+        },
+        {
             "$ref": "../parameters.json#/match"
         },
         {
@@ -201,6 +207,10 @@
               "item_type": {
                 "description": "Limit hold on one itemtype (ignored for item-level holds)",
                 "type": [ "string", "null" ]
+              },
+              "non_priority": {
+                "description": "Set this hold as non priority",
+                "type": [ "boolean", "null" ]
               }
             },
             "required": [ "patron_id", "pickup_library_id" ]

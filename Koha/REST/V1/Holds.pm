@@ -74,6 +74,7 @@ sub add {
         my $expiration_date   = $body->{expiration_date};
         my $notes             = $body->{notes};
         my $hold_date         = $body->{hold_date};
+        my $non_priority      = $body->{non_priority};
 
         if(!C4::Context->preference( 'AllowHoldDateInFuture' ) && $hold_date) {
             return $c->render(
@@ -174,6 +175,7 @@ sub add {
                 itemnumber       => $item_id,
                 found            => undef,                # TODO: Why not?
                 itemtype         => $item_type,
+                non_priority     => $non_priority,
             }
         );
 

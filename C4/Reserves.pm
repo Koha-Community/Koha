@@ -185,6 +185,7 @@ sub AddReserve {
     my $checkitem      = $params->{itemnumber};
     my $found          = $params->{found};
     my $itemtype       = $params->{itemtype};
+    my $non_priority   = $params->{non_priority};
 
     $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
         or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
@@ -248,6 +249,7 @@ sub AddReserve {
             expirationdate => $expdate,
             itemtype       => $itemtype,
             item_level_hold => $checkitem ? 1 : 0,
+            non_priority   => $non_priority ? 1 : 0,
         }
     )->store();
     $hold->set_waiting() if $found && $found eq 'W';
@@ -1656,7 +1658,8 @@ sub _Findgroupreserve {
                biblioitems.biblioitemnumber AS biblioitemnumber,
                reserves.itemnumber          AS itemnumber,
                reserves.reserve_id          AS reserve_id,
-               reserves.itemtype            AS itemtype
+               reserves.itemtype            AS itemtype,
+               reserves.non_priority        AS non_priority
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
@@ -1691,7 +1694,8 @@ sub _Findgroupreserve {
                biblioitems.biblioitemnumber AS biblioitemnumber,
                reserves.itemnumber          AS itemnumber,
                reserves.reserve_id          AS reserve_id,
-               reserves.itemtype            AS itemtype
+               reserves.itemtype            AS itemtype,
+               reserves.non_priority        AS non_priority
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber)
@@ -1725,7 +1729,8 @@ sub _Findgroupreserve {
                reserves.timestamp                  AS timestamp,
                reserves.itemnumber                 AS itemnumber,
                reserves.reserve_id                 AS reserve_id,
-               reserves.itemtype                   AS itemtype
+               reserves.itemtype                   AS itemtype,
+               reserves.non_priority        AS non_priority
         FROM reserves
         WHERE reserves.biblionumber = ?
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)

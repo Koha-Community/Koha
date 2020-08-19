@@ -476,6 +476,11 @@
                                     <input type="hidden" name="holds_to_place_count" value="1" />
                                 [% END %]
                             [% END # /UNLESS multi_hold %]
+
+                            <li>
+                                <label for="non_priority">Non priority hold:</label>
+                                <input name="non_priority" id="non_priority" type="checkbox" />
+                            </li>
                         </ol>
 
                         [% UNLESS ( multi_hold ) %]

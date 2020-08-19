@@ -52,6 +52,7 @@ my $title          = $input->param('title');
 my $checkitem      = $input->param('checkitem');
 my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
+my $non_priority   = $input->param('non_priority');
 
 my $borrower = Koha::Patrons->find( $borrowernumber );
 $borrower = $borrower->unblessed if $borrower;
@@ -114,6 +115,7 @@ if ( $type eq 'str8' && $borrower ) {
                         itemnumber       => $checkitem,
                         found            => $found,
                         itemtype         => $itemtype,
+                        non_priority     => $non_priority,
                     }
                 );
 
@@ -135,6 +137,7 @@ if ( $type eq 'str8' && $borrower ) {
                         itemnumber       => $checkitem,
                         found            => $found,
                         itemtype         => $itemtype,
+                        non_priority     => $non_priority,
                     }
                 );
             }
@@ -155,6 +158,7 @@ if ( $type eq 'str8' && $borrower ) {
                             itemnumber       => $checkitem,
                             found            => $found,
                             itemtype         => $itemtype,
+                            non_priority     => $non_priority,
                         }
                     );
                 }

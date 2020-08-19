@@ -2761,6 +2761,8 @@ sub CanBookBeRenewed {
 
     my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
 
+    $resfound = 0 if $resrec->{non_priority};
+
     # This item can fill one or more unfilled reserve, can those unfilled reserves
     # all be filled by other available items?
     if ( $resfound
