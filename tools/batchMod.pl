@@ -242,7 +242,7 @@ if ($op eq "action") {
                         else {
                             my $modified_holds_priority = 0;
                             if (defined $exclude_from_local_holds_priority) {
-                                if($item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
+                                if(!defined $item->exclude_from_local_holds_priority || $item->exclude_from_local_holds_priority != $exclude_from_local_holds_priority) {
                                 $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority)->store;
                                 $modified_holds_priority = 1;
                             }
