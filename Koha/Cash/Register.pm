@@ -22,6 +22,7 @@ use Carp;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Cash::Register::Actions;
+use Koha::Cash::Register::Cashups;
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -66,7 +67,7 @@ sub cashups {
       $self->_result->search_related( 'cash_register_actions',
         $merged_conditions, $attrs );
 
-    return Koha::Cash::Register::Actions->_new_from_dbic($rs);
+    return Koha::Cash::Register::Cashups->_new_from_dbic($rs);
 }
 
 =head3 last_cashup
@@ -85,7 +86,7 @@ sub last_cashup {
     )->single;
 
     return unless $rs;
-    return Koha::Cash::Register::Action->_new_from_dbic($rs);
+    return Koha::Cash::Register::Cashup->_new_from_dbic($rs);
 }
 
 =head3 accountlines
@@ -208,7 +209,7 @@ sub drop_default {
 
 =head3 add_cashup
 
-    my $action = $cash_register->add_cashup(
+    my $cashup = $cash_register->add_cashup(
         {
             manager_id => $logged_in_user->id,
             amount     => $cash_register->outstanding_accountlines->total
@@ -230,7 +231,7 @@ sub add_cashup {
         }
     )->discard_changes;
 
-    return Koha::Cash::Register::Action->_new_from_dbic($rs);
+    return Koha::Cash::Register::Cashup->_new_from_dbic($rs);
 }
 
 =head2 Internal methods

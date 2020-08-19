@@ -1,4 +1,4 @@
-package Koha::Cash::Register::Action;
+package Koha::Cash::Register::Cashups;
 
 # This file is part of Koha.
 #
@@ -20,62 +20,44 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Cash::Register::Cashup;
 
-use base qw(Koha::Object);
-
-=encoding utf8
+use base qw(Koha::Cash::Register::Actions);
 
 =head1 NAME
 
-Koha::Cash::Register::Action - Koha cashregister::action Object class
+Koha::Cash::Register::Actions - Koha Cash Register Action Object set class
 
 =head1 API
 
 =head2 Class methods
 
+=head3 search
+
+    my $cashups = Koha::Cash::Register::Cashups->search( $where, $attr );
+
+Returns a list of cash register cashups.
+
 =cut
 
-=head3 manager
+sub search {
+    my ( $self, $where, $attr ) = @_;
 
-Return the manager linked to this cash register::action
+    unless ( exists $attr->{order_by} ) {
+        $attr->{order_by} =
+          [ { '-asc' => 'register_id' }, { '-desc' => 'timestamp' } ];
+    }
 
-=cut
-
-sub manager {
-    my ($self) = @_;
-    my $rs = $self->_result->manager;
-    return unless $rs;
-    return Koha::Patron->_new_from_dbic($rs);
+    my $rs = $self->SUPER::search({ code => 'CASHUP' });
+    return $rs->SUPER::search( $where, $attr );
 }
 
-=head3 register
-
-Return the register linked to this cash register::action
+=head3 object_class
 
 =cut
 
-sub register {
-    my ($self) = @_;
-    my $rs = $self->_result->register;
-    return Koha::Cash::Register->_new_from_dbic($rs);
-}
-
-=head2 Internal methods
-
-=cut
-
-=head3 _type
-
-=cut
-
-sub _type {
-    return 'CashRegisterAction';
+sub object_class {
+    return 'Koha::Cash::Register::Cashup';
 }
 
 1;
-
-=head1 AUTHORS
-
-Martin Renvoize <martin.renvoize@ptfs-europe.com>
-
-=cut

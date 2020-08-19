@@ -1,0 +1,104 @@
+{
+    "/cash_registers/{cash_register_id}/cashups": {
+        "get": {
+            "x-mojo-to": "CashRegisters::Cashups#list",
+            "operationId": "listCashups",
+            "tags": ["cash_registers", "cashups"],
+            "produces": ["application/json"],
+            "parameters": [{
+                    "$ref": "../parameters.json#/cash_register_id_pp"
+                },
+                {
+                    "$ref": "../parameters.json#/match"
+                },
+                {
+                    "$ref": "../parameters.json#/order_by"
+                },
+                {
+                    "$ref": "../parameters.json#/page"
+                },
+                {
+                    "$ref": "../parameters.json#/per_page"
+                },
+                {
+                    "$ref": "../parameters.json#/q_param"
+                },
+                {
+                    "$ref": "../parameters.json#/q_body"
+                },
+                {
+                    "$ref": "../parameters.json#/q_header"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Cashups performed on this register",
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "../definitions.json#/cashup"
+                        }
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Register not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "cash_management": "cashup"
+                }
+            }
+        }
+    },
+    "/cashups/{cashup_id}": {
+        "get": {
+            "x-mojo-to": "CashRegisters::Cashups#get",
+            "operationId": "getCashup",
+            "tags": ["cash_registers", "cashups"],
+            "parameters": [{
+                "$ref": "../parameters.json#/cashup_id_pp"
+            }],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "A cashup",
+                    "schema": {
+                        "$ref": "../definitions.json#/cashup"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Patron not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "cash_management": "cashup"
+                }
+            },
+            "x-koha-embed": [
+                "summary"
+            ]
+        }
+    }
+}

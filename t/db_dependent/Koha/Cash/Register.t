@@ -176,17 +176,17 @@ subtest 'cashup' => sub {
 
         is(
             ref($cashup1),
-            'Koha::Cash::Register::Action',
-            'return is Koha::Cash::Register::Action'
+            'Koha::Cash::Register::Cashup',
+            'return is Koha::Cash::Register::Cashup'
         );
         is( $cashup1->code, 'CASHUP',
-            'CASHUP code set in Koha::Cash::Register::Action' );
+            'CASHUP code set in Koha::Cash::Register::Cashup' );
         is( $cashup1->manager_id, $patron->id,
-            'manager_id set correctly in Koha::Cash::Register::Action' );
+            'manager_id set correctly in Koha::Cash::Register::Cashup' );
         is( $cashup1->amount, '12.000000',
-            'amount set correctly in Koha::Cash::Register::Action' );
+            'amount set correctly in Koha::Cash::Register::Cashup' );
         isnt( $cashup1->timestamp, undef,
-            'timestamp set in Koha::Cash::Register::Action' );
+            'timestamp set in Koha::Cash::Register::Cashup' );
     };
 
     subtest 'last_cashup' => sub {
@@ -198,7 +198,7 @@ subtest 'cashup' => sub {
         my $last_cashup = $register->last_cashup;
         is(
             ref($last_cashup),
-            'Koha::Cash::Register::Action',
+            'Koha::Cash::Register::Cashup',
             'A cashup was returned when one existed'
         );
         is( $last_cashup->id, $cashup2->id,
@@ -213,8 +213,8 @@ subtest 'cashup' => sub {
         plan tests => 4;
 
         my $cashups = $register->cashups;
-        is( ref($cashups), 'Koha::Cash::Register::Actions',
-'Koha::Cash::Register->cashups should always return a Koha::Cash::Register::Actions set'
+        is( ref($cashups), 'Koha::Cash::Register::Cashups',
+'Koha::Cash::Register->cashups should always return a Koha::Cash::Register::Cashups set'
         );
         is( $cashups->count, 0,
 'Koha::Cash::Register->cashups should always return the correct number of cashups'
@@ -224,8 +224,8 @@ subtest 'cashup' => sub {
           $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
 
         $cashups = $register->cashups;
-        is( ref($cashups), 'Koha::Cash::Register::Actions',
-'Koha::Cash::Register->cashups should return a Koha::Cash::Register::Actions set'
+        is( ref($cashups), 'Koha::Cash::Register::Cashups',
+'Koha::Cash::Register->cashups should return a Koha::Cash::Register::Cashups set'
         );
         is( $cashups->count, 1,
 'Koha::Cash::Register->cashups should return the correct number of cashups'
