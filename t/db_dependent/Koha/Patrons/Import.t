@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 159;
+use Test::More tests => 160;
 use Test::Warn;
 use Encode qw( encode_utf8 );
 use utf8;
@@ -26,6 +26,7 @@ use utf8;
 # To be replaced by t::lib::Mock
 use Test::MockModule;
 use Koha::Database;
+use Koha::Patron::Relationships;
 
 use File::Temp qw(tempfile tempdir);
 my $temp_dir = tempdir('Koha_patrons_import_test_XXXX', CLEANUP => 1, TMPDIR => 1);
@@ -86,7 +87,6 @@ is($result_0, undef, 'Got the expected undef from import_patrons with no file ha
 # Given ... a file handle to file with headers only.
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 t::lib::Mocks::mock_preference('dateformat', 'us');
-
 
 my $csv_headers  = 'cardnumber,surname,firstname,title,othernames,initials,streetnumber,streettype,address,address2,city,state,zipcode,country,email,phone,mobile,fax,dateofbirth,branchcode,categorycode,dateenrolled,dateexpiry,userid,password';
 my $res_header   = 'cardnumber, surname, firstname, title, othernames, initials, streetnumber, streettype, address, address2, city, state, zipcode, country, email, phone, mobile, fax, dateofbirth, branchcode, categorycode, dateenrolled, dateexpiry, userid, password';
@@ -434,6 +434,40 @@ subtest 'test_import_with_cardnumber_0' => sub {
 
 };
 
+subtest 'Import patron with guarantor' => sub {
+    plan tests => 4;
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'guarantor' );
+
+    my $category = $builder->build( { source => 'Category' } )->{categorycode};
+    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $guarantor = Koha::Patron->new(
+        {
+            surname      => 'Guarantor',
+            branchcode   => $branch,
+            categorycode => $category,
+        }
+    )->store();
+    my $guarantor_id = $guarantor->id;
+
+    my $branchcode = $builder->build( { source => "Branch" } )->{branchcode};
+    my $categorycode = $builder->build( { source => "Category" } )->{categorycode};
+    my $csv_headers = 'cardnumber,surname, branchcode, categorycode, guarantor_id, guarantor_relationship';
+    my $csv = "kylemhall,Hall,$branchcode,$categorycode,$guarantor_id,guarantor";
+
+    my $filename_1 = make_csv( $temp_dir, $csv_headers, $csv );
+    open( my $handle_1, "<", $filename_1 ) or die "cannot open < $filename_1: $!";
+    my $params_1 = { file => $handle_1, };
+
+    my $result = $patrons_import->import_patrons( $params_1 );
+    like( $result->{feedback}->[1]->{value}, qr/^Hall \/ \d+/, 'First borrower imported as expected' );
+    my $patron = Koha::Patrons->find( { cardnumber => 'kylemhall' } );
+    is( $patron->surname, "Hall", "Patron was created" );
+
+    my $r = Koha::Patron::Relationships->find( { guarantor_id => $guarantor_id } );
+    ok( $r, 'Found relationship' );
+    is( $r->guarantee->cardnumber, 'kylemhall', 'Found the correct guarantee' );
+};
+
 subtest 'test_import_with_password_overwrite' => sub {
     plan tests => 8;
 
@@ -584,14 +618,15 @@ subtest 'test_set_column_keys' => sub {
     # When ... Then ...
     my @columnkeys_0 = $patrons_import->set_column_keys(undef);
     # -1 because we do not want the borrowernumber column
-    is(scalar @columnkeys_0, @columns - 1, 'Got the expected array size from set column keys with undef extended');
+    # +2 for guarantor id and guarantor relationship
+    is(scalar @columnkeys_0, @columns - 1 + 2, 'Got the expected array size from set column keys with undef extended');
 
     # Given ... extended.
     my $extended = 1;
 
     # When ... Then ...
     my @columnkeys_1 = $patrons_import->set_column_keys($extended);
-    is(scalar @columnkeys_1, @columns - 1 + $extended, 'Got the expected array size from set column keys with extended');
+    is(scalar @columnkeys_1, @columns - 1 + 2 + $extended, 'Got the expected array size from set column keys with extended');
 };
 
 subtest 'test_generate_patron_attributes' => sub {
