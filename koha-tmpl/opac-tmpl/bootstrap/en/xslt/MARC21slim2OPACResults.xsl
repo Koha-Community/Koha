@@ -1249,7 +1249,7 @@
         <span class="results_summary availability">
             <span class="label">Availability: </span>
             <xsl:choose>
-                <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">
+                <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0 and count(key('item-by-status', 'reallynotforloan'))=0">
                         <xsl:choose>
                             <xsl:when test="string-length($AlternateHoldingsField)=3 and marc:datafield[@tag=$AlternateHoldingsField]">
                             <xsl:variable name="AlternateHoldingsCount" select="count(marc:datafield[@tag=$AlternateHoldingsField])"/>
@@ -1261,7 +1261,7 @@
                             </xsl:for-each>
                             (<xsl:value-of select="$AlternateHoldingsCount"/>)
                             </xsl:when>
-                            <xsl:otherwise><span class="noitems">No items available </span> </xsl:otherwise>
+                            <xsl:otherwise><span class="noitems">No items available.</span> </xsl:otherwise>
                         </xsl:choose>
                 </xsl:when>
                 <xsl:when test="count(key('item-by-status', 'available'))>0">
@@ -1369,14 +1369,10 @@
                 </xsl:when>
             </xsl:choose>
 
-            <xsl:if test="count(key('item-by-status', 'available'))=0">
-                       <span class="available"><xsl:value-of select="items:homebranch"/><xsl:text>: </xsl:text></span>
-            </xsl:if>
-
             <xsl:choose>
                 <xsl:when test="count(key('item-by-status', 'reallynotforloan'))>0">
                           <span class="unavailable">
-                              <br />
+                             <span class="AvailabilityLabel"><strong><xsl:text>Not available: </xsl:text></strong></span>
                              <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')"/>
                              <xsl:for-each select="$unavailable_items[generate-id() = generate-id(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch))[1])]">
                                 <span>
@@ -1427,12 +1423,6 @@
                    <span class="unavailable">
                        <xsl:text>Damaged (</xsl:text>
                        <xsl:value-of select="count(key('item-by-status', 'Damaged'))"/>
-                       <xsl:text>). </xsl:text>                   </span>
-            </xsl:if>
-            <xsl:if test="count(key('item-by-status', 'On order'))>0">
-                   <span class="unavailable">
-                       <xsl:text>On order (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'On order'))"/>
                        <xsl:text>). </xsl:text>                   </span>
             </xsl:if>
             <xsl:if test="count(key('item-by-status', 'Pending hold'))>0">
