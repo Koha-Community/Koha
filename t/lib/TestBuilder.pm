@@ -563,6 +563,9 @@ sub _gen_default_values {
         Branch => {
             pickup_location => 0,
         },
+        Reserve => {
+            non_priority => 0,
+        },
         Itemtype => {
             rentalcharge => 0,
             rentalcharge_daily => 0,

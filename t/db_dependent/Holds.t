@@ -7,19 +7,21 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 use MARC::Record;
 
 use C4::Biblio;
 use C4::Calendar;
 use C4::Items;
 use C4::Reserves;
+use C4::Circulation;
 
 use Koha::Biblios;
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
+use Koha::Checkout;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
@@ -1250,4 +1252,77 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'non priority holds' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup database
+    Koha::Holds->search->delete;
+    $dbh->do('DELETE FROM issues');
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                renewalsallowed => 5,
+                reservesallowed => 5,
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item;
+
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $item->homebranch }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $item->homebranch }
+        }
+    );
+
+    Koha::Checkout->new(
+        {
+            borrowernumber => $patron1->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branchcode     => $item->homebranch
+        }
+    )->store;
+
+    my $hid = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $patron2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    my ( $ok, $err ) =
+      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+
+    ok( !$ok, 'Cannot renew' );
+    is( $err, 'on_reserve', 'Item is on hold' );
+
+    my $hold = Koha::Holds->find($hid);
+    $hold->non_priority(1)->store;
+
+    ( $ok, $err ) =
+      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+
+    ok( $ok, 'Can renew' );
+    is( $err, undef, 'Item is on non priority hold' );
+
+    $schema->storage->txn_rollback;
+
 };
