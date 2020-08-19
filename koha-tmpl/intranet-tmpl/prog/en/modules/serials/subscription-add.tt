@@ -562,29 +562,6 @@ fieldset.rows table { clear: none; margin: 0; }
         [%- ELSE -%]
             var mana_enabled = 0;
         [%- END -%]
-        var MSG_LINK_TO_VENDOR = _("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor");
-        var MSG_LINK_BIBLIO = _("You must choose or create a bibliographic record");
-        var MSG_BIBLIO_NOT_EXIST = _("Bibliographic record does not exist!");
-        var MSG_REQUIRED_SUB_LENGTH = _("You must choose a subscription length or an end date.");
-        var MSG_TEST_PREDICTION = _("Please click on 'Test prediction pattern' before saving subscription.");
-        var MSG_REQUIRED_PUB_DATE = _("You must choose a first publication date");
-        var MSG_SAVE_PREDICTION_PATTERN = _("You have modified the advanced prediction pattern. Please save your work or cancel modifications.");
-        var MSG_PATTERN_IRREG = _("Warning! Present pattern has planned irregularities. Click on 'Test prediction pattern' to check if it's still valid");
-        var MSG_PATTERN_NAME = _("Please enter a name for this pattern");
-        var MSG_PATTERN_NAME_EXISTS = _("This pattern name already exists. Do you want to modify it?");
-        var MSG_OVERWRITE_PATTERNS = _("Warning: This will modify the pattern for all subscriptions that are using it.");
-        var MSG_PATTERN_CREATE_FAILED = _("Something went wrong. Unable to create a new numbering pattern.");
-        var MSG_PATTERN_TEST_FAILED = _("Cannot test prediction pattern for the following reason(s): %s");
-        var MSG_FREQUENCY_UNDEFINED = _("Frequency is not defined");
-        var MSG_PUB_DATE_UNDEFINED = _("First publication date is not defined");
-        var MSG_NEXT_ISSUE_UNDEFINED = _("Next issue publication date is not defined");
-        var MSG_MANA_SEARCHING = _("Searching for subscription in Mana Knowledge Base");
-        var MSG_MANA_RESULTS = _("Results from Mana Knowledge Base");
-        var MSG_MANA_SUBSCRIPTION_FOUND = _("Subscription found on Mana Knowledge Base:");
-        var MSG_MANA_SHOW_DETAILS = _("Show Mana results");
-        var MSG_MANA_NO_SUBSCRIPTION_FOUND = _("No subscription found on Mana Knowledge Base");
-        var MSG_MANA_SHARE_PATTERN = _("Please feel free to share your pattern with all others librarians once you are done");
-
         var BOOKSELLER_IDS = [% To.json( bookseller_ids ) || '[]' | html %];
     </script>
     [% Asset.js("js/subscription-add.js") | $raw %]

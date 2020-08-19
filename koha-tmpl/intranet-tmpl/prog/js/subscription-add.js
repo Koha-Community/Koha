@@ -16,7 +16,7 @@ function check_issues(){
         if (document.f.subtype.value == globalfreqdata.unit){
             document.f.issuelengthcount.value=(document.f.sublength.value*globalfreqdata.issuesperunit)/globalfreqdata.unitsperissue;
         } else if (document.f.subtype.value != "issues"){
-            alert( MSG_FREQUENCY_LENGTH_ERROR );
+            alert( __("Frequency and subscription length provided doesn't combine well. Please consider entering an issue count rather than a time period.") );
         }
     }
 }
@@ -48,7 +48,7 @@ function Clear(id) {
 function Check_page1() {
     var bookseller_id = $("#aqbooksellerid").val();
     if ( bookseller_id.length == 0) {
-        input_box = confirm( MSG_LINK_TO_VENDOR );
+        input_box = confirm( __("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor") );
         if (input_box==false) {
             return false;
         }
@@ -62,36 +62,36 @@ function Check_page1() {
 
     var biblionumber = $("#biblionumber").val()
     if ( biblionumber.length == 0 ) {
-        alert( MSG_LINK_BIBLIO );
+        alert( __("You must choose or create a bibliographic record") );
         return false;
     }
 
     var bib_exists = $("input[name='title']").val().length;
 
-    if (!bib_exists) alert(MSG_BIBLIO_NOT_EXIST);
+    if (!bib_exists) alert( __("Bibliographic record does not exist!") );
     return bib_exists;
 }
 
 function Check_page2(){
     if( more_than_one_serial == "" ){
         if($("#acqui_date").val().length == 0){
-            alert( MSG_REQUIRED_PUB_DATE );
+            alert( __("You must choose a first publication date") );
             return false;
         }
     }
     if($("#sublength").val().length == 0 && $("input[name='enddate']").val().length == 0){
-        alert( MSG_REQUIRED_SUB_LENGTH );
+        alert( __("You must choose a subscription length or an end date.") );
         return false;
     }
     if(advancedpatternlocked == 0){
-        alert( MSG_SAVE_PREDICTION_PATTERN );
+        alert( __("You have modified the advanced prediction pattern. Please save your work or cancel modifications.") );
         return false;
     }
     if(patternneedtobetested){
         if( irregularity !== "" ){
-            alert( MSG_PATTERN_IRREG );
+            alert( __("Warning! Present pattern has planned irregularities. Click on 'Test prediction pattern' to check if it's still valid") );
         } else {
-            alert( MSG_TEST_PREDICTION );
+            alert( __("Please click on 'Test prediction pattern' before saving subscription.") );
         }
         return false;
     }
@@ -272,24 +272,24 @@ function testPredictionPattern() {
     var error = 0;
     var error_msg = "";
     if(frequencyid == undefined || frequencyid == ""){
-        error_msg += "- " + MSG_FREQUENCY_UNDEFINED + "\n";
+        error_msg += "- " + __("Frequency is not defined") + "\n";
         error ++;
     }
     acquidate = $("#acqui_date").val();
     if(acquidate == undefined || acquidate == ""){
-        error_msg += "-" + MSG_PUB_DATE_UNDEFINED + "\n";
+        error_msg += "-" + __("First publication date is not defined") + "\n";
         error ++;
     }
     if( more_than_one_serial !== "" ){
         var nextacquidate = $("#nextacquidate").val();
         if(nextacquidate == undefined || nextacquidate == ""){
-            error_msg += "-" + MSG_NEXT_ISSUE_UNDEFINED + "\n";
+            error_msg += "-" + __("Next issue publication date is not defined") + "\n";
             error ++;
         }
     }
 
     if(error){
-        alert( MSG_PATTERN_TEST_FAILED.format(error_msg) );
+        alert( __("Cannot test prediction pattern for the following reason(s): %s").format(error_msg) );
         return false;
     }
 
@@ -338,7 +338,7 @@ function testPredictionPattern() {
 
 function saveAdvancedPattern() {
     if ($("#patternname").val().length == 0) {
-        alert( MSG_PATTERN_NAME );
+        alert( __("Please enter a name for this pattern") );
         return false;
     }
 
@@ -353,8 +353,8 @@ function saveAdvancedPattern() {
     });
     var cnfrm = 1;
     if(found){
-        var msg = MSG_PATTERN_NAME_EXISTS
-            + "\n" + MSG_OVERWRITE_PATTERNS;
+        var msg = __("This pattern name already exists. Do you want to modify it?")
+            +"\n" + __("Warning: This will modify the pattern for all subscriptions that are using it.");
         cnfrm = confirm(msg);
     }
 
@@ -384,7 +384,7 @@ function saveAdvancedPattern() {
                     $("#numberpattern").val(data.numberpatternid);
                     numberpatternload();
                 } else {
-                    alert( MSG_PATTERN_CREATE_FAILED );
+                    alert( __("Something went wrong. Unable to create a new numbering pattern.") );
                 }
             }
         );
@@ -405,7 +405,7 @@ function show_page_2() {
 }
 
 function mana_search() {
-    $("#mana_search").html("<p>" + MSG_MANA_SEARCHING + "... <img src='" + interface + "/" + theme + "/img/spinner-small.gif' /></p>");
+    $("#mana_search").html("<p>" + __("Searching for subscription in Mana Knowledge Base") + "... <img src='" + interface + "/" + theme + "/img/spinner-small.gif' /></p>");
     $("#mana_search").show();
 
     $.ajax({
@@ -416,7 +416,7 @@ function mana_search() {
     })
         .done( function( result ) {
             $("#mana_search_result .modal-body").html(result);
-            $("#mana_search_result_label").text( MSG_MANA_RESULTS );
+            $("#mana_search_result_label").text( __("Results from Mana Knowledge Base") );
             $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "full",
                 "order":[[4, "desc"], [5, "desc"]],
@@ -430,10 +430,10 @@ function mana_search() {
                 ]
             }));
             if( $("#mana_results_datatable").length && $("td.dataTables_empty").length == 0){
-                $("#mana_search").html("<p>" + MSG_MANA_SUBSCRIPTION_FOUND + "</p><p> <a href=\"#\" data-toggle=\"modal\" data-target=\"#mana_search_result\"><i class=\"fa fa-window-maximize\"></i> " + MSG_MANA_SHOW_DETAILS + "</a></p>");
+                $("#mana_search").html("<p>" + __("Subscription found on Mana Knowledge Base:") + "</p><p> <a href=\"#\" data-toggle=\"modal\" data-target=\"#mana_search_result\"><i class=\"fa fa-window-maximize\"></i> " + __("Show Mana results") + "</a></p>");
             }
             else if ( $("#mana_results_datatable").length ){
-                $("#mana_search").html("<p>" + MSG_MANA_NO_SUBSCRIPTION_FOUND + "</p><p>" + MSG_MANA_SHARE_PATTERN + "</p>");
+                $("#mana_search").html("<p>" + __("No subscription found on Mana Knowledge Base") + "</p><p>" + __("Please feel free to share your pattern with all others librarians once you are done") + "</p>");
             }
             else{
                 $("#mana_search").html( result );
@@ -721,7 +721,7 @@ $(document).ready(function() {
             },
             error: function (x) {
                 $("input[name='title']").val('');
-                $("#error_bib_not_exist").html("This bibliographic record does not exist");
+                $("#error_bib_not_exist").html( __("This bibliographic record does not exist") );
             }
         });
     });
