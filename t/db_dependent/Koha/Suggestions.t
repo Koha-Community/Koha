@@ -33,18 +33,18 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder           = t::lib::TestBuilder->new;
-my $biblio_1          = $builder->build( { source => 'Biblio' } );
-my $biblio_2          = $builder->build( { source => 'Biblio' } );
+my $biblio_1          = $builder->build_sample_biblio;
+my $biblio_2          = $builder->build_sample_biblio;
 my $patron            = $builder->build( { source => 'Borrower' } );
 my $nb_of_suggestions = Koha::Suggestions->search->count;
 my $new_suggestion_1  = Koha::Suggestion->new(
     {   suggestedby  => $patron->{borrowernumber},
-        biblionumber => $biblio_1->{biblionumber},
+        biblionumber => $biblio_1->biblionumber,
     }
 )->store;
 my $new_suggestion_2 = Koha::Suggestion->new(
     {   suggestedby  => $patron->{borrowernumber},
-        biblionumber => $biblio_2->{biblionumber},
+        biblionumber => $biblio_2->biblionumber,
     }
 )->store;
 
@@ -52,7 +52,7 @@ subtest 'store' => sub {
     plan tests => 3;
     my $suggestion  = Koha::Suggestion->new(
         {   suggestedby  => $patron->{borrowernumber},
-            biblionumber => $biblio_1->{biblionumber},
+            biblionumber => $biblio_1->biblionumber,
         }
     )->store;
 

@@ -271,28 +271,16 @@ subtest 'siblings' => sub {
 subtest 'has_overdues' => sub {
     plan tests => 3;
 
-    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
-    my $item_1 = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem_1->{biblionumber}
-            }
-        }
-    );
+    my $item_1 = $builder->build_sample_item;
     my $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
     is( $retrieved_patron->has_overdues, 0, );
 
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
-    my $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $tomorrow, branchcode => $library->{branchcode} })->store();
+    my $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->itemnumber, date_due => $tomorrow, branchcode => $library->{branchcode} })->store();
     is( $retrieved_patron->has_overdues, 0, );
     $issue->delete();
     my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
-    $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $yesterday, branchcode => $library->{branchcode} })->store();
+    $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->itemnumber, date_due => $yesterday, branchcode => $library->{branchcode} })->store();
     $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
     is( $retrieved_patron->has_overdues, 1, );
     $issue->delete();
@@ -579,41 +567,23 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
-    my $item_1 = $builder->build(
+    my $item_1 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1,
-                itemlost      => 0,
-                withdrawn     => 0,
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
-    my $item_2 = $builder->build(
+    my $item_2 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1,
-                itemlost      => 0,
-                withdrawn     => 0,
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
     my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
-    my $item_3 = $builder->build(
+    my $item_3 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_2,
-                itemlost      => 0,
-                withdrawn     => 0,
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_2,
         }
     );
     my $patron = $builder->build(
@@ -639,9 +609,9 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
 
     t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
-    AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
-    AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
-    AddIssue( $patron, $item_3->{barcode} );
+    AddIssue( $patron, $item_1->barcode, DateTime->now->subtract( days => 1 ) );
+    AddIssue( $patron, $item_2->barcode, DateTime->now->subtract( days => 5 ) );
+    AddIssue( $patron, $item_3->barcode );
 
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $checkouts = $patron->checkouts;
@@ -652,17 +622,17 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     is( ref($pending_checkouts), 'Koha::Checkouts', 'pending_checkouts should return a Koha::Checkouts object' );
 
     my $first_checkout = $pending_checkouts->next;
-    is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_3->{biblionumber}, 'pending_checkouts should prefetch values from other tables (here biblio)' );
+    is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_3->biblionumber, 'pending_checkouts should prefetch values from other tables (here biblio)' );
 
     my $overdues = $patron->get_overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
     is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->get_overdues should return Koha::Checkouts' );
-    is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
-    is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
+    is( $overdues->next->itemnumber, $item_1->itemnumber, 'The issue should be returned in the same order as they have been done, first is correct' );
+    is( $overdues->next->itemnumber, $item_2->itemnumber, 'The issue should be returned in the same order as they have been done, second is correct' );
 
 
-    C4::Circulation::AddReturn( $item_1->{barcode} );
-    C4::Circulation::AddReturn( $item_2->{barcode} );
+    C4::Circulation::AddReturn( $item_1->barcode );
+    C4::Circulation::AddReturn( $item_2->barcode );
     $old_checkouts = $patron->old_checkouts;
     is( $old_checkouts->count, 2, 'old_checkouts should return 2 old checkouts that patron' );
     is( ref($old_checkouts), 'Koha::Old::Checkouts', 'old_checkouts should return a Koha::Old::Checkouts object' );
@@ -968,37 +938,26 @@ subtest 'holds and old_holds' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
-    my $item_1 = $builder->build(
+    my $item_1 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
-    my $item_2 = $builder->build(
+    my $item_2 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
     my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
-    my $item_3 = $builder->build(
+    my $item_3 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_2
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_2,
         }
     );
+
     my $patron = $builder->build(
         {
             source => 'Borrower',
@@ -1086,41 +1045,27 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 value  => { privacy => 1, }
             }
         );
-        my $item_1 = $builder->build(
-            {   source => 'Item',
-                value  => {
-                    itemlost  => 0,
-                    withdrawn => 0,
-                },
-            }
-        );
+        my $item_1 = $builder->build_sample_item;
         my $issue_1 = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item_1->{itemnumber},
+                    itemnumber     => $item_1->itemnumber,
                 },
             }
         );
-        my $item_2 = $builder->build(
-            {   source => 'Item',
-                value  => {
-                    itemlost  => 0,
-                    withdrawn => 0,
-                },
-            }
-        );
+        my $item_2 = $builder->build_sample_item;
         my $issue_2 = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item_2->{itemnumber},
+                    itemnumber     => $item_2->itemnumber,
                 },
             }
         );
 
-        my ( $returned_1, undef, undef ) = C4::Circulation::AddReturn( $item_1->{barcode}, undef, undef, dt_from_string('2010-10-10') );
-        my ( $returned_2, undef, undef ) = C4::Circulation::AddReturn( $item_2->{barcode}, undef, undef, dt_from_string('2011-11-11') );
+        my ( $returned_1, undef, undef ) = C4::Circulation::AddReturn( $item_1->barcode, undef, undef, dt_from_string('2010-10-10') );
+        my ( $returned_2, undef, undef ) = C4::Circulation::AddReturn( $item_2->barcode, undef, undef, dt_from_string('2011-11-11') );
         is( $returned_1 && $returned_2, 1, 'The items should have been returned' );
 
         my $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } );
@@ -1134,26 +1079,26 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
 
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare(q|SELECT borrowernumber FROM old_issues where itemnumber = ?|);
-        $sth->execute($item_1->{itemnumber});
+        $sth->execute($item_1->itemnumber);
         my ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'With privacy=1, the issue should have been anonymised' );
-        $sth->execute($item_2->{itemnumber});
+        $sth->execute($item_2->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $patron->{borrowernumber}, 'The issue should not have been anonymised, the returned date is later' );
 
         $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history;
-        $sth->execute($item_2->{itemnumber});
+        $sth->execute($item_2->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue should have been anonymised, the returned date is before' );
 
         my $sth_reset = $dbh->prepare(q|UPDATE old_issues SET borrowernumber = ? WHERE itemnumber = ?|);
-        $sth_reset->execute( $patron->{borrowernumber}, $item_1->{itemnumber} );
-        $sth_reset->execute( $patron->{borrowernumber}, $item_2->{itemnumber} );
+        $sth_reset->execute( $patron->{borrowernumber}, $item_1->itemnumber );
+        $sth_reset->execute( $patron->{borrowernumber}, $item_2->itemnumber );
         $rows_affected = Koha::Patrons->search_patrons_to_anonymise->anonymise_issue_history;
-        $sth->execute($item_1->{itemnumber});
+        $sth->execute($item_1->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue 1 should have been anonymised, before parameter was not passed' );
-        $sth->execute($item_2->{itemnumber});
+        $sth->execute($item_2->itemnumber);
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue 2 should have been anonymised, before parameter was not passed' );
 
@@ -1169,30 +1114,23 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 value  => { privacy => 0, }
             }
         );
-        my $item = $builder->build(
-            {   source => 'Item',
-                value  => {
-                    itemlost  => 0,
-                    withdrawn => 0,
-                },
-            }
-        );
+        my $item = $builder->build_sample_item;
         my $issue = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item->{itemnumber},
+                    itemnumber     => $item->itemnumber,
                 },
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
 
         my $dbh = C4::Context->dbh;
         my ($borrowernumber_used_to_anonymised) = $dbh->selectrow_array(q|
             SELECT borrowernumber FROM old_issues where itemnumber = ?
-        |, undef, $item->{itemnumber});
+        |, undef, $item->itemnumber);
         is( $borrowernumber_used_to_anonymised, $patron->{borrowernumber}, 'With privacy=0, the issue should not be anonymised' );
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
@@ -1208,24 +1146,17 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 value  => { privacy => 1, }
             }
         );
-        my $item = $builder->build(
-            {   source => 'Item',
-                value  => {
-                    itemlost  => 0,
-                    withdrawn => 0,
-                },
-            }
-        );
+        my $item = $builder->build_sample_item;
         my $issue = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item->{itemnumber},
+                    itemnumber     => $item->itemnumber,
                 },
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
@@ -1233,7 +1164,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         my $dbh = C4::Context->dbh;
         my ($borrowernumber_used_to_anonymised) = $dbh->selectrow_array(q|
             SELECT borrowernumber FROM old_issues where itemnumber = ?
-        |, undef, $item->{itemnumber});
+        |, undef, $item->itemnumber);
         is( $borrowernumber_used_to_anonymised, undef, 'With AnonymousPatron is not defined, the issue should have been anonymised anyway' );
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
@@ -1246,24 +1177,17 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 value  => { privacy => 1 }    # Another branchcode than the logged in librarian
             }
         );
-        my $item = $builder->build(
-            {   source => 'Item',
-                value  => {
-                    itemlost  => 0,
-                    withdrawn => 0,
-                },
-            }
-        );
+        my $item = $builder->build_sample_item;
         my $issue = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item->{itemnumber},
+                    itemnumber     => $item->itemnumber,
                 },
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, undef, undef, dt_from_string('2010-10-10') );
         is( Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->count, 0 );
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
@@ -1471,37 +1395,26 @@ subtest 'get_overdues' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
-    my $item_1 = $builder->build(
+    my $item_1 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
-    my $item_2 = $builder->build(
+    my $item_2 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_1,
         }
     );
     my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
-    my $item_3 = $builder->build(
+    my $item_3 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_2
-            }
+            library      => $library->{branchcode},
+            biblionumber => $biblionumber_2,
         }
     );
+
     my $patron = $builder->build(
         {
             source => 'Borrower',
@@ -1511,15 +1424,15 @@ subtest 'get_overdues' => sub {
 
     t::lib::Mocks::mock_preference({ branchcode => $library->{branchcode} });
 
-    AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
-    AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
-    AddIssue( $patron, $item_3->{barcode} );
+    AddIssue( $patron, $item_1->barcode, DateTime->now->subtract( days => 1 ) );
+    AddIssue( $patron, $item_2->barcode, DateTime->now->subtract( days => 5 ) );
+    AddIssue( $patron, $item_3->barcode );
 
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     my $overdues = $patron->get_overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
-    is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
-    is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
+    is( $overdues->next->itemnumber, $item_1->itemnumber, 'The issue should be returned in the same order as they have been done, first is correct' );
+    is( $overdues->next->itemnumber, $item_2->itemnumber, 'The issue should be returned in the same order as they have been done, second is correct' );
 
     my $o = $overdues->reset->next;
     my $unblessed_overdue = $o->unblessed_all_relateds;

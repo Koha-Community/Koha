@@ -107,22 +107,15 @@ subtest 'Koha::Subscription->frequency' => sub {
 };
 
 my $nb_of_subs = Koha::Subscriptions->search->count;
-my $biblio_1   = $builder->build( { source => 'Biblio' } );
-my $bi_1       = $builder->build(
-    {
-        source => 'Biblioitem',
-        value  => {
-            biblionumber => $biblio_1->{biblionumber}
-        }
-    }
-);
+my $biblio_1   = $builder->build_sample_biblio;
+my $bi_1       = $biblio_1->biblioitem;
 my $sub_freq_1 = $builder->build( { source => 'SubscriptionFrequency' } );
 my $sub_np_1   = $builder->build( { source => 'SubscriptionNumberpattern' } );
 my $sub_1      = $builder->build(
     {
         source => 'Subscription',
         value  => {
-            biblionumber  => $biblio_1->{biblionumber},
+            biblionumber  => $biblio_1->biblionumber,
             periodicity   => $sub_freq_1->{id},
             numberpattern => $sub_np_1->{id}
         }
@@ -136,7 +129,7 @@ is(
 );
 is(
     $sub_1->{biblionumber},
-    $biblio_1->{biblionumber},
+    $biblio_1->biblionumber,
     'The link between sub and biblio is well done'
 );
 is( $sub_1->{periodicity}, $sub_freq_1->{id},
@@ -146,7 +139,7 @@ is( $sub_1->{numberpattern},
     'The link between sub and sub_numberpattern is well done' );
 
 my $ref = {
-    'title'           => $biblio_1->{title},
+    'title'           => $biblio_1->title,
     'sfdescription'   => $sub_freq_1->{description},
     'unit'            => $sub_freq_1->{unit},
     'unitsperissue'   => $sub_freq_1->{unitsperissue},
@@ -173,9 +166,9 @@ my $ref = {
     'whenmorethan3'   => $sub_np_1->{whenmorethan3},
     'setto3'          => $sub_np_1->{setto3},
     'numbering3'      => $sub_np_1->{numbering3},
-    'issn'            => $bi_1->{issn},
-    'ean'             => $bi_1->{ean},
-    'publishercode'   => $bi_1->{publishercode}
+    'issn'            => $bi_1->issn,
+    'ean'             => $bi_1->ean,
+    'publishercode'   => $bi_1->publishercode,
 };
 
 is_deeply( Koha::Subscription->get_sharable_info( $sub_1->{subscriptionid} ),

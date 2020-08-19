@@ -33,15 +33,15 @@ subtest "Check MARC field length calculation" => sub {
 
     t::lib::Mocks->mock_preference( 'marcflavour', 'MARC21' );
 
-    my $biblio = t::lib::TestBuilder->new->build({ source => 'Biblio' });
+    my $biblio = t::lib::TestBuilder->new->build_sample_biblio;
     my $record = MARC::Record->new;
     $record->append_fields(
         MARC::Field->new( '100', '', '', a => 'My title' ),
     );
 
     is( $record->leader, ' 'x24, 'No leader lengths' );
-    C4::Biblio::ModBiblioMarc( $record, $biblio->{biblionumber}, '' );
-    my $savedrec = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->{biblionumber} });
+    C4::Biblio::ModBiblioMarc( $record, $biblio->biblionumber, '' );
+    my $savedrec = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->biblionumber });
     like( substr($savedrec->leader,0,5), qr/^\d{5}$/, 'Record length found' );
     like( substr($savedrec->leader,12,5), qr/^\d{5}$/, 'Base address found' );
 };

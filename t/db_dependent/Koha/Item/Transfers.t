@@ -35,11 +35,16 @@ $schema->storage->txn_begin;
 my $builder      = t::lib::TestBuilder->new;
 my $library_from = $builder->build( { source => 'Branch' } );
 my $library_to   = $builder->build( { source => 'Branch' } );
-my $item         = $builder->build( { source => 'Item', value => { holding_branch => $library_from->{branchcode}, homebranch => $library_to->{branchcode} } } );
+my $item = $builder->build_sample_item(
+    {
+        holdingbranch => $library_from->{branchcode},
+        homebranch    => $library_to->{branchcode}
+    }
+);
 
 my $nb_of_transfers = Koha::Item::Transfers->search->count;
 my $new_transfer_1  = Koha::Item::Transfer->new(
-    {   itemnumber  => $item->{itemnumber},
+    {   itemnumber  => $item->itemnumber,
         frombranch  => $library_from->{branchcode},
         tobranch    => $library_to->{branchcode},
         datearrived => dt_from_string,
@@ -47,7 +52,7 @@ my $new_transfer_1  = Koha::Item::Transfer->new(
     }
 )->store;
 my $new_transfer_2 = Koha::Item::Transfer->new(
-    {   itemnumber  => $item->{itemnumber},
+    {   itemnumber  => $item->itemnumber,
         frombranch  => $library_from->{branchcode},
         tobranch    => $library_to->{branchcode},
         datearrived => undef,
@@ -74,20 +79,17 @@ subtest 'daterequested tests' => sub {
     $schema->storage->txn_begin;
     my $library_from = $builder->build( { source => 'Branch' } );
     my $library_to   = $builder->build( { source => 'Branch' } );
-    my $item         = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                holding_branch => $library_from->{branchcode},
-                homebranch     => $library_to->{branchcode}
-            }
+            holdingbranch => $library_from->{branchcode},
+            homebranch    => $library_to->{branchcode}
         }
     );
 
     my $now = dt_from_string;
     my $transfer = Koha::Item::Transfer->new(
         {
-            itemnumber => $item->{itemnumber},
+            itemnumber => $item->itemnumber,
             frombranch => $library_from->{branchcode},
             tobranch   => $library_to->{branchcode}
         }

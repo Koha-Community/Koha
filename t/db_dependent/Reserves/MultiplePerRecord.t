@@ -64,54 +64,26 @@ my $itemtype2 = $builder->build(
     }
 );
 
-my $biblio = $builder->build(
+my $biblio = $builder->build_sample_biblio;
+my $item1 = $builder->build_sample_item(
     {
-        source => 'Biblio',
-        value  => {
-            title => 'Title 1',
-        },
+        biblionumber => $biblio->biblionumber,
+        itype        => $itemtype1->{itemtype},
+        library      => $library->{branchcode},
+    },
+);
+my $item2 = $builder->build_sample_item(
+    {
+        biblionumber => $biblio->biblionumber,
+        itype        => $itemtype2->{itemtype},
+        library      => $library->{branchcode},
     }
 );
-my $biblioitem = $builder->build(
+my $item3 = $builder->build_sample_item(
     {
-        source => 'Biblioitem',
-        value  => { biblionumber => $biblio->{biblionumber} }
-    }
-);
-my $item1 = $builder->build(
-    {
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblio->{biblionumber},
-            itype         => $itemtype1->{itemtype},
-            homebranch    => $library->{branchcode},
-            holdingbranch => $library->{branchcode},
-            damaged       => 0,
-        },
-    }
-);
-my $item2 = $builder->build(
-    {
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblio->{biblionumber},
-            itype         => $itemtype2->{itemtype},
-            homebranch    => $library->{branchcode},
-            holdingbranch => $library->{branchcode},
-            damaged       => 0,
-        },
-    }
-);
-my $item3 = $builder->build(
-    {
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblio->{biblionumber},
-            itype         => $itemtype2->{itemtype},
-            homebranch    => $library->{branchcode},
-            holdingbranch => $library->{branchcode},
-            damaged       => 0,
-        },
+        biblionumber => $biblio->biblionumber,
+        itype        => $itemtype2->{itemtype},
+        library      => $library->{branchcode},
     }
 );
 
@@ -132,7 +104,7 @@ Koha::CirculationRules->set_rules(
 
 t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
 
-my $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
+my $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 1, 'GetMaxPatronHoldsForRecord returns max of 1' );
 my $rule = C4::Reserves::GetHoldRule(
     $category->{categorycode},
@@ -157,7 +129,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
+$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 2, 'GetMaxPatronHoldsForRecord returns max of 2' );
 $rule = C4::Reserves::GetHoldRule(
     $category->{categorycode},
@@ -182,7 +154,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
+$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 3, 'GetMaxPatronHoldsForRecord returns max of 3' );
 $rule = C4::Reserves::GetHoldRule(
     $category->{categorycode},
@@ -207,7 +179,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
+$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 4, 'GetMaxPatronHoldsForRecord returns max of 4' );
 $rule = C4::Reserves::GetHoldRule(
     $category->{categorycode},
@@ -232,7 +204,7 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
+$max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->biblionumber );
 is( $max, 5, 'GetMaxPatronHoldsForRecord returns max of 1' );
 $rule = C4::Reserves::GetHoldRule(
     $category->{categorycode},
@@ -254,7 +226,7 @@ is( $holds->forced_hold_level, undef, "No holds does not force an item or record
 my $hold = Koha::Hold->new({
     borrowernumber => $patron->{borrowernumber},
     reservedate => '1981-06-10',
-    biblionumber => $biblio->{biblionumber},
+    biblionumber => $biblio->biblionumber,
     branchcode => $library->{branchcode},
     priority => 1,
 })->store();
@@ -262,7 +234,7 @@ my $hold = Koha::Hold->new({
 $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, 'record', "Record level hold forces record level holds" );
 
-$hold->itemnumber( $item1->{itemnumber} );
+$hold->itemnumber( $item1->itemnumber );
 $hold->store();
 
 $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
@@ -283,38 +255,38 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
+my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
 is( $can->{status}, 'OK', 'Hold can be placed with 0 holds' );
 my $hold_id = AddReserve(
     {
         branchcode     => $library->{branchcode},
         borrowernumber => $patron->{borrowernumber},
-        biblionumber   => $biblio->{biblionumber},
+        biblionumber   => $biblio->biblionumber,
         priority       => 1
     }
 );
 ok( $hold_id, 'First hold was placed' );
 
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
 is( $can->{status}, 'OK', 'Hold can be placed with 1 hold' );
 $hold_id = AddReserve(
     {
         branchcode     => $library->{branchcode},
         borrowernumber => $patron->{borrowernumber},
-        biblionumber   => $biblio->{biblionumber},
+        biblionumber   => $biblio->biblionumber,
         priority       => 1
     }
 );
 ok( $hold_id, 'Second hold was placed' );
 
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
 Koha::Holds->find($hold_id)->found("W")->store;
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber);
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
-$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber}, undef, { ignore_found_holds => 1 });
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->biblionumber, undef, { ignore_found_holds => 1 });
 is( $can->{status}, 'OK', 'Third hold is allowed when ignoring waiting holds' );
 
 $schema->storage->txn_rollback;

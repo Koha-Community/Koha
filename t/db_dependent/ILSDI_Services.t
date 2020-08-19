@@ -310,77 +310,47 @@ subtest 'Holds test' => sub {
         source => 'Borrower',
     });
 
-    my $biblio = $builder->build({
-        source => 'Biblio',
-    });
-
-    my $biblioitems = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio->{biblionumber},
-        }
-    });
-
-    my $item = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblio->{biblionumber},
+    my $item = $builder->build_sample_item(
+        {
             damaged => 1
         }
-    });
+    );
 
     my $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio->{biblionumber});
+    $query->param( 'bib_id', $item->biblionumber);
 
     my $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, 'damaged', "Item damaged" );
 
-    my $item_o = Koha::Items->find($item->{itemnumber});
-    $item_o->damaged(0)->store;
+    $item->damaged(0)->store;
 
     my $hold = $builder->build({
         source => 'Reserve',
         value => {
             borrowernumber => $patron->{borrowernumber},
-            biblionumber => $biblio->{biblionumber},
-            itemnumber => $item->{itemnumber}
+            biblionumber => $item->biblionumber,
+            itemnumber => $item->itemnumber
         }
     });
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, 'itemAlreadyOnHold', "Item already on hold" );
 
-    my $biblio_with_no_item = $builder->build({
-        source => 'Biblio',
-    });
+    my $biblio_with_no_item = $builder->build_sample_biblio;
 
     $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio_with_no_item->{biblionumber});
+    $query->param( 'bib_id', $biblio_with_no_item->biblionumber);
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, 'NoItems', 'Biblio has no item' );
 
-    my $biblio2 = $builder->build({
-        source => 'Biblio',
-    });
-
-    my $biblioitems2 = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio2->{biblionumber},
-        }
-    });
-
-    my $item2 = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblio2->{biblionumber},
+    my $item2 = $builder->build_sample_item(
+        {
             damaged => 0,
-            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
-    });
+    );
 
     t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
     Koha::CirculationRules->set_rule(
@@ -395,41 +365,25 @@ subtest 'Holds test' => sub {
 
     $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio2->{biblionumber});
-    $query->param( 'item_id', $item2->{itemnumber});
+    $query->param( 'bib_id', $item2->biblionumber);
+    $query->param( 'item_id', $item2->itemnumber);
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'tooManyReserves', "Too many reserves" );
 
-    my $biblio3 = $builder->build({
-        source => 'Biblio',
-    });
-
-    my $biblioitems3 = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio3->{biblionumber},
-        }
-    });
-
     # Adding a holdable item to biblio 3.
-    my $item3 = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblio3->{biblionumber},
+    my $item3 = $builder->build_sample_item(
+        {
             damaged => 0,
-            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
-    });
+    );
 
-    my $item4 = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblio3->{biblionumber},
-            damaged => 1,
-            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
+    my $item4 = $builder->build_sample_item(
+        {
+            biblionumber => $item3->biblionumber,
+            damaged      => 1,
         }
-    });
+    );
 
     Koha::CirculationRules->set_rule(
         {
@@ -443,8 +397,8 @@ subtest 'Holds test' => sub {
 
     $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio3->{biblionumber});
-    $query->param( 'item_id', $item4->{itemnumber});
+    $query->param( 'bib_id', $item3->biblionumber);
+    $query->param( 'item_id', $item4->itemnumber);
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'damaged', "Item is damaged" );
@@ -483,26 +437,11 @@ subtest 'Holds test for branch transfer limits' => sub {
         }
     );
 
-    my $biblio = $builder->build({
-        source => 'Biblio',
-    });
-    my $biblioitem = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio->{biblionumber},
+    my $item = $builder->build_sample_item(
+        {
+            library => $origin_branch->{branchcode},
         }
-    });
-    my $item = $builder->build({
-        source => 'Item',
-        value => {
-            homebranch => $origin_branch->{branchcode},
-            holdingbranch => $origin_branch->{branchcode},
-            biblionumber => $biblio->{biblionumber},
-            damaged => 0,
-            itemlost => 0,
-            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
-        }
-    });
+    );
 
     Koha::CirculationRules->set_rule(
         {
@@ -516,15 +455,15 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     my $limit = Koha::Item::Transfer::Limit->new({
         toBranch => $pickup_branch->{branchcode},
-        fromBranch => $item->{holdingbranch},
-        itemtype => $item->{itype},
+        fromBranch => $item->holdingbranch,
+        itemtype => $item->effective_itemtype,
     })->store();
 
     my $query = new CGI;
     $query->param( 'pickup_location', $pickup_branch->{branchcode} );
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio->{biblionumber});
-    $query->param( 'item_id', $item->{itemnumber});
+    $query->param( 'bib_id', $item->biblionumber);
+    $query->param( 'item_id', $item->itemnumber);
 
     my $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'cannotBeTransferred', "Item hold, Item cannot be transferred" );
@@ -536,14 +475,14 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, undef, "Item hold, Item can be transferred" );
-    my $hold = Koha::Holds->search({ itemnumber => $item->{itemnumber}, borrowernumber => $patron->{borrowernumber} })->next;
+    my $hold = Koha::Holds->search({ itemnumber => $item->itemnumber, borrowernumber => $patron->{borrowernumber} })->next;
     is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     Koha::Holds->search()->delete();
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, undef, "Record hold, Item con be transferred" );
-    $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}, borrowernumber => $patron->{borrowernumber} })->next;
+    $hold = Koha::Holds->search({ biblionumber => $item->biblionumber, borrowernumber => $patron->{borrowernumber} })->next;
     is( $hold->branchcode, $pickup_branch->{branchcode}, 'The library id is correctly set' );
 
     $schema->storage->txn_rollback;
@@ -622,30 +561,17 @@ subtest 'GetRecords' => sub {
         source => 'Branch',
     });
 
-    my $biblio = $builder->build({
-        source => 'Biblio',
-    });
-    my $biblioitem = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio->{biblionumber},
-        },
-    });
-    my $item = $builder->build_object({
-        class => 'Koha::Items',
-        value => {
-            biblionumber => $biblio->{biblionumber},
-            biblioitemnumber => $biblioitem->{biblioitemnumber},
-            homebranch => $branch1->{branchcode},
-            holdingbranch => $branch1->{branchcode},
-        },
-    });
+    my $item = $builder->build_sample_item(
+        {
+            library => $branch1->{branchcode},
+        }
+    );
 
     ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode});
 
     my $cgi = new CGI;
     $cgi->param(service => 'GetRecords');
-    $cgi->param(id => $biblio->{biblionumber});
+    $cgi->param(id => $item->biblionumber);
 
     my $reply = C4::ILSDI::Services::GetRecords($cgi);
 
@@ -668,7 +594,7 @@ subtest 'RenewHold' => sub {
 
     my $cgi    = new CGI;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $item   = $builder->build_object( { class => 'Koha::Items' } );
+    my $item   = $builder->build_sample_item;
     $cgi->param( patron_id => $patron->borrowernumber );
     $cgi->param( item_id   => $item->itemnumber );
 

@@ -125,16 +125,7 @@ my $loggedinuser = $builder->build_object({
     }
 });
 
-my $biblio = $builder->build({
-    source => 'Biblio',
-});
-
-my $biblioitem = $builder->build({
-    source => 'Biblioitem',
-    value => {
-        biblionumber => $biblio->{biblionumber}
-    }
-});
+my $biblio = $builder->build_sample_biblio;
 
 my $subscriptionFrequency = $builder->build({
     source => 'SubscriptionFrequency'
@@ -147,7 +138,7 @@ my $subscriptionNumberpattern = $builder->build({
 my $subscription = $builder->build({
     source => 'Subscription',
     value => {
-        biblionumber => $biblio->{biblionumber},
+        biblionumber => $biblio->biblionumber,
         periodicity => $subscriptionFrequency->{id},
         numberpattern => $subscriptionNumberpattern->{id},
         mana_id => undef
@@ -178,7 +169,7 @@ my $data = Koha::SharedContent::prepare_entity_data(
 
 is($data->{language}, 'en', 'Language is set to default');
 is($data->{exportemail}, $library->branchemail, 'Email is set with the userenv branch one');
-is($data->{title}, $biblio->{title}, 'Shared title');
+is($data->{title}, $biblio->title, 'Shared title');
 is($data->{sfdescription}, $subscriptionFrequency->{description}, 'Shared sfdescription');
 is($data->{unit}, $subscriptionFrequency->{unit}, 'Shared unit');
 is($data->{unitsperissue}, $subscriptionFrequency->{unitsperissue}, 'Shared unitsperissue');
@@ -193,9 +184,10 @@ is($data->{every1}, $subscriptionNumberpattern->{every1}, 'Shared every1');
 is($data->{whenmorethan1}, $subscriptionNumberpattern->{whenmorethan1}, 'Shared whenmorethan1');
 is($data->{setto1}, $subscriptionNumberpattern->{setto1}, 'Shared setto1');
 is($data->{numbering1}, $subscriptionNumberpattern->{numbering1}, 'Shared numbering1');
-is($data->{issn}, $biblioitem->{issn}, 'Shared ISSN');
-is($data->{ean}, $biblioitem->{ean}, 'Shared EAN');
-is($data->{publishercode}, $biblioitem->{publishercode}, 'Shared publishercode');
+my $biblioitem = $biblio->biblioitem;
+is($data->{issn}, $biblioitem->issn, 'Shared ISSN');
+is($data->{ean}, $biblioitem->ean, 'Shared EAN');
+is($data->{publishercode}, $biblioitem->publishercode, 'Shared publishercode');
 
 sub mock_response {
     my $response = Test::MockObject->new();

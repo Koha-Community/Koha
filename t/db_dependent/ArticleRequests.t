@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 57;
+use Test::More tests => 54;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -47,25 +47,8 @@ my $dbh = C4::Context->dbh;
 
 $dbh->do("DELETE FROM circulation_rules");
 
-my $biblio = Koha::Biblio->new()->store();
-ok( $biblio->id, 'Koha::Biblio created' );
-
-my $biblioitem = $schema->resultset('Biblioitem')->new(
-    {
-        biblionumber => $biblio->id
-    }
-)->insert();
-ok( $biblioitem->id, 'biblioitem created' );
-
-my $itype = $builder->build({ source => 'Itemtype' });
-my $item = Koha::Item->new(
-    {
-        biblionumber     => $biblio->id,
-        biblioitemnumber => $biblioitem->id,
-        itype => $itype->{itemtype},
-    }
-)->store();
-ok( $item->id, 'Koha::Item created' );
+my $item = $builder->build_sample_item;
+my $biblio = $item->biblio;
 
 my $branch   = $builder->build({ source => 'Branch' });
 my $category = $builder->build({ source => 'Category' });
@@ -86,8 +69,8 @@ my $article_request_title = 'an article request title';
 my $article_request = Koha::ArticleRequest->new(
     {
         borrowernumber => $patron->id,
-        biblionumber   => $biblio->id,
-        itemnumber     => $item->id,
+        biblionumber   => $item->biblionumber,
+        itemnumber     => $item->itemnumber,
         title          => $article_request_title,
     }
 )->store();

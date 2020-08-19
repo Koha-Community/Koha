@@ -30,7 +30,7 @@ my $library2 = $builder->build({
 my $library3 = $builder->build({
     source => 'Branch',
 });
-my $itemtype = $builder->build({ source => 'Item' })->{itype};
+my $itemtype = $builder->build_sample_item->itype;
 
 my $bib_title = "Test Title";
 

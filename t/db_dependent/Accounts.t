@@ -75,7 +75,7 @@ my $userenv_branchcode = $branchcode;
 
 # Test manualinvoice
 my $itemtype = $builder->build( { source => 'Itemtype' } );
-my $item   = $builder->build( { source => 'Item', value => { itype => $itemtype->{itemtype} } } );
+my $item   = $builder->build_sample_item( { itype => $itemtype->{itemtype} } );
 my $patron = $builder->build( { source => 'Borrower' } );
 my $amount = 5;
 my $description = "Test fee!";
@@ -83,7 +83,7 @@ my $type = 'LOST';
 my $note = 'Test note!';
 warning_like {
     C4::Accounts::manualinvoice( $patron->{borrowernumber},
-        $item->{itemnumber}, $description, $type, $amount, $note )
+        $item->itemnumber, $description, $type, $amount, $note )
 }
 qr/C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit/,
   "deprecation warning received for manualinvoice";
@@ -586,10 +586,10 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
             processfee => 2.04,
     }});
     my $cli_borrowernumber = $builder->build({ source => 'Borrower' })->{'borrowernumber'};
-    my $cli_itemnumber1 = $builder->build({ source => 'Item', value => { itype => $itype_no_replace_no_fee->{itemtype} } })->{'itemnumber'};
-    my $cli_itemnumber2 = $builder->build({ source => 'Item', value => { itype => $itype_replace_no_fee->{itemtype} } })->{'itemnumber'};
-    my $cli_itemnumber3 = $builder->build({ source => 'Item', value => { itype => $itype_no_replace_fee->{itemtype} } })->{'itemnumber'};
-    my $cli_itemnumber4 = $builder->build({ source => 'Item', value => { itype => $itype_replace_fee->{itemtype} } })->{'itemnumber'};
+    my $cli_itemnumber1 = $builder->build_sample_item({ itype => $itype_no_replace_no_fee->{itemtype} })->itemnumber;
+    my $cli_itemnumber2 = $builder->build_sample_item({ itype => $itype_replace_no_fee->{itemtype} })->itemnumber;
+    my $cli_itemnumber3 = $builder->build_sample_item({ itype => $itype_no_replace_fee->{itemtype} })->itemnumber;
+    my $cli_itemnumber4 = $builder->build_sample_item({ itype => $itype_replace_fee->{itemtype} })->itemnumber;
 
     my $cli_issue_id_1 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1 } })->{issue_id};
     my $cli_issue_id_2 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2 } })->{issue_id};

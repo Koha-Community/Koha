@@ -44,15 +44,6 @@ my $patron = $builder->build(
     }
 );
 
-my $biblio = $builder->build(
-    {
-        source => 'Biblio',
-        value  => {
-            branchcode => $branch->{branchcode},
-        },
-    }
-);
-
 my $itemtype = $builder->build(
     {
         source => 'Itemtype',
@@ -62,16 +53,11 @@ my $itemtype = $builder->build(
     }
 );
 
-my $item = $builder->build(
+my $item = $builder->build_sample_item(
     {
-        source => 'Item',
-        value  => {
-            biblionumber     => $biblio->{biblionumber},
-            homebranch       => $branch->{branchcode},
-            holdingbranch    => $branch->{branchcode},
-            replacementprice => '5.00',
-            itype            => $itemtype->{itemtype},
-        },
+        library          => $branch->{branchcode},
+        replacementprice => '5.00',
+        itype            => $itemtype->{itemtype},
     }
 );
 
@@ -107,7 +93,7 @@ subtest 'Test basic functionality' => sub {
         day        => 30,
     );
 
-    my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
 
     is( $amount, 29, 'Amount is calculated correctly' );
 
@@ -147,15 +133,21 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
         day        => 30,
     );
 
-    my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    my $item = $builder->build_sample_item(
+        {
+            library          => $branch->{branchcode},
+            replacementprice => 5,
+            itype            => $itemtype->{itemtype},
+        }
+    );
+
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
 
     is( int($amount), 5, 'Amount is calculated correctly' );
 
-
     # Use default replacement cost (useDefaultReplacementCost) is item's replacement price is 0
-    my $item_obj = Koha::Items->find($item->{itemnumber});
-    $item_obj->replacementprice(0)->store;
-    ($amount) = CalcFine( $item_obj->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    $item->replacementprice(0)->store;
+    ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 6, 'Amount is calculated correctly' );
 
     teardown();
@@ -194,11 +186,11 @@ subtest 'Test cap_fine_to_replacement_pricew with overduefinescap' => sub {
         day        => 30,
     );
 
-    my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 3, 'Got the lesser of overduefinescap and replacement price where overduefinescap < replacement price' );
 
     Koha::CirculationRules->set_rule({ rule_name => 'overduefinescap', rule_value => 6, branchcode => undef, categorycode => undef, itemtype => undef });
-    ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 5, 'Get the lesser of overduefinescap and replacement price where overduefinescap > replacement price' );
 
     teardown();

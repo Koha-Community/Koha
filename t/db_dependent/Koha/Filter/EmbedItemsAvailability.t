@@ -62,31 +62,22 @@ subtest 'EmbedItemsAvailability tests' => sub {
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio(MARC::Record->new(), '');
 
     # Add some items with different onloan values
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => '2017-01-01'
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => '2017-01-01'
         }
     );
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => undef
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => undef
         }
     );
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => '2017-01-02'
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => '2017-01-02'
         }
     );
 
@@ -110,31 +101,22 @@ subtest 'EmbedItemsAvailability tests' => sub {
     ( $biblionumber, $biblioitemnumber ) = AddBiblio(MARC::Record->new(), '');
 
     # Add some items with different onloan values
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => '2017-01-01'
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => '2017-01-01'
         }
     );
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => undef
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => undef
         }
     );
-    $builder->build(
-        {   source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                onloan           => '2017-01-02'
-            }
+    $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            onloan       => '2017-01-02'
         }
     );
 

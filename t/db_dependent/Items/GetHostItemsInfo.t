@@ -14,14 +14,14 @@ subtest 'GetHostItemsInfo' => sub {
     plan tests => 3;
 
     my $builder = t::lib::TestBuilder->new;
-    my $bib1 = $builder->build({ source => 'Biblio' });
-    my $itm1 = $builder->build({ source => 'Item', value => { biblionumber => $bib1->{biblionumber} }});
-    my $itm2 = $builder->build({ source => 'Item', value => { biblionumber => $bib1->{biblionumber} }});
+    my $bib1 = $builder->build_sample_biblio;
+    my $itm1 = $builder->build_sample_item({ biblionumber => $bib1->biblionumber });
+    my $itm2 = $builder->build_sample_item({ biblionumber => $bib1->biblionumber });
     my $marc = MARC::Record->new;
     $marc->append_fields(
-        MARC::Field->new( '461', '', '', 0 => $bib1->{biblionumber}, 9 => $itm1->{itemnumber} ),
-        MARC::Field->new( '773', '', '', 0 => $bib1->{biblionumber}, 9 => $itm1->{itemnumber} ),
-        MARC::Field->new( '773', '', '', 0 => $bib1->{biblionumber}, 9 => $itm2->{itemnumber} ),
+        MARC::Field->new( '461', '', '', 0 => $bib1->biblionumber, 9 => $itm1->itemnumber ),
+        MARC::Field->new( '773', '', '', 0 => $bib1->biblionumber, 9 => $itm1->itemnumber ),
+        MARC::Field->new( '773', '', '', 0 => $bib1->biblionumber, 9 => $itm2->itemnumber ),
     );
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');

@@ -870,14 +870,14 @@ subtest 'Check stockrotationitem relationship' => sub {
     $schema->storage->txn_begin();
 
     my $builder = t::lib::TestBuilder->new;
-    my $item = $builder->build({ source => 'Item' });
+    my $item = $builder->build_sample_item;
 
     $builder->build({
         source => 'Stockrotationitem',
-        value  => { itemnumber_id => $item->{itemnumber} }
+        value  => { itemnumber_id => $item->itemnumber }
     });
 
-    my $sritem = Koha::Items->find($item->{itemnumber})->stockrotationitem;
+    my $sritem = Koha::Items->find($item->itemnumber)->stockrotationitem;
     isa_ok( $sritem, 'Koha::StockRotationItem', "Relationship works and correctly creates Koha::Object." );
 
     $schema->storage->txn_rollback;
@@ -889,7 +889,7 @@ subtest 'Check add_to_rota method' => sub {
     $schema->storage->txn_begin();
 
     my $builder = t::lib::TestBuilder->new;
-    my $item = $builder->build({ source => 'Item' });
+    my $item = $builder->build_sample_item;
     my $rota = $builder->build({ source => 'Stockrotationrota' });
     my $srrota = Koha::StockRotationRotas->find($rota->{rota_id});
 
@@ -898,11 +898,11 @@ subtest 'Check add_to_rota method' => sub {
         value  => { rota_id => $rota->{rota_id} },
     });
 
-    my $sritem = Koha::Items->find($item->{itemnumber});
+    my $sritem = Koha::Items->find($item->itemnumber);
     $sritem->add_to_rota($rota->{rota_id});
 
     is(
-        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
         $srrota->stockrotationstages->next->stage_id,
         "Adding to a rota a new sritem item being assigned to its first stage."
     );
@@ -919,7 +919,7 @@ subtest 'Check add_to_rota method' => sub {
     $sritem->add_to_rota($newrota->{rota_id});
 
     is(
-        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
         $srnewrota->stockrotationstages->next->stage_id,
         "Moving an item results in that sritem being assigned to the new first stage."
     );
@@ -932,8 +932,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
-    my $biblio = $builder->build({ source => 'Biblio', value => { frameworkcode => q{} } });
-    my $item = $builder->build({ source => 'Item', value => { biblionumber => $biblio->{biblionumber}, ccode => 'A|B' } });
+    my $item = $builder->build_sample_item({ ccode => 'A|B' });
 
     Koha::MarcSubfieldStructures->search({ tagfield => '952', tagsubfield => '8' })->delete; # theoretical precaution
     Koha::MarcSubfieldStructures->search({ kohafield => 'items.ccode' })->delete;
@@ -949,7 +948,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     # Start testing
-    my $marc = C4::Items::Item2Marc( $item, $biblio->{biblionumber} );
+    my $marc = C4::Items::Item2Marc( $item->unblessed, $item->biblionumber );
     my @subs = $marc->subfield( $mapping->tagfield, $mapping->tagsubfield );
     is( @subs, 2, 'Expect two subfields' );
     is( $subs[0], 'A', 'First subfield matches' );

@@ -698,7 +698,7 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
     plan tests => 2;
     #Let's build an order, we need a couple things though
     my $builder = t::lib::TestBuilder->new;
-    my $order_biblio = $builder->build({ source => 'Biblio' });
+    my $order_biblio = $builder->build_sample_biblio;
     my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
     my $order_invoice = $builder->build({ source => 'Aqinvoice'});
     my $order_currency = $builder->build({ source => 'Currency', value => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'FOO' }  });
@@ -715,7 +715,7 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
     };
     my $receive_order = $builder->build({ source => 'Aqorder', value => $orderinfo });
     (undef, my $received_ordernumber) = ModReceiveOrder({
-            biblionumber => $order_biblio->{biblionumber},
+            biblionumber => $order_biblio->biblionumber,
             order        => $receive_order,
             invoice      => $order_invoice,
             quantityreceived => $receive_order->{quantity},
@@ -726,7 +726,7 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
     $orderinfo->{replacementprice} = 16.12;
     $receive_order = $builder->build({ source => 'Aqorder', value => $orderinfo });
     (undef, $received_ordernumber) = ModReceiveOrder({
-            biblionumber => $order_biblio->{biblionumber},
+            biblionumber => $order_biblio->biblionumber,
             order        => $receive_order,
             invoice      => $order_invoice,
             quantityreceived => $receive_order->{quantity},

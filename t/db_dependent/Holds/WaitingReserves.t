@@ -59,57 +59,15 @@ my $patron2 = $builder->build({
     },
 });
 
-my $biblio = $builder->build({
-    source => 'Biblio',
-    value  => {
-        title => 'Title 1',    },
-});
+my $biblio  = $builder->build_sample_biblio;
+my $biblio2 = $builder->build_sample_biblio;
+my $biblio3 = $builder->build_sample_biblio;
+my $biblio4 = $builder->build_sample_biblio;
 
-my $biblio2 = $builder->build({
-    source => 'Biblio',
-    value  => {
-        title => 'Title 2',    },
-});
-
-my $biblio3 = $builder->build({
-    source => 'Biblio',
-    value  => {
-        title => 'Title 3',    },
-});
-
-my $biblio4 = $builder->build({
-    source => 'Biblio',
-    value  => {
-        title => 'Title 4',    },
-});
-
-my $item1 = $builder->build({
-    source => 'Item',
-    value  => {
-        biblionumber => $biblio->{biblionumber},
-    },
-});
-
-my $item2 = $builder->build({
-    source => 'Item',
-    value  => {
-        biblionumber => $biblio2->{biblionumber},
-    },
-});
-
-my $item3 = $builder->build({
-    source => 'Item',
-    value  => {
-        biblionumber => $biblio3->{biblionumber},
-    },
-});
-
-my $item4 = $builder->build({
-    source => 'Item',
-    value  => {
-        biblionumber => $biblio4->{biblionumber},
-    },
-});
+my $item1 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+my $item2 = $builder->build_sample_item({biblionumber => $biblio2->biblionumber});
+my $item3 = $builder->build_sample_item({biblionumber => $biblio3->biblionumber});
+my $item4 = $builder->build_sample_item({biblionumber => $biblio4->biblionumber});
 
 my $today = dt_from_string();
 
@@ -125,7 +83,7 @@ my $reserve1 = $builder->build({
         borrowernumber => $patron1->{borrowernumber},
         reservedate => $reserve1_reservedate->ymd,
         expirationdate => undef,
-        biblionumber => $biblio->{biblionumber},
+        biblionumber => $biblio->biblionumber,
         branchcode => 'LIB1',
         priority => 1,
         found => '',
@@ -135,14 +93,14 @@ my $reserve1 = $builder->build({
 t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
 t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 6);
 
-ModReserveAffect( $item1->{itemnumber}, $patron1->{borrowernumber});
+ModReserveAffect( $item1->itemnumber, $patron1->{borrowernumber});
 my $r = Koha::Holds->find($reserve1->{reserve_id});
 
 is($r->waitingdate, $today->ymd, 'Waiting date should be set to today' );
 is($r->expirationdate, $reserve1_expirationdate->ymd, 'Expiration date should be set to today + 6' );
 is($r->found, 'W', 'Reserve status is now "waiting"' );
 is($r->priority, 0, 'Priority should be 0' );
-is($r->itemnumber, $item1->{itemnumber}, 'Item number should be set correctly' );
+is($r->itemnumber, $item1->itemnumber, 'Item number should be set correctly' );
 
 my $reserve2 = $builder->build({
     source => 'Reserve',
@@ -150,19 +108,19 @@ my $reserve2 = $builder->build({
         borrowernumber => $patron2->{borrowernumber},
         reservedate => $reserve1_reservedate->ymd,
         expirationdate => undef,
-        biblionumber => $biblio2->{biblionumber},
+        biblionumber => $biblio2->biblionumber,
         branchcode => 'LIB1',
         priority => 1,
         found => '',
     },
 });
 
-ModReserveAffect( $item2->{itemnumber}, $patron2->{borrowernumber}, 1);
+ModReserveAffect( $item2->itemnumber, $patron2->{borrowernumber}, 1);
 my $r2 = Koha::Holds->find($reserve2->{reserve_id});
 
 is($r2->found, 'T', '2nd reserve - Reserve status is now "To transfer"' );
 is($r2->priority, 0, '2nd reserve - Priority should be 0' );
-is($r2->itemnumber, $item2->{itemnumber}, '2nd reserve - Item number should be set correctly' );
+is($r2->itemnumber, $item2->itemnumber, '2nd reserve - Item number should be set correctly' );
 
 my $reserve3 = $builder->build({
     source => 'Reserve',
@@ -170,7 +128,7 @@ my $reserve3 = $builder->build({
         borrowernumber => $patron2->{borrowernumber},
         reservedate => $reserve1_reservedate->ymd,
         expirationdate => undef,
-        biblionumber => $biblio3->{biblionumber},
+        biblionumber => $biblio3->biblionumber,
         branchcode => 'LIB1',
         priority => 1,
         found => '',
@@ -210,7 +168,7 @@ my $holiday2 = $builder->build({
 Koha::Caches->get_instance->flush_all;
 
 t::lib::Mocks::mock_preference('ExcludeHolidaysFromMaxPickUpDelay', 1);
-ModReserveAffect( $item3->{itemnumber}, $patron2->{borrowernumber});
+ModReserveAffect( $item3->itemnumber, $patron2->{borrowernumber});
 
 # Add 6 days of pickup delay + 1 day of holiday.
 my $expected_expiration = $today->clone;
@@ -228,7 +186,7 @@ my $reserve4 = $builder->build({
         borrowernumber => $patron2->{borrowernumber},
         reservedate => $reserve4_reservedate->ymd,
         expirationdate => $requested_expiredate->ymd,
-        biblionumber => $biblio4->{biblionumber},
+        biblionumber => $biblio4->biblionumber,
         branchcode => 'LIB1',
         priority => 1,
         found => '',
@@ -236,7 +194,7 @@ my $reserve4 = $builder->build({
 });
 
 t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 10);
-ModReserveAffect( $item4->{itemnumber}, $patron2->{borrowernumber}, 0, $reserve4->{reserve_id});
+ModReserveAffect( $item4->itemnumber, $patron2->{borrowernumber}, 0, $reserve4->{reserve_id});
 
 my $r4 = Koha::Holds->find($reserve4->{reserve_id});
 is($r4->expirationdate, $requested_expiredate->ymd, 'Requested expiration date should be kept' );

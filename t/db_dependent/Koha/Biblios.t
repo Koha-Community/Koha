@@ -96,23 +96,17 @@ subtest 'holds + current_holds' => sub {
 
 subtest 'waiting_or_in_transit' => sub {
     plan tests => 4;
-    my $biblio = $builder->build( { source => 'Biblio' } );
-    my $item = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblio->{biblionumber}
-        }
-    });
+    my $item = $builder->build_sample_item;
     my $reserve = $builder->build({
         source => 'Reserve',
         value => {
-            biblionumber => $biblio->{biblionumber},
+            biblionumber => $item->biblionumber,
             found => undef
         }
     });
 
     $reserve = Koha::Holds->find($reserve->{reserve_id});
-    $biblio = Koha::Biblios->find($biblio->{biblionumber});
+    $biblio = $item->biblio;
 
     is($biblio->has_items_waiting_or_intransit, 0, 'Item is neither waiting nor in transit');
 
@@ -125,7 +119,7 @@ subtest 'waiting_or_in_transit' => sub {
     my $transfer = $builder->build({
         source => 'Branchtransfer',
         value => {
-            itemnumber => $item->{itemnumber},
+            itemnumber => $item->itemnumber,
             datearrived => undef
         }
     });

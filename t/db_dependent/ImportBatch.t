@@ -133,7 +133,7 @@ is_deeply( $record_from_import_biblio_without_items, $original_record, 'GetRecor
 # Add a few tests for GetItemNumbersFromImportBatch
 my @a = GetItemNumbersFromImportBatch( $id_import_batch1 );
 is( @a, 0, 'No item numbers expected since we did not commit' );
-my $itemno = $builder->build({ source => 'Item' })->{itemnumber};
+my $itemno = $builder->build_sample_item->itemnumber;
 # Link this item to the import item to fool GetItemNumbersFromImportBatch
 my $sql = "UPDATE import_items SET itemnumber=? WHERE import_record_id=?";
 $dbh->do( $sql, undef, $itemno, $import_record_id );

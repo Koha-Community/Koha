@@ -104,53 +104,42 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
         MARC::Field->new($tagfield,'','', $tagsubfield => $blevel_itemtype )
     );
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
-    my $item_with_itemtype = $builder->build(
+    my $item_with_itemtype = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                homebranch       => $branch,
-                holdingbranch    => $branch,
-                itype            => $ilevel_itemtype
-            }
+            biblionumber => $biblionumber,
+            library      => $branch,
+            itype        => $ilevel_itemtype
         }
     );
-    my $item_without_itemtype = $builder->build(
+    my $item_without_itemtype = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                biblioitemnumber => $biblioitemnumber,
-                homebranch       => $branch,
-                holdingbranch    => $branch,
-                itype            => undef
-            }
+            biblionumber => $biblionumber,
+            library      => $branch,
         }
-    );
+    )->_result->update({ itype => undef });
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-    AddIssue( $borrower, $item_with_itemtype->{ barcode } );
-    AddReturn( $item_with_itemtype->{ barcode }, $branch );
+    AddIssue( $borrower, $item_with_itemtype->barcode );
+    AddReturn( $item_with_itemtype->barcode, $branch );
     # Test item-level itemtype was recorded on the 'statistics' table
     my $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,
         type       => 'return',
-        itemnumber => $item_with_itemtype->{ itemnumber }
+        itemnumber => $item_with_itemtype->itemnumber
     }, { order_by => { -asc => 'datetime' } })->next();
 
     is( $stat->itemtype, $ilevel_itemtype,
         "item-level itype recorded on statistics for return");
-    warning_like { AddIssue( $borrower, $item_without_itemtype->{ barcode } ) }
+    warning_like { AddIssue( $borrower, $item_without_itemtype->barcode ) }
                  [qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/],
                  'Item without itemtype set raises warning on AddIssue';
-    AddReturn( $item_without_itemtype->{ barcode }, $branch );
+    AddReturn( $item_without_itemtype->barcode, $branch );
     # Test biblio-level itemtype was recorded on the 'statistics' table
     $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,
         type       => 'return',
-        itemnumber => $item_without_itemtype->{ itemnumber }
+        itemnumber => $item_without_itemtype->itemnumber
     }, { order_by => { -asc => 'datetime' } })->next();
 
     is( $stat->itemtype, $blevel_itemtype,
@@ -194,48 +183,42 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
         MARC::Field->new($tagfield,'','', $tagsubfield => $blevel_itemtype )
     );
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
-    my $item_with_itemtype = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblionumber,
-            biblioitemnumber => $biblioitemnumber,
-            homebranch    => $branch,
-            holdingbranch => $branch,
-            itype         => $ilevel_itemtype
+    my $item_with_itemtype = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $branch,
+            itype        => $ilevel_itemtype
         }
-    });
-    my $item_without_itemtype = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblionumber,
-            biblioitemnumber => $biblioitemnumber,
-            homebranch    => $branch,
-            holdingbranch => $branch,
-            itype         => undef
+    );
+    my $item_without_itemtype = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $branch,
+            itype        => undef
         }
-    });
+    );
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
-    AddIssue( $borrower, $item_with_itemtype->{ barcode } );
-    AddReturn( $item_with_itemtype->{ barcode }, $branch );
+    AddIssue( $borrower, $item_with_itemtype->barcode );
+    AddReturn( $item_with_itemtype->barcode, $branch );
     # Test item-level itemtype was recorded on the 'statistics' table
     my $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,
         type       => 'return',
-        itemnumber => $item_with_itemtype->{ itemnumber }
+        itemnumber => $item_with_itemtype->itemnumber
     }, { order_by => { -asc => 'datetime' } })->next();
 
     is( $stat->itemtype, $blevel_itemtype,
         "biblio-level itype recorded on statistics for return");
 
-    AddIssue( $borrower, $item_without_itemtype->{ barcode } );
-    AddReturn( $item_without_itemtype->{ barcode }, $branch );
+    AddIssue( $borrower, $item_without_itemtype->barcode );
+    AddReturn( $item_without_itemtype->barcode, $branch );
     # Test biblio-level itemtype was recorded on the 'statistics' table
     $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,
         type       => 'return',
-        itemnumber => $item_without_itemtype->{ itemnumber }
+        itemnumber => $item_without_itemtype->itemnumber
     }, { order_by => { -asc => 'datetime' } })->next();
 
     is( $stat->itemtype, $blevel_itemtype,
@@ -261,24 +244,16 @@ subtest 'Handle ids duplication' => sub {
         }
     );
 
-    my $biblio = $builder->build( { source => 'Biblio' } );
     my $itemtype = $builder->build( { source => 'Itemtype', value => { rentalcharge => 5 } } );
-    my $item = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                biblionumber => $biblio->{biblionumber},
-                notforloan => 0,
-                itemlost   => 0,
-                withdrawn  => 0,
-                itype      => $itemtype->{itemtype},
-            }
+            itype => $itemtype->{itemtype},
         }
     );
     my $patron = $builder->build({source => 'Borrower'});
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    my $original_checkout = AddIssue( $patron->unblessed, $item->{barcode}, dt_from_string->subtract( days => 50 ) );
+    my $original_checkout = AddIssue( $patron->unblessed, $item->barcode, dt_from_string->subtract( days => 50 ) );
     my $issue_id = $original_checkout->issue_id;
     my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
     is( $account_lines->count, 1, '1 account line should exist for this issue_id' );
@@ -293,7 +268,7 @@ subtest 'Handle ids duplication' => sub {
     my ($doreturn, $messages, $new_checkout, $borrower);
     warning_like {
         ( $doreturn, $messages, $new_checkout, $borrower ) =
-          AddReturn( $item->{barcode}, undef, undef, undef, dt_from_string );
+          AddReturn( $item->barcode, undef, undef, undef, dt_from_string );
     }
     [
         qr{.*DBD::mysql::st execute failed: Duplicate entry.*},
@@ -313,18 +288,7 @@ subtest 'Handle ids duplication' => sub {
 
 subtest 'BlockReturnOfLostItems' => sub {
     plan tests => 4;
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item = $builder->build_object(
-        {
-            class  => 'Koha::Items',
-            value  => {
-                biblionumber => $biblio->biblionumber,
-                notforloan => 0,
-                itemlost   => 0,
-                withdrawn  => 0,
-        }
-    }
-    );
+    my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
@@ -348,18 +312,7 @@ subtest 'Checkin of an item claimed as returned should generate a message' => su
     plan tests => 1;
 
     t::lib::Mocks::mock_preference('ClaimReturnedLostValue', 1);
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item = $builder->build_object(
-        {
-            class  => 'Koha::Items',
-            value  => {
-                biblionumber => $biblio->biblionumber,
-                notforloan => 0,
-                itemlost   => 0,
-                withdrawn  => 0,
-        }
-    }
-    );
+    my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
@@ -376,18 +329,7 @@ subtest 'BranchTransferLimitsType' => sub {
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
 
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item = $builder->build_object(
-        {
-            class  => 'Koha::Items',
-            value  => {
-                biblionumber => $biblio->biblionumber,
-                notforloan => 0,
-                itemlost   => 0,
-                withdrawn  => 0,
-        }
-    }
-    );
+    my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
@@ -406,17 +348,7 @@ subtest 'Backdated returns should reduce fine if needed' => sub {
     t::lib::Mocks::mock_preference( "CalculateFinesOnBackdate", 1 );
 
     my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item = $builder->build_object(
-        {
-            class  => 'Koha::Items',
-            value  => {
-                biblionumber => $biblio->biblionumber,
-                notforloan => 0,
-                itemlost   => 0,
-                withdrawn  => 0,
-        }
-    }
-    );
+    my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({class => 'Koha::Patrons'});
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
     my $fine = Koha::Account::Line->new({

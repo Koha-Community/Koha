@@ -164,7 +164,7 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
         class_source => $class_source->{cn_source},
     });
 
-    my $item_1 = $builder->build({
+    my $item_1 = $builder->build({ # Cannot call build_sample_item or cn_sort will be replaced by Koha::Item->store
             source => 'Item',
             value  => {
                 itemcallnumber => 'GT95',

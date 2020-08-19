@@ -292,45 +292,36 @@ subtest 'regression tests' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
-    my $biblio1 = Koha::Biblio->new({title => 'Test Biblio 1', author => 'An author', })->store->unblessed;
-    my $biblioitem1 = Koha::Biblioitem->new({biblionumber => $biblio1->{biblionumber}})->store()->unblessed;
-    my $item1 = Koha::Item->new(
+    my $item1 = $builder->build_sample_item(
         {
-            biblionumber     => $biblio1->{biblionumber},
-            biblioitemnumber => $biblioitem1->{biblioitemnumber},
-            barcode          => 'a_t_barcode',
-            homebranch       => $library->{branchcode},
-            holdingbranch    => $library->{branchcode},
-            itype            => 'BK',
-            itemcallnumber   => 'itemcallnumber1',
+            barcode        => 'a_t_barcode',
+            library        => $library->{branchcode},
+            itype          => 'BK',
+            itemcallnumber => 'itemcallnumber1',
         }
-    )->store->unblessed;
-    my $biblio2 = Koha::Biblio->new({title => 'Test Biblio 2'})->store->unblessed;
-    my $biblioitem2 = Koha::Biblioitem->new({biblionumber => $biblio2->{biblionumber}})->store()->unblessed;
-    my $item2 = Koha::Item->new(
+    );
+    my $biblio1 = $item1->biblio->unblessed;
+    $item1 = $item1->unblessed;
+    my $item2   = $builder->build_sample_item(
         {
-            biblionumber     => $biblio2->{biblionumber},
-            biblioitemnumber => $biblioitem2->{biblioitemnumber},
-            barcode          => 'another_t_barcode',
-            homebranch       => $library->{branchcode},
-            holdingbranch    => $library->{branchcode},
-            itype            => 'BK',
-            itemcallnumber   => 'itemcallnumber2',
+            barcode        => 'another_t_barcode',
+            library        => $library->{branchcode},
+            itype          => 'BK',
+            itemcallnumber => 'itemcallnumber2',
         }
-    )->store->unblessed;
-    my $biblio3 = Koha::Biblio->new({title => 'Test Biblio 3'})->store->unblessed;
-    my $biblioitem3 = Koha::Biblioitem->new({biblionumber => $biblio3->{biblionumber}})->store()->unblessed;
-    my $item3 = Koha::Item->new(
+    );
+    my $biblio2 = $item2->biblio->unblessed;
+    $item2 = $item2->unblessed;
+    my $item3   = $builder->build_sample_item(
         {
-            biblionumber     => $biblio3->{biblionumber},
-            biblioitemnumber => $biblioitem3->{biblioitemnumber},
-            barcode          => 'another_t_barcode_3',
-            homebranch       => $library->{branchcode},
-            holdingbranch    => $library->{branchcode},
-            itype            => 'BK',
-            itemcallnumber   => 'itemcallnumber3',
+            barcode        => 'another_t_barcode_3',
+            library        => $library->{branchcode},
+            itype          => 'BK',
+            itemcallnumber => 'itemcallnumber3',
         }
-    )->store->unblessed;
+    );
+    my $biblio3 = $item3->biblio->unblessed;
+    $item3 = $item3->unblessed;
 
     t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 

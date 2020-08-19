@@ -192,25 +192,23 @@ subtest 'pickup_locations' => sub {
     my $group2_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
     my $group2_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
 
-    my $biblioitem  = $builder->build( { source => 'Biblioitem' } );
+    my $item1 = $builder->build_sample_item(
+        {
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library2->branchcode,
+            barcode       => '1',
+            itype         => 'test',
+        }
+    )->store;
 
-    my $item1  = Koha::Item->new({
-        biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
-        homebranch       => $library1->branchcode,
-        holdingbranch    => $library2->branchcode,
-        barcode          => '1',
-        itype            => 'test',
-    })->store;
-
-    my $item3  = Koha::Item->new({
-        biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
-        homebranch       => $library3->branchcode,
-        holdingbranch    => $library4->branchcode,
-        barcode          => '3',
-        itype            => 'test',
-    })->store;
+    my $item3 = $builder->build_sample_item(
+        {
+            homebranch    => $library3->branchcode,
+            holdingbranch => $library4->branchcode,
+            barcode       => '3',
+            itype         => 'test',
+        }
+    )->store;
 
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode, firstname => '1' } } );
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );

@@ -492,22 +492,13 @@ sub create_dependent_objects {
 }
 
 sub create_bib_and_item {
-    my $biblio = $builder->build({
-        source => 'Biblio',
-        value  => {
-            title => 'Title',
+    my $item = $builder->build_sample_item(
+        {
+            itype    => 'CD_foo',
+            ccode    => 'CD',
+            location => 'HR',
+            library  => 'B1',
         }
-    });
-    my $item = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblio->{biblionumber},
-            itype         => 'CD_foo',
-            ccode         => 'CD',
-            location      => 'HR',
-            homebranch    => 'B1',
-            holdingbranch => 'B1',
-        }
-    });
-    return ($biblio->{biblionumber}, $item->{itemnumber});
+    );
+    return ($item->biblionumber, $item->itemnumber);
 }

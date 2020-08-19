@@ -117,24 +117,9 @@ DELETESQL
         }
     });
 
-    my $biblio = $builder->build({
-        source => 'Biblio',
-    });
-    my $biblioitem = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio->{biblionumber}
-        }
-    });
-    my $item1 = $builder->build({
-        source => 'Item'
-    });
-    my $item2 = $builder->build({
-        source => 'Item'
-    });
-    my $item3 = $builder->build({
-        source => 'Item'
-    });
+    my $item1 = $builder->build_sample_item;
+    my $item2 = $builder->build_sample_item;
+    my $item3 = $builder->build_sample_item;
     my $now = dt_from_string();
     my $tomorrow = $now->add(days => 1)->strftime('%F');
 
@@ -142,7 +127,7 @@ DELETESQL
         source => 'Issue',
         value => {
             date_due => $tomorrow,
-            itemnumber => $item1->{itemnumber},
+            itemnumber => $item1->itemnumber,
             branchcode => $library2->{branchcode},
             borrowernumber => $borrower->{borrowernumber},
             returndate => undef
@@ -153,7 +138,7 @@ DELETESQL
         source => 'Issue',
         value => {
             date_due => $tomorrow,
-            itemnumber => $item2->{itemnumber},
+            itemnumber => $item2->itemnumber,
             branchcode => $library3->{branchcode},
             borrowernumber => $borrower->{borrowernumber},
             returndate => undef
@@ -163,7 +148,7 @@ DELETESQL
         source => 'Issue',
         value => {
             date_due => $tomorrow,
-            itemnumber => $item3->{itemnumber},
+            itemnumber => $item3->itemnumber,
             branchcode => $library3->{branchcode},
             borrowernumber => $borrower->{borrowernumber},
             returndate => undef

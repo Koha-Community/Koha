@@ -46,7 +46,7 @@ subtest 'Tests for CalcDateDue related to dateexpiry' => sub {
 };
 
 sub can_book_be_issued {
-    my $item    = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
+    my $item    = $builder->build_sample_item;
     my $patron  = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
@@ -56,12 +56,12 @@ sub can_book_be_issued {
         }
     );
     my $duration = gettimeofday();
-    my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
+    my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
     $duration = gettimeofday() - $duration;
     cmp_ok $duration, '<', 1, "CanBookBeIssued should not be take more than 1s if the patron is expired";
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is 9999-*' );
 
-    $item   = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
+    $item   = $builder->build_sample_item;
     $patron = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
@@ -70,11 +70,11 @@ sub can_book_be_issued {
             }
         }
     );
-    ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
+    ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is not set' );
 
     my $tomorrow = dt_from_string->add_duration( DateTime::Duration->new( days => 1 ) );
-    $item   = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
+    $item   = $builder->build_sample_item;
     $patron = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
@@ -83,7 +83,7 @@ sub can_book_be_issued {
             },
         }
     );
-    ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
+    ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->barcode );
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is tomorrow' );
 
 }
@@ -99,20 +99,20 @@ sub calc_date_due {
             categorycode => $patron_category->{categorycode},
         }
     });
-    my $item   = $builder->build( { source => 'Item' } );
+    my $item   = $builder->build_sample_item;
     my $branch = $builder->build( { source => 'Branch' } );
     my $today  = dt_from_string();
 
     # first test with empty expiry date
     # note that this expiry date will never lead to an issue btw !!
     $patron->{dateexpiry} = '0000-00-00';
-    my $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    my $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry 0000-00-00" );
 
     # second test expiry date==today
     my $d2 = output_pref( { dt => $today, dateonly => 1, dateformat => 'sql' } );
     $patron->{dateexpiry} = $d2;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && DateTime->compare( $d->truncate( to => 'day' ), $today->truncate( to => 'day' ) ) == 0, 1, "CalcDateDue with expiry today" );
 
     # third test expiry date tomorrow
@@ -120,13 +120,13 @@ sub calc_date_due {
     my $tomorrow = $today->clone->add_duration($dur);
     $d2 = output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } );
     $patron->{dateexpiry} = $d2;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry tomorrow" );
 
     # fourth test far future
     $patron->{dateexpiry} = '9876-12-31';
     my $t1 = time;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     my $t2 = time;
     is( ref $d eq "DateTime" && $t2 - $t1 < 1, 1, "CalcDateDue with expiry in year 9876 in " . sprintf( "%6.4f", $t2 - $t1 ) . " seconds." );
 }

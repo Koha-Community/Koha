@@ -45,34 +45,26 @@ subtest 'Test StoreLastBorrower' => sub {
         }
     );
 
-    my $item = $builder->build(
-        {
-            source => 'Item',
-            value  => {
-                itemlost  => 0,
-                withdrawn => 0,
-            },
-        }
-    );
+    my $item = $builder->build_sample_item;
 
     my $issue = $builder->build(
         {
             source => 'Issue',
             value  => {
                 borrowernumber => $patron->{borrowernumber},
-                itemnumber     => $item->{itemnumber},
+                itemnumber     => $item->itemnumber,
             },
         }
     );
 
-    my $item_object   = Koha::Items->find( $item->{itemnumber} );
-    my $patron_object = $item_object->last_returned_by();
+    $item = $item->get_from_storage;
+    my $patron_object = $item->last_returned_by();
     is( $patron_object, undef, 'Koha::Item::last_returned_by returned undef' );
 
-    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode},  undef, dt_from_string('2010-10-10') );
+    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode},  undef, dt_from_string('2010-10-10') );
 
-    $item_object   = Koha::Items->find( $item->{itemnumber} );
-    $patron_object = $item_object->last_returned_by();
+    $item = $item->get_from_storage;
+    $patron_object = $item->last_returned_by();
     is( ref($patron_object), 'Koha::Patron', 'Koha::Item::last_returned_by returned Koha::Patron' );
 
     $patron = $builder->build(
@@ -87,15 +79,15 @@ subtest 'Test StoreLastBorrower' => sub {
             source => 'Issue',
             value  => {
                 borrowernumber => $patron->{borrowernumber},
-                itemnumber     => $item->{itemnumber},
+                itemnumber     => $item->itemnumber,
             },
         }
     );
 
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
-    $item_object   = Koha::Items->find( $item->{itemnumber} );
-    $patron_object = $item_object->last_returned_by();
+    $item = $item->get_from_storage;
+    $patron_object = $item->last_returned_by();
     is( $patron_object->id, $patron->{borrowernumber}, 'Second patron to return item replaces the first' );
 
     $patron = $builder->build(
@@ -106,15 +98,15 @@ subtest 'Test StoreLastBorrower' => sub {
     );
     $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    $item_object->last_returned_by($patron_object);
-    $item_object = Koha::Items->find( $item->{itemnumber} );
-    my $patron_object2 = $item_object->last_returned_by();
+    $item->last_returned_by($patron_object);
+    $item = $item->get_from_storage;
+    my $patron_object2 = $item->last_returned_by();
     is( $patron_object->id, $patron_object2->id,
         'Calling last_returned_by with Borrower object sets last_returned_by to that borrower' );
 
     $patron_object->delete;
-    $item_object = Koha::Items->find( $item->{itemnumber} );
-    is( $item_object->last_returned_by, undef, 'last_returned_by should return undef if the last patron to return the item has been deleted' );
+    $item = $item->get_from_storage;
+    is( $item->last_returned_by, undef, 'last_returned_by should return undef if the last patron to return the item has been deleted' );
 
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '0' );
     $patron = $builder->build(
@@ -129,14 +121,14 @@ subtest 'Test StoreLastBorrower' => sub {
             source => 'Issue',
             value  => {
                 borrowernumber => $patron->{borrowernumber},
-                itemnumber     => $item->{itemnumber},
+                itemnumber     => $item->itemnumber,
             },
         }
     );
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->barcode, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
-    $item_object   = Koha::Items->find( $item->{itemnumber} );
-    is( $item_object->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );
+    $item = $item->get_from_storage;
+    is( $item->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );
 };
 
 $schema->storage->txn_rollback;

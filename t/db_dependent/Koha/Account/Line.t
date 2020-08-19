@@ -73,17 +73,14 @@ subtest 'item() tests' => sub {
     $schema->storage->txn_begin;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $patron = $builder->build( { source => 'Borrower' } );
-    my $item = Koha::Item->new(
-    {
-        biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
-        homebranch       => $library->{branchcode},
-        holdingbranch    => $library->{branchcode},
-        barcode          => 'some_barcode_12',
-        itype            => 'BK',
-    })->store;
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->{branchcode},
+            barcode => 'some_barcode_12',
+            itype   => 'BK',
+        }
+    );
 
     my $line = Koha::Account::Line->new(
     {
@@ -347,7 +344,7 @@ subtest 'Keep account info when related patron, staff, item or cash_register is 
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $item = $builder->build_object({ class => 'Koha::Items' });
+    my $item = $builder->build_sample_item;
     my $issue = $builder->build_object(
         {
             class => 'Koha::Checkouts',

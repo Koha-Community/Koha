@@ -43,7 +43,7 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $item   = $builder->build_object( { class => 'Koha::Items' } );
+    my $item   = $builder->build_sample_item;
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -53,7 +53,7 @@ subtest 'list() tests' => sub {
 
     # Make sure we have at least 10 items
     for ( 1..10 ) {
-        $builder->build_object({ class => 'Koha::Items' });
+        $builder->build_sample_item;
     }
 
     my $nonprivilegedpatron = $builder->build_object(
@@ -105,7 +105,7 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $item = $builder->build_object( { class => 'Koha::Items' } );
+    my $item = $builder->build_sample_item;
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
         value => { flags => 4 }

@@ -34,30 +34,26 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
-my $item_1 = $builder->build({
-    source => 'Item',
-    value => {
+my $item_1 = $builder->build_sample_item(
+    {
         barcode => '33333074344563'
     }
-});
-my $item_2 = $builder->build({
-    source => 'Item',
-    value => {
+);
+my $item_2 = $builder->build_sample_item(
+    {
         barcode => 'hb12070890'
     }
-});
-my $item_3 = $builder->build({
-    source => 'Item',
-    value => {
+);
+my $item_3 = $builder->build_sample_item(
+    {
         barcode => '201200345'
     }
-});
-my $item_4 = $builder->build({
-    source => 'Item',
-    value => {
+);
+my $item_4 = $builder->build_sample_item(
+    {
         barcode => '2012-0034'
     }
-});
+);
 
 my %args = (
     year        => '2012',

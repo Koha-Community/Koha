@@ -48,17 +48,9 @@ subtest 'Failure tests' => sub {
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
-    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
-    my $item       = $builder->build_object(
-        {   class => 'Koha::Items',
-            value  => {
-                homebranch    => $library->branchcode,
-                holdingbranch => $library->branchcode,
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->biblionumber,
-            }
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
         }
     );
 
@@ -95,17 +87,9 @@ subtest 'Anonymous patron tests' => sub {
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
-    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
-    my $item       = $builder->build_object(
-        {   class => 'Koha::Items',
-            value  => {
-                homebranch    => $library->branchcode,
-                holdingbranch => $library->branchcode,
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->biblionumber,
-            }
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
         }
     );
 
@@ -149,17 +133,9 @@ subtest 'Manually pass a return date' => sub {
             value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
         }
     );
-    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
-    my $item       = $builder->build_object(
-        {   class => 'Koha::Items',
-            value  => {
-                homebranch    => $library->branchcode,
-                holdingbranch => $library->branchcode,
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->biblionumber,
-            }
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
         }
     );
 

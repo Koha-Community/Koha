@@ -62,18 +62,7 @@ subtest 'Test Koha::Checkout::claim_returned' => sub {
     plan tests => 6;
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item   = $builder->build_object(
-        {
-            class => 'Koha::Items',
-            value => {
-                biblionumber => $biblio->biblionumber,
-                notforloan   => 0,
-                itemlost     => 0,
-                withdrawn    => 0,
-            }
-        }
-    );
+    my $item   = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
@@ -96,18 +85,7 @@ subtest 'Test Koha::Patronn::return_claims' => sub {
     plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item   = $builder->build_object(
-        {
-            class => 'Koha::Items',
-            value => {
-                biblionumber => $biblio->biblionumber,
-                notforloan   => 0,
-                itemlost     => 0,
-                withdrawn    => 0,
-            }
-        }
-    );
+    my $item   = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 

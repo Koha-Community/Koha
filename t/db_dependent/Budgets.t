@@ -968,9 +968,7 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 #Let's build an order, we need a couple things though
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
 
-    my $spent_biblio   = $builder->build({ source => 'Biblio' });
-    my $item_1         = $builder->build({ source => 'Item', value => { biblionumber => $spent_biblio->{biblionumber} } });
-    my $biblioitem_1   = $builder->build({ source => 'Biblioitem', value => { biblionumber => $spent_biblio->{biblionumber}, itemnumber => $item_1->{itemnumber} } });
+    my $item_1         = $builder->build_sample_item;
     my $spent_basket   = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
     my $spent_invoice  = $builder->build({ source => 'Aqinvoice'});
     my $spent_currency = $builder->build({ source => 'Currency', value => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'FOO' }  });
@@ -996,7 +994,7 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
         rrp                     => 16.99,
         discount                => .42,
         ecost                   => 16.91,
-        biblionumber            => $spent_biblio->{biblionumber},
+        biblionumber            => $item_1->biblionumber,
         currency                => $spent_currency->{currency},
         tax_rate_on_ordering    => 0,
         tax_value_on_ordering   => 0,
@@ -1045,7 +1043,7 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 #Let's test some budget planning
 #Regression tests for bug 18736
     #We need an item to test by BRANCHES
-    my $order_item_1 = $builder->build({ source => 'AqordersItem', value => { ordernumber => $spent_order->{ordernumber}, itemnumber => $item_1->{itemnumber}  } });
+    my $order_item_1 = $builder->build({ source => 'AqordersItem', value => { ordernumber => $spent_order->{ordernumber}, itemnumber => $item_1->itemnumber  } });
     my $spent_fund = Koha::Acquisition::Funds->find( $spent_order->{budget_id} );
     my $cell = {
         authcat => 'MONTHS',
@@ -1062,12 +1060,12 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
             expected_exact   => 9.8542,
         },
         'BRANCHES' => {
-            authvalue => $item_1->{homebranch},
+            authvalue => $item_1->homebranch,
             expected_rounded => 9.85,
             expected_exact   => 9.8542,
         },
         'ITEMTYPES' => {
-            authvalue => $biblioitem_1->{itemtype},
+            authvalue => $item_1->biblioitem->itemtype,
             expected_rounded => 78.80,
             expected_exact   => 78.8336,
         },

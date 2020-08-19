@@ -174,10 +174,10 @@ subtest 'Shelf content' => sub {
     plan tests => 18;
     my $patron1 = $builder->build( { source => 'Borrower', } );
     my $patron2 = $builder->build( { source => 'Borrower', } );
-    my $biblio1 = $builder->build( { source => 'Biblio', } );
-    my $biblio2 = $builder->build( { source => 'Biblio', } );
-    my $biblio3 = $builder->build( { source => 'Biblio', } );
-    my $biblio4 = $builder->build( { source => 'Biblio', } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $biblio4 = $builder->build_sample_biblio;
     my $number_of_contents = Koha::Virtualshelfcontents->search->count;
 
     is( $number_of_contents, 0, 'No content should exist' );
@@ -193,15 +193,15 @@ subtest 'Shelf content' => sub {
 
     $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
     is( t::lib::Dates::compare( $shelf->lastmodified, $dt_yesterday), 0, 'The lastmodified has been set to yesterday, will be useful for another test later' );
-    my $content1 = $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    my $content1 = $shelf->add_biblio( $biblio1->biblionumber, $patron1->{borrowernumber} );
     is( ref($content1), 'Koha::Virtualshelfcontent', 'add_biblio to a shelf should return a Koha::Virtualshelfcontent object if inserted' );
     $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
     is( t::lib::Dates::compare( $shelf->lastmodified, dt_from_string), 0, 'Adding a biblio to a shelf should update the lastmodified for the shelf' );
-    my $content2 = $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
+    my $content2 = $shelf->add_biblio( $biblio2->biblionumber, $patron1->{borrowernumber} );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 2, '2 biblio should have been inserted' );
 
-    my $content1_bis = $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    my $content1_bis = $shelf->add_biblio( $biblio1->biblionumber, $patron1->{borrowernumber} );
     is( $content1_bis, undef, 'add_biblio should return undef on duplicate' );    # Or an exception ?
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 2, 'The biblio should not have been duplicated' );
@@ -212,10 +212,10 @@ subtest 'Shelf content' => sub {
 
     # Patron 2 will try to remove biblios
     # allow_change_from_owner = 1, allow_change_from_others = 0 (defaults)
-    my $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
+    my $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->biblionumber ], borrowernumber => $patron2->{borrowernumber} } );
     is( $number_of_deleted_biblios, 0, 'Patron 2 removed nothing' );
     # Now try with patron 1
-    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio1->biblionumber ], borrowernumber => $patron1->{borrowernumber} } );
     is( $number_of_deleted_biblios, 1, 'Patron 1 removed biblio' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'To be sure the content has been deleted' );
@@ -223,26 +223,26 @@ subtest 'Shelf content' => sub {
     # allow_change_from_owner == 0 (readonly)
     $shelf->allow_change_from_owner( 0 );
     $shelf->store;
-    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->{biblionumber} ], borrowernumber => $patron1->{borrowernumber} } );
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio2->biblionumber ], borrowernumber => $patron1->{borrowernumber} } );
     is( $number_of_deleted_biblios, 0, 'Owner could not delete' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'Number of entries still equal to 1' );
-    $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
+    $shelf->add_biblio( $biblio2->biblionumber, $patron1->{borrowernumber} );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 1, 'Biblio not added to the list' );
     # Add back biblio1
     $shelf->allow_change_from_owner( 1 );
-    $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    $shelf->add_biblio( $biblio1->biblionumber, $patron1->{borrowernumber} );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 2, 'Biblio added to the list' );
 
     # allow_change_from_others == 1
     $shelf->allow_change_from_others( 1 );
-    my $content3 = $shelf->add_biblio( $biblio3->{biblionumber}, $patron2->{borrowernumber} );
-    my $content4 = $shelf->add_biblio( $biblio4->{biblionumber}, $patron2->{borrowernumber} );
+    my $content3 = $shelf->add_biblio( $biblio3->biblionumber, $patron2->{borrowernumber} );
+    my $content4 = $shelf->add_biblio( $biblio4->biblionumber, $patron2->{borrowernumber} );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 4, 'The biblio should have been added to the shelf by the patron 2' );
-    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio3->{biblionumber} ], borrowernumber => $patron2->{borrowernumber} } );
+    $number_of_deleted_biblios = $shelf->remove_biblios( { biblionumbers => [ $biblio3->biblionumber ], borrowernumber => $patron2->{borrowernumber} } );
     is( $number_of_deleted_biblios, 1, 'Biblio 3 deleted by patron 2' );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 3, 'Back to three entries' );
@@ -255,11 +255,10 @@ subtest 'Shelf permissions' => sub {
     plan tests => 40;
     my $patron1 = $builder->build( { source => 'Borrower', value => { flags => '2096766' } } ); # 2096766 is everything checked but not superlibrarian
     my $patron2 = $builder->build( { source => 'Borrower', value => { flags => '1048190' } } ); # 1048190 is everything checked but not superlibrarian and delete_public_lists
-    my $biblio1 = $builder->build( { source => 'Biblio', } );
-    my $biblio2 = $builder->build( { source => 'Biblio', } );
-    my $biblio3 = $builder->build( { source => 'Biblio', } );
-    my $biblio4 = $builder->build( { source => 'Biblio', } );
-
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $biblio4 = $builder->build_sample_biblio;
 
     my $public_shelf = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
@@ -412,10 +411,10 @@ subtest 'Get shelves containing biblios' => sub {
     plan tests => 9;
     my $patron1 = $builder->build( { source => 'Borrower', } );
     my $patron2 = $builder->build( { source => 'Borrower', } );
-    my $biblio1 = $builder->build( { source => 'Biblio', } );
-    my $biblio2 = $builder->build( { source => 'Biblio', } );
-    my $biblio3 = $builder->build( { source => 'Biblio', } );
-    my $biblio4 = $builder->build( { source => 'Biblio', } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $biblio4 = $builder->build_sample_biblio;
 
     my $shelf1 = Koha::Virtualshelf->new(
         {   shelfname    => "my first shelf",
@@ -436,23 +435,23 @@ subtest 'Get shelves containing biblios' => sub {
         }
     )->store;
 
-    my $content1 = $shelf1->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
-    my $content2 = $shelf1->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
-    my $content3 = $shelf2->add_biblio( $biblio2->{biblionumber}, $patron2->{borrowernumber} );
-    my $content4 = $shelf2->add_biblio( $biblio3->{biblionumber}, $patron2->{borrowernumber} );
-    my $content5 = $shelf2->add_biblio( $biblio4->{biblionumber}, $patron2->{borrowernumber} );
-    my $content6 = $shelf3->add_biblio( $biblio4->{biblionumber}, $patron1->{borrowernumber} );
+    my $content1 = $shelf1->add_biblio( $biblio1->biblionumber, $patron1->{borrowernumber} );
+    my $content2 = $shelf1->add_biblio( $biblio2->biblionumber, $patron1->{borrowernumber} );
+    my $content3 = $shelf2->add_biblio( $biblio2->biblionumber, $patron2->{borrowernumber} );
+    my $content4 = $shelf2->add_biblio( $biblio3->biblionumber, $patron2->{borrowernumber} );
+    my $content5 = $shelf2->add_biblio( $biblio4->biblionumber, $patron2->{borrowernumber} );
+    my $content6 = $shelf3->add_biblio( $biblio4->biblionumber, $patron1->{borrowernumber} );
 
     my $shelves_with_biblio1_for_any_patrons = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio1->{biblionumber},
+            biblionumber => $biblio1->biblionumber,
         }
     );
     is ( $shelves_with_biblio1_for_any_patrons->count, 0, 'shelf1 is private and should not be displayed if patron is not logged in' );
 
     my $shelves_with_biblio4_for_any_patrons = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio4->{biblionumber},
+            biblionumber => $biblio4->biblionumber,
         }
     );
     is ( $shelves_with_biblio4_for_any_patrons->count, 1, 'shelf3 is public and should be displayed for any patrons' );
@@ -460,7 +459,7 @@ subtest 'Get shelves containing biblios' => sub {
 
     my $shelves_with_biblio1_for_other_patrons = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio1->{biblionumber},
+            biblionumber => $biblio1->biblionumber,
             borrowernumber => $patron2->{borrowernumber},
         }
     );
@@ -468,7 +467,7 @@ subtest 'Get shelves containing biblios' => sub {
 
     my $shelves_with_biblio1_for_owner = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio1->{biblionumber},
+            biblionumber => $biblio1->biblionumber,
             borrowernumber => $patron1->{borrowernumber},
         }
     );
@@ -476,7 +475,7 @@ subtest 'Get shelves containing biblios' => sub {
 
     my $shelves_with_biblio2_for_patron1 = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio2->{biblionumber},
+            biblionumber => $biblio2->biblionumber,
             borrowernumber => $patron1->{borrowernumber},
         }
     );
@@ -485,7 +484,7 @@ subtest 'Get shelves containing biblios' => sub {
 
     my $shelves_with_biblio4_for_patron2 = Koha::Virtualshelves->get_shelves_containing_record(
         {
-            biblionumber => $biblio4->{biblionumber},
+            biblionumber => $biblio4->biblionumber,
             borrowernumber => $patron2->{borrowernumber},
         }
     );

@@ -87,10 +87,7 @@ my $bibnum = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->b
 # Create a helper item instance for testing
 my $item = $builder->build_sample_item({ biblionumber => $bibnum, library => $branch_1, itype => $itemtype });
 
-my $biblio_with_no_item = $builder->build({
-    source => 'Biblio'
-});
-
+my $biblio_with_no_item = $builder->build_sample_biblio;
 
 # Modify item; setting barcode.
 my $testbarcode = '97531';
@@ -601,7 +598,7 @@ Koha::Patrons->find( $borrowernumber )->set({ dateofbirth => $borrower->{dateofb
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber)->{status} , 'OK', "Reserving a 'PEGI 16' Biblio by a 30 year old borrower succeeds");
 
-is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblio_with_no_item->{biblionumber})->{status} , '', "Biblio with no item. Status is empty");
+is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblio_with_no_item->biblionumber)->{status} , '', "Biblio with no item. Status is empty");
        ####
 ####### EO Bug 13113 <<<
        ####

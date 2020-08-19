@@ -34,18 +34,18 @@ $schema->storage->txn_begin;
 my $builder         = t::lib::TestBuilder->new;
 my $library         = $builder->build( { source => 'Branch' } );
 my $patron          = $builder->build( { source => 'Borrower', value => { branchcode => $library->{branchcode} } } );
-my $item_1          = $builder->build( { source => 'Item' } );
-my $item_2          = $builder->build( { source => 'Item' } );
+my $item_1          = $builder->build_sample_item;
+my $item_2          = $builder->build_sample_item;
 my $nb_of_checkouts = Koha::Checkouts->search->count;
 my $new_checkout_1  = Koha::Checkout->new(
     {   borrowernumber => $patron->{borrowernumber},
-        itemnumber     => $item_1->{itemnumber},
+        itemnumber     => $item_1->itemnumber,
         branchcode     => $library->{branchcode},
     }
 )->store;
 my $new_checkout_2 = Koha::Checkout->new(
     {   borrowernumber => $patron->{borrowernumber},
-        itemnumber     => $item_2->{itemnumber},
+        itemnumber     => $item_2->itemnumber,
         branchcode     => $library->{branchcode},
     }
 )->store;
@@ -91,14 +91,14 @@ subtest 'item' => sub {
     plan tests => 2;
     my $item = $retrieved_checkout_1->item;
     is( ref( $item ), 'Koha::Item', 'Koha::Checkout->item should return a Koha::Item' );
-    is( $item->itemnumber, $item_1->{itemnumber}, 'Koha::Checkout->item should return the correct item' );
+    is( $item->itemnumber, $item_1->itemnumber, 'Koha::Checkout->item should return the correct item' );
 };
 
 subtest 'patron' => sub {
     plan tests => 3;
     my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
 
-    my $item = $builder->build_object( { class=> 'Koha::Items' } );
+    my $item = $builder->build_sample_item;
     my $checkout = Koha::Checkout->new(
         {   borrowernumber => $patron->borrowernumber,
             itemnumber     => $item->itemnumber,

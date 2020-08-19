@@ -139,17 +139,10 @@ subtest 'Display circulation table correctly' => sub {
     );
 
     my ( $biblionumber, $biblioitemnumber ) = add_biblio();
-    my $item = $builder->build_object(
+    my $item = $builder->build_sample_item(
         {
-            class => 'Koha::Items',
-            value => {
-                biblionumber  => $biblionumber,
-                homebranch    => $library->branchcode,
-                holdingbranch => $library->branchcode,
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-            }
+            biblionumber => $biblionumber,
+            library      => $library->branchcode,
         }
     );
     my $context = Test::MockModule->new('C4::Context');

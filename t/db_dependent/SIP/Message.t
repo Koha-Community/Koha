@@ -176,14 +176,14 @@ subtest "Test build_additional_item_fields_string" => sub {
 
     my $builder = t::lib::TestBuilder->new();
 
-    my $item = $builder->build( { source => 'Item' } );
-    my $ils_item = C4::SIP::ILS::Item->new( $item->{barcode} );
+    my $item = $builder->build_sample_item;
+    my $ils_item = C4::SIP::ILS::Item->new( $item->barcode );
 
     my $server = {};
     $server->{account}->{item_field}->{code} = 'itemnumber';
     $server->{account}->{item_field}->{field} = 'XY';
     my $attribute_string = $ils_item->build_additional_item_fields_string( $server );
-    is( $attribute_string, "XY$item->{itemnumber}|", 'Attribute field generated correctly with single param' );
+    is( $attribute_string, "XY".$item->itemnumber."|", 'Attribute field generated correctly with single param' );
 
     $server = {};
     $server->{account}->{item_field}->[0]->{code} = 'itemnumber';
@@ -191,7 +191,7 @@ subtest "Test build_additional_item_fields_string" => sub {
     $server->{account}->{item_field}->[1]->{code} = 'biblionumber';
     $server->{account}->{item_field}->[1]->{field} = 'YZ';
     $attribute_string = $ils_item->build_additional_item_fields_string( $server );
-    is( $attribute_string, "XY$item->{itemnumber}|YZ$item->{biblionumber}|", 'Attribute field generated correctly with multiple params' );
+    is( $attribute_string, sprintf("XY%s|YZ%s|", $item->itemnumber, $item->biblionumber), 'Attribute field generated correctly with multiple params' );
 
     $schema->storage->txn_rollback;
 };
@@ -604,14 +604,14 @@ sub test_hold_patron_bcode {
     my ( $response, $findpatron );
     my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
 
-    my $item = $builder->build({
-        source => 'Item',
-        value => { damaged => 0, withdrawn => 0, itemlost => 0, restricted => 0, homebranch => $branchcode, holdingbranch => $branchcode },
-    });
-    my $item_object = Koha::Items->find( $item->{itemnumber} );
+    my $item = $builder->build_sample_item(
+        {
+            library => $branchcode
+        }
+    );
 
     my $server = { ils => $mocks->{ils} };
-    my $sip_item = C4::SIP::ILS::Item->new( $item->{barcode} );
+    my $sip_item = C4::SIP::ILS::Item->new( $item->barcode );
 
     is( $sip_item->hold_patron_bcode, q{}, "SIP item with no hold returns empty string" );
 

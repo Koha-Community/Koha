@@ -63,32 +63,25 @@ Koha::Biblio::Metadata->new( { biblionumber => $bad_biblio->id, format => 'marcx
 my $bad_biblionumber = $bad_biblio->id;
 
 my $builder = t::lib::TestBuilder->new;
-my $item_1_1 = $builder->build({
-    source => 'Item',
-    value => {
+my $item_1_1 = $builder->build_sample_item(
+    {
         biblionumber => $biblionumber_1,
-        more_subfields_xml => '',
     }
-});
-my $item_1_2 = $builder->build({
-    source => 'Item',
-    value => {
+)->unblessed;
+my $item_1_2 = $builder->build_sample_item(
+    {
         biblionumber => $biblionumber_1,
-        more_subfields_xml => '',
     }
-});
-my $item_2_1 = $builder->build({
-    source => 'Item',
-    value => {
+)->unblessed;
+my $item_2_1 = $builder->build_sample_item(
+    {
         biblionumber => $biblionumber_2,
-        more_subfields_xml => '',
     }
-});
-my $bad_item = $builder->build({
+)->unblessed;
+my $bad_item = $builder->build({ # Cannot call build_sample_item, we want inconsistent data on purpose
     source => 'Item',
     value => {
         biblionumber => $bad_biblionumber,
-        more_subfields_xml => '',
     }
 });
 
@@ -223,24 +216,16 @@ subtest '_get_biblio_for_export' => sub {
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
     my $branch_a = $builder->build({source => 'Branch',});
     my $branch_b = $builder->build({source => 'Branch',});
-    my $item_branch_a = $builder->build(
+    my $item_branch_a = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                biblionumber       => $biblionumber,
-                homebranch         => $branch_a->{branchcode},
-                more_subfields_xml => '',
-            }
+            biblionumber => $biblionumber,
+            library      => $branch_a->{branchcode},
         }
     );
-    my $item_branch_b = $builder->build(
+    my $item_branch_b = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                biblionumber       => $biblionumber,
-                homebranch         => $branch_b->{branchcode},
-                more_subfields_xml => '',
-            }
+            biblionumber => $biblionumber,
+            library      => $branch_b->{branchcode},
         }
     );
 

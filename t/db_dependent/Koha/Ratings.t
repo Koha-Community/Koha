@@ -31,8 +31,8 @@ my $builder = t::lib::TestBuilder->new;
 
 my $patron_1 = $builder->build( { source => 'Borrower', } );
 my $patron_2 = $builder->build( { source => 'Borrower', } );
-my $biblio_1 = $builder->build( { source => 'Biblio', } );
-my $biblionumber = $biblio_1->{biblionumber};
+my $biblio_1 = $builder->build_sample_biblio;
+my $biblionumber = $biblio_1->biblionumber;
 
 my $rating_1 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber}, rating_value => 3 } )->store;
 my $rating_2 = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber}, rating_value => 4 } )->store;

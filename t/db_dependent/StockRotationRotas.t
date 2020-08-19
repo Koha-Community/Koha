@@ -66,12 +66,12 @@ subtest 'Basic object tests' => sub {
 
     #### Test add_item
 
-    my $item = $builder->build({ source => 'Item' });
+    my $item = $builder->build_sample_item;
 
-    $srrota->add_item($item->{itemnumber});
+    $srrota->add_item($item->itemnumber);
 
     is(
-        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
         $srrota->first_stage->stage_id,
         "Adding an item results in a new sritem item being assigned to the first stage."
     );
@@ -85,10 +85,10 @@ subtest 'Basic object tests' => sub {
         value  => { rota_id => $newrota->{rota_id} },
     });
 
-    $srnewrota->add_item($item->{itemnumber});
+    $srnewrota->add_item($item->itemnumber);
 
     is(
-        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        Koha::StockRotationItems->find($item->itemnumber)->stage_id,
         $srnewrota->stockrotationstages->next->stage_id,
         "Moving an item results in that sritem being assigned to the new first stage."
     );

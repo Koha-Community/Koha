@@ -36,23 +36,23 @@ my $patron_1 = $builder->build({ source => 'Borrower', value => { flags => undef
 my $patron_2 = $builder->build({ source => 'Borrower' });
 $patron_1 = Koha::Patrons->find( $patron_1->{borrowernumber} );
 $patron_2 = Koha::Patrons->find( $patron_2->{borrowernumber} );
-my $biblio_1 = $builder->build({ source => 'Biblio' });
-my $biblio_2 = $builder->build({ source => 'Biblio' });
+my $biblio_1 = $builder->build_sample_biblio;
+my $biblio_2 = $builder->build_sample_biblio;
 my $nb_of_reviews = Koha::Reviews->search->count;
 my $nb_of_approved_reviews = Koha::Reviews->search({ approved => 1 })->count;
 my $new_review_1_1 = Koha::Review->new({
     borrowernumber => $patron_1->borrowernumber,
-    biblionumber => $biblio_1->{biblionumber},
+    biblionumber => $biblio_1->biblionumber,
     review => 'a kind review',
 })->store;
 my $new_review_1_2 = Koha::Review->new({
     borrowernumber => $patron_1->borrowernumber,
-    biblionumber => $biblio_2->{biblionumber},
+    biblionumber => $biblio_2->biblionumber,
     review => 'anoter kind review',
 })->store;
 my $new_review_2_1 = Koha::Review->new({
     borrowernumber => $patron_2->borrowernumber,
-    biblionumber => $biblio_1->{biblionumber},
+    biblionumber => $biblio_1->biblionumber,
     review => 'just anoter review',
 })->store;
 

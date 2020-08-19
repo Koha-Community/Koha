@@ -111,10 +111,8 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
     my $builder = t::lib::TestBuilder->new();
     my $category = $builder->build({ source => 'Category' });
     my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
-    my $biblio = $builder->build({ source => 'Biblio' });
-    my $bibnum = $biblio->{biblionumber};
-    my $item = $builder->build({ source => 'Item', value => { biblionumber => $bibnum }});
-    my $itemnumber = $item->{itemnumber};
+    my $item = $builder->build_sample_item;
+    my $itemnumber = $item->itemnumber;
     my $borrowernumber = $builder->build({ source => 'Borrower', value => { categorycode => $category->{categorycode}, branchcode => $branchcode }})->{borrowernumber};
 
     my $resdate = dt_from_string->add( days => -20 );
@@ -124,7 +122,7 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
     my $hold1 = Koha::Hold->new({
         branchcode => $branchcode,
         borrowernumber => $borrowernumber,
-        biblionumber => $bibnum,
+        biblionumber => $item->biblionumber,
         priority => 1,
         reservedate => $resdate,
         expirationdate => $notexpdate,
@@ -134,7 +132,7 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
     my $hold2 = Koha::Hold->new({
         branchcode => $branchcode,
         borrowernumber => $borrowernumber,
-        biblionumber => $bibnum,
+        biblionumber => $item->biblionumber,
         priority => 2,
         reservedate => $resdate,
         expirationdate => $expdate,
@@ -144,7 +142,7 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
     my $hold3 = Koha::Hold->new({
         branchcode => $branchcode,
         borrowernumber => $borrowernumber,
-        biblionumber => $bibnum,
+        biblionumber => $item->biblionumber,
         itemnumber => $itemnumber,
         priority => 0,
         reservedate => $resdate,

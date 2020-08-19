@@ -31,69 +31,55 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
-# NOTE This is a trick, if we want to populate the biblioitems table, we should not create a Biblio but a Biblioitem
-my $param = { source => 'Biblioitem' };
-my $from_biblio = {
-    biblionumber => $builder->build($param)->{biblionumber},
-};
-my $to_biblio = {
-    biblionumber => $builder->build($param)->{biblionumber},
-};
+my $from_biblio = $builder->build_sample_biblio;
+my $to_biblio = $builder->build_sample_biblio;
 
-my $item1       = $builder->build(
-    {   source => 'Item',
-        value  => { biblionumber => $from_biblio->{biblionumber}, },
-    }
-);
-my $item2 = $builder->build(
-    {   source => 'Item',
-        value  => { biblionumber => $from_biblio->{biblionumber}, },
-    }
-);
-my $item3 = $builder->build(
-    {   source => 'Item',
-        value  => { biblionumber => $to_biblio->{biblionumber}, },
-    }
-);
+my $item1 = $builder->build_sample_item(
+    { biblionumber => $from_biblio->biblionumber, } );
+my $item2 = $builder->build_sample_item(
+    { biblionumber => $from_biblio->biblionumber, } );
+my $item3 = $builder->build_sample_item(
+    { biblionumber => $to_biblio->biblionumber, } );
+
 
 my $bib_level_hold_not_to_move = $builder->build(
     {   source => 'Reserve',
-        value  => { biblionumber => $from_biblio->{biblionumber}, },
+        value  => { biblionumber => $from_biblio->biblionumber, },
     }
 );
 my $item_level_hold_not_to_move = $builder->build(
     {   source => 'Reserve',
-        value  => { biblionumber => $from_biblio->{biblionumber}, itemnumber => $item1->{itemnumber} },
+        value  => { biblionumber => $from_biblio->biblionumber, itemnumber => $item1->itemnumber },
     }
 );
 my $item_level_hold_to_move = $builder->build(
     {   source => 'Reserve',
-        value  => { biblionumber => $from_biblio->{biblionumber}, itemnumber => $item2->{itemnumber} },
+        value  => { biblionumber => $from_biblio->biblionumber, itemnumber => $item2->itemnumber },
     }
 );
 
-my $to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->{itemnumber}, $from_biblio->{biblionumber}, $to_biblio->{biblionumber} );
+my $to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->itemnumber, $from_biblio->biblionumber, $to_biblio->biblionumber );
 
-is( $to_biblionumber_after_moved, $to_biblio->{biblionumber}, 'MoveItemFromBiblio should return the to_biblionumber if success' );
+is( $to_biblionumber_after_moved, $to_biblio->biblionumber, 'MoveItemFromBiblio should return the to_biblionumber if success' );
 
-$to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->{itemnumber}, $from_biblio->{biblionumber}, $to_biblio->{biblionumber} );
+$to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->itemnumber, $from_biblio->biblionumber, $to_biblio->biblionumber );
 
 is( $to_biblionumber_after_moved, undef, 'MoveItemFromBiblio should return undef if the move has failed. If called twice, the item is not attached to the first biblio anymore' );
 
-my $get_item1 = Koha::Items->find( $item1->{itemnumber} );
-is( $get_item1->biblionumber, $from_biblio->{biblionumber}, 'The item1 should not have been moved' );
-my $get_item2 = Koha::Items->find( $item2->{itemnumber} );
-is( $get_item2->biblionumber, $to_biblio->{biblionumber}, 'The item2 should have been moved' );
-my $get_item3 = Koha::Items->find( $item3->{itemnumber} );
-is( $get_item3->biblionumber, $to_biblio->{biblionumber}, 'The item3 should not have been moved' );
+my $get_item1 = Koha::Items->find( $item1->itemnumber );
+is( $get_item1->biblionumber, $from_biblio->biblionumber, 'The item1 should not have been moved' );
+my $get_item2 = Koha::Items->find( $item2->itemnumber );
+is( $get_item2->biblionumber, $to_biblio->biblionumber, 'The item2 should have been moved' );
+my $get_item3 = Koha::Items->find( $item3->itemnumber );
+is( $get_item3->biblionumber, $to_biblio->biblionumber, 'The item3 should not have been moved' );
 
 my $get_bib_level_hold    = Koha::Holds->find( $bib_level_hold_not_to_move->{reserve_id} );
 my $get_item_level_hold_1 = Koha::Holds->find( $item_level_hold_not_to_move->{reserve_id} );
 my $get_item_level_hold_2 = Koha::Holds->find( $item_level_hold_to_move->{reserve_id} );
 
-is( $get_bib_level_hold->biblionumber,    $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
-is( $get_item_level_hold_1->biblionumber, $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
-is( $get_item_level_hold_2->biblionumber, $to_biblio->{biblionumber},   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
+is( $get_bib_level_hold->biblionumber,    $from_biblio->biblionumber, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
+is( $get_item_level_hold_1->biblionumber, $from_biblio->biblionumber, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
+is( $get_item_level_hold_2->biblionumber, $to_biblio->biblionumber,   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
 
 $schema->storage->txn_rollback;
 

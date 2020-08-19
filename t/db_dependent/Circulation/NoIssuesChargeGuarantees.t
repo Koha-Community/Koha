@@ -33,16 +33,7 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
 
-my $item = $builder->build(
-    {
-        source => 'Item',
-        value  => {
-            biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
-            notforloan => 0,
-            withdrawn  => 0
-        }
-    }
-);
+my $item = $builder->build_sample_item;
 
 my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my $patron = $builder->build_object(
@@ -77,12 +68,12 @@ my $r = $builder->build_object(
 t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees', '5.00' );
 t::lib::Mocks::mock_preference( 'AllowFineOverride', '' );
 
-my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
+my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
 
 my $account = Koha::Account->new( { patron_id => $guarantee->id } );
 $account->add_debit({ amount => 10.00, type => 'LOST', interface => 'test' });
-( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
+( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 
 my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->id })->next();
