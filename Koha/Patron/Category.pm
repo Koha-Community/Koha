@@ -235,9 +235,7 @@ or, if undef, falls back to the OpacResetPassword system preference.
 sub effective_reset_password {
     my ($self) = @_;
 
-    return ( defined $self->reset_password )
-        ? $self->reset_password
-        : C4::Context->preference('OpacResetPassword');
+    return $self->reset_password // C4::Context->preference('OpacResetPassword');
 }
 
 =head3 effective_change_password
@@ -250,41 +248,35 @@ or, if undef, falls back to the OpacPasswordChange system preference.
 sub effective_change_password {
     my ($self) = @_;
 
-    return ( defined $self->change_password )
-        ? $self->change_password
-        : C4::Context->preference('OpacPasswordChange');
+    return $self->change_password // C4::Context->preference('OpacPasswordChange');
 }
 
 =head3 effective_min_password_length
 
     $category->effective_min_password_length()
 
-Retrieve category's password length if setted, or minPasswordLength otherwise
+Retrieve category's password length if set, or minPasswordLength otherwise
 
 =cut
 
 sub effective_min_password_length {
     my ($self) = @_;
 
-    return C4::Context->preference('minPasswordLength') unless defined $self->min_password_length;
-
-    return $self->min_password_length;
+    return $self->min_password_length // C4::Context->preference('minPasswordLength');
 }
 
 =head3 effective_require_strong_password
 
     $category->effective_require_strong_password()
 
-Retrieve category's password strength if setted, or RequireStrongPassword otherwise
+Retrieve category's password strength if set, or RequireStrongPassword otherwise
 
 =cut
 
 sub effective_require_strong_password {
     my ($self) = @_;
 
-    return C4::Context->preference('RequireStrongPassword') unless defined $self->require_strong_password;
-
-    return $self->require_strong_password;
+    return $self->require_strong_password // C4::Context->preference('RequireStrongPassword');
 }
 
 =head3 override_hidden_items
