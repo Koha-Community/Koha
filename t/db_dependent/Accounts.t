@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 27;
 use Test::MockModule;
 use Test::Warn;
 
@@ -45,7 +45,6 @@ BEGIN {
 can_ok( 'C4::Accounts',
     qw(
         chargelostitem
-        manualinvoice
         purge_zero_balance_fees )
 );
 
@@ -72,33 +71,6 @@ $context->mock( 'userenv', sub {
 });
 $context->mock( 'interface', sub { return "commandline" } );
 my $userenv_branchcode = $branchcode;
-
-# Test manualinvoice
-my $itemtype = $builder->build( { source => 'Itemtype' } );
-my $item   = $builder->build_sample_item( { itype => $itemtype->{itemtype} } );
-my $patron = $builder->build( { source => 'Borrower' } );
-my $amount = 5;
-my $description = "Test fee!";
-my $type = 'LOST';
-my $note = 'Test note!';
-warning_like {
-    C4::Accounts::manualinvoice( $patron->{borrowernumber},
-        $item->itemnumber, $description, $type, $amount, $note )
-}
-qr/C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit/,
-  "deprecation warning received for manualinvoice";
-my ($accountline) = Koha::Account::Lines->search(
-    {
-        borrowernumber => $patron->{borrowernumber}
-    }
-);
-is( $accountline->debit_type_code, $type, 'Debit type set correctly for manualinvoice' );
-is( $accountline->amount+0, $amount, 'Accountline amount set correctly for manualinvoice' );
-ok( $accountline->description =~ /^$description/, 'Accountline description set correctly for manualinvoice' );
-is( $accountline->note, $note, 'Accountline note set correctly for manualinvoice' );
-is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for manualinvoice' );
-
-$dbh->do(q|DELETE FROM accountlines|);
 
 # Testing purge_zero_balance_fees
 
