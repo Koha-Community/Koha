@@ -150,6 +150,12 @@ __PACKAGE__->table("old_reserves");
   default_value: 0
   is_nullable: 0
 
+=head2 non_priority
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -208,6 +214,8 @@ __PACKAGE__->add_columns(
   "itemtype",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "item_level_hold",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "non_priority",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -306,13 +314,14 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-25 13:08:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PtDLEieaxS+76FD0H943Zg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-08-19 19:20:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Dov8h1qPOTI4pWBFUuaV2Q
 
 __PACKAGE__->add_columns(
     '+item_level_hold' => { is_boolean => 1 },
     '+lowestPriority'  => { is_boolean => 1 },
-    '+suspend'         => { is_boolean => 1 }
+    '+suspend'         => { is_boolean => 1 },
+    '+non_priority'    => { is_boolean => 1 }
 );
 
 sub koha_object_class {
