@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -167,6 +167,61 @@ subtest 'Lastseen response' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+subtest 'Patron info summary > 5 should not crash server' => sub {
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 22;
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $seen_patron = $builder->build({
+        source => 'Borrower',
+        value  => {
+            lastseen => '2001-01-01',
+            password => hash_password( PATRON_PW ),
+            branchcode => $branchcode,
+        },
+    });
+    my $cardnum = $seen_patron->{cardnumber};
+    my $sip_patron = C4::SIP::ILS::Patron->new( $cardnum );
+    $findpatron = $sip_patron;
+
+    my @summaries = (
+        '          ',
+        'Y         ',
+        ' Y        ',
+        '  Y       ',
+        '   Y      ',
+        '    Y     ',
+        '     Y    ',
+        '      Y   ',
+        '       Y  ',
+        '        Y ',
+        '         Y',
+    );
+    for my $summary ( @summaries ) {
+        my $siprequest = PATRON_INFO . 'engYYYYMMDDZZZZHHMMSS' . $summary .
+            FID_INST_ID . $branchcode . '|' .
+            FID_PATRON_ID . $cardnum . '|' .
+            FID_PATRON_PWD . PATRON_PW . '|';
+        my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+        my $server = { ils => $mocks->{ils} };
+        undef $response;
+        $msg->handle_patron_info( $server );
+
+        isnt( $response, undef, 'At least we got a response.' );
+        my $respcode = substr( $response, 0, 2 );
+        is( $respcode, PATRON_INFO_RESP, 'Response code fine' );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
 # Here is room for some more subtests
 
 # END of main code
