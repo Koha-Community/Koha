@@ -379,7 +379,7 @@ subtest 'get_effective_daysmode' => sub {
 };
 
 subtest 'get_lostreturn_policy() tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -451,8 +451,8 @@ subtest 'get_lostreturn_policy() tests' => sub {
 
     my $item = $builder->build_sample_item(
         {
-            homebranch    => $specific_rule_true->{branchcode},
-            holdingbranch => $specific_rule_false->{branchcode}
+            homebranch    => $specific_rule_false->{branchcode},
+            holdingbranch => $specific_rule_true->{branchcode}
         }
     );
     my $params = {
@@ -467,11 +467,11 @@ subtest 'get_lostreturn_policy() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHomeBranch' );
     is( Koha::CirculationRules->get_lostreturn_policy( $params ),
-         1,'Specific rule for home branch is applied (true)');
+         0,'Specific rule for home branch is applied (false)');
 
     t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
     is( Koha::CirculationRules->get_lostreturn_policy( $params ),
-         0,'Specific rule for holoding branch is applied (false)');
+         1,'Specific rule for holding branch is applied (true)');
 
     # Default rule check
     t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
@@ -498,6 +498,11 @@ subtest 'get_lostreturn_policy() tests' => sub {
         ->delete;
     is( Koha::CirculationRules->get_lostreturn_policy( $params ),
          1,'No rule for branch, no default rule, fallback default (true)');
+
+    # Fallback to ItemHoldBranch if CheckinLibrary is undefined
+    $params->{return_branch} = undef;
+    is( Koha::CirculationRules->get_lostreturn_policy( $params ),
+         0,'return_branch undefined, fallback to ItemHomeBranch rule (false)');
 
     $schema->storage->txn_rollback;
 };
