@@ -1,5 +1,9 @@
 $DBversion = 'XXX'; # will be replaced by the RM
 if ( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+INSERT INTO `letter` VALUES ('reserves','HOLD_CANCELLATION','','Hold Cancellation',0,'Your hold was canceled.','[%- USE AuthorisedValues -%]\r\nDear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nYour hold for [% biblio.title %] was canceled for the following reason: [% AuthorisedValues.GetByCode( \'HOLD_CANCELLATION\', hold.cancellation_reason ) %]','email','default');
+    });
+
     if ( !column_exists( 'reserves', 'cancellation_reason' ) ) {
         $dbh->do(q{
             ALTER TABLE reserves ADD COLUMN `cancellation_reason` varchar(80) default NULL AFTER cancellationdate;
