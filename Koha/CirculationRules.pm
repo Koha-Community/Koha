@@ -439,8 +439,8 @@ sub get_lostreturn_policy {
 
     my $behaviour = C4::Context->preference( 'RefundLostOnReturnControl' ) // 'CheckinLibrary';
     my $behaviour_mapping = {
-           CheckinLibrary => $params->{'return_branch'},
-           ItemHomeBranch => $item->homebranch,
+        CheckinLibrary    => $params->{'return_branch'} // $item->homebranch,
+        ItemHomeBranch    => $item->homebranch,
         ItemHoldingBranch => $item->holdingbranch
     };
 

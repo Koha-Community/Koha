@@ -811,8 +811,10 @@ sub _set_found_trigger {
     return $self
       unless Koha::CirculationRules->get_lostreturn_policy(
         {
-            current_branch => C4::Context->userenv->{branch},
-            item           => $self,
+            item          => $self,
+            return_branch => C4::Context->userenv
+            ? C4::Context->userenv->{'branch'}
+            : undef,
         }
       );
 
