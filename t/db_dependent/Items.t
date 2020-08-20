@@ -33,7 +33,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 15;
+use Test::More tests => 14;
 
 use Test::Warn;
 
@@ -124,31 +124,6 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->effective_itemtype, $biblio->biblioitem->itemtype, "Itemtype set correctly when not using item-level_itypes" );
 
     $schema->storage->txn_rollback;
-};
-
-subtest 'ModItem tests' => sub {
-    plan tests => 6;
-
-    $schema->storage->txn_begin;
-
-    my $builder = t::lib::TestBuilder->new;
-    my $item    = $builder->build_sample_item();
-
-    my @fields = qw( itemlost withdrawn damaged );
-    for my $field (@fields) {
-        my $field_on = $field."_on";
-
-        $item->$field(1)->store;
-        $item->discard_changes;
-        is( output_pref({ str => $item->$field_on, dateonly => 1 }), output_pref({ dt => dt_from_string(), dateonly => 1 }), "When updating $field, $field_on is updated" );
-
-        $item->$field(0)->store;
-        $item->discard_changes;
-        is( $item->$field_on, undef, "When clearing $field, $field_on is cleared" );
-    }
-
-    $schema->storage->txn_rollback;
-
 };
 
 subtest 'ModItemTransfer tests' => sub {
