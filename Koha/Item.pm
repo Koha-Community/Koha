@@ -124,11 +124,12 @@ sub store {
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
 
-        # Retreive the item for comparison if we need to
-        my $pre_mod_item = $self->get_from_storage
-          if ( exists $updated_columns{itemlost}
-            or exists $updated_columns{withdrawn}
-            or exists $updated_columns{damaged} );
+        # Retrieve the item for comparison if we need to
+        my $pre_mod_item = (
+                 exists $updated_columns{itemlost}
+              or exists $updated_columns{withdrawn}
+              or exists $updated_columns{damaged}
+        ) ? $self->get_from_storage : undef;
 
         # Update *_on  fields if needed
         # FIXME: Why not for AddItem as well?
@@ -785,7 +786,7 @@ sub renewal_branchcode {
     $self->_set_found_trigger
 
 Finds the most recent lost item charge for this item and refunds the patron
-appropriatly, taking into account any payments or writeoffs already applied
+appropriately, taking into account any payments or writeoffs already applied
 against the charge.
 
 Internal function, not exported, called only by Koha::Item->store.
@@ -837,7 +838,7 @@ sub _set_found_trigger {
     my $patron = Koha::Patrons->find( $accountline->borrowernumber );
     return $self
       unless $patron;  # Patron has been deleted, nobody to credit the return to
-                       # FIXME Should not we notify this somehwere
+                       # FIXME Should not we notify this somewhere
 
     my $account = $patron->account;
 
