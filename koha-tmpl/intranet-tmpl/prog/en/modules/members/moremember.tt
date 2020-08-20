@@ -849,6 +849,7 @@
 
                                             [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                                             [% IF hold_cancellation %]
+                                                <label for="cancellation-reason">Cancellation reason:</label>
                                                 <select name="cancellation-reason">
                                                     <option value="">No reason given</option>
                                                     [% FOREACH reason IN hold_cancellation %]
