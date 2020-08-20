@@ -71,8 +71,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -84,8 +83,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -97,8 +95,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_3 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
             interface         => 'commandline',
@@ -147,8 +144,7 @@ subtest 'total() tests' => sub {
 
     my $credit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -160,8 +156,7 @@ subtest 'total() tests' => sub {
 
     my $credit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -173,8 +168,7 @@ subtest 'total() tests' => sub {
 
     my $credit_3 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
             interface         => 'commandline',
@@ -223,8 +217,7 @@ subtest 'credits_total() tests' => sub {
 
     my $credit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -236,8 +229,7 @@ subtest 'credits_total() tests' => sub {
 
     my $credit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => -10,
             interface         => 'commandline',
@@ -249,8 +241,7 @@ subtest 'credits_total() tests' => sub {
 
     my $credit_3 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => -100,
             interface         => 'commandline',
@@ -299,8 +290,7 @@ subtest 'debits_total() tests' => sub {
 
     my $credit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => 0,
             interface         => 'commandline',
@@ -312,8 +302,7 @@ subtest 'debits_total() tests' => sub {
 
     my $credit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -10,
             amountoutstanding => 0,
             interface         => 'commandline',
@@ -325,8 +314,7 @@ subtest 'debits_total() tests' => sub {
 
     my $credit_3 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            debit_type_code   => "OVERDUE",
-            status            => "RETURNED",
+            credit_type_code  => "PAYMENT",
             amount            => -100,
             amountoutstanding => 0,
             interface         => 'commandline',
