@@ -353,6 +353,9 @@ __END_SRU_PUBLICSERVER__
  <elasticsearch>
      <server>__ELASTICSEARCH_SERVER__</server> <!-- may be repeated to include all servers on your cluster -->
      <index_name>koha___KOHASITE__</index_name> <!-- should be unique amongst all the indices on your cluster. _biblios and _authorities will be appended. -->
+
+     <!-- See https://metacpan.org/pod/Search::Elasticsearch#cxn_pool -->
+     <cxn_pool>Static</cxn_pool>
  </elasticsearch>
  <!-- Uncomment the following line if you want to override the Elasticsearch default index settings -->
  <!-- <elasticsearch_index_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/index_config.yaml</elasticsearch_index_config> -->
