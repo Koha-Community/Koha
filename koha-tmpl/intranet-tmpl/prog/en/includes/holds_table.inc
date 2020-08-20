@@ -33,10 +33,10 @@
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
                 <input type="hidden" name="biblionumber" value="[% hold.biblionumber | html %]" />
                 [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
-                    <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id %]">
+                    <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id | html %]">
                 [% ELSE %]
-                    <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id %]">
-                    <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id %]">
+                    <input type="hidden" name="rank-request" class="rank-request" value="[% hold.priority | html %]" data-hold-id="[% hold.reserve_id | html %]">
+                    <select name="rank-request" class="rank-request" disabled="disabled" data-hold-id="[% hold.reserve_id | html %]">
                 [% END %]
                     [% IF ( hold.found ) %]
                         [% IF ( hold.intransit ) %]
