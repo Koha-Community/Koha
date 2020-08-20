@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Test::Warn;
 
 use C4::Reserves;
-use Koha::Holds;
+use Koha::AuthorisedValueCategory;
 use Koha::Database;
+use Koha::Holds;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -250,6 +251,139 @@ subtest 'cancel' => sub {
         );
     };
 
+};
+
+subtest 'cancel with reason' => sub {
+    plan tests => 7;
+    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
+    my $item_info = {
+        biblionumber     => $biblioitem->biblionumber,
+        biblioitemnumber => $biblioitem->biblioitemnumber,
+        homebranch       => $library->branchcode,
+        holdingbranch    => $library->branchcode,
+        itype            => $itemtype->itemtype,
+    };
+    my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, }
+        }
+    );
+
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    ok($reserve_id, "Hold created");
+    ok($hold, "Hold found");
+
+    my $av = Koha::AuthorisedValue->new( { category => 'HOLD_CANCELLATION', authorised_value => 'TEST_REASON' } )->store;
+    Koha::Notice::Templates->search({ code => 'HOLD_CANCELLATION'})->delete();
+    my $notice = Koha::Notice::Template->new({
+        name                   => 'Hold cancellation',
+        module                 => 'reserves',
+        code                   => 'HOLD_CANCELLATION',
+        title                  => 'Hold cancelled',
+        content                => 'Your hold was cancelled.',
+        message_transport_type => 'email',
+        branchcode             => q{},
+    })->store();
+
+    $hold->cancel({cancellation_reason => 'TEST_REASON'});
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold, undef, 'Hold is not in the reserves table');
+    $hold = Koha::Old::Holds->find($reserve_id);
+    ok( $hold, 'Hold was found in the old reserves table');
+
+    my $message = Koha::Notice::Messages->find({ borrowernumber => $patron->id, letter_code => 'HOLD_CANCELLATION'});
+    ok( $message, 'Found hold cancellation message');
+    is( $message->subject, 'Hold cancelled', 'Message has correct title' );
+    is( $message->content, 'Your hold was cancelled.', 'Message has correct content');
+
+    $notice->delete;
+    $av->delete;
+    $message->delete;
+};
+
+subtest 'cancel all with reason' => sub {
+    plan tests => 7;
+    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
+    my $item_info = {
+        biblionumber     => $biblioitem->biblionumber,
+        biblioitemnumber => $biblioitem->biblioitemnumber,
+        homebranch       => $library->branchcode,
+        holdingbranch    => $library->branchcode,
+        itype            => $itemtype->itemtype,
+    };
+    my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, }
+        }
+    );
+
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    ok($reserve_id, "Hold created");
+    ok($hold, "Hold found");
+
+    my $av = Koha::AuthorisedValue->new( { category => 'HOLD_CANCELLATION', authorised_value => 'TEST_REASON' } )->store;
+    Koha::Notice::Templates->search({ code => 'HOLD_CANCELLATION'})->delete();
+    my $notice = Koha::Notice::Template->new({
+        name                   => 'Hold cancellation',
+        module                 => 'reserves',
+        code                   => 'HOLD_CANCELLATION',
+        title                  => 'Hold cancelled',
+        content                => 'Your hold was cancelled.',
+        message_transport_type => 'email',
+        branchcode             => q{},
+    })->store();
+
+    ModReserveCancelAll($item->id, $patron->id, 'TEST_REASON');
+
+    $hold = Koha::Holds->find($reserve_id);
+    is( $hold, undef, 'Hold is not in the reserves table');
+    $hold = Koha::Old::Holds->find($reserve_id);
+    ok( $hold, 'Hold was found in the old reserves table');
+
+    my $message = Koha::Notice::Messages->find({ borrowernumber => $patron->id, letter_code => 'HOLD_CANCELLATION'});
+    ok( $message, 'Found hold cancellation message');
+    is( $message->subject, 'Hold cancelled', 'Message has correct title' );
+    is( $message->content, 'Your hold was cancelled.', 'Message has correct content');
+
+    $av->delete;
+    $message->delete;
 };
 
 $schema->storage->txn_rollback;
