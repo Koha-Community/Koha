@@ -407,3 +407,5 @@ Your total unpaid fines are too high.
 [% ELSE %]
 The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
 [% END %]", 'email');
+
+INSERT INTO `letter` VALUES ('reserves','HOLD_CANCELLATION','','Hold Cancellation',0,'Your hold was canceled.','[%- USE AuthorisedValues -%]\r\nDear [% borrower.firstname %] [% borrower.surname %],\r\n\r\nYour hold for [% biblio.title %] was canceled for the following reason: [% AuthorisedValues.GetByCode( \'HOLD_CANCELLATION\', hold.cancellation_reason ) %]','email','default');
