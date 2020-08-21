@@ -40,7 +40,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get_balance() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -141,6 +141,40 @@ subtest 'get_balance() tests' => sub {
             outstanding_debits => {
                 total => 0,
                 lines => []
+            },
+            outstanding_credits => {
+                total => -10,
+                lines => [ $credit_line->to_api ]
+            }
+        }
+    );
+
+    # Accountline without manager_id (happens with fines.pl cron for example)
+    my $account_line_3 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            date              => \'NOW()',
+            amount            => 50,
+            description       => "A description",
+            debit_type_code   => "NEW_CARD", # New card
+            amountoutstanding => 50,
+            manager_id        => undef,
+            branchcode        => $library->id,
+            interface         => 'test',
+        }
+    )->store();
+    $account_line_3->discard_changes;
+
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)->status_is(200)->json_is(
+        {   balance            => 40.00,
+            outstanding_debits => {
+                total => 50.00,
+                lines => [
+                    $account_line_3->to_api
+                ]
             },
             outstanding_credits => {
                 total => -10,
