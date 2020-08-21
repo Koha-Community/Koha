@@ -984,7 +984,7 @@ subtest 'ModItemFromMarc' => sub {
     my $item = Koha::Items->find($itemnumber);
     is( $item->itemlost, 1, 'itemlost picked from the item marc');
 
-    $item->paidfor("this is something")->store;
+    $item->new_status("this is something")->store;
 
     my $updated_item_record = new MARC::Record;
     $updated_item_record->append_fields(
@@ -996,8 +996,8 @@ subtest 'ModItemFromMarc' => sub {
 
     my $updated_item = ModItemFromMarc($updated_item_record, $biblio->biblionumber, $itemnumber);
     is( $updated_item->{itemlost}, 0, 'itemlost should have been reset to the default value in DB' );
-    is( $updated_item->{paidfor}, "this is something", "Non mapped field has not been reset" );
-    is( Koha::Items->find($itemnumber)->paidfor, "this is something" );
+    is( $updated_item->{new_status}, "this is something", "Non mapped field has not been reset" );
+    is( Koha::Items->find($itemnumber)->new_status, "this is something" );
 
     $schema->storage->txn_rollback;
 };
