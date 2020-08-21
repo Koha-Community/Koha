@@ -249,7 +249,7 @@ function forgetPatronAndClub(){
     $.removeCookie("holdfor", { path: '/' });
     $.removeCookie("holdforclub", { path: '/' });
     $(".holdforlink").remove();
-    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> " + PLACE_HOLD + "</a>");
+    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> " + __("Place hold") + "</a>");
 }
 
 function browse_selection () {

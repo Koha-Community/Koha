@@ -167,7 +167,6 @@
     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
