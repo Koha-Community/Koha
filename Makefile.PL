@@ -354,6 +354,7 @@ my $target_map = {
   './patroncards'               => 'INTRANET_CGI_DIR',
   './patron_lists'              => 'INTRANET_CGI_DIR',
   './plugins'                   => 'INTRANET_CGI_DIR',
+  './pos'                       => 'INTRANET_CGI_DIR',
   './reports'                   => 'INTRANET_CGI_DIR',
   './reserve'                   => 'INTRANET_CGI_DIR',
   './reviews'                   => 'INTRANET_CGI_DIR',
