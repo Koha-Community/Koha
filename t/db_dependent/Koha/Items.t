@@ -118,13 +118,15 @@ subtest 'store' => sub {
             Time::Fake->offset( $yesterday->epoch );
             $item->$field(1)->store;
             $item->get_from_storage;
-            is($item->$field_on, DateTime::Format::MySQL->format_datetime($yesterday), $field_on . " was set upon first truthy setting");
+            is( t::lib::Dates::compare( $item->$field_on, $yesterday ),
+                0, $field_on . " was set upon first truthy setting" );
 
             # Update the field to a new 'true' value
             Time::Fake->offset( $today->epoch );
             $item->$field(2)->store;
             $item->get_from_storage;
-            is($item->$field_on, DateTime::Format::MySQL->format_datetime($yesterday), $field_on . " was not updated upon second truthy setting");
+            is( t::lib::Dates::compare( $item->$field_on, $yesterday ),
+                0, $field_on . " was not updated upon second truthy setting" );
 
             # Update the field to a new 'false' value
             $item->$field(0)->store;
