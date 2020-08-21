@@ -1,4 +1,4 @@
-/* global PATRON_NOTE */
+/* global __ */
 
 $(document).ready(function() {
     $.ajaxSetup ({ cache: false });
@@ -115,14 +115,14 @@ $(document).ready(function() {
 
                 content = "";
                 if ( data.returned ) {
-                    content = CIRCULATION_RETURNED;
+                    content = __("Checked in");
                     $(id).parent().parent().addClass('ok');
-                    $('#date_due_' + data.itemnumber).html(CIRCULATION_RETURNED);
+                    $('#date_due_' + data.itemnumber).html( __("Checked in") );
                     if ( data.patronnote != null ) {
-                        $('.patron_note_' + data.itemnumber).html( PATRON_NOTE + ": " + data.patronnote);
+                        $('.patron_note_' + data.itemnumber).html( __("Patron note") + ": " + data.patronnote);
                     }
                 } else {
-                    content = CIRCULATION_NOT_RETURNED;
+                    content = __("Unable to check in");
                     $(id).parent().parent().addClass('warn');
                 }
 
@@ -160,24 +160,24 @@ $(document).ready(function() {
 
                 var content = "";
                 if ( data.renew_okay ) {
-                    content = CIRCULATION_RENEWED_DUE + " " + data.date_due;
+                    content = __("Renewed, due:") + " " + data.date_due;
                     $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
                 } else {
-                    content = CIRCULATION_RENEW_FAILED + " ";
+                    content = __("Renew failed:") + " ";
                     if ( data.error == "no_checkout" ) {
-                        content += NOT_CHECKED_OUT;
+                        content += __("not checked out");
                     } else if ( data.error == "too_many" ) {
-                        content += TOO_MANY_RENEWALS;
+                        content += __("too many renewals");
                     } else if ( data.error == "on_reserve" ) {
-                        content += ON_RESERVE;
+                        content += __("on hold");
                     } else if ( data.error == "restriction" ) {
-                        content += NOT_RENEWABLE_RESTRICTION;
+                        content += __("Not allowed: patron restricted");
                     } else if ( data.error == "overdue" ) {
-                        content += NOT_RENEWABLE_OVERDUE;
+                        content += __("Not allowed: overdue");
                     } else if ( data.error ) {
                         content += data.error;
                     } else {
-                        content += REASON_UNKNOWN;
+                        content += __("reason unknown");
                     }
                 }
 
@@ -250,9 +250,9 @@ $(document).ready(function() {
                 {
                     "mDataProp": function( oObj ) {
                         if ( oObj.issued_today ) {
-                            return "<strong>" + TODAYS_CHECKOUTS + "</strong>";
+                            return "<strong>" + __("Today's checkouts") + "</strong>";
                         } else {
-                            return "<strong>" + PREVIOUS_CHECKOUTS + "</strong>";
+                            return "<strong>" + __("Previous checkouts") + "</strong>";
                         }
                     }
                 },
@@ -307,7 +307,7 @@ $(document).ready(function() {
                         title += "</a></span>";
 
                         if ( oObj.author ) {
-                            title += " " + BY.replace( "_AUTHOR_",  " " + oObj.author.escapeHtml() );
+                            title += " " + __("by _AUTHOR_").replace( "_AUTHOR_",  " " + oObj.author.escapeHtml() );
                         }
 
                         if ( oObj.itemnotes ) {
@@ -328,7 +328,7 @@ $(document).ready(function() {
 
                         var onsite_checkout = '';
                         if ( oObj.onsite_checkout == 1 ) {
-                            onsite_checkout += " <span class='onsite_checkout'>(" + INHOUSE_USE + ")</span>";
+                            onsite_checkout += " <span class='onsite_checkout'>(" + __("On-site checkout") + ")</span>";
                         }
 
                         title += " "
@@ -421,70 +421,70 @@ $(document).ready(function() {
                             // Do nothing
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
                             msg += "<span>"
-                                    + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
+                                    +"<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>"
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed-on_reserve";
                         } else if ( oObj.can_renew_error == "too_many" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE
+                                    + __("Not renewable")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "restriction" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_RESTRICTION
+                                    + __("Not allowed: patron restricted")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "overdue" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_OVERDUE
+                                    + __("Not allowed: overdue")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_soon" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_TOO_SOON.format( oObj.can_renew_date )
+                                    + __("No renewal before %s").format(oObj.can_renew_date)
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_soon" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_AUTO_TOO_SOON
+                                    + __("Scheduled for automatic renewal")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_late" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_AUTO_TOO_LATE
+                                    + __("Can no longer be auto-renewed - number of checkout days exceeded")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_much_oweing" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_AUTO_TOO_MUCH_OWEING
+                                    + __("Automatic renewal failed, patron has unpaid fines")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_account_expired" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_AUTO_ACCOUNT_EXPIRED
+                                    + __("Automatic renewal failed, account expired")
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_renew" ) {
                             msg += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_AUTO_RENEW
+                                    + __("Scheduled for automatic renewal")
                                     + "</span>";
 
                             span_style = "display: none";
@@ -493,7 +493,7 @@ $(document).ready(function() {
                             // Don't display something if it's an onsite checkout
                         } else if ( oObj.can_renew_error == "item_denied_renewal" ) {
                             content += "<span class='renewals-disabled'>"
-                                    + NOT_RENEWABLE_DENIED
+                                    + __("Renewal denied by syspref")
                                     + "</span>";
 
                             span_style = "display: none";
@@ -528,7 +528,7 @@ $(document).ready(function() {
                         content += msg;
                         if ( can_renew || can_force_renew ) {
                             content += "<span class='renewals'>("
-                                    + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
+                                    + __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed)
                                     + ")</span>";
                         }
 
@@ -542,7 +542,7 @@ $(document).ready(function() {
                     "bVisible": AllowCirculate ? true : false,
                     "mDataProp": function ( oObj ) {
                         if ( oObj.can_renew_error == "on_reserve" ) {
-                            return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>";
+                            return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
                         } else {
                             return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
                         }
@@ -557,7 +557,7 @@ $(document).ready(function() {
                         if ( oObj.return_claim_id ) {
                           content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
                         } else {
-                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + RETURN_CLAIMED_MAKE + '</a>';
+                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                         }
                         return content;
                     }
@@ -601,9 +601,9 @@ $(document).ready(function() {
                 "dataSrc": "issued_today",
                 "startRender": function ( rows, group ) {
                     if ( group ) {
-                        return TODAYS_CHECKOUTS;
+                        return __("Today's checkouts");
                     } else {
-                        return PREVIOUS_CHECKOUTS;
+                        return __("Previous checkouts");
                     }
                 }
             },
@@ -616,13 +616,13 @@ $(document).ready(function() {
                 var ul = $('<ul>');
                 Object.keys(checkoutsByItype).sort().forEach(function (itype) {
                     var li = $('<li>')
-                        .append($('<strong>').html(itype || MSG_NO_ITEMTYPE))
+                        .append($('<strong>').html(itype || __("No itemtype")))
                         .append(': ' + checkoutsByItype[itype]);
                     ul.append(li);
                 })
                 $('<details>')
                     .addClass('checkouts-by-itemtype')
-                    .append($('<summary>').html(MSG_CHECKOUTS_BY_ITEMTYPE))
+                    .append($('<summary>').html( __("Number of checkouts by item type") ))
                     .append(ul)
                     .insertBefore(oSettings.nTableWrapper)
             },
@@ -681,7 +681,7 @@ $(document).ready(function() {
                             title += "</a></span>";
 
                             if ( oObj.author ) {
-                                title += " " + BY.replace( "_AUTHOR_", " " + oObj.author.escapeHtml() );
+                                title += " " + __("by _AUTHOR_").replace( "_AUTHOR_", " " + oObj.author.escapeHtml() );
                             }
 
                             if ( oObj.itemnotes ) {
@@ -702,7 +702,7 @@ $(document).ready(function() {
 
                             var onsite_checkout = '';
                             if ( oObj.onsite_checkout == 1 ) {
-                                onsite_checkout += " <span class='onsite_checkout'>(" + INHOUSE_USE + ")</span>";
+                                onsite_checkout += " <span class='onsite_checkout'>(" + __("On-site checkout") + ")</span>";
                             }
 
                             title += " "
@@ -866,7 +866,7 @@ $(document).ready(function() {
                 content = '<span class="badge">' + created_on.toLocaleDateString() + '</span>';
                 $(id).parent().parent().addClass('ok');
             } else {
-                content = RETURN_CLAIMED_FAILURE;
+                content = __("Unable to claim as returned");
                 $(id).parent().parent().addClass('warn');
             }
 
@@ -1049,7 +1049,7 @@ $(document).ready(function() {
 
     // Hanld return claim deletion
     $('body').on('click', '.return-claim-tools-delete', function() {
-        let confirmed = confirm(CONFIRM_DELETE_RETURN_CLAIM);
+        let confirmed = confirm(__("Are you sure you want to delete this return claim?"));
         if ( confirmed ) {
             let id = $(this).data('return-claim-id');
 

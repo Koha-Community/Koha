@@ -1,3 +1,4 @@
+/* global __ dataTablesDefaults borrowernumber SuspendHoldsIntranet */
 $(document).ready(function() {
     var holdsTable;
 
@@ -10,6 +11,7 @@ $(document).ready(function() {
     function load_holds_table() {
         var holds = new Array();
         if ( ! holdsTable ) {
+            var title;
             holdsTable = $("#holds-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "bAutoWidth": false,
                 "sDom": "rt",
@@ -25,7 +27,7 @@ $(document).ready(function() {
                                   + oObj.title.escapeHtml();
 
                             $.each(oObj.subtitle, function( index, value ) {
-                                      title += " " + value.escapeHtml();
+                                title += " " + value.escapeHtml();
                             });
 
                             title += " " + oObj.part_number + " " + oObj.part_name;
@@ -37,7 +39,7 @@ $(document).ready(function() {
                             title += "</a>";
 
                             if ( oObj.author ) {
-                                title += " " + BY.replace( "_AUTHOR_",  oObj.author.escapeHtml() );
+                                title += " " + __("by _AUTHOR_").replace("_AUTHOR_", oObj.author.escapeHtml());
                             }
 
                             if ( oObj.itemnotes ) {
@@ -83,7 +85,7 @@ $(document).ready(function() {
                                     if( oObj.branches[i].selected ){
 
                                         selectedbranch = " selected='selected' ";
-                                        setbranch = CURRENT;
+                                        setbranch = __(" (current) ");
                                     } else if ( oObj.branches[i].pickup_location == 0 ) {
                                         continue;
                                     } else{
@@ -112,8 +114,8 @@ $(document).ready(function() {
                         "bSortable": false,
                         "mDataProp": function( oObj ) {
                             return "<select name='rank-request'>"
-                                 + "<option value='n'>" + NO + "</option>"
-                                 + "<option value='del'>" + YES  + "</option>"
+                                 +"<option value='n'>" + __("No") + "</option>"
+                                 +"<option value='del'>" + __("Yes") + "</option>"
                                  + "</select>"
                                  + "<input type='hidden' name='biblionumber' value='" + oObj.biblionumber + "'>"
                                  + "<input type='hidden' name='borrowernumber' value='" + borrowernumber + "'>"
@@ -130,10 +132,10 @@ $(document).ready(function() {
                                 return "";
                             } else if ( oObj.suspend == 1 ) {
                                 return "<a class='hold-resume btn btn-default btn-xs' id='resume" + oObj.reserve_id + "'>"
-                                     + "<i class='fa fa-play'></i> " + RESUME + "</a>";
+                                     +"<i class='fa fa-play'></i> " + __("Resume") + "</a>";
                             } else {
                                 return "<a class='hold-suspend btn btn-default btn-xs' id='suspend" + oObj.reserve_id + "'>"
-                                     + "<i class='fa fa-pause'></i> " + SUSPEND + "</a>";
+                                     +"<i class='fa fa-pause'></i> " + __("Suspend") + "</a>";
                             }
                         }
                     },
@@ -142,15 +144,15 @@ $(document).ready(function() {
                             var data = "";
 
                             if ( oObj.suspend == 1 ) {
-                                data += "<p>" + HOLD_IS_SUSPENDED;
+                                data += "<p>" + __("Hold is <strong>suspended</strong>");
                                 if ( oObj.suspend_until ) {
-                                    data += " " + UNTIL.format( oObj.suspend_until_formatted );
+                                    data += " " + __("until %s").format(oObj.suspend_until_formatted);
                                 }
                                 data += "</p>";
                             }
 
                             if ( oObj.itemtype_limit ) {
-                                data += NEXT_AVAILABLE_ITYPE.format( oObj.itemtype_limit );
+                                data += __("Next available %s item").format(oObj.itemtype_limit);
                             }
 
                             if ( oObj.barcode ) {
@@ -158,22 +160,22 @@ $(document).ready(function() {
                                 if ( oObj.found == "W" ) {
 
                                     if ( oObj.waiting_here ) {
-                                        data += ITEM_IS_WAITING_HERE;
+                                        data += __("Item is <strong>waiting here</strong>");
                                     } else {
-                                        data += ITEM_IS_WAITING;
-                                        data += " " + AT.format( oObj.waiting_at );
+                                        data += __("Item is <strong>waiting</strong>");
+                                        data += " " + __("at %s").format(oObj.waiting_at);
                                     }
 
                                 } else if ( oObj.transferred ) {
-                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch, oObj.date_sent );
+                                    data += __("Item is <strong>in transit</strong> from %s since %s").format(oObj.from_branch, oObj.date_sent);
                                 } else if ( oObj.not_transferred ) {
-                                    data += NOT_TRANSFERRED_YET.format( oObj.not_transferred_by );
+                                    data += __("Item hasn't been transferred yet from %s").format(oObj.not_transferred_by);
                                 }
                                 data += "</em>";
                             }
                             return data;
                         }
-                   }
+                    }
                 ],
                 "bPaginate": false,
                 "bProcessing": true,
@@ -203,7 +205,7 @@ $(document).ready(function() {
                           holdsTable.api().ajax.reload();
                       } else {
                         if ( data.error == "HOLD_NOT_FOUND" ) {
-                            alert ( RESUME_HOLD_ERROR_NOT_FOUND );
+                            alert( __("Unable to resume, hold not found") );
                             holdsTable.api().ajax.reload();
                         }
                       }
@@ -249,22 +251,22 @@ $(document).ready(function() {
             <form id='suspend-modal-form' class='form-inline'>\
                 <div class='modal-header'>\
                     <button type='button' class='closebtn' data-dismiss='modal' aria-hidden='true'>×</button>\
-                    <h3 id='suspend-modal-label'>" + SUSPEND_HOLD_ON + " <i><span id='suspend-modal-title'></span></i></h3>\
+                    <h3 id='suspend-modal-label'>" + __("Suspend hold on") + " <i><span id='suspend-modal-title'></span></i></h3>\
                 </div>\
 \
                 <div class='modal-body'>\
                     <input type='hidden' id='suspend-modal-reserve_id' name='reserve_id' />\
 \
-                    <label for='suspend-modal-until'>" + SUSPEND_UNTIL + "</label>\
+                    <label for='suspend-modal-until'>" + __("Suspend until:") + "</label>\
                     <input name='suspend_until' id='suspend-modal-until' class='suspend-until' size='10' />\
 \
-                    <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + CLEAR_DATE_TO_SUSPEND_INDEFINITELY + "</a></p>\
+                    <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + __("Clear date to suspend indefinitely") + "</a></p>\
 \
                 </div>\
 \
                 <div class='modal-footer'>\
-                    <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" + SUSPEND + "</button>\
-                    <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + CANCEL + "</a>\
+                    <button id='suspend-modal-submit' class='btn btn-primary' type='submit' name='submit'>" + __("Suspend") + "</button>\
+                    <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + __("Cancel") + "</a>\
                 </div>\
             </form>\
             </div>\
@@ -283,10 +285,10 @@ $(document).ready(function() {
               holdsTable.api().ajax.reload();
           } else {
             if ( data.error == "INVALID_DATE" ) {
-                alert( SUSPEND_HOLD_ERROR_DATE );
+                alert( __("Unable to suspend hold, invalid date") );
             }
             else if ( data.error == "HOLD_NOT_FOUND" ) {
-                alert ( SUSPEND_HOLD_ERROR_NOT_FOUND );
+                alert( __("Unable to suspend hold, hold not found") );
                 holdsTable.api().ajax.reload();
             }
           }

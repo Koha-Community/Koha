@@ -1,4 +1,4 @@
-/* global BROWSER_PREVIOUS BROWSER_NEXT BROWSER_RETURN_TO_SEARCH */
+/* global __ */
 
 if ( KOHA === undefined ) var KOHA = {};
 
@@ -81,16 +81,16 @@ KOHA.browser = function (searchid, biblionumber) {
                     var prevbutton;
                     var nextbutton;
                     if (me.curPos === 0 && current_search.offset === 1) {
-                        prevbutton = '<span id="browse-previous" class="browse-button" title="' + BROWSER_PREVIOUS + '"><i class="fa fa-arrow-left"></i></span>';
+                        prevbutton = '<span id="browse-previous" class="browse-button" title="' + __("Previous") + '"><i class="fa fa-arrow-left"></i></span>';
                     } else {
-                        prevbutton = '<a href="#" id="browse-previous" class="browse-button" title="' + BROWSER_PREVIOUS + '"><i class="fa fa-arrow-left"></i></a>';
+                        prevbutton = '<a href="#" id="browse-previous" class="browse-button" title="' + __("Previous") + '"><i class="fa fa-arrow-left"></i></a>';
                     }
                     if (current_search.offset + me.curPos == current_search.total) {
-                        nextbutton = '<span id="browse-next" class="browse-button" title="' + BROWSER_NEXT + '"><i class="fa fa-arrow-right"></i></span>';
+                        nextbutton = '<span id="browse-next" class="browse-button" title="' + __("Next") + '"><i class="fa fa-arrow-right"></i></span>';
                     } else {
-                        nextbutton = '<a href="#" id="browse-next" class="browse-button" title="' + BROWSER_NEXT + '"><i class="fa fa-arrow-right"></i></a>';
+                        nextbutton = '<a href="#" id="browse-next" class="browse-button" title="' + __("Next") + '"><i class="fa fa-arrow-right"></i></a>';
                     }
-                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="searchwithcontext"><i class="fa fa-list"></i> ' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
+                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="searchwithcontext"><i class="fa fa-list"></i> ' + __("Results") + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
                     $('a#browse-previous').click(function (ev) {
                         ev.preventDefault();
                         browseRecords(-1);
