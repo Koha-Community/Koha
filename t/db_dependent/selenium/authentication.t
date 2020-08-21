@@ -97,7 +97,26 @@ SKIP: {
         $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->get($mainpage); # This should not be needed but we the next find_element fails randomly
-        $driver->find_element('//div[@id="login"]'); # logged out
+
+        { # Temporary debug
+            $driver->error_handler(
+                sub {
+                    my ( $driver, $selenium_error ) = @_;
+                    print STDERR "\nSTRACE:";
+                    my $i = 1;
+                    while ( (my @call_details = (caller($i++))) ){
+                        print STDERR "\t" . $call_details[1]. ":" . $call_details[2] . " in " . $call_details[3]."\n";
+                    }
+                    print STDERR "\n";
+                    print STDERR sprintf("Is logged in patron: %s (%s)?\n", $patron->firstname, $patron->surname );
+                    $s->capture( $driver );
+                    croak $selenium_error;
+                }
+            );
+
+            $driver->find_element('//div[@id="login"]'); # logged out
+            $s->add_error_handler; # Reset to the default error handler
+        }
 
         # Using the form on the right
         $s->fill_form( { userid => $patron->userid, password => $password } );
