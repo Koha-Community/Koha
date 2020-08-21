@@ -306,7 +306,7 @@
 
     <!-- Cashup summary modal -->
     [% IF register.last_cashup %]
-    <div class="modal" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
+    <div class="modal printable" id="cashupSummaryModal" tabindex="-1" role="dialog" aria-labelledby="cashupSummaryLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -356,6 +356,7 @@
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
                 </div> <!-- /.modal-footer -->
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
@@ -425,6 +426,22 @@
             var accountlines_id = $(this).data('accountline');
             var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=' + accountlines_id, '_blank');
             win.focus();
+        });
+
+        $('.modal.printable').on('shown.bs.modal', function() {
+            $('.modal-dialog', this).addClass('focused');
+            $('body').addClass('modalprinter');
+
+            if ($(this).hasClass('autoprint')) {
+                window.print();
+            }
+        }).on('hidden.bs.modal', function () {
+            $('.modal-dialog', this).removeClass('focused');
+            $('body').removeClass('modalprinter');
+        });
+
+        $('.printModal').click(function() {
+            window.print();
         });
 
         $(document).ready(function() {
