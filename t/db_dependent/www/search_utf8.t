@@ -256,7 +256,14 @@ sub test_search{
     $agent->field('q', $search_key);
     $agent->click();
     my $intra_text = $agent->text() ;
-    like( $intra_text, qr|Publisher: $publisher|, );
+    my $diag = sub {
+        my $pref = 'XSLTResultsDisplay';
+        my $xslt_file = C4::Context->preference('marcflavour') . 'slim2intranetResults.xsl';
+        my $xslt_filepath = C4::XSLT::_get_best_default_xslt_filename( C4::Context->config('intrahtdocs'), C4::Context->preference("template"), 'en', $xslt_file );
+        return sprintf( "===DIAG===\n%s is %s\n%s %s\n==========", $pref, C4::Context->preference($pref), $xslt_filepath, ( -f $xslt_filepath ? 'exists' : 'does not exist' ));
+    };
+
+    like( $intra_text, qr|Publisher: $publisher|, ) or diag($diag->());
 
     $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
     $agent->form_number(5);
