@@ -98,15 +98,15 @@ sub cashup_summary {
 
     my $outgoing_transactions = $self->register->accountlines->search(
         { %{$conditions}, credit_type_code => undef },
-        { select => 'accountlines_id' } );
+    );
     my $income_transactions = $self->register->accountlines->search(
         { %{$conditions}, debit_type_code => undef },
-        { select => 'accountlines_id' } );
+    );
 
     my $income_summary = Koha::Account::Offsets->search(
         {
             'me.credit_id' =>
-              { '-in' => $income_transactions->_resultset->as_query },
+              { '-in' => $income_transactions->_resultset->get_column('accountlines_id')->as_query },
             'me.debit_id' => { '!=' => undef }
         },
         {
@@ -120,7 +120,7 @@ sub cashup_summary {
     my $outgoing_summary = Koha::Account::Offsets->search(
         {
             'me.debit_id' =>
-              { '-in' => $outgoing_transactions->_resultset->as_query },
+              { '-in' => $outgoing_transactions->_resultset->get_column('accountlines_id')->as_query },
             'me.credit_id' => { '!=' => undef }
         },
         {
@@ -145,20 +145,14 @@ sub cashup_summary {
             credit_type      => { description => $_->get_column('credit_description') }
         }
     } $outgoing_summary->as_list;
+
     $summary = {
-        from_date => $previous ? $previous->timestamp : undef,
-        to_date   => $self->timestamp,
-        income    => \@income,
-        outgoing  => \@outgoing,
-        total     => ( $outgoing_transactions->total * -1 ) +
-          ( $income_transactions->total * -1 ),
-        bankable => (
-            $outgoing_transactions->search( { payment_type => 'CASH' } )
-              ->total * -1
-        ) + (
-            $income_transactions->search( { payment_type => 'CASH' } )->total *
-              -1
-        )
+        from_date             => $previous ? $previous->timestamp : undef,
+        to_date               => $self->timestamp,
+        income                => \@income,
+        outgoing              => \@outgoing,
+        income_transactions   => $income_transactions,
+        outgoing_transactions => $outgoing_transactions,
     };
 
     return $summary;

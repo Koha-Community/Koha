@@ -342,12 +342,14 @@
                         <tfoot>
                             <tr>
                                 <td>Total</td>
-                                <td>[% register.last_cashup.cashup_summary.total | $Price %]</td>
+                                <td>[% ( register.last_cashup.cashup_summary.outgoing_transactions.total + register.last_cashup.cashup_summary.income_transactions.total) * -1 | $Price %]</td>
                             </tr>
+                            [% FOREACH pt IN payment_types %]
                             <tr>
-                                <td>Bankable</td>
-                                <td>[% register.last_cashup.cashup_summary.bankable | $Price %]</td>
+                                <td>[% pt.lib %]</td>
+                                <td>[% ( register.last_cashup.cashup_summary.outgoing_transactions.total( payment_type => pt.authorised_value ) + register.last_cashup.cashup_summary.income_transactions.total( payment_type => pt.authorised_value )) * -1 | $Price %]</td>
                             </tr>
+                            [% END %]
 
                         </tfoot>
                     </table>
