@@ -183,7 +183,6 @@ sub store {
             and $pre_mod_item->itemlost > 0 )
         {
             $self->_set_found_trigger($pre_mod_item);
-            $self->paidfor('');
         }
 
         logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
@@ -936,7 +935,6 @@ sub to_api_mapping {
         itemnotes                => 'public_notes',
         itemnotes_nonpublic      => 'internal_notes',
         holdingbranch            => 'holding_library_id',
-        paidfor                  => undef,
         timestamp                => 'timestamp',
         location                 => 'location',
         permanent_location       => 'permanent_location',
