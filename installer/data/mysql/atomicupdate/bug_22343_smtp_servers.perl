@@ -36,6 +36,12 @@ if( CheckVersion( $DBversion ) ) {
         });
     }
 
+    $dbh->do(q{
+        INSERT IGNORE INTO permissions
+            (module_bit, code, description)
+        VALUES ( 3, 'manage_smtp_servers', 'Manage SMTP servers configuration');
+    });
+
     # Always end with this (adjust the bug info)
     NewVersion( $DBversion, 22343, "Add SMTP configuration options");
 }
