@@ -1183,7 +1183,7 @@
                                 [% CASE "email" -%]
                                     <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email"><i class="fa fa-envelope-o"></i></a></div>
                                 [% CASE "twitter" -%]
-                                    <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title |url %]" data-lang="[% lang | html %]" title="Share on Twitter"><i class="fa fa-twitter"></i></a></div>
+                                    <div><a id="twitter" href="https://twitter.com/share?url=[% current_url|url %]&text=[% title | uri %]" class="twitter-share-button" data-count="none" data-lang="[% lang | html %]" title="Share on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></div>
                             [% END -%]
                         [% END %]
                     </div>
@@ -1413,9 +1413,6 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE greybox.inc %]
-[% IF ( SocialNetworks ) %]
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-[% END %]
 [% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %][% END %]
 
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
