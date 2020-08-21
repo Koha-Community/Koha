@@ -1158,7 +1158,7 @@
                         <div><a id="facebook" href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook">Facebook</a></div>
                         <div><a id="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn">LinkedIn</a></div>
                         <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email">Email</a></div>
-                        <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title |url %]" data-lang="[% lang | html %]">Tweet</a></div>
+                        <div><a id="twitter" href="https://twitter.com/share?url=[% current_url|url %]&text=[% title | uri %]" class="twitter-share-button" data-count="none" data-lang="[% lang | html %]">Tweet</i></a></div>
                     </div>
                 [% END %]
             </div> <!-- / .ulactioncontainer -->
@@ -1386,9 +1386,6 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE greybox.inc %]
-[% IF ( SocialNetworks ) %]
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-[% END %]
 [% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %][% END %]
 
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
