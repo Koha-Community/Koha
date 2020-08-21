@@ -81,9 +81,13 @@ if ( C4::Context->preference("LocalCoverImages") ) {
     );
 }
 $template->{VARS}->{'count'}        = $itemcount;
-$template->{VARS}->{'biblionumber'} = $biblionumber;
 $template->param(C4::Search::enabled_staff_search_views);
 $template->{VARS}->{'biblio'} = $biblio;
+
+$template->param(
+    biblionumber => $biblionumber,
+    itemnumber => $itemnumber,
+);
 
 my $hold_count = $biblio ? $biblio->holds->count : 0;
 $template->param( holdcount => $hold_count );

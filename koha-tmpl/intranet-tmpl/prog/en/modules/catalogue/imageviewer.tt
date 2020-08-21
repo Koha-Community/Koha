@@ -56,7 +56,7 @@
             <div class="col-md-4">
                 <ul class="thumbnails">
                     [% FOREACH image IN images %]
-                            <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
+                            <li id="imagenumber-[% image.imagenumber | html %]" data-itemnumber="[% image.itemnumber %]" data-biblionumber="[% image.biblionumber %]" class="thumbnail">
                             <a class="show_cover" data-coverimg="[% image.imagenumber | html %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image.imagenumber | html %]">
                                 [% IF loop.first %]
                                     <img class="selected" id="thumbnail_[% image.imagenumber | html %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | html %]&amp;thumbnail=1" alt="Thumbnail" />
@@ -73,10 +73,21 @@
             </div> <!-- /.col-md-4 -->
         </div> <!-- /.row -->
     [% ELSE %]
-        <div class="dialog message">There are no images for this record.</div>
+        [% IF itemnumber %]
+            <div class="dialog message">There are no images for this item.</div>
+        [% ELSE %]
+            <div class="dialog message">There are no images for this record.</div>
+        [% END %]
         [% IF ( CAN_user_tools_upload_local_cover_images ) %]
             <hr />
-            <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+            <p>
+                Upload an image file:
+                [% IF itemnumber %]
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% itemnumber | uri %]&amp;filetype=image">
+                [% ELSE %]
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image">
+                [% END %]
+                <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
             </p>
         [% END %]
     [% END %]
@@ -126,6 +137,8 @@
 
         function removeLocalImage(imagenumber) {
             var thumbnail = $("#imagenumber-" + imagenumber );
+            var itemnumber = $(thumbnail).data("itemnumber");
+            var biblionumber = $(thumbnail).data("biblionumber");
             var copy = thumbnail.html();
             thumbnail.find("img").css("opacity", ".2");
             thumbnail.find("a.remove").html("<img style='display:inline-block' src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' />");
@@ -135,7 +148,11 @@
                 success: function(data) {
                     $(data).each( function() {
                         if ( this.deleted == 1 ) {
-                            location.href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=" + biblionumber;
+                            if( itemnumber ) {
+                                location.href="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=" + itemnumber;
+                            } else {
+                                location.href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=" + biblionumber;
+                            }
                         } else {
                             thumbnail.html( copy );
                             alert(_("An error occurred on deleting this image"));
