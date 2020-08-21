@@ -556,6 +556,7 @@ sub LinkBibHeadingsToAuthorities {
     }
     require C4::Heading;
     require C4::AuthoritiesMarc;
+
     $allowrelink = 1 unless defined $allowrelink;
     my $num_headings_changed = 0;
     foreach my $field ( $bib->fields() ) {
