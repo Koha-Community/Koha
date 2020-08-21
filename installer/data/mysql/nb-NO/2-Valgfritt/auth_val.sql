@@ -105,3 +105,7 @@ INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES
 -- return claims
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'RET_BY_PATRON', 'Returned by patron');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'FOUND_IN_LIB',  'Found in library');
+
+-- hold cancellation
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('HOLD_CANCELLATION','NOT_FOUND','Item could not be located on shelves');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('HOLD_CANCELLATION','DAMAGED','Item was found to be too damaged to fill hold');
