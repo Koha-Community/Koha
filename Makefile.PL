@@ -384,6 +384,7 @@ my $target_map = {
   './suggestion'                => 'INTRANET_CGI_DIR',
   './svc'                       => 'INTRANET_CGI_DIR',
   './t'                         => 'NONE',
+  './xt'                        => 'NONE',
   './tags'                      => 'INTRANET_CGI_DIR',
   './tmp'                       => 'NONE', # FIXME need to determine whether
                                            # Koha generates any persistent temp files
