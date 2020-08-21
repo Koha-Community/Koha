@@ -651,7 +651,6 @@ CREATE TABLE `deleteditems` (
   `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
   `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
@@ -860,7 +859,6 @@ CREATE TABLE `items` ( -- holdings/item information
   `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
   `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
