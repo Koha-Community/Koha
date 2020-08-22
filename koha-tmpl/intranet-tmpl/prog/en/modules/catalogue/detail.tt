@@ -149,7 +149,7 @@
         [% END %]
 
         [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
-            <span id="catalogue_detail_elastic_record" class="results_summary"><span class="label">Elasticsearch Record :</span> <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="ELASTIC" class="previewElastic">Show</a></span>
+            <span id="catalogue_detail_elastic_record" class="results_summary"><span class="label">Elasticsearch record:</span> <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a></span>
         [% END %]
 
         [% IF ( holdcount ) %]
@@ -1127,7 +1127,7 @@ Note that permanent location is a code, and location may be an authval.
     <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="elasticPreviewLabel">Elastic record</h3>
+        <h3 id="elasticPreviewLabel">Elasticsearch record</h3>
     </div>
     <div class="modal-body">
         <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
