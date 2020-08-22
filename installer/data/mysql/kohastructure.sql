@@ -3980,7 +3980,7 @@ CREATE TABLE `hold_fill_targets` (
   `itemnumber` int(11) NOT NULL,
   `source_branchcode`  varchar(10) default NULL,
   `item_level_request` tinyint(4) NOT NULL default 0,
-  `reserve_id` int(11) DEFAULT NULL
+  `reserve_id` int(11) DEFAULT NULL,
   PRIMARY KEY `itemnumber` (`itemnumber`),
   KEY `bib_branch` (`biblionumber`, `source_branchcode`),
   CONSTRAINT `hold_fill_targets_ibfk_1` FOREIGN KEY (`borrowernumber`)
