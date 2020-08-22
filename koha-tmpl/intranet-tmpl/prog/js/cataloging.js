@@ -90,41 +90,57 @@ var Select2Utils = {
     initSelect2: function(selects) {
         if ($.fn.select2) {
             if ( window.CAN_user_parameters_manage_auth_values === undefined || ! CAN_user_parameters_manage_auth_values ) {
-                $(selects).select2();
-            } else {
-                $(selects).select2({
-                    tags: true,
-                    createTag: function (tag) {
-                        return {
-                            id: tag.term,
-                            text: tag.term,
-                            newTag: true
-                        };
-                    },
-                    templateResult: function(state) {
-                        if (state.newTag) {
-                            return state.text + " " + __("(select to create)");
-                        }
-                        return state.text;
-                    }
-                }).on("select2:select", function(e) {
-                    if(e.params.data.newTag){
-                        current_select2 = this;
-                        var category = $(this).data("category");
-                        $("#avCreate #new_av_category").html(category);
-                        $("#avCreate input[name='category']").val(category);
-                        $("#avCreate input[name='value']").val(e.params.data.text);
-                        $("#avCreate input[name='description']").val(e.params.data.text);
-
-                        $(this).val($(this).find("option:first").val()).trigger('change');
-                        $('#avCreate').modal({show:true});
-                    }
-                }).on("select2:clear", function () {
+                $(selects).select2().on("select2:clear", function () {
                     $(this).on("select2:opening.cancelOpen", function (evt) {
                         evt.preventDefault();
-
                         $(this).off("select2:opening.cancelOpen");
                     });
+                });
+            } else {
+                $(selects).each(function(){
+                    if ( !$(this).data("category") ) {
+                        $(this).select2().on("select2:clear", function () {
+                            $(this).on("select2:opening.cancelOpen", function (evt) {
+                                evt.preventDefault();
+                                $(this).off("select2:opening.cancelOpen");
+                            });
+                        });
+                    } else {
+                        $(this).select2({
+                            tags: true,
+                            createTag: function (tag) {
+                                return {
+                                    id: tag.term,
+                                    text: tag.term,
+                                    newTag: true
+                                };
+                            },
+                            templateResult: function(state) {
+                                if (state.newTag) {
+                                    return state.text + " " + __("(select to create)");
+                                }
+                                return state.text;
+                            }
+                        }).on("select2:select", function(e) {
+                            if(e.params.data.newTag){
+                                current_select2 = this;
+                                var category = $(this).data("category");
+                                $("#avCreate #new_av_category").html(category);
+                                $("#avCreate input[name='category']").val(category);
+                                $("#avCreate input[name='value']").val(e.params.data.text);
+                                $("#avCreate input[name='description']").val(e.params.data.text);
+
+                                $(this).val($(this).find("option:first").val()).trigger('change');
+                                $('#avCreate').modal({show:true});
+                            }
+                        }).on("select2:clear", function () {
+                            $(this).on("select2:opening.cancelOpen", function (evt) {
+                                evt.preventDefault();
+
+                                $(this).off("select2:opening.cancelOpen");
+                            });
+                        });
+                    }
                 });
             }
         }
