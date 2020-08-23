@@ -25,6 +25,7 @@ use C4::Context;
 
 use Koha::Database;
 use Koha::StockRotationStages;
+use Koha::SMTP::Servers;
 
 use base qw(Koha::Object);
 
@@ -63,6 +64,57 @@ sub get_effective_marcorgcode {
     my ( $self )  = @_;
 
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
+}
+
+=head3 smtp_server
+
+    my $smtp_server = $library->smtp_server;
+    $library->smtp_server({ smtp_server => $smtp_server });
+    $library->smtp_server({ smtp_server => undef });
+
+Accessor for getting and setting the library's SMTP server.
+
+Returns the effective SMTP server configuration to be used on the library. The returned
+value is always a I<Koha::SMTP::Server> object.
+
+Setting it to undef will remove the link to a specific SMTP server and effectively
+make the library use the default setting
+
+=cut
+
+sub smtp_server {
+    my ( $self, $params ) = @_;
+
+    my $library_smtp_server_rs = $self->_result->library_smtp_server;
+
+    if ( exists $params->{smtp_server} ) {
+
+        $self->_result->result_source->schema->txn_do( sub {
+            $library_smtp_server_rs->delete
+                if $library_smtp_server_rs;
+
+            if ( defined $params->{smtp_server} ) {
+                # Set the new server
+                # Remove any already set SMTP server
+
+                my $smtp_server = $params->{smtp_server};
+                $smtp_server->_result->add_to_library_smtp_servers({ library_id => $self->id });
+            }
+        });
+    } # else => reset to default
+    else {
+        # Getter
+        if ( $library_smtp_server_rs ) {
+            # use Data::Printer colored => 1;
+            # p($library_smtp_server_rs);
+            return Koha::SMTP::Servers->find(
+                $library_smtp_server_rs->smtp_server_id );
+        }
+
+        return Koha::SMTP::Servers->get_default;
+    }
+
+    return $self;
 }
 
 =head3 inbound_email_address
