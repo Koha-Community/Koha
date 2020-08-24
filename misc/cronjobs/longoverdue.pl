@@ -36,7 +36,6 @@ BEGIN {
 
 use Getopt::Long;
 use Pod::Usage;
-use List::Util qw/ any /;
 
 use C4::Circulation qw/LostItem MarkIssueReturned/;
 use C4::Context;
@@ -298,6 +297,15 @@ sub bounds {
 
 # FIXME - This sql should be inside the API.
 sub longoverdue_sth {
+    my ( $params ) = @_;
+    my $skip_lost_values = $params->{skip_lost_values};
+
+    my $skip_lost_values_sql = q{};
+    if ( @$skip_lost_values ) {
+        my $values = join( ',', map { qq{'$_'} } @$skip_lost_values );
+        $skip_lost_values_sql = "AND itemlost NOT IN ( $values )"
+    }
+
     my $query = "
     SELECT items.itemnumber, borrowernumber, date_due, itemlost
       FROM issues, items
@@ -305,6 +313,7 @@ sub longoverdue_sth {
       AND  DATE_SUB(CURDATE(), INTERVAL ? DAY)  > date_due
       AND  DATE_SUB(CURDATE(), INTERVAL ? DAY) <= date_due
       AND  itemlost <> ?
+      $skip_lost_values_sql
      ORDER BY date_due
     ";
     return C4::Context->dbh->prepare($query);
@@ -376,7 +385,7 @@ my $i = 0;
 # FIXME - The item is only marked returned if you supply --charge .
 #         We need a better way to handle this.
 #
-my $sth_items = longoverdue_sth();
+my $sth_items = longoverdue_sth({ skip_lost_values => \@skip_lost_values });
 
 foreach my $startrange (sort keys %$lost) {
     if( my $lostvalue = $lost->{$startrange} ) {
@@ -389,10 +398,6 @@ foreach my $startrange (sort keys %$lost) {
         $sth_items->execute($startrange, $endrange, $lostvalue);
         $count=0;
         ITEM: while (my $row=$sth_items->fetchrow_hashref) {
-            if ( @skip_lost_values ) {
-                next ITEM if any { $_ eq $row->{itemlost} } @skip_lost_values;
-            }
-
             if( $filter_borrower_categories ) {
                 my $category = uc Koha::Patrons->find( $row->{borrowernumber} )->categorycode();
                 next ITEM unless ( $category_to_process{ $category } );
