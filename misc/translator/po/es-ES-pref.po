@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2020-07-21 04:19+0000\n"
-"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
+"PO-Revision-Date: 2020-08-21 20:27+0000\n"
+"Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
 "Language: es\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1595305151.706155\n"
+"X-POOTLE-MTIME: 1598041643.262849\n"
 "X-Pootle-Path: /es/18.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1671,10 +1671,7 @@ msgstr "Utilice el siguiente texto para editar cómo los registros de autoridad 
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/merge_authorities.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/merge_authorities.pl</code>. Pídale "
-"al administrador del sistema que lo programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/merge_authorities.pl</code>. Pídale al administrador del sistema que lo programe."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
@@ -2119,20 +2116,27 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr "Cuando se crean los ítems, asignarles ubicación temporaria en"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# <br />"
+msgid "cataloguing.pref#NotesToHide# <br />"
 msgstr "<br />"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgid "cataloguing.pref#NotesToHide# Don't show"
 msgstr "No mostrar"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr "Para campos ocultos de otras páginas tal como la vista normal, utilice la configuración de visibilidad para subcampos en la sección de hojas de trabajo bibliográfica MARC del módulo de administración."
+msgid "cataloguing.pref#NotesToHide# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+"Para ocultar campos de otras páginas tal como la vista normal, utilice la "
+"configuración de visibilidad para subcampos en la sección de hojas de "
+"trabajo bibliográfica MARC del módulo de administración."
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr "campos de nota en las pestañas 'Notas de título' y 'Descripción' en las páginas de vista detallada del OPAC e interfaz administrativa. Utilice una coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgid "cataloguing.pref#NotesToHide# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr ""
+"campos de nota en las pestañas 'Notas de título' y 'Descripción' en las "
+"páginas de vista detallada del OPAC e interfaz administrativa. Utilice una "
+"coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 "
+"(UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2266,9 +2270,7 @@ msgstr "No mostrar"
 
 # Cataloging > Spine Labels
 msgid "cataloguing.pref#SpineLabelShowPrintOnBibDetails# buttons on the bib details page to print item spine labels."
-msgstr ""
-"botones en la página de detalles de los registros bibliográficos para "
-"imprimir el marbete/tejuelo del ítem."
+msgstr "botones en la página de detalles de los registros bibliográficos para imprimir el marbete/tejuelo del ítem."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces."
@@ -2924,7 +2926,7 @@ msgstr "No"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron."
-msgstr "permitir a restricciones de RETRASOS provocados por envío de avisos el ser purgados automáticamente cuando todos los ejemplares retrasados son devueltos por un usuario."
+msgstr "circulation.pref#AutoRemoveOverduesRestrictions# permite que las restricciones de retrasos (OVERDUES) activadas por avisos enviados se borren automáticamente cuando un usuario devuelve todos los ítems atrasados."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -3769,7 +3771,7 @@ msgstr "Habilitar"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# onsite checkout by default if last checkout was an onsite one"
-msgstr "devolución en sitio por defecto si la última devolución fue una en sitio"
+msgstr "circulación.pref#OnSiteCheckoutAutoCheck# préstamo in situ por defecto si el último préstamo fue in situ"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -6291,18 +6293,6 @@ msgid "opac.pref#EnablePayPalOpacPayments# patrons to make payments from the OPA
 msgstr "a usuarios hacer pagos desde el OPAC via PayPal en"
 
 # OPAC > Appearance
-msgid "opac.pref#GoogleIndicTransliteration# Don't show"
-msgstr "No mostrar"
-
-# OPAC > Appearance
-msgid "opac.pref#GoogleIndicTransliteration# GoogleIndicTransliteration on the OPAC."
-msgstr "GoogleIndicTransliteration en el OPAC."
-
-# OPAC > Appearance
-msgid "opac.pref#GoogleIndicTransliteration# Show"
-msgstr "Mostrar"
-
-# OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
 msgstr "moviendo los resultados al frente e incrementando el tamaño o resaltando las filas para dichos resultados. (Solo para no-XSLT)"
 
@@ -7204,15 +7194,11 @@ msgstr "Habilite"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
-msgstr ""
-"el OPAC de Koha como público. Un OPAC privado requiere autenticarse antes de "
-"poder acceder al mismo. "
+msgstr "el OPAC de Koha como público. Un OPAC privado requiere autenticarse antes de poder acceder al mismo. "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
-msgstr ""
-"Nota: Esto no afecta la API pública, vea "
-"<code>RESTPublicAnonymousRequests</code> para controlar la API."
+msgstr "Nota: Esto no afecta la API pública, vea <code>RESTPublicAnonymousRequests</code> para controlar la API."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -7404,9 +7390,7 @@ msgstr "No permitir"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistration# library patrons to register for an account via the OPAC."
-msgstr ""
-"que los usuarios de la biblioteca se registren y creen una cuenta a través "
-"del OPAC."
+msgstr "que los usuarios de la biblioteca se registren y creen una cuenta a través del OPAC."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -7438,8 +7422,7 @@ msgstr "Requerir"
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationConfirmEmail# users to confirm their email address by entering it twice."
-msgstr ""
-"a los usuarios confirmar su dirección de email ingresando la misma dos veces."
+msgstr "a los usuarios confirmar su dirección de email ingresando la misma dos veces."
 
 # OPAC > Self registration and modification
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
