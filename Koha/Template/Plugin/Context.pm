@@ -38,6 +38,12 @@ Especially useful to call ->search
 
 =cut
 
+=head3 Scalar
+
+Return object set in scalar context
+
+=cut
+
 sub Scalar {
     my ( $self, $set, $method ) = @_;
     $set = $set->$method;
