@@ -236,9 +236,10 @@
         [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/z3950_search.js") | $raw %]
-    [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'z3950_search.inc' %]
+    [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
             var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
@@ -257,7 +258,6 @@
             $("#result_pagenumbers").hide();
         }
     </script>
-    [% INCLUDE 'z3950_search.inc' %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
