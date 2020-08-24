@@ -22636,6 +22636,13 @@ if (CheckVersion($DBversion)) {
     NewVersion( $DBversion, 19036, "Add accountlines.credit_number, account_credit_types.credit_number_enabled and syspref AutoCreditNumber" );
 }
 
+$DBversion = '20.06.00.027';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES('BiblioItemtypeInfo', '0','Control whether biblio level itemtype image displays','0','YesNo')" );
+
+    NewVersion( $DBversion, 8732, 'Add new BiblioItemtypeInfo to system preferences' );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
