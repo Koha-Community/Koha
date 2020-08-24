@@ -355,7 +355,7 @@ if ($op=~/else/) {
         }
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
 
-        next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue ) and ($displayby ne 'branchcode' or $branchfilter ne '__ANY__' );
+        next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue ) and ($displayby ne 'branchcode' && $branchfilter ne '__ANY__' );
         $$suggestion_ref{$displayby} = $criteriumvalue;
 
         my $suggestions = &SearchSuggestion({ %$suggestion_ref, archived => $filter_archived });
