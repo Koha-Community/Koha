@@ -488,9 +488,13 @@ sub marc_records_to_documents {
 
         if ( $self->index eq 'authorities' ){
             my $authtypecode = GuessAuthTypeCode( $record );
-            my $field = $record->field( $auth_match_headings{ $authtypecode } );
-            my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
-            push @{$record_document->{'match-heading'}}, $heading->search_form if $heading;
+            if( $authtypecode ){
+                my $field = $record->field( $auth_match_headings{ $authtypecode } );
+                my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
+                push @{$record_document->{'match-heading'}}, $heading->search_form if $heading;
+            } else {
+                warn "Cannot determine authority type for record: " . $record->field('001')->as_string;
+            }
         }
 
         my $mappings = $rules->{leader};
