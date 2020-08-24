@@ -30,12 +30,8 @@ my $makefile = read_file("$curdir/Makefile.PL");
 my @missing;
 for my $d ( sort @dirs ) {
     chomp $d;
-    next if $d eq './Koha';
-    next if $d eq './C4';
-    next if $d eq './koha-tmpl';
-    next if $d eq './etc';
-    next if $d eq './debian';
-    next if $makefile =~ m|'$d'|gxms;
+    next if $d =~ /\.\/(debian|\.git)$/;
+    next if $makefile =~ m{'$d('|\/)}xms;
     push @missing, $d;
 }
 
