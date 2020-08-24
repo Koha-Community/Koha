@@ -255,17 +255,8 @@ subtest 'cancel' => sub {
 
 subtest 'cancel with reason' => sub {
     plan tests => 7;
-    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
-    my $item_info = {
-        biblionumber     => $biblioitem->biblionumber,
-        biblioitemnumber => $biblioitem->biblioitemnumber,
-        homebranch       => $library->branchcode,
-        holdingbranch    => $library->branchcode,
-        itype            => $itemtype->itemtype,
-    };
-    my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $item = $builder->build_sample_item({ library => $library->branchcode });
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
 
@@ -322,17 +313,8 @@ subtest 'cancel with reason' => sub {
 
 subtest 'cancel all with reason' => sub {
     plan tests => 7;
-    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
-    my $item_info = {
-        biblionumber     => $biblioitem->biblionumber,
-        biblioitemnumber => $biblioitem->biblioitemnumber,
-        homebranch       => $library->branchcode,
-        holdingbranch    => $library->branchcode,
-        itype            => $itemtype->itemtype,
-    };
-    my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $item = $builder->build_sample_item({ library => $library->branchcode });
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
     t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
 
