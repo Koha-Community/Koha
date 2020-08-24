@@ -169,6 +169,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'z3950_search.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
@@ -182,7 +183,6 @@
             }));
         });
     </script>
-    [% INCLUDE 'z3950_search.inc' %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

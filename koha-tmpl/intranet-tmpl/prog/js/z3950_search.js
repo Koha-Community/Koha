@@ -1,3 +1,4 @@
+/* global __ total_pages */
 //z3950_search.js for Authorities, Bib records and Acquisitions module
 function Import(Breeding, recordid, AuthType, FrameworkCode) {
 
@@ -9,6 +10,19 @@ function Import(Breeding, recordid, AuthType, FrameworkCode) {
     window.close();
     return false;
 
+}
+
+function validate_goto_page() {
+    var page = $('#goto_page').val();
+    if (isNaN(page)) {
+        alert( __("The page entered is not a number.") );
+        return false;
+    } else if (page < 1 || page > total_pages) {
+        alert( __("The page should be a number between 1 and %s.").format(total_pages) );
+        return false;
+    } else {
+        return true;
+    }
 }
 
 $( document ).ready( function() {
@@ -44,7 +58,7 @@ $( document ).ready( function() {
     });
     $( "form[name='f']" ).submit( function() {
         if ( $( 'input[type=checkbox]' ).filter( ':checked' ).length == 0 ) {
-            alert( MSG_CHOOSE_Z3950 );
+            alert( __("Please choose at least one external target") );
             $( "body" ).css( "cursor", "default" );
             return false;
         } else {
