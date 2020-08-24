@@ -29,9 +29,11 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'get_default() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config( 'smtp_server', undef );
 
     my $server  = Koha::SMTP::Servers->get_default;
     is( ref($server), 'Koha::SMTP::Server',
@@ -46,6 +48,33 @@ subtest 'get_default() tests' => sub {
         $unblessed_server,
         Koha::SMTP::Servers::default_setting,
         'The default setting is returned if no user-defined default'
+    );
+
+    t::lib::Mocks::mock_config(
+        'smtp_server',
+        {
+            host      => 'localhost.midway',
+            port      => 1234,
+            timeout   => 121,
+            ssl_mode  => 'starttls',
+            user_name => 'tomasito',
+            password  => 'none',
+            debug     => 1
+        }
+    );
+
+    my $smtp_config = C4::Context->config('smtp_server');
+
+    $server = Koha::SMTP::Servers->get_default;
+    is( ref($server), 'Koha::SMTP::Server',
+        'An object of the right type is returned' );
+
+    $unblessed_server = $server->unblessed;
+    delete $unblessed_server->{id};
+    is_deeply(
+        $unblessed_server,
+        $smtp_config,
+        'The default setting is overridden by the entry in koha-conf.xml'
     );
 
     $schema->storage->txn_rollback;

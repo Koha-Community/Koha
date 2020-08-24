@@ -43,7 +43,16 @@ Returns the default I<Koha::SMTP::Server> object.
 sub get_default {
     my ($self) = @_;
 
-    my $default = Koha::SMTP::Server->new( $self->default_setting );
+    my $default;
+    my $smtp_config = C4::Context->config('smtp_server');
+
+    if ( $smtp_config ) {
+        $default = Koha::SMTP::Server->new( $smtp_config );
+    }
+    else {
+        $default = Koha::SMTP::Server->new( $self->default_setting );
+    }
+
     $default->{_is_system_default} = 1;
     return $default;
 }
