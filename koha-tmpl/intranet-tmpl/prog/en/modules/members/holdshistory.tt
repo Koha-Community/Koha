@@ -97,6 +97,9 @@
               Fulfilled
           [% ELSIF hold.cancellationdate %]
               Cancelled
+                [% IF hold.cancellation_reason %]
+                    ([% AuthorisedValues.GetByCode('HOLD_CANCELLATION', hold.cancellation_reason) %])
+                [% END %]
           [% ELSIF hold.found == 'W' %]
               Waiting
           [% ELSIF hold.found == 'T' %]
