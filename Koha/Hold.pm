@@ -351,12 +351,18 @@ sub is_suspended {
 
 =head3 cancel
 
-my $cancel_hold = $hold->cancel();
+my $cancel_hold = $hold->cancel(
+    {
+        [ charge_cancel_fee => 1||0, ]
+        [ cancellation_reason => $cancellation_reason, ]
+    }
+);
 
 Cancel a hold:
 - The hold will be moved to the old_reserves table with a priority=0
 - The priority of other holds will be updated
 - The patron will be charge (see ExpireReservesMaxPickUpDelayCharge) if the charge_cancel_fee parameter is set
+- The canceled hold will have the cancellation reason added to old_reserves.cancellation_reason if one is passed in
 - a CANCEL HOLDS log will be done if the pref HoldsLog is on
 
 =cut
