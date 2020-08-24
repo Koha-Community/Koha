@@ -76,6 +76,13 @@ Options:
   --tmp-path dir            Set a user defined tmp_path. It defaults to
                             /var/lib/koha/<instance>/tmp
   --letsencrypt             Set up a https-only site with letsencrypt certificates
+  --smtp-host host          SMTP host name
+  --smtp-port NN            SMTP port
+  --smtp-timeout NN         Connection timeout in seconds
+  --smtp-ssl-mode mode      SSL mode. Options are 'disabled' (default), 'ssl' and 'starttls'.
+  --smtp-user-name user     User name to be used on SMTP auth
+  --smtp-password  pass     Password to authenticate SMTP
+  --smtp-debug              Enable debug mode for SMTP
   --help,-h                 Show this help.
 
 Note: the instance name cannot be longer that 11 chars.
@@ -118,6 +125,13 @@ generate_config_file() {
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
         -e "s/__MEMCACHED_SERVERS__/$MEMCACHED_SERVERS/g" \
+        -e "s/__SMTP_HOST__/$SMTP_HOST/g" \
+        -e "s/__SMTP_PORT__/$SMTP_PORT/g" \
+        -e "s/__SMTP_TIMEOUT__/$SMTP_TIMEOUT/g" \
+        -e "s/__SMTP_SSL_MODE__/$SMTP_SSL_MODE/g" \
+        -e "s/__SMTP_USER_NAME__/$SMTP_USER_NAME/g" \
+        -e "s/__SMTP_PASSWORD__/$SMTP_PASSWORD/g" \
+        -e "s/__SMTP_DEBUG__/$SMTP_DEBUG/g" \
         "/etc/koha/$1" > "$2"
 
 }
@@ -244,6 +258,37 @@ set_memcached()
 
 }
 
+set_smtp()
+{
+    if [ "$CLO_SMTP_HOST" != "" ]; then
+        SMTP_HOST=$CLO_SMTP_HOST
+    fi
+
+    if [ "$CLO_SMTP_PORT" != "" ]; then
+        SMTP_PORT=$CLO_SMTP_PORT
+    fi
+
+    if [ "$CLO_SMTP_TIMEOUT" != "" ]; then
+        SMTP_TIMEOUT=$CLO_SMTP_TIMEOUT
+    fi
+
+    if [ "$CLO_SMTP_SSL_MODE" != "" ]; then
+        SMTP_SSL_MODE=$CLO_SMTP_SSL_MODE
+    fi
+
+    if [ "$CLO_SMTP_USER_NAME" != "" ]; then
+        SMTP_USER_NAME=$CLO_SMTP_USER_NAME
+    fi
+
+    if [ "$CLO_SMTP_PASSWORD" != "" ]; then
+        SMTP_PASSWORD=$CLO_SMTP_PASSWORD
+    fi
+
+    if [ "$CLO_SMTP_DEBUG" != "" ]; then
+        SMTP_DEBUG=$CLO_SMTP_DEBUG
+    fi
+}
+
 set_upload_path()
 {
     local instance="$1"
@@ -341,6 +386,15 @@ ZEBRA_LANGUAGE="en"
 ADMINUSER="1"
 PASSWDFILE="/etc/koha/passwd"
 
+# SMTP config
+SMTP_HOST="localhost"
+SMTP_PORT="25"
+SMTP_TIMEOUT="120"
+SMTP_SSL_MODE="disabled"
+SMTP_USER_NAME=""
+SMTP_PASSWORD=""
+SMTP_DEBUG="0"
+
 # memcached variables
 USE_MEMCACHED="yes"
 MEMCACHED_SERVERS=""
@@ -380,7 +434,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,smtp-host:,smtp-port,smtp-timeout:,smtp-ssl-mode:smtp-user-name:,smtp-password:,smtp-debug,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -399,6 +453,13 @@ CLO_TMP_PATH=""
 CLO_LETSENCRYPT=""
 CLO_TEMPLATE_CACHE_DIR=""
 CLO_TIMEZONE=""
+CLO_SMTP_HOST=""
+CLO_SMTP_PORT=""
+CLO_SMTP_TIMEOUT=""
+CLO_SMTP_SSL_MODE=""
+CLO_SMTP_USER_NAME=""
+CLO_SMTP_PASSWORD=""
+CLO_SMTP_DEBUG=""
 
 while true ; do
     case "$1" in
@@ -434,6 +495,20 @@ while true ; do
             CLO_ADMINUSER="$2" ; shift 2 ;;
         --enable-sru)
             ENABLE_SRU="yes" ; shift ;;
+        --smtp-debug)
+            CLO_SMTP_DEBUG="1" ; shift ;;
+        --smtp-host)
+            CLO_SMTP_HOST="$2" ; shift 2 ;;
+        --smtp-port)
+            CLO_SMTP_PORT="$2" ; shift 2 ;;
+        --smtp-timeout)
+            CLO_SMTP_TIMEOUT="$2" ; shift 2 ;;
+        --smtp-ssl-mode)
+            CLO_SMTP_SSL_MODE="$2" ; shift 2 ;;
+        --smtp-user-name)
+            CLO_SMTP_USER_NAME="$2" ; shift 2 ;;
+        --smtp-password)
+            CLO_SMTP_PASSWORD="$2" ; shift 2 ;;
         --sru-port)
             SRU_SERVER_PORT="$2" ; shift 2 ;;
         --template-cache-dir)
@@ -507,6 +582,7 @@ fi
 
 name="$1"
 
+set_smtp
 set_upload_path $name
 set_tmp_path $name
 

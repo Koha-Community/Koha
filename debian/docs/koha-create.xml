@@ -43,6 +43,13 @@
       <arg><option>--upload-path</option> directory</arg>
       <arg><option>--tmp-path</option> directory</arg>
       <arg><option>--letsencrypt</option></arg>
+      <arg><option>--smtp-host</option> host</arg>
+      <arg><option>--smtp-port</option> port</arg>
+      <arg><option>--smtp-timeout</option> n</arg>
+      <arg><option>--smtp-ssl-mode</option> disabled|ssl|starttls</arg>
+      <arg><option>--smtp-user-name</option> user</arg>
+      <arg><option>--smtp-password</option>  pass</arg>
+      <arg><option>--smtp-debug</option></arg>
       <arg><option>--help</option>|<option>-h</option></arg>
 
       <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
@@ -206,6 +213,55 @@
       <term><option>--letsencrypt</option></term>
       <listitem>
         <para>Set up a https-only website with letsencrypt certificates</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-host</option></term>
+      <listitem>
+        <para>Specify the SMTP server <option>hostname</option>. (default: localhost)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-port</option></term>
+      <listitem>
+        <para>Specify the SMTP server <option>port</option>. (default: 25)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-timeout</option></term>
+      <listitem>
+        <para>Timeout for outbound SMTP connections. (default: 120)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-ssl-mode</option></term>
+      <listitem>
+        <para>Set the SSL mode. Options are <option>disabled</option> (default), <option>ssl</option> and <option>starttls</option>.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-user-name</option></term>
+      <listitem>
+        <para>Specify the user name to use for SMTP. (default: empty)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-password</option></term>
+      <listitem>
+        <para>Specify the password for SMTP. (default: empty)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--smtp-debug</option></term>
+      <listitem>
+        <para>Enable debug mode.</para>
       </listitem>
     </varlistentry>
 
