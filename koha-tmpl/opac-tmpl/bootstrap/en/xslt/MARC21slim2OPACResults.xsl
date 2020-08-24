@@ -1381,26 +1381,13 @@
 
                         <!-- First the remaining not for loan categories -->
                         <xsl:variable name="unavailable_items" select="key('item-by-status', 'reallynotforloan')"/>
-                        <xsl:for-each select="$unavailable_items[generate-id() = generate-id(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch))[1])]">
-                            <span>
-                                    <xsl:attribute name="class">
-                                        ItemSummary
-                                        <xsl:value-of select="translate(items:substatus,' ','_')"/>
-                                    </xsl:attribute>
-                                    <xsl:if test="$singleBranchMode=0">
-                                        <span class="ItemBranch"><xsl:value-of select="items:homebranch"/><xsl:text> </xsl:text></span>
-                                    </xsl:if>
-                                      <span class='notforloandesc'><xsl:value-of select="items:substatus"/></span>
-                                      <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
-                                          <span class="CallNumberAndLabel">
-                                              <span class="LabelCallNumber">Call number: </span>
-							          <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span>
-                                          </span>
-                                      </xsl:if>
-                                      <xsl:text> (</xsl:text>
-                                      <xsl:value-of select="count(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch)))"/>
-                                      <xsl:text>)</xsl:text>
-                                      <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                        <xsl:for-each select="$unavailable_items[not(./items:substatus=preceding-sibling::*/items:substatus)]">
+                            <span class="ItemSummary unavailable">
+                                <span class='notforloandesc'><xsl:value-of select="items:substatus"/></span>
+                                <xsl:text> (</xsl:text>
+                                <xsl:value-of select="count(parent::*/items:item/items:substatus[ text() = current()/items:substatus  ])"/>
+                                <xsl:text>)</xsl:text>
+                                <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                             </span>
                         </xsl:for-each>
 
