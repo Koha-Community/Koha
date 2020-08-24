@@ -801,6 +801,18 @@
                         <h2>Existing holds</h2>
                         <div id="toolbar" class="btn-toolbar">
                             <input type="submit" name="submit" value="Update hold(s)" />
+                        <fieldset id="cancellation-reason-fieldset" class="action">
+                            [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                            [% IF hold_cancellation %]
+                                <label for="cancellation-reason">Cancellation reason: </label>
+                                <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
+                                    <option value="">No reason given</option>
+                                    [% FOREACH reason IN hold_cancellation %]
+                                        <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                    [% END %]
+                                </select>
+                            [% END %]
+                        </fieldset>
                         </div>
 
                         [% FOREACH biblioloo IN biblioloop %]
@@ -909,22 +921,6 @@
 
                             [% END # /IF biblioloo.reserveloop %]
                         [% END # FOREACH biblioloo %]
-                            <fieldset class="action">
-                                [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
-                                [% IF hold_cancellation %]
-                                    <label for="cancellation-reason">Cancellation reason: </label>
-                                    <select class="cancellation-reason" name="cancellation-reason" id="cancellation-reason">
-                                        <option value="">No reason given</option>
-                                        [% FOREACH reason IN hold_cancellation %]
-                                            <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                        [% END %]
-                                    </select>
-                                [% END %]
-                            </fieldset>
-
-                            <fieldset class="action">
-                                <input type="submit" name="submit" value="Update hold(s)" />
-                            </fieldset>
                         </fieldset> <!-- /.rows -->
                     </form> <!-- /name=TTime -->
                 [% END # IF reserveloop %]
@@ -944,6 +940,38 @@
         [% END %]
     </div> <!-- /.row -->
 
+    <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Confirm deletion</h3>
+                </div>
+
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this hold?</p>
+
+                    <fieldset class="action">
+                        [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
+                        [% IF hold_cancellation %]
+                            <label for="cancellation-reason">Cancellation reason: </label>
+                            <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
+                                <option value="">No reason given</option>
+                                [% FOREACH reason IN hold_cancellation %]
+                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                [% END %]
+                            </select>
+                        [% END %]
+                    </fieldset>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="cancelModalConfirmBtn" type="button" class="btn btn-danger">Confirm cancellation</button>
+                    <a href="#" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -955,8 +983,6 @@
         var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
-        var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-        var REASON_LABEL = _("Reason: ");
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
         [% itemloo.itemnumber | html %]: {
@@ -980,6 +1006,15 @@
         columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         $(document).ready(function() {
+            $('#cancellation-reason-fieldset').hide();
+            $('.rank-request').on('change', function() {
+                if ( $(".rank-request option:selected[value='del']").length ) {
+                    $('#cancellation-reason-fieldset').show();
+                } else {
+                    $('#cancellation-reason-fieldset').hide();
+                }
+            });
+
             [% SET active = clubs ? 1 : 0 %]
             $('#circ_holds_select').tabs({
                 active: [% active | $raw %],
@@ -1244,20 +1279,24 @@
                 $("#" + fieldID).val("");
             });
 
-            // Confirm cancelation of hold
+            // Confirm cancellation of hold
+            let cancel_link;
             $(".cancel-hold").on("click",function(e) {
                 e.preventDefault;
-                let msg = MSG_CONFIRM_DELETE_HOLD ;
-                if ( $("#cancellation-reason").val() ) {
-                    const reason = $("#cancellation-reason option:selected").text();
-                    msg += "\n\n" + REASON_LABEL + reason;
+                cancel_link = $(this);
+                $('#cancelModal').modal();
+                return false;
+            });
+            $("#cancelModalConfirmBtn").on("click",function(e) {
+                let borrowernumber = cancel_link.data('borrowernumber');
+                let biblionumber = cancel_link.data('biblionumber');
+                let reserve_id = cancel_link.data('id');
+                let reason = $("#modal-cancellation-reason").val();
+                let link = `request.pl?action=cancel&amp;borrowernumber=${ borrowernumber }&amp;biblionumber=${ biblionumber }&amp;reserve_id=${ reserve_id }`;
+                if ( reason ) {
+                    link += "&amp;cancellation-reason=" + reason
                 }
-                const confirm = confirmDelete(msg);
-                if ( confirm ) {
-                    let href = $(this).attr('href');
-                    href += "&cancellation-reason=" + $("#cancellation-reason").val();
-                    window.location = href;
-                }
+                window.location.href = link;
                 return false;
             });
 
