@@ -141,6 +141,22 @@
                 <li><label for="branchemail">Email: </label><input type="text" name="branchemail" id="branchemail" class="email"  size="80" value="[% library.branchemail | html %]" /></li>
                 <li><label for="branchreplyto">Reply-To: </label> <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto | html %]" /><br /><span class="hint">Default: ReplyToDefault system preference</span></li>
                 <li><label for="branchreturnpath">Return-Path: </label> <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath | html %]" /><br /><span class="hint">Default: ReturnpathDefault system preference</span></li>
+                <li><label for="smtp_server">SMTP server: </label>
+                    <select name="smtp_server" id="smtp_server">
+                    [% IF selected_smtp_server.is_system_default %]
+                        <option value="*" selected="selected">Default</option>
+                    [% ELSE %]
+                        <option value="*">Default</option>
+                    [% END %]
+                    [% FOREACH smtp_server IN smtp_servers %]
+                        [% IF smtp_server.id == selected_smtp_server.id %]
+                            <option value="[% smtp_server.id | html %]" selected="selected">[% smtp_server.name | html %]</option>
+                        [% ELSE %]
+                            <option value="[% smtp_server.id | html %]">[% smtp_server.name | html %]</option>
+                        [% END %]
+                    [% END %]
+                    </select>
+                </li>
                 <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl | html %]" class="url" /></li>
                 <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info | $raw %]</textarea></li>
                 <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>

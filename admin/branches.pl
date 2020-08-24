@@ -19,16 +19,22 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use CGI qw ( -utf8 );
+use Try::Tiny;
+
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
+
+use Koha::Database;
 use Koha::Patrons;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::SMTP::Servers;
 
-my $input        = new CGI;
+my $input        = CGI->new;
 my $branchcode   = $input->param('branchcode');
 my $categorycode = $input->param('categorycode');
 my $op           = $input->param('op') || 'list';
@@ -47,10 +53,14 @@ if ( $op eq 'add_form' ) {
     my $library;
     if ($branchcode) {
         $library = Koha::Libraries->find($branchcode);
+        $template->param( selected_smtp_server => $library->smtp_server );
     }
 
+    my @smtp_servers = Koha::SMTP::Servers->search;
+
     $template->param(
-        library    => $library,
+        library      => $library,
+        smtp_servers => \@smtp_servers
     );
 } elsif ( $op eq 'add_validate' ) {
     my @fields = qw(
@@ -82,11 +92,32 @@ if ( $op eq 'add_form' ) {
         for my $field (@fields) {
             $library->$field( scalar $input->param($field) );
         }
-        eval { $library->store; };
-        if ($@) {
+
+        try {
+            Koha::Database->new->schema->txn_do(
+                sub {
+                    $library->store->discard_changes;
+                    # Deal with SMTP server
+                    my $smtp_server_id = $input->param('smtp_server');
+
+                    if ( $smtp_server_id ) {
+                        if ( $smtp_server_id eq '*' ) {
+                            $library->smtp_server({ smtp_server => undef });
+                        }
+                        else {
+                            my $smtp_server = Koha::SMTP::Servers->find( $smtp_server_id );
+                            Koha::Exceptions::BadParameter->throw( parameter => 'smtp_server' )
+                                unless $smtp_server;
+                            $library->smtp_server({ smtp_server => $smtp_server });
+                        }
+                    }
+
+                    push @messages, { type => 'message', code => 'success_on_update' };
+                }
+            );
+        }
+        catch {
             push @messages, { type => 'alert', code => 'error_on_update' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_update' };
         }
     } else {
         $branchcode =~ s|\s||g;
@@ -95,12 +126,30 @@ if ( $op eq 'add_form' ) {
                 ( map { $_ => scalar $input->param($_) || undef } @fields )
             }
         );
-        eval { $library->store; };
-        if ($@) {
-            push @messages, { type => 'alert', code => 'error_on_insert' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_insert' };
+
+        try {
+            Koha::Database->new->schema->txn_do(
+                sub {
+                    $library->store->discard_changes;
+
+                    my $smtp_server_id = $input->param('smtp_server');
+
+                    if ( $smtp_server_id ) {
+                        if ( $smtp_server_id ne '*' ) {
+                            my $smtp_server = Koha::SMTP::Servers->find( $smtp_server_id );
+                            Koha::Exceptions::BadParameter->throw( parameter => 'smtp_server' )
+                                unless $smtp_server;
+                            $library->smtp_server({ smtp_server => $smtp_server });
+                        }
+                    }
+
+                    push @messages, { type => 'message', code => 'success_on_insert' };
+                }
+            );
         }
+        catch {
+            push @messages, { type => 'alert', code => 'error_on_insert' };
+        };
     }
     $op = 'list';
 } elsif ( $op eq 'delete_confirm' ) {
