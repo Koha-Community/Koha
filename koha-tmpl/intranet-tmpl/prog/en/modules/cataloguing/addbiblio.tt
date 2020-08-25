@@ -183,27 +183,6 @@
         }
 [% END %]
 
-function confirmnotdup(redirect){
-    $("#confirm_not_duplicate").attr("value","1");
-    $("#redirect").attr("value",redirect);
-    Check();
-}
-
-function Dopop(link,i) {
-    defaultvalue = document.getElementById(i).value;
-    window.open(link+"&result="+defaultvalue,"valuebuilder",'width=700,height=550,toolbar=false,scrollbars=yes');
-}
-
-/**
- * this function open a popup to search on z3950 server.
- */
-function PopupZ3950() {
-    var strQuery = GetZ3950Terms();
-    if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber | html %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-    }
-}
-
 /**
 * this function append button for create new authority if not found
 */
@@ -221,7 +200,7 @@ function addCreateAuthorityButton(tag_subfield_line, heading, tag_index) {
             // Create a new form that will be POSTed in the new window
             var form = $('<form>').attr({
             method: 'post',
-            action: "../authorities/authorities.pl",
+            action: "/cgi-bin/authorities/authorities.pl",
             target: "new_auth_popup"
             });
             //add the authtypecode
@@ -272,7 +251,7 @@ function updateHeadingLinks(links) {
 
     // Delete the old message dialog and create a new one
     $('#autolinker_dialog').remove();
-    var message_dialog = $('<div id="autolinker_dialog" class="dialog"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
+    var message_dialog = $('<div id="autolinker_dialog" class="dialog message"><strong>' + _("Automatic authority link results:") + '</strong><ul></ul></div>');
     var message_dialog_ul = message_dialog.find('ul');
 
     $.each(links, function(index, heading) {
