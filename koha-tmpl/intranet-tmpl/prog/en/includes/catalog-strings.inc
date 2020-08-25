@@ -23,6 +23,7 @@
     [% SET cancelled = Context.Scalar(orders, "filter_by_cancelled") %]
     var countorders = [% current.count || 0 | html %];
     var countdeletedorders = [% cancelled.count || 0 | html %];
+    var searchid = '[% searchid | html %]';
 
     /* provide Z3950 search points */
     function GetZ3950Terms(){
