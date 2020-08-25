@@ -70,6 +70,12 @@ __PACKAGE__->table("old_reserves");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 cancellation_reason
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
 =head2 reservenotes
 
   data_type: 'longtext'
@@ -163,6 +169,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "cancellationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "cancellation_reason",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "reservenotes",
   { data_type => "longtext", is_nullable => 1 },
   "priority",
@@ -298,8 +306,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-18 12:43:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4vMUC/1kSr3vgQ7n0Pmuug
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-25 13:08:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PtDLEieaxS+76FD0H943Zg
 
 __PACKAGE__->add_columns(
     '+item_level_hold' => { is_boolean => 1 },
