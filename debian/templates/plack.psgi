@@ -66,7 +66,7 @@ my $apiv1  = builder {
     $server->to_psgi_app;
 };
 
-Koha::Logger->get;
+Koha::Logger->_init;
 
 builder {
     enable "ReverseProxy";
