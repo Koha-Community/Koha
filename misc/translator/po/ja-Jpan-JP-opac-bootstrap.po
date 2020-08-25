@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-07-16 02:58-0300\n"
+"POT-Creation-Date: 2020-08-17 10:42-0300\n"
 "PO-Revision-Date: 2019-02-28 22:46+0000\n"
 "Last-Translator: liliputech <arthur.suzuki@biblibre.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -40,7 +40,7 @@ msgstr "%s %s %s%s%sタイトルなし%s %s %s%s "
 #. %7$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle 
 #. %8$s:  subtitl.subfield | html 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
 #, fuzzy, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s%s%sタイトルなし%s %s %s%s"
@@ -84,6 +84,18 @@ msgstr "%s %s %s %s あなたはニュース問題についてのメール通知
 msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
+msgstr ""
+
+#. %1$s:  IF ( Koha.Preference('OpacFavicon') ) 
+#. %2$s:  Koha.Preference('OpacFavicon') | url 
+#. %3$s:  ELSE 
+#. %4$s:  Koha.Preference('OPACBaseURL') | url 
+#. %5$s:  interface | url 
+#. %6$s:  theme | url 
+#. %7$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:12
+#, c-format
+msgid "%s %s %s %s%s/%s/images/favicon.ico %s "
 msgstr ""
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -413,19 +425,6 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; タイトル フレーズ "
 msgid "%s (Record no. %s)"
 msgstr "%s (レコード番号 %s)"
 
-# %1$s: FOREACH relate IN related
-# %2$s: relate.related_search
-# %3$s: END
-#. %1$s:  IF ( related ) 
-#. %2$s:  FOREACH relate IN related 
-#. %3$s:  relate.related_search | html 
-#. %4$s:  END 
-#. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:102
-#, fuzzy, c-format
-msgid "%s (related searches: %s %s %s ). %s "
-msgstr "(関連する検索: %s%s%s) "
-
 #. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
 #. %2$s:  HTML5MediaParent _ ctrl_preload | html 
 #. %3$s:  HTML5MediaSet.child | html 
@@ -442,7 +441,7 @@ msgstr "%s %s %s%s"
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s凍結されたアカウント %s "
@@ -498,13 +497,13 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:322
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:323
 #, fuzzy, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Not renewable%s "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:320
 #, fuzzy, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "続けて借りることができない"
@@ -559,7 +558,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:433
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:430
 #, fuzzy, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -586,7 +585,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  IF ( koha_spsuggest ) 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
 #, fuzzy, c-format
 msgid "%s Did you mean: "
 msgstr "%s もしかして: "
@@ -599,7 +598,7 @@ msgid "%s Holds (%s) "
 msgstr "待つことの中 "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:457
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:454
 #, c-format
 msgid "%s Internet user critics"
 msgstr ""
@@ -629,7 +628,7 @@ msgstr "%s アイテムが貸出中"
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:315
 #, fuzzy, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -637,7 +636,7 @@ msgstr "続けて借りることができない"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:326
 #, fuzzy, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Not renewable%s "
@@ -657,20 +656,20 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s 見つかりませんでした。 %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, fuzzy, c-format
 msgid "%s Not allowed"
 msgstr "続けて借りることができない"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
 #, fuzzy, c-format
 msgid "%s Not renewable "
 msgstr "%s Not renewable%s "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
 #, fuzzy, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "続けて借りることができない"
@@ -678,7 +677,7 @@ msgstr "続けて借りることができない"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:564
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Not renewable%s "
@@ -714,13 +713,13 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:661
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr ""
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:457
 #, c-format
 msgid "%s Professional critics"
 msgstr ""
@@ -751,14 +750,14 @@ msgstr ""
 "の提案%s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:466
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:463
 #, fuzzy, c-format
 msgid "%s Quotations"
 msgstr "館所蔵"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:329
 #, fuzzy, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "続けて借りることができない"
@@ -776,19 +775,13 @@ msgid "%s Restriction added by overdues process %s %s %s %s "
 msgstr ""
 
 #. %1$s:  LibraryName | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
-#, c-format
-msgid "%s Search"
-msgstr "%s 検索"
-
-#. %1$s:  LibraryName | html 
 #. %2$s:  IF ( query_desc ) 
 #. %3$s:  query_desc | html 
 #. %4$s:  END 
 #. %5$s:  IF ( limit_desc ) 
 #. %6$s:  limit_desc | html 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:90
 #, fuzzy, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s 検索 %s検索語: '%s'%s%s&nbsp;件数制限:&nbsp;'%s'%s"
@@ -885,7 +878,7 @@ msgstr "%s %s %s (%s) %s %s %s %s %s "
 # %2$s: END
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:230
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:231
 #, fuzzy, c-format
 msgid "%s This record has no items. %s "
 msgstr "%sこのレコードにはアイテムはありません。%s "
@@ -899,7 +892,7 @@ msgid ""
 msgstr "すみません、この題名はいかなる評論がない。 "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:463
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:460
 #, c-format
 msgid "%s Video extracts"
 msgstr ""
@@ -948,7 +941,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:574
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
 msgstr "%sはい%sいいえ%s "
@@ -957,7 +950,7 @@ msgstr "%sはい%sいいえ%s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:337
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
@@ -997,7 +990,7 @@ msgstr "%s 冊の書籍"
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:357
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:385
 #, c-format
 msgid "%s by "
@@ -1037,13 +1030,13 @@ msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:303
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #, c-format
 msgid "%s per day"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:307
 #, c-format
 msgid "%s per hour"
 msgstr ""
@@ -1899,6 +1892,15 @@ msgstr "%s %s%s%sKoha オンライン%s カタログ &rsaquo; あなたのカー
 msgid "%s%s%sKoha online%s catalog recent comments"
 msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; 最近のコメント %s "
 
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
+#, fuzzy, c-format
+msgid "%s%s%sLibrary catalog%s"
+msgstr "%1$s -- 館所蔵のディレクトリ"
+
 # %1$s: IF ( SEARCH_RESULT.BiblioDefaultViewmarc )
 # %2$s: OPACBaseURL
 # %3$s: SEARCH_RESULT.biblionumber
@@ -1923,7 +1925,7 @@ msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; 最近のコメン�
 #. %10$s:  SEARCH_RESULT.biblionumber | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:116
 #, c-format
 msgid ""
 "%s%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s%s%s%s/cgi-bin/koha/opac-"
@@ -1961,7 +1963,7 @@ msgstr "%s, 著者: %s%s %s %s "
 # %2$s: SEARCH_RESULT.biblionumber 
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:50
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -1971,7 +1973,7 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 # %2$s: SEARCH_RESULT.biblionumber 
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:48
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -1983,9 +1985,9 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  i.biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:47
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:74
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:119
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -2035,7 +2037,7 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:89
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
@@ -2046,7 +2048,7 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:26
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:31
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
@@ -2152,7 +2154,7 @@ msgstr "%sコレクション%sアイテムの種類%s"
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:112
 #, fuzzy, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
@@ -2256,7 +2258,7 @@ msgstr ""
 # %2$s: END
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:285
 #, fuzzy, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%sこのレコードにはアイテムはありません。%s "
@@ -2853,7 +2855,7 @@ msgstr ""
 # %3$s: itemtypeloo.description
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:454
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:451
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "%s&nbsp;%s %s"
@@ -2927,7 +2929,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; タイトル フレーズ"
 # %2$s: END
 # %3$s: itemtypeloo.description
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:529
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:526
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "%s&nbsp;%s %s"
@@ -2945,12 +2947,12 @@ msgstr "(%s 冊の書籍)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft | html 
 #. %2$s:  ISSUE.renewsallowed | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:322
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:320
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:326
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:562
 #, fuzzy, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s / %s 個のリニューアルが残っています)"
@@ -2958,8 +2960,8 @@ msgstr "(%s / %s 個のリニューアルが残っています)"
 #. For the first occurrence,
 #. %1$s:  HOLDS.count | html 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:469
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:277
 #, fuzzy, c-format
 msgid "(%s total)"
@@ -2977,7 +2979,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:142
 msgid "(All)"
 msgstr ""
 
@@ -3018,7 +3020,7 @@ msgstr "(Koha はサポートしていません)"
 msgid "(Not supported yet)"
 msgstr "(未サポート)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
 #, fuzzy, c-format
 msgid "(On-site checkout)"
 msgstr "%1$s 定期刊行物"
@@ -3139,8 +3141,8 @@ msgstr "(代わりに SRU を使用)"
 msgid "(Voided)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:196
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:418
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
 #, c-format
@@ -3156,25 +3158,25 @@ msgstr ""
 # %1$s: GROUP_RESULT.timestamp 
 #. For the first occurrence,
 #. %1$s:  SEARCH_RESULT.timestamp | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:382
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:204
 #, c-format
 msgid "(modified on %s)"
 msgstr "(更新日時: %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
 #, fuzzy, c-format
 msgid "(on hold)"
 msgstr "(取り置き中)"
 
 #. %1$s:  ar.item.barcode | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:621
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
 #, c-format
 msgid "(only %s)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:564
 #, c-format
 msgid "(overdue)"
 msgstr ""
@@ -3198,10 +3200,21 @@ msgstr "列印"
 msgid "(related searches: %s%s%s)"
 msgstr "(関連する検索: %s%s%s)"
 
+# %1$s: FOREACH relate IN related
+# %2$s: relate.related_search
+# %3$s: END 
+#. %1$s:  FOREACH relate IN related 
+#. %2$s:  relate.related_search | html 
+#. %3$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:109
+#, fuzzy, c-format
+msgid "(related searches:%s %s%s)."
+msgstr "(関連する検索: %s%s%s)"
+
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:574
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:573
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:485
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
 #, fuzzy, c-format
@@ -3324,7 +3337,7 @@ msgid "6 months"
 msgstr "6ヶ月"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:108
 msgid "9999-12-31"
 msgstr ""
 
@@ -3423,10 +3436,10 @@ msgstr "入手日: 古い順"
 
 # INPUT type=submit name=tagsel_button
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:557
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:554
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:144
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:417
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:276
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
@@ -3449,7 +3462,7 @@ msgstr "%s 個のアイテムを追加: %s"
 msgid "Add another field"
 msgstr "他のフィールドを追加"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:550
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:460
 #, fuzzy, c-format
 msgid "Add tag"
@@ -3467,7 +3480,7 @@ msgstr "カートに追加"
 msgid "Add to %s"
 msgstr "追加: %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #, c-format
 msgid "Add to a list"
 msgstr "リストに追加"
@@ -3489,14 +3502,14 @@ msgstr "リストに追加:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:573
 #, fuzzy, c-format
 msgid "Add to your cart"
 msgstr "あなたのカートに追加"
 
 # SCRIPT
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #, fuzzy
 msgid "Add to..."
 msgstr "追加先:"
@@ -3548,14 +3561,14 @@ msgstr "住所:"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:107
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:312
 #, fuzzy
 msgid "Adlibris cover image"
 msgstr "館所蔵の表紙のピクチャー"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:257
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:254
 msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 
@@ -3594,12 +3607,12 @@ msgid "All collections"
 msgstr "すべてのコレクション"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "All holds will resume."
 msgstr ""
 
@@ -3649,8 +3662,8 @@ msgid "Alternate contact"
 msgstr "代わりの連絡先:"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
 #, c-format
 msgid "Amount"
 msgstr "金額"
@@ -3765,7 +3778,7 @@ msgid "April"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "この取り置きを本当にキャンセルしますか?"
@@ -3773,7 +3786,7 @@ msgstr "この取り置きを本当にキャンセルしますか?"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "Are you sure you want to cancel this hold?"
 msgstr "この取り置きを本当にキャンセルしますか?"
 
@@ -3835,7 +3848,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "このリストを本当に削除しますか?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "この取り置きを本当にキャンセルしますか?"
@@ -3847,7 +3860,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "このリストを本当に削除しますか?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "この取り置きを本当にキャンセルしますか?"
@@ -3857,7 +3870,7 @@ msgstr "この取り置きを本当にキャンセルしますか?"
 msgid "Arrived"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
 #, c-format
 msgid "Article requests "
 msgstr ""
@@ -3945,9 +3958,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:117
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:248
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:600
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:215
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
@@ -3973,7 +3986,7 @@ msgstr "作者"
 msgid "Author notes provided by Syndetics"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:88
 #, fuzzy, c-format
 msgid "Author(s)"
 msgstr "作者："
@@ -4048,7 +4061,7 @@ msgstr "作者"
 msgid "Availability"
 msgstr "館内にある "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:399
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:396
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, fuzzy, c-format
 msgid "Availability:"
@@ -4115,16 +4128,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:197
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:426
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:427
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1214
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
 msgstr "バーコード"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, fuzzy, c-format
 msgid "Barcode:"
 msgstr "バーコード"
@@ -4178,12 +4191,12 @@ msgstr ""
 msgid "Braille"
 msgstr "館内にある"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:21
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:22
 #, fuzzy, c-format
 msgid "Brief display"
 msgstr "要旨"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:35
 #, fuzzy, c-format
 msgid "Brief history"
@@ -4247,15 +4260,15 @@ msgstr "ある %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:199
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:427
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:428
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, fuzzy, c-format
 msgid "Call no."
 msgstr "ロープの書籍コード"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:289
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #, fuzzy, c-format
 msgid "Call no.:"
 msgstr "ロープの書籍コード"
@@ -4319,8 +4332,8 @@ msgstr "ロープの書籍コード"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:681
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:166
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:291
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:277
@@ -4360,7 +4373,7 @@ msgstr "期日まで受け取る"
 msgid "Cancel rating"
 msgstr "館所蔵を取り消す"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:678
 #, fuzzy, c-format
 msgid "Cancel:"
 msgstr "館所蔵を取り消す"
@@ -4412,7 +4425,7 @@ msgid "Card number:"
 msgstr "図書貸し出し証の番号："
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:27
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #, fuzzy, c-format
 msgid "Cart"
@@ -4456,7 +4469,7 @@ msgstr "パスワードを改正する"
 msgid "Change your password "
 msgstr "パスワードを改正する "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
 #, c-format
 msgid "Chapters"
 msgstr ""
@@ -4602,7 +4615,7 @@ msgstr "金額"
 msgid "Claimed"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:185
 #, fuzzy, c-format
 msgid "Classification"
 msgstr "号を分類する： %s"
@@ -4616,7 +4629,7 @@ msgid "Classification: %s "
 msgstr "号を分類する： %s "
 
 #. INPUT type=reset
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:882
 #, fuzzy, c-format
 msgid "Clear"
@@ -4624,9 +4637,9 @@ msgstr "全てを一掃する"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:397
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:52
@@ -4704,7 +4717,7 @@ msgstr ""
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:505
 msgid "Click to view in Google Books"
 msgstr ""
 
@@ -4760,7 +4773,7 @@ msgstr "選ぶ館所蔵を除いて移す"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #, fuzzy, c-format
 msgid "Collection"
@@ -4909,7 +4922,7 @@ msgstr "%s の図書目録は記録する "
 msgid "Copy number"
 msgstr "ロープの書籍コード"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:140
 #, fuzzy, c-format
 msgid "Copyright"
 msgstr "著作の年度："
@@ -5028,7 +5041,7 @@ msgstr ""
 msgid "Credit %s"
 msgstr "借金"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:407
 #, c-format
 msgid "Credits"
 msgstr "借金"
@@ -5081,9 +5094,9 @@ msgid "DVD video / Videodisc"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:161
@@ -5112,9 +5125,9 @@ msgstr "期日"
 msgid "Date due"
 msgstr "期日"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:269
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
 #, fuzzy, c-format
 msgid "Date due:"
 msgstr "期日"
@@ -5135,13 +5148,13 @@ msgstr ""
 msgid "Date range:"
 msgstr "期日"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #, c-format
 msgid "Date received"
 msgstr "期日まで受け取る"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:393
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:390
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:81
 #, fuzzy, c-format
@@ -5262,7 +5275,7 @@ msgid "Description"
 msgstr "陳述"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:116
 #, fuzzy, c-format
 msgid "Details"
 msgstr "詳しい説明："
@@ -5298,7 +5311,7 @@ msgstr "定期刊行物の数量"
 msgid "Details from library"
 msgstr "図書館の情報"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:178
 #, c-format
 msgid "Dewey"
 msgstr "号を分類する"
@@ -5379,12 +5392,12 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:29
 #, c-format
 msgid "Download"
 msgstr "ダウンロード"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
 #, fuzzy, c-format
 msgid "Download as iCal/.ics file"
 msgstr "新しく増加して本棚を仮想する "
@@ -5417,8 +5430,8 @@ msgid "Dublin Core"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:425
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:284
 #, c-format
 msgid "Due"
@@ -5452,7 +5465,7 @@ msgstr ""
 msgid "Edit"
 msgstr "待つことの中"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:354
 #, c-format
 msgid "Edit / Create note"
 msgstr ""
@@ -5519,7 +5532,7 @@ msgstr "E-mail"
 msgid "Email:"
 msgstr "自由"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:29
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:30
 #, fuzzy, c-format
 msgid "Empty and close"
 msgstr "空っぽなのはしかも閉鎖する"
@@ -5647,7 +5660,7 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:140
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:38
 #, fuzzy, c-format
@@ -5784,7 +5797,7 @@ msgstr ""
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:301
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr ""
@@ -5821,7 +5834,7 @@ msgid "Fine %s"
 msgstr "罰金"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:204
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:287
 #, c-format
 msgid "Fines"
@@ -5834,7 +5847,7 @@ msgid "Fines (%s)"
 msgstr "罰金"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:1
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:393
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "罰金と料金"
@@ -5845,8 +5858,8 @@ msgstr "罰金と料金"
 msgid "Fines and charges (%s)"
 msgstr "罰金と料金"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:574
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "罰金"
@@ -5973,7 +5986,7 @@ msgstr ""
 msgid "From: "
 msgstr "あげる： "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:36
 #, fuzzy, c-format
 msgid "Full history"
@@ -5985,7 +5998,7 @@ msgid "Full subscription history"
 msgstr "検索"
 
 #. %1$s:  bibliotitle | html 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:49
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
 #, fuzzy, c-format
 msgid "Full subscription history for %s"
 msgstr "%s の購読の資料"
@@ -6086,7 +6099,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:218
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:250
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:169
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:52
@@ -6188,13 +6201,13 @@ msgstr "今日は,"
 msgid "Hide options"
 msgstr "その他の選択："
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:31
 #, fuzzy, c-format
 msgid "Hide window"
 msgstr "ウィンドウズに隠れる"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:39
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:166
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:147
 #, c-format
 msgid "Highlight"
@@ -6417,7 +6430,7 @@ msgstr "普通だ"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:181
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:81
 #, c-format
 msgid "ISBN"
 msgstr "国際標准の書籍コード（ISBN）"
@@ -6449,7 +6462,7 @@ msgid "ISBN: %s %s %s; %s %s "
 msgstr "%s %s %s %s %s "
 
 #. %1$s:  SEARCH_RESULT.isbn | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:46
 #, fuzzy, c-format
 msgid "ISBN:%s"
 msgstr "国際標准の書籍コード（ISBN）: %s"
@@ -6651,7 +6664,7 @@ msgstr "従 %1$s 郵送する %2$s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:574
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:571
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:485
 #, fuzzy, c-format
 msgid "In your cart"
@@ -6688,7 +6701,7 @@ msgstr "図示"
 msgid "Instructors:"
 msgstr "図示"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:612
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:609
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:274
 #, c-format
 msgid "Interlibrary loan request"
@@ -6706,7 +6719,7 @@ msgstr ""
 msgid "Invalid shelf number."
 msgstr "ロープの書籍コード"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:602
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:603
 #, fuzzy, c-format
 msgid "Issue"
 msgstr "定期刊行物の数量"
@@ -6809,7 +6822,7 @@ msgstr "続けて借りることができない"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:194
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, fuzzy, c-format
@@ -6817,7 +6830,7 @@ msgid "Item type"
 msgstr "館所蔵の型式"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:174
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:277
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:134
 #, fuzzy, c-format
@@ -6845,7 +6858,7 @@ msgstr ""
 msgid "Items available at:"
 msgstr "複本がない。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:401
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:398
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, fuzzy, c-format
 msgid "Items available:"
@@ -6924,7 +6937,7 @@ msgstr "Koha - RSS"
 msgid "Koha Wiki"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:192
 #, c-format
 msgid "LCCN"
 msgstr "LCCN"
@@ -7042,7 +7055,7 @@ msgstr ""
 msgid "Libraries"
 msgstr "%1$s -- 館所蔵のディレクトリ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:626
 #, fuzzy, c-format
@@ -7068,7 +7081,7 @@ msgstr "%1$s -- 館所蔵のディレクトリ"
 msgid "Library:"
 msgstr "%1$s -- 館所蔵のディレクトリ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:31
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:32
 #, fuzzy, c-format
 msgid "Library: "
 msgstr "%1$s -- 館所蔵のディレクトリ "
@@ -7166,7 +7179,7 @@ msgstr ""
 msgid "Lists"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:491
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #, fuzzy, c-format
 msgid "Lists:"
@@ -7187,12 +7200,12 @@ msgstr "館所蔵"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Loading..."
 msgstr "館所蔵"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:384
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:385
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "館所蔵"
@@ -7213,7 +7226,7 @@ msgstr "館所蔵"
 msgid "Location"
 msgstr "館所蔵"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:250
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
 #, fuzzy, c-format
 msgid "Location (Status)"
 msgstr "館所蔵"
@@ -7223,7 +7236,7 @@ msgstr "館所蔵"
 msgid "Location and availability: "
 msgstr "館内にある "
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:217
 #, fuzzy, c-format
 msgid "Location(s) (Status)"
 msgstr "館所蔵"
@@ -7254,7 +7267,7 @@ msgstr "館所蔵"
 msgid "Log in"
 msgstr "ログイン"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:564
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
 #, fuzzy, c-format
 msgid "Log in to add tags"
 msgstr "タグを追加するにはログインしてください。"
@@ -7427,15 +7440,15 @@ msgstr "MARCXML"
 msgid "Main address"
 msgstr "連絡先："
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:605
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:267
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:270
 #, c-format
 msgid "Make a "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:612
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:609
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:274
 #, fuzzy, c-format
 msgid "Make an "
@@ -7473,7 +7486,7 @@ msgstr "自分"
 msgid "March"
 msgstr "検索"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:505
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:502
 #, c-format
 msgid "Match:"
 msgstr ""
@@ -7559,14 +7572,14 @@ msgstr ""
 msgid "More book reviews at iDreamBooks.com"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:23
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:879
 #, fuzzy, c-format
 msgid "More details"
 msgstr "もっと多い資料"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #, fuzzy
 msgid "More lists"
 msgstr "出版していない"
@@ -7700,7 +7713,7 @@ msgstr "提案を買う"
 msgid "New search"
 msgstr "検索"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:552
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:462
@@ -7708,8 +7721,8 @@ msgstr "検索"
 msgid "New tag(s), separated by a comma:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:193
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #, c-format
 msgid "New tag:"
 msgstr ""
@@ -7794,22 +7807,22 @@ msgstr "（貸し出す）"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:131
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:142
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:273
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:281
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:290
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:298
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:307
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:225
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:233
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:516
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:318
@@ -7854,7 +7867,7 @@ msgstr ""
 msgid "No items available."
 msgstr "複本がない。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:429
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:426
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:222
 #, fuzzy, c-format
 msgid "No items available:"
@@ -7971,19 +7984,19 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "この取り置きを本当にキャンセルしますか?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "No, do not cancel hold"
 msgstr "すみません、あなたは予約して上回ることができない %s。 "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "No, do not resume holds"
 msgstr "すみません、あなたは予約して上回ることができない %s。 "
@@ -8020,7 +8033,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:33
@@ -8035,7 +8048,7 @@ msgstr "普通だ"
 msgid "Not checked in %s"
 msgstr "（貸し出す）"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:263
 #, fuzzy, c-format
 msgid "Not finding what you're looking for? "
@@ -8065,7 +8078,7 @@ msgstr ""
 msgid "Not on hold"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:116
 #, c-format
 msgid "Not what you expected? Check for "
 msgstr ""
@@ -8154,11 +8167,11 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:146
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1212
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:38
 #, c-format
@@ -8193,7 +8206,7 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8228,7 +8241,7 @@ msgstr ""
 msgid "November"
 msgstr "定期刊行物の番号"
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
 #, c-format
 msgid "Number"
 msgstr "定期刊行物の番号"
@@ -8419,7 +8432,7 @@ msgstr ""
 msgid "Overdue (%s)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:469
 #, c-format
 msgid "Overdues "
 msgstr ""
@@ -8430,7 +8443,7 @@ msgstr ""
 msgid "Owner only"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
 #, fuzzy, c-format
 msgid "Pages"
 msgstr "%1$s 館所蔵のディレクトリ --"
@@ -8616,7 +8629,7 @@ msgstr "館所蔵を選ぶ"
 msgid "Pick up location:"
 msgstr "館所蔵を選ぶ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:609
 #, fuzzy, c-format
 msgid "Pickup library"
 msgstr "いかなる分館"
@@ -8651,11 +8664,11 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:8
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:540
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:237
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
@@ -8671,7 +8684,7 @@ msgstr "予約する"
 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:14
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:599
 #, fuzzy, c-format
 msgid "Placed on"
 msgstr "予約する"
@@ -9005,7 +9018,7 @@ msgid "Primary phone:"
 msgstr "列印"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:33
 #, c-format
 msgid "Print"
 msgstr "列印"
@@ -9087,7 +9100,7 @@ msgid "Public lists"
 msgstr "本棚を公にする"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #, fuzzy
 msgid "Public lists:"
 msgstr "本棚を公にする"
@@ -9121,7 +9134,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr "入手日: 古い順"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:369
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:366
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:394
 #, fuzzy, c-format
 msgid "Publication:"
@@ -9159,7 +9172,7 @@ msgstr "(発行日: %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:108
 #, c-format
 msgid "Publisher"
 msgstr "出版者"
@@ -9222,7 +9235,7 @@ msgstr "定期刊行物の数量 "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
 msgid "Rating based on reviews of "
 msgstr ""
@@ -9269,7 +9282,7 @@ msgstr "図書目録は番号を記録する："
 msgid "Record not found"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
 #, fuzzy, c-format
 msgid "Record title"
 msgstr "定期刊行物の題名："
@@ -9289,7 +9302,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:29
 #, c-format
 msgid "Refine your search"
 msgstr ""
@@ -9333,7 +9346,7 @@ msgstr ""
 msgid "Related Term"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:428
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #, c-format
 msgid "Relative"
 msgstr ""
@@ -9348,7 +9361,7 @@ msgstr "%1$s 定期刊行物"
 msgid "Relevance"
 msgstr "予約する"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:43
 #, fuzzy, c-format
 msgid "Remove"
 msgstr "続けて借りる"
@@ -9398,17 +9411,17 @@ msgid "Remove share"
 msgstr "続けて借りる"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:201
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:480
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:285
 #, c-format
 msgid "Renew"
 msgstr "続けて借りる"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Renew all"
 msgstr "続けて借りる"
@@ -9422,8 +9435,8 @@ msgid "Renew item"
 msgstr "続けて借りる"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Renew selected"
 msgstr "選ぶ館所蔵を除いて移す"
@@ -9435,7 +9448,7 @@ msgstr "選ぶ館所蔵を除いて移す"
 msgid "RenewLoan"
 msgstr "続けて借りる"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:294
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #, fuzzy, c-format
 msgid "Renewed!"
 msgstr "続けて借りる"
@@ -9462,7 +9475,7 @@ msgid "Request ID:"
 msgstr "この館所蔵を選ぶ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:544
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:17
 #, c-format
 msgid "Request article"
@@ -9666,7 +9679,7 @@ msgid "Return to the catalog home page."
 msgstr "%1$s 館所蔵のディレクトリ --"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:73
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:134
 #, fuzzy, c-format
 msgid "Return to the last advanced search"
 msgstr "高度な検索"
@@ -9785,7 +9798,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
@@ -9806,7 +9819,7 @@ msgstr "図書目録は番号を記録する： "
 msgid "Save to another list"
 msgstr "を管理する"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:566
 #, fuzzy, c-format
 msgid "Save to lists"
 msgstr "を管理する"
@@ -9873,6 +9886,12 @@ msgstr "検索"
 msgid "Search "
 msgstr "検索 "
 
+#. LINK
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
+#, fuzzy
+msgid "Search %s"
+msgstr "検索 "
+
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
 #. %3$s:  Branches.GetName( mylibraryfirst ) | html 
@@ -9890,7 +9909,7 @@ msgstr "題名を検索する："
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:363
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:360
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:388
 #, fuzzy
@@ -9930,11 +9949,14 @@ msgstr "を管理する"
 msgid "Search suggestions"
 msgstr "%s%s私の%s%s購入の提案"
 
-#. %1$s:  LibraryName | html 
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:10
 #, fuzzy, c-format
-msgid "Search the %s"
-msgstr "トップページを検索する"
+msgid "Search the %s%s%sKoha library%s catalog"
+msgstr "%s %s%s%sKoha オンライン%s カタログ %s "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -9982,11 +10004,11 @@ msgstr "アクション:"
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:240
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:514
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:94
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
@@ -10022,9 +10044,9 @@ msgstr "この館所蔵を選ぶ"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:397
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:51
@@ -10062,9 +10084,9 @@ msgstr "選ぶ館所蔵を除いて移す"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:41
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:309
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #, fuzzy, c-format
@@ -10084,7 +10106,7 @@ msgstr "（貸し出す）"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:46
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:26
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:63
 #, c-format
 msgid "Send"
@@ -10121,7 +10143,7 @@ msgstr "テーマ"
 msgid "September"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:171
 #, fuzzy, c-format
 msgid "Serial"
 msgstr "定期刊行物："
@@ -10284,7 +10306,7 @@ msgstr "その他の選択："
 msgid "Show the top "
 msgstr "館所蔵のディレクトリを検索する "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:60
 #, fuzzy, c-format
 msgid "Show year: "
 msgstr "館所蔵のディレクトリを検索する "
@@ -10344,7 +10366,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -10540,8 +10562,8 @@ msgstr "狀態"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:121
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:109
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:848
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:287
@@ -10609,7 +10631,7 @@ msgstr "テーマ"
 msgid "Subject phrase"
 msgstr "テーマ： %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:130
 #, fuzzy, c-format
 msgid "Subject(s)"
 msgstr "テーマ"
@@ -10648,7 +10670,7 @@ msgstr "ウィンドウズを閉鎖する"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:159
 #, fuzzy
 msgid "Submit changes"
@@ -10662,8 +10684,8 @@ msgstr "改正"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "改正"
@@ -10711,13 +10733,13 @@ msgstr "%s の購読の資料"
 
 #. I
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:105
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:121
 msgid "Subscribe to this search"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:83
 #, fuzzy, c-format
 msgid "Subscription"
 msgstr "陳述"
@@ -10743,7 +10765,7 @@ msgstr "%s の購読の資料"
 msgid "Subscription title"
 msgstr "陳述 "
 
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:33
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:34
 #, fuzzy, c-format
 msgid "Subscription: "
 msgstr "陳述 "
@@ -10871,8 +10893,8 @@ msgid "Table of contents provided by Syndetics"
 msgstr ""
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:190
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
 #, fuzzy, c-format
 msgid "Tag"
@@ -10888,13 +10910,13 @@ msgstr ""
 msgid "Tag cloud"
 msgstr "タグクラウド"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:265
 #, c-format
 msgid "Tag status here."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:557
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:421
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
 #, c-format
@@ -10923,7 +10945,7 @@ msgstr ""
 msgid "Tags from this library:"
 msgstr "図書館の情報"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:433
 #, c-format
 msgid "Tags:"
@@ -11459,11 +11481,11 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:190
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:473
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:599
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:425
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:600
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
@@ -11632,7 +11654,7 @@ msgstr ""
 msgid "URL"
 msgstr "ＵＲＬ："
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:199
 #, fuzzy, c-format
 msgid "URL(s)"
 msgstr "ＵＲＬ："
@@ -11645,6 +11667,11 @@ msgstr "ＵＲＬ："
 #, fuzzy, c-format
 msgid "URL: %s "
 msgstr "- %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:11
+#, c-format
+msgid "UTF-8"
+msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -11689,13 +11716,13 @@ msgid "Unavailable issues"
 msgstr "次は得ることができる"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:38
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:146
 #, c-format
 msgid "Unhighlight"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:164
 #, fuzzy, c-format
 msgid "Unified title"
 msgstr "一律にする題名："
@@ -11821,9 +11848,9 @@ msgstr "%s%s私の%s%s購入の提案"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:121
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:340
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:343
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:346
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
@@ -11845,7 +11872,7 @@ msgstr ""
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:223
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #, fuzzy
 msgid "View on Amazon.com"
 msgstr "採点（…から来る Amazon.com）"
@@ -11868,7 +11895,7 @@ msgstr "検索"
 msgid "Vol info"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:602
 #, c-format
 msgid "Volume"
 msgstr ""
@@ -11958,8 +11985,8 @@ msgstr "選ぶ館所蔵を除いて移す "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:309
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #, fuzzy
 msgid "With selected titles: "
@@ -11990,7 +12017,7 @@ msgstr ""
 msgid "Written on %s by %s"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:250
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:583
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:585
 #, fuzzy, c-format
@@ -12019,24 +12046,24 @@ msgid "Yes, I agree."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "この取り置きを本当にキャンセルしますか?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "館所蔵を取り消す"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "Yes, resume all holds"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "この取り置きを本当にキャンセルしますか?"
@@ -12181,7 +12208,7 @@ msgstr "いかなる館所蔵を貸し出していない"
 msgid "You currently have nothing checked out."
 msgstr "いかなる館所蔵を貸し出していない"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:397
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:398
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "あなたの現在総括的な罰金と費用："
@@ -12247,7 +12274,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
 #, c-format
 msgid "You have a credit of:"
 msgstr "あなたは借金がある："
@@ -12257,7 +12284,7 @@ msgstr "あなたは借金がある："
 msgid "You have already requested this title."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:689
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:690
 #, c-format
 msgid "You have no article requests currently."
 msgstr ""
@@ -12284,7 +12311,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
 #, c-format
 msgid "You have nothing checked out"
 msgstr "いかなる館所蔵を貸し出していない"
@@ -12368,7 +12395,7 @@ msgstr "<a1>登って入る</a> Koha"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #, fuzzy
 msgid "You must be logged in to create or add to lists"
 msgstr "<a1>登って入る</a> Koha"
@@ -12604,7 +12631,7 @@ msgid "Your lists"
 msgstr "出版していない"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #, fuzzy
 msgid "Your lists:"
 msgstr "出版していない"
@@ -12621,17 +12648,17 @@ msgid "Your messaging settings"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 msgid "Your note about %s has been saved and sent to the library."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "送り届けて本を借りる"
@@ -12746,7 +12773,7 @@ msgstr "検索"
 #. %1$s:  total | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:102
 #, fuzzy, c-format
-msgid "Your search returned %s results."
+msgid "Your search returned %s results. "
 msgstr "本のかごを利用して送り届けられる："
 
 #. SCRIPT
@@ -12789,7 +12816,7 @@ msgstr "郵便番号"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #, fuzzy
 msgid "[ New list ]"
@@ -12857,7 +12884,7 @@ msgid "bib_id"
 msgstr "bib_id"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:239
 msgid "bonus"
 msgstr ""
 
@@ -12876,7 +12903,7 @@ msgstr "作者 %s"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:116
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:999
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
@@ -12910,8 +12937,8 @@ msgid "contains"
 msgstr "含む"
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
 "%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
@@ -13108,12 +13135,6 @@ msgstr "送り届けて本を借りる"
 msgid "item_id"
 msgstr "待つことの中"
 
-#. %1$s:  LibraryName | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:11
-#, c-format
-msgid "koha opac %s"
-msgstr ""
-
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
 #, fuzzy
@@ -13211,8 +13232,8 @@ msgstr "E-mail"
 msgid "privacy policy"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:605
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:267
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:270
 #, fuzzy, c-format
@@ -13351,7 +13372,7 @@ msgstr "初め"
 msgid "subjects "
 msgstr "テーマ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:116
 #, fuzzy, c-format
 msgid "suggestions"
 msgstr "提案を買う"
@@ -13448,7 +13469,7 @@ msgid "to post a comment."
 msgstr ""
 
 #. LINK
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:50
 msgid "unAPI"
 msgstr ""
 
