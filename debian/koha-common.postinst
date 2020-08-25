@@ -190,6 +190,54 @@ EOF
 done
 
 for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-opac"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-opac = WARN, PLACKOPAC
+log4perl.appender.PLACKOPAC=Log::Log4perl::Appender::File
+log4perl.appender.PLACKOPAC.filename=/var/log/koha/$site/plack-opac-error.log
+log4perl.appender.PLACKOPAC.mode=append
+log4perl.appender.PLACKOPAC.layout=PatternLayout
+log4perl.appender.PLACKOPAC.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKOPAC.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-api"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-api = WARN, PLACKAPI
+log4perl.appender.PLACKAPI=Log::Log4perl::Appender::File
+log4perl.appender.PLACKAPI.filename=/var/log/koha/$site/plack-api-error.log
+log4perl.appender.PLACKAPI.mode=append
+log4perl.appender.PLACKAPI.layout=PatternLayout
+log4perl.appender.PLACKAPI.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKAPI.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-intranet"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-intranet = WARN, PLACKINTRANET
+log4perl.appender.PLACKINTRANET=Log::Log4perl::Appender::File
+log4perl.appender.PLACKINTRANET.filename=/var/log/koha/$site/plack-intranet-error.log
+log4perl.appender.PLACKINTRANET.mode=append
+log4perl.appender.PLACKINTRANET.layout=PatternLayout
+log4perl.appender.PLACKINTRANET.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKINTRANET.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
     kohaconfig="/etc/koha/sites/$site/koha-conf.xml"
     logdir="$( xmlstarlet sel -t -v 'yazgfs/config/logdir' $kohaconfig )"
     if [ "$logdir" != "" ] && [ "$logdir" != "0" ]; then
