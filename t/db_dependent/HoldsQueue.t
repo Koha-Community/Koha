@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 55;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -662,6 +662,8 @@ $reserve_id = AddReserve(
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup branch matches home branch targeted" );
+my $target_rs = $schema->resultset('HoldFillTarget');
+is( $target_rs->next->reserve_id, $reserve_id, "Reserve id correctly set in hold fill target for title level hold" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
@@ -908,7 +910,7 @@ Koha::Holds->find( $reserve_id )->cancel;
 
 
 subtest "Test Local Holds Priority - Bib level" => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     Koha::Biblios->delete();
     t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
@@ -960,6 +962,7 @@ subtest "Test Local Holds Priority - Bib level" => sub {
     C4::HoldsQueue::CreateQueue();
 
     my $queue_rs = $schema->resultset('TmpHoldsqueue');
+    my $target_rs = $schema->resultset('HoldFillTarget');
     is( $queue_rs->count(), 1,
         "Hold queue contains one hold" );
     is(
@@ -967,6 +970,7 @@ subtest "Test Local Holds Priority - Bib level" => sub {
         $local_patron->borrowernumber,
         "We should pick the local hold over the next available"
     );
+    is( $target_rs->next->reserve_id, $reserve_id2, "Reserve id correctly set in hold fill target" );
 };
 
 subtest "Test Local Holds Priority - Item level" => sub {
@@ -1233,7 +1237,7 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
 
 subtest "Item level holds info is preserved (Bug 25738)" => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $dbh->do("DELETE FROM tmp_holdsqueue");
     $dbh->do("DELETE FROM hold_fill_targets");
@@ -1301,6 +1305,8 @@ subtest "Item level holds info is preserved (Bug 25738)" => sub {
 
     my $queue_line_1 = $queue_rs->next;
     is( $queue_line_1->item_level_request, 1, 'Request is correctly advertised as item-level' );
+    my $target_rs = $schema->resultset('HoldFillTarget')->search({borrowernumber=>$patron_1->borrowernumber});;
+    is( $target_rs->next->reserve_id, $reserve_id_1, "Reserve id correctly set in hold fill target for item level hold" );
 
     my $queue_line_2 = $queue_rs->next;
     is( $queue_line_2->item_level_request, 0, 'Request is correctly advertised as biblio-level' );
