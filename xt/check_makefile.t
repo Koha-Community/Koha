@@ -19,6 +19,7 @@
 
 use Modern::Perl;
 use Test::More;
+plan tests => 1;
 
 use File::Spec;
 use File::Slurp qw( read_file );
