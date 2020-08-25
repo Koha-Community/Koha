@@ -87,6 +87,7 @@ requires 'PDF::Reuse', '0.36';
 requires 'PDF::Reuse::Barcode', '0.05';
 requires 'PDF::Table', 'v0.9.3';
 requires 'POSIX', '1.09';
+requires 'Plack::Middleware::LogWarn', '0.001002';
 requires 'Plack::Middleware::ReverseProxy', '0.14';
 requires 'Schedule::At', '1.06';
 requires 'Search::Elasticsearch', '5.01';
