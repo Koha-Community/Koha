@@ -46,6 +46,7 @@ Return object set in scalar context
 
 sub Scalar {
     my ( $self, $set, $method ) = @_;
+    return unless $set;
     $set = $set->$method;
     return $set;
 }
