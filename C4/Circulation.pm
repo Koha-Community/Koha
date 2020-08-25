@@ -2761,7 +2761,14 @@ sub CanBookBeRenewed {
 
     my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
 
-    $resfound = 0 if $resrec->{non_priority};
+    # If next hold is non priority, then check if any hold with priority (non_priority = 0) exists for the same biblionumber.
+    if ( $resfound && $resrec->{non_priority} ) {
+        $resfound = Koha::Holds->search(
+            { biblionumber => $resrec->{biblionumber}, non_priority => 0 } )
+          ->count > 0;
+    }
+
+
 
     # This item can fill one or more unfilled reserve, can those unfilled reserves
     # all be filled by other available items?

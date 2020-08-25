@@ -1256,7 +1256,7 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
 
 subtest 'non priority holds' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -1322,6 +1322,30 @@ subtest 'non priority holds' => sub {
 
     ok( $ok, 'Can renew' );
     is( $err, undef, 'Item is on non priority hold' );
+
+    my $patron3 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $item->homebranch }
+        }
+    );
+
+    # Add second hold with non_priority = 0
+    AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $patron3->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 2,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    ( $ok, $err ) =
+      CanBookBeRenewed( $patron1->borrowernumber, $item->itemnumber );
+
+    ok( !$ok, 'Cannot renew' );
+    is( $err, 'on_reserve', 'Item is on hold' );
 
     $schema->storage->txn_rollback;
 

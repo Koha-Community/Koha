@@ -140,38 +140,53 @@
             </td>
 
             <td>
+                <ul>
                 [% IF ( hold.found ) %]
-                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
-                        [% IF ( hold.barcodenumber ) %]
-                            [% hold.barcodenumber | html %]
-                            <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
-                        [% ELSE %]
-                            No barcode
-                        [% END %]
-                    </a>
+                    <li>
+                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
+                            [% IF ( hold.barcodenumber ) %]
+                                [% hold.barcodenumber | html %]
+                                <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
+                            [% ELSE %]
+                                No barcode
+                            [% END %]
+                        </a>
+                    </li>
                 [% ELSE %]
                     [% IF ( hold.item_level_hold ) %]
-                        <i>
-                            Only item
-                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
-                                [% IF ( hold.barcodenumber ) %]
-                                    [% hold.barcodenumber | html %]
-                                    <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
-                                [% ELSE %]
-                                    No barcode
-                                [% END %]
-                            </a>
-                        </i>
+                        <li>
+                            <i>
+                                Only item
+                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
+                                    [% IF ( hold.barcodenumber ) %]
+                                        [% hold.barcodenumber | html %]
+                                        <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
+                                    [% ELSE %]
+                                        No barcode
+                                    [% END %]
+                                </a>
+                            </i>
+                        </li>
                     [% ELSE %]
                         [% IF hold.itemtype %]
-                            <i>Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</i>
+                            <li>
+                                <i>Next available [% ItemTypes.GetDescription( hold.itemtype ) | html %] item</i>
+                            </li>
                         [% ELSE %]
-                            <i>Next available</i>
+                            <li>
+                                <i>Next available</i>
+                            </li>
                         [% END %]
 
                         <input type="hidden" name="itemnumber" value="" />
                     [% END %]
                 [% END %]
+                [% IF hold.non_priority %]
+                    <li>
+                        <i>Non priority hold</i>
+                    </li>
+                [% END %]
+                </ul>
             </td>
 
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]

@@ -6,6 +6,9 @@ if( CheckVersion( $DBversion ) ) {
     # or perform some test and warn
     if( !column_exists( 'reserves', 'non_priority' ) ) {
         $dbh->do("ALTER TABLE reserves ADD COLUMN `non_priority` tinyint(1) NOT NULL DEFAULT 0 AFTER `item_level_hold` -- Is this a non priority hold");
+    }
+
+    if( !column_exists( 'old_reserves', 'non_priority' ) ) {
         $dbh->do("ALTER TABLE old_reserves ADD COLUMN `non_priority` tinyint(1) NOT NULL DEFAULT 0 AFTER `item_level_hold` -- Is this a non priority hold");
     }
 
