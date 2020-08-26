@@ -38,6 +38,7 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Logger;
 
+use Log::Log4perl;
 use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 {
     no warnings 'redefine';
@@ -77,18 +78,24 @@ builder {
     enable "+Koha::Middleware::RealIP";
 
     mount '/opac'          => builder {
-        enable 'Log4perl', category => 'plack-opac';
-        enable 'LogWarn';
+        if ( Log::Log4perl->get_logger('plack-opac')->has_appenders ){
+            enable 'Log4perl', category => 'plack-opac';
+            enable 'LogWarn';
+        }
         $opac;
     };
     mount '/intranet'      => builder {
-        enable 'Log4perl', category => 'plack-intranet';
-        enable 'LogWarn';
+        if ( Log::Log4perl->get_logger('plack-intranet')->has_appenders ){
+            enable 'Log4perl', category => 'plack-intranet';
+            enable 'LogWarn';
+        }
         $intranet;
     };
     mount '/api/v1/app.pl' => builder {
-        enable 'Log4perl', category => 'plack-api';
-        enable 'LogWarn';
+        if ( Log::Log4perl->get_logger('plack-api')->has_appenders ){
+            enable 'Log4perl', category => 'plack-api';
+            enable 'LogWarn';
+        }
         $apiv1;
     };
 };
