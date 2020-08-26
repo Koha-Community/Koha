@@ -138,7 +138,7 @@ elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
     $template->param( returned => $doreturn );
 }
-elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
+elsif ( $patron && ( $op eq 'checkout' ) ) {
     my $impossible  = {};
     my $needconfirm = {};
     ( $impossible, $needconfirm ) = CanBookBeIssued(
@@ -182,22 +182,14 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                 barcode    => $barcode,
             );
         }
-    } elsif ( $needconfirm->{RENEW_ISSUE} || $op eq 'renew' ) {
-        if ($confirmed) {
-            #warn "renewing";
-            AddRenewal( $borrower->{borrowernumber}, $item->itemnumber );
-            push @newissueslist, $barcode;
-            $template->param( renewed => 1 );
-        } else {
-            #warn "renew confirmation";
-            $template->param(
+    } elsif ( $needconfirm->{RENEW_ISSUE} ){
+        $template->param(
                 renew               => 1,
                 barcode             => $barcode,
                 confirm             => 1,
                 confirm_renew_issue => 1,
                 hide_main           => 1,
-            );
-        }
+        );
     } elsif ( $confirm_required && !$confirmed ) {
         #warn "failed confirmation";
         $template->param(
@@ -259,6 +251,16 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
         }
     }
 } # $op
+
+if ( $patron && ( $op eq 'renew' ) ) {
+    my ($status,$renewerror) = CanBookBeRenewed( $borrower->{borrowernumber}, $item->itemnumber );
+    if ($status) {
+        #warn "renewing";
+        AddRenewal( $borrower->{borrowernumber}, $item->itemnumber );
+        push @newissueslist, $barcode;
+        $template->param( renewed => 1 );
+    }
+}
 
 if ($borrower) {
 #   warn "issuer's  branchcode: " .   $issuer->{branchcode};

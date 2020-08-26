@@ -327,7 +327,7 @@
                                                             <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
                                                             <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                                             [% IF ISSUE.can_be_renewed %]
-                                                                <input type="hidden" name="op" value="checkout" />
+                                                                <input type="hidden" name="op" value="renew" />
                                                                 <input type="hidden" name="confirmed" value="1" />
                                                                 [% UNLESS ( ISSUE.renew ) %]
                                                                     <input type="submit" value="Renew item"  name="confirm  " class="btn renew" />
