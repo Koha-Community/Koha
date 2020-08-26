@@ -1304,7 +1304,7 @@
                                        <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber and $OPACItemLocation='callnum'">
                                            <span class="CallNumberAndLabel">
                                                 <span class="LabelCallNumber">Call number: </span>
-                                                <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-status-and-branch-home', concat(items:status, ' ', items:homebranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
+                                                <span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/><xsl:if test="count(key('item-by-status-and-branch-holding', concat(items:status, ' ', items:holdingbranch)))>1"><xsl:text>, ..</xsl:text></xsl:if></span>
                                            </span>
                                        </xsl:if>
                                        <xsl:choose>
