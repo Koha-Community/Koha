@@ -123,6 +123,7 @@ use MARC::Field;
 use MARC::Record;
 use Modern::Perl;
 use Pod::Usage;
+use Try::Tiny;
 
 my $verbose = 0;
 my $commit = 5000;
@@ -302,12 +303,20 @@ sub _do_reindex {
         push @commit_buffer, $record;
         if ( !( --$commit_count ) ) {
             _log( 1, "Committing $commit records...\n" );
-            my $response = $indexer->update_index( \@id_buffer, \@commit_buffer );
-            _handle_response($response);
+            my $response;
+            try{
+                $response = $indexer->update_index( \@id_buffer, \@commit_buffer );
+                _handle_response($response);
+                _log( 1, "Commit complete\n" );
+            } catch {
+                if( ref $_ eq 'Koha::Exceptions::Elasticsearch::BadResponse'){
+                    _log(1,$_->{error});
+                    _log(2,$_->{details});
+                }
+            };
             $commit_count  = $commit;
             @id_buffer     = ();
             @commit_buffer = ();
-            _log( 1, "Commit complete\n" );
         }
     }
 
