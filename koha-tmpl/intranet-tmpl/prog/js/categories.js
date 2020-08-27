@@ -84,6 +84,9 @@ $(document).ready(function() {
             },
             category_type: {
                 required: true
+            },
+            min_password_length: {
+                digits: true
             }
         },
         messages: {
