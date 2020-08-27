@@ -25,6 +25,7 @@ use base qw(Koha::SearchEngine::Elasticsearch);
 use Data::Dumper;
 
 use Koha::Exceptions;
+use Koha::Exceptions::Elasticsearch;
 use Koha::SearchEngine::Zebra::Indexer;
 use C4::AuthoritiesMarc qw//;
 use C4::Biblio;
@@ -113,15 +114,24 @@ sub update_index {
     }
     my $response;
     if (@body) {
-        my $elasticsearch = $self->get_elasticsearch();
-        $response = $elasticsearch->bulk(
-            index => $self->index_name,
-            type => 'data', # is just hard coded in Indexer.pm?
-            body => \@body
-        );
-        if ($response->{errors}) {
-            carp "One or more ElasticSearch errors occurred when indexing documents";
-        }
+        try{
+            my $elasticsearch = $self->get_elasticsearch();
+            $response = $elasticsearch->bulk(
+                index => $self->index_name,
+                type => 'data', # is just hard coded in Indexer.pm?
+                body => \@body
+            );
+            if ($response->{errors}) {
+                carp "One or more ElasticSearch errors occurred when indexing documents";
+            }
+        } catch {
+            if( ref $_ eq 'Search::Elasticsearch::Error::Timeout' ){
+            Koha::Exceptions::Elasticsearch::BadResponse->throw(
+                error => "Record commit failed.",
+                details => "Timeout",
+            );
+            }
+        };
     }
     return $response;
 }
