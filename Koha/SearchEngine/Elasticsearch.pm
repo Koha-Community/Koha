@@ -1282,6 +1282,8 @@ sub _read_configuration {
 
     $configuration->{cxn_pool} = $conf->{cxn_pool} // 'Static';
 
+    $configuration->{trace_to} = $conf->{trace_to} if defined $conf->{trace_to};
+
     return $configuration;
 }
 

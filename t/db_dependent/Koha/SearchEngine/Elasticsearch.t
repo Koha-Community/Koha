@@ -37,7 +37,7 @@ $schema->storage->txn_begin;
 
 subtest '_read_configuration() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 15;
 
     my $configuration;
     t::lib::Mocks::mock_config( 'elasticsearch', undef );
@@ -100,10 +100,15 @@ subtest '_read_configuration() tests' => sub {
 
     $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
     is( $configuration->{cxn_pool}, 'Fluid', 'cxn_pool configuration parsed correctly' );
+    isnt( defined $configuration->{trace_to}, 'trace_to is not defined if not set' );
 
     my $params = Koha::SearchEngine::Elasticsearch::get_elasticsearch_params;
     is_deeply( $configuration->{nodes}, \@servers , 'get_elasticsearch_params is just a wrapper for _read_configuration' );
 
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Fluid', trace_to => 'Stderr' } );
+
+    $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
+    is( $configuration->{trace_to}, 'Stderr', 'trace_to configuration parsed correctly' );
 };
 
 subtest 'get_elasticsearch_settings() tests' => sub {
