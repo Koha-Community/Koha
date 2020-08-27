@@ -33,7 +33,7 @@ use Koha::SearchEngine::Elasticsearch::Search;
 
 subtest '_read_configuration() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 13;
 
     my $configuration;
     t::lib::Mocks::mock_config( 'elasticsearch', undef );
@@ -89,7 +89,17 @@ subtest '_read_configuration() tests' => sub {
 
     $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
     is( $configuration->{index_name}, 'index', 'Index configuration parsed correctly' );
+    is( $configuration->{cxn_pool}, 'Static', 'cxn_pool configuration set correctly to Static if not specified' );
     is_deeply( $configuration->{nodes}, \@servers , 'Server configuration parsed correctly' );
+
+    t::lib::Mocks::mock_config( 'elasticsearch', { server => \@servers, index_name => 'index', cxn_pool => 'Fluid' } );
+
+    $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
+    is( $configuration->{cxn_pool}, 'Fluid', 'cxn_pool configuration parsed correctly' );
+
+    my $params = Koha::SearchEngine::Elasticsearch::get_elasticsearch_params;
+    is_deeply( $configuration->{nodes}, \@servers , 'get_elasticsearch_params is just a wrapper for _read_configuration' );
+
 };
 
 subtest 'get_elasticsearch_settings() tests' => sub {
