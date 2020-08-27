@@ -2493,6 +2493,7 @@ CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `content` MEDIUMTEXT, -- body text for the notice or slip
   `message_transport_type` varchar(20) NOT NULL DEFAULT 'email', -- transport type for this notice
   `lang` varchar(25) NOT NULL DEFAULT 'default', -- lang of the notice
+  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- last modification
   PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`, `lang`),
   CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`)
   REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE

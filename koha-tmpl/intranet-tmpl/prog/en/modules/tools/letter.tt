@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE Branches %]
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
@@ -142,6 +143,7 @@
                                     <th>Module</th>
                                     <th>Code</th>
                                     <th>Name</th>
+                                    <th class="title-string">Last updated</th>
                                     <th class="nosort">Copy notice</th>
                                     <th class="nosort">Actions</th>
                                 </tr>
@@ -175,6 +177,7 @@
                                         </td>
                                         <td>[% lette.code | html %]</td>
                                         <td>[% lette.name | html %]</td>
+                                        <td>[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
                                         <td class="actions">
                                             [% IF !independant_branch || !lette.branchcode %]
                                                 <form method="post" action="/cgi-bin/koha/tools/letter.pl">
@@ -417,6 +420,12 @@
                                         <fieldset class="rows mtt" id="[% letter.message_transport_type | html %]_[% lang | html %]">
                                     [% END %]
                                         <ol>
+                                            [% IF ( letter.updated_on ) %]
+                                                <li>
+                                                    <label for="updated_on_[% letter.message_transport_type | html %]_[% lang | html %]">Last updated:</label>
+                                                    [% letter.updated_on | $KohaDates with_hours = 1 %]
+                                                </li>
+                                            [% END %]
                                             <li>
                                                 <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
                                                 <input type="hidden" name="lang" value="[% lang | html %]" />

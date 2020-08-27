@@ -207,6 +207,7 @@ sub add_form {
             $letters{ $lang }{templates}{$mtt} = {
                 message_transport_type => $letter->{message_transport_type},
                 is_html    => $letter->{is_html},
+                updated_on => $letter->{updated_on},
                 title      => $letter->{title},
                 content    => $letter->{content} // '',
             };
@@ -367,7 +368,7 @@ sub retrieve_letters {
 
     my $dbh = C4::Context->dbh;
     my ($sql, @where, @args);
-    $sql = "SELECT branchcode, module, code, name, branchname
+    $sql = "SELECT branchcode, module, code, name, branchname, MAX(updated_on) as updated_on
             FROM letter
             LEFT OUTER JOIN branches USING (branchcode)
     ";
