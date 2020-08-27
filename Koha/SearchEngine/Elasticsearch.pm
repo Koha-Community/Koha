@@ -141,13 +141,8 @@ sub get_elasticsearch_params {
             croak($_->message);
         }
     };
-    # Extract relevant parts of configuration
-    my $params = {
-        nodes => $conf->{nodes}
-    };
-    $params->{cxn_pool} //= 'Static';
 
-    return $params;
+    return $conf
 }
 
 =head2 get_elasticsearch_settings
@@ -1260,6 +1255,8 @@ sub _read_configuration {
             "Missing <elasticsearch>/<index_name> entry in koha-conf.xml",
         );
     }
+
+    $configuration->{cxn_pool} = $conf->{cxn_pool} // 'Static';
 
     return $configuration;
 }
