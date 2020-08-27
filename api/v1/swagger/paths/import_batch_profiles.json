@@ -1,5 +1,5 @@
 {
-  "/import-batch-profiles": {
+  "/import_batch_profiles": {
     "get": {
       "x-mojo-to": "ImportBatchProfiles#list",
       "operationId": "listImportBatchProfiles",
@@ -37,7 +37,7 @@
         "200": {
           "description": "A list of import batch profiles",
           "schema": {
-            "$ref": "../definitions.json#/import-batch-profiles"
+            "$ref": "../definitions.json#/import_batch_profiles"
           }
         },
         "401": {
@@ -140,7 +140,7 @@
         "201": {
           "description": "Created Profile",
           "schema": {
-            "$ref": "../definitions.json#/import-batch-profile"
+            "$ref": "../definitions.json#/import_batch_profile"
           }
         },
         "400": {
@@ -187,7 +187,7 @@
       }
     }
   },
-  "/import-batch-profiles/{profile_id}": {
+  "/import_batch_profiles/{profile_id}": {
     "put": {
       "x-mojo-to": "ImportBatchProfiles#edit",
       "operationId": "editImportBatchProfiles",
@@ -260,7 +260,7 @@
         "200": {
           "description": "Updated profile",
           "schema": {
-            "$ref": "../definitions.json#/import-batch-profile"
+            "$ref": "../definitions.json#/import_batch_profile"
           }
         },
         "400": {
