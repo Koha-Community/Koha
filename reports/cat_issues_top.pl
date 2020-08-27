@@ -194,14 +194,14 @@ sub calculate {
     my $colfield;
     my $colorder;
     if ($column){
-        $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
+        $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/issuedate/));
         if($column=~/itemtype/){
             $column = C4::Context->preference('item-level_itypes') ? "items.itype": "biblioitems.itemtype";
         }
         $column = "borrowers.".$column if $column=~/categorycode/;
         my @colfilter ;
-        $colfilter[0] = @$filters[0] if ($column =~ /timestamp/ )  ;
-        $colfilter[1] = @$filters[1] if ($column =~ /timestamp/ )  ;
+        $colfilter[0] = @$filters[0] if ($column =~ /issuedate/ )  ;
+        $colfilter[1] = @$filters[1] if ($column =~ /issuedate/ )  ;
         $colfilter[0] = @$filters[2] if ($column =~ /returndate/ )  ;
         $colfilter[1] = @$filters[3] if ($column =~ /returndate/ )  ;
         $colfilter[0] = @$filters[4] if ($column =~ /branch/ )  ;
@@ -212,25 +212,25 @@ sub calculate {
         $colfilter[0] = @$filters[8] if ($column =~ /category/ )  ;
       # This commented out row (sort2) was not removed when adding new filters for ccode, shelving location and call number
       # $colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
-        $colfilter[0] = @$filters[9] if ($column =~ /timestamp/ ) ;
-        $colfilter[0] = @$filters[10] if ($column =~ /timestamp/ ) ;
-        $colfilter[0] = @$filters[11] if ($column =~ /timestamp/ ) ;
+        $colfilter[0] = @$filters[9] if ($column =~ /issuedate/ ) ;
+        $colfilter[0] = @$filters[10] if ($column =~ /issuedate/ ) ;
+        $colfilter[0] = @$filters[11] if ($column =~ /issuedate/ ) ;
     #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
                                                 
     # loop cols.
         if ($column eq "Day") {
             #Display by day
-            $column = "old_issues.timestamp";
+            $column = "old_issues.issuedate";
             $colfield .="dayname($column)";  
             $colorder .="weekday($column)";
         } elsif ($column eq "Month") {
             #Display by Month
-            $column = "old_issues.timestamp";
+            $column = "old_issues.issuedate";
             $colfield .="monthname($column)";  
             $colorder .="month($column)";  
         } elsif ($column eq "Year") {
             #Display by Year
-            $column = "old_issues.timestamp";
+            $column = "old_issues.issuedate";
             $colfield .="Year($column)";
             $colorder .= $column;
         } else {
@@ -245,7 +245,7 @@ sub calculate {
                      LEFT JOIN items ON old_issues.itemnumber=items.itemnumber 
                      LEFT JOIN biblioitems  ON biblioitems.biblioitemnumber=items.biblioitemnumber 
                      WHERE 1";
-        if (($column=~/timestamp/) or ($column=~/returndate/)){
+        if (($column=~/issuedate/) or ($column=~/returndate/)){
             if ($colfilter[1] and ($colfilter[0])){
                 $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
             } elsif ($colfilter[1]) {
@@ -311,9 +311,9 @@ sub calculate {
                   WHERE 1";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
+    $strcalc .= " AND old_issues.issuedate > '" . @$filters[0] ."'" if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-    $strcalc .= " AND old_issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
+    $strcalc .= " AND old_issues.issuedate < '" . @$filters[1] ."'" if ( @$filters[1] );
     @$filters[2]=~ s/\*/%/g if (@$filters[2]);
     $strcalc .= " AND old_issues.returndate > '" . @$filters[2] ."'" if ( @$filters[2] );
     @$filters[3]=~ s/\*/%/g if (@$filters[3]);
@@ -338,11 +338,11 @@ sub calculate {
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[9] ."'" if ( @$filters[9] );
     @$filters[10]=~ s/\*/%/g if (@$filters[10]);
-    $strcalc .= " AND dayname(old_issues.timestamp) like '" . @$filters[10]."'" if (@$filters[10]);
+    $strcalc .= " AND dayname(old_issues.issuedate) like '" . @$filters[10]."'" if (@$filters[10]);
     @$filters[11]=~ s/\*/%/g if (@$filters[11]);
-    $strcalc .= " AND monthname(old_issues.timestamp) like '" . @$filters[11]."'" if (@$filters[11]);
+    $strcalc .= " AND monthname(old_issues.issuedate) like '" . @$filters[11]."'" if (@$filters[11]);
     @$filters[12]=~ s/\*/%/g if (@$filters[12]);
-    $strcalc .= " AND year(old_issues.timestamp) like '" . @$filters[12] ."'" if ( @$filters[12] );
+    $strcalc .= " AND year(old_issues.issuedate) like '" . @$filters[12] ."'" if ( @$filters[12] );
     
     $strcalc .= " group by biblio.biblionumber";
     $strcalc .= ", $colfield" if ($column);
