@@ -556,7 +556,7 @@ $(document).ready(function() {
                         if ( oObj.return_claim_id ) {
                           content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
                         } else {
-                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i>' + RETURN_CLAIMED_MAKE + '</a>';
+                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + RETURN_CLAIMED_MAKE + '</a>';
                         }
                         return content;
                     }
