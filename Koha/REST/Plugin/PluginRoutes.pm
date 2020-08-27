@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 use Koha::Exceptions::Plugin;
 use Koha::Plugins;
+use Koha::Logger;
 
 use Clone qw(clone);
 use Try::Tiny;
@@ -91,7 +92,8 @@ sub inject_routes {
     catch {
         my $error = $_;
         my $class = ref $plugin;
-        warn "Plugin $class route injection failed: $error";
+        my $logger = Koha::Logger->get({ interface => 'api' });
+        $logger->error("Plugin $class route injection failed: $error");
         return $spec;
     };
 }

@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious';
 
 use C4::Context;
+use Koha::Logger;
 use Carp;
 use JSON::Validator::OpenAPI::Mojolicious;
 use Try::Tiny;
@@ -106,7 +107,8 @@ sub startup {
         # to catch bad ones.
 
         # JSON::Validator uses confess, so trim call stack from the message.
-        carp "Warning: Could not load REST API spec bundle: " . ($_ =~ /\A(.*?)$/ms)[0];
+        my $logger = Koha::Logger->get({ interface => 'api' });
+        $logger->error("Warning: Could not load REST API spec bundle: " . $_);
 
         try {
             $validator->load_and_validate_schema(
@@ -138,7 +140,7 @@ sub startup {
         }
         catch {
             # JSON::Validator uses confess, so trim call stack from the message.
-            croak "Could not load REST API spec: " . ($_ =~ /\A(.*?)$/ms)[0];
+            $logger->error("Warning: Could not load REST API spec bundle: " . $_);
         };
     };
 
