@@ -881,6 +881,7 @@ $(document).ready(function() {
             $(id).replaceWith( content );
 
             refreshReturnClaimsTable();
+            issuesTable.api().ajax.reload();
         }, "json")
 
     });
@@ -1065,6 +1066,7 @@ $(document).ready(function() {
                 type: 'DELETE',
                 success: function( data ) {
                     refreshReturnClaimsTable();
+                    issuesTable.api().ajax.reload();
                 }
             });
         }
