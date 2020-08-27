@@ -43,6 +43,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Password',
         description => 'The password was rejected by a plugin'
     },
+    'Koha::Exceptions::Password::NoCategoryProvided' => {
+        isa => 'Koha::Exceptions::Password',
+        description => 'You must provide a patron\'s category to validate password\'s strength and length'
+    }
 );
 
 sub full_message {

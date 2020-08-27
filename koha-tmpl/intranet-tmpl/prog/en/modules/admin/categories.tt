@@ -231,7 +231,7 @@
                 </li>
                 <li>
                     <label for="min_password_length">Minimum password length:</label>
-                    <input id="min_password_length" type="number" name="min_password_length" value="[% category.min_password_length | html %]"/>
+                    <input id="min_password_length" type="text" inputmode="numeric" pattern="[0-9]*" name="min_password_length" value="[% category.min_password_length | html %]"/>
                     <span>Leave blank to use system default ([% Koha.Preference('minPasswordLength') | html %])</span>
                 </li>
                 <li class="pwd_setting_wrapper">

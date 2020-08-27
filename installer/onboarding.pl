@@ -144,8 +144,14 @@ if ( $step == 3 ) {
         my $secondpassword = $input->param('password2') || '';
         my $cardnumber     = $input->param('cardnumber');
         my $userid         = $input->param('userid');
+        my $categorycode = $input->param('categorycode_entry');
+        my $patron_category =
+          Koha::Patron::Categories->find( $categorycode );
 
-        my ( $is_valid, $passworderror) = Koha::AuthUtils::is_password_valid( $firstpassword );
+        my ( $is_valid, $passworderror ) =
+          Koha::AuthUtils::is_password_valid( $firstpassword,
+            $patron_category );
+
 
         if ( my $error_code = checkcardnumber($cardnumber) ) {
             if ( $error_code == 1 ) {
@@ -171,7 +177,7 @@ if ( $step == 3 ) {
                 firstname    => scalar $input->param('firstname'),
                 cardnumber   => scalar $input->param('cardnumber'),
                 branchcode   => scalar $input->param('libraries'),
-                categorycode => scalar $input->param('categorycode_entry'),
+                categorycode => $categorycode,
                 userid       => scalar $input->param('userid'),
                 privacy      => "default",
                 address      => "",
@@ -179,8 +185,6 @@ if ( $step == 3 ) {
                 flags        => 1,    # Will be superlibrarian
             };
 
-            my $patron_category =
-              Koha::Patron::Categories->find( $patron_data->{categorycode} );
             $patron_data->{dateexpiry} =
               $patron_category->get_expiry_date( $patron_data->{dateenrolled} );
 
