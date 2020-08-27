@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Context;
 use Koha::Logger;
-use Carp;
+
 use JSON::Validator::OpenAPI::Mojolicious;
 use Try::Tiny;
 
