@@ -25,6 +25,7 @@ use Koha::BiblioFrameworks;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Patrons;
 use C4::Biblio qw( GetMarcFromKohaField );
 
 {
@@ -273,6 +274,22 @@ use C4::Biblio qw( GetMarcFromKohaField );
             new_item(sprintf "Biblio with biblionumber=%s does not have title defined", $biblio->biblionumber);
         }
         new_hint("Edit these biblio records to defined a title");
+    }
+}
+
+{
+    my $patrons = Koha::Patrons->search( {}, { order_by => [ 'categorycode', 'borrowernumber' ] } );
+    my @invalid_patrons;
+    while ( my $patron = $patrons->next ) {
+        push @invalid_patrons, $patron unless $patron->is_valid_age;
+    }
+    if (@invalid_patrons) {
+        new_section("Patrons with invalid age for category");
+        foreach my $patron (@invalid_patrons) {
+            new_item( sprintf "Patron borrowernumber=%s in category '%s' has invalid age '%s'",
+                $patron->borrowernumber, $patron->category->categorycode, $patron->get_age );
+        }
+        new_hint("You may change patron's category automatically with misc/cronjobs/update_patrons_category.pl");
     }
 }
 
