@@ -41,12 +41,24 @@ my $port2app = {
 };
 
 builder {
+    # This middleware decides which app to run (opac or intranet) depending on
+    # SERVER_PORT.  It must be run before ReverseProxy middleware which can
+    # modify SERVER_PORT
+    enable sub {
+        my $app = shift;
+        sub {
+            my $env = shift;
+            $env->{'koha.app'} = $port2app->{$env->{SERVER_PORT}} || $intranet;
+            return $app->($env);
+        }
+    };
+
     enable 'ReverseProxy';
     enable '+Koha::Middleware::SetEnv';
     enable '+Koha::Middleware::RealIP';
+
     sub {
         my $env = shift;
-        my $app = $port2app->{$env->{SERVER_PORT}} || $intranet;
-        $app->($env);
+        $env->{'koha.app'}->($env);
     };
 }
