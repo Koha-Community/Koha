@@ -66,17 +66,7 @@ sub _around_action {
     my ($next, $c, $action, $last) = @_;
 
     # Flush memory caches before every request
-    my $caches = $Koha::Caches::singleton_caches;
-    if ($caches) {
-        foreach my $key (keys %$caches) {
-            my $cache = $caches->{$key};
-            if (ref $cache->{cache} eq 'Cache::Memory') {
-                $cache->flush_all;
-            }
-            $cache->flush_L1_cache;
-        }
-    }
-    $Koha::Caches::singleton_caches = {};
+    Koha::Caches->flush_L1_caches();
     Koha::Cache::Memory::Lite->flush();
 
     return $next->();
