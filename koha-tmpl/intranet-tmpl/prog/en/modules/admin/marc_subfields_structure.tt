@@ -156,7 +156,11 @@
                     [% END %]
                     (if checked, it means that the subfield is a URL and can be clicked)
                 </li>
-                <li><label for="link[% loo.row | html %]">Link:</label><input type="text" id="link[% loo.row | html %]" name="link" value="[% loo.link | html %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
+                <li>
+                    <label for="link[% loo.row | html %]">Link:</label>
+                    <input type="text" id="link[% loo.row | html %]" name="link" value="[% loo.link | html %]" size="10" maxlength="80" />
+                    (an index name, e.g. title or Local-Number)
+                </li>
                 <li>
                     <label for="kohafield[% loo.row | html %]">Koha link:</label>
                     <!-- This select should be DISABLED; value is submitted by the following hidden input -->
@@ -169,6 +173,7 @@
                       [% END %]
                     [% END %]
                     </select>
+                    <span class="error">(If you change this value, you must ask your administrator to run misc/batchRebuildBiblioTables.pl.)</span>
                     <!-- Do NOT remove this next hidden input! We need it to save kohafield. -->
                     <input type="hidden" name="kohafield" value="[% loo.kohafield | html %]"/>
                 </li>
