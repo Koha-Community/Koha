@@ -22689,6 +22689,20 @@ if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20057, "Add new system preference 'AutoApprovePatronProfileSettings'");
 }
 
+$DBversion = '20.06.00.031';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'reserves', 'non_priority' ) ) {
+        $dbh->do("ALTER TABLE reserves ADD COLUMN `non_priority` tinyint(1) NOT NULL DEFAULT 0 AFTER `item_level_hold`");
+    }
+
+    if( !column_exists( 'old_reserves', 'non_priority' ) ) {
+        $dbh->do("ALTER TABLE old_reserves ADD COLUMN `non_priority` tinyint(1) NOT NULL DEFAULT 0 AFTER `item_level_hold`");
+    }
+
+    NewVersion( $DBversion, 22789, "Add non_priority column on reserves and old_reserves tables");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
