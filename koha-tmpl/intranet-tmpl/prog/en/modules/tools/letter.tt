@@ -177,7 +177,7 @@
                                         </td>
                                         <td>[% lette.code | html %]</td>
                                         <td>[% lette.name | html %]</td>
-                                        <td>[% lette.updated_on | $KohaDates with_hours = 1 %]</td>
+                                        <td><span title="[% lette.updated_on %]">[% lette.updated_on | $KohaDates with_hours = 1 %]</span></td>
                                         <td class="actions">
                                             [% IF !independant_branch || !lette.branchcode %]
                                                 <form method="post" action="/cgi-bin/koha/tools/letter.pl">
