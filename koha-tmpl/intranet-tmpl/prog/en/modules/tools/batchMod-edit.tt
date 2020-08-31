@@ -67,11 +67,6 @@ $(document).ready(function(){
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 [% INCLUDE 'select2.inc' %]
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.subfield_line select').select2();
-  });
-</script>
 
 </head>
 <body id="tools_batchMod-edit" class="tools">
@@ -281,7 +276,7 @@ $(document).ready(function(){
               </label>
 
               [% IF ( mv.type == 'select' ) -%]
-                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor">
+                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor select2">
                   [%- FOREACH aval IN mv.values %]
               [% ite.subfield | html %] -
                     [% IF aval == mv.default %]
