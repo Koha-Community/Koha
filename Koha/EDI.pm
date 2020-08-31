@@ -211,12 +211,30 @@ sub process_invoice {
     my $logger = Log::Log4perl->get_logger();
     my $vendor_acct;
 
-    my $plugin = $invoice_message->edi_acct()->plugin();
+    my $plugin_class = $invoice_message->edi_acct()->plugin();
+
+    # Plugin has its own invoice processor, only run it and not the standard invoice processor below
+    if ( $plugin_class ) {
+        my $plugin = $plugin_class->new();
+        if ( $plugin->can('edifact_process_invoice') ) {
+            Koha::Plugins::Handler->run(
+                {
+                    class  => $plugin_class,
+                    method => 'edifact_process_invoice',
+                    params => {
+                        invoice => $invoice_message,
+                    }
+                }
+            );
+            return;
+        }
+    }
+
     my $edi_plugin;
-    if ( $plugin ) {
+    if ( $plugin_class ) {
         $edi_plugin = Koha::Plugins::Handler->run(
             {
-                class  => $plugin,
+                class  => $plugin_class,
                 method => 'edifact',
                 params => {
                     invoice_message => $invoice_message,

@@ -50,22 +50,7 @@ if ( $cmd && $cmd eq 'delete' ) {
 if ( $cmd && $cmd eq 'import' ) {
     my $id  = $q->param('message_id');
     my $invoice = $schema->resultset('EdifactMessage')->find($id);
-
-    my $plugin_used = 0;
-    if ( my $plugin_class = $invoice->edi_acct->plugin ) {
-        $plugin_used = 1;
-        Koha::Plugins::Handler->run(
-            {
-                class  => $plugin_class,
-                method => 'edifact_process_invoice',
-                params => {
-                    invoice => $invoice,
-                }
-            }
-        );
-    }
-
-    process_invoice($invoice) unless $plugin_used;
+    process_invoice($invoice);
 }
 
 my @msgs = $schema->resultset('EdifactMessage')->search(

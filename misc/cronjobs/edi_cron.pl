@@ -132,25 +132,7 @@ if ( C4::Context->preference('EdifactInvoiceImport') eq 'automatic' ) {
     foreach my $invoice (@downloaded_invoices) {
         my $filename = $invoice->filename();
         $logger->trace("Processing invoice $filename");
-
-        my $plugin_used = 0;
-        if ( my $plugin_class = $invoice->edi_acct->plugin ) {
-            my $plugin = $plugin_class->new();
-            if ( $plugin->can('edifact_process_invoice') ) {
-                $plugin_used = 1;
-                Koha::Plugins::Handler->run(
-                    {
-                        class  => $plugin_class,
-                        method => 'edifact_process_invoice',
-                        params => {
-                            invoice => $invoice,
-                        }
-                    }
-                );
-            }
-        }
-
-        process_invoice($invoice) unless $plugin_used;
+        process_invoice($invoice);
     }
 }
 
