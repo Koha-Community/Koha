@@ -53,6 +53,7 @@
     <th>Due date</th>
     <th>Checkin date</th>
     <th>Checkout date</th>
+    <th class="checked_out_from">Checked out from</th>
     <th class="NoSort">Payment note</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
@@ -112,6 +113,11 @@
             [% line.checkout.issuedate | $KohaDates %]
         [% END %]
     </td>
+    <td class="checked_out_from">
+        [% IF line.issue_id && line.checkout.library %]
+            [% line.checkout.library.branchname | html %]
+        [% END %]
+    </td>
     <td class="actions">
         <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
         <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-remove"></i></a></span>
@@ -124,7 +130,7 @@
 
 <tfoot>
     <tr>
-        <td class="total" colspan="11">Total due:</td>
+        <td class="total" colspan="12">Total due:</td>
         <td style="text-align: right;">[% total | $Price %]</td>
     </tr>
     [% IF outstanding_credits.total_outstanding < 0 %]
