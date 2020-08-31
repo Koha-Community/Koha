@@ -255,7 +255,7 @@ sub authenticate_api_request {
     if ( !$authorization and
          ( $params->{is_public} and
           ( C4::Context->preference('RESTPublicAnonymousRequests') or
-            $user) ) or $params->{is_plugin} ) {
+            $user) or $params->{is_plugin} ) ) {
         # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );
