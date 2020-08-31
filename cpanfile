@@ -80,6 +80,7 @@ requires 'Mojolicious', '7.21';
 requires 'Mojolicious::Plugin::OpenAPI', '1.15';
 requires 'Net::CIDR', '0.17';
 requires 'Net::Netmask', '1.9022';
+requires 'Net::Stomp', '0.57';
 requires 'Net::Z3950::ZOOM', '1.16';
 requires 'Number::Format', '1.52';
 requires 'OpenOffice::OODoc', '2.125';
