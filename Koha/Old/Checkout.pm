@@ -18,6 +18,7 @@ package Koha::Old::Checkout;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Libraries;
 
 use base qw(Koha::Object);
 
@@ -41,6 +42,21 @@ sub item {
     my ( $self ) = @_;
     my $item_rs = $self->_result->item;
     return Koha::Item->_new_from_dbic( $item_rs );
+}
+
+=head3 library
+
+my $library = $checkout->library;
+
+Return the library in which the transaction took place. Might return I<undef>.
+
+=cut
+
+sub library {
+    my ( $self ) = @_;
+    my $library_rs = $self->_result->library;
+    return unless $library_rs;
+    return Koha::Library->_new_from_dbic( $library_rs );
 }
 
 =head3 patron

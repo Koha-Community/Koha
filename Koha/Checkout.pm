@@ -28,6 +28,7 @@ use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Items;
+use Koha::Libraries;
 
 use base qw(Koha::Object);
 
@@ -75,6 +76,20 @@ sub item {
     my ( $self ) = @_;
     my $item_rs = $self->_result->item;
     return Koha::Item->_new_from_dbic( $item_rs );
+}
+
+=head3 library
+
+my $library = $checkout->library;
+
+Return the library in which the transaction took place
+
+=cut
+
+sub library {
+    my ( $self ) = @_;
+    my $library_rs = $self->_result->library;
+    return Koha::Library->_new_from_dbic( $library_rs );
 }
 
 =head3 patron
