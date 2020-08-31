@@ -812,7 +812,7 @@ sub _get_facet_from_result_set {
         my $facet_value = $term->textContent;
         $facet_value =~ s/\s*(?<!\p{Uppercase})[.\-,;]*\s*$//;
         $facet_value =~ s/\Q$internal_sep\E/$sep/ if defined $sep;
-        $facets->{ $facet_value } =  ( defined $facets->{$facet_value} ) ? $facets->{ $facet_value } + $term->getAttribute( 'occur' ) : $term->getAttribute( 'occur' );
+        $facets->{ $facet_value } += $term->getAttribute( 'occur' );
     }
 
     return $facets;
