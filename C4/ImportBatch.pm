@@ -711,7 +711,6 @@ sub BatchCommitRecords {
         } elsif ($record_result eq 'ignore') {
             $recordid = $record_match;
             $num_ignored++;
-            $recordid = $record_match;
             if ($record_type eq 'biblio' and defined $recordid and ( $item_result eq 'create_new' || $item_result eq 'replace' ) ) {
                 my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
                 $num_items_added += $bib_items_added;
@@ -1199,6 +1198,7 @@ sub GetBestRecordMatch {
                              WHERE  import_record_matches.import_record_id = ? AND
                              (  (import_records.record_type = 'biblio' AND biblio.biblionumber IS NOT NULL) OR
                                 (import_records.record_type = 'auth' AND auth_header.authid IS NOT NULL) )
+                             AND chosen = 1
                              ORDER BY score DESC, candidate_match_id DESC");
     $sth->execute($import_record_id);
     my ($record_id) = $sth->fetchrow_array();
@@ -1479,12 +1479,13 @@ sub GetImportRecordMatches {
     my $dbh = C4::Context->dbh;
     # FIXME currently biblio only
     my $sth = $dbh->prepare_cached("SELECT title, author, biblionumber,
-                                    candidate_match_id, score, record_type
+                                    candidate_match_id, score, record_type,
+                                    chosen
                                     FROM import_records
                                     JOIN import_record_matches USING (import_record_id)
                                     LEFT JOIN biblio ON (biblionumber = candidate_match_id)
                                     WHERE import_record_id = ?
-                                    ORDER BY score DESC, biblionumber DESC");
+                                    ORDER BY score DESC, chosen DESC, biblionumber DESC");
     $sth->bind_param(1, $import_record_id);
     my $results = [];
     $sth->execute();
@@ -1517,10 +1518,12 @@ sub SetImportRecordMatches {
     $delsth->execute($import_record_id);
     $delsth->finish();
 
-    my $sth = $dbh->prepare("INSERT INTO import_record_matches (import_record_id, candidate_match_id, score)
-                                    VALUES (?, ?, ?)");
+    my $sth = $dbh->prepare("INSERT INTO import_record_matches (import_record_id, candidate_match_id, score, chosen)
+                                    VALUES (?, ?, ?, ?)");
+    my $chosen = 1; #The first match is defaulted to be chosen
     foreach my $match (@matches) {
-        $sth->execute($import_record_id, $match->{'record_id'}, $match->{'score'});
+        $sth->execute($import_record_id, $match->{'record_id'}, $match->{'score'}, $chosen);
+        $chosen = 0; #After the first we do not default to other matches
     }
 }
 
@@ -1737,41 +1740,30 @@ sub _get_commit_action {
     if ($record_type eq 'biblio') {
         my ($bib_result, $bib_match, $item_result);
 
-        if ($overlay_status ne 'no_match') {
-            $bib_match = GetBestRecordMatch($import_record_id);
-            if ($overlay_action eq 'replace') {
-                $bib_result  = defined($bib_match) ? 'replace' : 'create_new';
-            } elsif ($overlay_action eq 'create_new') {
-                $bib_result  = 'create_new';
-            } elsif ($overlay_action eq 'ignore') {
-                $bib_result  = 'ignore';
-            }
-         if($item_action eq 'always_add' or $item_action eq 'add_only_for_matches'){
+        $bib_match = GetBestRecordMatch($import_record_id);
+        if ($overlay_status ne 'no_match' && defined($bib_match)) {
+
+            $bib_result = $overlay_action;
+
+            if($item_action eq 'always_add' or $item_action eq 'add_only_for_matches'){
                 $item_result = 'create_new';
-       }
-      elsif($item_action eq 'replace'){
-          $item_result = 'replace';
-          }
-      else {
-             $item_result = 'ignore';
-           }
+            } elsif($item_action eq 'replace'){
+                $item_result = 'replace';
+            } else {
+                $item_result = 'ignore';
+            }
+
         } else {
             $bib_result = $nomatch_action;
-            $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_new')     ? 'create_new' : 'ignore';
+            $item_result = ($item_action eq 'always_add' or $item_action eq 'add_only_for_new') ? 'create_new' : 'ignore';
         }
         return ($bib_result, $item_result, $bib_match);
     } else { # must be auths
         my ($auth_result, $auth_match);
 
-        if ($overlay_status ne 'no_match') {
-            $auth_match = GetBestRecordMatch($import_record_id);
-            if ($overlay_action eq 'replace') {
-                $auth_result  = defined($auth_match) ? 'replace' : 'create_new';
-            } elsif ($overlay_action eq 'create_new') {
-                $auth_result  = 'create_new';
-            } elsif ($overlay_action eq 'ignore') {
-                $auth_result  = 'ignore';
-            }
+        $auth_match = GetBestRecordMatch($import_record_id);
+        if ($overlay_status ne 'no_match' && defined($auth_match)) {
+            $auth_result = $overlay_action;
         } else {
             $auth_result = $nomatch_action;
         }

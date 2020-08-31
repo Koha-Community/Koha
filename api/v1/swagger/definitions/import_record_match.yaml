@@ -1,0 +1,16 @@
+---
+type: object
+properties:
+  import_record_id:
+    type: integer
+    description: Internal import record identifier
+  candidate_match_id:
+    type: integer
+    description: Internal import record match candidate identifier
+  chosen:
+    type: boolean
+    description: Whether match has been chosen for overlay
+  score:
+    type: integer
+    description: Ranking value for this match calculated by the matching rules
+additionalProperties: false

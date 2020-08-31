@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -212,6 +212,34 @@ subtest "RecordsFromMarcPlugin" => sub {
         'Checked one field in first record' );
     is( $records->[1]->subfield('100', 'a'), 'Another',
         'Checked one field in second record' );
+};
+
+subtest "_get_commit_action" => sub {
+    plan tests => 24;
+    my $mock_import = Test::MockModule->new("C4::ImportBatch");
+
+    $mock_import->mock( GetBestRecordMatch => sub { return 5; } );
+    foreach my $record_type ( ('biblio','authority') ){
+        foreach my $match_action ( ('replace','create_new','ignore') ){
+            foreach my $no_match_action ( ('create_new','ignore') ){
+                my ($result, $match, $item_result) =
+                    C4::ImportBatch::_get_commit_action($match_action, $no_match_action, 'always_add', 'auto_match', 42, $record_type);
+                is( $result, $match_action, "When match found amd chosen we return the match_action for $record_type records with match action $match_action and no match action $no_match_action");
+            }
+        }
+    }
+
+    $mock_import->mock( GetBestRecordMatch => sub { my $matches = undef; return $matches; } );
+    foreach my $record_type ( ('biblio','authority') ){
+        foreach my $match_action ( ('replace','create_new','ignore') ){
+            foreach my $no_match_action ( ('create_new','ignore') ){
+                my ($result, $match, $item_result) =
+                    C4::ImportBatch::_get_commit_action($match_action, $no_match_action, 'always_add', 'auto_match', 42, $record_type);
+                is( $result, $no_match_action, "When no match found or chosen we return the match_action for $record_type records with match action $match_action and no match action $no_match_action");
+            }
+        }
+    }
+
 };
 
 sub get_import_record {

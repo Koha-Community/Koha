@@ -68,21 +68,23 @@ my @list = ();
 foreach my $record (@$records) {
     my $citation = $record->{'title'} || $record->{'authorized_heading'};
 
-    my $match = GetImportRecordMatches( $record->{'import_record_id'}, 1 );
-    my $match_citation = '';
+    my $matches = GetImportRecordMatches( $record->{'import_record_id'} );
     my $match_id;
-    if ( $#$match > -1 ) {
-        if ( $match->[0]->{'record_type'} eq 'biblio' ) {
-            $match_citation .= $match->[0]->{'title'}
-              if defined( $match->[0]->{'title'} );
-            $match_citation .= ' ' . $match->[0]->{'author'}
-              if defined( $match->[0]->{'author'} );
-            $match_id = $match->[0]->{'biblionumber'};
-        }
-        elsif ( $match->[0]->{'record_type'} eq 'auth' ) {
-            if ( defined( $match->[0]->{'authorized_heading'} ) ) {
-                $match_citation .= $match->[0]->{'authorized_heading'};
-                $match_id = $match->[0]->{'candidate_match_id'};
+    if ( scalar @$matches > 0 ) {
+        foreach my $match (@$matches){
+        my $match_citation = '';
+            if ( $match->{'record_type'} eq 'biblio' ) {
+                $match_citation .= $match->{'title'}
+                  if defined( $match->{'title'} );
+                $match_citation .= ' ' . $match->{'author'}
+                  if defined( $match->{'author'} );
+                $match->{'match_citation'} = $match_citation;
+            }
+            elsif ( $match->{'record_type'} eq 'auth' ) {
+                if ( defined( $match->{'authorized_heading'} ) ) {
+                    $match_citation .= $match->{'authorized_heading'};
+                    $match->{'match_citation'} = $match_citation;
+                }
             }
         }
     }
@@ -97,12 +99,11 @@ foreach my $record (@$records) {
         isbn            => $record->{'isbn'},
         status          => $record->{'status'},
         overlay_status  => $record->{'overlay_status'},
-        match_citation  => $match_citation,
         matched         => $record->{'matched_biblionumber'}
           || $record->{'matched_authid'}
           || q{},
-        score => $#$match > -1 ? $match->[0]->{'score'} : 0,
-        match_id => $match_id,
+        score => scalar @$matches > 0 ? $matches->[0]->{'score'} : 0,
+        matches => $matches,
         diff_url => $match_id ? "/cgi-bin/koha/tools/showdiffmarc.pl?batchid=$import_batch_id&importid=$record->{import_record_id}&id=$match_id&type=$record->{record_type}" : undef
       };
 }

@@ -1,0 +1,106 @@
+---
+"/import/{import_batch_id}/records/{import_record_id}/matches/chosen":
+  put:
+    x-mojo-to: ImportRecordMatches#set_chosen
+    operationId: setChosen
+    tags:
+      - import_record_matches
+    parameters:
+      - name: import_batch_id
+        in: path
+        required: true
+        description: An import_batch ID
+        type: integer
+      - name: import_record_id
+        in: path
+        required: true
+        description: An import_record ID
+        type: integer
+      - name: body
+        in: body
+        description: A JSON object containing fields to modify
+        required: true
+        schema:
+          type: object
+          properties:
+            candidate_match_id:
+              description: Candidate match to choose
+              type: integer
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Match updated
+      "400":
+        description: Missing or wrong parameters
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Match management not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Import record match not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        tools: manage_staged_marc
+  delete:
+    x-mojo-to: ImportRecordMatches#unset_chosen
+    operationId: unsetChosen
+    tags:
+      - import_record_matches
+    parameters:
+      - name: import_batch_id
+        in: path
+        required: true
+        description: An import_batch ID
+        type: integer
+      - name: import_record_id
+        in: path
+        required: true
+        description: An import_record ID
+        type: integer
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: Matches unchosen
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Match management not allowed
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Import record matches not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal server error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        tools: manage_staged_marc
