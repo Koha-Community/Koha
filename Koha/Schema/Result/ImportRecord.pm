@@ -265,6 +265,13 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-18 10:50:48
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bqIAQzhgioWtBWU8zFdtjw
 
+sub koha_object_class {
+    'Koha::Import::Record';
+}
+sub koha_objects_class {
+    'Koha::Import::Records';
+}
+
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
