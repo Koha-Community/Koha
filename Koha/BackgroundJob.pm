@@ -1,5 +1,20 @@
 package Koha::BackgroundJob;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 use Carp qw( croak );
@@ -13,12 +28,54 @@ use Koha::BackgroundJob::BatchUpdateAuthority;
 
 use base qw( Koha::Object );
 
+=head1 NAME
+
+Koha::BackgroundJob - Koha BackgroundJob Object class
+
+This is a base class for BackgroundJob, some methods must be subclassed.
+
+Example of usage:
+
+Producer:
+my $job_id = Koha::BackgroundJob->enqueue(
+    {
+        job_type => $job_type,
+        job_size => $job_size,
+        job_args => $job_args
+    }
+);
+
+Consumer:
+Koha::BackgrounJobs->find($job_id)->process;
+See also C<misc/background_jobs_worker.pl> for a full example
+
+=head1 API
+
+=head2 Class methods
+
+=head3 connect
+
+Connect to the message broker using default guest/guest credential
+
+=cut
+
 sub connect {
     my ( $self );
     my $stomp = Net::Stomp->new( { hostname => 'localhost', port => '61613' } );
     $stomp->connect( { login => 'guest', passcode => 'guest' } );
     return $stomp;
 }
+
+=head3 enqueue
+
+Enqueue a new job. It will insert a new row in the DB table and notify the broker that a new job has been enqueued.
+
+C<job_size> is the size of the job
+C<job_args> is the arguments of the job. It's a structure that will be JSON encoded.
+
+Return the job_id of the newly created job.
+
+=cut
 
 sub enqueue {
     my ( $self, $params ) = @_;
@@ -61,6 +118,12 @@ sub enqueue {
     return $job_id;
 }
 
+=head3 process
+
+Process the job!
+
+=cut
+
 sub process {
     my ( $self, $args ) = @_;
 
@@ -72,7 +135,19 @@ sub process {
       : Koha::Exceptions::Exception->throw('->process called without valid job_type');
 }
 
+=head3 job_type
+
+Return the job type of the job. Must be a string.
+
+=cut
+
 sub job_type { croak "This method must be subclassed" }
+
+=head3 messages
+
+Messages let during the processing of the job.
+
+=cut
 
 sub messages {
     my ( $self ) = @_;
@@ -86,12 +161,24 @@ sub messages {
     return @messages;
 }
 
+=head3 report
+
+Report of the job.
+
+=cut
+
 sub report {
     my ( $self ) = @_;
 
     my $data_dump = decode_json $self->data;
     return $data_dump->{report};
 }
+
+=head3 cancel
+
+Cancel a job.
+
+=cut
 
 sub cancel {
     my ( $self ) = @_;

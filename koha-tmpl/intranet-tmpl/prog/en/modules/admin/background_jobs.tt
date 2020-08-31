@@ -24,7 +24,7 @@
     <div class="dialog message">
         [% SWITCH m.code %]
         [% CASE 'cannot_retrieve_jobs' %]
-            <div><i class="fa fa-exclamation error"></i>Cannot retrieve pending jobs ([% m.error %])</div>
+            <div><i class="fa fa-exclamation error"></i>Cannot retrieve pending jobs ([% m.error | html %])</div>
         [% CASE 'cannot_view_job' %]
             <div><i class="fa fa-exclamation error"></i>Insufficient permission to see this job.</div>
         [% CASE %]
@@ -104,7 +104,7 @@
                             [% END %]
                             [% SWITCH m.code %]
                             [% CASE 'biblio_not_modified' %]
-                                Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.[% IF m.error %] ([% m.error %])[% END %].
+                                Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.[% IF m.error %] ([% m.error | html %])[% END %].
                             [% CASE 'biblio_modified' %]
                                 Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.biblionumber | uri %]">[% m.biblionumber | html %]</a> has successfully been modified.
                             [% END %]
@@ -122,7 +122,7 @@
                             [% END %]
                             [% SWITCH m.code %]
                             [% CASE 'authority_not_modified' %]
-                                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has not been modified. An error occurred on modifying it[% IF m.error %] ([% m.error %])[% END %].
+                                Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has not been modified. An error occurred on modifying it[% IF m.error %] ([% m.error | html %])[% END %].
                             [% CASE 'authority_modified' %]
                                 Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% m.authid | uri %]">[% m.authid | html %]</a> has successfully been modified..
                             [% END %]
@@ -146,7 +146,7 @@
     <div class="dialog message">
         <i class="fa fa-info"></i>
         [% IF pending_jobs.size > 0 %]
-            There is [% pending_jobs.size %] pending jobs on the server: [% pending_jobs.join(', ') %].
+            There is [% pending_jobs.size | html %] pending jobs on the server: [% pending_jobs.join(', ') | html %].
         [% ELSE %]
             There is no pending jobs on the server.
         [% END %]

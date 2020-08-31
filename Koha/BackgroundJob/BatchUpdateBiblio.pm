@@ -1,5 +1,20 @@
 package Koha::BackgroundJob::BatchUpdateBiblio;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 
@@ -10,9 +25,31 @@ use C4::MarcModificationTemplates;
 
 use base 'Koha::BackgroundJob';
 
+=head1 NAME
+
+Koha::BackgroundJob::BatchUpdateBiblio - Batch update bibliographic records
+
+This is a subclass of Koha::BackgroundJob.
+
+=head1 API
+
+=head2 Class methods
+
+=head3 job_type
+
+Define the job type of this job: batch_biblio_record_modification
+
+=cut
+
 sub job_type {
     return 'batch_biblio_record_modification';
 }
+
+=head3 process
+
+Process the modification.
+
+=cut
 
 sub process {
     my ( $self, $args ) = @_;
@@ -84,6 +121,12 @@ sub process {
     $job->status('finished') if $job->status ne 'cancelled';
     $job->store;
 }
+
+=head3 enqueue
+
+Enqueue the new job
+
+=cut
 
 sub enqueue {
     my ( $self, $args) = @_;
