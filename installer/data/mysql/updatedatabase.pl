@@ -22678,6 +22678,17 @@ INSERT IGNORE INTO `letter` VALUES ('reserves','HOLD_CANCELLATION','','Hold Canc
     NewVersion( $DBversion, 25534, "Add ability to send an email specifying a reason when canceling a hold");
 }
 
+$DBversion = '20.06.00.030';
+if ( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type`) VALUES
+        ('AutoApprovePatronProfileSettings', '0', '', 'Automatically approve patron profile changes from the OPAC.', 'YesNo');
+    });
+
+    NewVersion( $DBversion, 20057, "Add new system preference 'AutoApprovePatronProfileSettings'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
