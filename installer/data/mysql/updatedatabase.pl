@@ -22703,6 +22703,28 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22789, "Add non_priority column on reserves and old_reserves tables");
 }
 
+$DBversion = '20.06.00.032';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'items', 'exclude_from_local_holds_priority' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `items` ADD COLUMN `exclude_from_local_holds_priority` tinyint(1) default NULL AFTER `new_status`
+        });
+    }
+
+    if( !column_exists( 'deleteditems', 'exclude_from_local_holds_priority' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `deleteditems` ADD COLUMN `exclude_from_local_holds_priority` tinyint(1) default NULL AFTER `new_status`
+        });
+    }
+
+    if( !column_exists( 'categories', 'exclude_from_local_holds_priority' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `categories` ADD COLUMN `exclude_from_local_holds_priority` tinyint(1) default NULL AFTER `change_password`
+        });
+    }
+    NewVersion( $DBversion, 19889, "Add exclude_from_local_holds_priority column to items, deleteditems and categories tables");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
