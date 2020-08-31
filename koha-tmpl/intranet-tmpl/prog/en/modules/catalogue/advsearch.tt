@@ -98,8 +98,10 @@
             <input type="checkbox" name="whole_record">
             <label for="whole_record">Search entire MARC record</label>
         [% END %]
-        <input type="checkbox" name="weight_search" checked>
-        <label for="weight_search">Apply field weightings to search</label>
+        <span id="weight_search">
+            <input type="checkbox" name="weight_search" checked>
+            <label for="weight_search">Apply field weightings to search</label>
+        </span>
     [% END %]
     [% FOREACH search_box IN search_boxes_loop %]
         [% IF ( search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]

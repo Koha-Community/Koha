@@ -31,8 +31,10 @@
                         <fieldset>
                             <legend>Search for:</legend>
                             [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
-                                <input type="checkbox" name="weight_search" checked>
-                                <label for="weighted_search">Apply field weightings to search</label>
+                                <span id="weight_search">
+                                    <input type="checkbox" name="weight_search" checked>
+                                    <label for="weight_search">Apply field weightings to search</label>
+                                </span>
                             [% END %]
                             [% IF ( expanded_options ) %]
                                 <div class="advanced-search-terms extended">
