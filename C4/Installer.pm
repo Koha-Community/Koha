@@ -30,7 +30,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( foreign_key_exists index_exists column_exists TableExists);
+    push @EXPORT, qw( primary_key_exists foreign_key_exists index_exists column_exists TableExists);
 };
 
 =head1 NAME
@@ -608,6 +608,18 @@ sub get_file_path_from_name {
         return $found[0]->{'fwkfile'};
     }
 
+}
+
+sub primary_key_exists {
+    my ( $table_name, $key_name ) = @_;
+    my $dbh = C4::Context->dbh;
+    my ($exists) = $dbh->selectrow_array(
+        qq|
+        SHOW INDEX FROM $table_name
+        WHERE key_name = 'PRIMARY' AND column_name = ?
+        |, undef, $key_name
+    );
+    return $exists;
 }
 
 sub foreign_key_exists {
