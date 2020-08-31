@@ -37,8 +37,11 @@ BEGIN {
 
 use Koha::Database;
 use Koha::Plugins;
+use t::lib::TestBuilder;
 
-my $schema = Koha::Database->new->schema;
+
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 
 subtest 'Bad plugins tests' => sub {
 
@@ -118,14 +121,16 @@ subtest 'Disabled plugins tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Anonymous access routes plugins tests' => sub {
+subtest 'Permissions and access to plugin routes tests' => sub {
 
-    plan tests => 9;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
     # enable plugins
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    # enable BASIC auth
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
     # remove any existing plugins that might interfere
     Koha::Plugins::Methods->search->delete;
@@ -150,14 +155,38 @@ subtest 'Anonymous access routes plugins tests' => sub {
 
     C4::Context->set_preference( 'RESTPublicAnonymousRequests', 0 );
 
-   $t->get_ok('/api/v1/contrib/testplugin/public/patrons/bother')
-     ->status_is(200, 'Plugin routes not affected by RESTPublicAnonymousRequests')
-     ->json_is( { bothered => Mojo::JSON->true } );
+    $t->get_ok('/api/v1/contrib/testplugin/public/patrons/bother')
+      ->status_is(200, 'Plugin routes not affected by RESTPublicAnonymousRequests')
+      ->json_is( { bothered => Mojo::JSON->true } );
 
     C4::Context->set_preference( 'RESTPublicAnonymousRequests', 1 );
 
     $t->get_ok('/api/v1/contrib/testplugin/public/patrons/bother')
       ->status_is(200, 'Plugin routes not affected by RESTPublicAnonymousRequests')
+      ->json_is( { bothered => Mojo::JSON->true } );
+
+    $t->get_ok('/api/v1/contrib/testplugin/patrons/bother')
+      ->status_is(401, 'Plugin routes honour permissions, anonymous access denied');
+
+    # Create a patron with permissions, but the wrong ones: 3 => parameters
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**3 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    $t->get_ok("//$userid:$password@/api/v1/contrib/testplugin/patrons/bother")
+      ->status_is(403, 'Plugin routes honour permissions, wrong permissions, access denied');
+
+    # Set the patron permissions to the right ones: 4 => borrowers
+    $librarian->set({ flags => 2 ** 4 })->store->discard_changes;
+
+    $t->get_ok("//$userid:$password@/api/v1/contrib/testplugin/patrons/bother")
+      ->status_is(200, 'Plugin routes honour permissions, right permissions, access granted')
       ->json_is( { bothered => Mojo::JSON->true } );
 
     $schema->storage->txn_rollback;
