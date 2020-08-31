@@ -31,6 +31,7 @@ var dataTablesDefaults = {
         }
     },
     "dom": 't',
+    "paginate": false,
     "buttons": [{
         fade: 100,
         className: "dt_button_clear_filter",
@@ -48,8 +49,6 @@ var dataTablesDefaults = {
             node.addClass("disabled");
         }
     }],
-    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All" ]],
-    "iDisplayLength": 20,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
         // When the DataTables search function is triggered,

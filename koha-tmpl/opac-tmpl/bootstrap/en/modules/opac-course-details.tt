@@ -122,7 +122,7 @@
         $(document).ready(function() {
             columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
             KohaTable("#course-items-table", {
-                "dom": '<"top"flp>rt<"clear">',
+                "dom": '<"top"f>rt<"clear">',
                 "sorting": [[ 1, "asc" ]],
                 "autoWidth": false,
             }, columns_settings );
