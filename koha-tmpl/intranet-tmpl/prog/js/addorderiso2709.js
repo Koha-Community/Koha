@@ -1,4 +1,4 @@
-/* global dataTablesDefaults ERR_NO_RECORD_SELECTED ERR_INVALID_QUANTITY ERR_FUNDS_MISSING MSG_LOADING */
+/* global dataTablesDefaults __ */
 
 $(document).ready(function() {
     $("#Aform").preventDoubleFormSubmit();
@@ -50,7 +50,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         if ( $("input:checkbox[name='import_record_id']:checked").length < 1 ) {
-            alert( ERR_NO_RECORD_SELECTED );
+            alert( __("There is no record selected") );
             return false;
         }
 
@@ -61,14 +61,14 @@ $(document).ready(function() {
             }
         });
         if ( error > 0 ) {
-            alert( error + " " + ERR_INVALID_QUANTITY );
+            alert(error + " " + __("quantity values are not filled in or are not numbers") );
             return false;
 
         }
 
         error = checkOrderBudgets();
         if ( error > 0 ) {
-            alert( ERR_FUNDS_MISSING );
+            alert( __("Some budgets are not defined in item records") );
             return false;
         }
 
@@ -88,7 +88,7 @@ $(document).ready(function() {
     });
     $("#dataPreview").on("hidden.bs.modal", function(){
         $("#dataPreviewLabel").html("");
-        $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> " + MSG_LOADING + "</div>");
+        $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> " + __("Loading") + "</div>");
     });
 });
 
