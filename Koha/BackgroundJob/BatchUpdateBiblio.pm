@@ -54,8 +54,6 @@ Process the modification.
 sub process {
     my ( $self, $args ) = @_;
 
-    my $job_type = $args->{job_type};
-
     my $job = Koha::BackgroundJobs->find( $args->{job_id} );
 
     if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
@@ -79,8 +77,6 @@ sub process {
         total_success => 0,
     };
     my @messages;
-    my $dbh = C4::Context->dbh;
-    $dbh->{RaiseError} = 1;
     RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
 
         last if $job->get_from_storage->status eq 'cancelled';

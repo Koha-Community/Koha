@@ -75,8 +75,6 @@ sub process {
         total_success => 0,
     };
     my @messages;
-    my $dbh = C4::Context->dbh;
-    $dbh->{RaiseError} = 1;
     RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
         next unless $record_id;
         # Authorities
