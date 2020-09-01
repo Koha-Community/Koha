@@ -152,7 +152,7 @@ if ( $xslfile ) {
     $cleaned_title =~ tr|/||;
     my $query =
       ( C4::Context->preference('UseControlNumber') and $record->field('001') )
-      ? 'rcn:'. $record->field('001')->data . ' and (bib-level:a or bib-level:b)'
+      ? 'rcn:'. $record->field('001')->data . ' AND (bib-level:a OR bib-level:b)'
       : "Host-item:$cleaned_title";
     my ( $err, $result, $count ) = $searcher->simple_search_compat( $query, 0, 0 );
 
