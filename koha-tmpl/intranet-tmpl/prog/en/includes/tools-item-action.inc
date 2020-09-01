@@ -1,8 +1,7 @@
         [% IF item_action_ignore AND num_items == 0 %]
-            <select name="item_action" id="item_action" disabled="disabled">
+            No items were found during staging
         [% ELSE %]
             <select name="item_action" id="item_action">
-        [% END %]
             [% IF ( item_action_always_add ) %]
                 <option value="always_add" selected="selected">
             [% ELSE %]
@@ -33,4 +32,5 @@
                 <option value="ignore">
             [% END %]
                 Ignore items</option>
-        </select>
+            </select>
+        [% END %]
