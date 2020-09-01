@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::Mojo;
 use Test::Warn;
+use Test::MockModule;
 
 use File::Basename;
 use t::lib::Mocks;
@@ -37,6 +38,12 @@ BEGIN {
 
 use Koha::Database;
 use Koha::Plugins;
+
+my $logger = Test::MockModule->new('Koha::Logger');
+$logger->mock('error', sub {
+    shift;
+    warn @_;
+});
 
 my $schema = Koha::Database->new->schema;
 
@@ -61,9 +68,10 @@ subtest 'Bad plugins tests' => sub {
 
     # initialize Koha::REST::V1 after mocking
     my $t;
-    warning_is
+    warning_like
         { $t = Test::Mojo->new('Koha::REST::V1'); }
-        'The resulting spec is invalid. Skipping Bad API Route Plugin',
+        [qr{Could not load REST API spec bundle: Invalid JSON specification},
+        qr{The resulting spec is invalid. Skipping Bad API Route Plugin},],
         'Bad plugins raise warning';
 
     my $routes = get_defined_routes($t);
@@ -139,9 +147,10 @@ subtest 'Anonymous access routes plugins tests' => sub {
 
     # initialize Koha::REST::V1 after mocking
     my $t;
-    warning_is
+    warning_like
         { $t = Test::Mojo->new('Koha::REST::V1'); }
-        'The resulting spec is invalid. Skipping Bad API Route Plugin',
+        [qr{Could not load REST API spec bundle: Invalid JSON specification},
+        qr{The resulting spec is invalid. Skipping Bad API Route Plugin},],
         'Bad plugins raise warning';
 
     my $routes = get_defined_routes($t);
