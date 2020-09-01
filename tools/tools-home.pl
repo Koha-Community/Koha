@@ -42,4 +42,11 @@ $template->param(
     pendingtags     => $pendingtags
 );
 
+if ( C4::Context->config('enable_plugins') ) {
+    my @tool_plugins = Koha::Plugins->new()->GetPlugins({
+        method => 'tool',
+    });
+    $template->param( tool_plugins => \@tool_plugins );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;

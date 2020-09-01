@@ -120,9 +120,20 @@
     <dd>Quote editor for Quote-of-the-day feature in OPAC</dd>
     [% END %]
 
-    [% IF ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool ) %]
+    [% IF ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool && tool_plugins ) %]
     <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></dt>
-    <dd>Use tool plugins</dd>
+    <dd>
+        Use tool plugins
+        <ul>
+        [% FOREACH plugin IN tool_plugins %]
+            <li class="plugin_link">
+                <a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool">
+                    <span class="plugin_name">[% plugin.metadata.name | html %]</span>
+                </a>
+            </li>
+        [% END %]
+        </ul>
+    </dd>
     [% END %]
 
     [% IF ( CAN_user_tools_upload_general_files ) %]
