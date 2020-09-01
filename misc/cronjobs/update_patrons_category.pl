@@ -55,7 +55,8 @@ Options:
    -fu=X --fineunder=X      update if fines under X amount
    -rb=date --regbefore     update if registration date is before given date
    -ra=date --regafter      update if registration date is after a given date
-   -d --dbfield name=value  where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
+   -d --field name=value    where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
+   --where <conditions>     where clause to add to the query
    -v -verbose              verbose mode
    -c --confirm             commit changes to db, no action will be taken unless this switch is included
    -b --branch <branchname> only deal with patrons from this library/branch
@@ -121,11 +122,26 @@ Enter a date in ISO format YYYY-MM-DD and only patrons registered after this dat
 
 =item B<--field column=value | -d column=value>
 
-Use this flag to specify a column in the borrowers table and update only patrons whose value in that column matches the value supplied (repeatable)
+Use this flag to specify a column in the borrowers table and update only patrons whose value in that column equals the value supplied (repeatable)
+A value of null will check for a field that is not set.
 
 e.g.
 --field dateexpiry=2016-01-01
 will update all patrons who expired on that date, useful for schools etc.
+
+=item B<--where $conditions>
+
+Use this option to specify a condition built with columns from the borrowers table
+
+e.g.
+--where 'email IS NULL'
+will update all patrons with no value for email
+
+--where 'categorycode LIKE "%CHILD"'
+will update all patrons with a category ending in CHILD.
+
+--where 'categorycode LIKE RESIDENT%'
+will update all patrons whose category does not begin with RESIDENT.
 
 =back
 
@@ -163,6 +179,7 @@ my $reg_bef;
 my $reg_aft;
 my $branch_lim;
 my %fields;
+my @where;
 
 GetOptions(
     'help|?'          => \$help,
@@ -178,7 +195,8 @@ GetOptions(
     'rb|regbefore=s'  => \$reg_bef,
     'ra|regafter=s'   => \$reg_aft,
     'b|branch=s'      => \$branch_lim,
-    'd|field=s'       => \%fields
+    'd|field=s'       => \%fields,
+    'where=s'         => \@where,
 );
 
 pod2usage(1) if $help;
@@ -235,10 +253,15 @@ if ($verbose) {
 }
 
 while ( my ( $key, $value ) = each %fields ) {
-    $verbose and print "    Borrower column $key is equal to $value\n";
+    $verbose and print "    Borrower column $key is $value\n";
+    $value = undef if lc($value) eq 'null';
     $params{ "me." . $key } = $value;
 }
-my $target_patrons = Koha::Patrons->search(\%params)->search_patrons_to_update_category(
+
+my $where_literal = join ' AND ', @where;
+my $target_patrons = Koha::Patrons->search( \%params );
+$target_patrons = $target_patrons->search( \$where_literal ) if @where;
+$target_patrons = $target_patrons->search_patrons_to_update_category(
     {
         from          => $fromcat,
         search_params => \%params,
