@@ -95,7 +95,7 @@ while (my $data=$rqselect->fetchrow_hashref){
     }
     unless ($used > 0){
         unless ($test) {
-            DelAuthority({ authid => $data->{'authid'} });
+            DelAuthority({ authid => $data->{'authid'}, skip_merge => 1 });
             print " : deleted";
         } else {
             print " : can be deleted";
