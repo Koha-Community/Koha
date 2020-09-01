@@ -1,4 +1,8 @@
-          <select name="item_action" id="item_action">
+        [% IF item_action_ignore AND num_items == 0 %]
+            <select name="item_action" id="item_action" disabled="disabled">
+        [% ELSE %]
+            <select name="item_action" id="item_action">
+        [% END %]
             [% IF ( item_action_always_add ) %]
                 <option value="always_add" selected="selected">
             [% ELSE %]
