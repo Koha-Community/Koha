@@ -906,9 +906,9 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   description LONGTEXT, -- a plain text explanation of the item type
   rentalcharge decimal(28,6) default NULL, -- the amount charged when this item is checked out/issued
   rentalcharge_daily decimal(28,6) default NULL, -- the amount charged for each day between checkout date and due date
-  rentalcharge_daily_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the daily retnal fee is calculated directly or using finesCalendar
+  rentalcharge_daily_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the daily rental fee is calculated directly or using finesCalendar
   rentalcharge_hourly decimal(28,6) default NULL, -- the amount charged for each hour between checkout date and due date
-  rentalcharge_hourly_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the hourly retnal fee is calculated directly or using finesCalendar
+  rentalcharge_hourly_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the hourly rental fee is calculated directly or using finesCalendar
   defaultreplacecost decimal(28,6) default NULL, -- default replacement cost
   processfee decimal(28,6) default NULL, -- default text be recorded in the column note when the processing fee is applied
   notforloan smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
