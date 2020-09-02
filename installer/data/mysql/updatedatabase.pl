@@ -22725,6 +22725,30 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 19889, "Add exclude_from_local_holds_priority column to items, deleteditems and categories tables");
 }
 
+$DBversion = '20.06.00.033';
+if( CheckVersion( $DBversion ) ) {
+    if( column_exists( 'opac_news', 'timestamp' ) ) {
+        $dbh->do(q|
+            ALTER TABLE opac_news
+            CHANGE COLUMN timestamp publicationdate date DEFAULT NULL
+        |);
+    }
+    if( !column_exists( 'opac_news', 'updated_on' ) ) {
+        $dbh->do(q|
+            ALTER TABLE opac_news
+            ADD COLUMN updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER publicationdate
+        |);
+    }
+
+    $dbh->do(q|
+        UPDATE letter
+        SET content = REPLACE(content,?,?)
+        WHERE content LIKE ?
+    |, undef, 'opac_news.timestamp', 'opac_news.publicationdate', '%opac_news.timestamp%' );
+
+    NewVersion( $DBversion, 21066, ["Update table opac_news", "Replace timestamp references in letters table"] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
