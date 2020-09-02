@@ -23,8 +23,6 @@
 [% FOR m IN messages %]
     <div class="dialog message">
         [% SWITCH m.code %]
-        [% CASE 'cannot_retrieve_jobs' %]
-            <div><i class="fa fa-exclamation error"></i>Cannot retrieve pending jobs ([% m.error | html %])</div>
         [% CASE 'cannot_view_job' %]
             <div><i class="fa fa-exclamation error"></i>Insufficient permission to see this job.</div>
         [% CASE %]
@@ -142,15 +140,6 @@
 [% IF op == 'list' %]
 
     <h2>Background jobs</h2>
-
-    <div class="dialog message">
-        <i class="fa fa-info"></i>
-        [% IF pending_jobs.size > 0 %]
-            There is [% pending_jobs.size | html %] pending jobs on the server: [% pending_jobs.join(', ') | html %].
-        [% ELSE %]
-            There is no pending jobs on the server.
-        [% END %]
-    </div>
 
     [% IF jobs.count %]
         <table id="table_background_jobs">
