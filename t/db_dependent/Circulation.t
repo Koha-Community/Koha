@@ -3565,7 +3565,7 @@ subtest 'CanBookBeIssued & CircConfirmItemParts' => sub {
     my $dt_due = dt_from_string->add( days => 3 );
 
     my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
-    is_deeply( $needsconfirmation, { additional_materials => 'includes DVD' }, 'Item needs confirmation of additional parts' );
+    is_deeply( $needsconfirmation, { ADDITIONAL_MATERIALS => 'includes DVD' }, 'Item needs confirmation of additional parts' );
 };
 
 subtest 'Do not return on renewal (LOST charge)' => sub {

@@ -54,9 +54,9 @@
                         <div id="autoswitched" class="dialog message">Patron was automatically switched by reading the patron card during checking out. Ensure you are working with the right patron.</div>
                     [% END %]
 
-                    [% IF additional_materials %]
+                    [% IF ADDITIONAL_MATERIALS %]
                         <div id="materials" class="dialog message">Note about the accompanying materials: <br />
-                        [% additional_materials | html %]
+                        [% ADDITIONAL_MATERIALS | html %]
                         </div>
                     [% END %]
 
@@ -82,7 +82,7 @@
 
                     [% IF ( NEEDSCONFIRMATION ) %]
                         <div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
-                            [% IF CAN_user_circulate_force_checkout or additional_materials %]
+                            [% IF CAN_user_circulate_force_checkout or ADDITIONAL_MATERIALS %]
                                 <h3>Please confirm checkout</h3>
                             [% ELSE %]
                               <h3>Cannot check out</h3>
@@ -198,9 +198,9 @@
                                     </li>
                                 [% END %]
 
-                                [% IF additional_materials %]
+                                [% IF ADDITIONAL_MATERIALS %]
                                     <li>
-                                        Please confirm that the accompanying materials are present: [% additional_materials | html %]
+                                        Please confirm that the accompanying materials are present: [% ADDITIONAL_MATERIALS | html %]
                                     </li>
                                 [% END %]
                             </ul>

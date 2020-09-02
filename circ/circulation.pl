@@ -395,7 +395,7 @@ if (@$barcodes) {
             my $materials = $item->materials;
             my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
             $materials = $descriptions->{lib} // $materials;
-            $template_params->{additional_materials} = $materials;
+            $template_params->{ADDITIONAL_MATERIALS} = $materials;
             $template_params->{itemhomebranch} = $item->homebranch;
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
