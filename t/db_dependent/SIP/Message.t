@@ -601,7 +601,7 @@ sub test_checkin_v2 {
 
     # Test account option no_holds_check that prevents items on hold from being checked in via SIP
     Koha::Old::Checkouts->search({ issue_id => $issue->issue_id })->delete;
-    $server->{account}->{no_holds_checkin} = 1;
+    $server->{account}->{holds_block_checkin} = 1;
     my $reserve_id = AddReserve({
         branchcode     => $branchcode,
         borrowernumber => $patron1->{borrowernumber},
@@ -617,7 +617,7 @@ sub test_checkin_v2 {
     is( substr($response,5,1), 'Y', 'Alert flag is set' );
     check_field( $respcode, $response, FID_SCREEN_MSG, 'Item is on hold, please return to circulation desk', 'Screen message is correct' );
     $hold->delete();
-    $server->{account}->{no_holds_checkin} = 0;
+    $server->{account}->{holds_block_checkin} = 0;
 
 }
 

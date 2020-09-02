@@ -52,7 +52,7 @@ sub do_checkin {
 
     my $checked_in_ok     = $account->{checked_in_ok};
     my $cv_triggers_alert = $account->{cv_triggers_alert};
-    my $no_holds_checkin  = $account->{no_holds_checkin};
+    my $holds_block_checkin  = $account->{holds_block_checkin};
 
     if (!$branch) {
         $branch = 'SIP2';
@@ -116,7 +116,7 @@ sub do_checkin {
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{ResFound}) {
-        if ($no_holds_checkin) {
+        if ($holds_block_checkin) {
             $self->alert_type('99');
             $return = 0;
         } elsif ($branch eq $messages->{ResFound}->{branchcode}) {

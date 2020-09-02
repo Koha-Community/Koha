@@ -201,7 +201,7 @@ sub checkin {
 
     my $checked_in_ok     = $account->{checked_in_ok};
     my $cv_triggers_alert = $account->{cv_triggers_alert};
-    my $no_holds_checkin  = $account->{no_holds_checkin};
+    my $holds_block_checkin  = $account->{holds_block_checkin};
 
     my ( $patron, $item, $circ );
 
@@ -225,7 +225,7 @@ sub checkin {
     if ( !$circ->ok && $circ->alert_type && $circ->alert_type == 98 ) { # data corruption
         $circ->screen_msg("Checkin failed: data problem");
         siplog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
-    } elsif ( $data->{messages}->{ResFound} && !$circ->ok && $no_holds_checkin ) {
+    } elsif ( $data->{messages}->{ResFound} && !$circ->ok && $holds_block_checkin ) {
         $circ->screen_msg("Item is on hold, please return to circulation desk");
         siplog ("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
     } elsif ( $data->{messages}->{withdrawn} && !$circ->ok && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
