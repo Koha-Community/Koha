@@ -120,6 +120,7 @@ if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
 
 my ( $borrower, $patron );
 if ( $patronid ) {
+    ( $patronid ) = Koha::Plugins->call( 'patron_barcode_transform', $patronid ) || $patronid;
     $patron = Koha::Patrons->find( { cardnumber => $patronid } );
     $borrower = $patron->unblessed if $patron;
 }

@@ -20,6 +20,7 @@ use C4::Auth qw(&check_api_auth);
 
 use Koha::Patrons;
 use Koha::Patron::Attributes;
+use Koha::Plugins;
 use Koha::Items;
 
 use UNIVERSAL::can;
@@ -520,6 +521,7 @@ sub handle_checkout {
     $fields = $self->{fields};
 
     $patron_id = $fields->{ (FID_PATRON_ID) };
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
     $item_id   = $fields->{ (FID_ITEM_ID) };
     my $fee_ack = $fields->{ (FID_FEE_ACK) };
 
@@ -740,6 +742,8 @@ sub handle_block_patron {
     $blocked_card_msg = $fields->{ (FID_BLOCKED_CARD_MSG) };
     $patron_id        = $fields->{ (FID_PATRON_ID) };
     $terminal_pwd     = $fields->{ (FID_TERMINAL_PWD) };
+
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
 
     # Terminal passwords are different from account login
     # passwords, but I have no idea what to do with them.  So,
@@ -965,6 +969,8 @@ sub handle_patron_info {
     $start        = $fields->{ (FID_START_ITEM) };
     $end          = $fields->{ (FID_END_ITEM) };
 
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
+
     $patron = $ils->find_patron($patron_id);
 
     $resp = (PATRON_INFO_RESP);
@@ -1121,6 +1127,8 @@ sub handle_fee_paid {
     $patron_pwd = $fields->{ (FID_PATRON_PWD) };
     $fee_id     = $fields->{ (FID_FEE_ID) };
     $trans_id   = $fields->{ (FID_TRANSACTION_ID) };
+
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
 
     $ils->check_inst_id( $inst_id, "handle_fee_paid" );
 
@@ -1324,6 +1332,8 @@ sub handle_patron_enable {
     $patron_id  = $fields->{ (FID_PATRON_ID) };
     $patron_pwd = $fields->{ (FID_PATRON_PWD) };
 
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
+
     siplog( "LOG_DEBUG", "handle_patron_enable: patron_id: '%s', patron_pwd: '%s'", $patron_id, $patron_pwd );
 
     $patron = $ils->find_patron($patron_id);
@@ -1386,6 +1396,8 @@ sub handle_hold {
     $item_id     = $fields->{ (FID_ITEM_ID) } || '';
     $title_id    = $fields->{ (FID_TITLE_ID) } || '';
     $fee_ack     = $fields->{ (FID_FEE_ACK) } || 'N';
+
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
 
     if ( $hold_mode eq '+' ) {
         $status = $ils->add_hold( $patron_id, $patron_pwd, $item_id, $title_id, $expiry_date, $pickup_locn, $hold_type, $fee_ack );
@@ -1451,6 +1463,8 @@ sub handle_renew {
     $title_id   = $fields->{ (FID_TITLE_ID) };
     $item_props = $fields->{ (FID_ITEM_PROPS) };
     $fee_ack    = $fields->{ (FID_FEE_ACK) };
+
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
 
     $status = $ils->renew( $patron_id, $patron_pwd, $item_id, $title_id, $no_block, $nb_due_date, $third_party, $item_props, $fee_ack );
 
@@ -1532,6 +1546,8 @@ sub handle_renew_all {
     $patron_pwd   = $fields->{ (FID_PATRON_PWD) };
     $terminal_pwd = $fields->{ (FID_TERMINAL_PWD) };
     $fee_ack      = $fields->{ (FID_FEE_ACK) };
+
+    ($patron_id) = Koha::Plugins->call('patron_barcode_transform', $patron_id ) || $patron_id;
 
     $status = $ils->renew_all( $patron_id, $patron_pwd, $fee_ack );
 

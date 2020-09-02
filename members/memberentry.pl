@@ -44,6 +44,7 @@ use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
+use Koha::Plugins;
 use Koha::Token;
 use Koha::SMS::Providers;
 
@@ -323,6 +324,9 @@ if ($op eq 'save' || $op eq 'insert'){
 
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
+
+    my ( $new_barcode ) = Koha::Plugins->call( 'patron_barcode_transform', $newdata{'cardnumber'} ) || $newdata{'cardnumber'};
+    $newdata{'cardnumber'} = $new_barcode;
 
     if (my $error_code = checkcardnumber( $newdata{cardnumber}, $borrowernumber )){
         push @errors, $error_code == 1
