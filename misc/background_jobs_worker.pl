@@ -17,33 +17,50 @@
 
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
+use Try::Tiny;
 
 use Koha::BackgroundJobs;
 
-my $conn = Koha::BackgroundJob->connect;
+my $conn;
+try {
+    $conn = Koha::BackgroundJob->connect;
+} catch {
+    warn sprintf "Cannot connect to the message broker, the jobs will be processed anyway (%s)", $_;
+};
 
 my @job_types = qw( batch_biblio_record_modification batch_authority_record_modification );
 
-# FIXME cf note in Koha::BackgroundJob about $namespace
-my $namespace = C4::Context->config('memcached_namespace');
-for my $job_type ( @job_types ) {
-    $conn->subscribe({ destination => sprintf("/queue/%s-%s", $namespace, $job_type), ack => 'client' });
+if ( $conn ) {
+    # FIXME cf note in Koha::BackgroundJob about $namespace
+    my $namespace = C4::Context->config('memcached_namespace');
+    for my $job_type ( @job_types ) {
+        $conn->subscribe({ destination => sprintf("/queue/%s-%s", $namespace, $job_type), ack => 'client' });
+    }
 }
 while (1) {
-    my $frame = $conn->receive_frame;
-    if ( !defined $frame ) {
-        # maybe log connection problems
-        next;    # will reconnect automatically
+    if ( $conn ) {
+        my $frame = $conn->receive_frame;
+        if ( !defined $frame ) {
+            # maybe log connection problems
+            next;    # will reconnect automatically
+        }
+
+        my $body = $frame->body;
+        my $args = decode_json($body);
+
+        # FIXME This means we need to have create the DB entry before
+        # It could work in a first step, but then we will want to handle job that will be created from the message received
+        my $job = Koha::BackgroundJobs->find($args->{job_id});
+        my $success = $job->process( $args );
+
+        $conn->ack( { frame => $frame } ); # FIXME depending on $success?
+    } else {
+        my $jobs = Koha::BackgroundJobs->search({ status => 'new' });
+        while ( my $job = $jobs->next ) {
+            my $args = decode_json($job->data);
+            $job->process( { job_id => $job->id, %$args } );
+        }
+        sleep 10;
     }
-
-    my $body = $frame->body;
-    my $args = decode_json($body);
-
-    # FIXME This means we need to have create the DB entry before
-    # It could work in a first step, but then we will want to handle job that will be created from the message received
-    my $job = Koha::BackgroundJobs->find($args->{job_id});
-    my $success = $job->process( $args );
-
-    $conn->ack( { frame => $frame } ); # FIXME depending on $success?
 }
 $conn->disconnect;
