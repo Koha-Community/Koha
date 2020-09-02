@@ -242,7 +242,8 @@ sub arguments_for_command {
 sub kocIssueItem {
     my $circ = shift;
 
-    $circ->{ 'barcode' } = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
+    $circ->{barcode} = barcodedecode( $circ->{barcode} ) if $circ->{barcode};
+
     my $branchcode = C4::Context->userenv->{branch};
     my $patron = Koha::Patrons->find( { cardnumber => $circ->{cardnumber} } );
     my $borrower = $patron->unblessed;
@@ -322,7 +323,9 @@ sub kocIssueItem {
 
 sub kocReturnItem {
     my ( $circ ) = @_;
-    $circ->{'barcode'} = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
+
+    $circ->{barcode} = barcodedecode( $circ->{barcode} ) if $circ->{barcode};
+
     my $item = Koha::Items->find({ barcode => $circ->{barcode} });
     my $biblio = $item->biblio;
     my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );

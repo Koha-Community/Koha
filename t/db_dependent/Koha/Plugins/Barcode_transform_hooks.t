@@ -22,8 +22,6 @@ use Test::Warn;
 
 use File::Basename;
 
-use C4::Circulation qw( AddIssue AddRenewal AddReturn );
-
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -42,9 +40,9 @@ my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
-subtest 'after_circ_action() hook tests' => sub {
+subtest '() hook tests' => sub {
 
-    plan tests => 3;
+    plan tests => 1;
 
     $schema->storage->txn_begin;
 
@@ -66,51 +64,14 @@ subtest 'after_circ_action() hook tests' => sub {
     my $test_plugin = Test::MockModule->new('Koha::Plugin::Test');
     $test_plugin->mock( 'after_item_action',   undef );
     $test_plugin->mock( 'after_biblio_action', undef );
-    $test_plugin->mock( 'item_barcode_transform', sub { my ( $self, $barcode ) = @_; return $barcode; } );
 
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    $item_1->barcode('THISISATEST');
 
-    subtest 'AddIssue' => sub {
-        plan tests => 2;
-
-        warning_like { AddIssue( $patron->unblessed, $item_1->barcode ); }
-        qr/after_circ_action called with action: checkout, ref: Koha::Checkout type: issue/,
-          'AddIssue calls the after_circ_action hook';
-
-        warning_like { AddIssue( $patron->unblessed, $item_2->barcode, undef, undef, undef, undef, { onsite_checkout => 1 } ); }
-        qr/after_circ_action called with action: checkout, ref: Koha::Checkout type: onsite_checkout/,
-          'AddIssue calls the after_circ_action hook (onsite_checkout case)';
-    };
-
-    subtest 'AddRenewal' => sub {
-        plan tests => 1;
-
-        warning_like { AddRenewal( $patron->borrowernumber, $item_1->id, $patron->branchcode ); }
-                qr/after_circ_action called with action: renewal, ref: Koha::Checkout/,
-                'AddRenewal calls the after_circ_action hook';
-    };
-
-    subtest 'AddReturn' => sub {
-        plan tests => 2;
-
-        t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 1);
-        $item_1->set({ withdrawn => 1 })->store;
-
-        warning_is {
-            AddReturn( $item_1->barcode, $patron->branchcode );
-        } undef, 'No hook called because no return happened';
-
-        t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems', 0);
-        $item_1->set({ withdrawn => 0 })->store;
-
-        warning_like {
-            AddReturn( $item_1->barcode, $patron->branchcode );
-        }
-        qr/after_circ_action called with action: checkin, ref: Koha::Old::Checkout/,
-          'AddReturn calls the after_circ_action hook';
-    };
+    warning_like { $item_1->store(); }
+        qr/item_barcode_transform called with parameter: THISISATEST/,
+        'AddReserve calls the after_hold_create hook';
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;

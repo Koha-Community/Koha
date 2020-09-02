@@ -36,7 +36,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Auth qw( in_iprange get_template_and_user checkpw );
-use C4::Circulation qw( AddReturn CanBookBeIssued AddIssue CanBookBeRenewed AddRenewal );
+use C4::Circulation qw( barcodedecode AddReturn CanBookBeIssued AddIssue CanBookBeRenewed AddRenewal );
 use C4::Reserves;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Members;
@@ -46,6 +46,7 @@ use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
+use Koha::Plugins;
 use Koha::Token;
 
 my $query = CGI->new;
@@ -104,6 +105,8 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) =
     $query->param("confirmed")  || '',
     $query->param("newissues")  || '',
 );
+
+$barcode = barcodedecode( $barcode ) if $barcode;
 
 my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.

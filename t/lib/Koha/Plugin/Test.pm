@@ -93,9 +93,14 @@ sub intranet_js {
     return "Koha::Plugin::Test::intranet_js";
 }
 
+sub item_barcode_transform {
+    my ( $self, $barcode ) = @_;
+    Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $barcode");
+}
+
 sub configure {
     my ( $self, $args ) = @_;
-    return "Koha::Plugin::Test::configure";;
+    return "Koha::Plugin::Test::configure";
 }
 
 sub install {

@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 59;
+use Test::More tests => 60;
 use Test::Warn;
 
 use C4::Context;
@@ -222,6 +222,7 @@ ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
 ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
 ok( $plugin->can('intranet_head'), 'Test plugin can intranet_head' );
 ok( $plugin->can('intranet_js'), 'Test plugin can intranet_js' );
+ok( $plugin->can('item_barcode_transform'), 'Test plugin can barcode_transform' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );

@@ -46,6 +46,7 @@ use Koha::CsvProfiles;
 use Koha::Patrons;
 use Koha::Patron::Debarments qw( GetDebarments );
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Plugins;
 use Koha::Database;
 use Koha::BiblioFrameworks;
 use Koha::Items;
@@ -157,8 +158,7 @@ if (C4::Context->preference("DisplayClearScreenButton")) {
 
 for my $barcode ( @$barcodes ) {
     $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
-    $barcode = barcodedecode($barcode)
-        if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
+    $barcode = barcodedecode( $barcode ) if $barcode;
 }
 
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');

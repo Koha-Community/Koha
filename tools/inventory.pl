@@ -31,7 +31,7 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Items qw( GetItemsForInventory );
 use C4::Koha qw( GetAuthorisedValues );
-use C4::Circulation qw( AddReturn );
+use C4::Circulation qw( barcodedecode AddReturn );
 use C4::Reports::Guided qw( );
 use C4::Charset qw( NormalizeString );
 
@@ -41,6 +41,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::ClassSources;
 use Koha::Items;
+
 use List::MoreUtils qw( none );
 
 my $minlocation=$input->param('minlocation') || '';
@@ -186,6 +187,9 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
     }
     for my $barcode (@uploadedbarcodes) {
         next unless $barcode;
+
+        $barcode = barcodedecode($barcode);
+
         ++$lines_read;
         if (length($barcode)>$barcode_size) {
             $err_length += 1;

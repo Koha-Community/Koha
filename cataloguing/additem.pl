@@ -33,7 +33,7 @@ use C4::Biblio qw(
     ModBiblio
 );
 use C4::Context;
-use C4::Circulation qw( LostItem );
+use C4::Circulation qw( barcodedecode LostItem );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::ClassSource qw( GetClassSources GetClassSource );
 use C4::Barcodes;
@@ -461,6 +461,8 @@ if ($op eq "additem") {
         my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $item->barcode($barcode);
     }
+
+    $item->barcode(barcodedecode($item->barcode));
 
     # If we have to add or add & duplicate, we add the item
     if ( $add_submit || $prefillitem) {

@@ -26,7 +26,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use C4::Context;
-use C4::Circulation qw( GetBranchItemRule );
+use C4::Circulation qw( barcodedecode GetBranchItemRule );
 use C4::Reserves;
 use C4::ClassSource qw( GetClassSort );
 use C4::Log qw( logaction );
@@ -88,6 +88,8 @@ sub store {
     unless ( $self->itype ) {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
+
+    $self->barcode( C4::Circulation::barcodedecode( $self->barcode ) );
 
     my $today  = dt_from_string;
     my $action = 'create';

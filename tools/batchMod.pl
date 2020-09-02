@@ -33,7 +33,7 @@ use C4::Biblio qw(
     TransformHtmlToXml
 );
 use C4::Items qw( GetItemsInfo Item2Marc ModItemFromMarc );
-use C4::Circulation qw( LostItem IsItemIssued );
+use C4::Circulation qw( barcodedecode LostItem IsItemIssued );
 use C4::Context;
 use C4::Koha;
 use C4::BackgroundJob;
@@ -372,6 +372,9 @@ if ($op eq "show"){
         if ( my $list = $input->param('barcodelist') ) {
             my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
             @barcodelist = uniq @barcodelist;
+
+            @barcodelist = map { barcodedecode( $_ ) } @barcodelist;
+
             # Note: adding lc for case insensitivity
             my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => \@barcodelist }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
             @itemnumbers = map { exists $itemdata{lc $_} ? $itemdata{lc $_} : () } @barcodelist;
