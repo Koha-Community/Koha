@@ -322,6 +322,11 @@
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
                                                 <input type="hidden" name="barcode" value="[% itembarcode | html %]" />
                                                 <input type="hidden" name="multiple_confirm" value="1" />
+                                                [% FOREACH inputloo IN inputloop %]
+                                                    <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                                                    <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                                                    <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                                                [% END %]
                                                 <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, checkin (Y)</button>
                                             </form>
                                             <button type="button" data-dismiss="modal" class="deny" accesskey="n"><i class="fa fa-times"></i> No, don't checkin (N)</button>
