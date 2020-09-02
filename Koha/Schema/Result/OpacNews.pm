@@ -56,7 +56,13 @@ __PACKAGE__->table("opac_news");
   is_nullable: 0
   size: 50
 
-=head2 timestamp
+=head2 published_on
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 updated_on
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
@@ -98,7 +104,9 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 0 },
   "lang",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 50 },
-  "timestamp",
+  "published_on",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "updated_on",
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
@@ -168,8 +176,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-23 08:50:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Db/JtTOlAdb+83PKZhbFCQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-02 12:50:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IKAwgZM6jqOTbksraZb21w
 
 sub koha_object_class {
     'Koha::NewsItem';
