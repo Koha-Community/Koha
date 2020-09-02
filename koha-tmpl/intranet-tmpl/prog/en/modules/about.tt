@@ -114,6 +114,17 @@
             <tr><th scope="row"><strong>Warning</strong> </th><td>Error message from Zebra: [% ( errZebraConnection ) | html %] </td></tr>
             [% END %]
             <tr>
+                <th scope="row">Message broker: </th>
+                <td>
+                    Status:
+                    [% IF warnConnectBroker %]
+                        <span class="status_warn">connection failed</span>
+                    [% ELSE %]
+                        <span class="status_ok">running</span>
+                    [% END %]
+                </td>
+            </tr>
+            <tr>
               <th scope="row">Date and time: </th>
               <td>[% current_date_and_time | $KohaDates  with_hours => 1 %]</td>
             </tr>
@@ -184,7 +195,7 @@
         </div>
 
         <div id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships || log4perl_errors || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size || warnConnectBroker %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -257,6 +268,15 @@
                     [% CASE %]Unknown error "[% e | html %]"
                 [% END %]
             [% END %]
+        [% END %]
+
+        [% IF warnConnectBroker %]
+            <h2>Impossible to connect to the message broker</h2>
+            There is an error when trying to connect to the message broker (RabbitMQ), check the Koha log files.
+            <br/>
+            Maybe it is not installed and configured correctly?
+            <br/>
+            Contact your system administrator.
         [% END %]
 
         [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnPrefKohaAdminEmailAddress || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules || config_bcrypt_settings_no_set || warnHiddenBiblionumbers.size %]

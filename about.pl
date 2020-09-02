@@ -43,6 +43,7 @@ use C4::Installer::PerlModules;
 use Koha;
 use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Acquisition::Currencies;
+use Koha::BackgroundJob;
 use Koha::BiblioFrameworks;
 use Koha::Email;
 use Koha::Patron::Categories;
@@ -553,6 +554,17 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
           if $shouldhidemarc_intranet->{biblionumber};
     }
     $template->param( warnHiddenBiblionumbers => \@hidden_biblionumbers );
+}
+
+{
+    # BackgroundJob - test connection to message broker
+    eval {
+        Koha::BackgroundJob->connect;
+    };
+    if ( $@ ) {
+        warn $@;
+        $template->param( warnConnectBroker => $@ );
+    }
 }
 
 my %versions = C4::Context::get_versions();
