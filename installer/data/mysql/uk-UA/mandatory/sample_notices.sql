@@ -154,7 +154,7 @@ INSERT INTO `letter` (module, code, name, title, content, is_html) VALUES
 <div class="newsitem">
 <h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
 <p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
-<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Вивішено <<opac_news.publicationdate>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Вивішено <<opac_news.published_on>></p>
 <hr />
 </div>
 </news>',

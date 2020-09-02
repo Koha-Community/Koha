@@ -136,7 +136,7 @@ sub get_opac_new {
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
     $data->{expirationdate} = output_pref({ dt => dt_from_string( $data->{expirationdate} ), dateonly => 1 }) if ( $data->{expirationdate} );
-    $data->{publicationdate} = output_pref({ dt => dt_from_string( $data->{publicationdate} ), dateonly => 1 });
+    $data->{published_on} = output_pref({ dt => dt_from_string( $data->{published_on} ), dateonly => 1 });
     return $data;
 }
 
@@ -146,7 +146,7 @@ sub get_opac_news {
     my $dbh = C4::Context->dbh;
     my $query = q{
                   SELECT opac_news.*, branches.branchname,
-                         publicationdate AS newdate,
+                         published_on AS newdate,
                          borrowers.title AS author_title,
                          borrowers.firstname AS author_firstname,
                          borrowers.surname AS author_surname
@@ -163,7 +163,7 @@ sub get_opac_news {
         $query .= ' AND (opac_news.branchcode IS NULL OR opac_news.branchcode=?)';
         push @values,$branchcode;
     }
-    $query.= ' ORDER BY publicationdate DESC ';
+    $query.= ' ORDER BY published_on DESC ';
     #if ($limit) {
     #    $query.= 'LIMIT 0, ' . $limit;
     #}
@@ -193,7 +193,7 @@ sub GetNewsToDisplay {
     my ($lang,$branch) = @_;
     my $dbh = C4::Context->dbh;
     my $query = q{
-     SELECT opac_news.*,publicationdate AS newdate,
+     SELECT opac_news.*,published_on AS newdate,
      borrowers.title AS author_title,
      borrowers.firstname AS author_firstname,
      borrowers.surname AS author_surname
@@ -203,7 +203,7 @@ sub GetNewsToDisplay {
         expirationdate >= CURRENT_DATE()
         OR    expirationdate IS NULL
      )
-     AND   publicationdate <= CURDATE()
+     AND   published_on <= CURDATE()
      AND   (opac_news.lang = '' OR opac_news.lang = ?)
      AND   (opac_news.branchcode IS NULL OR opac_news.branchcode = ?)
      ORDER BY number

@@ -94,7 +94,7 @@
                             </h4>
                             <div class="newsbody">[% koha_new.content | $raw %]</div>
                             <div class="newsfooter">
-                                Published on [% koha_new.publicationdate | $KohaDates %]
+                                Published on [% koha_new.published_on | $KohaDates %]
                                 [% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %]
                                     by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %]
                                 [% END %]

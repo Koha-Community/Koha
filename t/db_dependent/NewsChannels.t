@@ -74,7 +74,7 @@ my $href_entry1 = {
     content        => $new1,
     lang           => $lang1,
     expirationdate => $expirationdate1,
-    publicationdate=> $timestamp1,
+    published_on=> $timestamp1,
     number         => $number1,
     branchcode     => 'LIB1',
 };
@@ -89,7 +89,7 @@ my $href_entry2 = {
     content        => $new2,
     lang           => $lang2,
     expirationdate => $expirationdate2,
-    publicationdate=> $timestamp2,
+    published_on=> $timestamp2,
     number         => $number2,
     borrowernumber => $brwrnmbr,
     branchcode     => 'LIB1',
@@ -103,7 +103,7 @@ my $href_entry3 = {
     title          => $title3,
     content        => $new3,
     lang           => $lang3,
-    publicationdate=> $timestamp3,
+    published_on=> $timestamp3,
     number         => $number3,
     borrowernumber => $brwrnmbr,
     branchcode     => 'LIB1',
@@ -114,14 +114,14 @@ is( $rv, 1, 'Successfully added the third dummy news item without expiration dat
 # We need to determine the idnew in a non-MySQLism way.
 # This should be good enough.
 my $query =
-q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-01' AND expirationdate='2999-12-30'; };
+q{ SELECT idnew from opac_news WHERE published_on='2000-01-01' AND expirationdate='2999-12-30'; };
 my ( $idnew1 ) = $dbh->selectrow_array( $query );
 $query =
-q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-01' AND expirationdate='2999-12-31'; };
+q{ SELECT idnew from opac_news WHERE published_on='2000-01-01' AND expirationdate='2999-12-31'; };
 my ( $idnew2 ) = $dbh->selectrow_array( $query );
 
 $query =
-q{ SELECT idnew from opac_news WHERE publicationdate='2000-01-02'; };
+q{ SELECT idnew from opac_news WHERE published_on='2000-01-02'; };
 my ( $idnew3 ) = $dbh->selectrow_array( $query );
 
 # Test upd_opac_new
@@ -148,7 +148,7 @@ is_deeply(
         content        => $new1,
         lang           => $lang1,
         expirationdate => $expirationdate1,
-        publicationdate=> $timestamp1,
+        published_on=> $timestamp1,
         number         => $number1,
         borrowernumber => undef,
         idnew          => $idnew1,
@@ -168,7 +168,7 @@ is_deeply(
         content        => $new2,
         lang           => $lang2,
         expirationdate => $expirationdate2,
-        publicationdate=> $timestamp2,
+        published_on=> $timestamp2,
         number         => $number2,
         borrowernumber => $brwrnmbr,
         idnew          => $idnew2,

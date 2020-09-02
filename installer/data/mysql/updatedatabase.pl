@@ -22730,13 +22730,13 @@ if( CheckVersion( $DBversion ) ) {
     if( column_exists( 'opac_news', 'timestamp' ) ) {
         $dbh->do(q|
             ALTER TABLE opac_news
-            CHANGE COLUMN timestamp publicationdate date DEFAULT NULL
+            CHANGE COLUMN timestamp published_on date DEFAULT NULL
         |);
     }
     if( !column_exists( 'opac_news', 'updated_on' ) ) {
         $dbh->do(q|
             ALTER TABLE opac_news
-            ADD COLUMN updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER publicationdate
+            ADD COLUMN updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER published_on
         |);
     }
 
@@ -22744,9 +22744,9 @@ if( CheckVersion( $DBversion ) ) {
         UPDATE letter
         SET content = REPLACE(content,?,?)
         WHERE content LIKE ?
-    |, undef, 'opac_news.timestamp', 'opac_news.publicationdate', '%opac_news.timestamp%' );
+    |, undef, 'opac_news.timestamp', 'opac_news.published_on', '%opac_news.timestamp%' );
 
-    NewVersion( $DBversion, 21066, ["Update table opac_news", "Replace timestamp references in letters table"] );
+    NewVersion( $DBversion, 21066, ["Rename column opac_news.timestamp with published_on", "Add new column opac_news.updated_on", "Replace timestamp references in letters table"] );
 }
 
 # SEE bug 13068
