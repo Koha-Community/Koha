@@ -227,7 +227,7 @@ sub checkin {
         siplog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
     } elsif ( $data->{messages}->{ResFound} && !$circ->ok && $holds_block_checkin ) {
         $circ->screen_msg("Item is on hold, please return to circulation desk");
-        siplog ("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
+        siplog ("LOG_DEBUG", "C4::SIP::ILS::Checkin - item on hold");
     } elsif ( $data->{messages}->{withdrawn} && !$circ->ok && C4::Context->preference("BlockReturnOfWithdrawnItems") ) {
             $circ->screen_msg("Item withdrawn, return not allowed");
             siplog ("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
