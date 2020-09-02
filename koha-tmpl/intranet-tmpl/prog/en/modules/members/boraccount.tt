@@ -52,6 +52,7 @@
           <th>Due date</th>
           <th>Checkin date</th>
           <th>Checkout date</th>
+          <th class="checked_out_from">Checked out from</th>
           <th>Home library</th>
           <th>Note</th>
           <th>Amount</th>
@@ -75,6 +76,11 @@
       <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
       <td>[% IF ( account.issue_id ) %][% account.checkout.returndate | $KohaDates with_hours => 1 %][% END %]</td>
       <td>[% IF ( account.issue_id ) %][% account.checkout.issuedate | $KohaDates %][% END %]</td>
+      <td class="checked_out_from">
+          [% IF account.issue_id && account.checkout.library %]
+              [% account.checkout.library.branchname | html %]
+          [% END %]
+      </td>
       <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF account.amount <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
