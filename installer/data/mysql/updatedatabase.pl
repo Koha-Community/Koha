@@ -22759,6 +22759,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24197, "Add new system preference 'AddressForFailedOverdueNotices'" );
 }
 
+$DBversion = '20.06.00.035';
+if ( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('EdifactInvoiceImport', 'automatic', 'automatic|manual', "If on, don't auto-import EDI invoices, just keep them in the database with the status 'new'", 'Choice')
+    });
+
+    NewVersion( $DBversion, 23682, "Add new system preference 'EdifactInvoiceImport'" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
