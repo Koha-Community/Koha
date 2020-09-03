@@ -502,6 +502,7 @@ sub relationships_debt {
     my @guarantors;
     if ( $only_this_guarantor ) {
         @guarantors = $self->guarantee_relationships->count ? ( $self ) : ();
+        Koha::Exceptions::BadParameter->throw( { parameter => 'only_this_guarantor' } ) unless @guarantors;
     } elsif ( $self->guarantor_relationships->count ) {
         # I am a guarantee, just get all my guarantors
         @guarantors = $self->guarantor_relationships->guarantors;
