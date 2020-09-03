@@ -142,7 +142,7 @@ sub filter_by_current {
     my ($self) = @_;
     return $self->search(
         {
-            datecancellationprinted => [ undef, '0000-00-00' ]
+            datecancellationprinted => undef,
         }
     );
 }
@@ -159,8 +159,7 @@ sub filter_by_cancelled {
     my ($self) = @_;
     return $self->search(
         {
-            datecancellationprinted =>
-              [ { '!=' => [ -and => ( undef, '0000-00-00' ) ] } ]
+            datecancellationprinted => { '!=' => undef }
         }
     );
 }
