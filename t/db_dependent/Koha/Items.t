@@ -138,7 +138,7 @@ subtest 'store' => sub {
     };
 
     subtest '_lost_found_trigger' => sub {
-        plan tests => 7;
+        plan tests => 10;
 
         t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee', 1 );
         t::lib::Mocks::mock_preference( 'WhenLostForgiveFine',          0 );
@@ -759,6 +759,336 @@ subtest 'store' => sub {
             $item->itemlost(0)->store;
             is( $item->{_refunded}, undef, 'No refund triggered' );
 
+        };
+
+        subtest 'restore fine | no overdue' => sub {
+
+            plan tests => 8;
+
+            my $manager =
+              $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv(
+                { patron => $manager, branchcode => $manager->branchcode } );
+
+            # Set lostreturn_policy to 'restore' for tests
+            my $specific_rule_restore = $builder->build(
+                {
+                    source => 'CirculationRule',
+                    value  => {
+                        branchcode   => $manager->branchcode,
+                        categorycode => undef,
+                        itemtype     => undef,
+                        rule_name    => 'lostreturn',
+                        rule_value   => 'restore'
+                    }
+                }
+            );
+
+            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+            my $item = $builder->build_sample_item(
+                {
+                    biblionumber     => $biblio->biblionumber,
+                    library          => $library->branchcode,
+                    replacementprice => $replacement_amount,
+                    itype            => $item_type->itemtype
+                }
+            );
+
+            my $issue =
+              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Simulate item marked as lost
+            $item->itemlost(1)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $processing_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'PROCESSING'
+                }
+            );
+            is( $processing_fee_lines->count,
+                1, 'Only one processing fee produced' );
+            my $processing_fee_line = $processing_fee_lines->next;
+            is( $processing_fee_line->amount + 0,
+                $processfee_amount,
+                'The right PROCESSING amount is generated' );
+            is( $processing_fee_line->amountoutstanding + 0,
+                $processfee_amount,
+                'The right PROCESSING amountoutstanding is generated' );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountountstanding is generated' );
+
+            my $account = $patron->account;
+            my $debts   = $account->outstanding_debits;
+
+            # Pay off the debt
+            my $credit = $account->add_credit(
+                {
+                    amount    => $account->balance,
+                    type      => 'PAYMENT',
+                    interface => 'test',
+                }
+            );
+            $credit->apply(
+                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+
+            # Simulate item marked as found
+            $item->itemlost(0)->store;
+            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( $item->{_restored}, undef, 'Restore not triggered when there is no overdue fine found' );
+        };
+
+        subtest 'restore fine | unforgiven overdue' => sub {
+
+            plan tests => 10;
+
+            # Set lostreturn_policy to 'restore' for tests
+            my $manager =
+              $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv(
+                { patron => $manager, branchcode => $manager->branchcode } );
+            my $specific_rule_restore = $builder->build(
+                {
+                    source => 'CirculationRule',
+                    value  => {
+                        branchcode   => $manager->branchcode,
+                        categorycode => undef,
+                        itemtype     => undef,
+                        rule_name    => 'lostreturn',
+                        rule_value   => 'restore'
+                    }
+                }
+            );
+
+            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+            my $item = $builder->build_sample_item(
+                {
+                    biblionumber     => $biblio->biblionumber,
+                    library          => $library->branchcode,
+                    replacementprice => $replacement_amount,
+                    itype            => $item_type->itemtype
+                }
+            );
+
+            my $issue =
+              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Simulate item marked as lost
+            $item->itemlost(1)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $processing_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'PROCESSING'
+                }
+            );
+            is( $processing_fee_lines->count,
+                1, 'Only one processing fee produced' );
+            my $processing_fee_line = $processing_fee_lines->next;
+            is( $processing_fee_line->amount + 0,
+                $processfee_amount,
+                'The right PROCESSING amount is generated' );
+            is( $processing_fee_line->amountoutstanding + 0,
+                $processfee_amount,
+                'The right PROCESSING amountoutstanding is generated' );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountountstanding is generated' );
+
+            my $account = $patron->account;
+            my $debts   = $account->outstanding_debits;
+
+            # Pay off the debt
+            my $credit = $account->add_credit(
+                {
+                    amount    => $account->balance,
+                    type      => 'PAYMENT',
+                    interface => 'test',
+                }
+            );
+            $credit->apply(
+                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+
+            # Fine not forgiven
+            my $overdue = $account->add_debit(
+                {
+                    amount     => 30.00,
+                    user_id    => $manager->borrowernumber,
+                    library_id => $library->branchcode,
+                    interface  => 'test',
+                    item_id    => $item->itemnumber,
+                    type       => 'OVERDUE',
+                }
+            )->store();
+            $overdue->status('LOST')->store();
+            $overdue->discard_changes;
+            is( $overdue->status, 'LOST',
+                'Overdue status set to LOST' );
+
+            # Simulate item marked as found
+            $item->itemlost(0)->store;
+            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( $item->{_restored}, undef, 'Restore not triggered when overdue was not forgiven' );
+            $overdue->discard_changes;
+            is( $overdue->status, 'FOUND',
+                'Overdue status updated to FOUND' );
+        };
+
+        subtest 'restore fine | forgiven overdue' => sub {
+
+            plan tests => 12;
+
+            # Set lostreturn_policy to 'restore' for tests
+            my $manager =
+              $builder->build_object( { class => "Koha::Patrons" } );
+            t::lib::Mocks::mock_userenv(
+                { patron => $manager, branchcode => $manager->branchcode } );
+            my $specific_rule_restore = $builder->build(
+                {
+                    source => 'CirculationRule',
+                    value  => {
+                        branchcode   => $manager->branchcode,
+                        categorycode => undef,
+                        itemtype     => undef,
+                        rule_name    => 'lostreturn',
+                        rule_value   => 'restore'
+                    }
+                }
+            );
+
+            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+            my $item = $builder->build_sample_item(
+                {
+                    biblionumber     => $biblio->biblionumber,
+                    library          => $library->branchcode,
+                    replacementprice => $replacement_amount,
+                    itype            => $item_type->itemtype
+                }
+            );
+
+            my $issue =
+              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            # Simulate item marked as lost
+            $item->itemlost(1)->store;
+            C4::Circulation::LostItem( $item->itemnumber, 1 );
+
+            my $processing_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'PROCESSING'
+                }
+            );
+            is( $processing_fee_lines->count,
+                1, 'Only one processing fee produced' );
+            my $processing_fee_line = $processing_fee_lines->next;
+            is( $processing_fee_line->amount + 0,
+                $processfee_amount,
+                'The right PROCESSING amount is generated' );
+            is( $processing_fee_line->amountoutstanding + 0,
+                $processfee_amount,
+                'The right PROCESSING amountoutstanding is generated' );
+
+            my $lost_fee_lines = Koha::Account::Lines->search(
+                {
+                    borrowernumber  => $patron->id,
+                    itemnumber      => $item->itemnumber,
+                    debit_type_code => 'LOST'
+                }
+            );
+            is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
+            my $lost_fee_line = $lost_fee_lines->next;
+            is( $lost_fee_line->amount + 0,
+                $replacement_amount, 'The right LOST amount is generated' );
+            is( $lost_fee_line->amountoutstanding + 0,
+                $replacement_amount,
+                'The right LOST amountountstanding is generated' );
+
+            my $account = $patron->account;
+            my $debts   = $account->outstanding_debits;
+
+            # Pay off the debt
+            my $credit = $account->add_credit(
+                {
+                    amount    => $account->balance,
+                    type      => 'PAYMENT',
+                    interface => 'test',
+                }
+            );
+            $credit->apply(
+                { debits => [ $debts->as_list ], offset_type => 'Payment' } );
+
+            # Add overdue
+            my $overdue = $account->add_debit(
+                {
+                    amount     => 30.00,
+                    user_id    => $manager->borrowernumber,
+                    library_id => $library->branchcode,
+                    interface  => 'test',
+                    item_id    => $item->itemnumber,
+                    type       => 'OVERDUE',
+                }
+            )->store();
+            $overdue->status('LOST')->store();
+            is( $overdue->status, 'LOST',
+                'Overdue status set to LOST' );
+
+            # Forgive fine
+            $credit = $account->add_credit(
+                {
+                    amount     => 30.00,
+                    user_id    => $manager->borrowernumber,
+                    library_id => $library->branchcode,
+                    interface  => 'test',
+                    type       => 'FORGIVEN',
+                    item_id    => $item->itemnumber
+                }
+            );
+            $credit->apply(
+                { debits => [$overdue], offset_type => 'Forgiven' } );
+
+            # Simulate item marked as found
+            $item->itemlost(0)->store;
+            is( $item->{_refunded}, 1, 'Refund triggered' );
+            is( $item->{_restored}, 1, 'Restore triggered when overdue was forgiven' );
+            $overdue->discard_changes;
+            is( $overdue->status, 'FOUND', 'Overdue status updated to FOUND' );
+            is( $overdue->amountoutstanding, $overdue->amount, 'Overdue outstanding has been restored' );
+            $credit->discard_changes;
+            is( $credit->status, 'VOID', 'Overdue Forgival has been marked as VOID');
         };
 
         subtest 'Continue when userenv is not set' => sub {
