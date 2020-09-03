@@ -22749,6 +22749,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21066, ["Rename column opac_news.timestamp with published_on", "Add new column opac_news.updated_on", "Replace timestamp references in letters table"] );
 }
 
+$DBversion = '20.06.00.034';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type)
+        VALUES ('AddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress', 'free')
+    |);
+
+    NewVersion( $DBversion, 24197, "Add new system preference 'AddressForFailedOverdueNotices'" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';

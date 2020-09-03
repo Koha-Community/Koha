@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('AddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress', 'free');
