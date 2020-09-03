@@ -78,10 +78,10 @@
                 [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
             [% END %]
             <td>[% Categories.GetName( overdueloo.patron.categorycode ) | html %]</td>
-            <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
-          <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=overdueloo %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
-            <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
             <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
+          <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=overdueloo %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
+            <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
+            <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
             <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
