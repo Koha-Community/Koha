@@ -943,7 +943,7 @@
                     Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
                 [% END %]
             [% END %]
-            var columns_settings = [% TablesSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
+            var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
             var returns_table = KohaTable("checkedintable", {
                     "bFilter":false,
                     "bPaginate":false,
