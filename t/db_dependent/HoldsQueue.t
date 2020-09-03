@@ -1413,7 +1413,8 @@ subtest 'Excludes from local holds priority' => sub {
             branchcode     => $other_patron->branchcode,
             borrowernumber => $other_patron->borrowernumber,
             biblionumber   => $item1->biblionumber,
-            priority       => 1
+            priority       => 1,
+            itemtype       => $item1->effective_itemtype
         }
     );
 
@@ -1422,7 +1423,8 @@ subtest 'Excludes from local holds priority' => sub {
             branchcode     => $local_patron_excluded->branchcode,
             borrowernumber => $local_patron_excluded->borrowernumber,
             biblionumber   => $item1->biblionumber,
-            priority       => 2
+            priority       => 2,
+            itemtype       => $item1->effective_itemtype
         }
     );
 
@@ -1431,7 +1433,8 @@ subtest 'Excludes from local holds priority' => sub {
             branchcode     => $local_patron_not_excluded->branchcode,
             borrowernumber => $local_patron_not_excluded->borrowernumber,
             biblionumber   => $item1->biblionumber,
-            priority       => 3
+            priority       => 3,
+            itemtype       => $item1->effective_itemtype
         }
     );
 
