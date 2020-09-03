@@ -25,7 +25,6 @@ use C4::Koha;
 use C4::Output;
 use Koha::Database;
 use Koha::EDI qw(process_invoice);
-use Koha::Plugins::Handler;
 
 my $q = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
