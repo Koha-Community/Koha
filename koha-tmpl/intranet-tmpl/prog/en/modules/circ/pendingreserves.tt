@@ -141,7 +141,7 @@
         </td>
         <td>
         [% FOREACH loc IN reserveloo.locations %]
-            [% AuthorisedValues.GetByCode('LOC', loc) | html %]
+            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc) | html %]
         [% END %]
         </td>
         <td>

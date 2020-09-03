@@ -105,9 +105,9 @@
                         <td>[% item.replacementprice | $Price %]</td>
                         <td>[% Branches.GetName(item.homebranch) | html %]</td>
                         <td>[% ItemTypes.GetDescription(item.effective_itemtype) | html %]</td>
-                        <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
                         <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
-                        <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]
                         <td>[% item.itemnotes | $raw %]</td>
                     </tr>

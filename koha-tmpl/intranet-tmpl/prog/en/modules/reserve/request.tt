@@ -609,7 +609,7 @@
                                                     </td>
                                                     [% IF itemdata_ccode %]
                                                         <td>
-                                                            [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemloo.ccode ) | html %][% END %]
+                                                            [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemloo.ccode ) | html %][% END %]
                                                         </td>
                                                     [% END %]
                                                     <td>
@@ -665,15 +665,15 @@
                                                         [% END %]
 
                                                         [% IF ( itemloo.itemlost ) %]
-                                                           <span class="lost">[% AuthorisedValues.GetByCode( 'LOST', itemloo.itemlost ) | html %]</span>
+                                                           <span class="lost">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => itemloo.itemlost ) | html %]</span>
                                                         [% END %]
 
                                                         [% IF ( itemloo.damaged ) %]
-                                                            <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', itemloo.damaged ) | html %]</span>
+                                                            <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => itemloo.damaged ) | html %]</span>
                                                         [% END %]
 
                                                         [% IF ( itemloo.withdrawn ) %]
-                                                           <span class="wdn">[% AuthorisedValues.GetByCode( 'WITHDRAWN', itemloo.withdrawn ) | html %]</span>
+                                                           <span class="wdn">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => itemloo.withdrawn ) | html %]</span>
                                                         [% END %]
 
                                                         [% IF ( itemloo.notforloan ) %]

@@ -109,7 +109,7 @@
               [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) | html %][% END %]
             </td>
             <td>
-              [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html %][% END %]
+              [% IF ( subscription.location ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %][% END %]
             </td>
             <td>
               [% IF ( subscription.callnumber ) %][% subscription.callnumber | html %][% END %]

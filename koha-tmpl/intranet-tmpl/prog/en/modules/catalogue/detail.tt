@@ -630,7 +630,7 @@ Note that permanent location is a code, and location may be an authval.
                 <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode | html %]</h3>
             [% END %]
             [% IF ( subscription.closed ) %]<p>This subscription is closed.</p>[% END %]
-            [% IF ( subscription.location ) %]<p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html %]</p>[% END %]
+            [% IF ( subscription.location ) %]<p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</p>[% END %]
             [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber | html %] </p>[% END %]
             [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes | html | html_line_break %] </p>[% END %]
             [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist | html %] </p>[% END %]

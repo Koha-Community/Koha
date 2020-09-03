@@ -611,13 +611,13 @@
                                                                         [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber | html %]</a>]
                                                                     [% END %]
                                                                     [% IF ( other_items_loo.withdrawn ) %]
-                                                                        ([% AuthorisedValues.GetByCode( 'WITHDRAWN', other_items_loo.withdrawn ) | html %])
+                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => other_items_loo.withdrawn ) | html %])
                                                                     [% END %]
                                                                     [% IF ( other_items_loo.itemlost ) %]
-                                                                        ([% AuthorisedValues.GetByCode( 'LOST', other_items_loo.itemlost ) | html %])
+                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => other_items_loo.itemlost ) | html %])
                                                                     [% END %]
                                                                     [% IF ( other_items_loo.damaged ) %]
-                                                                        ([% AuthorisedValues.GetByCode( 'DAMAGED', other_items_loo.damaged ) | html %])
+                                                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => other_items_loo.damaged ) | html %])
                                                                     [% END %]
                                                                     [% IF ( other_items_loo.intransit ) %]
                                                                         (In transit)

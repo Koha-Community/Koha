@@ -55,7 +55,7 @@
                     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a>
                   </td>
                   <td>[% Branches.GetName(item.branchcode) | html %]</td>
-                  <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>
+                  <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</td>
                 </tr>
               [% END %]
             </tbody>

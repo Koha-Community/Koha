@@ -76,7 +76,7 @@
             <td>
                   <ul>
                       [% FOREACH location IN reserveloo.location %]
-                          <li>[% AuthorisedValues.GetByCode( 'LOC', location ) | html %]</li>
+                          <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => location ) | html %]</li>
                       [% END %]
                   </ul>
             </td>

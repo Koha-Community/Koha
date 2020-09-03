@@ -203,10 +203,10 @@
                     </td>
                     <td class="tf-author">[% trsfitemloo.item.biblio.author | html %]</td>
                     <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.item.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.item.itemnumber | uri %]#item[% trsfitemloo.item.itemnumber | uri %]">[% trsfitemloo.item.barcode | html %]</a></td>
-                    <td class="tf-location"><span class="shelvingloc">[% AuthorisedValues.GetByCode( 'LOC', trsfitemloo.item.location ) | html %]</span></td>
+                    <td class="tf-location"><span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => trsfitemloo.item.location ) | html %]</span></td>
                     <td class="tf-itemcallnumber">[% trsfitemloo.item.itemcallnumber | html %]</td>
                     <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.item.effective_itemtype ) | html %]</td>
-                    <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.item.ccode ) | html %]</td>
+                    <td class="tf-ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => trsfitemloo.item.ccode ) | html %]</td>
                     <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
                     <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
                 </tr>

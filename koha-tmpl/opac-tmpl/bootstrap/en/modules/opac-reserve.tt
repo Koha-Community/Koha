@@ -396,7 +396,7 @@
                                                                 <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingBranchName ) | html %]</td>
                                                             [% END %]
                                                             [% IF ( itemdata_ccode ) %]
-                                                                <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemLoo.ccode, 1 ) | html %][% END %]</td>
+                                                                <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemLoo.ccode, opac => 1 ) | html %][% END %]</td>
                                                             [% END %]
                                                             <td class="call_no">[% itemLoo.callNumber | html %]</td>
                                                             [% IF ( itemdata_enumchron ) %]

@@ -214,24 +214,26 @@
                                                  Item shelving location updated.
                                                 <br />Old value:
                                                 [% IF errmsgloo.ItemLocationUpdated.from %]
+                                                    [% SET av_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => errmsgloo.ItemLocationUpdated.from ) %]
                                                     [% IF errmsgloo.ItemLocationUpdated.from == '' %]
                                                         empty
-                                                    [% ELSIF AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.from ) == '' %]
+                                                    [% ELSIF av_description == '' %]
                                                         [% errmsgloo.ItemLocationUpdated.from | html %] (No description available)
                                                     [% ELSE %]
-                                                        [% AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.from ) | html %]
+                                                        [% av_description | html %]
                                                     [% END %]
                                                 [% ELSE %]
                                                     "Blank"
                                                 [% END %]
                                                 <br />New value:
                                                 [% IF errmsgloo.ItemLocationUpdated.to %]
+                                                    [% SET av_description = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => errmsgloo.ItemLocationUpdated.to ) %]
                                                     [% IF errmsgloo.ItemLocationUpdated.to == '' %]
                                                         empty
-                                                    [% ELSIF AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.to ) == '' %]
+                                                    [% ELSIF av_description == '' %]
                                                         [% errmsgloo.ItemLocationUpdated.to | html %] (Not an authorized value)
                                                     [% ELSE %]
-                                                        [% AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.to ) | html %]
+                                                        [% av_description | html %]
                                                     [% END %]
                                                 [% ELSE %]
                                                     "Blank"
@@ -848,7 +850,7 @@
                                             [% ItemTypes.GetDescription( riloo.itemtype ) | html %]
                                         </td>
                                         <td class="ci-collection">
-                                            [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) | html %]
+                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => riloo.ccode) | html %]
                                         </td>
                                         <td class="ci-patron">
                                             [% IF ( riloo.duedate ) %]

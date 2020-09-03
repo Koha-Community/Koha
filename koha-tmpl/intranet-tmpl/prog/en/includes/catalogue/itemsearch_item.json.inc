@@ -14,7 +14,7 @@
   [%~ END %]",
   "[% (biblioitem.publicationyear || biblio.copyrightdate) | html %]",
   "[% biblioitem.publishercode | html | $To %]",
-  "[% AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]",
   "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]#item[% item.itemnumber | uri %]" title="Go to item details">[% item.barcode | html %]</a>
   [%~ END %]",
@@ -25,8 +25,8 @@
   "[% ItemTypes.GetDescription(item.itype) | html %]",
   "[% item.stocknumber | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | html %]",
-  "[% AuthorisedValues.GetByCode( 'LOST', item.itemlost ) || "" | html %]",
-  "[% AuthorisedValues.GetByCode( 'WITHDRAWN', item.withdrawn ) || "" | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | html %]",
   "[% (item.issues || 0) | html %]",
   "[% FILTER escape_quotes ~%]
     <div class="btn-group dropup"><button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-pencil"></i> Edit <span class="caret"></span> </button> <ul class="dropdown-menu pull-right"> <li><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | uri %]&itemnumber=[% item.itemnumber | uri %]">Edit item</a></li> <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% item.biblionumber | html %]">Edit record</a></li> </ul> </div>

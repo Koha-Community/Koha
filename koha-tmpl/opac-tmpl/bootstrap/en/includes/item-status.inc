@@ -8,7 +8,7 @@
 
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost, opac => 1 ) %]
     [% IF ( av_lib_include ) %]
         <span class="item-status lost">[% av_lib_include | html %]</span>
     [% ELSE %]
@@ -53,7 +53,7 @@
 
 [% IF ( item.withdrawn ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetByCode( 'WITHDRAWN', item.withdrawn, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn, opac => 1 ) %]
     [% IF av_lib_include %]
         <span class="item-status withdrawn">[% av_lib_include | html %]</span>
     [% ELSE %]
@@ -76,7 +76,7 @@
 
 [% IF ( item.damaged ) %]
     [% SET itemavailable = 0 %]
-    [% av_lib_include = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged, 1 ) %]
+    [% av_lib_include = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => item.damaged, opac => 1 ) %]
     [% IF av_lib_include %]
         <span class="item-status damaged">[% av_lib_include | html %]</span>
     [% ELSE %]

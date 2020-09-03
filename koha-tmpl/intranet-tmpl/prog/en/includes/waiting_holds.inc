@@ -39,7 +39,7 @@
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
                 <td>[% Branches.GetName( reserveloo.item.holdingbranch ) | html %]</td>
-                <td>[% AuthorisedValues.GetByCode('LOC', reserveloo.item.location) | html %]</td>
+                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => reserveloo.item.location) | html %]</td>
                 <td>[% reserveloo.item.itemcallnumber | html %]</td>
                 <td>[% reserveloo.item.copynumber | html %]</td>
                 <td>[% reserveloo.item.enumchron | html %]</td>

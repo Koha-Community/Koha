@@ -81,8 +81,8 @@
                                         <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
                                         <td>[% cr.biblio.author | html %]</td>
                                         <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
-                                        <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <em>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location, 1 ) | html %]</em></td>
-                                        <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode, 1 ) | html %]</td>
+                                        <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => cr.item.location, opac => 1 ) | html %]</em></td>
+                                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode, opac => 1 ) | html %]</td>
                                         <td>[% cr.item.itemcallnumber | html %]</td>
                                         <td>[% cr.item.copynumber | html %]</td>
                                         <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
