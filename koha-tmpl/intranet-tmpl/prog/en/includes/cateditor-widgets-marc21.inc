@@ -49,6 +49,12 @@
             <option value="5">5 - Partial (preliminary) level</option>
             <option value="7">7 - Minimal level</option>
             <option value="8">8 - Prepublication level</option>
+            [% IF Koha.Preference('UseOCLCEncodingLevels') %]
+                <option value="I">I- Full-level input by OCLC participants</option>
+                <option value="J">J- Deleted record</option>
+                <option value="K">K- Less-than-full input by OCLC participants</option>
+                <option value="M">M- Added from a batch process</option>
+            [% END %]
             <option value="u">u - Unknown</option>
             <option value="z">z - Not applicable</option>
         </select>

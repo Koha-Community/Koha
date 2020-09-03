@@ -1,4 +1,5 @@
 [% SET footerjs = 1 %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>000 - Leader builder &rsaquo; Cataloging &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -236,6 +237,28 @@
 				[% ELSE %]
 					<option value="8">8- Prepublication level</option>
 				[% END %]
+                [% IF Koha.Preference('UseOCLCEncodingLevels') %]
+                    [% IF ( f17I ) %]
+                            <option value="I" selected="selected">I- Full-level input by OCLC participants</option>
+                    [% ELSE %]
+                            <option value="I">I- Full-level input by OCLC participants</option>
+                    [% END %]
+                    [% IF ( f17J ) %]
+                            <option value="J" selected="selected">J- Deleted record</option>
+                    [% ELSE %]
+                            <option value="J">J- Deleted record</option>
+                    [% END %]
+                    [% IF ( f17K ) %]
+                            <option value="K" selected="selected">K- Less-than-full input by OCLC participants</option>
+                    [% ELSE %]
+                            <option value="K">K- Less-than-full input by OCLC participants</option>
+                    [% END %]
+                    [% IF ( f17K ) %]
+                            <option value="M" selected="selected">M- Added from a batch process</option>
+                    [% ELSE %]
+                            <option value="M">M- Added from a batch process</option>
+                    [% END %]
+                [% END %]
 				[% IF ( f17u ) %]
 					<option value="u" selected="selected">u - Unknown</option>
 				[% ELSE %]
