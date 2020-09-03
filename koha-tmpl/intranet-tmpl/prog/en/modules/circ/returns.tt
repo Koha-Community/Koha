@@ -197,13 +197,13 @@
                                                 Not for loan status updated.
                                                 <br />Old value:
                                                 [% IF errmsgloo.NotForLoanStatusUpdated.from %]
-                                                    [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html %].
+                                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.from ) | html %].
                                                 [% ELSE %]
                                                     Available for loan.
                                                 [% END %]
                                                 <br />New value:
                                                 [% IF errmsgloo.NotForLoanStatusUpdated.to %]
-                                                    [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html %].
+                                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.to ) | html %].
                                                 [% ELSE %]
                                                     Available for loan.
                                                 [% END %]

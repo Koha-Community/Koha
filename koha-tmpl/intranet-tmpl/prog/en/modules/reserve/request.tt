@@ -677,7 +677,7 @@
                                                         [% END %]
 
                                                         [% IF ( itemloo.notforloan ) %]
-                                                           <span class="nfl">Not for loan ([% AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html %])</span>
+                                                           <span class="nfl">Not for loan ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => itemloo.notforloan ) | html %])</span>
                                                         [% END %]
                                                     </td>
                                                     <td>

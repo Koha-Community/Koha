@@ -161,7 +161,7 @@
                     [% IF checkout_info.itemtype_notforloan %]
                         <li><i class="fa fa-li fa-warning"></i>Item type is normally not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetByCode( 'NOT_LOAN', checkout_info.item_notforloan, 0 ) %]
+                      [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
                         <li><i class="fa fa-li fa-warning"></i>Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
                     [% END %]
                   [% END %]
@@ -220,7 +220,7 @@
                     [% IF checkout_info.itemtype_notforloan %]
                        <li><i class="fa fa-li fa-exclamation"></i>Item type not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetByCode( 'NOT_LOAN', checkout_info.item_notforloan, 0 ) %]
+                      [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => checkout_info.item_notforloan ) %]
                         <li><i class="fa fa-li fa-exclamation"></i>Item not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
                     [% END %]
                   [% END %]
