@@ -530,7 +530,7 @@ sub MapItemsToHoldRequests {
                     && ( ( $item->{hold_fulfillment_policy} eq 'any' ) # Don't fill item level holds that contravene the hold pickup policy at this time
                         || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} } )
                     && ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
-                        || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
+                        || ( $request->{itemnumber} && ( $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} ) ) )
                   )
                 {
                     $itemnumber = $item->{itemnumber};
