@@ -1371,7 +1371,7 @@ Return true if the patron is a superlibrarian.
 
 sub is_superlibrarian {
     my ($self) = @_;
-    return $self->has_permission( { superlibrarian => 1 } );
+    return $self->has_permission( { superlibrarian => 1 } ) ? 1 : 0;
 }
 
 =head3 is_adult

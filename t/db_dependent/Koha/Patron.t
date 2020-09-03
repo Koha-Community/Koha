@@ -214,7 +214,7 @@ subtest 'login_attempts tests' => sub {
 
 subtest 'is_superlibrarian() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -228,10 +228,13 @@ subtest 'is_superlibrarian() tests' => sub {
         }
     );
 
-    ok( !$patron->is_superlibrarian, 'Patron is not a superlibrarian and the method returns the correct value' );
+    is( $patron->is_superlibrarian, 0, 'Patron is not a superlibrarian and the method returns the correct value' );
 
     $patron->flags(1)->store->discard_changes;
-    ok( $patron->is_superlibrarian, 'Patron is a superlibrarian and the method returns the correct value' );
+    is( $patron->is_superlibrarian, 1, 'Patron is a superlibrarian and the method returns the correct value' );
+
+    $patron->flags(0)->store->discard_changes;
+    is( $patron->is_superlibrarian, 0, 'Patron is not a superlibrarian and the method returns the correct value' );
 
     $schema->storage->txn_rollback;
 };
