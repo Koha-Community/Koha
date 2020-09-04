@@ -88,7 +88,7 @@ print "Test run only\n" unless $confirm;
 while ( my $auto_renew = $auto_renews->next ) {
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
-    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
+    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
     if ( $error eq 'auto_renew' ) {
         if ($verbose) {
             say sprintf "Issue id: %s for borrower: %s and item: %s ". ( $confirm ? 'will' : 'would') . " be renewed.",
