@@ -3588,7 +3588,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('941', 'h', 'Medium', 'Medium', 0, 0, NULL, 9, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('943', '6', 'Linkage', 'Linkage', 0, 0, '', 9, '', '', '', 0, -6, '', '', '', NULL),
 		('943', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 9, '', '', '', 0, -6, '', '', '', NULL),
-		('943', 'a', 'Uniform title', 'Unifor title', 0, 0, '', 9, '', '', '', 1, 5, '', '', '130', NULL),
+        ('943', 'a', 'Uniform title', 'Unifor title', 0, 0, '', 9, '', '', '', 1, 5, '', '', 'Title-uniform', NULL),
 		('943', 'd', 'Date of treaty signing', 'Date of treaty signing', 1, 0, '', 9, '', '', '', 0, -6, '', '', '', NULL),
 		('943', 'f', 'Date of a work', 'Date of a work', 0, 0, '', 9, '', '', '', 0, -6, '', '', '', NULL),
 		('943', 'g', 'Miscellaneous information', 'Miscellaneous information', 0, 0, '', 9, '', '', '', 0, -6, '', '', '', NULL),
