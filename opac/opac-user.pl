@@ -175,6 +175,7 @@ my @overdues;
 my @issuedat;
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 my $pending_checkouts = $patron->pending_checkouts->search({}, { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] });
+my $are_renewable_items = 0;
 if ( $pending_checkouts->count ) { # Useless test
     while ( my $c = $pending_checkouts->next ) {
         my $issue = $c->unblessed_all_relateds;
@@ -211,6 +212,7 @@ if ( $pending_checkouts->count ) { # Useless test
         ( $issue->{'renewalfee'}, $issue->{'renewalitemtype'} ) = GetIssuingCharges( $issue->{'itemnumber'}, $borrowernumber );
         $issue->{itemtype_object} = Koha::ItemTypes->find( Koha::Items->find( $issue->{itemnumber} )->effective_itemtype );
         if($status && C4::Context->preference("OpacRenewalAllowed")){
+            $are_renewable_items = 1;
             $issue->{'status'} = $status;
         }
 
@@ -278,7 +280,7 @@ if ( $pending_checkouts->count ) { # Useless test
     }
 }
 my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
-$canrenew = 0 if ($overduesblockrenewing ne 'allow' and $overdues_count == $count);
+$canrenew = 0 if ($overduesblockrenewing ne 'allow' and $overdues_count == $count) || !$are_renewable_items;
 
 $template->param( ISSUES       => \@issuedat );
 $template->param( issues_count => $count );

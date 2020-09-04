@@ -379,7 +379,9 @@
                                     <input type="hidden" name="from" value="opac_user" />
                                     <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                                     [% FOREACH ISSUE IN ISSUES %]
-                                        <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
+                                        [% IF ISSUE.status %]
+                                            <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
+                                        [% END %]
                                     [% END %]
                                     <input type="submit" class="btn" value="Renew all" />
                                 </form>
