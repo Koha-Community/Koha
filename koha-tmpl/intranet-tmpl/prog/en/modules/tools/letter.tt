@@ -552,12 +552,6 @@
         var code = '[% code | html %]';
         var new_lettercode = '[% new_lettercode | html %]';
         var new_branchcode = '[% new_branchcode | html %]';
-        var MSG_CODE_EXISTS = _("A default letter with the code '%s' already exists.");
-        var MSG_CODE_EXISTS_FOR_LIBRARY = _("A letter with the code '%s' already exists for '%s'.");
-        var MSG_EMPTY_TITLE_AND_CONTENT = _("Please specify title and content for %s");
-        var MSG_EMPTY_TEMPLATES = _("Please fill at least one template.");
-        var MSG_LOADING = _("Loading");
-        var MSG_NO_NOTICE_FOUND = _("No matching notices found");
         var columns_settings = [% TablesSettings.GetColumns( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
      </script>
     [% Asset.js("js/letter.js") | $raw %]

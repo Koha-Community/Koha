@@ -1,5 +1,5 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_NO_NOTICE_FOUND interface theme KohaTable columns_settings */
+/* global _ module add_form copy_form no_op_set code interface theme KohaTable columns_settings */
 
 var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ __('Loading...') +"</div>";
 
@@ -18,9 +18,9 @@ function checkCodes( new_lettercode, new_branchcode ){
         success: function (data) {
             if ( data.letters.length > 0 ) {
                 if( new_branchcode === '' ) {
-                    alert( MSG_CODE_EXISTS.format(new_lettercode));
+                    alert(__("A default letter with the code '%s' already exists.").format(new_lettercode));
                 } else {
-                    alert( MSG_CODE_EXISTS_FOR_LIBRARY.format(new_lettercode, new_branchcode) );
+                    alert(__("A letter with the code '%s' already exists for '%s'.").format(new_lettercode, new_branchcode));
                 }
                 $(".spinner").hide();
             } else {
@@ -49,9 +49,6 @@ $(document).ready(function() {
             { "bSortable": false, "aTargets": [ "nosort" ] },
             { "sType": "title-string", "aTargets" : [ "title-string"] }
         ],
-        "oLanguage": {
-            "sZeroRecords": MSG_NO_NOTICE_FOUND
-        },
         "exportColumns": [0,1,2,3],
     }, columns_settings);
 
@@ -92,7 +89,7 @@ $(document).ready(function() {
                 ) {
                     var mtt = $(this).find('input[name="message_transport_type"]').val();
                     at_least_one_exists = 1; // Only one template has to be filled in for form to be valid
-                    alert( MSG_EMPTY_TITLE_AND_CONTENT.format( mtt ) );
+                    alert(__("Please specify title and content for %s").format(mtt));
                     are_valid = 0;
                 } else if ( title.length > 0 && content.length > 0 ) {
                     at_least_one_exists = 1;
@@ -101,7 +98,7 @@ $(document).ready(function() {
 
             if ( ! at_least_one_exists ) {
                 // No templates were filled out
-                alert( MSG_EMPTY_TEMPLATES );
+                alert( __("Please fill at least one template.") );
                 return false;
             }
 
