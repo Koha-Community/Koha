@@ -1992,7 +1992,7 @@ sub searchResults {
         }    # notforloan, item level and biblioitem level
 
         # if all items are hidden, do not show the record
-        if ($items_count > 0 && $hideatopac_count == $items_count) {
+        if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && $items_count > 0 && $hideatopac_count == $items_count) {
             next;
         }
 

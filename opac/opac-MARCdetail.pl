@@ -108,7 +108,7 @@ my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $tagslib = &GetMarcStructure( 0, $framework );
 my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField( 'items.itemnumber' );
 my @nonhiddenitems = $record->field($tag_itemnumber);
-if (scalar @all_items >= 1 && scalar @nonhiddenitems == 0) {
+if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && scalar @all_items >= 1 && scalar @nonhiddenitems == 0 ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }

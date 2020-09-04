@@ -84,7 +84,7 @@ my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
 unless ( $patron and $patron->category->override_hidden_items ) {
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
-    if ( $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) ) {
+    if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) ) {
         print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
         exit;
     }

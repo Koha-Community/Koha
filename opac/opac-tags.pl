@@ -270,7 +270,7 @@ if ($loggedinuser) {
                 borcat => $borcat });
             $hidden_items = \@hidden_itemnumbers;
         }
-        next if ( $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
+        next if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
         $tag->{title} = $biblio->title;
         $tag->{subtitle} = $biblio->subtitle;
         $tag->{medium} = $biblio->medium;

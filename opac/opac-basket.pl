@@ -96,7 +96,7 @@ foreach my $biblionumber ( @bibs ) {
     my @hidden_items     = GetHiddenItemnumbers({ items => \@all_items, borcat => $borcat });
 
     # If every item is hidden, then the biblio should be hidden too.
-    next if (scalar @all_items >= 1 && scalar @hidden_items == scalar @all_items);
+    next if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && scalar @all_items >= 1 && scalar @hidden_items == scalar @all_items);
 
     # copy the visible ones into the items array.
     my @items;

@@ -656,6 +656,13 @@ OPAC:
             - 'List of patron categories, separated by |, that can see items otherwise hidden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems">OpacHiddenItems</a>:'
             - pref: OpacHiddenItemsExceptions
         -
+            - pref: OpacHiddenItemsHidesRecord
+              default: 1
+              choices:
+                  no: "Don't hide"
+                  yes: Hide
+            - "biblio record when all its items are hidden by <code>OpacHiddenItems</code>."
+        -
             - pref: OpacAllowPublicListCreation
               default: 1
               choices:

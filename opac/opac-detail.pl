@@ -106,7 +106,7 @@ if ( scalar @all_items >= 1 ) {
     push @hiddenitems,
       GetHiddenItemnumbers( { items => \@all_items, borcat => $borcat } );
 
-    if (scalar @hiddenitems == scalar @all_items ) {
+    if ( C4::Context->preference('OpacHiddenItemsHidesRecord') && scalar @hiddenitems == scalar @all_items ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
         exit;
     }
