@@ -279,7 +279,7 @@ $dbh->do(
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 77;
+    plan tests => 81;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -615,8 +615,14 @@ subtest "CanBookBeRenewed tests" => sub {
     );
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Still should not be able to renew' );
-    is( $error, 'auto_too_soon', 'returned code is auto_too_soon, reserve not checked' );
+    is( $error, 'on_reserve', 'returned code is on_reserve, reserve checked when not checking for cron' );
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, undef, 1 );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'auto_too_soon', 'returned code is auto_too_soon, reserve not checked when checking for cron' );
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
     $dbh->do('UPDATE circulation_rules SET rule_value = 0 where rule_name = "norenewalbefore"');

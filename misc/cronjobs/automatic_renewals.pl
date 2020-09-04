@@ -76,7 +76,7 @@ my %report;
 while ( my $auto_renew = $auto_renews->next ) {
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
-    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
+    my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber, undef, 1 );
     if ( $error eq 'auto_renew' ) {
         my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
         $auto_renew->auto_renew_error(undef)->store;
