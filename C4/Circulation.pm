@@ -2637,11 +2637,11 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 =cut
 
 sub CanBookBeRenewed {
-    my ( $borrowernumber, $itemnumber, $override_limit ) = @_;
+    my ( $borrowernumber, $itemnumber, $override_limit, $cron ) = @_;
 
     my $dbh    = C4::Context->dbh;
     my $renews = 1;
-    my $auto_renew = 0;
+    my $auto_renew = "no";
 
     my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
     my $issue = $item->checkout or return ( 0, 'no_checkout' );
@@ -2739,22 +2739,21 @@ sub CanBookBeRenewed {
 
             if ( $soonestrenewal > dt_from_string() )
             {
-                return ( 0, "auto_too_soon" ) if $issue->auto_renew && $patron->autorenew_checkouts;
-                return ( 0, "too_soon" );
+                $auto_renew = ($issue->auto_renew && $patron->autorenew_checkouts) ? "auto_too_soon" : "too_soon";
             }
             elsif ( $issue->auto_renew && $patron->autorenew_checkouts ) {
-                $auto_renew = 1;
+                $auto_renew = "ok";
             }
         }
 
         # Fallback for automatic renewals:
         # If norenewalbefore is undef, don't renew before due date.
-        if ( $issue->auto_renew && !$auto_renew && $patron->autorenew_checkouts ) {
+        if ( $issue->auto_renew && $auto_renew eq "no" && $patron->autorenew_checkouts ) {
             my $now = dt_from_string;
             if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
-                $auto_renew = 1;
+                $auto_renew = "ok";
             } else {
-                return ( 0, "auto_too_soon" );
+                $auto_renew = "auto_too_soon";
             }
         }
     }
@@ -2833,8 +2832,15 @@ sub CanBookBeRenewed {
             }
         }
     }
-    return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
-    return ( 0, "auto_renew" ) if $auto_renew && !$override_limit; # 0 if auto-renewal should not succeed
+    if( $cron ) { #The cron wants to return 'too_soon' over 'on_reserve'
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
+        return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
+    } else { # For other purposes we want 'on_reserve' before 'too_soon'
+        return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
+        return ( 0, $auto_renew  ) if $auto_renew =~ 'too_soon';#$auto_renew ne "no" && $auto_renew ne "ok";
+    }
+
+    return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed
 
     return ( 1, undef );
 }
