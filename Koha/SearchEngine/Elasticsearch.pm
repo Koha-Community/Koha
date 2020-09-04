@@ -30,6 +30,7 @@ use Koha::SearchMarcMaps;
 use Koha::Caches;
 use C4::Heading;
 use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
+use C4::Biblio;
 
 use Carp qw( carp croak );
 use Clone qw( clone );
@@ -773,7 +774,10 @@ sub marc_records_to_documents {
 
         # Check if there is at least one available item
         if ($self->index eq $BIBLIOS_INDEX) {
-            my $biblio = Koha::Biblios->find($record->field('001')->data);
+            my ($tag, $code) = C4::Biblio::GetMarcFromKohaField('biblio.biblionumber');
+            my $field = $record->field($tag);
+            my $biblionumber = $field->is_control_field ? $field->data : $field->subfield($code);
+            my $biblio = Koha::Biblios->find($biblionumber);
             my $items = $biblio->items;
             my $available = 0;
             while (my $item = $items->next) {
