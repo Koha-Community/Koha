@@ -572,7 +572,7 @@ subtest 'Holds test with start_date and end_date' => sub {
 
 subtest 'GetRecords' => sub {
 
-    plan tests => 1;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -591,6 +591,24 @@ subtest 'GetRecords' => sub {
         }
     );
 
+    my $patron = $builder->build({
+        source => 'Borrower',
+    });
+
+    my $issue = $builder->build({
+        source => 'Issue',
+        value => {
+            itemnumber => $item->itemnumber,
+        }
+    });
+
+    my $hold = $builder->build({
+        source => 'Reserve',
+        value => {
+            biblionumber => $item->biblionumber,
+        }
+    });
+
     ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode});
 
     my $cgi = CGI->new;
@@ -607,6 +625,17 @@ subtest 'GetRecords' => sub {
     };
     is_deeply($reply->{record}->[0]->{items}->{item}->[0]->{transfer}, $expected,
         'GetRecords returns transfer informations');
+
+    # Check informations exposed
+    my $reply_issue = $reply->{record}->[0]->{issues}->{issue}->[0];
+    is($reply_issue->{itemnumber}, $item->itemnumber, 'GetRecords has an issue tag');
+    is($reply_issue->{borrowernumber}, undef, 'GetRecords does not expose borrowernumber in issue tag');
+    is($reply_issue->{surname}, undef, 'GetRecords does not expose surname in issue tag');
+    is($reply_issue->{firstname}, undef, 'GetRecords does not expose firstname in issue tag');
+    is($reply_issue->{cardnumber}, undef, 'GetRecords does not expose cardnumber in issue tag');
+    my $reply_reserve = $reply->{record}->[0]->{reserves}->{reserve}->[0];
+    is($reply_reserve->{biblionumber}, $item->biblionumber, 'GetRecords has a reserve tag');
+    is($reply_reserve->{borrowernumber}, undef, 'GetRecords does not expose borrowernumber in reserve tag');
 
     $schema->storage->txn_rollback;
 };
