@@ -5,7 +5,11 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self checkout &rsaquo; Print Receipt for [% borrowernumber | html %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
-[% Asset.css("css/print.css") | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/print-rtl.css", { media = "print" }) | $raw %]
+[% ELSE %]
+    [% Asset.css("css/print.css", { media = "print" }) | $raw %]
+[% END %]
 [% IF stylesheet %]
 <link rel="stylesheet" type="text/css" href="[% stylesheet | $raw %]" />
 [% END %]

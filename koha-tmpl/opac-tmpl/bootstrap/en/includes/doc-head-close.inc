@@ -7,16 +7,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | url %]/[% theme | url %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% IF ( bidi ) %]
-    [% Asset.css("lib/bootstrap/css/bootstrap-rtl.min.css") | $raw %]
     [% Asset.css("lib/jquery/jquery-ui-rtl-1.12.1.min.css") | $raw %]
-    [% Asset.css("css/right-to-left.css") | $raw %]
 [% ELSE %]
     [% Asset.css("lib/jquery/jquery-ui-1.12.1.min.css") | $raw %]
 [% END %]
 [% IF ( Koha.Preference('opaclayoutstylesheet') ) %]
     [% SET opaclayoutstylesheet = Koha.Preference('opaclayoutstylesheet') %]
 [% ELSE %]
-    [% SET opaclayoutstylesheet = 'opac.css' %]
+    [% IF ( bidi ) %]
+        [% SET opaclayoutstylesheet = 'opac-rtl.css' %]
+    [% ELSE %]
+        [% SET opaclayoutstylesheet = 'opac.css' %]
+    [% END %]
 [% END %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet | url %]" />
@@ -34,7 +36,11 @@
 [% IF ( opac_css_override ) %]
     <link rel="stylesheet" type="text/css" href="[% interface | url %]/[% theme | url %]/css/[% opac_css_override | url %]" />
 [% END %]
-[% Asset.css("css/print.css", { media = "print" }) | $raw %]
+[% IF ( bidi ) %]
+    [% Asset.css("css/print-rtl.css", { media = "print" }) | $raw %]
+[% ELSE %]
+    [% Asset.css("css/print.css", { media = "print" }) | $raw %]
+[% END %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]
     <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
 [% END %]

@@ -5,9 +5,11 @@ const { dest, series, src, watch } = require('gulp');
 
 const sass = require("gulp-sass");
 const cssnano = require("gulp-cssnano");
+const rtlcss = require('gulp-rtlcss');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const args = require('minimist')(process.argv.slice(2));
+const rename = require('gulp-rename');
 
 const STAFF_JS_BASE = "koha-tmpl/intranet-tmpl/prog/js";
 const STAFF_CSS_BASE = "koha-tmpl/intranet-tmpl/prog/css";
@@ -34,6 +36,12 @@ function css() {
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(sourcemaps.write('./maps'))
+        .pipe(dest(css_base))
+
+        .pipe(rtlcss())
+        .pipe(rename({
+            suffix: '-rtl'
+        })) // Append "-rtl" to the filename.
         .pipe(dest(css_base));
 }
 
@@ -42,7 +50,15 @@ function build() {
     return src(css_base + "/src/**/*.scss")
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(cssnano({ zindex: false }))
+        .pipe(cssnano({
+            zindex: false
+        }))
+        .pipe(dest(css_base))
+
+        .pipe(rtlcss())
+        .pipe(rename({
+            suffix: '-rtl'
+        })) // Append "-rtl" to the filename.
         .pipe(dest(css_base));
 }
 
