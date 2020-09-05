@@ -93,6 +93,8 @@
                                             <li>This item is on hold for another borrower.</li>
                                         [% ELSIF error == 'item_denied_renewal' %]
                                             <li>Item renewal is not allowed.</li>
+                                        [% ELSIF error == 'auto_too_soon' %]
+                                            <li>This item is scheduled for auto renewal.</li>
                                         [% END %]
                                     [% END %]
                                 </ul>
