@@ -3,6 +3,9 @@
 [% USE Koha %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+
+[% PROCESS 'accounts.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Create manual credit</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -46,7 +49,7 @@
                                 <label for="type">Credit type: </label>
                                 <select name="type" id="type">
                                     [% FOREACH credit_type IN credit_types %]
-                                    <option value="[% credit_type.code | html %]">[% credit_type.description | html %]</option>
+                                    <option value="[% credit_type.code | html %]">[%- PROCESS credit_type_description credit_type=credit_type -%]</option>
                                     [% END %]
                                 </select>
                             </li>

@@ -4,6 +4,9 @@
 [% USE Price %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+
+[% PROCESS 'accounts.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Create manual invoice</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -56,9 +59,9 @@
                                 <select name="type" id="type">
                                     [% FOREACH debit_type IN debit_types %]
                                     [% IF debit_type.code == type %]
-                                    <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
+                                    <option value="[% debit_type.code | html %]" selected="selected">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
                                     [% ELSE %]
-                                    <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
+                                    <option value="[% debit_type.code | html %]">[%- PROCESS debit_type_description debit_type=debit_type -%]</option>
                                     [% END %]
                                     [% END %]
                                 </select>
