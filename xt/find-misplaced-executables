@@ -1,8 +1,9 @@
-#!/bin/sh
-#
+#!/usr/bin/perl
+
 # Script to find files that probably should not be executed.
 #
 # Copyright 2010 Catalyst IT Ltd
+# Copyright 2020 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -19,20 +20,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-set -e
+use Modern::Perl;
+use File::Find;
+use Data::Dumper;
+use Test::More tests => 1;
 
-find . \
-    -name misc -prune \
-    -o -name svc -prune \
-    -o -name xt -prune \
-    -o -name t -prune \
-    -o -name .git -prune \
-    -o -name blib -prune \
-    -o -name scripts -prune \
-    -o -name debian -prune \
-    -o -executable -type f \
-        '!' -name '*.pl' \
-        '!' -name '*.sh' \
-        '!' -name '*.plugin' \
-        '!' -name unapi \
-        -print
+my @files;
+sub wanted {
+    my $name = $File::Find::name;
+    # Ignore files in .git, blib and node_modules
+    return if $name =~ m[^\./(.git|blib|node_modules)];
+    # Ignore directories
+    return if -d $name; # Skip dir
+
+    # Search for missing x in svc, xt and t
+    if (   $name =~ m[^\./(svc|xt)] && $name ne './xt/perltidyrc'
+        || $name =~ m[^\./t/.*\.t$] )
+    {
+        push @files, $name unless -x $name;
+    }
+
+    # Search for missing x for .pl and .sh
+    if ( $name =~ m[\.(pl|sh)$] ) {
+        push @files, $name unless -x $name;
+    }
+
+    # Search for extra x flag for .pm
+    if ( $name =~ m[\.pm$] ) {
+        push @files, $name if -x $name;
+    }
+}
+find({ wanted => \&wanted, no_chdir => 1}, '.' );
+is(@files, 0) or diag(Dumper @files) ;
