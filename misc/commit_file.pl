@@ -21,10 +21,12 @@ my $batch_number = "";
 my $list_batches = 0;
 my $revert = 0;
 my $want_help = 0;
+my $framework = '';
 
 my $result = GetOptions(
     'batch-number:s' => \$batch_number,
     'list-batches'   => \$list_batches,
+    'framework:s'    => \$framework,
     'revert'         => \$revert,
     'h|help'         => \$want_help
 );
@@ -84,7 +86,7 @@ sub process_batch {
 
     print "... importing MARC records -- please wait\n";
     my ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored) =
-        BatchCommitRecords($import_batch_id, '', 100, \&print_progress_and_commit);
+        BatchCommitRecords($import_batch_id, $framework, 100, \&print_progress_and_commit);
     print "... finished importing MARC records\n";
 
     print <<_SUMMARY_;
@@ -145,6 +147,8 @@ stage_file.pl or by the Koha Tools option
 Parameters:
     --batch-number <#>   number of the record batch
                          to import
+    --framework <code>   add new records using this framework.  If
+                         omitted, the default framework is used.
     --list-batches       print a list of record batches
                          available to commit
     --revert             revert a batch instead of importing it
