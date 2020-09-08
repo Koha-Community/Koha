@@ -910,6 +910,7 @@ sub host_record {
     my ($self, $params) = @_;
     my $no_items = $params->{no_items};
     return if C4::Context->preference('marcflavour') eq 'UNIMARC'; # TODO
+    return if !C4::Context->preference('ArticleRequestsHostRedirection');
     return if $params->{no_items} && $self->items->count > 0;
 
     my $record;
