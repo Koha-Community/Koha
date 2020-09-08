@@ -105,8 +105,6 @@ sub smtp_server {
     else {
         # Getter
         if ( $library_smtp_server_rs ) {
-            # use Data::Printer colored => 1;
-            # p($library_smtp_server_rs);
             return Koha::SMTP::Servers->find(
                 $library_smtp_server_rs->smtp_server_id );
         }

@@ -1363,7 +1363,7 @@ sub _send_message_by_email {
     }
 
 # if initial message address was empty, coming here means that a to address was found and
-# queue should be updated; same if to address was overriden by create_message_headers
+# queue should be updated; same if to address was overriden by Koha::Email->create
     _update_message_to_address( $message->{'message_id'}, $email->email->header('To') )
       if !$message->{to_address}
       || $message->{to_address} ne $email->email->header('To');
