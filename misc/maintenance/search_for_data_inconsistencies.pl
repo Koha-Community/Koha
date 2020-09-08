@@ -196,7 +196,12 @@ use C4::Biblio;
 }
 
 {
-    my $biblios = Koha::Biblios->search({ -or => { title => undef, title => '' }});
+    my $biblios = Koha::Biblios->search({
+        -or => [
+            title => '',
+            title => undef,
+        ]
+    });
     if ( $biblios->count ) {
         my ( $title_tag, $title_subtag ) = C4::Biblio::GetMarcFromKohaField( 'biblio.title' );
         my $title_field = $title_tag // '';
