@@ -939,8 +939,14 @@ sub host_record {
             $bibno = $engine->extract_biblionumber( $results->[0] );
             last;
         }
-        # Extract number from $w (remove orgcode) for second try
-        $rcn= $1 if $try == 1 && $rcn =~ /\)\s*(\d+)/;
+        # Add or remove orgcode for second try
+        if( $try == 1 && $rcn =~ /\)\s*(\d+)/ ) {
+            $rcn = $1; # number only
+        } elsif( $try == 1 && $rcn =~ /^\d+/ ) {
+            $rcn = "($orgcode)$rcn";
+        } else {
+            last;
+        }
     }
     if( $bibno ) {
         my $host = Koha::Biblios->find($bibno) or return;
