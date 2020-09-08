@@ -30,8 +30,8 @@ if( CheckVersion( $DBversion ) ) {
                 PRIMARY KEY (`id`),
                 UNIQUE KEY `library_id_idx` (`library_id`),
                 KEY `smtp_server_id_idx` (`smtp_server_id`),
-                CONSTRAINT `library_id_fk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT `smtp_server_id_fk` FOREIGN KEY (`smtp_server_id`) REFERENCES `smtp_servers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                CONSTRAINT `library_smtp_servers_library_fk` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `library_smtp_servers_smtp_servers_fk` FOREIGN KEY (`smtp_server_id`) REFERENCES `smtp_servers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         });
     }
