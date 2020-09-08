@@ -289,10 +289,11 @@
 
                             [% IF ( deleted ) %]<div class="alert alert-info">The selected suggestions have been deleted.</div>[% END %]
 
-                            [% IF ( suggestions_loop ) %]
-                                [% SET can_delete_suggestion = 0 %]
+                            [% IF suggestions_loop OR title_filter %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
                                     <div class="form-row">
+                                        <label for="title_filter">Search for:</label>
+                                        <input type="text" name="title_filter" id="title_filter" value="[% title_filter | html %]" />
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
                                                 <div class="col-auto my-1">
@@ -307,13 +308,16 @@
                                                         [% END %]
                                                     </select>
                                                 </div>
-                                                <div class="col-auto my-1">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Go</button>
-                                                </div>
                                             [% END %]
                                         [% END %]
+                                        <div class="col-auto my-1">
+                                            <button type="submit" class="btn btn-sm btn-primary">Go</button>
+                                        </div>
                                     </div>
                                 </form>
+                            [% END %]
+                            [% IF suggestions_loop %]
+                                [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     <input type="hidden" name="op" value="delete_confirm" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
@@ -434,18 +438,20 @@
                                 </form>
                             [% ELSE %]
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) %]
-                                    [% IF ( loggedinusername ) %]
-                                        [% IF ( suggested_by_anyone ) %]
-                                            <p>There are no pending purchase suggestions.</p>
-                                        [% ELSE %]
-                                            <p>You have no pending purchase suggestions. <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">View all suggestions</a></p>
-                                        [% END %]
+                                    [% IF title_filter %]
+                                        <p>There are no pending purchase suggestions matching your search.</p>
+                                    [% ELSIF loggedinusername AND NOT suggested_by_anyone %]
+                                        <p>You have no pending purchase suggestions. <a href="/cgi-bin/koha/opac-suggestions.pl?suggested_by_anyone=1">View all suggestions</a></p>
                                     [% ELSE %]
                                         <p>There are no pending purchase suggestions.</p>
                                     [% END %]
                                 [% ELSE %]
                                     [% IF ( loggedinusername ) %]
-                                        <p>You have no pending purchase suggestions.</p>
+                                        [% IF title_filter %]
+                                            <p>There are no pending purchase suggestions matching your search.</p>
+                                        [% ELSE %]
+                                            <p>You have no pending purchase suggestions.</p>
+                                        [% END %]
                                     [% ELSE %]
                                         <p>You are not authorized to see pending purchase suggestions.</p>
                                     [% END %]
@@ -489,7 +495,6 @@
     $(function() {
         $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "order": [[ 1, "asc" ]],
-            "dom": '<"top"<"table_entries"><"table_controls"f>>t',
             "autoWidth": false,
             "columnDefs": [
               [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %]

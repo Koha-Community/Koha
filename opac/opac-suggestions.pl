@@ -41,6 +41,7 @@ my $biblionumber    = $input->param('biblionumber');
 my $suggestion      = $input->Vars;
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
+my $title_filter    = $input->param('title_filter');
 my $need_confirm    = 0;
 
 # If a spambot accidentally populates the 'negcap' field in the sugesstions form, then silently skip and return.
@@ -188,7 +189,12 @@ if ( $op eq "add_confirm" ) {
     $op = 'else';
 }
 
-my $suggestions_loop = &SearchSuggestion({suggestedby => $suggestion->{suggestedby}});
+my $suggestions_loop = &SearchSuggestion(
+    {
+        suggestedby => $suggestion->{suggestedby},
+        title       => $title_filter,
+    }
+);
 if ( $op eq "delete_confirm" ) {
     my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
@@ -261,6 +267,7 @@ $template->param(
     messages              => \@messages,
     suggestionsview       => 1,
     suggested_by_anyone   => $suggested_by_anyone,
+    title_filter          => $title_filter,
     patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
     need_confirm => $need_confirm,
     patrons_total_suggestions_count => $patrons_total_suggestions_count,
