@@ -361,6 +361,8 @@ $credit_type can be any of:
   - 'PAYMENT'
   - 'FORGIVEN'
   - 'LOST_FOUND'
+  - 'OVERPAYMENT'
+  - 'PAYMENT'
   - 'WRITEOFF'
 
 =cut
@@ -776,6 +778,7 @@ our $offset_type = {
     'CREDIT'           => 'Manual Credit',
     'FORGIVEN'         => 'Writeoff',
     'LOST_FOUND'       => 'Lost Item Found',
+    'OVERPAYMENT'      => 'Overpayment',
     'PAYMENT'          => 'Payment',
     'WRITEOFF'         => 'Writeoff',
     'ACCOUNT'          => 'Account Fee',

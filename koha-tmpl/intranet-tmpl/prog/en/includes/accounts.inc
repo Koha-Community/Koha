@@ -7,6 +7,7 @@
             [%- CASE 'FORGIVEN'         -%]Forgiven
             [%- CASE 'CREDIT'           -%]Credit
             [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
+            [%- CASE 'OVERPAYMENT'      -%]Overpayment refund
             [%- CASE 'REFUND'           -%]Refund
             [%- CASE                    -%][% account.credit_type.description | html %]
         [%- END -%]

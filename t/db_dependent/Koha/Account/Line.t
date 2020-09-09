@@ -570,7 +570,7 @@ subtest 'adjust() tests' => sub {
 
     my $overpayment_refund = $account->lines->last;
     is( $overpayment_refund->amount * 1, -10, 'A new credit has been added' );
-    is( $overpayment_refund->description, 'Overpayment refund', 'Credit generated with the expected description' );
+    is( $overpayment_refund->credit_type_code, 'OVERPAYMENT', 'Credit generated with the expected credit_type_code' );
 
     $schema->storage->txn_rollback;
 };
