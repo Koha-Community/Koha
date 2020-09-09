@@ -87,7 +87,7 @@ SKIP: {
         $patron->set_password({ password => $password });
 
         # Using the modal
-        $driver->find_element('//a[@class="login-link loginModal-trigger"]')->click;
+        $driver->find_element('//a[@class="nav-link login-link loginModal-trigger"]')->click;
         $s->fill_form( { muserid => $patron->userid, mpassword => $password } );
         $driver->find_element('//div[@id="loginModal"]//input[@type="submit"]')->click;
         like( $driver->get_title, qr(Koha online catalog), 'Patron without permission should be able to login to the OPAC using the modal' );
