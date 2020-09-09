@@ -90,22 +90,23 @@ subtest 'store() tests' => sub {
         }
     );
 
-    $SIG{__WARN__} = sub {}; # FIXME: PrintError = 0 not working!
+    {
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok
+            { $relationship_2->store; }
+            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+            'Exception is thrown for duplicated relationship';
 
-    throws_ok
-        { $relationship_2->store; }
-        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-        'Exception is thrown for duplicated relationship';
-
-    is( "$@",
-        "There already exists a relationship for the same guarantor ("
-            . $patron_2->borrowernumber
-            . ") and guarantee ("
-            . $patron_1->borrowernumber
-            . ") combination",
-        'Exception stringified correctly'
-    );
-
+        is( "$@",
+            "There already exists a relationship for the same guarantor ("
+                . $patron_2->borrowernumber
+                . ") and guarantee ("
+                . $patron_1->borrowernumber
+                . ") combination",
+            'Exception stringified correctly'
+        );
+    }
 
     $schema->storage->txn_rollback;
 };
