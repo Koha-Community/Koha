@@ -20669,6 +20669,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "19.11.09.001";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('DefaultLongOverdueSkipLostStatuses', '', NULL, 'Skip these lost statuses by default in longoverdue.pl', 'Free')
+    });
+
+    print "Upgrade to $DBversion done (Bug 25958 - Allow LongOverdue cron to exclude specified lost values)\n";
+    SetVersion( $DBversion );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
