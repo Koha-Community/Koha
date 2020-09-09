@@ -5,7 +5,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use List::MoreUtils qw(any none);
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
@@ -41,10 +42,13 @@ my $isbn2 = '0684843897';
 # XISBN match : Harry Potter and the Sorcerer's Stone,
 # 1. Scholastic mass market paperback printing1.
 my $isbn3 = '043936213X';
+# Finn Family Moomintroll, won't match to other isbns
+my $isbn4 = '014030150X';
 
 my $biblionumber1 = _add_biblio_with_isbn($isbn1);
 my $biblionumber2 = _add_biblio_with_isbn($isbn2);
 my $biblionumber3 = _add_biblio_with_isbn($isbn3);
+my $biblionumber4 = _add_biblio_with_isbn($isbn4);
 
 my $trial = C4::XISBN::_get_biblio_from_xisbn($isbn1);
 is( $trial->{biblionumber},
@@ -54,12 +58,13 @@ is( $trial->{biblionumber},
 t::lib::Mocks::mock_preference( 'ThingISBN', 1 );
 
 my $results_thingisbn;
-eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1); };
+eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1, $biblionumber4); };
 SKIP: {
     skip "Problem retrieving ThingISBN", 1
         unless $@ eq '';
-    is( $results_thingisbn->[0]->{biblionumber},
-        $biblionumber3,
+    ok( (any { $_->{'biblionumber'} eq $biblionumber1 } @$results_thingisbn),
+        "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
+    ok( (any { $_->{'biblionumber'} eq $biblionumber3 } @$results_thingisbn),
         "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
 }
 
@@ -76,8 +81,7 @@ eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1,$biblionumber3); };
 SKIP: {
     skip "Problem retrieving ThingISBN", 1
         unless $@ eq '';
-    is( $results_thingisbn->[0]->{biblionumber},
-        undef,
+    ok( (none { $_->{'biblionumber'} eq $biblionumber3 } @$results_thingisbn),
         "Doesn't get biblionumber if the biblionumber matches the one passed to the sub." );
 }
 
