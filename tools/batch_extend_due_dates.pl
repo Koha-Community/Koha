@@ -36,7 +36,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => 'tools/batch_extend_due_dates.tt',
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'batch_extend_due_dates' },
     }
 );
