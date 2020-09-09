@@ -327,9 +327,9 @@ CREATE TABLE `categories` ( -- this table shows information related to Koha patr
   `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
   `reset_password` TINYINT(1) NULL DEFAULT NULL, -- if patrons of this category can do the password reset flow,
   `change_password` TINYINT(1) NULL DEFAULT NULL, -- if patrons of this category can change their passwords in the OAPC
-  `exclude_from_local_holds_priority` tinyint(1) default NULL, -- Exclude patrons of this category from local holds priority
   `min_password_length` smallint(6) NULL DEFAULT NULL, -- set minimum password length for patrons in this category
   `require_strong_password` TINYINT(1) NULL DEFAULT NULL, -- set required password strength for patrons in this category
+  `exclude_from_local_holds_priority` tinyint(1) default NULL, -- Exclude patrons of this category from local holds priority
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

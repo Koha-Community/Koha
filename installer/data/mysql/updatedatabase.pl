@@ -22777,6 +22777,18 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20168, "Update OPACSearchForTitleIn to work with Bootstrap 4");
 }
 
+$DBversion = '20.06.00.037';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'categories', 'min_password_length' ) ) {
+        $dbh->do("ALTER TABLE categories ADD COLUMN `min_password_length` smallint(6) NULL DEFAULT NULL AFTER `change_password` -- set minimum password length for patrons in this category");
+    }
+    if( !column_exists( 'categories', 'require_strong_password' ) ) {
+        $dbh->do("ALTER TABLE categories ADD COLUMN `require_strong_password` TINYINT(1) NULL DEFAULT NULL AFTER `min_password_length` -- set required password strength for patrons in this category");
+    }
+
+    NewVersion( $DBversion, 23816, "Add min_password_length and require_strong_password columns in categories table");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
