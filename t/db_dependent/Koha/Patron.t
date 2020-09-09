@@ -64,12 +64,15 @@ subtest 'add_guarantor() tests' => sub {
 
     is( $guarantors->count, 1, 'No guarantors added' );
 
-    $SIG{__WARN__} = sub {}; # FIXME: PrintError = 0 not working!
-
-    throws_ok
-        { $patron_1->add_guarantor({ guarantor_id => $patron_2->borrowernumber, relationship => 'father2' }); }
-        'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
-        'Exception is thrown for duplicated relationship';
+    {
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok
+            { $patron_1->add_guarantor({ guarantor_id => $patron_2->borrowernumber, relationship => 'father2' }); }
+            'Koha::Exceptions::Patron::Relationship::DuplicateRelationship',
+            'Exception is thrown for duplicated relationship';
+        close STDERR;
+    }
 
     $schema->storage->txn_rollback;
 };
