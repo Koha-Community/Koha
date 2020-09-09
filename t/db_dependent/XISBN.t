@@ -104,13 +104,13 @@ sub Mock_simple_search_compat {
 
     $query =~ s/-//g;
     my $ret_biblionumber;
-    if ( $query =~ /$isbn1/ ) {
+    if ( $query eq "nb=$isbn1" ) {
         $ret_biblionumber = $biblionumber1;
     }
-    elsif ( $query =~ /$isbn2/ ) {
+    elsif ( $query eq "nb=$isbn2" ) {
         $ret_biblionumber = $biblionumber2;
     }
-    elsif ( $query =~ /$isbn3/ ) {
+    elsif ( $query eq "nb=$isbn3" ) {
         $ret_biblionumber = $biblionumber3;
     }
 
