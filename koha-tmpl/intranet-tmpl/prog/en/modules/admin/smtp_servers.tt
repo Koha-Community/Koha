@@ -346,7 +346,12 @@ SMTP servers
                         "searchable": false,
                         "orderable": false
                     }
-                ]
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    if ( data.debug ) {
+                        $(row).addClass('debug');
+                    }
+                },
             });
 
             $('#smtp_servers').on( "click", '.delete_server', function () {
