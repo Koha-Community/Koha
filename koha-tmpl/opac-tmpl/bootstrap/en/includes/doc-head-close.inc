@@ -11,7 +11,7 @@
 [% ELSE %]
     [% Asset.css("lib/jquery/jquery-ui-1.12.1.min.css") | $raw %]
 [% END %]
-[% IF ( Koha.Preference('opaclayoutstylesheet') ) %]
+[% IF ( Koha.Preference('opaclayoutstylesheet') && Koha.Preference('opaclayoutstylesheet') != "opac.css" ) %]
     [% SET opaclayoutstylesheet = Koha.Preference('opaclayoutstylesheet') %]
 [% ELSE %]
     [% IF ( bidi ) %]
