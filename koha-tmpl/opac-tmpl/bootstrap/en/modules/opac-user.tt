@@ -452,22 +452,22 @@
                                 </table>
                                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                     <input type="submit" class="btn btn-primary" value="Renew selected" />
+                                    <button type="button" id="renewall_js" class="btn btn-primary">Renew all</button>
                                 [% END %]
                                 </form>
 
                                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                                <form id="renewall" action="/cgi-bin/koha/opac-renew.pl" method="post">
-                                    <input type="hidden" name="from" value="opac_user" />
-                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                                    [% FOREACH ISSUE IN ISSUES %]
-                                        [% IF ISSUE.status %]
-                                            <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
+                                    <form id="renewall" class="js-hide" action="/cgi-bin/koha/opac-renew.pl" method="post">
+                                        <input type="hidden" name="from" value="opac_user" />
+                                        <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
+                                        [% FOREACH ISSUE IN ISSUES %]
+                                            [% IF ISSUE.status %]
+                                                <input type="hidden" name="item" value="[% ISSUE.itemnumber | html %]" />
+                                            [% END %]
                                         [% END %]
-                                    [% END %]
-                                    <input type="submit" class="btn btn-primary" value="Renew all" />
-                                </form>
+                                        <input type="submit" class="btn btn-primary" value="Renew all" />
+                                    </form>
                                 [% END %]
-                                <p><a href="opac-ics.pl">Download as iCal/.ics file</a></p>
                             [% ELSE %]
                                 <table class="table table-bordered table-striped">
                                     <tr><td>You have nothing checked out</td></tr>
@@ -834,7 +834,14 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-
+        function tableInit( tableId ){
+            if( tableId == "checkoutst" ){
+                $(".dt-buttons").append("<a class=\"dt-button buttons-ical\" href=\"opac-ics.pl\">iCal</a> ");
+                [% IF ( OpacRenewalAllowed && canrenew && !userdebarred ) %]
+                    $(".dt-buttons").append("<button id=\"renewselected_link\" class=\"dt-button buttons-renew\"><i class=\"fa fa-check\" aria-hidden=\"true\"></i> "+_("Renew selected")+"</button> <button id=\"renewall_link\" class=\"dt-button buttons-renewall\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i></span> "+_("Renew all")+"</button>");
+                [% END %]
+            }
+        }
         $(document).ready(function(){
             $('#opac-user-views').tabs();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
@@ -891,13 +898,21 @@
             var dTables = $("#checkoutst,#holdst,#overduest,#opac-user-relative-issues-table");
             dTables.each(function(){
                 var thIndex = $(this).find("th.psort").index();
-                $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
+                $(this).on("init.dt", function() {
+                        tableInit( $(this).attr("id") );
+                    })
+                    .dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sorting" : [[ thIndex, 'asc' ]],
+                    "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
                     "columnDefs": [
                         { "targets": [ "nosort" ],"sortable": false,"searchable": false },
                         { "type": "anti-the", "targets" : [ "anti-the" ] },
                         { "type": "title-string", "targets" : [ "title-string" ] }
-                    ]
+                    ],
+                    "language": {
+                        "search": "_INPUT_",
+                        "searchPlaceholder": _("Search")
+                    }
                 }));
             });
 
@@ -919,14 +934,11 @@
                     e.preventDefault();
                     $("#renewselected").submit();
                 });
-                $("body").on("click","#renewall_link",function(e){
+                $("body").on("click","#renewall_link, #renewall_js",function(e){
                     e.preventDefault();
                     $("#renewall").submit();
                 });
-                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" class=\"btn btn-link\" href=\"#\"><i class=\"fa fa-check\" aria-hidden=\"true\"></i> "+_("Renew selected")+"</a> <a id=\"renewall_link\" class=\"btn btn-link\" href=\"#\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i></span> "+_("Renew all")+"</a></div>");
-                [% END %]
-            [% END %]
+            [% END # /IF ( OpacRenewalAllowed && canrenew && !userdebarred ) %]
 
             [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
 

@@ -19,6 +19,10 @@ div.dataTables_filter {
     margin : 0;
 }
 
+.dt-buttons {
+    padding: .3em 0 0 0;
+}
+
 .dataTables_filter input {
     background-color: #fff;
     border-radius: 0.2rem;
@@ -26,6 +30,7 @@ div.dataTables_filter {
     color: #495057;
     height: calc(1.5em + 0.5rem + 2px);
     line-height: 1.5;
+    margin-left: 3px;
     padding: 0.25rem 0.5rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
@@ -33,4 +38,21 @@ div.dataTables_filter {
 .dataTables_filter input[type="search"]:focus {
     border-color: #85ca11;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(194, 228, 136, 0.6);
+}
+
+div.dt-button-collection {
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    column-gap: 8px;
+    left: 0;
+    margin-top: 3px;
+    overflow: hidden;
+    padding: 8px 8px 4px 8px;
+    position: absolute;
+    top: 0;
+    width: 150px;
+    z-index: 2002;
 }
