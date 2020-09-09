@@ -107,7 +107,6 @@ sub get_xisbns {
         $unique_xisbns->{ $response_data->{content} }++;
         my $xbiblio= _get_biblio_from_xisbn($response_data->{content});
         next unless $xbiblio;
-        next if $xbiblio->{normalized_isbn} && $xbiblio->{normalized_isbn} eq $isbn;
         push @xisbns, $xbiblio if $xbiblio && $xbiblio->{biblionumber} ne $biblionumber;
     }
     if ( wantarray ) {
