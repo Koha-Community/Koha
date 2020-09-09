@@ -22769,6 +22769,14 @@ if ( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23682, "Add new system preference 'EdifactInvoiceImport'" );
 }
 
+$DBversion = '20.06.00.036';
+if( CheckVersion( $DBversion ) ) {
+    # Fix the markup in the OPACSearchForTitleIn system preference
+    $dbh->do("UPDATE systempreferences SET VALUE = replace( value, '</li>', ''), value = REPLACE( value, '<li>', '') WHERE VARIABLE = 'OPACSearchForTitleIn';");
+
+    NewVersion( $DBversion, 20168, "Update OPACSearchForTitleIn to work with Bootstrap 4");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
