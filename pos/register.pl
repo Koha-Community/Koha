@@ -127,7 +127,7 @@ else {
 
                     my $refund = $accountline->reduce(
                         {
-                            reduction_type => 'Refund',
+                            reduction_type => 'REFUND',
                             branch         => $library_id,
                             staff_id       => $logged_in_user->id,
                             interface      => 'intranet',

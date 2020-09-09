@@ -7,7 +7,7 @@
             [%- CASE 'FORGIVEN'         -%]Forgiven
             [%- CASE 'CREDIT'           -%]Credit
             [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
-            [%- CASE 'Refund'           -%]Refund
+            [%- CASE 'REFUND'           -%]Refund
             [%- CASE                    -%][% account.credit_type.description | html %]
         [%- END -%]
     [%- ELSIF account.debit_type_code -%]

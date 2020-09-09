@@ -179,27 +179,33 @@
                 [%- CASE 'FORGIVEN'         -%]Forgiven
                 [%- CASE 'CREDIT'           -%]Credit
                 [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
+                [%- CASE 'REFUND'           -%]Refund
                 [%- CASE                    -%][% account.credit_type.description | html %]
             [%- END -%]
         [%- ELSIF account.debit_type_code -%]
-        [%- SWITCH account.debit_type_code -%]
-            [%- CASE 'ACCOUNT'          -%]Account creation fee
-            [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
-            [%- CASE 'LOST'             -%]Lost item
-            [%- CASE 'MANUAL'           -%]Manual fee
-            [%- CASE 'NEW_CARD'         -%]New card
-            [%- CASE 'OVERDUE'          -%]Fine
-            [%- CASE 'PROCESSING'       -%]Lost item processing fee
-            [%- CASE 'RENT'             -%]Rental fee
-            [%- CASE 'RENT_DAILY'       -%]Daily rental fee
-            [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
-            [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
-            [%- CASE 'RESERVE'          -%]Hold fee
-            [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
-            [%- CASE                    -%][% account.debit_type.description | html %]
+            [%- SWITCH account.debit_type_code -%]
+                [%- CASE 'ACCOUNT'          -%]Account creation fee
+                [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
+                [%- CASE 'LOST'             -%]Lost item
+                [%- CASE 'MANUAL'           -%]Manual fee
+                [%- CASE 'NEW_CARD'         -%]New card
+                [%- CASE 'OVERDUE'          -%]Fine
+                [%- CASE 'PROCESSING'       -%]Lost item processing fee
+                [%- CASE 'RENT'             -%]Rental fee
+                [%- CASE 'RENT_DAILY'       -%]Daily rental fee
+                [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
+                [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
+                [%- CASE 'RESERVE'          -%]Hold fee
+                [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
+                [%- CASE                    -%][% account.debit_type.description | html %]
+            [%- END -%]
         [%- END -%]
-        [%- END -%]
-        [%- SWITCH account.status -%]
+        [%- PROCESS account_status_description account=account -%]
+    </span>
+[%- END # /BLOCK account_type_description -%]
+
+[%- BLOCK account_status_description -%]
+    [%- SWITCH account.status -%]
             [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
             [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
             [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
@@ -208,5 +214,4 @@
             [%- CASE 'LOST'       -%]<span> (Lost)</span>
             [%- CASE              -%]
         [%- END -%]
-    </span>
-[%- END # /BLOCK account_type_description -%]
+[%- END -%]
