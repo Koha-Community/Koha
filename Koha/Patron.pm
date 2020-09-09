@@ -1166,7 +1166,7 @@ sub is_valid_age {
     my $patroncategory = $self->category;
     my ($low,$high) = ($patroncategory->dateofbirthrequired, $patroncategory->upperagelimit);
 
-    return (defined($age) && (($high && ($age > $high)) or ($age < $low))) ? 0 : 1;
+    return (defined($age) && (($high && ($age > $high)) or ($low && ($age < $low)))) ? 0 : 1;
 }
 
 =head3 account
