@@ -47,8 +47,8 @@ SKIP: {
         $driver->get($mainpage);
         like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
 
-        my $password = Koha::AuthUtils::generate_password();
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+        my $password = Koha::AuthUtils::generate_password($patron->category);
         t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
         $patron->set_password({ password => $password });
 
@@ -81,8 +81,8 @@ SKIP: {
         $driver->get($mainpage);
         like( $driver->get_title, qr(Koha online catalog), 'Hitting the main page should not redirect to the login form');
 
-        my $password = Koha::AuthUtils::generate_password();
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+        my $password = Koha::AuthUtils::generate_password($patron->category);
         t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
         $patron->set_password({ password => $password });
 

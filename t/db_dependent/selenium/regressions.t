@@ -54,7 +54,7 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 1 } } );
-    my $password = Koha::AuthUtils::generate_password();
+    my $password = Koha::AuthUtils::generate_password($patron->category);
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
@@ -205,7 +205,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
         );
     }
 
-    my $password = Koha::AuthUtils::generate_password();
+    my $password = Koha::AuthUtils::generate_password($patron->category);
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
