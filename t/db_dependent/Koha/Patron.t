@@ -85,10 +85,10 @@ subtest 'relationships_debt() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'parent' );
 
-    my $parent_1 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $parent_2 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $child_1 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $child_2 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $parent_1 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Parent 1" } });
+    my $parent_2 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Parent 2" } });
+    my $child_1 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Child 1" } });
+    my $child_2 = $builder->build_object({ class => 'Koha::Patrons', value => { firstname => "Child 2" } });
 
     $child_1->add_guarantor({ guarantor_id => $parent_1->borrowernumber, relationship => 'parent' });
     $child_1->add_guarantor({ guarantor_id => $parent_2->borrowernumber, relationship => 'parent' });
@@ -97,284 +97,109 @@ subtest 'relationships_debt() tests' => sub {
 
     is( $child_1->guarantor_relationships->guarantors->count, 2, 'Child 1 has correct number of guarantors' );
     is( $child_2->guarantor_relationships->guarantors->count, 2, 'Child 2 has correct number of guarantors' );
-    is( $parent_1->guarantee_relationships->guarantees->count, 2, 'Parent 1 has correct number of guarantors' );
-    is( $parent_2->guarantee_relationships->guarantees->count, 2, 'Parent 2 has correct number of guarantors' );
+    is( $parent_1->guarantee_relationships->guarantees->count, 2, 'Parent 1 has correct number of guarantees' );
+    is( $parent_2->guarantee_relationships->guarantees->count, 2, 'Parent 2 has correct number of guarantees' );
 
-    # 3 params, count from 0 to 6 in binary ( 3 places ) to get the set of switches, then do that 4 times, one for each parent and child
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
+    my $patrons = [ $parent_1, $parent_2, $child_1, $child_2 ];
 
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
+    # First test: No debt
+    my ($parent1_debt, $parent2_debt, $child1_debt, $child2_debt) = (0,0,0,0);
+    _test_combinations($patrons, $parent1_debt,$parent2_debt,$child1_debt,$child2_debt);
 
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
+    # Add debt to child_2
+    $child2_debt = 2;
+    $child_2->account->add_debit({ type => 'ACCOUNT', amount => $child2_debt, interface => 'commandline' });
+    is( $child_2->account->non_issues_charges, $child2_debt, 'Debt added to Child 2' );
+    _test_combinations($patrons, $parent1_debt,$parent2_debt,$child1_debt,$child2_debt);
 
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
+    $parent1_debt = 3;
+    $parent_1->account->add_debit({ type => 'ACCOUNT', amount => $parent1_debt, interface => 'commandline' });
+    is( $parent_1->account->non_issues_charges, $parent1_debt, 'Debt added to Parent 1' );
+    _test_combinations($patrons, $parent1_debt,$parent2_debt,$child1_debt,$child2_debt);
 
-    $child_2->account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
-    is( $child_2->account->non_issues_charges, 10, 'Child 2 owes correct amount' );
+    $parent2_debt = 5;
+    $parent_2->account->add_debit({ type => 'ACCOUNT', amount => $parent2_debt, interface => 'commandline' });
+    is( $parent_2->account->non_issues_charges, $parent2_debt, 'Parent 2 owes correct amount' );
+    _test_combinations($patrons, $parent1_debt,$parent2_debt,$child1_debt,$child2_debt);
 
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    $parent_1->account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
-    is( $parent_1->account->non_issues_charges, 10, 'Parent 1 owes correct amount' );
-
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    $parent_2->account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
-    is( $parent_2->account->non_issues_charges, 10, 'Parent 2 owes correct amount' );
-
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 30, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    $child_1->account->add_debit({ type => 'ACCOUNT', amount => 10, interface => 'commandline' });
-    is( $child_1->account->non_issues_charges, 10, 'Child 1 owes correct amount' );
-
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 30, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 40, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 30, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 40, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 20, 'Family debt is correct' );
-    is( $parent_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 30, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 30, 'Family debt is correct' );
-    is( $child_1->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 40, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_1->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 0 }), 10, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 0, include_this_patron => 1 }), 20, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 0 }), 30, 'Family debt is correct' );
-    is( $child_2->relationships_debt({ only_this_guarantor => 0, include_guarantors => 1, include_this_patron => 1 }), 40, 'Family debt is correct' );
-
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 0, include_this_patron => 1 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 0 }), 0, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
-    throws_ok {
-        is( $child_2->relationships_debt({ only_this_guarantor => 1, include_guarantors => 1, include_this_patron => 1 }), 10, 'Family debt is correct' );
-    } 'Koha::Exceptions::BadParameter', 'Exception is thrown as patron is not a guarantor';
+    $child1_debt = 7;
+    $child_1->account->add_debit({ type => 'ACCOUNT', amount => $child1_debt, interface => 'commandline' });
+    is( $child_1->account->non_issues_charges, $child1_debt, 'Child 1 owes correct amount' );
+    _test_combinations($patrons, $parent1_debt,$parent2_debt,$child1_debt,$child2_debt);
 
     $schema->storage->txn_rollback;
 };
+
+sub _test_combinations {
+    my ( $patrons, $parent1_debt, $parent2_debt, $child1_debt, $child2_debt ) = @_;
+
+    # Options
+    # P1 => P1 + C1 + C2 ( - P1 ) ( + P2 )
+    # P2 => P2 + C1 + C2 ( - P2 ) ( + P1 )
+    # C1 => P1 + P2 + C1 + C2 ( - C1 )
+    # C2 => P1 + P2 + C1 + C2 ( - C2 )
+
+# 3 params, count from 0 to 6 in binary ( 3 places ) to get the set of switches, then do that 4 times, one for each parent and child
+    for my $i ( 0 .. 7 ) {
+        my ( $only_this_guarantor, $include_guarantors, $include_this_patron )
+          = split '', sprintf( "%03b", $i );
+        for my $patron ( @$patrons ) {
+            if ( $only_this_guarantor
+                && !$patron->guarantee_relationships->count )
+            {
+                throws_ok {
+                    $patron->relationships_debt(
+                        {
+                            only_this_guarantor => $only_this_guarantor,
+                            include_guarantors  => $include_guarantors,
+                            include_this_patron => $include_this_patron
+                        }
+                    );
+                }
+                'Koha::Exceptions::BadParameter',
+                  'Exception is thrown as patron is not a guarantor';
+
+            }
+            else {
+
+                my $debt = 0;
+                if ( $patron->firstname eq 'Parent 1' ) {
+                    $debt += $parent1_debt if ($include_this_patron && $include_guarantors);
+                    $debt += $child1_debt + $child2_debt;
+                    $debt += $parent2_debt unless ($only_this_guarantor || !$include_guarantors);
+                }
+                elsif ( $patron->firstname eq 'Parent 2' ) {
+                    $debt += $parent2_debt if ($include_this_patron & $include_guarantors);
+                    $debt += $child1_debt + $child2_debt;
+                    $debt += $parent1_debt unless ($only_this_guarantor || !$include_guarantors);
+                }
+                elsif ( $patron->firstname eq 'Child 1' ) {
+                    $debt += $child1_debt if ($include_this_patron);
+                    $debt += $child2_debt;
+                    $debt += $parent1_debt + $parent2_debt if ($include_guarantors);
+                }
+                else {
+                    $debt += $child2_debt if ($include_this_patron);
+                    $debt += $child1_debt;
+                    $debt += $parent1_debt + $parent2_debt if ($include_guarantors);
+                }
+
+                is(
+                    $patron->relationships_debt(
+                        {
+                            only_this_guarantor => $only_this_guarantor,
+                            include_guarantors  => $include_guarantors,
+                            include_this_patron => $include_this_patron
+                        }
+                    ),
+                    $debt,
+                    $patron->firstname
+                      . " debt of $debt calculated correctly for ( only_this_guarantor: $only_this_guarantor, include_guarantors: $include_guarantors, include_this_patron: $include_this_patron)"
+                );
+            }
+        }
+    }
+}
 
 subtest 'add_enrolment_fee_if_needed() tests' => sub {
 
