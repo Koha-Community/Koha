@@ -183,7 +183,7 @@ subtest 'Display circulation table correctly' => sub {
       or diag(
         "thead: $thead_length ; tfoot: $tfoot_length ; tbody: $tbody_length");
 
-    push @cleanup, $patron->checkouts, $item->biblio, $item, $patron,
+    push @cleanup, $patron->checkouts, $item, $item->biblio, $patron,
       $patron->category, $library;
 };
 
