@@ -598,7 +598,7 @@ END_SQL
                     }
                 }
 
-                my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode );
+                my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode, undef, $patron->lang );
 
                 unless ($letter) {
                     $verbose and warn qq|Message '$overdue_rules->{"letter$i"}' content not found|;
@@ -689,7 +689,7 @@ END_SQL
                     splice @items, $PrintNoticesMaxLines if $effective_mtt eq 'print' && $PrintNoticesMaxLines && scalar @items > $PrintNoticesMaxLines;
                     #catch the case where we are sending a print to someone with an email
 
-                    my $letter_exists = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode, $effective_mtt ) ? 1 : 0;
+                    my $letter_exists = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode, $effective_mtt, $patron->lang ) ? 1 : 0;
                     my $letter = parse_overdues_letter(
                         {   letter_code     => $overdue_rules->{"letter$i"},
                             borrowernumber  => $borrowernumber,
