@@ -140,6 +140,8 @@ $sth->execute(@parameters);
 my $item_level_itypes = C4::Context->preference('item-level_itypes');
 my $claims_returned_lost_value = C4::Context->preference('ClaimReturnedLostValue');
 
+my $itemtypes = { map { $_->{itemtype} => $_->{translated_description} } @{ Koha::ItemTypes->search_with_localization->unblessed } };
+
 my @checkouts_today;
 my @checkouts_previous;
 while ( my $c = $sth->fetchrow_hashref() ) {
@@ -161,30 +163,36 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my ( $renewals_count, $renewals_allowed, $renewals_remaining ) =
       GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
 
-    my $type_for_stat = Koha::ItemTypes->find( $item_level_itypes ? $c->{itype} : $c->{itemtype} );
-    my $itemtype = Koha::ItemTypes->find( $c->{itype} );
-    my $recordtype = Koha::ItemTypes->find( $c->{itemtype} );
+    my ( $itemtype, $recordtype, $type_for_stat );
+    $itemtype      = $itemtypes->{ $c->{itype} }    if $c->{itype};
+    $recordtype    = $itemtypes->{ $c->{itemtype} } if $c->{itemtype};
+    $type_for_stat = $item_level_itypes ? $itemtype : $recordtype;
+
     my $location;
     if ( $c->{location} ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $c->{location} });
-        $location = $av->count ? $av->next->lib : '';
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.location', authorised_value => $c->{location} } );
+        $location = $av->{lib} ? $av->{lib} : '';
     }
     my $collection;
     if ( $c->{collection} ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'CCODE', authorised_value => $c->{collection} });
-        $collection = $av->count ? $av->next->lib : '';
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.ccode', authorised_value => $c->{collection} } );
+        $collection = $av->{lib} ? $av->{lib} : '';
     }
     my $lost;
     my $claims_returned;
     if ( $c->{itemlost} ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'LOST', authorised_value => $c->{itemlost} });
-        $lost = $av->count ? $av->next->lib : '';
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.itemlost', authorised_value => $c->{itemlost} } );
+        $lost            = $av->{lib} ? $av->{lib} : '';
         $claims_returned = $c->{itemlost} eq $claims_returned_lost_value;
     }
     my $damaged;
     if ( $c->{damaged} ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'DAMAGED', authorised_value => $c->{damaged} });
-        $damaged = $av->count ? $av->next->lib : '';
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.damaged', authorised_value => $c->{damaged} } );
+        $damaged = $av->{lib} ? $av->{lib} : '';
     }
     my @subtitles = split(/ \| /, $c->{'subtitle'} // '' );
     my $checkout = {
@@ -196,9 +204,9 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         part_name            => $c->{part_name} // '',
         author               => $c->{author},
         barcode              => $c->{barcode},
-        type_for_stat        => $type_for_stat ? $type_for_stat->translated_description : q{},
-        itemtype_description => $itemtype ? $itemtype->translated_description : q{},
-        recordtype_description => $recordtype ? $recordtype->translated_description : q{},
+        type_for_stat          => $type_for_stat || q{},
+        itemtype_description   => $itemtype || q{},
+        recordtype_description => $recordtype || q{},
         collection           => $collection,
         location             => $location,
         homebranch           => $c->{homebranch},
