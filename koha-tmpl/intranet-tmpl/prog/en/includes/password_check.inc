@@ -14,7 +14,7 @@
             var min_lenght = $('select'+category_selector+' option:selected').data('pwdLength');
             var regex_text = require_strong?"(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{"+min_lenght+",}":".{"+min_lenght+",}";
             var pattern_regex = new RegExp(regex_text);
-            return this.optional(element) || pattern_regex.test(value);
+            return this.optional(element) || value == '****' || pattern_regex.test(value);
         }, function(unused, element) {
             var require_strong = $('select'+category_selector+' option:selected').data('pwdStrong');
             var min_lenght = $('select'+category_selector+' option:selected').data('pwdLength');
