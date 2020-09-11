@@ -98,3 +98,21 @@ sub _psgi_env {
 }
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+Koha::App::Plugin::CGIBinKoha
+
+=head1 DESCRIPTION
+
+Koha App Plugin used to wrap Koha CGI scripts for backwards compatibility whilst we migrate from CGI to using the Mojolicious Web Application Framework.
+
+=head1 METHODS
+
+=head2 register
+
+Called at application startup; Sets up a catch-all router to identify CGI scripts and loads the found script using CGI::Compile before running it under CGI::Emulate::PSGI.
+
+=cut

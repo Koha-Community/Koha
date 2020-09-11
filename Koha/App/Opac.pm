@@ -73,3 +73,21 @@ sub _around_action {
 }
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+Koha::App::Opac - Mojolicious app for Koha's Opac Client
+
+=head1 DESCRIPTION
+
+Run the Koha Opac using Mojolicious servers
+
+=head1 METHODS
+
+=head2 startup
+
+Called at application startup; Sets up routes, loads plugins and invokes hooks.
+
+=cut

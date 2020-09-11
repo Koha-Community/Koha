@@ -30,3 +30,21 @@ sub register {
 }
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+Koha::App::Plugin::RESTV1
+
+=head1 DESCRIPTION
+
+Koha App Plugin used to intercept api calls and route them to the dedicated REST API Mojolicious App.
+
+=head1 METHODS
+
+=head2 register
+
+Called at application startup; Sets up a router to catch all calls to /api and pass them through to Koha::REST::V1.
+
+=cut

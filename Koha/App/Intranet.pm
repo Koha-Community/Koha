@@ -73,3 +73,21 @@ sub _around_action {
 }
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+Koha::App::Intranet - Mojolicious app for Koha's Intranet Client
+
+=head1 DESCRIPTION
+
+Run the Koha Intranet using Mojolicious servers
+
+=head1 METHODS
+
+=head2 startup
+
+Called at application startup; Sets up routes, loads plugins and invokes hooks.
+
+=cut
