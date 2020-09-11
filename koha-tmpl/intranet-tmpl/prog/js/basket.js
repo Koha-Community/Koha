@@ -1,4 +1,4 @@
-/* global MSG_BASKET_EMPTY MSG_RECORD_IN_BASKET MSG_RECORD_ADDED MSG_NRECORDS_IN_BASKET MSG_NRECORDS_ADDED MSG_NO_RECORD_ADDED MSG_RECORD_REMOVED MSG_CONFIRM_DEL_BASKET MSG_CONFIRM_DEL_RECORDS MSG_IN_YOUR_CART MSG_NO_RECORD_SELECTED MSG_ITEM_IN_CART MSG_ITEM_NOT_IN_CART */
+/* global __ */
 
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
@@ -87,7 +87,7 @@ function openBasket() {
         if (window.focus) { basket.focus(); }
     }
     else {
-        showCartUpdate(MSG_BASKET_EMPTY);
+        showCartUpdate( __("Your cart is currently empty") );
     }
 }
 
@@ -115,7 +115,7 @@ function addRecord(val, selection,NoMsgAlert) {
                 return 0;
             }
             if (! NoMsgAlert ) {
-                showCartUpdate(MSG_RECORD_IN_BASKET);
+                showCartUpdate( __("This item is already in your cart") );
             }
         }
         else {
@@ -132,7 +132,7 @@ function addRecord(val, selection,NoMsgAlert) {
             return 1;
         }
         if (! NoMsgAlert ) {
-            showCartUpdate(MSG_RECORD_ADDED);
+            showCartUpdate( __("This item has been added to your cart") );
             updateLink(val,"add");
         }
     }
@@ -202,20 +202,20 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
     var msg = "";
     if (nbAdd) {
         if (i > nbAdd) {
-            msg = MSG_NRECORDS_ADDED.format(nbAdd);
+            msg = __("%s item(s) added to your cart").format(nbAdd);
             msg += "<br/>";
-            msg += MSG_NRECORDS_IN_BASKET.format((i-nbAdd));
+            msg += __("%s already in your cart").format((i-nbAdd));
         }
         else {
-            msg = MSG_NRECORDS_ADDED.format(nbAdd);
+            msg = __("%s item(s) added to your cart").format(nbAdd);
         }
     }
     else {
         if (i < 1) {
-            msg = MSG_NO_RECORD_SELECTED;
+            msg = __("No item was selected");
         }
         else {
-            msg = MSG_NO_RECORD_ADDED;
+            msg = __("No item was added to your cart (already in your cart)!");
         }
     }
 	showCartUpdate(msg);
@@ -254,7 +254,7 @@ function delSingleRecord(biblionumber){
     writeCookie( nameCookie, valCookie );
     updateBasket( arrayRecords.length-1 );
     updateLink(biblionumber,"del");
-    showCartUpdate(MSG_RECORD_REMOVED);
+    showCartUpdate(__("The item has been removed from your cart"));
 }
 
 function delSelRecords() {
@@ -281,7 +281,7 @@ function delSelRecords() {
 
             if (str2.length === 0) { // equivalent to emptying the basket
                 var rep = false;
-                rep = confirm(MSG_CONFIRM_DEL_BASKET);
+                rep = confirm(__("Are you sure you want to empty your cart?"));
                 if (rep) {
                     delCookie(nameCookie);
                     document.location = "about:blank";
@@ -305,7 +305,7 @@ function delSelRecords() {
         document.location = CGIBIN + "basket/basket.pl?" + strCookie;
     }
     else {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert(__("No item was selected"));
     }
 }
 
@@ -334,7 +334,7 @@ function delRecord (n, s) {
 
 function delBasket(context,rep) {
     if (rep === undefined){
-        rep = confirm(MSG_CONFIRM_DEL_BASKET);
+        rep = confirm(__("Are you sure you want to empty your cart?"));
     }
     if (rep) {
         if(context == "popup"){
@@ -354,7 +354,7 @@ function delBasket(context,rep) {
 function quit() {
     if (document.myform.records.value) {
         var rep = false;
-        rep = confirm(MSG_CONFIRM_DEL_RECORDS);
+        rep = confirm(__("Are you sure you want to remove the selected items?"));
         if (rep) {
             delSelRecords();
         }
@@ -411,10 +411,10 @@ function showLess() {
 function updateBasket(updated_value,target) {
 	if(target){
 	target.$('#basketcount').html(" <span>("+updated_value+")</span>");
-    target.$('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
+    target.$('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
 	} else {
 	$('#basketcount').html(" <span>("+updated_value+")</span>");
-    $('#cartDetails').html(MSG_IN_YOUR_CART.format(updated_value));
+    $('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
 	}
 	var basketcount = updated_value;
 }
@@ -429,7 +429,7 @@ function addSelToShelf() {
 	if(items){
     document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
 	} else {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert(__("No item was selected"));
     }
 }
 
@@ -443,7 +443,7 @@ function vShelfAdd(biblist) {
                 bibs.push("biblionumber=" +  biblist[i].value);
             }
         }
-        if (bibs.length === 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
+        if (bibs.length === 0) { showListsUpdate(__("No item was selected")); }
         return bibs.join("&");
     } else {
         var bibnums = getContextBiblioNumbers();
@@ -453,7 +453,7 @@ function vShelfAdd(biblist) {
             }
             return bibs.join("&");
         } else {
-            showListsUpdate(MSG_NO_RECORD_SELECTED);
+            showListsUpdate(__("No item was selected"));
         }
     }
 }
@@ -484,20 +484,20 @@ function updateLink(val, op, target){
     var cartR = target ? target.$("#cartR" + val) : $("#cartR" + val);
 
     if(op == "add"){
-        cart.html(MSG_ITEM_IN_CART).addClass("incart");
+        cart.html(__("In your cart")).addClass("incart");
         cartR.show();
     } else {
-        cart.html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        cart.html(__("Add to cart")).removeClass("incart").addClass("addtocart");
         cartR.hide();
     }
 }
 
 function updateAllLinks(target){
     if(target){
-        target.$("a.incart").html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        target.$("a.incart").html(__("Add to cart")).removeClass("incart").addClass("addtocart");
         target.$(".cartRemove").hide();
     } else {
-        $("a.incart").html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        $("a.incart").html(__("Add to cart")).removeClass("incart").addClass("addtocart");
         $(".cartRemove").hide();
     }
 }
