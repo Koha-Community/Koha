@@ -383,9 +383,6 @@ sub config {
 sub zebraconfig {
 	return _common_config($_[1],'server');
 }
-sub ModZebrations {
-	return _common_config($_[1],'serverinfo');
-}
 
 =head2 preference
 
