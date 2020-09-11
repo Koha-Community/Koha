@@ -1,3 +1,5 @@
+/* global __ biblionumber count holdcount countorders countdeletedorders searchid addRecord */
+/* exported GetZ3950Terms PopupZ3950Confirmed */
 /* IF ( CAN_user_editcatalogue_edit_catalogue ) */
     /* this function open a popup to search on z3950 server.  */
     function PopupZ3950() {
@@ -7,7 +9,7 @@
         }
     }
     function PopupZ3950Confirmed() {
-        if (confirm( MSG_REPLACE_RECORD )){
+        if (confirm( __("Please note that this external search could replace the current record.") )) {
             PopupZ3950();
         }
     }
@@ -24,23 +26,23 @@ function confirm_deletion(link) {
     var order_manage_permission = $(link).data("order-manage");
     var is_confirmed;
     if (count > 0){
-        is_confirmed = alert( MSG_DELETE_ALL_ITEMS.format(count) );
+        is_confirmed = alert(__("%s item(s) are attached to this record. You must delete all items before deleting this record.").format(count));
     } else if (countorders > 0){
         if( order_manage_permission ){
-            is_confirmed = confirm( CONFIRM_RECORD_USED_IN_ORDERS.format(countorders) );
+            is_confirmed = confirm(__("Warning: This record is used in %s order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?").format(countorders));
         } else {
-            is_confirmed = alert( MSG_RECORD_USED_IN_ORDERS.format(countorders) );
+            is_confirmed = alert(__("%s order(s) are using this record. You need order managing permissions to delete this record.").format(countorders));
         }
     } else if (countdeletedorders > 0){
         if( order_manage_permission ){
-            is_confirmed = confirm( CONFIRM_IN_DELETED_ORDERS.format(countdeletedorders) );
+            is_confirmed = confirm(__("%s deleted order(s) are using this record. Are you sure you want to delete this record?").format(countdeletedorders));
         } else {
-            is_confirmed = alert( MSG_IN_DELETED_ORDERS.format(countdeletedorders) );
+            is_confirmed = alert(__("%s deleted order(s) are using this record. You need order managing permissions to delete this record.").format(countdeletedorders));
         }
     } else if ( holdcount > 0 ) {
-        is_confirmed = confirm( CONFIRM_DELETION_HOLDS.format(holdcount) );
+        is_confirmed = confirm( __("%s holds(s) for this record. Are you sure you want to delete this record?").format(holdcount));
     } else {
-        is_confirmed = confirm( CONFIRM_RECORD_DELETION );
+        is_confirmed = confirm( __("Are you sure you want to delete this record?") );
     }
     if (is_confirmed) {
         $("#deletebiblio").unbind('click');
@@ -56,9 +58,9 @@ function confirm_deletion(link) {
 
 function confirm_items_deletion() {
     if ( holdcount > 0 ) {
-        alert( MSG_DELETE_ALL_HOLDS.format(holdcount) );
+        alert(__("%s hold(s) on this record. You must delete all holds before deleting all items.").format(holdcount));
     } else if ( count > 0 ) {
-        if( confirm( CONFIRM_DELETE_ITEMS.format(count) ) ) {
+        if (confirm(__("Are you sure you want to delete the %s attached items?").format(count))) {
             window.location="/cgi-bin/koha/cataloguing/additem.pl?op=delallitems&amp;biblionumber=" + biblionumber + (searchid ? "&amp;searchid="+searchid : "");
         } else {
             return false;
@@ -70,7 +72,7 @@ function confirm_items_deletion() {
 }
 
 function alertNoItems(){
-    alert( MSG_NO_ITEMS );
+    alert( __("This record has no items.") );
 }
 
 /* END IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) */
@@ -110,4 +112,4 @@ $(document).ready(function() {
             alertNoItems();
         })
         .tooltip();
- });
+});
