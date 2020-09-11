@@ -34,7 +34,7 @@ sub wanted {
     return if -d $name; # Skip dir
 
     # Search for missing x in svc, xt and t
-    if (   $name =~ m[^\./(svc|xt)] && $name ne './xt/perltidyrc'
+    if (   $name =~ m[^\./(svc|xt)] && $name !~ m[\./xt/(perltidyrc|fix-old-fsf-address\.exclude)]
         || $name =~ m[^\./t/.*\.t$] )
     {
         push @files, $name unless -x $name;
