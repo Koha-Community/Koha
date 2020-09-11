@@ -738,8 +738,8 @@ sub quote_item {
             while ( $created < $order_quantity ) {
                 $item_hash->{biblionumber} = $bib->{biblionumber};
                 $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                my $item = Koha::Item->new( $item_hash )->store;
-                my $itemnumber = $item->itemnumber;
+                my $kitem = Koha::Item->new( $item_hash )->store;
+                my $itemnumber = $kitem->itemnumber;
                 $logger->trace("Added item:$itemnumber");
                 $schema->resultset('AqordersItem')->create(
                     {
@@ -830,8 +830,8 @@ sub quote_item {
 
                     $item_hash->{biblionumber} = $bib->{biblionumber};
                     $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $item = Koha::Item->new( $item_hash )->store;
-                    my $itemnumber = $item->itemnumber;
+                    my $kitem = Koha::Item->new( $item_hash )->store;
+                    my $itemnumber = $kitem->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
                         {
@@ -900,8 +900,8 @@ sub quote_item {
                     };
                     $new_item->{biblionumber} = $bib->{biblionumber};
                     $new_item->{biblioitemnumber} = $bib->{biblioitemnumber};
-                    my $item = Koha::Item->new( $new_item )->store;
-                    my $itemnumber = $item->itemnumber;
+                    my $kitem = Koha::Item->new( $new_item )->store;
+                    my $itemnumber = $kitem->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
                         {
