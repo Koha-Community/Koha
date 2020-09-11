@@ -22,6 +22,8 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
+    <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
+    <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
     <xsl:variable name="OPACResultsLibrary" select="marc:sysprefs/marc:syspref[@name='OPACResultsLibrary']"/>
     <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
@@ -637,6 +639,12 @@
     </xsl:when>
     </xsl:choose>
     </p>
+
+    <xsl:call-template name="show-series">
+        <xsl:with-param name="searchurl">/cgi-bin/koha/opac-search.pl</xsl:with-param>
+        <xsl:with-param name="UseControlNumber" select="$UseControlNumber"/>
+        <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
+    </xsl:call-template>
 
     <xsl:if test="marc:datafield[@tag=250]">
     <span class="results_summary edition">
