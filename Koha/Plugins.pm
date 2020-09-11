@@ -19,6 +19,7 @@ package Koha::Plugins;
 
 use Modern::Perl;
 
+use Array::Utils qw(array_minus);
 use Module::Load::Conditional qw(can_load);
 use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
 use List::MoreUtils qw( any );
@@ -29,7 +30,7 @@ use C4::Output;
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
     my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
-    push( @INC, @pluginsdir );
+    push @INC, array_minus(@pluginsdir, @INC) ;
     pop @INC if $INC[-1] eq '.';
 }
 
