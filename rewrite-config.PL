@@ -158,7 +158,14 @@ my %configuration = (
   "__ELASTICSEARCH_SERVERS__" => "localhost:9200",
   "__ELASTICSEARCH_INDEX__" => "koha",
   "__FONT_DIR__" => "/usr/share/fonts/truetype/dejavu",
-  "__TEMPLATE_CACHE_DIR__" => "/tmp/koha"
+  "__TEMPLATE_CACHE_DIR__" => "/tmp/koha",
+  '__SMTP_HOST__'      => 'localhost',
+  '__SMTP_PORT__'      => '25',
+  '__SMTP_TIMEOUT__'   => '120',
+  '__SMTP_SSL_MODE__'  => 'disabled',
+  '__SMTP_USER_NAME__' => '',
+  '__SMTP_PASSWORD__'  => '',
+  '__SMTP_DEBUG__'     => '0',
 );
 
 # Override configuration from the environment

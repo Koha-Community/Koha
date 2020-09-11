@@ -471,6 +471,34 @@ System user account that will own Koha's files.
 
 System group that will own Koha's files.
 
+=item SMTP_HOST
+
+SMTP server host name (default: localhost)
+
+=item SMTP_PORT
+
+SMTP server port (default: 25)
+
+=item SMTP_TIMEOUT
+
+Connection timeour in seconds (default: 120)
+
+=item SMTP_SSL_MODE
+
+SSL mode. Options are 'disabled' (default), 'ssl' and 'starttls'
+
+=item SMTP_USER_NAME
+
+SMTP authentication user name
+
+=item SMTP_PASSWORD
+
+SMTP authentication password
+
+=item SMTP_DEBUG
+
+Enable debug mode for SMTP (default: no)
+
 =back
 
 =cut
@@ -511,7 +539,14 @@ my %config_defaults = (
   'USE_ELASTICSEARCH'     => 'no',
   'ELASTICSEARCH_SERVERS' => 'localhost:9200',
   'ELASTICSEARCH_INDEX'  => 'koha',
-  'FONT_DIR'          => '/usr/share/fonts/truetype/dejavu'
+  'FONT_DIR'          => '/usr/share/fonts/truetype/dejavu',
+  'SMTP_HOST'      => 'localhost',
+  'SMTP_PORT'      => '25',
+  'SMTP_TIMEOUT'   => '120',
+  'SMTP_SSL_MODE'  => 'disabled',
+  'SMTP_USER_NAME' => '',
+  'SMTP_PASSWORD'  => '',
+  'SMTP_DEBUG'     => 'no',
 );
 
 # set some default configuration options based on OS
@@ -542,6 +577,8 @@ my %valid_config_values = (
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
   'USE_MEMCACHED'      => { 'yes' => 1, 'no' => 1 },
   'USE_ELASTICSEARCH'  => { 'yes' => 1, 'no' => 1 },
+  'SMTP_SSL_MODE'      => { 'disabled' => 1, 'ssl' => 1, 'starttls' => 1 },
+  'SMTP_DEBUG'         => { 'yes' => 1, 'no' => 1 },
 );
 
 # get settings from command-line
@@ -570,6 +607,14 @@ my $cli_koha_font_dir = "";
 my $cli_koha_run_database_tests = "";
 my $cli_koha_install_base = "";
 my $cli_koha_template_cache_dir = "";
+my $cli_smtp_host      = "";
+my $cli_smtp_port      = "";
+my $cli_smtp_timeout   = "";
+my $cli_smtp_ssl_mode  = "";
+my $cli_smtp_user_name = "";
+my $cli_smtp_password  = "";
+my $cli_smtp_debug     = "";
+
 Getopt::Long::Configure('pass_through');
 my $results = GetOptions(
     "prev-install-log=s"           => \$koha_install_log,
@@ -597,6 +642,13 @@ my $results = GetOptions(
     "run_database_tests=s"         => \$cli_koha_run_database_tests,
     "install_base=s"               => \$cli_koha_install_base,
     "template-cache-dir=s"         => \$cli_koha_template_cache_dir,
+    "smtp-host=s"                  => \$cli_smtp_host,
+    "smtp-port=s"                  => \$cli_smtp_port,
+    "smtp-timeout=s"               => \$cli_smtp_timeout,
+    "smtp-ssl-mode=s"              => \$cli_smtp_ssl_mode,
+    "smtp-user-name=s"             => \$cli_smtp_user_name,
+    "smtp-password=s"              => \$cli_smtp_password,
+    "smtp-debug"                   => \$cli_smtp_debug,
     "help"                         => sub { HelpMessage(0) },
 ) or HelpMessage(1);
 
@@ -685,7 +737,7 @@ WriteMakefile(
               #VERSION     => strftime('2.9.%Y%m%d%H',gmtime),
               VERSION_FROM => 'kohaversion.pl',
               ABSTRACT     => 'Award-winning integrated library system (ILS) and Web OPAC',
-              AUTHOR       => 'Koha Contributors <http://koha-community.org/>',
+              AUTHOR       => 'Koha Contributors <https://koha-community.org/>',
               NO_META      => 1,
               PREREQ_PM    => $koha_pm->prereq_pm,
 
@@ -872,7 +924,14 @@ sub get_cli_values {
         FONT_DIR                   => $cli_koha_font_dir,
         RUN_DATABASE_TESTS         => $cli_koha_run_database_tests,
         INSTALL_BASE               => $cli_koha_install_base,
-        TEMPLATE_CACHE_DIR         => $cli_koha_template_cache_dir
+        TEMPLATE_CACHE_DIR         => $cli_koha_template_cache_dir,
+        SMTP_HOST                  => $cli_smtp_host,
+        SMTP_PORT                  => $cli_smtp_port,
+        SMTP_TIMEOUT               => $cli_smtp_timeout,
+        SMTP_SSL_MODE              => $cli_smtp_ssl_mode,
+        SMTP_USER_NAME             => $cli_smtp_user_name,
+        SMTP_PASSWORD              => $cli_smtp_password,
+        SMTP_DEBUG                 => (defined $cli_smtp_debug) ? ( $cli_smtp_debug ? 'yes' : 'no' ) : $values->{SMTP_DEBUG},
     };
     foreach my $key (keys %{$map}) {
         $values->{$key} = $map->{$key} if ($map->{$key});
@@ -1256,6 +1315,40 @@ Template cache directory?);
 Path to DejaVu fonts?);
   $config{'FONT_DIR'} = _get_value('FONT_DIR', $msg, $defaults->{'FONT_DIR'}, $valid_values, $install_log_values);
 
+  $msg = q(
+SMTP settings
+You will be able to set your default SMTP configuration.);
+  $msg .= q{
+SMTP host name?};
+  $config{'SMTP_HOST'} = _get_value('SMTP_HOST', $msg, $defaults->{'SMTP_HOST'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP port?};
+  $config{'SMTP_PORT'} = _get_value('SMTP_PORT', $msg, $defaults->{'SMTP_PORT'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP timeout (in seconds)?};
+  $config{'SMTP_TIMEOUT'} = _get_value('SMTP_TIMEOUT', $msg, $defaults->{'SMTP_TIMEOUT'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP SSL mode?};
+  $msg .= _add_valid_values_disp('SMTP_SSL_MODE', $valid_values);
+  $config{'SMTP_SSL_MODE'} = _get_value('SMTP_SSL_MODE', $msg, $defaults->{'SMTP_SSL_MODE'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP user name?};
+  $config{'SMTP_USER_NAME'} = _get_value('SMTP_USER_NAME', $msg, $defaults->{'SMTP_USER_NAME'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP password?};
+  $config{'SMTP_PASSWORD'} = _get_value('SMTP_PASSWORD', $msg, $defaults->{'SMTP_PASSWORD'}, $valid_values, $install_log_values);
+
+  $msg = q{
+SMTP debug mode?};
+  $msg .= _add_valid_values_disp('SMTP_DEBUG', $valid_values);
+  $config{'SMTP_DEBUG'} = _get_value('SMTP_DEBUG', $msg, $defaults->{'SMTP_DEBUG'}, $valid_values, $install_log_values);
+
+  $config{'SMTP_DEBUG'} = ( $config{'SMTP_DEBUG'} eq 'yes' ) ? 1 : 0;
 
   $msg = q(
 Would you like to run the database-dependent test suite?);
