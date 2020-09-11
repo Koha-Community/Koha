@@ -516,7 +516,7 @@ sub marcrecord2csv {
         my @fields;
         while ( $content =~ m|(\d{3})\$?(.)?|g ) {
             my $fieldtag = $1;
-            my $subfieldtag = $2 || undef;
+            my $subfieldtag = $2;
             push @fields, { fieldtag => $fieldtag, subfieldtag => $subfieldtag };
         }
         if ( @result == 2) {
@@ -561,7 +561,7 @@ sub marcrecord2csv {
             } else {
                 # If not, we get the matching tag name from koha
                 my $tag = $tags->[0];
-                if ( $tag->{subfieldtag} ) {
+                if (defined $tag->{subfieldtag} ) {
                     my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
                     my @results = $dbh->selectrow_array( $query, {}, $tag->{fieldtag}, $tag->{subfieldtag} );
                     push @marcfieldsheaders, $results[0];
@@ -589,7 +589,7 @@ sub marcrecord2csv {
                 my @fields = $record->field( $tag->{fieldtag} );
                 # If it is a subfield
                 my @loop_values;
-                if ( $tag->{subfieldtag} ) {
+                if (defined $tag->{subfieldtag} ) {
                     my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, tagsubfield => $tag->{subfieldtag}, });
                     $av = $av->count ? $av->unblessed : [];
                     my $av_description_mapping = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };

@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;
@@ -11,6 +11,8 @@ use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use C4::Record;
 use Koha::Database;
+
+use C4::Items;
 
 use t::lib::TestBuilder;
 
@@ -126,6 +128,33 @@ is( $csv_output, q[Title|AVs
 
 
 
+# Bug 26414 - Unable to export Withdrawn status using CSV profile
+# Test that subfieldtag '0' works in the fieldtag '952'
+my $record2 = new_record();
+my $frameworkcode2 = q||;
+# We change the barcode of the second item record to prevent an error "duplicate entry"
+my $field = $record->field('952');
+my $new_field = new MARC::Field('952', ' ', ' ',
+    0 => '1',
+    p => '3010023918',
+);
+$field->replace_with($new_field);
+# We create another record
+my ( $biblionumber2, $biblioitemnumber2 ) = AddBiblio( $record2, $frameworkcode2 );
+# We add two item to two record to test fieldtag 952 and subfieldtag 9520
+my (undef, undef, $itemnumber2) = AddItemFromMarc($record2, $biblionumber);
+my (undef, undef, $itemnumber) = AddItemFromMarc($record, $biblionumber);
+$csv_content = q(Titre=245a|Nom de personne=100a|Statut « Élagué »=9520);
+my $csv_profile_id_10 = insert_csv_profile( {csv_content => $csv_content } );
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_10, 1, $csv);
+is($csv_output, q[Titre|"Nom de personne"|"Statut « Élagué »"
+"The art of computer programming,The art of another title"|"Knuth, Donald Ervin"|Withdrawn;Withdrawn
+], q|subfieldtag 952$0 is not working, should return 'Withdrawn'|
+);
+
+# End Bug 26414
+
+
 sub insert_csv_profile {
     my ( $params ) = @_;
     my $csv_content = $params->{csv_content};
@@ -172,6 +201,7 @@ sub new_record {
         ),
         MARC::Field->new(
             952, ' ', ' ',
+            0 => '1',
             p => '3010023917',
             y => 'BK',
             c => 'GEN',
