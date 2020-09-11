@@ -7,7 +7,43 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Merge patron records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
+[% FILTER collapse %]
+    <style>
+        ins {
+            background-color: #e6ffe6;
+        }
+        del {
+            background-color: #ffe6e6;
+        }
+        .col0,
+        .col1 {
+            display: none;
+        }
+        .col3 ins,
+        .col2 del {
+            display: none;
+        }
+        #col-label,
+        .col2,
+        .col3 {
+            border-right: 1px solid #EEE;
+            flex-grow: 1;
+            margin-right:1em;
+        }
+        #col-label {
+            font-family: monospace;
+        }
+        #col-label div {
+            white-space: none;
+        }
+        .compare {
+            display: flex;
+        }
+        .modal-lg {
+            width: 90%;
+        }
+    </style>
+[% END %]
 </head>
 <body id="pat_merge" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -52,8 +88,19 @@
 
             [% IF action == 'show' %]
                 [% IF patrons.count > 1 %]
+                    [% IF ( patrons.count == 2 ) %]
+                        <div id="toolbar" class="btn-toolbar">
+                            <div class="btn-group">
+                                <button class="btn btn-default" id="compare_patrons">
+                                    <i class="fa fa-arrows-h"></i> Compare patrons
+                                </button>
+                            </div>
+                        </div>
+                    [% END %]
+
                     <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
-                    <form type="post" action="merge-patrons.pl">
+
+                    <form type="post" action="merge-patrons.pl" id="patron-merge-form">
                         <table id="patron-merge-table" class="datatable">
                             <thead>
                                 <tr>
@@ -70,13 +117,18 @@
                             <tbody>
                                 [% FOREACH p IN patrons %]
                                     <tr>
-                                        <td><input class="keeper" type="radio" name="keeper" value="[% p.id | html %]" id="keeper_[% p.id | html %]" /></td>
+                                        <td><input class="keeper" type="radio" name="keeper" value="[% p.id | html %]" data-borrowernumber="[% p.id | html %]" id="keeper_[% p.id | html %]" /></td>
                                         <td>
                                             <label for="keeper_[% p.id | html %]">
                                                 <strong>[% p.cardnumber | html %]</strong>
                                             </label>
                                         </td>
-                                        <td>[% INCLUDE 'patron-title.inc' patron = p %]</td>
+                                        <td>
+                                            <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber | uri %]">
+                                                [% INCLUDE 'patron-title.inc' patron = p %]
+                                                <i class="fa fa-window-restore"></i>
+                                            </a>
+                                        </td>
                                         <td>[% p.dateofbirth | $KohaDates %]</td>
                                         <td>[% Categories.GetName( p.categorycode ) | html %] ([% p.categorycode | html %])</td>
                                         <td>[% Branches.GetName( p.branchcode ) | html %]</td>
@@ -139,21 +191,132 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal" id="compareModal" tabindex="-1" role="dialog" aria-labelledby="compareModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="compareModalLabel">Compare patrons for merging</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="compare">
+                        <div id="col-label">
+                            <div><strong>Name:</strong></div>
+                            <div><strong>Initials:</strong></div>
+                            <div><strong>Other name:</strong></div>
+                            <div><strong>Library:</strong></div>
+                            <div><strong>Card number:</strong></div>
+                            <div><strong>Category:</strong></div>
+                            <br />
+                            <div><strong>Address line 1:</strong></div>
+                            <div><strong>Address line 2:</strong></div>
+                            <div><strong>City:</strong></div>
+                            <div><strong>State:</strong></div>
+                            <div><strong>Zip code:</strong></div>
+                            <div><strong>Country:</strong></div>
+                            <br />
+                            <div><strong>Registration date:</strong></div>
+                            <div><strong>Renewal date:</strong></div>
+                            <div><strong>Expiration date:</strong></div>
+                            <div><strong>Date of birth:</strong></div>
+                            <div><strong>Restricted:</strong></div>
+                            <div><strong>Primary email:</strong></div>
+                            <div><strong>Secondary email:</strong></div>
+                            <div><strong>Primary phone:</strong></div>
+                            <div><strong>Secondary phone:</strong></div>
+                            <div><strong>Other phone:</strong></div>
+                            <div><strong>Gender:</strong></div>
+                            <div><strong>Updated on:</strong></div>
+                            <div><strong>Username:</strong></div>
+                        </div>
+
+                        [% FOREACH p IN patrons %]
+                            <div id="col-[% p.borrowernumber | html %]-orig"class="col[% loop.index | html %]">
+<!-- <pre> block is unindented to avoid unwanted whitespace -->
+<pre>
+[% IF ( p.surname ) %][% p.surname | html %], [% p.firstname | html %][% ELSE %]-[% END %]
+[% IF ( p.initials ) %][% p.initials | html %][% ELSE %]-[% END %]
+[% IF ( p.othernames ) %][% p.othernames | html %][% ELSE %]-[% END %]
+[% IF ( p.branchcode ) %][% p.branchcode | html %][% ELSE %]-[% END %]
+[% IF ( p.cardnumber ) %][% p.cardnumber | html %][% ELSE %]-[% END %]
+[% IF ( p.categorycode ) %][% p.categorycode | html %][% ELSE %]-[% END %]
+
+[% IF ( p.address ) %][% p.address | html %][% ELSE %]-[% END %]
+[% IF ( p.address2 ) %][% p.address2 | html %][% ELSE %]-[% END %]
+[% IF ( p.city ) %][% p.city | html %][% ELSE %]-[% END %]
+[% IF ( p.state ) %][% p.state | html %][% ELSE %]-[% END %]
+[% IF ( p.zipcode ) %][% p.zipcode | html %][% ELSE %]-[% END %]
+[% IF ( p.country ) %][% p.country | html %][% ELSE %]-[% END %]
+
+[% IF ( p.dateenrolled ) %][% p.dateenrolled | html %][% ELSE %]-[% END %]
+[% IF ( p.date_renewed ) %][% p.date_renewed | html %][% ELSE %]-[% END %]
+[% IF ( p.dateexpiry ) %][% p.dateexpiry | html %][% ELSE %]-[% END %]
+[% IF ( p.dateofbirth ) %][% p.dateofbirth | html %][% ELSE %]-[% END %]
+[% IF ( p.debarred ) %][% p.debarred | html %][% ELSE %]-[% END %]
+[% IF ( p.email ) %][% p.email | html %][% ELSE %]-[% END %]
+[% IF ( p.emailpro ) %][% p.emailpro | html %][% ELSE %]-[% END %]
+[% IF ( p.phone ) %][% p.phone | html %][% ELSE %]-[% END %]
+[% IF ( p.phonepro ) %][% p.phonepro | html %][% ELSE %]-[% END %]
+[% IF ( p.mobile ) %][% p.mobile | html %][% ELSE %]-[% END %]
+[% IF ( p.sex ) %][% p.sex | html %][% ELSE %]-[% END %]
+[% IF ( p.updated_on ) %][% p.updated_on | html %][% ELSE %]-[% END %]
+[% IF ( p.userid ) %][% p.userid | html %][% ELSE %]-[% END %]
+</pre>
+                            </div>
+                        [% END %]
+                        [% FOREACH p IN patrons %]
+                            <div id="col-[% p.borrowernumber | html %]-diff" class="col[% ( loop.index + 2 ) | html %]"><pre></pre></div>
+                        [% END %]
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="submit-merge-form"><i class="fa fa-compress" aria-hidden="true"></i> Merge patrons</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove" aria-hidden="true"></i> Close</button>
+                </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#compareModal -->
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-
+    [% Asset.js("lib/jsdiff/jsdiff.min.js") | $raw %]
     <script>
     $(document).ready(function() {
-        $('#merge-patrons').prop('disabled', true);
+        var controls = $("#merge-patrons, #compare_patrons");
+        controls.prop('disabled', true);
         $('#patron-merge-table').on('change', 'input', function() {
             if ( $('.keeper:checked').length > 0 ) {
-                $('#merge-patrons').prop('disabled', false);
+                controls.prop('disabled', false);
             } else {
-                $('#merge-patrons').prop('disabled', true);
+                controls.prop('disabled', true);
             }
         });
+
+        $("#compare_patrons").on("click", function(e){
+            e.preventDefault();
+            $("#compareModal").modal("show");
+        });
+
+        $("#compareModal").on("shown.bs.modal", function(){
+            /* Find which column is the basis for merging */
+            var col0 = $(".keeper:checked").data("borrowernumber");
+            var col1 = $(".keeper:not(:checked)").data("borrowernumber");
+            /* Get the original patron data for comparison */
+            var diff1 = $("#col-" + col0 + "-orig pre").text();
+            var diff2 = $("#col-" + col1 + "-orig pre").text();
+
+            var diffs = diffString(diff2, diff1);
+            /* Load the diff HTML in the empty columns */
+            $(".col2 pre, .col3 pre").html(diffs);
+        });
+
+        $("#submit-merge-form").on("click", function(){
+            $("#patron-merge-form").submit();
+        });
     });
+
     </script>
 [% END %]
 
