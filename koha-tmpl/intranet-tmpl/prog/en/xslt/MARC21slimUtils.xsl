@@ -403,33 +403,6 @@
       </xsl:if>
     </xsl:template>
 
-    <xsl:template name="part">
-        <xsl:variable name="partNumber">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">n</xsl:with-param>
-                <xsl:with-param name="anyCodes">n</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="partName">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">p</xsl:with-param>
-                <xsl:with-param name="anyCodes">p</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="string-length(normalize-space($partNumber))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partNumber"/>
-                </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="string-length(normalize-space($partName))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partName"/>
-                </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
     <xsl:template name="show-series">
         <xsl:param name="searchurl"/>
         <xsl:param name="UseControlNumber"/>
@@ -561,6 +534,33 @@
         </xsl:if>
 
         </span>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="part">
+        <xsl:variable name="partNumber">
+            <xsl:call-template name="specialSubfieldSelect">
+                <xsl:with-param name="axis">n</xsl:with-param>
+                <xsl:with-param name="anyCodes">n</xsl:with-param>
+                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="partName">
+            <xsl:call-template name="specialSubfieldSelect">
+                <xsl:with-param name="axis">p</xsl:with-param>
+                <xsl:with-param name="anyCodes">p</xsl:with-param>
+                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="string-length(normalize-space($partNumber))">
+                <xsl:call-template name="chopPunctuation">
+                    <xsl:with-param name="chopString" select="$partNumber"/>
+                </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="string-length(normalize-space($partName))">
+                <xsl:call-template name="chopPunctuation">
+                    <xsl:with-param name="chopString" select="$partName"/>
+                </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
