@@ -386,14 +386,14 @@ Circulation:
             - Include up to
             - pref: PrintNoticesMaxLines
               class: integer
-            - "item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
+            - "item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
         -
             - pref: OverduesBlockCirc
               choices:
                   block: Block
                   noblock: "Don't block"
                   confirmation: Ask for confirmation
-            - "when checking out to a borrower that has overdues outstanding."
+            - "when checking out to a patron that has overdues outstanding."
         -
             - "When checking out an item with rental fees, "
             - pref: RentalFeesCheckoutConfirmation
@@ -703,7 +703,7 @@ Circulation:
                   no: "Don't allow"
             - "holds to expire automatically if they have not been picked by within the time period specified in the ReservesMaxPickUpDelay system preference.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
         -
-            - If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of
+            - If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
               class: currency
             - "."
