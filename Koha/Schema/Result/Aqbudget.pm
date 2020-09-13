@@ -322,6 +322,12 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumbe
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-13 21:13:32
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3u8RuxkSI5UJ4flK6hd64w
 
+__PACKAGE__->belongs_to(
+  "budget",
+  "Koha::Schema::Result::Aqbudgetperiod",
+  { "foreign.budget_period_id" => "self.budget_period_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 sub koha_object_class {
     'Koha::Acquisition::Fund';
