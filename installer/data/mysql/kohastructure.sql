@@ -2925,7 +2925,8 @@ CREATE TABLE `aqbudgets` ( -- information related to Funds
   KEY `budget_code` (`budget_code`),
   KEY `budget_branchcode` (`budget_branchcode`),
   KEY `budget_period_id` (`budget_period_id`),
-  KEY `budget_owner_id` (`budget_owner_id`)
+  KEY `budget_owner_id` (`budget_owner_id`),
+  CONSTRAINT `aqbudgetperiods_ibfk_1` FOREIGN KEY (`budget_period_id`) REFERENCES `aqbudgetperiods` (`budget_period_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
