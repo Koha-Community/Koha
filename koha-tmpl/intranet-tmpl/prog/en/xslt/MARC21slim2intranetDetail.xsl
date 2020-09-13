@@ -1049,11 +1049,13 @@
                         <xsl:choose>
                         <xsl:when test="@ind2=0">
                             <xsl:call-template name="subfieldSelectSpan">
+                                <xsl:with-param name="newline">1</xsl:with-param>
                                 <xsl:with-param name="codes">trug</xsl:with-param>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="subfieldSelectSpan">
+                                <xsl:with-param name="newline">1</xsl:with-param>
                                 <xsl:with-param name="codes">atrug</xsl:with-param>
                             </xsl:call-template>
                         </xsl:otherwise>

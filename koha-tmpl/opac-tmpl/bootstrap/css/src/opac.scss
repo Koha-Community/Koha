@@ -2215,11 +2215,7 @@ nav {
 .contents {
     width: 75%;
 
-    .t:first-child::before {
-        content: "→ ";
-    }
-
-    .t::before {
+    .newline::after {
         content: "\A → ";
         white-space: pre;
     }
@@ -2240,6 +2236,10 @@ nav {
     line-height: 135%;
     margin-left: 2em;
     position: relative;
+
+    :first-child::before {
+        content: "→ ";
+    }
 }
 
 .m880 {

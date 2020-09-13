@@ -60,10 +60,16 @@
         <xsl:param name="subdivDelimiter"/>
         <xsl:param name="prefix"/>
         <xsl:param name="suffix"/>
+        <xsl:param name="newline"/>
             <xsl:for-each select="marc:subfield">
                 <xsl:if test="contains($codes, @code)">
                     <span>
-                        <xsl:attribute name="class"><xsl:value-of select="@code"/></xsl:attribute>
+                        <xsl:attribute name="class">
+                            <xsl:value-of select="@code"/>
+                            <xsl:if test="$newline = 1 and contains(text(), '--')">
+                                <xsl:text> newline</xsl:text>
+                            </xsl:if>
+                        </xsl:attribute>
                         <xsl:if test="contains($subdivCodes, @code)">
                             <xsl:value-of select="$subdivDelimiter"/>
                         </xsl:if>

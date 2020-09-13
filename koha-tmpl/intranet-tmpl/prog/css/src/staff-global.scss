@@ -2880,30 +2880,31 @@ li {
 .contents {
     width: 75%;
 
-    .r {
-        display: inline;
+    .newline::after {
+        content: "\A → ";
+        white-space: pre;
     }
 
     .t {
-        display: inline;
         font-weight: bold;
+        display: inline;
+    }
 
-        &:first-child {
-            &::before {
-                content: "→ ";
-            }
-        }
-
-        &::before {
-            content: "\A→ ";
-            white-space: pre;
-        }
+    .r {
+        display: inline;
     }
 }
 
+
 .contentblock {
+    font-size: 95%;
+    line-height: 135%;
     margin-left: 2em;
     position: relative;
+
+    :first-child::before {
+        content: "→ ";
+    }
 }
 
 #hierarchies {
