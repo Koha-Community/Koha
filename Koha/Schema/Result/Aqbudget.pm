@@ -88,6 +88,7 @@ __PACKAGE__->table("aqbudgets");
 =head2 budget_period_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 sort1_authcat
@@ -157,7 +158,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "budget_period_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "sort1_authcat",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "sort2_authcat",
@@ -257,6 +258,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 budget_period
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbudgetperiod>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "budget_period",
+  "Koha::Schema::Result::Aqbudgetperiod",
+  { budget_period_id => "budget_period_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 suggestions
 
 Type: has_many
@@ -298,8 +319,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-16 13:50:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zB7ox8a4KdDGq5fsbQfLGQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-09-13 23:03:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kmzXRyD6aNqPr5C6u9GBHA
 
 
 sub koha_object_class {
