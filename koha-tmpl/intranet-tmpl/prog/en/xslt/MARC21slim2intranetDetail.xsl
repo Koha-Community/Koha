@@ -1145,6 +1145,90 @@
             </span>
         </xsl:if>
 
+        <!-- 770 - Supplement/Special issue entry -->
+        <xsl:if test="marc:datafield[@tag=770]">
+            <span class="results_summary supplement"><span class="label">Supplement: </span>
+                <xsl:for-each select="marc:datafield[@tag=770]">
+                    <xsl:if test="marc:subfield[@code='i']">
+                        <span class="770_rel_info">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">i</xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text> </xsl:text>
+                        </span>
+                    </xsl:if>
+                    <a>
+                        <xsl:choose>
+                            <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                                <xsl:attribute name="href">
+                                    /cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='t'], '()', ''),true())"/></xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="marc:subfield[@code='a'] or marc:subfield[@code='t']">
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a_t</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                        </xsl:choose>
+                    </a>
+                    <xsl:text> </xsl:text>
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">bdghkmnr9usxyz</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:choose>
+                        <xsl:when test="position()=last()"></xsl:when>
+                        <xsl:otherwise><span class="separator"> | </span></xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
+
+        <!-- 772 - Supplement parent entry -->
+        <xsl:if test="marc:datafield[@tag=772]">
+            <span class="results_summary supplement_parent"><span class="label">Supplement to: </span>
+                <xsl:for-each select="marc:datafield[@tag=772]">
+                    <xsl:if test="marc:subfield[@code='i']">
+                        <span class="772_rel_info">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">i</xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text> </xsl:text>
+                        </span>
+                    </xsl:if>
+                    <a>
+                        <xsl:choose>
+                            <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                                <xsl:attribute name="href">
+                                    /cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:subfield[@code='t'], '()', ''),true())"/></xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="marc:subfield[@code='a'] or marc:subfield[@code='t']">
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a_t</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                        </xsl:choose>
+                    </a>
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">bdghkmnr9usxyz</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:choose>
+                        <xsl:when test="position()=last()"></xsl:when>
+                        <xsl:otherwise><span class="separator"> | </span></xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
 
         <!--  775 Other Edition  -->
         <xsl:if test="marc:datafield[@tag=775]">
