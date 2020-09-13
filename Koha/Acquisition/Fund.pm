@@ -17,6 +17,7 @@ package Koha::Acquisition::Fund;
 
 use Modern::Perl;
 
+use Koha::Acquisition::Budgets;
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -28,6 +29,21 @@ Koha::Acquisition::Fund object class
 =head1 API
 
 =head2 Class methods
+
+=head3 budget
+
+    my $budget = $fund->budget;
+
+Returns the I<Koha::Acquisition::Budget> object for the budget (aqbudgetperiods)
+associated to the fund.
+
+=cut
+
+sub budget {
+    my ( $self )  = @_;
+    my $budget_rs = $self->_result->budget;
+    return Koha::Acquisition::Budget->_new_from_dbic( $budget_rs );
+}
 
 =head3 to_api
 

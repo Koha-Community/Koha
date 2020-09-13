@@ -67,6 +67,7 @@
             <th>Basket</th>
             <th>Basket group</th>
             <th>Library</th>
+            <th>Budget</th>
             <th>Fund</th>
             <th>Claims count</th>
             <th class="title-string">Claimed date</th>
@@ -131,8 +132,8 @@
             </td>
             <td>[% Branches.GetName( lateorder.basket.authorizer.branchcode ) | html %]
             </td>
-            <td>[% lateorder.fund.budget_name | html %]
-            </td>
+            <td>[% lateorder.fund.budget.budget_period_description | html %]</td>
+            <td>[% lateorder.fund.budget_name | html %]</td>
             <td>[% lateorder.claims.count | html %]</td>
             <td>
                 [% FOR claim IN lateorder.claims %]
