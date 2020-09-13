@@ -322,6 +322,12 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumbe
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-17 12:22:27
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:unur5fA8ERmVpNrqQonzMw
 
+__PACKAGE__->belongs_to(
+  "budget",
+  "Koha::Schema::Result::Aqbudgetperiod",
+  { "foreign.budget_period_id" => "self.budget_period_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
