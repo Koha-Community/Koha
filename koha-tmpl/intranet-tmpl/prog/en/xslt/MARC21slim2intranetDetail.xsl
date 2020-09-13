@@ -1030,18 +1030,19 @@
         </span>
     </xsl:if>
 
+        <!-- 505 - Formatted contents note -->
         <xsl:if test="marc:datafield[@tag=505]">
             <div class="results_summary contents">
             <xsl:choose>
-            <xsl:when test="marc:datafield[@tag=505]/@ind1=0">
-                <span class="label">Contents:</span>
-            </xsl:when>
-            <xsl:when test="marc:datafield[@tag=505]/@ind1=1">
-                <span class="label">Incomplete contents:</span>
-            </xsl:when>
-            <xsl:when test="marc:datafield[@tag=505]/@ind1=2">
-                <span class="label">Partial contents:</span>
-            </xsl:when>
+                <xsl:when test="marc:datafield[@tag=505]/@ind1=0">
+                    <span class="label">Contents:</span>
+                </xsl:when>
+                <xsl:when test="marc:datafield[@tag=505]/@ind1=1">
+                    <span class="label">Incomplete contents:</span>
+                </xsl:when>
+                <xsl:when test="marc:datafield[@tag=505]/@ind1=2">
+                    <span class="label">Partial contents:</span>
+                </xsl:when>
             </xsl:choose>
                 <xsl:for-each select="marc:datafield[@tag=505]">
                     <div class='contentblock'>

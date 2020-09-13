@@ -1111,39 +1111,39 @@
         </xsl:for-each>
         </xsl:if>
 
-        <!-- 505 -->
+        <!-- 505 - Formatted contents note -->
         <xsl:if test="marc:datafield[@tag=505]">
-        <div class="results_summary contents">
-        <xsl:for-each select="marc:datafield[@tag=505]">
-        <xsl:if test="position()=1">
-            <xsl:choose>
-            <xsl:when test="@ind1=1">
-                <span class="label">Incomplete contents:</span>
-            </xsl:when>
-            <xsl:when test="@ind1=2">
-                <span class="label">Partial contents:</span>
-            </xsl:when>
-            <xsl:otherwise>
-                <span class="label">Contents:</span>
-            </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <div class='contentblock' property='description'>
-        <xsl:choose>
-        <xsl:when test="@ind2=0">
-            <xsl:call-template name="subfieldSelectSpan">
-                <xsl:with-param name="codes">trug</xsl:with-param>
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:call-template name="subfieldSelectSpan">
-                <xsl:with-param name="codes">atrug</xsl:with-param>
-            </xsl:call-template>
-        </xsl:otherwise>
-        </xsl:choose>
-        </div>
-        </xsl:for-each>
-        </div>
+            <div class="results_summary contents">
+                <xsl:for-each select="marc:datafield[@tag=505]">
+                    <xsl:if test="position()=1">
+                        <xsl:choose>
+                        <xsl:when test="@ind1=1">
+                            <span class="label">Incomplete contents:</span>
+                        </xsl:when>
+                        <xsl:when test="@ind1=2">
+                            <span class="label">Partial contents:</span>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <span class="label">Contents:</span>
+                        </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                    <div class='contentblock' property='description'>
+                        <xsl:choose>
+                            <xsl:when test="@ind2=0">
+                                <xsl:call-template name="subfieldSelectSpan">
+                                    <xsl:with-param name="codes">trug</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:call-template name="subfieldSelectSpan">
+                                    <xsl:with-param name="codes">atrug</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </div>
+                </xsl:for-each>
+            </div>
         </xsl:if>
 
         <!-- 583 -->
