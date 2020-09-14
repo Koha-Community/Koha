@@ -140,7 +140,7 @@ if($marc_mod_template ne '') {
     if($marc_mod_template_id < 0) {
         die "Can't located MARC modification template '$marc_mod_template'\n";
     } else {
-        print "Records will be modified using MARC modofication template: $marc_mod_template\n" if $verbose;
+        print "Records will be modified using MARC modification template: $marc_mod_template\n" if $verbose;
     }
 }
 
