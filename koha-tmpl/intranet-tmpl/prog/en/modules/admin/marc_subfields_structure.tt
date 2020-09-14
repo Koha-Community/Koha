@@ -35,7 +35,7 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
         <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo;
-        <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode | html %]&amp;searchfield=[% tagfield | uri %]">
+        <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode | uri %]&amp;searchfield=[% tagfield | uri %]">
             [% IF ( frameworkcode ) %][% frameworkcode | html %][% ELSE %]Default[% END %] framework structure
         </a> &rsaquo;
         [% IF ( add_form ) %]
@@ -56,7 +56,7 @@
         [% IF ( else ) %]
             Tag [% tagfield | html %] Subfield structure
         [% END %]
-    </div>
+    </div> <!-- /#breadcrumbs -->
 
     <div class="main container-fluid">
         <div class="row">
@@ -159,11 +159,11 @@
                                                             <option value="10">items (10)</option>
                                                         [%- END -%]
                                                         </select>
-                                                        (ignore means that the subfield does not display in the record editor)
+                                                        <div class="hint">Ignore means that the subfield does not display in the record editor</div>
                                                     </li>
                                                 </ol>
-                                            </fieldset>
-                                        </div>
+                                            </fieldset> <!-- /.rows -->
+                                        </div> <!-- /#basic[% loo.urisubfieldcode | html %] -->
 
                                         <div id="advanced[% loo.urisubfieldcode | html %]" class="contraints">
                                             <fieldset class="rows">
@@ -202,12 +202,12 @@
                                                         [% ELSE %]
                                                             <input type="checkbox" id="isurl[% loo.row | html %]" name="isurl[% loo.row | html %]" value="1" />
                                                         [% END %]
-                                                        (if checked, it means that the subfield is a URL and can be clicked)
+                                                        <div class="hint">If checked, it means that the subfield is a URL and can be clicked</div>
                                                     </li>
                                                     <li>
                                                         <label for="link[% loo.row | html %]">Link:</label>
                                                         <input type="text" id="link[% loo.row | html %]" name="link" value="[% loo.link | html %]" size="10" maxlength="80" />
-                                                        (an index name, e.g. title or Local-Number)
+                                                        <div class="hint">An index name, e.g. title or Local-Number</div>
                                                     </li>
                                                     <li>
                                                         <label for="kohafield[% loo.row | html %]">Koha link:</label>
@@ -225,10 +225,10 @@
                                                         <input type="hidden" name="kohafield" value="[% loo.kohafield | html %]"/>
                                                     </li>
                                                 </ol>
-                                            </fieldset>
-                                        </div>
+                                            </fieldset> <!-- /.rows -->
+                                        </div> <!-- /#advanced[% loo.urisubfieldcode | html %] -->
 
-                                        <div id="oth[% loo.urisubfieldcode | html %]" class="contraints">
+                                        <div id="oth[% loo.urisubfieldcode | html %]" class="constraints">
                                             <fieldset class="rows">
                                                 <legend>Other options (choose one)</legend>
                                                 <ol>
@@ -270,17 +270,17 @@
                                                         </select>
                                                     </li>
                                                 </ol>
-                                            </fieldset>
-                                        </div>
-                                    </div><!-- /content_sub -->
-                                [% END %]
-                            </div><!-- /content -->
+                                            </fieldset> <!-- /.rows -->
+                                        </div> <!-- /#oth[% loo.urisubfieldcode | html %] -->
+                                    </div><!-- /constraints -->
+                                [% END # /FOREACH loo %]
+                            </div><!-- /subfieldtabs -->
 
                             <fieldset class="action">
                                 <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="cancel">Cancel</a>
                             </fieldset>
                         </form>
-                    [% END %]
+                    [% END # /IF ( add_form ) %]
 
                     [% IF ( delete_confirm ) %]
                         <div class="dialog alert">
@@ -304,8 +304,8 @@
                                 <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
                                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
                             </form>
-                        </div>
-                    [% END %]
+                        </div> <!-- /.dialog.alert -->
+                    [% END # /IF ( delete_confirm ) %]
 
                     [% IF ( delete_confirmed ) %]
                         <h3>Data deleted</h3>
@@ -317,6 +317,7 @@
 
                     [% IF ( else ) %]
                         <h1>MARC subfield structure admin for [% tagfield | html %] [% IF ( frameworkcode ) %](framework [% frameworkcode | html %])[% ELSE %](default framework)[% END %]</h1>
+
                         <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
                         <p>The column 'Koha field' shows that the subfield is linked with a Koha field.</p>
 
@@ -365,7 +366,7 @@
                                     </tr>
                                 [% END %]
                             </tbody>
-                        </table>
+                        </table> <!-- /#table_marcsubfieldstructure -->
 
                         <form action="[% script_name | html %]" method="get">
                             <fieldset class="action"><input type="hidden" name="op" value="add_form" />
@@ -376,7 +377,7 @@
                             </fieldset>
                         </form>
 
-                    [% END %]
+                    [% END # /IF else %]
 
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
