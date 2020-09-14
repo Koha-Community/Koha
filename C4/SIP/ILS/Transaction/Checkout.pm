@@ -97,7 +97,7 @@ sub do_checkout {
                 $self->screen_msg("This item was previously checked out by you");
                 last;
             } elsif ( $confirmation eq 'ADDITIONAL_MATERIALS' ) {
-                $self->screen_msg('Item must be issued at a circulation desk');
+                $self->screen_msg('Item must be checked out at a circulation desk');
                 $noerror = 0;
                 last;
             } else {

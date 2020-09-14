@@ -9,15 +9,15 @@
     [% IF messages.BadBarcode %]
         <span>(Barcode not found on the database, please see library staff for assistance)</span>
     [% ELSIF messages.Wrongbranch %]
-        <span>(The item cannot be returned at this library, please see library staff for assistance)</span>
+        <span>(The item cannot be checked in at this library, please see library staff for assistance)</span>
     [% ELSIF messages.withdrawn %]
         <span>(Item is withdrawn and check-in blocked by policy, please see library staff for assistance)</span>
     [% ELSIF messages.NotIssued %]
         <span>(The book is not currently on loan, please see library staff for assistance)</span>
     [% ELSIF messages.additional_materials %]
-        <span>(The item cannot be returned at a self service terminal, please see library staff for assistance)</span>
+        <span>(The item cannot be checked in at a self service terminal, please see library staff for assistance)</span>
     [% ELSE %]
-        <span>(There was a problem returning this item, please see library staff for assistance)</span>
+        <span>(There was a problem checking in this item, please see library staff for assistance)</span>
     [% END %]
 [% END %]
 [% PROCESS 'html_helpers.inc' %]
