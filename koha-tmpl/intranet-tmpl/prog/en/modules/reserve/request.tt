@@ -992,7 +992,7 @@
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
         [% itemloo.itemnumber | html %]: {
-            homebranch: "[% To.json( Branches.GetName( itemloo.homebranch ) ) | $raw %]";
+            homebranch: "[% To.json( Branches.GetName( itemloo.homebranch ) ) | $raw %]",
             holdallowed: [% itemloo.holdallowed | html %]
             },
             [% END %][% END %][% END %]
