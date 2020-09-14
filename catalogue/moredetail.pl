@@ -72,13 +72,21 @@ if( $query->cookie("searchToOrder") ){
 }
 
 # get variables
+my $biblionumber;
+my $itemnumber;
+if( $query->param('itemnumber') && !$query->param('biblionumber') ){
+    $itemnumber = $query->param('itemnumber');
+    my $item = Koha::Items->find( $itemnumber );
+    $biblionumber = $item->biblionumber;
+} else {
+    $biblionumber = $query->param('biblionumber');
+}
 
-my $biblionumber=$query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
 my $title=$query->param('title');
 my $bi=$query->param('bi');
 $bi = $biblionumber unless $bi;
-my $itemnumber = $query->param('itemnumber');
+$itemnumber = $query->param('itemnumber');
 my $data = &GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
 my $showallitems = $query->param('showallitems');
