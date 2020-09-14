@@ -98,7 +98,7 @@ run_rebuild_elasticsearch()
     if [ "${clo_processes}" > 0 ]; then
         processes=${clo_processes}
     fi
-    rebuild_opts="--processes ${processes}"
+    rebuild_opts="${rebuild_opts} --processes ${processes}"
 
     if [ "${delete}" = "yes" ]; then
         rebuild_opts="${rebuild_opts} -d"
