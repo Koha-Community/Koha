@@ -53,6 +53,7 @@ my $fee_amount;
 my $fee_identifier;
 my $transaction_id;
 my $pickup_location;
+my $hold_mode;
 
 my $terminator = q{};
 
@@ -81,6 +82,7 @@ GetOptions(
     "fee-identifier=s"  => \$fee_identifier,
     "transaction-id=s"  => \$transaction_id,
     "pickup-location=s" => \$pickup_location,
+    "hold-mode=s"       => \$hold_mode,
 
     "t|terminator=s" => \$terminator,
 
@@ -264,7 +266,7 @@ my $handlers = {
         name       => 'Hold',
         subroutine => \&build_hold_command_message,
         parameters => {
-            hold_mode           => '+',
+            hold_mode           => $hold_mode eq '-' ? '-' : '+',
             transaction_date    => $transaction_date,
             expiration_date     => undef,
             pickup_location     => $pickup_location,
@@ -639,6 +641,7 @@ Options:
   --fee-identifier  Fee identifier for Fee Paid message, optional
   --transaction-id  Transaction id for Fee Paid message, optional
   --pickup-location Pickup location (branchcode) for Hold message, optional
+  --hold-mode       Accepts +: Add hold or -:cancel hold, defaults to +
 
   -m --message     SIP2 message to execute
 
