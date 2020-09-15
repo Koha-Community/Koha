@@ -64,11 +64,11 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
 
     my $item;
     warning_like { $item = $builder->build_sample_item({ biblionumber => $biblio_id }); }
-            qr/after_item_action called with action: create, ref: Koha::Item/,
+            qr/after_item_action called with action: create, ref: Koha::Item item_id defined: yes itemnumber defined: yes/,
             'AddItem calls the hook with action=create';
 
     warning_like { $item->location('shelves')->store; }
-            qr/after_item_action called with action: modify, ref: Koha::Item/,
+            qr/after_item_action called with action: modify, ref: Koha::Item item_id defined: yes itemnumber defined: yes/,
             'ModItem calls the hook with action=modify';
 
     warning_like { $item->delete; }

@@ -153,7 +153,11 @@ sub after_item_action {
     my $item_id = $params->{item_id};
 
     if ( $action ne 'delete' ) {
-        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, ref: " . ref($item) );
+        my $itemnumber_defined = (defined $item->itemnumber) ? 'yes' : 'no';
+        my $item_id_defined    = (defined $item_id) ? 'yes' : 'no';
+        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, ref: " . ref($item) . " ".
+                                           "item_id defined: $item_id_defined ".
+                                           "itemnumber defined: $itemnumber_defined" );
     }
     else {
         Koha::Exceptions::Exception->throw("after_item_action called with action: $action" ) if $item_id;
