@@ -633,11 +633,6 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Holds->search->delete;
-    $dbh->do('DELETE FROM issues');
-    Koha::Items->search->delete;
-    Koha::Biblios->search->delete;
-
     my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes' } );
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -650,7 +645,6 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
     my $itemnumber_3 = $builder->build_sample_item({ library => $library->branchcode, biblionumber => $biblio_3->biblionumber})->itemnumber;
 
-    Koha::CirculationRules->search->delete;
     Koha::CirculationRules->set_rules(
         {
             categorycode => '*',
@@ -818,9 +812,6 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
 
     $schema->storage->txn_begin;
 
-    # Cleanup database
-    Koha::Holds->search->delete;
-    $dbh->do('DELETE FROM issues');
     Koha::CirculationRules->set_rule(
         {
             branchcode   => undef,
@@ -830,9 +821,6 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
             rule_value   => 25,
         }
     );
-
-    Koha::Items->search->delete;
-    Koha::Biblios->search->delete;
 
     # Create item types
     my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
@@ -1038,10 +1026,6 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     plan tests => 9;
 
     $schema->storage->txn_begin;
-
-    # Cleanup database
-    Koha::Holds->search->delete;
-    $dbh->do('DELETE FROM issues');
     Koha::CirculationRules->set_rule(
         {
             branchcode   => undef,
@@ -1051,9 +1035,6 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
             rule_value   => 25,
         }
     );
-
-    Koha::Items->search->delete;
-    Koha::Biblios->search->delete;
 
     # Create item types
     my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
@@ -1260,9 +1241,6 @@ subtest 'non priority holds' => sub {
 
     $schema->storage->txn_begin;
 
-    # Cleanup database
-    Koha::Holds->search->delete;
-    $dbh->do('DELETE FROM issues');
     Koha::CirculationRules->set_rules(
         {
             branchcode   => undef,
