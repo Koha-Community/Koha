@@ -88,7 +88,9 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
-    my $today = dt_from_string;
+    my $today         = dt_from_string;
+    my $plugin_action = 'create';
+
     unless ( $self->in_storage ) { #AddItem
         unless ( $self->permanent_location ) {
             $self->permanent_location($self->location);
@@ -117,9 +119,9 @@ sub store {
         logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
           if $log_action && C4::Context->preference("CataloguingLog");
 
-        $self->_after_item_action_hooks({ action => 'create' });
-
     } else { # ModItem
+
+        $plugin_action = 'modify';
 
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
@@ -190,8 +192,6 @@ sub store {
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
             unless $params->{skip_modzebra_update};
 
-        $self->_after_item_action_hooks({ action => 'modify' });
-
         logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
           if $log_action && C4::Context->preference("CataloguingLog");
     }
@@ -200,7 +200,10 @@ sub store {
         $self->dateaccessioned($today);
     }
 
-    return $self->SUPER::store;
+    my $result = $self->SUPER::store;
+    $self->get_from_storage->_after_item_action_hooks({ action => $plugin_action });
+
+    return $result;
 }
 
 =head3 delete
