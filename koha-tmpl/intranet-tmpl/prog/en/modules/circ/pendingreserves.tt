@@ -57,6 +57,7 @@
         <th>First patron</th>
         <th class="anti-the">Title</th>
         <th class="string-sort">Libraries</th>
+        <th>Available barcodes</th>
         <th>Available call numbers</th>
         <th>Available copy numbers</th>
         <th>Available enumeration</th>
@@ -99,6 +100,11 @@
                         </li>
                     [% END %]
                </ul>
+            [% END %]
+        </td>
+        <td>
+            [% IF ( reserveloo.barcode ) %]
+            [% IF ( reserveloo.itemnumber ) %]Only [% reserveloo.barcode.first | html %][% ELSE %][% reserveloo.barcode.first | html %] or any available.[% END %]
             [% END %]
         </td>
         <td>

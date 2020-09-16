@@ -200,6 +200,8 @@ my $strsth =
                     ORDER BY items.itemnumber SEPARATOR '|') l_enumchron,
             GROUP_CONCAT(DISTINCT items.copynumber
                     ORDER BY items.itemnumber SEPARATOR '|') l_copynumber,
+            GROUP_CONCAT(DISTINCT items.barcode
+                    ORDER BY items.itemnumber SEPARATOR '|') l_barcode,
             biblio.title,
             biblio.copyrightdate,
             biblioitems.publicationyear,
@@ -266,6 +268,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itemcallnumber   => [split('\|', $data->{l_itemcallnumber})],
             enumchron        => [split('\|', $data->{l_enumchron})],
             copyno           => [split('\|', $data->{l_copynumber})],
+            barcode          => [split('\|', $data->{l_barcode})],
             count            => $data->{icount},
             rcount           => $data->{rcount},
             pullcount        => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
