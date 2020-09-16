@@ -397,8 +397,18 @@ sub removeFieldsForPrefill {
 
 my $input        = new CGI;
 my $error        = $input->param('error');
-my $biblionumber = $input->param('biblionumber');
-my $itemnumber   = $input->param('itemnumber');
+
+my $biblionumber;
+my $itemnumber;
+if( $input->param('itemnumber') && !$input->param('biblionumber') ){
+    $itemnumber = $input->param('itemnumber');
+    my $item = Koha::Items->find( $itemnumber );
+    $biblionumber = $item->biblionumber;
+} else {
+    $biblionumber = $input->param('biblionumber');
+    $itemnumber = $input->param('itemnumber');
+}
+
 my $op           = $input->param('op') || q{};
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
