@@ -54,7 +54,7 @@
                         <div id="autoswitched" class="dialog message">Patron was automatically switched by reading the patron card during checking out. Ensure you are working with the right patron.</div>
                     [% END %]
 
-                    [% IF ADDITIONAL_MATERIALS %]
+                    [% IF ADDITIONAL_MATERIALS && !NEEDSCONFIRMATION %]
                         <div id="materials" class="dialog message">Note about the accompanying materials: <br />
                         [% ADDITIONAL_MATERIALS | html %]
                         </div>
