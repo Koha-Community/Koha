@@ -619,14 +619,9 @@ sub marc_records_to_documents {
                     my $subfields_join_mappings = $data_field_rules->{subfields_join};
                     if ($subfields_join_mappings) {
                         foreach my $subfields_group (keys %{$subfields_join_mappings}) {
-                            # Map each subfield to values, remove empty values, join with space
-                            my $data = join(
-                                ' ',
-                                grep(
-                                    $_,
-                                    map { join(' ', $field->subfield($_)) } split(//, $subfields_group)
-                                )
-                            );
+                            my $data_field = $field->clone; #copy field to preserve for alt scripts
+                            $data_field->delete_subfield(match => qr/^$/); #remove empty subfields, otherwise they are printed as a space
+                            my $data = $data_field->as_string( $subfields_group ); #get values for subfields as a combined string, preserving record order
                             if ($data) {
                                 $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document, {
                                         altscript => $altscript,
