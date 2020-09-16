@@ -77,9 +77,9 @@ my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
 
-my $registerid;
+my $cash_register_id;
 if ( C4::Context->preference('UseCashRegisters') ) {
-    $registerid = $input->param('registerid');
+    $cash_register_id = $input->param('cash_register');
     my $registers  = Koha::Cash::Registers->search(
         { branch   => $library_id, archived => 0 },
         { order_by => { '-asc' => 'name' } }
@@ -90,16 +90,16 @@ if ( C4::Context->preference('UseCashRegisters') ) {
     }
     else {
 
-        if ( !$registerid ) {
+        if ( !$cash_register_id ) {
             my $default_register = Koha::Cash::Registers->find(
                 { branch => $library_id, branch_default => 1 } );
-            $registerid = $default_register->id if $default_register;
+            $cash_register_id = $default_register->id if $default_register;
         }
-        $registerid = $registers->next->id if !$registerid;
+        $cash_register_id = $registers->next->id if !$cash_register_id;
 
         $template->param(
-            registerid => $registerid,
-            registers  => $registers,
+            default_register => $cash_register_id,
+            registers        => $registers,
         );
     }
 }
@@ -196,7 +196,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     note         => $payment_note,
                     interface    => C4::Context->interface,
                     payment_type => $payment_type,
-                    cash_register => $registerid
+                    cash_register => $cash_register_id
                 }
             );
             $payment_id = $pay_result->{payment_id};
@@ -221,7 +221,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                             note         => $note,
                             interface    => C4::Context->interface,
                             payment_type => $payment_type,
-                            cash_register => $registerid
+                            cash_register => $cash_register_id
                         }
                     );
                 }
@@ -237,7 +237,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                         payment_type => $payment_type,
                         interface    => C4::Context->interface,
                         payment_type => $payment_type,
-                        cash_register => $registerid
+                        cash_register => $cash_register_id
                     }
                 );
             }

@@ -154,7 +154,7 @@
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
             [% FOREACH register IN registers %]
-              [% IF register.id == registerid %]
+              [% IF register.id == default_register %]
             <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
               [% ELSE %]
             <option value="[% register.id | html %]">[% register.name | html %]</option>
@@ -290,7 +290,7 @@
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
             [% FOREACH register IN registers %]
-              [% IF register.id == registerid %]
+              [% IF register.id == default_register %]
             <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
               [% ELSE %]
             <option value="[% register.id | html %]">[% register.name | html %]</option>
