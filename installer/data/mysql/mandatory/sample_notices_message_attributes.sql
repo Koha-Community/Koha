@@ -5,5 +5,7 @@ values
 (2, 'Advance_Notice', 1),
 (4, 'Hold_Filled', 0),
 (5, 'Item_Check_in', 0),
-(6, 'Item_Checkout', 0);
+(6, 'Item_Checkout', 0),
+(7, 'Ill_ready', 0),
+(8, 'Ill_unavailable', 0);
 
