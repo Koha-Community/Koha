@@ -40,6 +40,7 @@
                     <th>Item type</th>
                     <th>Date due</th>
                     <th>Barcode</th>
+                    <th>Inventory number</th>
                     <th>Charge</th>
                     <th>Price</th>
                     <th>Status</th>
@@ -56,6 +57,7 @@
                         <td>[% ItemTypes.GetDescription( issue.itype ) | html %]</td>
                         <td>[% issue.date_due | $KohaDates  as_due_date => 1 %]</td>
                         <td>[% issue.barcode | html %]</td>
+                        <td>[% issue.stocknumber | html %]</td>
                         <td>[% issue.charge | $Price %]</td>
                         <td>[% issue.replacementprice | $Price %]</td>
                         <td>[% IF ( issue.overdue ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
@@ -63,7 +65,7 @@
                 [% END %]
 
             <tr>
-                <td colspan="6" style="text-align: right; font-weight:bold;">Totals:</td>
+                <td colspan="7" style="text-align: right; font-weight:bold;">Totals:</td>
                 <td>[% totaldue | $Price %]</td>
                 <td>[% totalprice | $Price %]</td>
                 <td colspan="3">&nbsp;</td>
