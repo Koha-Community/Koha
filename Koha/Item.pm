@@ -61,7 +61,7 @@ Koha::Item - Koha Item object class
 
     $item->store;
 
-$params can take an optional 'skip_modzebra_update' parameter.
+$params can take an optional 'skip_record_index' parameter.
 If set, the reindexation process will not happen (index_records not called)
 
 NOTE: This is a temporary fix to answer a performance issue when lot of items
@@ -197,7 +197,7 @@ sub store {
     my $result = $self->SUPER::store;
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
-        unless $params->{skip_modzebra_update};
+        unless $params->{skip_record_index};
     $self->get_from_storage->_after_item_action_hooks({ action => $plugin_action });
 
     return $result;
@@ -216,7 +216,7 @@ sub delete {
 
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
-        unless $params->{skip_modzebra_update};
+        unless $params->{skip_record_index};
 
     $self->_after_item_action_hooks({ action => 'delete' });
 

@@ -615,7 +615,7 @@ if ($op eq "additem") {
 		# Adding the item
         if (!$exist_itemnumber) {
             my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) =
-                AddItemFromMarc( $record, $biblionumber, { skip_modzebra_update => 1 } );
+                AddItemFromMarc( $record, $biblionumber, { skip_record_index => 1 } );
             set_item_default_location($oldbibitemnum);
 
             # We count the item only if it was really added
@@ -705,7 +705,7 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
-        $error = $item->safe_delete({ skip_modzebra_update => 1 });
+        $error = $item->safe_delete({ skip_record_index => 1 });
         next if ref $error eq 'Koha::Item'; # Deleted item is returned if deletion successful
         push @errors,$error;
     }

@@ -304,7 +304,7 @@ if ($op eq "action") {
                                                 $localmarcitem,
                                                 $itemdata->{biblionumber},
                                                 $itemnumber,
-                                                { skip_modzebra_update => 1 },
+                                                { skip_record_index => 1 },
                                             )
                                           )
                                         {
@@ -312,7 +312,7 @@ if ($op eq "action") {
                                                 $itemnumber,
                                                 'batchmod',
                                                 undef,
-                                                { skip_modzebra_update => 1 }
+                                                { skip_record_index => 1 }
                                             ) if $item->{itemlost}
                                               and not $itemdata->{itemlost};
                                         }

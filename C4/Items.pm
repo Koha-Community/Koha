@@ -144,13 +144,13 @@ Given a MARC::Record object containing an embedded item
 record and a biblionumber, create a new item record.
 
 The final optional parameter, C<$params>, expected to contain
-'skip_modzebra_update' key, which relayed down to Koha::Item/store,
+'skip_record_index' key, which relayed down to Koha::Item/store,
 there it prevents calling of index_records,
 which takes most of the time in batch adds/deletes: index_records
 to be called later in C<additem.pl> after the whole loop.
 
 $params:
-    skip_modzebra_update => 1|0
+    skip_record_index => 1|0
 
 =cut
 
@@ -174,7 +174,7 @@ sub AddItemFromMarc {
     $item_values->{biblionumber} = $biblionumber;
     $item_values->{cn_source} = delete $item_values->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item_values->{cn_sort}   = delete $item_values->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
-    my $item = Koha::Item->new( $item_values )->store({ skip_modzebra_update => $params->{skip_modzebra_update} });
+    my $item = Koha::Item->new( $item_values )->store({ skip_record_index => $params->{skip_record_index} });
     return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
 }
 
@@ -287,13 +287,13 @@ sub AddItemBatchFromMarc {
 my $item = ModItemFromMarc($item_marc, $biblionumber, $itemnumber[, $params]);
 
 The final optional parameter, C<$params>, expected to contain
-'skip_modzebra_update' key, which relayed down to Koha::Item/store,
+'skip_record_index' key, which relayed down to Koha::Item/store,
 there it prevents calling of index_records,
 which takes most of the time in batch adds/deletes: index_records better
 to be called later in C<additem.pl> after the whole loop.
 
 $params:
-    skip_modzebra_update => 1|0
+    skip_record_index => 1|0
 
 =cut
 
@@ -327,7 +327,7 @@ sub ModItemFromMarc {
     $item_object = $item_object->set_or_blank($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields));
-    $item_object->store({ skip_modzebra_update => $params->{skip_modzebra_update} });
+    $item_object->store({ skip_record_index => $params->{skip_record_index} });
 
     return $item_object->unblessed;
 }
