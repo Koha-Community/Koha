@@ -60,6 +60,11 @@ Config file format:
                       add_only_for_matches, add_only_for_new or ignore
   import_mode    - stage or direct
   framework      - to be used if import_mode is direct
+  connexion_user      - User sent from connexion client
+  connexion_password  - Password sent from connexion client
+
+  Note: If connexion parameters are not defined request authentication will not be checked
+  You should specify a different user for connexion to protect the Koha credentials
 
   All process related parameters (all but ip and port) have default values as
   per Koha import process.
@@ -140,6 +145,14 @@ sub parse_config {
       or die "No koha user in config file";
     $self->{password} = delete( $param{password} )
       or die "No koha user password in config file";
+
+    if( defined $param{connexion_user} || defined $param{connexion_password}){
+        # If either is defined we expect both
+        $self->{connexion_user} = delete( $param{connexion_user} )
+          or die "No koha connexion_user in config file";
+        $self->{connexion_password} = delete( $param{connexion_password} )
+          or die "No koha user connexion_password in config file";
+    }
 
     $self->{host} = delete( $param{host} );
     $self->{port} = delete( $param{port} )
@@ -247,7 +260,6 @@ sub read_request {
     }
 
     $in = join '', @in_arr;
-
     $in =~ m/(.)$/;
     my $lastchar = $1;
     my ($xml, $user, $password, $local_user);
@@ -300,6 +312,7 @@ sub read_request {
         $self->log("Invalid request", $in, @details);
         return;
     }
+    $user = $local_user if !$user && $local_user;
 
     $self->log("Request", @details);
     $self->log($in) if $self->{debug};
@@ -319,9 +332,15 @@ sub _trim_identifier {
 
 sub handle_request {
     my ( $self, $io ) = @_;
-
     my ($data, $user, $password) = $self->read_request($io)
       or return $self->error_response("Bad request");
+
+    unless(
+        !(defined $self->{connexion_user}) ||
+        ($user eq $self->{connexion_user} && $password eq $self->{connexion_password})
+    ){
+       return $self->error_response("Unauthorized request");
+    }
 
     my $ua;
     if ($self->{user}) {
