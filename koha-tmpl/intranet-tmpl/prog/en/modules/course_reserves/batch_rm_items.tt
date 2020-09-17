@@ -43,9 +43,9 @@
                 <ul>
                     [% FOREACH i IN item_and_count %]
                       [% IF i.delcount == 1 %]
-                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount %] course.</li>
+                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount | html %] course.</li>
                       [% ELSIF i.delcount > 1 %]
-                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount %] courses.</li>
+                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount | html %] courses.</li>
                       [% END %]
                     [% END %]
                 </ul>
