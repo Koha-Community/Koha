@@ -27,6 +27,7 @@
                 [% IF patron.has_overdues %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
+                <li><a id="printcheckinslip" href="#">Print checkin slip</a></li>
             </ul>
     </div>
     [% END %]

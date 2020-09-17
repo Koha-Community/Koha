@@ -70,7 +70,22 @@ VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Su
     <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
     <li><b>Notes:</b> <<suggestions.note>></li>
     </ul>
-    </p>',1, 'email');
+    </p>',1, 'email'),
+    ('circulation','CHECKINSLIP','Checkin slip','Checkin slip',
+    "<h3><<branches.branchname>></h3>
+    Checked in items for <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+    (<<borrowers.cardnumber>>) <br />
+
+    <<today>><br />
+
+    <h4>Checked in today</h4>
+    <checkedin>
+    <p>
+    <<biblio.title>> <br />
+    Barcode: <<items.barcode>><br />
+    </p>
+    </checkedin>",1, 'print');
+
 INSERT INTO `letter` (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Utlån','Utlån', '<h3><<branches.branchname>></h3>
 Utlånt til <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />

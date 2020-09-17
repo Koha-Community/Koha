@@ -1454,3 +1454,26 @@ tables:
             - "[% ELSE %]"
             - "The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]"
             - "[% END %]"
+
+        - module: circulation
+          code: CHECKINSLIP
+          branchcode: ""
+          name: "Checkin slip"
+          is_html: 1
+          title: "Checkin slip"
+          message_transport_type: print
+          lang: default
+          content:
+            - "<h3><<branches.branchname>></h3>"
+            - "Checked in items for <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />"
+            - "(<<borrowers.cardnumber>>) <br />"
+            - ""
+            - "<<today>><br />"
+            - ""
+            - "<h4>Checked in today</h4>"
+            - "<checkedin>"
+            - "<p>"
+            - "<<biblio.title>> <br />"
+            - "Barcode: <<items.barcode>><br />"
+            - "</p>"
+            - "</checkedin>"

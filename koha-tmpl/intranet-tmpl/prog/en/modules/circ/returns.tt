@@ -857,6 +857,7 @@
                                         <th class="ci-collection">Collection</th>
                                         <th class="ci-patron">Patron</th>
                                         <th class="ci-note">Note</th>
+                                        <th class="ci-printslip">&nbsp;</th>
                                     </tr>
                                 </thead>
 
@@ -941,6 +942,9 @@
                                             [% IF ( riloo.itemnotes_nonpublic ) %]
                                                 <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</span></p>
                                             [% END %]
+                                        </td>
+                                        <td class="ci-printslip actions">
+                                            <a id="printcheckinslip" href="#" class="btn btn-default" data-borrowernumber="[% riloo.patron.borrowernumber | html %]"><i class="fa fa-print"></i> Print checkin slip</a>
                                         </td>
                                     </tr>
                                 [% END # /FOREACH riloo %]
@@ -1139,6 +1143,13 @@
                 }
             });
             $('[data-toggle="tooltip"]').tooltip();
+
+            $("#printcheckinslip").click(function(){
+                var borrowernumber = $(this).data('borrowernumber');
+                window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=" + borrowernumber + "&amp;print=checkinslip", "printwindow");
+                return false;
+            });
+
         });
     </script>
 [% END %]

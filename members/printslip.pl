@@ -39,6 +39,7 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Members;
 use C4::Koha;
+use Koha::DateUtils;
 
 #use Smart::Comments;
 #use Data::Dumper;
@@ -79,7 +80,50 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 my $branch=C4::Context->userenv->{'branch'};
 my ($slip, $is_html);
-if (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
+if ( $print eq 'checkinslip' ) {
+    my $checkinslip_branch = $session->param('branch') ? $session->param('branch') : $branch;
+
+    # get today's checkins
+    my $today_start = dt_from_string->set( hour => 0, minute => 0, second => 0 );
+    my $today_end = dt_from_string->set( hour => 23, minute => 59, second => 0 );
+    $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_start );
+    $today_end = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_end );
+    my $todays_checkins = Koha::Old::Checkouts->search({
+        returndate => {
+            '>=' => $today_start,
+            '<=' => $today_end,
+        },
+        borrowernumber => $borrowernumber,
+        branchcode => $checkinslip_branch,
+    });
+
+    my @checkins;
+    while ( my $c = $todays_checkins->next ) {
+        push @checkins, {
+            biblio => $c->item->biblio->unblessed,
+            items => $c->item->unblessed,
+        };
+    }
+    my %repeat = (
+        checkedin => \@checkins,
+    );
+
+    my $letter = C4::Letters::GetPreparedLetter(
+        module => 'circulation',
+        letter_code => 'CHECKINSLIP',
+        branchcode => $checkinslip_branch,
+        tables => {
+            branches => $checkinslip_branch,
+            borrowers => $borrowernumber,
+        },
+        repeat => \%repeat,
+        message_transport_type => 'print'
+    );
+
+    $slip = $letter->{content};
+    $is_html = $letter->{is_html};
+
+} elsif (my $letter = IssueSlip ($session->param('branch') || $branch, $borrowernumber, $print eq "qslip")) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }
