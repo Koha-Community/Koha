@@ -918,6 +918,54 @@
         </span>
     </xsl:if>
 
+<!-- MARC21 777 - Issued With Entry -->
+    <xsl:if test="marc:datafield[@tag=777]">
+        <xsl:for-each select="marc:datafield[@tag=777]">
+            <xsl:if test="@ind1 != 1">
+                <span class="results_summary issued_with">
+                    <span class="label">
+                        <xsl:choose>
+                            <xsl:when test="@ind2=8 and marc:subfield[@code='i']">
+                                <xsl:value-of select="marc:subfield[@code='i']"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>Issued with:</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:text> </xsl:text>
+                    </span>
+                    <xsl:variable name="f777">
+                        <xsl:call-template name="chopPunctuation">
+                            <xsl:with-param name="chopString">
+                                <xsl:call-template name="subfieldSelect">
+                                    <xsl:with-param name="codes">a_t</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:choose>
+                        <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                            <xsl:value-of select="translate($f777, '()', '')"/>
+                            </a>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(marc:subfield[@code='t'], true())"/></xsl:attribute>
+                            <xsl:value-of select="$f777"/>
+                            </a>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="marc:subfield[@code='g']">
+                        <xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/>
+                    </xsl:if>
+                </span>
+                <xsl:if test="marc:subfield[@code='n']">
+                    <xsl:text> </xsl:text><span class="results_summary in_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+                </xsl:if>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:if>
+
 <!-- DDC classification -->
     <xsl:if test="marc:datafield[@tag=082]">
         <span class="results_summary ddc">
