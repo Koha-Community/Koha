@@ -118,13 +118,9 @@
                                 </div>
                             [% END %]
 
-                            [% IF additional_materials && !multiple_confirmed %]
-                                <div class="dialog alert">
-                                    <ul>
-                                        <li>
-                                        Note about the accompanying materials: [% additional_materials | html %]
-                                        </li>
-                                    </ul>
+                            [% IF additional_materials && !needs_confirm && !multiple_confirmed %]
+                                <div class="dialog message">
+                                    Note about the accompanying materials: [% additional_materials | html %]
                                 </div>
                             [% END %]
 
@@ -314,7 +310,7 @@
                                         <div class="modal-body">
                                             <ul>
                                                 <li>
-                                                    Please confirm that the accompanying materials are present: [% additional_materials | html %]
+                                                    Please confirm that the accompanying materials are present: <strong>[% additional_materials | html %]</strong>
                                                 </li>
                                             </ul>
                                         </div>
