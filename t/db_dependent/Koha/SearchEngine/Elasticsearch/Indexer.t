@@ -29,6 +29,13 @@ my $schema = Koha::Database->schema();
 
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
+SKIP: {
+
+    eval { Koha::SearchEngine::Elasticsearch->get_elasticsearch_params; };
+
+    skip 'Elasticsearch configuration not available', 1
+        if $@;
+
 subtest 'create_index() tests' => sub {
     plan tests => 6;
     my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
@@ -71,3 +78,5 @@ subtest 'create_index() tests' => sub {
         'Dropping the index'
     );
 };
+
+}
