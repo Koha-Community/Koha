@@ -135,8 +135,20 @@ if ($op eq "logout") {
     $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
 }
 elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
-    my ($doreturn) = AddReturn( $barcode, $branch );
-    $template->param( returned => $doreturn );
+    my $success        = 0;
+    my $human_required = 0;
+    if ( C4::Context->preference("CircConfirmItemParts") ) {
+        my $item = Koha::Items->find( { barcode => $barcode } );
+        if ( defined($item)
+            && $item->materials )
+        {
+            $human_required = 1;
+        }
+    }
+
+    ($success) = AddReturn( $barcode, $branch )
+      unless $human_required;
+    $template->param( returned => $success );
 }
 elsif ( $patron && ( $op eq 'checkout' ) ) {
     my $impossible  = {};
