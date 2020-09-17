@@ -29,6 +29,13 @@ my $schema = Koha::Database->schema();
 
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
+SKIP: {
+
+    eval { Koha::SearchEngine::Elasticsearch->get_elasticsearch_params; };
+
+    skip 'Elasticsearch configuration not available', 2
+        if $@;
+
 subtest 'create_index() tests' => sub {
     plan tests => 5;
     my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
@@ -71,7 +78,6 @@ subtest 'create_index() tests' => sub {
     );
 };
 
-
 subtest 'update_index() tests' => sub {
     plan tests => 2;
     my $kse = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
@@ -96,3 +102,5 @@ subtest 'update_index() tests' => sub {
     my $bibnumber_array = $indexer->update_index([13],["faked"]);
     is( $bibnumber_array->[0]->{index}->{_id},"13", "We should get a string matching the bibnumber");
 };
+
+}
