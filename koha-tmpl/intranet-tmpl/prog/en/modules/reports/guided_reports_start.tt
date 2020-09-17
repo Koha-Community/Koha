@@ -1002,81 +1002,103 @@
                                         [%- END %]
                                     [%- END -%]
                             [% END %]
-                            [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
-                                <p>
-                                    <div class="btn-group">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Batch operations with [% IF unlimited_total > limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
-                                            [% FOREACH header_ro IN header_row %]
-                                                [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
-                                                    <li class="dropdown-header">Bibliographic records</li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
-                                                    </li>
-                                                [% END %]
-                                                [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
-                                                    [% IF ( batch_biblionumbers ) %]
-                                                        <li role="separator" class="divider"></li>
+
+                            <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
+                                <input type="hidden" name="phase" value="Run this report"/>
+                                <input type="hidden" name="reports" value="[% report_id | html %]"/>
+                                [% FOREACH p IN sql_params %]
+                                    <input type="hidden" name="sql_params" value="[% p | html %]"/>
+                                [% END %]
+                                [% FOREACH n IN param_names %]
+                                    <input type="hidden" name="param_name" value="[% n | html %]"/>
+                                [% END %]
+                                <input type="hidden" name="limit" id="limit" value="20" />
+                            </form> <!-- /#limitselect -->
+
+                            [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) || ( unlimited_total ) > limit %]
+                                <div id="toolbar" class="btn-toolbar">
+                                    [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                        <div class="btn-group">
+                                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                Batch operations with [% IF unlimited_total > limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
+                                                [% FOREACH header_ro IN header_row %]
+                                                    [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
+                                                        <li class="dropdown-header">Bibliographic records</li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
+                                                        </li>
                                                     [% END %]
-                                                    <li class="dropdown-header">Item records</li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
-                                                    </li>
-                                                [% END %]
-                                                [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
-                                                    [% IF ( batch_biblionumbers || batch_itemnumbers ) %]
-                                                        <li role="separator" class="divider"></li>
+                                                    [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
+                                                        [% IF ( batch_biblionumbers ) %]
+                                                            <li role="separator" class="divider"></li>
+                                                        [% END %]
+                                                        <li class="dropdown-header">Item records</li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
+                                                        </li>
                                                     [% END %]
-                                                    <li class="dropdown-header">Patron records</li>
-                                                    <li>
-                                                        <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
-                                                    </li>
+                                                    [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
+                                                        [% IF ( batch_biblionumbers || batch_itemnumbers ) %]
+                                                            <li role="separator" class="divider"></li>
+                                                        [% END %]
+                                                        <li class="dropdown-header">Patron records</li>
+                                                        <li>
+                                                            <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
+                                                        </li>
+                                                    [% END %]
+                                                [% END # /FOREACH header_ro %]
+                                            </ul> <!-- /.dropdown-menu -->
+                                        </div> <!-- /.dropdown -->
+                                    [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+
+                                    [% IF ( unlimited_total > limit ) %]
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                [% IF ( limit ) %]
+                                                    Rows per page: <strong>[% limit | html %]</strong>
+                                                [% ELSE %]
+                                                    Rows per page
                                                 [% END %]
-                                            [% END %]
-                                        </ul> <!-- /.dropdown-menu -->
-                                    </div> <!-- /.dropdown -->
-                                </p>
-                            [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
+                                                [% FOREACH l IN limits %]
+                                                    [% IF l == limit %]
+                                                        <li>
+                                                            <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw fa-check"></i> [% l | html %]</a>
+                                                        </li>
+                                                    [% ELSE %]
+                                                        <li>
+                                                            <a class="limitselect" data-limit="[% l | html %]" href="#"><i class="fa fa-fw"></i> [% l | html %]</a>
+                                                        </li>
+                                                    [% END %]
+                                                [% END %]
+                                            </ul>
+                                        </div>
+                                    [% END # /IF ( unlimited_total > limit ) %]
+                                </div> <!-- /#toolbar.btn-toolbar -->
+                            [% END # /IF batch operations || ( unlimited_total > limit ) %]
+
+                            <div class="pages">
+                                [% pagination_bar | $raw %]
+                            </div>
+
                         [% END # UNLESS ( errors ) %]
                     [% END # IF ( execute ) %]
 
-                    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
-                        <input type="hidden" name="phase" value="Run this report"/>
-                        <input type="hidden" name="reports" value="[% report_id | html %]"/>
-
-                        [% FOREACH p IN sql_params %]
-                            <input type="hidden" name="sql_params" value="[% p | html %]"/>
-                        [% END %]
-                        [% FOREACH n IN param_names %]
-                            <input type="hidden" name="param_name" value="[% n | html %]"/>
-                        [% END %]
-
-                        <label for="limit">Rows per page: </label>
-                        <select name="limit" id="limit">
-                            [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
-                            [% FOREACH l IN limits %]
-                                [% IF l == limit %]
-                                    <option value="[% l | html %]" selected="selected">[% l | html %]</option>
-                                [% ELSE %]
-                                    <option value="[% l | html %]">[% l | html %]</option>
-                                [% END %]
-                            [% END %]
-                        </select>
-                    </form> <!-- /#limitselect -->
-
-                    <div class="pages">[% pagination_bar | $raw %]</div>
                     [% UNLESS ( errors ) %]
                         <table>
                             <tr>
@@ -2022,6 +2044,12 @@
                 var reportid = $(this).data("reportid");
                 previewSql( reportid );
             });
+            $(".limitselect").on("click", function(){
+                var limit = $(this).data("limit");
+                $("#limit").val( limit );
+                $("#limitselect").submit();
+            });
+
         });
 
         function tabsInit( ui, rtable ){
