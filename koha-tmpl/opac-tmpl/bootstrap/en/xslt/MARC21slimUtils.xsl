@@ -377,22 +377,25 @@
         <!-- 440 -->
         <xsl:for-each select="marc:datafield[@tag=440]">
             <a><xsl:attribute name="href"><xsl:value-of select="$searchurl"/>?q=se,phr:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
-            <xsl:call-template name="chopPunctuation">
-                            <xsl:with-param name="chopString">
-                                <xsl:call-template name="subfieldSelect">
-                                    <xsl:with-param name="codes">av</xsl:with-param>
-                                </xsl:call-template>
-                            </xsl:with-param>
+                <xsl:call-template name="chopPunctuation">
+                    <xsl:with-param name="chopString">
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">av</xsl:with-param>
                         </xsl:call-template>
+                    </xsl:with-param>
+                </xsl:call-template>
             </a>
             <xsl:call-template name="part"/>
+            <xsl:if test="marc:subfield[@code='v']">
+                <xsl:text> ; </xsl:text><xsl:value-of select="marc:subfield[@code='v']" />
+            </xsl:if>
             <xsl:choose>
                 <xsl:when test="position()=last()">
                     <xsl:if test="../marc:datafield[@tag=490][@ind1!=1]">
-                        <xsl:text>; </xsl:text>
+                        <span class="separator"> | </span>
                     </xsl:if>
                 </xsl:when>
-                <xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise>
+                <xsl:otherwise><span class="separator"> | </span></xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
 
@@ -402,13 +405,23 @@
                         <xsl:call-template name="chopPunctuation">
                             <xsl:with-param name="chopString">
                                 <xsl:call-template name="subfieldSelect">
-                                    <xsl:with-param name="codes">av</xsl:with-param>
+                                    <xsl:with-param name="codes">a</xsl:with-param>
                                 </xsl:call-template>
                             </xsl:with-param>
                         </xsl:call-template>
             </a>
-                    <xsl:call-template name="part"/>
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+            <xsl:call-template name="part"/>
+            <xsl:if test="marc:subfield[@code='v']">
+                <xsl:text> ; </xsl:text><xsl:value-of select="marc:subfield[@code='v']" />
+            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="position()=last()">
+                    <xsl:if test="../marc:datafield[@tag=490][@ind1=1]">
+                        <span class="separator"> | </span>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:otherwise><span class="separator"> | </span></xsl:otherwise>
+            </xsl:choose>
         </xsl:for-each>
         <!-- 490 Series traced, Ind1 = 1 -->
         <xsl:if test="marc:datafield[@tag=490][@ind1=1]">
@@ -451,7 +464,7 @@
                 </xsl:choose>
                 <xsl:text>: </xsl:text>
                 <xsl:value-of  select="marc:subfield[@code='v']" />
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"> | </span></xsl:otherwise></xsl:choose>
             </xsl:for-each>
 
             <xsl:for-each select="marc:datafield[@tag=830]">
@@ -491,9 +504,10 @@
                         <xsl:call-template name="part"/>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>: </xsl:text>
-                <xsl:value-of  select="marc:subfield[@code='v']" />
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                <xsl:if test="marc:subfield[@code='v']">
+                    <xsl:text> ; </xsl:text><xsl:value-of select="marc:subfield[@code='v']" />
+                </xsl:if>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"> | </span></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </xsl:if>
 
