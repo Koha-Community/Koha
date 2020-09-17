@@ -1,4 +1,4 @@
-[% USE raw %]
+    [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -102,7 +102,7 @@
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                <input type="submit" name= "confirm" value="Return to account summary" class="btn back focus" />
+                                <input type="submit" name= "confirm" value="Return to account summary" class="btn btn-info back focus" />
                             </form>
                         </div> <!-- / .alert -->
                     [% END # / IF ( impossible %]
@@ -330,9 +330,9 @@
                                                                 <input type="hidden" name="op" value="renew" />
                                                                 <input type="hidden" name="confirmed" value="1" />
                                                                 [% UNLESS ( ISSUE.renew ) %]
-                                                                    <input type="submit" value="Renew item"  name="confirm  " class="btn renew" />
+                                                                    <input type="submit" value="Renew item"  name="confirm  " class="btn btn-primary btn-sm renew" />
                                                                 [% ELSE %]
-                                                                    <input type="submit" value="Renew item" class="btn renew" />
+                                                                    <input type="submit" value="Renew item" class="btn btn-primary btn-sm renew" />
                                                                 [% END %]
                                                             [% ELSE %]
                                                                 [% IF ISSUE.renew_error == 'auto_renew' OR ISSUE.renew_error == 'auto_too_soon' %]
@@ -343,7 +343,7 @@
                                                                     <span>No renewals allowed</span>
                                                                 [% END %]
                                                                 [% IF Koha.Preference('SCOAllowCheckin') %]
-                                                                    <input type="submit" value="Check in item" name="confirm" class="btn return" />
+                                                                    <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
                                                                     <input type="hidden" name="op" value="returnbook" />
                                                                     <input type="hidden" name="confirmed" value=""  />
                                                                 [% END %]
