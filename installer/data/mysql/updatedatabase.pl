@@ -22719,7 +22719,7 @@ if( CheckVersion( $DBversion ) ) {
 
     if( !column_exists( 'categories', 'exclude_from_local_holds_priority' ) ) {
         $dbh->do(q{
-            ALTER TABLE `categories` ADD COLUMN `exclude_from_local_holds_priority` tinyint(1) default NULL AFTER `change_password`
+            ALTER TABLE `categories` ADD COLUMN `exclude_from_local_holds_priority` tinyint(1) default NULL AFTER `require_strong_password`
         });
     }
     NewVersion( $DBversion, 19889, "Add exclude_from_local_holds_priority column to items, deleteditems and categories tables");
