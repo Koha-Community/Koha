@@ -1,5 +1,6 @@
 <div id="navmenu">
     <div id="navmenulist">
+        <h5>Serials</h5>
         <ul>
         [% IF ( subscriptionid ) %]
                 <li><a href="serials-collection.pl?subscriptionid=[% subscriptionid | uri %]">Serial collection</a></li>
@@ -34,5 +35,13 @@
                 <li><a href="/cgi-bin/koha/serials/serials-search.pl?mana=1">Search on Mana</a></li>
             [% END %]
         </ul>
+
+        [% IF ( CAN_user_reports ) %]
+            <h5>Reports</h5>
+            <ul>
+                <li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials statistics wizard</a></li>
+            </ul>
+        [% END %]
+
     </div>
 </div>
