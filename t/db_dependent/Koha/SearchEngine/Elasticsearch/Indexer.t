@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -30,7 +30,7 @@ my $schema = Koha::Database->schema();
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
 subtest 'create_index() tests' => sub {
-    plan tests => 5;
+    plan tests => 6;
     my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
     $se->mock( '_read_configuration', sub {
             my ($self, $sub ) = @_;
@@ -63,36 +63,11 @@ subtest 'create_index() tests' => sub {
     my $response = $indexer->update_index([1], $records);
     is( $response->{errors}, 0, "no error on update_index" );
     is( scalar(@{$response->{items}}), 1, "1 item indexed" );
+    is( $response->{items}[0]->{index}->{_id},"1", "We should get a string matching the bibnumber passed in");
 
     is(
         $indexer->drop_index(),
         Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED(),
         'Dropping the index'
     );
-};
-
-
-subtest 'update_index() tests' => sub {
-    plan tests => 2;
-    my $kse = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-    $kse->mock( 'marc_records_to_documents', sub {
-            my ($self, $params ) = @_;
-            return [1];
-    });
-
-    my $indexer;
-    ok(
-        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
-        'Creating a new indexer object'
-    );
-
-    my $searcher = $indexer->get_elasticsearch();
-    my $se = Test::MockModule->new( ref $searcher );
-    $se->mock( 'bulk', sub {
-            my ($self, %params ) = @_;
-            return $params{body};
-    });
-
-    my $bibnumber_array = $indexer->update_index([13],["faked"]);
-    is( $bibnumber_array->[0]->{index}->{_id},"13", "We should get a string matching the bibnumber");
 };
