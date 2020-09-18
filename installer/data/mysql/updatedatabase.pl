@@ -22797,6 +22797,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24807, "Add 'year' type to improve sorting behaviour" );
 }
 
+$DBversion = '20.06.00.039';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'hold_fill_targets', 'reserve_id' ) ) {
+        $dbh->do( "ALTER TABLE hold_fill_targets ADD COLUMN reserve_id int(11) DEFAULT NULL AFTER item_level_request" );
+    }
+
+    NewVersion( $DBversion, 18958, "Add reserve_id to hold_fill_targets");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
