@@ -256,6 +256,16 @@ my @mandatoryfields;
     }
 }
 
+my @unwantedfields;
+{
+    last unless ($op eq 'add');
+    my $fldsreq_sp = C4::Context->preference("OPACSuggestionUnwantedFields");
+    @unwantedfields = sort split(/\s*\,\s*/, $fldsreq_sp);
+    foreach (@unwantedfields) {
+        $template->param( $_."_hidden" => 1);
+    }
+}
+
 $template->param(
     %$suggestion,
     suggestions_loop      => $suggestions_loop,

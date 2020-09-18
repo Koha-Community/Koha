@@ -76,79 +76,94 @@
                                                 <input type="text" id="title" name="title" class="span6" maxlength="255" value="[% title | html %]" />
                                             [% END %]
                                         </li>
-                                        <li>
-                                            [% IF ( author_required ) %]
-                                                <label for="author" class="required">Author:</label>
-                                                <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" required="required" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="author">Author:</label>
-                                                <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" />
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            <div title="Copyright or publication year, for example: 2016">
-                                                [% IF ( copyrightdate_required ) %]
-                                                    <label for="copyrightdate" class="required">Copyright date:</label>
-                                                    <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" required="required" />
-                                                <span class="required">Required</span>
+                                        [% UNLESS ( author_hidden ) %]
+                                            <li>
+                                                    [% IF ( author_required ) %]
+                                                        <label for="author" class="required">Author:</label>
+                                                        <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" required="required" />
+                                                        <span class="required">Required</span>
+                                                    [% ELSE %]
+                                                        <label for="author">Author:</label>
+                                                        <input type="text" id="author" name="author" class="span6" maxlength="80" value="[% author | html %]" />
+                                                    [% END %]
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( copyrightdate_hidden )%]
+                                            <li>
+                                                <div title="Copyright or publication year, for example: 2016">
+                                                    [% IF ( copyrightdate_required ) %]
+                                                        <label for="copyrightdate" class="required">Copyright date:</label>
+                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" required="required" />
+                                                    <span class="required">Required</span>
+                                                    [% ELSE %]
+                                                        <label for="copyrightdate">Copyright date:</label>
+                                                        <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" />
+                                                    [% END %]
+                                                </div>
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( isbn_hidden )%]
+                                            <li>
+                                                [% IF ( isbn_required ) %]
+                                                    <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
+                                                    <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" required="required" />
+                                                    <span class="required">Required</span>
                                                 [% ELSE %]
-                                                    <label for="copyrightdate">Copyright date:</label>
-                                                    <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" value="[% copyrightdate | html %]" />
+                                                    <label for="isbn">Standard number (ISBN, ISSN or other):</label>
+                                                    <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" />
                                                 [% END %]
-                                            </div>
-                                        </li>
-                                        <li>
-                                            [% IF ( isbn_required ) %]
-                                                <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
-                                                <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" required="required" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="isbn">Standard number (ISBN, ISSN or other):</label>
-                                                <input type="text" id="isbn" name="isbn"  maxlength="80" value="[% isbn | html %]" />
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            [% IF ( publishercode_required ) %]
-                                                <label for="publishercode" class="required">Publisher:</label>
-                                                <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" required="required" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="publishercode">Publisher:</label>
-                                                <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" />
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            [% IF ( collectiontitle_required ) %]
-                                                <label for="collectiontitle" class="required">Collection title:</label>
-                                                <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" required="required" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="collectiontitle">Collection title:</label>
-                                                <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" />
-                                            [% END %]
-                                        </li>
-                                        <li>
-                                            [% IF ( place_required ) %]
-                                                <label for="place" class="required">Publication place:</label>
-                                                <input type="text" id="place" name="place" required="required" maxlength="80" value="[% place | html %]" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="place">Publication place:</label>
-                                                <input type="text" id="place" name="place"  maxlength="80" value="[% place | html %]" />
-                                            [% END %]
-                                        </li>
-                                        <li id="opac-suggestion-quantity">
-                                            [% IF ( quantity_required ) %]
-                                                <label for="quantity" class="required">Quantity:</label>
-                                                <input type="text" id="quantity" name="quantity" required="required" maxlength="4" size="4" />
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="quantity">Quantity:</label>
-                                                <input type="text" id="quantity" name="quantity"  maxlength="4" size="4" />
-                                            [% END %]
-                                        </li>
-                                        <li>
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( publishercode_hidden ) %]
+                                            <li>
+                                                [% IF ( publishercode_required ) %]
+                                                    <label for="publishercode" class="required">Publisher:</label>
+                                                    <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" required="required" />
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="publishercode">Publisher:</label>
+                                                    <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" value="[% publishercode | html %]" />
+                                                [% END %]
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( collectiontitle_hidden ) %]
+                                            <li>
+                                                [% IF ( collectiontitle_required ) %]
+                                                    <label for="collectiontitle" class="required">Collection title:</label>
+                                                    <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" required="required" />
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="collectiontitle">Collection title:</label>
+                                                    <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" value="[% collectiontitle | html %]" />
+                                                [% END %]
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( place_hidden ) %]
+                                            <li>
+                                                [% IF ( place_required ) %]
+                                                    <label for="place" class="required">Publication place:</label>
+                                                    <input type="text" id="place" name="place" required="required" maxlength="80" value="[% place | html %]" />
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="place">Publication place:</label>
+                                                    <input type="text" id="place" name="place"  maxlength="80" value="[% place | html %]" />
+                                                [% END %]
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( quantity_hidden ) %]
+                                            <li id="opac-suggestion-quantity">
+                                                [% IF ( quantity_required ) %]
+                                                    <label for="quantity" class="required">Quantity:</label>
+                                                    <input type="text" id="quantity" name="quantity" required="required" maxlength="4" size="4" />
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="quantity">Quantity:</label>
+                                                    <input type="text" id="quantity" name="quantity"  maxlength="4" size="4" />
+                                                [% END %]
+                                            </li>
+                                        [% END %]
+                                        [% UNLESS ( itemtype_hidden )%]
+                                            <li>
                                             [% IF ( itemtype_required ) %]
                                                 <label for="itemtype" class="required">Item type:</label>
                                                 [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
@@ -157,8 +172,10 @@
                                                 <label for="itemtype">Item type:</label>
                                                 [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
                                             [% END %]
-                                        </li>
+                                            </li>
+                                        [% END %]
                                         [% IF branchcode %]
+                                        [% UNLESS ( branch_hidden )%]
                                             <li>
                                                 [% IF ( branchcode_required ) %]
                                                     <label for="branch" class="required">Library:</label>
@@ -174,7 +191,9 @@
                                                 [% END %]
                                             </li>
                                         [% END %]
+                                        [% END %]
                                         [% IF ( patron_reason_loop ) %]
+                                        [% UNLESS ( patronreason_hidden )%]
                                             <li>
                                                 [% IF ( patronreason_required ) %]
                                                     <label for="patronreason" class="required">Reason for suggestion: </label>
@@ -196,16 +215,19 @@
                                                 [% END %]
                                             </li>
                                         [% END %]
-                                        <li>
-                                            [% IF ( note_required ) %]
-                                                <label for="note" class="required">Notes:</label>
-                                                <textarea name="note" id="note" rows="5" cols="40" required="required">[% note | html %]</textarea>
-                                                <span class="required">Required</span>
-                                            [% ELSE %]
-                                                <label for="note">Notes:</label>
-                                                <textarea name="note" id="note" rows="5" cols="40">[% note | html %]</textarea>
-                                            [% END %]
-                                        </li>
+                                        [% END %]
+                                        [% UNLESS ( note_hidden ) %]
+                                            <li>
+                                                [% IF ( note_required ) %]
+                                                    <label for="note" class="required">Notes:</label>
+                                                    <textarea name="note" id="note" rows="5" cols="40" required="required">[% note | html %]</textarea>
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="note">Notes:</label>
+                                                    <textarea name="note" id="note" rows="5" cols="40">[% note | html %]</textarea>
+                                                [% END %]
+                                            </li>
+                                        [% END %]
 
                                         <!--  Add a hidden 'negcap' field -->
                                         <li id="negcap" style="position: absolute; left: -2000px;">
