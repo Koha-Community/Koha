@@ -136,8 +136,8 @@ if ($query->param('WT-itemNumber')){
 	updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
 }
 
+my $itemnumber = $query->param('itemnumber');
 if ( $query->param('reserve_id') ) {
-    my $itemnumber     = $query->param('itemnumber');
     my $borrowernumber = $query->param('borrowernumber');
     my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
@@ -165,7 +165,6 @@ if ( $query->param('reserve_id') ) {
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $biblio->title,
-            itemnumber     => $item->itemnumber,
             itembiblionumber => $biblio->biblionumber,
             iteminfo       => $biblio->author,
             name           => $name,
@@ -179,7 +178,6 @@ my $borrower;
 my $returned = 0;
 my $messages;
 my $issue;
-my $itemnumber;
 my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
 if (
@@ -231,7 +229,6 @@ if ($dotransfer){
 }
 
 if ($canceltransfer){
-    $itemnumber=$query->param('itemnumber');
     DeleteTransfer($itemnumber);
     if($dest eq "ttr"){
         print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");
@@ -361,7 +358,6 @@ if ($barcode) {
 }
 $template->param( inputloop => \@inputloop );
 
-
 my $found    = 0;
 my $waiting  = 0;
 my $reserved = 0;
@@ -373,7 +369,6 @@ if ( $messages->{'WasTransfered'} ) {
     $template->param(
         found          => 1,
         transfer       => 1,
-        itemnumber     => $itemnumber,
     );
 }
 
@@ -382,7 +377,6 @@ if ( $messages->{'NeedsTransfer'} ){
         found          => 1,
         needstransfer  => $messages->{'NeedsTransfer'},
         trigger        => $messages->{'TransferTrigger'},
-        itemnumber     => $itemnumber,
     );
 }
 
@@ -400,7 +394,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         WrongTransfer  => 1,
         TransferWaitingAt => $messages->{'WrongTransfer'},
         WrongTransferItem => $messages->{'WrongTransferItem'},
-        itemnumber => $itemnumber,
     );
 
     my $reserve    = $messages->{'ResFound'};
@@ -436,7 +429,6 @@ if ( $messages->{'ResFound'}) {
             hold_auto_filled => 1,
             print_slip       => C4::Context->preference('HoldsAutoFillPrintSlip'),
             reserve_id       => $nextreservinfo->{reserve_id},
-            itemnumber       => $itemnumber,
         );
 
         if ( $messages->{'transfert'} ) {
@@ -459,7 +451,6 @@ if ( $messages->{'ResFound'}) {
                 transfertodo => $branchCheck ? undef : 1,
                 reserve_id   => $reserve->{reserve_id},
                 reserved     => 1,
-                itemnumber   => $itemnumber,
             );
         }
 
@@ -650,12 +641,13 @@ if ( $barcode ) {
                 $template->param(
                   collectionItemNeedsTransferred => 1,
                   collectionBranch => $collectionBranch,
-                  itemnumber => $itemnumber,
                 );
             }
         }
     }
 }
+
+$template->param( itemnumber => $itemnumber );
 
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
