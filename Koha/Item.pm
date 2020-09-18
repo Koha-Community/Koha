@@ -405,12 +405,12 @@ sub holds {
 =head3 request_transfer
 
   my $transfer = $item->request_transfer(
-      { to => $to_library, reason => $reason, force => 0 } );
+      { to => $to_library, reason => $reason, ignore_limits => 0 } );
 
 Add a transfer request for this item to the given branch for the given reason.
 
 An exception will be thrown if the BranchTransferLimits would prevent the requested
-transfer, unless 'force' is passed to override the limits.
+transfer, unless 'ignore_limits' is passed to override the limits.
 
 Note: At this time, only one active transfer (i.e pending arrival date) may exist
 at a time for any given item. An exception will be thrown should you attempt to
@@ -434,10 +434,10 @@ sub request_transfer {
     my $request;
     Koha::Exceptions::Item::Transfer::Found->throw( transfer => $request )
       if ( $request = $self->get_transfer );
-    # FIXME: Add override functionality to allow for queing transfers
 
     Koha::Exceptions::Item::Transfer::Limit->throw()
-      unless ( $params->{force} || $self->can_be_transferred( { to => $params->{to} } ) );
+      unless ( $params->{ignore_limits}
+        || $self->can_be_transferred( { to => $params->{to} } ) );
 
     my $transfer = Koha::Item::Transfer->new(
         {
@@ -458,9 +458,11 @@ sub request_transfer {
 
 Return the active transfer request or undef
 
-Note: Transfers are retrieved in a LIFO (Last In First Out) order using this method.
+Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
+whereby the most recently sent, but not recieved, transfer will be returned
+if it exists, otherwise the oldest unsatisfied transfer will be returned.
 
-FIXME: Add Tests for LIFO functionality
+FIXME: Add Tests for FIFO functionality
 
 =cut
 
@@ -469,7 +471,7 @@ sub get_transfer {
     my $transfer_rs = $self->_result->branchtransfers->search(
         { datearrived => undef },
         {
-            order_by => [ { -asc => 'datesent' }, { -asc => 'daterequested' } ],
+            order_by => [ { -desc => 'datesent' }, { -asc => 'daterequested' } ],
             rows     => 1
         }
     )->first;
