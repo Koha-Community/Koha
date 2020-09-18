@@ -192,24 +192,28 @@
                                     [% END %]
                                     [% FOREACH errmsgloo IN errmsgloop %]
                                         [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
-                                            <p class="problem">
+                                            <p class="problem ret_nflupdate">
                                                 Not for loan status updated.
                                                 <br />Old value:
                                                 [% IF errmsgloo.NotForLoanStatusUpdated.from %]
-                                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.from ) | html %].
+                                                    <span class="ret_updatedfrom">
+                                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.from ) | html %].
+                                                    </span>
                                                 [% ELSE %]
                                                     Available for loan.
                                                 [% END %]
                                                 <br />New value:
                                                 [% IF errmsgloo.NotForLoanStatusUpdated.to %]
-                                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.to ) | html %].
+                                                    <span class="ret_updatedto">
+                                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => errmsgloo.NotForLoanStatusUpdated.to ) | html %].
+                                                    </span>
                                                 [% ELSE %]
                                                     Available for loan.
                                                 [% END %]
                                             </p>
                                         [% END %]
                                         [% IF ( errmsgloo.ItemLocationUpdated ) %]
-                                             <p class="problem">
+                                             <p class="problem ret_location_update">
                                                  Item shelving location updated.
                                                 <br />Old value:
                                                 [% IF errmsgloo.ItemLocationUpdated.from %]
@@ -240,30 +244,30 @@
                                              </p>
                                         [% END %]
                                         [% IF ( errmsgloo.badbarcode ) %]
-                                            <p class="problem">No item with barcode: [% errmsgloo.msg | html %]</p>
+                                            <p class="problem ret_badbarcode">No item with barcode: [% errmsgloo.msg | html %]</p>
                                         [% END %]
                                         [% IF ( errmsgloo.ispermanent ) %]
-                                            <p class="problem">Please return item to: [% Branches.GetName( errmsgloo.msg ) | html %]</p>
+                                            <p class="problem ret_ispermenant">Please return item to: [% Branches.GetName( errmsgloo.msg ) | html %]</p>
                                         [% END %]
                                         [% IF ( errmsgloo.notissued ) %]
-                                            <p class="problem">Not checked out.</p>
+                                            <p class="problem ret_notissued">Not checked out.</p>
                                         [% END %]
                                         [% IF ( errmsgloo.localuse) %]
-                                            <p class="problem">Local use recorded</p>
+                                            <p class="problem ret_localuse">Local use recorded</p>
                                         [% END %]
                                         [% IF ( errmsgloo.waslost ) %]
                                             [% IF Koha.Preference('BlockReturnOfLostItems') %]
-                                                <p class="problem">Item is lost, cannot be checked in.</p>
+                                                <p class="problem ret_blocked">Item is lost, cannot be checked in.</p>
                                             [% ELSE %]
-                                                <p class="problem">Item was lost, now found.</p>
+                                                <p class="problem ret_checkedin">Item was lost, now found.</p>
                                             [% END %]
                                             [% IF LostItemFeeRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
-                                                <p class="problem">A refund has been applied to the borrowing patron's account.</p>
+                                                <p class="problem ret_refund">A refund has been applied to the borrowing patron's account.</p>
                                             [% ELSIF Koha.Preference('BlockReturnOfLostItems') %]
                                                <h5>Cannot check in</h5>
                                                <p><strong>NOT CHECKED IN</strong></p>
                                             [% ELSE %]
-                                                <p class="problem">Any lost item fees for this item will remain on the patron's account.</p>
+                                                <p class="problem ret_feeremains">Any lost item fees for this item will remain on the patron's account.</p>
                                             [% END %]
                                         [% END %]
                                         [% IF ( errmsgloo.withdrawn ) %]
@@ -271,19 +275,19 @@
                                                <h5>Cannot check in</h5>
                                                <p><strong>NOT CHECKED IN</strong></p>
                                             [% END %]
-                                           <p class="problem">Item is withdrawn.</p>
+                                           <p class="problem ret_withdrawn">Item is withdrawn.</p>
                                         [% END %]
                                         [% IF ( errmsgloo.debarred ) %]
-                                            <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber | uri %]">[% errmsgloo.debarname | html %]([% errmsgloo.debarcardnumber | html %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
+                                            <p class="problem ret_debarred"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber | uri %]">[% errmsgloo.debarname | html %]([% errmsgloo.debarcardnumber | html %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
                                         [% END %]
                                         [% IF ( errmsgloo.prevdebarred ) %]
-                                            <p class="problem"><strong>Reminder: </strong>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %].</p>
+                                            <p class="problem ret_prevdebarred"><strong>Reminder: </strong>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %].</p>
                                         [% END %]
                                         [% IF ( errmsgloo.foreverdebarred ) %]
-                                            <p class="problem"><strong>Reminder: </strong>Patron has an indefinite restriction.</p>
+                                            <p class="problem ret_foreverdebarred"><strong>Reminder: </strong>Patron has an indefinite restriction.</p>
                                         [% END %]
                                         [% IF errmsgloo.data_corrupted %]
-                                            <p class="problem">The item has not been checked in due to a configuration issue in your system. You must ask an administrator to take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a> and search for the "data problems" section</p>
+                                            <p class="problem ret_datacorrupt">The item has not been checked in due to a configuration issue in your system. You must ask an administrator to take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a> and search for the "data problems" section</p>
                                         [% END %]
                                     [% END # /FOREACH errmsgloo %]
                                 </div> <!-- /.dialog.dialog-alert -->
@@ -295,7 +299,7 @@
                                 [% ELSE %]
                                     <div class="dialog message">
                                 [% END %]
-                                        <p class="problem">[% checkinmsg | html_line_break %]</p>
+                                        <p class="problem ret_checkinmsg">[% checkinmsg | html_line_break %]</p>
                                     </div>
                             [% END # /IF checkinmsg %]
                         [% END # /BLOCK all_checkin_messages %]
