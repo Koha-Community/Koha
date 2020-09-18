@@ -1184,23 +1184,72 @@ subtest 'store' => sub {
 };
 
 subtest 'get_transfer' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     my $transfer = $new_item_1->get_transfer();
     is( $transfer, undef, 'Koha::Item->get_transfer should return undef if the item is not in transit' );
 
     my $library_to = $builder->build( { source => 'Branch' } );
 
-    C4::Circulation::transferbook({
-        from_branch => $new_item_1->holdingbranch,
-        to_branch => $library_to->{branchcode},
-        barcode => $new_item_1->barcode,
-    });
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber    => $new_item_1->itemnumber,
+                frombranch    => $new_item_1->holdingbranch,
+                tobranch      => $library_to->{branchcode},
+                reason        => 'Manual',
+                datesent      => undef,
+                datearrived   => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
 
     $transfer = $new_item_1->get_transfer();
     is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfers object' );
 
-    is( $transfer->itemnumber, $new_item_1->itemnumber, 'Koha::Item->get_transfer should return a valid Koha::Item::Transfers object' );
+    my $transfer_2 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber  => $new_item_1->itemnumber,
+                frombranch  => $new_item_1->holdingbranch,
+                tobranch    => $library_to->{branchcode},
+                reason      => 'Manual',
+                datesent    => undef,
+                datearrived => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
+
+    $transfer = $new_item_1->get_transfer();
+    is( $transfer->branchtransfer_id, $transfer_1->branchtransfer_id, 'Koha::Item->get_transfer returns the oldest transfer request');
+
+    $transfer_2->datesent(\'NOW()')->store;
+    $transfer = $new_item_1->get_transfer();
+    is( $transfer->branchtransfer_id, $transfer_2->branchtransfer_id, 'Koha::Item->get_transfer returns the in_transit transfer');
+
+    my $transfer_3 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber  => $new_item_1->itemnumber,
+                frombranch  => $new_item_1->holdingbranch,
+                tobranch    => $library_to->{branchcode},
+                reason      => 'Manual',
+                datesent    => undef,
+                datearrived => undef,
+                daterequested => \'NOW()'
+            }
+        }
+    );
+
+    $transfer_2->datearrived(\'NOW()')->store;
+    $transfer = $new_item_1->get_transfer();
+    is( $transfer->branchtransfer_id, $transfer_1->branchtransfer_id, 'Koha::Item->get_transfer returns the next queued transfer');
+    is( $transfer->itemnumber, $new_item_1->itemnumber, 'Koha::Item->get_transfer returns the right items transfer' );
 };
 
 subtest 'holds' => sub {

@@ -462,8 +462,6 @@ Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
 whereby the most recently sent, but not recieved, transfer will be returned
 if it exists, otherwise the oldest unsatisfied transfer will be returned.
 
-FIXME: Add Tests for FIFO functionality
-
 =cut
 
 sub get_transfer {
