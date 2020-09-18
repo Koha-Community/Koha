@@ -30,12 +30,6 @@
                     <div id="booleansearch" class="maincontent">
                         <fieldset>
                             <legend>Search for:</legend>
-                            [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
-                                <span id="weight_search">
-                                    <input type="checkbox" name="weight_search" checked>
-                                    <label for="weight_search">Apply field weightings to search</label>
-                                </span>
-                            [% END %]
                             [% IF ( expanded_options ) %]
                                 <div class="advanced-search-terms extended">
                             [% ELSE %]
@@ -135,6 +129,18 @@
                                         [% END %]
                                     </div> <!-- /.search-term-row -->
                                 [% END # FOREACH search_box %]
+                                [% IF ( expanded_options ) %]
+                                    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+                                        <div id="weight_search">
+                                            <label>
+                                                <input type="checkbox" name="weight_search" checked="checked">
+                                                Apply field weights to search
+                                            </label>
+                                        </div>
+                                    [% END %]
+                                [% ELSE %]
+                                    <input type="hidden" name="weight_search" value="1" />
+                                [% END %]
                             </div> <!-- /.search-terms -->
                         </fieldset>
                     </div> <!-- /#booleansearch -->

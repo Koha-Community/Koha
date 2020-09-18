@@ -93,16 +93,6 @@
 <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset id="searchterms">
     <legend>Search for </legend>
-    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
-        [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
-            <input type="checkbox" name="whole_record">
-            <label for="whole_record">Search entire MARC record</label>
-        [% END %]
-        <span id="weight_search">
-            <input type="checkbox" name="weight_search" checked>
-            <label for="weight_search">Apply field weightings to search</label>
-        </span>
-    [% END %]
     [% FOREACH search_box IN search_boxes_loop %]
         [% IF ( search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]
 			[% IF ( expanded_options ) %]
@@ -125,6 +115,20 @@
               [% END %]
             [% END %]
 		</div>
+    [% END %]
+    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+        [% IF ( expanded_options ) %]
+            <p>
+                [% IF Koha.Preference('ElasticsearchMARCFormat') == 'ARRAY' %]
+                    <label><input type="checkbox" name="whole_record" /> Search entire MARC record</label>
+                [% END %]
+                <span id="weight_search">
+                    <label><input type="checkbox" name="weight_search" checked="checked" /> Apply field weights to search</label>
+                </span>
+            <p>
+        [% ELSE %]
+            <input type="hidden" name="weight_search" value="1" />
+        [% END %]
     [% END %]
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
