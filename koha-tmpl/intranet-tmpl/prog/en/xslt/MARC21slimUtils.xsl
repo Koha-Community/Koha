@@ -452,7 +452,7 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="position()=last()">
-                    <xsl:if test="../marc:datafield[@tag=490][@ind1!=1]">
+                    <xsl:if test="../marc:datafield[@tag=490][@ind1=1]">
                         <span class="separator"> | </span>
                     </xsl:if>
                 </xsl:when>
