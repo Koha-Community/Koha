@@ -459,7 +459,7 @@ sub request_transfer {
 Return the active transfer request or undef
 
 Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
-whereby the most recently sent, but not recieved, transfer will be returned
+whereby the most recently sent, but not received, transfer will be returned
 if it exists, otherwise the oldest unsatisfied transfer will be returned.
 
 =cut
