@@ -2093,6 +2093,7 @@ params:
   budget
   orderstatus (note that orderstatus '' will retrieve orders
                of any status except cancelled)
+  is_standing
   managing_library
   biblionumber
   get_canceled_order (if set to a true value, cancelled orders will
@@ -2116,6 +2117,7 @@ returns:
                 'quantityreceived' => undef,
                 'title'            => 'The Adventures of Huckleberry Finn',
                 'managing_library' => 'CPL'
+                'is_standing'      => '1'
             }
 
 =cut
@@ -2136,6 +2138,7 @@ sub GetHistory {
     my $basketgroupname = $params{basketgroupname};
     my $budget = $params{budget};
     my $orderstatus = $params{orderstatus};
+    my $is_standing = $params{is_standing};
     my $biblionumber = $params{biblionumber};
     my $get_canceled_order = $params{get_canceled_order} || 0;
     my $ordernumber = $params{ordernumber};
@@ -2176,6 +2179,7 @@ sub GetHistory {
             aqbasket.basketname,
             aqbasket.basketgroupid,
             aqbasket.authorisedby,
+            aqbasket.is_standing,
             concat( borrowers.firstname,' ',borrowers.surname) AS authorisedbyname,
             branch as managing_library,
             aqbasketgroups.name as groupname,
@@ -2267,6 +2271,11 @@ sub GetHistory {
     if ( defined $orderstatus and $orderstatus ne '') {
         $query .= " AND aqorders.orderstatus = ? ";
         push @query_params, "$orderstatus";
+    }
+
+    if ( $is_standing ) {
+        $query .= " AND is_standing = ? ";
+        push @query_params, $is_standing;
     }
 
     if ($basket) {

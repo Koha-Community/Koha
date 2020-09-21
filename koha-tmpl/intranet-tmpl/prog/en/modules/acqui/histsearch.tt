@@ -67,6 +67,7 @@
                             [% CASE 'complete' %]Received
                             [% CASE 'cancelled' %]Cancelled
                         [% END %]
+                        [% IF order.is_standing %](standing order)[% END %]
                     </td>
                     <td><a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketname | html %] ([% order.basketno | html %])</a></td>
                     <td>[% order.authorisedbyname | html %]</td>

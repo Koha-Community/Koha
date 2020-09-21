@@ -75,6 +75,12 @@
               <option value="cancelled">Cancelled</option>
             [% END %]
         </select>
+        [% IF filters.is_standing %]
+            <input type="checkbox" name="is_standing" id="is_standing" value="1" checked="checked" />
+        [% ELSE %]
+            <input type="checkbox" name="is_standing" id="is_standing" value="1" />
+        [% END %]
+         <label class="yesno" for="search_children_too">Standing order</label>
     </li>
     <li>
         <label for="fund">Fund: </label>

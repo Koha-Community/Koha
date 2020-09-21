@@ -85,6 +85,7 @@ my $filters = {
     booksellerinvoicenumber => scalar $input->param('booksellerinvoicenumber'),
     budget                  => scalar $input->param('budget'),
     orderstatus             => scalar $input->param('orderstatus'),
+    is_standing             => scalar $input->param('is_standing'),
     ordernumber             => scalar $input->param('ordernumber'),
     search_children_too     => scalar $input->param('search_children_too'),
     created_by              => [ $input->multi_param('created_by') ],
