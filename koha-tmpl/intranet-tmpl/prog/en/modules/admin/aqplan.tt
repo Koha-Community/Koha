@@ -139,8 +139,8 @@
 
         <td class="actions">
              [% UNLESS ( budget_line.budget_lock ) %]
-                    <input type="button" class="auto_fill_row" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
-                    <input type="button" class="clear_fields" data-budget-id="[% budget_line.budget_id | html %]" value="Clear">
+                    <input type="button" class="auto_fill_row btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
+                    <input type="button" class="clear_fields btn btn-default btn-xs" data-budget-id="[% budget_line.budget_id | html %]" value="Clear">
             [% ELSE %]
              <div style="color:red;">not owned</div>
             [% END %]
