@@ -5,6 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Biblio %]
+[% USE Price %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
@@ -717,6 +718,7 @@ Note that permanent location is a code, and location may be an authval.
           <th class="title-string">Receive date</th>
           <th>Status</th>
           <th>Quantity</th>
+          <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
           <th>Internal note</th>
           <th>Subscription</th>
           <th>Subscription callnumber</th>
@@ -769,6 +771,7 @@ Note that permanent location is a code, and location may be an authval.
               [% END %]
             </td>
             <td>[% order.quantity | html %]</td>
+            <td>[% IF ( order.unitprice_tax_included > 0 ) %][% order.unitprice_tax_included | $Price %][% ELSE %][% order.ecost_tax_included | $Price %][% END %]
             <td>[% order.order_internalnote | html %]</td>
             <td>
                 [% IF order.subscriptionid %]
