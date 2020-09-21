@@ -1310,65 +1310,67 @@
         <!-- 785 -->
         <xsl:if test="marc:datafield[@tag=785]">
             <xsl:for-each select="marc:datafield[@tag=785]">
-                <span class="results_summary succeeding_entry">
-                    <xsl:choose>
-                        <xsl:when test="@ind2=0">
-                            <span class="label">Continued by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=1">
-                            <span class="label">Continued in part by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=2">
-                            <span class="label">Superseded by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=3">
-                            <span class="label">Superseded in part by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=4">
-                            <span class="label">Absorbed by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=5">
-                            <span class="label">Absorbed in part by:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=6">
-                            <span class="label">Split into .. and ...:</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=7">
-                            <span class="label">Merged with ... to form ...</span>
-                        </xsl:when>
-                        <xsl:when test="@ind2=8">
-                            <span class="label">Changed back to:</span>
-                        </xsl:when>
-                    </xsl:choose>
-                    <xsl:text> </xsl:text>
+                <xsl:if test="@ind1=0">
+                    <span class="results_summary succeeding_entry">
+                        <xsl:choose>
+                            <xsl:when test="@ind2=0">
+                                <span class="label">Continued by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=1">
+                                <span class="label">Continued in part by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=2">
+                                <span class="label">Superseded by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=3">
+                                <span class="label">Superseded in part by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=4">
+                                <span class="label">Absorbed by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=5">
+                                <span class="label">Absorbed in part by:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=6">
+                                <span class="label">Split into .. and ...:</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=7">
+                                <span class="label">Merged with ... to form ...</span>
+                            </xsl:when>
+                            <xsl:when test="@ind2=8">
+                                <span class="label">Changed back to:</span>
+                            </xsl:when>
+                        </xsl:choose>
+                        <xsl:text> </xsl:text>
 
-                    <xsl:if test="marc:subfield[@code='i']">
-                        <span class="785_rel_info">
-                            <xsl:value-of select="marc:subfield[@code='i']"/>
-                            <xsl:text> </xsl:text>
-                        </span>
-                    </xsl:if>
+                        <xsl:if test="marc:subfield[@code='i']">
+                            <span class="785_rel_info">
+                                <xsl:value-of select="marc:subfield[@code='i']"/>
+                                <xsl:text> </xsl:text>
+                            </span>
+                        </xsl:if>
 
-                    <xsl:variable name="f785">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">a_t</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:variable>
+                        <xsl:variable name="f785">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">a_t</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:variable>
 
-                    <xsl:choose>
-                        <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
-                                <xsl:value-of select="$f785"/>
-                            </a>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f785, '()', ''), true())"/></xsl:attribute>
-                                <xsl:value-of select="$f785"/>
-                            </a>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                        <xsl:choose>
+                            <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                                <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                                    <xsl:value-of select="$f785"/>
+                                </a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f785, '()', ''), true())"/></xsl:attribute>
+                                    <xsl:value-of select="$f785"/>
+                                </a>
+                            </xsl:otherwise>
+                        </xsl:choose>
 
-                </span>
+                    </span>
+                </xsl:if>
             </xsl:for-each>
         </xsl:if>
 
