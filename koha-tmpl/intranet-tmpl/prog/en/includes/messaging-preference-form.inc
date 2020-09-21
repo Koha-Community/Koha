@@ -19,7 +19,12 @@
           [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming events
           [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
           [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
-          [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
+          [% ELSIF ( messaging_preference.Item_Checkout ) %]
+            [% IF Koha.Preference( 'RenewalSendNotice' ) %]
+                Item checkout and renewal
+            [% ELSE %]
+                Item checkout
+            [% END %]
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
