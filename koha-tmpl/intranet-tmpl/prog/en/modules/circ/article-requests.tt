@@ -2,11 +2,13 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% USE Asset %]
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Article requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style> p { margin-top: 0; } [id^="article-menu-"] { display: none; } [id^="article-menu-"]:before { content: "|"; }</style>
+<style>p { margin-top: 0; } [id^="article-menu-"] { display: none; } [id^="article-menu-"]:before { content: "|"; } .starthidden { display:none; }</style>
 </head>
 
 [% BLOCK actions %]
@@ -62,7 +64,7 @@
         <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>
     </div>
 
-    <div class="main container-fluid">
+    <div class="main container-fluid starthidden">
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
@@ -125,12 +127,6 @@
                             </thead>
 
                              <tbody>
-                                <tr class="ar-pending-none">
-                                    <td colspan="12">
-                                        There are no pending article requests at this time.
-                                    </td>
-                                </tr>
-
                                 [% FOREACH ar IN article_requests_pending %]
                                     <tr class="ar-row ar-pending">
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
@@ -232,12 +228,6 @@
                             </thead>
 
                              <tbody>
-                                <tr class="ar-processing-none">
-                                    <td colspan="12">
-                                        There are no article requests in processing at this time.
-                                    </td>
-                                </tr>
-
                                 [% FOREACH ar IN article_requests_processing %]
                                     <tr class="ar-row ar-processing">
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
@@ -320,43 +310,35 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
     <script>
-        var active_table = "#article-requests-pending";
-        var last_cancel_reason;
+        var active_tab = "#article-requests-pending";
+        var last_cancel_reason, pending_datatable, processing_datatable, active_datatable;
         $(document).ready(function() {
             $('#article-request-tabs').tabs({
                 activate: function( activate_event, activate_ui ) {
-                    active_table = activate_ui.newPanel.selector;
-                    activateBatchActions( active_table );
-                },
-                create: function( create_event, create_ui ){
-                    active_table = create_ui.panel.selector;
+                    active_tab = activate_ui.newPanel.selector;
+                    if( active_tab == '#article-requests-pending' )
+                        active_datatable = pending_datatable;
+                    else active_datatable = processing_datatable;
+                    activateBatchActions( active_tab );
                 },
             });
 
-            activateBatchActions( active_table );
 
-            [% IF article_requests_pending.count %]
-                $(".ar-pending-none").hide();
-            [% END %]
-
-            [% IF article_requests_processing.count %]
-                $(".ar-processing-none").hide();
-            [% END %]
-
-            $( "input:checkbox", active_table ).on("change", function(){
-                activateBatchActions( active_table );
+            $( "input:checkbox, #article-request-tabs" ).on("change", function(){
+                activateBatchActions( active_tab );
             });
 
             $(".SelectAll").on("click", function(e) {
                 e.preventDefault();
-                $( active_table + " input[type='checkbox']").prop('checked', true);
-                activateBatchActions( active_table );
+                $( active_tab + " input[type='checkbox']").prop('checked', true);
+                activateBatchActions( active_tab );
             });
             $(".ClearAll").on("click", function(e) {
                 e.preventDefault();
-                $( active_table + " input[type='checkbox']").prop('checked', false);
-                activateBatchActions( active_table );
+                $( active_tab + " input[type='checkbox']").prop('checked', false);
+                activateBatchActions( active_tab );
             });
             $("a.ar-actions").on('click', function(e) {
                 // Hide menu option ?
@@ -364,28 +346,42 @@
                     $('a.ar-process-request').hide();
                 else $('a.ar-process-request').show();
             });
+
+            pending_datatable = $("#article-requests-pending-table").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                ],
+            }));
+            active_datatable = pending_datatable;
+            processing_datatable = $("#article-requests-processing-table").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [0, -1], "bSortable": false, "bSearchable": false },
+                ],
+            }));
+            activateBatchActions( active_tab );
+            $(".starthidden").show();
         });
 
-        function activateBatchActions( active_table ){
+        function activateBatchActions( active_tab ){
             // Check to see whether batch menu should be shown based on state of checkboxes
-            if ( $( "input:checkbox", active_table ).length > 0 ) {
+            if ( $( "input:checkbox", active_tab ).length > 0 ) {
                 // There are rows with checkboxes
-                $( "[class$='_table_controls']", active_table ).show();
-                if ( $( "input:checkbox:checked", active_table ).length > 0 ) {
-                    $( "[id^='article-menu-']", active_table ).css("display","inline-block");
+                $( "[class$='_table_controls']", active_tab ).show();
+                if ( $( "input:checkbox:checked", active_tab ).length > 0 ) {
+                    $( "[id^='article-menu-']", active_tab ).css("display","inline-block");
                 } else {
-                    $( "[id^='article-menu-']", active_table ).hide();
+                    $( "[id^='article-menu-']", active_tab ).hide();
                 }
             } else {
                 // All rows have been removed
-                $("[class$='_table_controls']", active_table ).hide();
+                $("[class$='_table_controls']", active_tab ).hide();
             }
         }
 
         function HandleMulti( fnHandler, id, a ) {
             last_cancel_reason = undefined;
             if( id !== 0 ) { fnHandler( id, a ); return; }
-            $( active_table + " input[type='checkbox']:checked").each(function() {
+            $( active_tab + " input[type='checkbox']:checked").each(function() {
                 fnHandler( $(this).attr('reqid'), $(this).closest('tr').find('td.ar-actions div a') );
             });
         }
@@ -413,20 +409,20 @@
                     notes: last_cancel_reason
                 },
                 success: function( data ) {
-                    a.closest('tr').remove();
+                    active_datatable.row( a.closest('tr') ).remove().draw();
                     UpdateTabCounts();
-                    activateBatchActions( active_table );
+                    activateBatchActions( active_tab );
                 },
                 dataType: 'json'
             });
         }
 
         function Process( id, a ) {
-            var table_row = a.closest('tr').clone();
+            var table_row = a.closest('tr');
             table_row.find('.ar-process-request').remove();
             table_row.find('input[type="checkbox"]').prop('checked', false);
 
-            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" class="spinner"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -435,11 +431,11 @@
                     id: id,
                 },
                 success: function( data ) {
-                    a.closest('tr').remove();
-                    $("#article-requests-processing-table").append( table_row );
-                    $("#article-requests-processing-table .ar-processing-none").hide();
+                    $("img.spinner").remove();
+                    pending_datatable.row( table_row ).remove().draw();
+                    processing_datatable.row.add( table_row ).draw();
                     UpdateTabCounts();
-                    activateBatchActions( active_table );
+                    activateBatchActions( active_tab );
                 },
                 dataType: 'json'
             });
@@ -455,22 +451,17 @@
                     id: id,
                 },
                 success: function( data ) {
-                    a.closest('tr').remove();
+                    active_datatable.row( a.closest('tr') ).remove().draw();
                     UpdateTabCounts();
-                    activateBatchActions( active_table );
+                    activateBatchActions( active_tab );
                 },
                 dataType: 'json'
             });
         }
 
         function UpdateTabCounts() {
-            var pending_count = $('#article-requests-pending-table tbody tr.ar-row').length;
-            $("#ar_pending_count").html( pending_count );
-            if ( pending_count == 0 ) $(".ar-pending-none").show();
-
-            var processing_count = $('#article-requests-processing-table tbody tr.ar-row').length;
-            $("#ar_processing_count").html( processing_count );
-            if ( processing_count == 0 ) $(".ar-processing-none").show();
+            $("#ar_pending_count").html( pending_datatable.rows().count() );
+            $("#ar_processing_count").html( processing_datatable.rows().count() );
         }
     </script>
 [% END %]
