@@ -364,14 +364,18 @@ function showColumn(num){
 }
 
 function showAllColumns(){
-    $("#selections").checkCheckboxes();
+    $("#selections").find("input:checkbox").each(function () {
+        $(this).prop("checked", true);
+    });
     $("#selections span").addClass("selected");
     $("#plan td:nth-child(2),#plan tr th:nth-child(2)").nextAll().show();
     $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 function hideAllColumns(){
     var allCols = $("#plan th").length;
-    $("#selections").unCheckCheckboxes();
+    $("#selections").find("input:checkbox").each(function () {
+        $(this).prop("checked", false);
+    });
     $("#selections span").removeClass("selected");
     $("#plan td:nth-child(2),#plan th:nth-child(2)").nextUntil("th:nth-child("+(allCols-1)+"),td:nth-child("+(allCols-1)+")").hide(); // hide all but the last two columns
     $("#hideall").prop("checked", true).parent().addClass("selected");
