@@ -506,7 +506,7 @@ subtest 'request_transfer' => sub {
     'Koha::Exceptions::Item::Transfer::Limit',
       'Exception thrown if transfer is prevented by limits';
 
-    my $forced_transfer = $item->request_transfer( { to => $library1, reason => 'Manual', force => 1 } );
+    my $forced_transfer = $item->request_transfer( { to => $library1, reason => 'Manual', ignore_limits => 1 } );
     is( ref($forced_transfer), 'Koha::Item::Transfer',
         'Koha::Item->request_transfer allowed when forced'
     );
