@@ -53,127 +53,62 @@ if ( $email_add ) {
         session_id => scalar $query->cookie('CGISESSID'),
         token  => scalar $query->param('csrf_token'),
     });
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $user_email = $patron->first_valid_email_address
-    || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $email_replyto = $patron->firstname . " " . $patron->surname . " <$user_email>";
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $user_email = $patron->first_valid_email_address;
+
     my $comment    = $query->param('comment');
 
-    # Since we are already logged in, no need to check credentials again
-    # when loading a second template.
-    my $template2 = C4::Templates::gettemplate(
-        'opac-sendbasket.tt', 'opac', $query,
-    );
-
     my @bibs = split( /\//, $bib_list );
-    my @results;
     my $iso2709;
-    my $marcflavour = C4::Context->preference('marcflavour');
-    foreach my $biblionumber (@bibs) {
-        $template2->param( biblionumber => $biblionumber );
-
-        my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
-        my $dat              = $biblio->unblessed;
-        my $record = $biblio->metadata->record(
-            {
-                embed_items => 1,
-                opac        => 1,
-                patron      => $patron,
-            }
-        );
-        my $marcauthorsarray = $biblio->get_marc_contributors;
-        my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-
-        my $items = $biblio->items->search_ordered->filter_by_visible_in_opac({ patron => $patron });
-
-        my $hasauthors = 0;
-        if($dat->{'author'} || @$marcauthorsarray) {
-          $hasauthors = 1;
-        }
-
-        $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
-        $dat->{MARCAUTHORS}    = $marcauthorsarray;
-        $dat->{HASAUTHORS}     = $hasauthors;
-        $dat->{'biblionumber'} = $biblionumber;
-        $dat->{ITEM_RESULTS}   = $items;
-        my ( $host, $relatedparts ) = $biblio->get_marc_host;
-        $dat->{HOSTITEMENTRIES} = $host;
-        $dat->{RELATEDPARTS} = $relatedparts;
-
-        $iso2709 .= $record->as_usmarc();
-
-        push( @results, $dat );
-    }
-
-    my $resultsarray = \@results;
-    
-    $template2->param(
-        BIBLIO_RESULTS => $resultsarray,
-        comment        => $comment,
-        firstname      => $patron->firstname,
-        surname        => $patron->surname,
-    );
-
-    # Getting template result
-    my $template_res = $template2->output();
-    my $body;
-
-    # Analysing information and getting mail properties
-    my $subject;
-    if ( $template_res =~ /\<SUBJECT\>(?<subject>.*)\<END_SUBJECT\>/s ) {
-        $subject = $+{subject};
-        $subject =~ s|\n?(.*)\n?|$1|;
-    }
-    else {
-        $subject = "no subject";
-    }
-
-    my $email_header = "";
-    if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
-        $email_header = $1;
-        $email_header =~ s|\n?(.*)\n?|$1|;
-    }
-
-    if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
-        $body = $1;
-        $body =~ s|\n?(.*)\n?|$1|;
-    }
-
-    my $THE_body = <<END_OF_BODY;
-$email_header
-$body
-END_OF_BODY
+    foreach my $bib ( @bibs ) {
+        my $biblio = Koha::Biblios->find( $bib ) or next;
+        $iso2709 .= $biblio->metadata->record->as_usmarc();
+    };
 
     if ( !defined $iso2709 ) {
         carp "Error sending mail: empty basket";
         $template->param( error => 1 );
-    }
-    else {
-        try {
-            # if you want to use the KohaAdmin address as from, that is the default no need to set it
-            my $email = Koha::Email->create({
-                to       => $email_add,
-                reply_to => $email_replyto,
-                subject  => $subject,
-            });
-            $email->header( 'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress') );
-            $email->text_body( $THE_body );
-            $email->attach(
-                Encode::encode( "UTF-8", $iso2709 ),
-                content_type => 'application/octet-stream',
-                name         => 'basket.iso2709',
-                disposition  => 'attachment',
-            );
-            my $library = $patron->library;
-            $email->transport( $library->smtp_server->transport );
-            $email->send_or_die;
-            $template->param( SENT => "1" );
-        }
-        catch {
-            carp "Error sending mail: $_";
-            $template->param( error => 1 );
+    } elsif ( !defined $user_email or $user_email eq '' ) {
+        carp "Error sending mail: sender's email address is invalid";
+        $template->param( error => 1 );
+    } else {
+        my %loops = (
+            biblio => \@bibs,
+        );
+
+        my %substitute = (
+            comment => $comment,
+        );
+
+        my $letter = C4::Letters::GetPreparedLetter(
+            module => 'catalogue',
+            letter_code => 'CART',
+            lang => $patron->lang,
+            tables => {
+                borrowers => $borrowernumber,
+            },
+            message_transport_type => 'email',
+            loops => \%loops,
+            substitute => \%substitute,
+        );
+
+        my $attachment = {
+            filename => 'basket.iso2709',
+            type => 'application/octet-stream',
+            content => Encode::encode("UTF-8", $iso2709),
         };
+
+        C4::Letters::EnqueueLetter({
+            letter => $letter,
+            message_transport_type => 'email',
+            borrowernumber => $patron->borrowernumber,
+            to_address => $email_add,
+            reply_address => $user_email,
+            attachments => [$attachment],
+        });
+
+        $template->param( SENT => 1 );
     }
 
     $template->param( email_add => $email_add );
