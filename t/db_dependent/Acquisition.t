@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 79;
+use Test::More tests => 80;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -890,6 +890,47 @@ subtest 'GetHistory - managing library' => sub {
 
     my $history = GetHistory(managing_library => 'CPL');
     is( scalar( @$history), scalar ( @$orders ) +1, "GetHistory returns number of orders");
+
+};
+
+subtest 'GetHistory - is_standing' => sub {
+
+    plan tests => 1;
+
+    my $orders = GetHistory( is_standing => '1' );
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $order_basket1 = $builder->build( { source => 'Aqbasket', value => { is_standing => 0 } } );
+    my $orderinfo1 = {
+        basketno                => $order_basket1->{basketno},
+        rrp                     => 19.99,
+        replacementprice        => undef,
+        quantity                => 1,
+        quantityreceived        => 0,
+        datereceived            => undef,
+        datecancellationprinted => undef,
+    };
+    my $order1 = $builder->build( { source => 'Aqorder', value => $orderinfo1 } );
+
+    my $order_basket2 = $builder->build( { source => 'Aqbasket', value => { is_standing => 1 } } );
+    my $orderinfo2 = {
+        basketno                => $order_basket2->{basketno},
+        rrp                     => 19.99,
+        replacementprice        => undef,
+        quantity                => 1,
+        quantityreceived        => 0,
+        datereceived            => undef,
+        datecancellationprinted => undef,
+    };
+    my $order2 = $builder->build( { source => 'Aqorder', value => $orderinfo2 } );
+
+    my $history = GetHistory( is_standing => 1 );
+    is(
+        scalar(@$history),
+        scalar(@$orders) + 1,
+        "GetHistory returns number of standing orders"
+    );
 
 };
 
