@@ -148,28 +148,34 @@
                                             <a class="btn btn-link js-show" href="#suspendModal[% HOLD.reserve_id | html %]" role="button" data-toggle="modal"><i class="fa fa-pause" aria-hidden="true"></i> Suspend</a>
                                             [% # hold suspend modal form %]
                                             <div id="suspendModal[% HOLD.reserve_id | html %]" class="modal-nojs" tabindex="-1" role="dialog" aria-labelledby="suspendModal[% HOLD.reserve_id | html %]Label" aria-hidden="true">
-                                                <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                                        [% IF HOLD.suspend %]
-                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Resume your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
-                                                        [% ELSE %]
-                                                            <h3 id="suspendModal[% HOLD.reserve_id | html %]Label">Suspend your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
-                                                        [% END %]
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                                        <label for="suspend_until_[% HOLD.reserve_id | html %]">Suspend until:</label>
-                                                        <input type="text" name="suspend_until" id="suspend_until_[% HOLD.reserve_id | html %]" class="suspend-until" size="10" />
-                                                        [% INCLUDE 'date-format.inc' %]
-                                                        <p class="js-show"><a href="#" onclick="document.getElementById('suspend_until_[% HOLD.reserve_id | html %]').value='';return false;">Clear date to suspend indefinitely</a></p>
-                                                        <button class="btn btn-mini js-hide" type="submit" name="submit">Suspend</button>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-primary" type="submit" name="submit">Suspend</button>
-                                                        <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
-                                                    </div>
-                                                </form>
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                                                            <div class="modal-header">
+                                                                [% IF HOLD.suspend %]
+                                                                    <h3 class="modal-title" id="suspendModal[% HOLD.reserve_id | html %]Label">Resume your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
+                                                                [% ELSE %]
+                                                                    <h3 class="modal-title" id="suspendModal[% HOLD.reserve_id | html %]Label">Suspend your hold on <em>[% HOLD.biblio.title | html %]</em></h3>
+                                                                [% END %]
+                                                                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">x</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
+                                                                <label for="suspend_until_[% HOLD.reserve_id | html %]">Suspend until:</label>
+                                                                <input type="text" name="suspend_until" id="suspend_until_[% HOLD.reserve_id | html %]" class="suspend-until" size="10" />
+                                                                [% INCLUDE 'date-format.inc' %]
+                                                                <p class="js-show"><a href="#" onclick="document.getElementById('suspend_until_[% HOLD.reserve_id | html %]').value='';return false;">Clear date to suspend indefinitely</a></p>
+                                                                <button class="btn btn-primary btn-sm js-hide" type="submit" name="submit">Suspend</button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Suspend</button>
+                                                                <button data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-remove" aria-hidden="true"></i> Do not suspend</button>
+                                                            </div>
+                                                        </form>
+                                                    </div> <!-- /.modal-content -->
+                                                </div> <!-- /.modal-dialog -->
                                             </div>  <!-- /#suspendModal[% HOLD.reserve_id | html %] -->
                                         [% ELSE %]
                                             <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
