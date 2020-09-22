@@ -298,7 +298,7 @@ to Zebra as well.
 sub index_records {
     my ( $self, $biblionumbers, $op, $server, $records ) = @_;
     $biblionumbers = [$biblionumbers] if ref $biblionumbers ne 'ARRAY' && defined $biblionumbers;
-    $records = [$records] if ref $biblionumbers ne 'ARRAY' && defined $records;
+    $records = [$records] if ref $records ne 'ARRAY' && defined $records;
     if ( $op eq 'specialUpdate' ) {
         unless ($records) {
             foreach my $biblionumber ( @$biblionumbers ){
