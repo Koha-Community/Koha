@@ -95,7 +95,7 @@ sub pay {
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
-    my $manager_id = $userenv ? $userenv->{number} : 0;
+    my $manager_id = $userenv ? $userenv->{number} : undef;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
