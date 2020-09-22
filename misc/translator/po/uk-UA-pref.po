@@ -2,18 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-08-19 11:58+0000\n"
+"PO-Revision-Date: 2020-09-08 06:00+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1597838334.023799\n"
+"X-POOTLE-MTIME: 1599544854.136320\n"
 "X-Pootle-Path: /uk/20.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -23,11 +22,11 @@ msgstr ""
 
 # Accounting > Features
 msgid "accounting.pref Features"
-msgstr ""
+msgstr "Можливості"
 
 # Accounting > Policy
 msgid "accounting.pref Policy"
-msgstr ""
+msgstr "Привілеї"
 
 # Accounting > Policy
 msgid "accounting.pref#AccountAutoReconcile# Do"
@@ -67,11 +66,11 @@ msgstr "автоматичне відображення діалогового �
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# Do"
-msgstr ""
+msgstr "Виконувати"
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# Don't"
-msgstr ""
+msgstr "Не виконувати"
 
 # Accounting > Policy
 msgid "accounting.pref#RoundFinesAtPayment# round fines to the nearest cent when collecting payments. Enabling this preference allows paying fines of partial cents which may not be visible in the interface."
@@ -1863,7 +1862,7 @@ msgstr "Інтерфейс"
 
 # Cataloging > Record structure
 msgid "cataloguing.pref Record structure"
-msgstr ""
+msgstr "Структура запису"
 
 # Cataloging > Spine labels
 msgid "cataloguing.pref Spine labels"
@@ -1934,11 +1933,11 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr " у якості інформації про наявність у фондах для записів, які не мають примірників (може бути вказано декілька підполів, наприклад <code>852abhi</code>), а значення підполів будуть відокремлені  "
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
 msgstr ""
 
 # Cataloging > Exporting
@@ -2065,7 +2064,7 @@ msgstr "Введіть <a href=\"http://www.loc.gov/marc/organizations/orgshome.
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable). This can be also set on libraries level."
-msgstr ""
+msgstr " за умовчанням у нових записах MARC21 (залиште порожнім, щоб вимкнути). Це також можна встановити на рівні бібліотек/підрозділів."
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# For example <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&language={LANG}</tt>"
@@ -3102,7 +3101,7 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
 msgstr ""
 
 # Circulation > Interface
@@ -3284,6 +3283,22 @@ msgstr ""
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "коли примірник був прострочений більше ніж"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -4463,7 +4478,7 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
 msgstr ""
 
 # Circulation > Holds policy
@@ -10008,3 +10023,4 @@ msgstr "Повертати лише "
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr " рядків у повідомленні, яке було запитане через службу веб-звітів."
+

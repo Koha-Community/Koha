@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-08-17 20:57+0000\n"
-"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
+"PO-Revision-Date: 2020-08-27 13:48+0000\n"
+"Last-Translator: marieluce <marie-luce.laflamme@inLibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1597697836.303855\n"
+"X-POOTLE-MTIME: 1598536110.724532\n"
 "X-Pootle-Path: /fr_CA/20.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1650,11 +1650,11 @@ msgstr "Autoriser le personnel et les utilisateurs à créer et voir des listes 
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# No"
-msgstr "non"
+msgstr "admin.pref#virtualshelves# non"
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Yes"
-msgstr "oui"
+msgstr "admin.pref#virtualshelves# oui"
 
 # Authorities
 msgid "authorities.pref"
@@ -1933,12 +1933,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "en tant qu'information de localisation pour les notices qui n'ont pas d'exemplaires. Cela peut-être plusieurs sous-zones, par ex. <code>999abhi</code> les sous-zones a, b, h et i de 999, en séparant les sous-zones avec"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "Séparer les multiples auteurs, collections et sujets avec "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr ""
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2152,18 +2152,11 @@ msgstr "Ne pas afficher"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
-"Pour masquer des champs d'autres pages comme la vue normale, utilisez les "
-"paramètres de visibilité des sous-zones dans la section des Grilles "
-"bibliographiques MARC du module d'administration."
+msgstr "Pour masquer des champs d'autres pages comme la vue normale, utilisez les paramètres de visibilité des sous-zones dans la section des Grilles bibliographiques MARC du module d'administration."
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
-"les champs de notes de l'onglet «Notes» et de l'onglet «Description» des "
-"pages de détails de l'OPAC et de l'interface professionnelle. Utilisez une "
-"virgule pour séparer plusieurs champs. Exemples : 500,502 (MARC21); 300,328 "
-"(UNIMARC)."
+msgstr "les champs de notes de l'onglet «Notes» et de l'onglet «Description» des pages de détails de l'OPAC et de l'interface professionnelle. Utilisez une virgule pour séparer plusieurs champs. Exemples : 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -3108,8 +3101,8 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "Ne pas permettre de déclarer des exemplaires perdus"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
-msgstr "à partir de la page \"Réservations à traiter\""
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3229,10 +3222,7 @@ msgstr "S'ils ne sont pas considérés, les deux valeurs seront enregistrées s�
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, on-site checkouts will count toward the checkout limit for regular checkouts. The on-site limit will still apply for on-site checkouts."
-msgstr ""
-"Lorsque activée, les prêts sur place compteront dans le total des prêts "
-"autorisés pour les prêts réguliers. La limite pour les prêts sur place "
-"s'appliquera toujours aux prêts sur place."
+msgstr "Lorsque activée, les prêts sur place compteront dans le total des prêts autorisés pour les prêts réguliers. La limite pour les prêts sur place s'appliquera toujours aux prêts sur place."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
@@ -3293,6 +3283,22 @@ msgstr "jours."
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "quand les exemplaires sont en retard depuis plus de"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3500,7 +3506,7 @@ msgstr "bibliothèque de retrait et type de document"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueueNumbering# 'virtual' priorities, where each group is numbered separately"
-msgstr "la priorité «virtuelle», où chaque groupe est numéroté séparément"
+msgstr "circulation.pref#HoldsSplitQueueNumbering# la priorité «virtuelle», où chaque groupe est numéroté séparément"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueueNumbering# If the holds queue is split, show librarians"
@@ -4472,8 +4478,8 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr "_BLANK_: FIC - ajoutera la localisation Fiction à un exemplaire qui n'a pas de localisation au moment du retour.<br/>"
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
-msgstr " Exemple: \"itemlost: 1\" pour définir items.itemlost sur 1 lorsque l'exemplaire est marqué comme perdu (1 étant une valeur autorisée)"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
+msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -8508,7 +8514,7 @@ msgstr "à accéder/modifier les privilèges du superbibliothécaire."
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# (Must contain at least one digit, one lowercase and one uppercase)."
-msgstr " (Doit contenir au moins un chiffre, une lettre minuscule et une lettre majuscule)."
+msgstr "patrons.pref#RequireStrongPassword# (Doit contenir au moins un chiffre, une lettre minuscule et une lettre majuscule)."
 
 # Patrons > Security
 msgid "patrons.pref#RequireStrongPassword# Don't require"
@@ -8680,7 +8686,7 @@ msgstr "Ne pas conserver"
 
 # Patrons > Patron forms
 msgid "patrons.pref#uppercasesurnames# store and display surnames in upper case."
-msgstr "les noms des utilisateurs en majuscules."
+msgstr "patrons.pref#uppercasesurnames# les noms des utilisateurs en majuscules."
 
 # Patrons > General
 msgid "patrons.pref#useDischarge# Allow"
@@ -10017,3 +10023,4 @@ msgstr "Retourner seulement"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr " lignes d'un rapport demandé par le service Web de rapports."
+

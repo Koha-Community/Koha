@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2020-05-20 08:33+0000\n"
-"Last-Translator: jessica.andersson <jessica.andersson@alingsas.se>\n"
+"PO-Revision-Date: 2020-09-07 12:20+0000\n"
+"Last-Translator: Emma Ternrud <emma.gustafsson@ub.gu.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1589963617.043824\n"
+"X-POOTLE-MTIME: 1599481246.479820\n"
 "X-Pootle-Path: /sv/20.05/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1933,12 +1933,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "som beståndsinformation för poster som inte har exemplar (denna kan innehålla flera underliggande fält att söka i, exempelvis skulle <code>852abhi</code> leta i de underliggande fälten a, b, h och i för 852), med de underliggande fälten separerade av"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "Separerar flera visade författare, serier eller ämnen med"
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr ""
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2242,7 +2242,7 @@ msgstr "Separera "
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# holding library"
-msgstr "reservationsbibliotek "
+msgstr "nuvarande bibliotek"
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# home library"
@@ -3101,7 +3101,7 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "Tillåt inte att markera exemplar som försvunna"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
 msgstr ""
 
 # Circulation > Interface
@@ -3283,6 +3283,22 @@ msgstr "dagar. "
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "när exemplaret är försenat med fler än "
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3654,7 +3670,7 @@ msgstr "Prioritera"
 
 # Circulation > Holds policy
 msgid "circulation.pref#LocalHoldsPriority# holding library"
-msgstr "reservationsbibliotek "
+msgstr "nuvarande plats"
 
 # Circulation > Holds policy
 # Circulation > Holds policy
@@ -3943,7 +3959,7 @@ msgstr "biblioteket där exemplaret återlämnats."
 
 # Circulation > Fines policy
 msgid "circulation.pref#RefundLostOnReturnControl# item holding branch."
-msgstr "exemplarets reservationsbibliotek (holding branch)."
+msgstr "exemplarets nuvarande plats (holding branch). "
 
 # Circulation > Fines policy
 msgid "circulation.pref#RefundLostOnReturnControl# item home branch."
@@ -4462,7 +4478,7 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
 msgstr ""
 
 # Circulation > Holds policy
@@ -7202,11 +7218,11 @@ msgstr "för exemplar på sidan med postdetaljer i OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationBranchToDisplay# holding library"
-msgstr "reservationsbibliotek"
+msgstr "nuvarande plats"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationBranchToDisplay# home and holding libraries"
-msgstr "hem- och reservationsbibliotek"
+msgstr "hembibliotek och nuvarande plats"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacLocationBranchToDisplay# home library"
@@ -7394,7 +7410,7 @@ msgstr "Separera"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSeparateHoldings# holding library"
-msgstr "reservationsbibliotek"
+msgstr "nuvarande plats"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacSeparateHoldings# home library"
@@ -8746,11 +8762,11 @@ msgstr "Visa fasetter för"
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# both home and holding library"
-msgstr "både hem- och reservationsbibliotek"
+msgstr "både hembibliotek och nuvarande plats"
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# holding library"
-msgstr "reservationsbibliotek"
+msgstr "nuvarande plats"
 
 # Searching > Results display
 msgid "searching.pref#DisplayLibraryFacets# home library"

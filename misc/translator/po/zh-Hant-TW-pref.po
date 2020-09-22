@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2020-08-20 09:28+0000\n"
+"PO-Revision-Date: 2020-09-17 06:49+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1597915734.032264\n"
+"X-POOTLE-MTIME: 1600325353.104330\n"
 "X-Pootle-Path: /zh_TW/20.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1510,7 +1510,7 @@ msgstr "顯示此圖書館名稱在 Hea 社群網站："
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# "
-msgstr ""
+msgstr " "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
@@ -1933,12 +1933,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "無館藏的書目記錄(可能在 <code>852abhi</code> 等處有多個分欄，查看852的分欄a, b, h 和i，即可發現它)，以分欄符號分隔這些分欄"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr "(非XSLT 形式瀏覽)."
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "區隔多個著者、集叢或主題 "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr "分開主要條目及次要條目用"
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2144,19 +2144,21 @@ msgstr "新增館藏記錄時，暫記其排架位置為"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# <br />"
-msgstr ""
+msgstr " <br />"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# Don't show"
-msgstr ""
+msgstr "勿展示"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
+msgstr "如在其它頁面隱藏欄位, 使用管理功能裡MARC書目框架裡的分欄視覺設定"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
 msgstr ""
+"註記欄位在'題名註記'標籤及'說明'標籤在OPAC及館員介面的書目詳頁。使用逗號來分隔不同行。範例：500,502 (MARC21); 300, 328 "
+"(UNIMARC)．"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -3101,8 +3103,8 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "不允許標記館藏為遺失"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
-msgstr "取自 '預約到館待提取' 畫面"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+msgstr "從「預約取件」畫面。數值應用必須在 UpdateItemWhenLostFromHoldList 定義。"
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3190,7 +3192,7 @@ msgstr "使用 LOST 容許值"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
-msgstr "代表宣稱已還入"
+msgstr "宣稱已還入"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
@@ -3222,7 +3224,7 @@ msgstr "若停用，將分別借出。"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, on-site checkouts will count toward the checkout limit for regular checkouts. The on-site limit will still apply for on-site checkouts."
-msgstr ""
+msgstr "如果啟用, 現場借出將計算一般借出的限制。現場限制將適用於現場借出．"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
@@ -3284,6 +3286,22 @@ msgstr "天。"
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "當館藏逾期超過"
 
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr " ."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr "<br>如果您不想跳過任何遺失狀態, 請留此段空著。"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr "<br>設定清單用逗號分隔的數值, 比方說<em>5,6,7</em>."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr "當使用自動館藏遺失程序, 跳過館藏及遺失值比對任何"
+
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
 msgstr "不顯示"
@@ -3298,7 +3316,7 @@ msgstr "按鈕，清除流通螢幕上的當前讀者。"
 
 # Circulation > Holds policy
 msgid "circulation.pref#DisplayMultiPlaceHold# Don't enable"
-msgstr "停用"
+msgstr "不要啟用"
 
 # Circulation > Holds policy
 msgid "circulation.pref#DisplayMultiPlaceHold# Enable"
@@ -4099,7 +4117,7 @@ msgstr "讀者證到期前，應先還書(到期日必須在讀者證到期日�
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Allow"
-msgstr "允許"
+msgstr "容許"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SCOAllowCheckin# Don't allow"
@@ -4462,8 +4480,9 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr "_BLANK_: FIC - 還入時，將未指定位置的館藏更新至小說位置。<br/>"
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
-msgstr "例如：當館藏被標記為遺失時，\"itemlost: 1\" 設定 items.itemlost 為 1"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
+msgstr ""
+"範例: 「館藏遺失: 1」來設定 items.itemlost 為1, 當館藏被標記為遺失. (需要 CanMarkHoldsToPullAsLost)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -9726,19 +9745,19 @@ msgstr "祗限館員介面"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# Use"
-msgstr ""
+msgstr "使用"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr ""
+msgstr "一個所見即所得編輯器 (TinyMCE)"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr ""
+msgstr "一個文字編輯器 (CodeMirror)"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# when editing news."
-msgstr ""
+msgstr "當編輯最新消息."
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"

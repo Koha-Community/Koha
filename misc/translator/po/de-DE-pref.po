@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2020-08-18 09:04+0000\n"
+"PO-Revision-Date: 2020-09-16 09:00+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1597741499.310281\n"
+"X-POOTLE-MTIME: 1600246837.459542\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -195,7 +195,7 @@ msgstr "Blindkopien (BCC) von Zeitschriften- oder Erwerbungsreklamationen an den
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#CurrencyFormat# 360 000,00 (FR)"
-msgstr "360 000,00 (EUR)"
+msgstr "360 000,00 (FR)"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#CurrencyFormat# 360'000.00 (CH)"
@@ -1879,7 +1879,7 @@ msgstr "Zeige keine"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# acquisition details on the bibliographic record detail page."
-msgstr "Erwerbungsdetails in der Datailansicht des Titels."
+msgstr "Erwerbungsdetails in der Detailansicht des Titels."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AdditionalFieldsInZ3950ResultSearch#  in the 'Additional fields' column of Z39.50 search results (use comma as delimiter e.g.: \"<code>001, 082$ab, 090$ab</code>\")"
@@ -1891,7 +1891,7 @@ msgstr "Zeige die MARC-Felder/Unterfelder"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# When matching on ISBN with the record import tool,"
-msgstr "Wenn beim Import über ISSN abgeglichen wird,"
+msgstr "Wenn beim Import über ISBN abgeglichen wird,"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records."
@@ -1934,12 +1934,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "als Bestandsinformation bei Datensätzen, die keine Exemplare haben. (Das Feld kann mehrere Unterfelder enthalten; zum Beispiel <code>852abhi</code>, getrennt durch"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "trennen."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr "(nur ohne XSLT)."
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "Mehrere angezeigte Verfasser, Reihen oder Schlagworte mit "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr "Trenne Haupteintragen und Unterteilungen mit "
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2153,17 +2153,11 @@ msgstr "Verstecke die Fußnotenfelder"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
-"Um Felder auf anderen Seiten, wie der normalen Detailansicht, auszublenden, "
-"können Sie die Sichtbarkeitseinstellungen in den Bibliographischen MARC "
-"Frameworks unter Administration verwenden."
+msgstr "Um Felder auf anderen Seiten, wie der normalen Detailansicht, auszublenden, können Sie die Sichtbarkeitseinstellungen in den Bibliographischen MARC Frameworks unter Administration verwenden."
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
-"in der Detailansicht in den Reitern \"Titelinformationen\" (OPAC) und \""
-"Beschreibung\" (Dienstoberfläche). Verwenden Sie ein Komma um mehrere Felder "
-"zu trennen. Beispiel: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr "in der Detailansicht in den Reitern \"Titelinformationen\" (OPAC) und \"Beschreibung\" (Dienstoberfläche). Verwenden Sie ein Komma um mehrere Felder zu trennen. Beispiel: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -3108,8 +3102,10 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "Markiere Exemplare nicht als verloren"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
-msgstr "von der Seite für 'Zu bearbeitende Vormerkungen'"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+msgstr ""
+"von der Seite \"Zu erledigende Vormerkungen\". Die Werte, die verwendet "
+"werden sollen, müssen in UpdateItemWhenLostFromHoldList konfiguriert werden."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3229,11 +3225,7 @@ msgstr "Wenn diese nicht als normale Ausleihen betrachtet werden, wird die erlau
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, on-site checkouts will count toward the checkout limit for regular checkouts. The on-site limit will still apply for on-site checkouts."
-msgstr ""
-"Wenn aktiviert, werden die Vor-Ort-Ausleihen bei der Berechnung der "
-"maximalen Ausleihanzahl für normale Ausleihen mit berücksichtigt. Die "
-"maximale Ausleihanzahl für Vor-Ort-Ausleihen wird zusätzlich ebenfalls "
-"berücksichtigt."
+msgstr "Wenn aktiviert, werden die Vor-Ort-Ausleihen bei der Berechnung der maximalen Ausleihanzahl für normale Ausleihen mit berücksichtigt. Die maximale Ausleihanzahl für Vor-Ort-Ausleihen wird zusätzlich ebenfalls berücksichtigt."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
@@ -3294,6 +3286,28 @@ msgstr "Tagen überfällig ist."
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "wenn das Exemplar seit mehr als"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr "."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+"<br>Lassen Sie dieses Feld frei, wenn keine Verloren-Status übergangen "
+"werden sollen."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+"<br>Tragen Sie eine Liste von komma-separierten Werten ein, z.B. "
+"<em>5,6,7</em>."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
+"Wenn die automatische Verlust-Bearbeitung verwendet wird, dann übergehe "
+"Exemplare mit einem der folgenden Verloren-Status:"
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -4473,8 +4487,11 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr "_BLANK_: FIC - sorgt dafür, dass ein Exemplar, dass bisher keinen Standort hatte auf den Standort Fiktion (FIC) gesetzt wird.<br/>"
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
-msgstr "Beispiel: \"itemlost: 1\" um items.itemlost auf 1 zu setzen, wenn das Exemplar als verloren markiert wird"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
+msgstr ""
+"Beispiel: \"itemlost: 1\" um den Verlust-Status (items.itemlost) auf 1 zu "
+"setzen, wenn das Exemplar als Verloren markiert wird. (Erfordert "
+"CanMarkHoldsToPullAsLost)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."

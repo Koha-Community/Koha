@@ -3,17 +3,18 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-06-11 10:18+0000\n"
-"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
+"PO-Revision-Date: 2020-09-22 07:21+0000\n"
+"Last-Translator: Stebeneva Anna <stebeneva@lib.tsu.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1591870725.452678\n"
+"X-POOTLE-MTIME: 1600759314.972970\n"
 "X-Pootle-Path: /ru/20.05/ru-RU-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1648,6 +1649,8 @@ msgstr ""
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Allow staff and patrons to create and view saved lists of books: "
 msgstr ""
+"admin.pref#virtualshelves# Позволить сотрудникам и читателям создавать и "
+"просматривать сохраненные списки изданий: "
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# No"
@@ -1934,11 +1937,11 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
 msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
 msgstr ""
 
 # Cataloging > Exporting
@@ -3028,10 +3031,14 @@ msgstr ""
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories separated with a pipe '|')"
 msgstr ""
+"circulation.pref#BatchCheckoutsValidCategories# (список типов читателей "
+"отделен символом '|')"
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to checkout in a batch"
 msgstr ""
+"circulation.pref#BatchCheckoutsValidCategories# Типы читателей, которым "
+"разрешена пакетная книговыдача"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#BlockReturnOfLostItems# Block"
@@ -3102,7 +3109,7 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
 msgstr ""
 
 # Circulation > Interface
@@ -3283,6 +3290,22 @@ msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
 msgstr ""
 
 # Circulation > Interface
@@ -3809,10 +3832,14 @@ msgstr ""
 # Circulation > Holds policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron categories separated with a pipe '|')"
 msgstr ""
+"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (список типов "
+"читателей отделен символом '|')"
 
 # Circulation > Holds policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories not affected by OPACHoldsIfAvailableAtPickup"
 msgstr ""
+"circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Типы читателей, на "
+"которые не влияет OPACHoldsIfAvailableAtPickup"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -4463,7 +4490,7 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
 msgstr ""
 
 # Circulation > Holds policy
@@ -7411,15 +7438,17 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacShowRecentComments# Don't show"
-msgstr ""
+msgstr "opac.pref#OpacShowRecentComments# Не показывать "
 
 # OPAC > Appearance
 msgid "opac.pref#OpacShowRecentComments# Show"
-msgstr ""
+msgstr "opac.pref#OpacShowRecentComments# Показать"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacShowRecentComments# a link to recent comments in the OPAC masthead."
 msgstr ""
+"opac.pref#OpacShowRecentComments# ссылка на последние комментарии в "
+"заголовке ЭК."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacStarRatings# Show star-ratings on"
@@ -7771,7 +7800,7 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewer# of commenter with comments in OPAC."
-msgstr ""
+msgstr "opac.pref # ShowReviewer # комментатора с комментариями в ЭК."
 
 # OPAC > Features
 msgid "opac.pref#ShowReviewer# username"
@@ -7912,6 +7941,8 @@ msgstr "Запретить"
 # OPAC > Features
 msgid "opac.pref#reviewson# patrons to make comments on items on the OPAC."
 msgstr ""
+"opac.pref # reviewson # читателей, чтобы оставлять комментарии к экземплярам "
+"в ЭК."
 
 # OPAC > Features
 msgid "opac.pref#suggestion# Allow"
@@ -10008,4 +10039,3 @@ msgstr ""
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr ""
-

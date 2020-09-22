@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2020-08-21 18:46+0000\n"
+"PO-Revision-Date: 2020-09-22 11:12+0000\n"
 "Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1598035561.304184\n"
+"X-POOTLE-MTIME: 1600773130.776779\n"
 "X-Pootle-Path: /es/20.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1934,12 +1934,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "como información de existencias para registros que no tienen ítems (puede contener múltiples subcampos para buscar; por ejemplo <code>852abhi</code> buscará en 852 subcampos a, b, h, e i.), con los subcampos separados por"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr "(solo vista no-XSLT)."
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "Separe varios autores, series o materias presentadas en pantalla con "
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr "Separar entrada principal y subdivisiones con "
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -2153,18 +2153,11 @@ msgstr "No mostrar"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
-msgstr ""
-"Para ocultar campos de otras páginas tal como la vista normal, utilice la "
-"configuración de visibilidad para subcampos en la sección de hojas de "
-"trabajo bibliográfica MARC del módulo de administración."
+msgstr "Para ocultar campos de otras páginas tal como la vista normal, utilice la configuración de visibilidad para subcampos en la sección de hojas de trabajo bibliográfica MARC del módulo de administración."
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesToHide# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
-msgstr ""
-"campos de nota en las pestañas 'Notas de título' y 'Descripción' en las "
-"páginas de vista detallada del OPAC e interfaz administrativa. Utilice una "
-"coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 "
-"(UNIMARC)."
+msgstr "campos de nota en las pestañas 'Notas de título' y 'Descripción' en las páginas de vista detallada del OPAC e interfaz administrativa. Utilice una coma para separar múltiples campos. Ejemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -3109,8 +3102,10 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "No permitir marcar ítems como perdidos"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
-msgstr "de la pantalla 'Reservas a retirar'"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+msgstr ""
+"de la pantalla 'Reservas a retirar'. Los valores a aplicar deben ser "
+"definidos en la preferencia UpdateItemWhenLostFromHoldList."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3230,10 +3225,7 @@ msgstr "Si está deshabilitado, ambos valores serán verificados por separado."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, on-site checkouts will count toward the checkout limit for regular checkouts. The on-site limit will still apply for on-site checkouts."
-msgstr ""
-"Si se habilita, los préstamos en-sitio se contabilizarán para el límite de "
-"préstamos normales. El límite en-sitio se aplicará todavía para préstamos en-"
-"sitio."
+msgstr "Si se habilita, los préstamos en-sitio se contabilizarán para el límite de préstamos normales. El límite en-sitio se aplicará todavía para préstamos en-sitio."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
@@ -3294,6 +3286,28 @@ msgstr "días."
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "cuando el ítem ha estado retrasado por más de"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr "."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+"<br>Deje esta campo vacío si no desea omitir cualquiera de los estados "
+"perdidos."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+"<br>Configurado a una lista de valores separados por coma, ej. "
+"<em>5,6,7</em>."
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
+"Cuando utilice el proceso automático de pérdida de ítems, omita ítems con un "
+"estado de pérdida coincidente con cualquiera de"
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -4473,8 +4487,10 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr "_BLANK_: FIC - hace que un ítem que no tiene ubicación sea actualizado a la ubicación Ficción en la devolución.<br/>"
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
-msgstr "Ejemplo: \"itemlost: 1\" para configurar items.itemlost a 1 cuando un ítem se marca como perdido"
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
+msgstr ""
+"Ejemplo: \"itemlost: 1\" para configurar items.itemlost a 1 cuando un ítem "
+"se marca como perdido (Requiere CanMarkHoldsToPullAsLost)."
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -9661,7 +9677,7 @@ msgstr "Ítems en lote"
 
 # Tools > News
 msgid "tools.pref News"
-msgstr "Novedades"
+msgstr "Noticias"
 
 # Tools > Patron cards
 msgid "tools.pref Patron cards"

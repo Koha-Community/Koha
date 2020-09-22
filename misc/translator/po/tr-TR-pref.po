@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2020-08-12 11:14+0000\n"
+"PO-Revision-Date: 2020-09-17 08:05+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1597230888.143357\n"
+"X-POOTLE-MTIME: 1600329953.913079\n"
 "X-Pootle-Path: /tr/20.05/tr-TR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1895,6 +1895,9 @@ msgstr "ISBN üzerinde kayıt içe aktarma aracı ile eşleştirildiğinde,"
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records."
 msgstr ""
+"İçe aktarılan kayıttaki ISBN'lerin tüm varyasyonlarını zaten kataloglanmış "
+"kayıtların ISBN alanlarında bir ifade olarak deneyerek agresif bir şekilde "
+"eşleştirmeye çalışın."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISBN# do"
@@ -1911,6 +1914,9 @@ msgstr "Kayıt içe aktarma aracıyla ISSN üzerinde eşleştirme yaparken,"
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISSN# attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records."
 msgstr ""
+"İçe aktarılan kayıttaki ISSN'lerin tüm varyasyonlarını önceden kataloglanmış "
+"kayıtların ISSN alanlarında bir deyim olarak deneyerek agresif bir şekilde "
+"eşleştirme girişiminde bulunun."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AggressiveMatchOnISSN# do"
@@ -1933,12 +1939,12 @@ msgid "cataloguing.pref#AlternateHoldingsField# as holdings information for reco
 msgstr "Alt alanlarla ayrılan, materyalleri olmayan kayıtlara yönelik koleksiyon bilgisi ( Bu, arama yeri için birden fazla alt alan içerebilir; örneğin <code>852abhi</code> 852 alt alanlarında a,b,h ve i olarak bakılabilir)"
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# ."
-msgstr "."
+msgid "cataloguing.pref#AuthoritySeparator# (non-XSLT view only)."
+msgstr "(yalnızca XSLT olmayan görünüm)."
 
 # Cataloging > Display
-msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr "Birden çok olan yazarlar, seriler veya konuları bu işaretle ayırın"
+msgid "cataloguing.pref#AuthoritySeparator# Separate main entry and subdivisions with "
+msgstr ""
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -3101,8 +3107,8 @@ msgid "circulation.pref#CanMarkHoldsToPullAsLost# Do not allow to mark items as 
 msgstr "Materyallerin kayıp olarak işaretlenmesine izin verme"
 
 # Circulation > Holds policy
-msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen"
-msgstr "'Ayırtmadan düşülecekler' ekranından"
+msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3283,6 +3289,22 @@ msgstr "günler."
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# when the item has been overdue for more than"
 msgstr "materyal şu kadar günden fazla gecikmeye kalmışsa"
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# ."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
+msgstr ""
+
+# Circulation > Checkout policy
+msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -4462,8 +4484,8 @@ msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an it
 msgstr "_BLANK_: FIC - iade sırasında Fiction konumuna güncellenmemiş bir konuma neden olur. <br/>"
 
 # Circulation > Holds policy
-msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
-msgstr "Örnek: materyal kayıp olarak işaretlendiğinde items.itemlost değerini 1 olarak ayarlamak için \"itemlost: 1\""
+msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
+msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -8410,23 +8432,23 @@ msgstr ""
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Alternate contact: ZIP/Postal code"
-msgstr ""
+msgstr "Alternatif kişi: ZIP/Posta kodu"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Fax"
-msgstr ""
+msgstr "İletişim - Faks"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Other phone"
-msgstr ""
+msgstr "İletişim - Diğer telefon"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Primary email"
-msgstr ""
+msgstr "İletişim - Birincil e-posta"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Primary phone"
-msgstr ""
+msgstr "İletişim - Birincil telefon"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# Contact - Secondary email"
@@ -8466,7 +8488,7 @@ msgstr "Ana adres - Sokak numarası"
 
 # Patrons > Patron relationships
 msgid "patrons.pref#PrefillGuaranteeField# When adding a guarantee to a guarantor patron fill the following fields in the guarantee's member entry form from the guarantors record:"
-msgstr ""
+msgstr "Kullanıcıya kefil eklerken kefil kaydından teminatın üye giriş formunda bulunan aşağıdaki alanları doldurun:"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
@@ -8690,7 +8712,7 @@ msgstr "Arama"
 
 # Searching > Did you mean/spell checking
 msgid "searching.pref Did you mean/spell checking"
-msgstr ""
+msgstr "bunu mu demek istediniz/Yazım denetimi"
 
 # Searching > Features
 msgid "searching.pref Features"
@@ -8698,11 +8720,11 @@ msgstr "Özellikleri"
 
 # Searching > Results display
 msgid "searching.pref Results display"
-msgstr ""
+msgstr "Sonuçlar ekranı"
 
 # Searching > Search form
 msgid "searching.pref Search form"
-msgstr ""
+msgstr "Arama Formu"
 
 # Searching > Search form
 msgid "searching.pref#AdvancedSearchLanguages# For example, to limit listing to French and Italian, enter <em>ita|fre</em>."
@@ -8954,15 +8976,15 @@ msgstr "OPAC'ta bir sayfada gösterilecek sonuç sayısı."
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# Don't show"
-msgstr ""
+msgstr "Gösterme"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# Show"
-msgstr ""
+msgstr "Göster"
 
 # Searching > Results display
 msgid "searching.pref#OPACnumSearchResultsDropdown# results per page dropdown on OPAC search results."
-msgstr ""
+msgstr "OPAC arama sonuçlarında sayfa başına açılır liste"
 
 # Searching > Features
 msgid "searching.pref#OpacGroupResults# Don't use"
@@ -9054,7 +9076,7 @@ msgstr "arama yapma"
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# on all variations of the ISBN."
-msgstr ""
+msgstr "tüm ISBN çeşitlerinde."
 
 # Searching > Results display
 msgid "searching.pref#SearchWithISBNVariations# search"
@@ -9206,15 +9228,15 @@ msgstr "Personel kullanıcıda sayfa başına sonuç."
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# Don't show"
-msgstr ""
+msgstr "Gösterme"
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# Show"
-msgstr ""
+msgstr "Göster"
 
 # Searching > Results display
 msgid "searching.pref#numSearchResultsDropdown# results per page dropdown on staff client search results."
-msgstr ""
+msgstr "personel istemci arama sonuçlarında sayfa başına açılır liste."
 
 # Serials
 msgid "serials.pref"
@@ -9398,7 +9420,7 @@ msgstr "Göster"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons and descriptions in XSLT MARC21 results and detail pages in the staff client."
-msgstr ""
+msgstr "personel istemcideki XSLT MARC21 sonuçlarındaki format, kullanıcı kitlesi ve materyal türü simgeleri ve açıklamaları ve ayrıntı sayfaları."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -9726,19 +9748,19 @@ msgstr "Yalnızca personel istemci"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# Use"
-msgstr ""
+msgstr "Kullan"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
-msgstr ""
+msgstr "Bir WYSIWYG düzenleyici (TinyMCE)"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr ""
+msgstr "bir metin düzenleyici (CodeMirror)"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# when editing news."
-msgstr ""
+msgstr "Duyuruları düzenlerken."
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -9762,7 +9784,7 @@ msgstr "Web Servisleri"
 
 # Web services > General
 msgid "web_services.pref General"
-msgstr ""
+msgstr "Genel"
 
 # Web services > ILS-DI
 msgid "web_services.pref ILS-DI"
@@ -9790,7 +9812,7 @@ msgstr "Raporlama"
 
 # Web services > General
 msgid "web_services.pref#AccessControlAllowOrigin# ."
-msgstr ""
+msgstr " ."
 
 # Web services > General
 msgid "web_services.pref#AccessControlAllowOrigin# Set the Access-Control-Allow-Origin header to"
@@ -10007,4 +10029,3 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
-
