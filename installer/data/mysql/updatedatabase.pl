@@ -22393,6 +22393,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25958, "Allow LongOverdue cron to exclude specified lost values");
 }
 
+$DBversion = '20.05.04.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, undef, '20.05.04 release' );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
