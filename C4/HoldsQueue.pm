@@ -61,6 +61,9 @@ Returns Transport Cost Matrix as a hashref <to branch code> => <from branch code
 =cut
 
 sub TransportCostMatrix {
+    my ( $params ) = @_;
+    my $ignore_holds_queue_skip_closed = $params->{ignore_holds_queue_skip_closed};
+
     my $dbh   = C4::Context->dbh;
     my $transport_costs = $dbh->selectall_arrayref("SELECT * FROM transport_cost",{ Slice => {} });
 
@@ -77,7 +80,7 @@ sub TransportCostMatrix {
             disable_transfer => $disabled
         };
 
-        if ( C4::Context->preference("HoldsQueueSkipClosed") ) {
+        if ( !$ignore_holds_queue_skip_closed && C4::Context->preference("HoldsQueueSkipClosed") ) {
             $calendars->{$from} ||= Koha::Calendar->new( branchcode => $from );
             $transport_cost_matrix{$to}{$from}{disable_transfer} ||=
               $calendars->{$from}->is_holiday( $today );
