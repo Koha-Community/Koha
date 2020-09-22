@@ -110,9 +110,6 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
-            unless $params->{skip_modzebra_update};
-
         logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
           if $log_action && C4::Context->preference("CataloguingLog");
 
@@ -168,9 +165,6 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
-            unless $params->{skip_modzebra_update};
-
         $self->_after_item_action_hooks({ action => 'modify' });
 
         logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
@@ -181,7 +175,11 @@ sub store {
         $self->dateaccessioned($today);
     }
 
-    return $self->SUPER::store;
+    my $result = $self->SUPER::store;
+    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+        unless $params->{skip_modzebra_update};
+
+    return $result;
 }
 
 =head3 delete
