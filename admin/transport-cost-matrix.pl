@@ -45,7 +45,7 @@ my $update = ( $input->param('op') // '' ) eq 'set-cost-matrix';
 
 my ($cost_matrix, $have_matrix);
 unless ($update) {
-    $cost_matrix = TransportCostMatrix();
+    $cost_matrix = TransportCostMatrix({ ignore_holds_queue_skip_closed => 1 });
     $have_matrix = keys %$cost_matrix if $cost_matrix;
 }
 
