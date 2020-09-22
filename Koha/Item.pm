@@ -113,9 +113,6 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
-            unless $params->{skip_modzebra_update};
-
         logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
           if $log_action && C4::Context->preference("CataloguingLog");
 
@@ -189,9 +186,6 @@ sub store {
             $self->paidfor('');
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
-            unless $params->{skip_modzebra_update};
-
         logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
           if $log_action && C4::Context->preference("CataloguingLog");
     }
@@ -201,6 +195,8 @@ sub store {
     }
 
     my $result = $self->SUPER::store;
+    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+        unless $params->{skip_modzebra_update};
     $self->get_from_storage->_after_item_action_hooks({ action => $plugin_action });
 
     return $result;
