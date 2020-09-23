@@ -300,15 +300,19 @@ sub index_records {
     $biblionumbers = [$biblionumbers] if ref $biblionumbers ne 'ARRAY' && defined $biblionumbers;
     $records = [$records] if ref $records ne 'ARRAY' && defined $records;
     if ( $op eq 'specialUpdate' ) {
+        my $index_biblionumbers;
         unless ($records) {
             foreach my $biblionumber ( @$biblionumbers ){
                 my $record = C4::Biblio::GetMarcBiblio({
                     biblionumber => $biblionumber,
                     embed_items  => 1 });
-                push @$records, $record;
+                if( $record ){
+                    push @$records, $record;
+                    push @$index_biblionumbers, $biblionumber;
+                }
             }
         }
-        $self->update_index_background( $biblionumbers, $records );
+        $self->update_index_background( $index_biblionumbers, $records ) if $index_biblionumbers && $records;
     }
     elsif ( $op eq 'recordDelete' ) {
         $self->delete_index_background( $biblionumbers );
