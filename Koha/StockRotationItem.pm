@@ -135,7 +135,7 @@ sub needs_advancing {
             return 0;
         }
     } else {
-        die "We have no historical branch transfer; this should not have happened!";
+        warn "We have no historical branch transfer for itemnumber " . $self->itemnumber->itemnumber . "; This should not have happened!";
     }
 }
 
