@@ -408,6 +408,7 @@ sub GetBorrowersToExpunge {
         $query .= q| LEFT JOIN patron_list_patrons USING (borrowernumber)|;
     }
     $query .= q| WHERE  category_type <> 'S'
+        AND ( borrowers.flags IS NULL OR borrowers.flags = 0 )
         AND tmp.guarantor_id IS NULL
     |;
     my @query_params;
