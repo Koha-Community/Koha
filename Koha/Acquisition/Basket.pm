@@ -22,6 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::BasketGroups;
+use Koha::Acquisition::Orders;
 use Koha::Patrons;
 
 use base qw( Koha::Object Koha::Object::Mixin::AdditionalFields );
@@ -75,6 +76,22 @@ sub basket_group {
     my $basket_group_rs = $self->_result->basket_group;
     return unless $basket_group_rs;
     return Koha::Acquisition::BasketGroup->_new_from_dbic( $basket_group_rs );
+}
+
+=head3 orders
+
+    my $orders = $basket->orders;
+
+Returns a Koha::Acquisition::Orders resultset, with the orders linked
+to this basket.
+
+=cut
+
+sub orders {
+    my ($self) = @_;
+
+    my $orders_rs = $self->_result->orders;
+    return Koha::Acquisition::Orders->_new_from_dbic( $orders_rs );
 }
 
 =head3 effective_create_items
