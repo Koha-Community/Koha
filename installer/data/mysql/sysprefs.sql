@@ -39,7 +39,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowPatronToSetCheckoutsVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set checkouts to be visible to his or her guarantor',  'YesNo'),
 ('AllowPatronToSetFinesVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set fines to be visible to his or her guarantor',  'YesNo'),
 ('AllowPKIAuth','None','None|Common Name|emailAddress','Use the field from a client-side SSL certificate to look a user in the Koha database','Choice'),
-('AllowPurchaseSuggestionBranchChoice','0','1','Allow user to choose branch when making a purchase suggestion','YesNo'),
 ('AllowRenewalIfOtherItemsAvailable','0',NULL,'If enabled, allow a patron to renew an item with unfilled holds if other available items can fill that hold.','YesNo'),
 ('AllowRenewalLimitOverride','0',NULL,'if ON, allows renewal limits to be overridden on the circulation screen','YesNo'),
 ('AllowRenewalOnHoldOverride','0',NULL,'If ON, allow items on hold to be renewed with a specified due date','YesNo'),
