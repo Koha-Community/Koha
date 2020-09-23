@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -268,6 +268,35 @@ subtest 'authorizer' => sub {
         $basket_creator->borrowernumber,
         '->authorized should return the correct creator'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'orders' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets'
+        }
+    );
+
+    my $orders = $basket->orders;
+    is( ref($orders), 'Koha::Acquisition::Orders', 'Type is correct with no attached orders' );
+    is( $orders->count, 0, 'No orders attached, count 0' );
+
+    my @actual_orders;
+
+    for ( 1..10 ) {
+        push @actual_orders, $builder->build_object({ class => 'Koha::Acquisition::Orders', value => { basketno => $basket->id } });
+    }
+
+    $orders = $basket->orders;
+    is( ref($orders), 'Koha::Acquisition::Orders', 'Type is correct with no attached orders' );
+    is( $orders->count, 10, '10 orders attached, count 10' );
 
     $schema->storage->txn_rollback;
 };
