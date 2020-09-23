@@ -404,8 +404,8 @@
                                                 [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                     <td class="note">
                                                         <input type="text" name="note" data-issue_id="[% ISSUE.issue_id | html %]" data-origvalue="[% ISSUE.note | html %]" value="[% ISSUE.note | html %]" readonly>
-                                                        <a class="btn js_submitnote" id="save_[% ISSUE.issue_id | html %]" style="display:none;">Submit note</a>
-                                                        <a class="btn nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</a>
+                                                        <button type="button" class="btn btn-primary btn-sm js_submitnote" id="save_[% ISSUE.issue_id | html %]" style="display:none;">Submit note</button>
+                                                        <button type="button" class="btn btn-primary btn-sm nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</button>
                                                     </td>
                                                 [% END %]
                                             </tr>
