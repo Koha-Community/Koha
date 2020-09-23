@@ -2502,6 +2502,8 @@ sub _adjust_pubyear {
     /xms ) { # the form 198-? occurred in Dutch ISBD rules
         my $digits = $+{year};
         $retval = $digits * ( 10 ** ( 4 - length($digits) ));
+    } else {
+        $retval = undef;
     }
     return $retval;
 }

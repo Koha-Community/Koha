@@ -94,7 +94,7 @@ subtest 'Multiple mappings for one kohafield' => sub {
 };
 
 subtest 'Testing _adjust_pubyear' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
     is( C4::Biblio::_adjust_pubyear('2004 c2000 2007'), 2000, 'First cYEAR' );
     is( C4::Biblio::_adjust_pubyear('2004 2000 2007'), 2004, 'First year' );
@@ -103,9 +103,11 @@ subtest 'Testing _adjust_pubyear' => sub {
     is( C4::Biblio::_adjust_pubyear('197X'), 1970, '197X on its own' );
     is( C4::Biblio::_adjust_pubyear('1...'), 1000, '1... on its own' );
     is( C4::Biblio::_adjust_pubyear('12?? 13xx'), 1200, '12?? first' );
-    is( C4::Biblio::_adjust_pubyear('12? 1x'), '12? 1x', 'Too short' );
-    is( C4::Biblio::_adjust_pubyear('198-'), '198-', 'Missing question mark' );
+    is( C4::Biblio::_adjust_pubyear('12? 1x'), undef, 'Too short return nothing as data must be int' );
+    is( C4::Biblio::_adjust_pubyear('198-'), undef, 'Missing question mark, nothing is returned as data must be int' );
     is( C4::Biblio::_adjust_pubyear('198-?'), '1980', '198-?' );
+    is( C4::Biblio::_adjust_pubyear('1981-'), '1981', 'Date range returns first date' );
+    is( C4::Biblio::_adjust_pubyear('broken'), undef, 'Non-matchign data returns nothing as the field must be int' );
 };
 
 # Cleanup
