@@ -18,6 +18,9 @@ package Koha::Acquisition::Order;
 use Modern::Perl;
 
 use Carp qw( croak );
+use Try::Tiny;
+
+use C4::Biblio qw(DelBiblio);
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
@@ -25,6 +28,7 @@ use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Order::Claims;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Exceptions::Object;
 use Koha::Biblios;
 use Koha::Holds;
 use Koha::Items;
@@ -93,6 +97,72 @@ sub store {
         $self->set( { parent_ordernumber => $self->ordernumber } );
         $self = $self->SUPER::store( $self );
     }
+
+    return $self;
+}
+
+=head3 cancel
+
+    $order->cancel(
+        { [ reason        => $reason,
+            delete_biblio => $delete_biblio ]
+        }
+    );
+
+This method marks an order as cancelled, optionally using the I<reason> parameter.
+As the order is cancelled, the (eventual) items linked to it are removed.
+If I<delete_biblio> is passed, it will try to remove the linked biblio.
+
+If either the items or biblio removal fails, an error message is added to the object
+so the caller can take appropriate actions.
+
+=cut
+
+sub cancel {
+    my ($self, $params) = @_;
+
+    my $delete_biblio = $params->{delete_biblio};
+    my $reason        = $params->{reason};
+
+    try {
+        # Delete the related items
+        $self->items->safe_delete;
+
+        my $biblio = $self->biblio;
+        if ( $biblio and $delete_biblio ) {
+
+            if (    $biblio->active_orders->count == 0
+                and $biblio->subscriptions->count == 0
+                and $biblio->items->count == 0 )
+            {
+
+                my $error = DelBiblio( $biblio->id );
+                $self->add_message({ message => 'error_delbiblio', error => $error })
+                  if $error;
+            }
+            else {
+
+                $self->add_message({ message => 'error_delbiblio' });
+            }
+        }
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::CannotBeDeleted' ) {
+            my $object = $_->object;
+            if ( ref($object) eq 'Koha::Item' ) {
+                $self->add_message({ message => 'error_delitem' });
+            }
+        }
+    };
+
+    # Update order status
+    $self->set(
+        {
+            cancellationreason      => $reason,
+            datecancellationprinted => \'NOW()',
+            orderstatus             => 'cancelled',
+        }
+    )->store;
 
     return $self;
 }
