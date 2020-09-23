@@ -1,11 +1,21 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Authority search results &rsaquo; Authorities &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
+<style>
+.usefor {
+    padding: 0;
+    margin: 0;
+}
+.usefor li {
+    list-style-type: none;
+}
+</style>
 </head>
 
 <body id="auth_searchresultlist" class="auth">
@@ -51,6 +61,9 @@
         [% UNLESS ( isEDITORS ) %]
           <th>Used in</th>
         [% END %]
+        [% IF Koha.Preference('ShowHeadingUse') %]
+          <th>Heading use</th>
+        [% END %]
         [% IF ( CAN_user_editauthorities ) %]
           <th>&nbsp;</th>
         [% END %]
@@ -73,6 +86,13 @@
           0 records
       [% END %]
       </td>
+    [% END %]
+    [% IF Koha.Preference('ShowHeadingUse') %]
+        <td class="actions"><ul class="usefor">
+            <li>[% IF resul.main %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Main/Added Entry</li>
+            <li>[% IF resul.subject %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Subject</li>
+            <li>[% IF resul.series %]<i class="fa fa-check"></i>[% ELSE %]<i class="fa fa-times"></i>[% END %] Series Title</li>
+        </ul></td>
     [% END %]
     [% IF ( CAN_user_editauthorities ) %]
       <td>

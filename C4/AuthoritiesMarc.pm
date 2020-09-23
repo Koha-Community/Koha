@@ -301,6 +301,18 @@ sub SearchAuthorities {
             }
             my $summary = BuildSummary( $authrecord, $authid, $thisauthtypecode );
 
+            if ( C4::Context->preference('ShowHeadingUse') ) {
+                # checking valid heading use
+                my $f008 = $authrecord->field('008');
+                my $pos14to16 = substr( $f008->data, 14, 3 );
+                my $main = substr( $pos14to16, 0, 1 );
+                $newline{main} = 1 if $main eq 'a';
+                my $subject = substr( $pos14to16, 1, 1);
+                $newline{subject} = 1 if $subject eq 'a';
+                my $series = substr( $pos14to16, 2, 1 );
+                $newline{series} = 1 if $series eq 'a';
+            }
+
             $newline{authtype}     = defined($thisauthtype) ?
                                         $thisauthtype->authtypetext : '';
             $newline{summary}      = $summary;
