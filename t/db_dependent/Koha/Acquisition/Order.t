@@ -19,13 +19,18 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
+use Test::Exception;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use C4::Circulation;
+
+use Koha::Biblios;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::Items;
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -581,6 +586,208 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
     is( $orders->filter_by_current->count, 2);
     is( $orders->filter_by_cancelled->count, 1);
 
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel() tests' => sub {
+
+    plan tests => 32;
+
+    $schema->storage->txn_begin;
+
+    # Scenario:
+    # * order with one item attached
+    # * the item is on loan
+    # * delete_biblio is passed
+    # => order is not cancelled
+    # => item in order is not removed
+    # => biblio in order is not removed
+    # => message about not being able to delete
+
+    my $item      = $builder->build_sample_item;
+    my $biblio_id = $item->biblio->id;
+    my $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $item->biblio->id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    )->reset_messages; # reset them as TestBuilder doesn't call new
+    $order->add_item( $item->id );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    t::lib::Mocks::mock_userenv(
+        { patron => $patron, branchcode => $patron->branchcode } );
+
+    # Add a checkout so cancelling fails because od 'book_on_loan'
+    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+    my $result = $order->cancel({ reason => 'Some reason' });
+    # refresh the order object
+    $order->discard_changes;
+
+    is( $result, $order, 'self is returned' );
+    is( $order->orderstatus, 'cancelled', 'Order is not marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is not undef' );
+    is( $order->cancellationreason, 'Some reason', 'cancellationreason is set' );
+    is( ref(Koha::Items->find($item->id)), 'Koha::Item', 'The item is present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
+    my @messages = @{ $order->messages };
+    is( $messages[0]->message, 'error_delitem', 'An error message is attached to the order' );
+
+    # Scenario:
+    # * order with one item attached
+    # * the item is no longer on loan
+    # * delete_biblio not passed
+    # => order is cancelled
+    # => item in order is removed
+    # => biblio remains untouched
+
+    C4::Circulation::AddReturn( $item->barcode );
+
+    $order->reset_messages;
+    $order->cancel({ reason => 'Some reason' })
+          ->discard_changes;
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
+    is( $order->cancellationreason, 'Some reason', 'cancellationreason is undef' );
+    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is present' );
+    @messages = @{ $order->messages };
+    is( scalar @messages, 0, 'No messages' );
+
+    # Scenario:
+    # * order with one item attached
+    # * biblio has another item
+    # => order is cancelled
+    # => item in order is removed
+    # => the extra item remains untouched
+    # => biblio remains untouched
+
+    my $item_1 = $builder->build_sample_item;
+    $biblio_id = $item_1->biblio->id;
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio_id });
+    $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    )->reset_messages;
+    $order->add_item( $item_1->id );
+
+    $order->cancel({ reason => 'Some reason', delete_biblio => 1 })
+          ->discard_changes;
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
+    is( $order->cancellationreason, 'Some reason', 'cancellationreason is undef' );
+    is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
+    is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The item is still present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    @messages = @{ $order->messages };
+    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
+
+    # Scenario:
+    # * order with one item attached
+    # * there's another order pointing to the biblio
+    # => order is cancelled
+    # => item in order is removed
+    # => biblio remains untouched
+    # => biblio delete error notified
+
+    $item      = $builder->build_sample_item;
+    $biblio_id = $item->biblio->id;
+    $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    )->reset_messages;
+    $order->add_item( $item->id );
+
+    # Add another order
+    $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    );
+
+    $order->cancel({ reason => 'Some reason', delete_biblio => 1 })
+          ->discard_changes;
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
+    is( $order->cancellationreason, 'Some reason', 'cancellationreason is undef' );
+    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    @messages = @{ $order->messages };
+    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
+
+    # Scenario:
+    # * order with one item attached
+    # * there's a subscription on the biblio
+    # => order is cancelled
+    # => item in order is removed
+    # => biblio remains untouched
+    # => biblio delete error notified
+
+    $item      = $builder->build_sample_item;
+    $biblio_id = $item->biblio->id;
+    $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    )->reset_messages;
+    $order->add_item( $item->id );
+
+    # Add a subscription
+    $builder->build_object(
+        {
+            class => 'Koha::Subscriptions',
+            value => {
+                biblionumber => $biblio_id,
+            }
+        }
+    );
+
+    $order->cancel({ reason => 'Some reason', delete_biblio => 1 })
+          ->discard_changes;
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
+    is( $order->cancellationreason, 'Some reason', 'cancellationreason is undef' );
+    is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    @messages = @{ $order->messages };
+    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
 
     $schema->storage->txn_rollback;
 };
