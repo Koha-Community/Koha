@@ -401,6 +401,11 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
+                        return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
+                    }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
                         if ( ! oObj.charge ) oObj.charge = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).toFixed(2) + '<span>';
                     }
@@ -768,6 +773,11 @@ $(document).ready(function() {
                     {
                         "mDataProp": function ( oObj ) {
                             return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
+                        }
+                    },
+                    {
+                        "mDataProp": function ( oObj ) {
+                            return ( oObj.copynumber ? oObj.copynumber.escapeHtml() : '' );
                         }
                     },
                     {

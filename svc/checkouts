@@ -85,6 +85,7 @@ my $sql = '
         items.itemnotes,
         items.itemnotes_nonpublic,
         items.itemcallnumber,
+        items.copynumber,
         items.replacementprice,
 
         issues.branchcode,
@@ -221,7 +222,8 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         itemnotes_nonpublic  => $c->{itemnotes_nonpublic},
         branchcode           => $c->{branchcode},
         branchname           => $c->{branchname},
-        itemcallnumber => $c->{itemcallnumber}   || q{},
+        itemcallnumber       => $c->{itemcallnumber} || q{},
+        copynumber           => $c->{copynumber} || q{},
         charge         => $charge,
         fine           => $fine,
         price          => $c->{replacementprice} || q{},

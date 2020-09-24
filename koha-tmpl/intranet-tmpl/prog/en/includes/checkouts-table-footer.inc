@@ -1,6 +1,6 @@
 <tfoot>
 	<tr>
-        <td colspan="14" style="text-align: right; font-weight:bold;">Totals:</td>
+        <td colspan="15" style="text-align: right; font-weight:bold;">Totals:</td>
         <td id="totaldue" style="text-align: right;"></td>
         <td id="totalfine" style="text-align: right;"></td>
         <td id="totalprice" style="text-align: right;"></td>
