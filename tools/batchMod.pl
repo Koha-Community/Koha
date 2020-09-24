@@ -330,9 +330,8 @@ foreach my $tag (sort keys %{$tagslib}) {
         next if IsMarcStructureInternal( $tagslib->{$tag}{$subfield} );
         next if (not $allowAllSubfields and $restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
-        # barcode and stocknumber are not meant to be batch-modified
-    	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';
-    	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.stocknumber';
+        # barcode is not meant to be batch-modified
+        next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';
 	my %subfield_data;
  
 	my $index_subfield = int(rand(1000000)); 
