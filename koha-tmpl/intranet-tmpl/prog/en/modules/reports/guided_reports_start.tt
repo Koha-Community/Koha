@@ -28,9 +28,9 @@
     [%- ELSIF ( showsql ) -%]
         &rsaquo; Saved reports &rsaquo; SQL view
     [%- ELSIF ( execute ) -%]
-        &rsaquo; Saved reports &rsaquo; Report [% name | html %]
+        &rsaquo; Saved reports &rsaquo; Report [% name | html %] ([% id | html %])
     [%- ELSIF ( editsql ) -%]
-        &rsaquo; Saved reports &rsaquo; Edit report [% reportname | html %]
+        &rsaquo; Saved reports &rsaquo; Edit report [% reportname | html %] ([% id | html %])
     [%- END -%]
     [%- IF ( build1 ) -%]
         &rsaquo; Build a report, step 1 of 6: Choose a module
