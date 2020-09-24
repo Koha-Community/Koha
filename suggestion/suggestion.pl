@@ -407,7 +407,7 @@ $template->param( returnsuggestedby => $returnsuggestedby );
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 $template->param(patron_reason_loop=>$patron_reason_loop);
 
-#Budgets management
+# Budgets for filtering
 my $budgets = GetBudgets;
 my @budgets_loop;
 foreach my $budget ( @{$budgets} ) {
@@ -420,8 +420,25 @@ foreach my $budget ( @{$budgets} ) {
 
     push @budgets_loop, $budget;
 }
-
 $template->param( budgetsloop => \@budgets_loop);
+
+# Budgets for suggestion add or edition
+my $sugg_budget_loop = [];
+my $sugg_budgets     = GetBudgetHierarchy();
+foreach my $r ( @{$sugg_budgets} ) {
+    next unless ( CanUserUseBudget( $borrowernumber, $r, $userflags ) );
+    my $selected = ( $$suggestion_ref{budgetid} && $r->{budget_id} eq $$suggestion_ref{budgetid} ) ? 1 : 0;
+    push @{$sugg_budget_loop},
+      {
+        b_id     => $r->{budget_id},
+        b_txt    => $r->{budget_name},
+        b_active => $r->{budget_period_active},
+        selected => $selected,
+      };
+}
+@{$sugg_budget_loop} = sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$sugg_budget_loop};
+$template->param( sugg_budgets => $sugg_budget_loop);
+
 if( $suggestion_ref->{STATUS} ) {
     $template->param(
         "statusselected_".$suggestion_ref->{STATUS} => 1,
