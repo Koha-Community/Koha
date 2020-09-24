@@ -341,8 +341,6 @@ elsif ($op eq "set-branch-defaults") {
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
     my $returnbranch  = $input->param('returnbranch');
     my $max_holds = strip_non_numeric( scalar $input->param('max_holds') );
-    $holdallowed =~ s/\s//g;
-    $holdallowed = undef if $holdallowed !~ /^\d+/;
 
     if ($branch eq "*") {
         Koha::CirculationRules->set_rules(

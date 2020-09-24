@@ -62,12 +62,15 @@ our $RULE_KINDS = {
 
     holdallowed => {
         scope => [ 'branchcode', 'itemtype' ],
+        can_be_blank => 0,
     },
     hold_fulfillment_policy => {
         scope => [ 'branchcode', 'itemtype' ],
+        can_be_blank => 0,
     },
     returnbranch => {
         scope => [ 'branchcode', 'itemtype' ],
+        can_be_blank => 0,
     },
 
     article_requests => {
@@ -278,6 +281,8 @@ sub set_rule {
     my $itemtype     = $params->{itemtype};
     my $rule_name    = $params->{rule_name};
     my $rule_value   = $params->{rule_value};
+    my $can_be_blank = defined $kind_info->{can_be_blank} ? $kind_info->{can_be_blank} : 1;
+    $rule_value = undef if $rule_value eq "" && !$can_be_blank;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
