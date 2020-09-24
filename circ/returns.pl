@@ -605,6 +605,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{barcode}             = $bar_code;
         $ri{homebranch}          = $item->homebranch;
         $ri{holdingbranch}       = $item->holdingbranch;
+        $ri{damaged}             = $item->damaged;
 
         $ri{location} = $item->location;
         my $shelfcode = $ri{'location'};

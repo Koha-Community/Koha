@@ -849,6 +849,9 @@
                                             [% ELSE %]
                                                 Not checked out
                                             [% END %]
+                                            [% IF ( riloo.damaged ) %]
+                                                <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', riloo.damaged ) | html %]</span>
+                                            [% END %]
                                         </td>
                                         <td class="ci-title">
                                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
