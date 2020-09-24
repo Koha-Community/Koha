@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 47;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -213,6 +213,7 @@ my $borrower1 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            flags => undef,
         },
 });
 my $bor1inlist = $borrower1->{borrowernumber};
@@ -222,6 +223,7 @@ my $borrower2 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            flags => undef,
         },
 });
 
@@ -231,6 +233,7 @@ my $guarantee = $builder->build({
             categorycode=>'KIDclamp',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            flags => undef,
         },
 });
 
@@ -306,21 +309,72 @@ is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date')
 
 # Test GetBorrowersToExpunge and TrackLastPatronActivity
 $dbh->do(q|UPDATE borrowers SET lastseen=NULL|);
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', categorycode => 'CIVILIAN' } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', categorycode => 'CIVILIAN' } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', categorycode => 'CIVILIAN' } } );
+$builder->build({
+    source => 'Borrower',
+    value => {
+        lastseen => '2016-01-01 01:01:01',
+        categorycode => 'CIVILIAN',
+        flags => undef,
+    }
+});
+$builder->build({
+    source => 'Borrower',
+    value => {
+        lastseen => '2016-02-02 02:02:02',
+        categorycode => 'CIVILIAN',
+        flags => undef,
+    }
+});
+$builder->build({
+    source => 'Borrower',
+    value => {
+        lastseen => '2016-03-03 03:03:03',
+        categorycode => 'CIVILIAN',
+        flags => undef,
+    }
+});
 $patstodel = GetBorrowersToExpunge( { last_seen => '1999-12-12' });
 is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });
 is( scalar @$patstodel, 2, 'TrackLastPatronActivity - 2 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { last_seen => '2016-04-04' });
 is( scalar @$patstodel, 3, 'TrackLastPatronActivity - 3 patrons must be deleted' );
-my $patron2 = $builder->build({ source => 'Borrower', value => { lastseen => undef } });
+my $patron2 = $builder->build({
+    source => 'Borrower',
+    value => {
+        lastseen => undef,
+        flags => undef,
+    }
+});
 t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
 Koha::Patrons->find( $patron2->{borrowernumber} )->track_login;
 is( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should not be changed' );
 Koha::Patrons->find( $patron2->{borrowernumber} )->track_login({ force => 1 });
 isnt( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should be changed now' );
+
+# Test GetBorrowersToExpunge and regular patron with permission
+$builder->build({
+        source => 'Category',
+        value => {
+            categorycode         => 'SMALLSTAFF',
+            description          => 'Small staff',
+            category_type        => 'A',
+        },
+});
+$borrowernumber = Koha::Patron->new({
+    categorycode => 'SMALLSTAFF',
+    branchcode => $library2->{branchcode},
+    flags => undef,
+})->store->borrowernumber;
+$patron = Koha::Patrons->find( $borrowernumber );
+$patstodel = GetBorrowersToExpunge( {category_code => 'SMALLSTAFF' } );
+is( scalar @$patstodel, 1, 'Regular patron with flags=undef can be deleted' );
+$patron->set({ flags => 0 })->store;
+$patstodel = GetBorrowersToExpunge( {category_code => 'SMALLSTAFF' } );
+is( scalar @$patstodel, 1, 'Regular patron with flags=0 can be deleted' );
+$patron->set({ flags => 4 })->store;
+$patstodel = GetBorrowersToExpunge( {category_code => 'SMALLSTAFF' } );
+is( scalar @$patstodel, 0, 'Regular patron with flags>0 can not be deleted' );
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)
