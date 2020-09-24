@@ -618,6 +618,8 @@ sub Z3950SearchAuth {
                             my $heading;
                             my $heading_authtype_code;
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
+                            next if ( not defined $heading_authtype_code ) ;
+
                             $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
 
                             my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], $encoding[$k], $heading );
