@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 152;
+use Test::More tests => 153;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
@@ -560,6 +560,59 @@ is($oai_setsVH->[0]->{id}, $setVH_id, 'id is ok');
 is($oai_setsVH->[0]->{spec}, $setVH->{spec}, 'id is ok');
 is($oai_setsVH->[0]->{name}, $setVH->{name}, 'id is ok');
 
+subtest 'OAI-PMH:AutoUpdateSetsEmbedItemData' => sub {
+
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference( 'OAI-PMH:AutoUpdateSetsEmbedItemData', 0 );
+
+    #Create a set
+    my $setFIC = {
+        'spec' => 'Set where collection code is FIC',
+        'name' => 'FIC'
+    };
+    my $setFIC_id = AddOAISet($setFIC);
+
+    #Create mappings : 'ccode' should be 'FIC'
+    my $mappingsFIC;
+    $mappingsFIC = [
+        {
+            marcfield    => '952',
+            marcsubfield => '8',
+            operator     => 'equal',
+            marcvalue    => 'FIC'
+        }
+    ];
+    ModOAISetMappings( $setFIC_id, $mappingsFIC );
+
+    # Create biblio with 'FIC' item
+    my $biblio_FIC = $builder->build_sample_biblio();
+    my $item       = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_FIC->biblionumber,
+            ccode        => 'FIC'
+        }
+    );
+
+    #Update
+    my $recordFIC = GetMarcBiblio( { biblionumber => $biblio_FIC->biblionumber } );
+    UpdateOAISetsBiblio( $biblio_FIC->biblionumber, $recordFIC );
+
+    #is biblio attached to setFIC ?
+    my $oai_setsFIC = GetOAISetsBiblio( $biblio_FIC->biblionumber );
+    is( $oai_setsFIC->[0]->{id},   undef, 'id is ok' );
+    is( $oai_setsFIC->[0]->{spec}, undef, 'id is ok' );
+    is( $oai_setsFIC->[0]->{name}, undef, 'id is ok' );
+
+    t::lib::Mocks::mock_preference( 'OAI-PMH:AutoUpdateSetsEmbedItemData', 1 );
+    UpdateOAISetsBiblio( $biblio_FIC->biblionumber, $recordFIC );
+
+    #is biblio attached to setFIC ?
+    $oai_setsFIC = GetOAISetsBiblio( $biblio_FIC->biblionumber );
+    is( $oai_setsFIC->[0]->{id},   $setFIC_id,      'id is ok' );
+    is( $oai_setsFIC->[0]->{spec}, $setFIC->{spec}, 'id is ok' );
+    is( $oai_setsFIC->[0]->{name}, $setFIC->{name}, 'id is ok' );
+};
 
 # ---------- Testing CalcOAISetsBiblio ----------
 ok (!defined(CalcOAISetsBiblio), 'CalcOAISetsBiblio without argument is undef');
