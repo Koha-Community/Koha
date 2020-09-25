@@ -2,7 +2,15 @@
 [% USE KohaDates %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% IF ( patron.borrowernumber ) %]
-<div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
+[% SET patrongrade = ( patron.has_permission({ 'catalogue' => 1 }) ) ? 'staffgrade' : 'normalgrade' %]
+<div class="patroninfo [% patrongrade | html %]">
+
+<h5>
+    [% IF ( patrongrade == 'staffgrade' ) %]
+        <i class="fa fa-shield" title="Staff patron"></i>
+    [% END %]
+    [% INCLUDE 'patron-title.inc' %]
+</h5>
 
 [% IF Koha.Preference('showLastPatron') %]
     <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
