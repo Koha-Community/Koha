@@ -1269,7 +1269,7 @@ Note that permanent location is a code, and location may be an authval.
         $(document).ready(function() {
             var ids = ['holdings_table', 'otherholdings_table'];
             var columns_settings = [ [% TablesSettings.GetColumns('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetColumns('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
-            var has_images = ["[% itemloop_has_images %]", "[% otheritemloop_has_images %]"];
+            var has_images = ["[% itemloop_has_images | html %]", "[% otheritemloop_has_images | html %]"];
             for (var i in ids) {
                 var id = ids[i];
                 if ( !has_images[i] ) { // remove the cover_image column
