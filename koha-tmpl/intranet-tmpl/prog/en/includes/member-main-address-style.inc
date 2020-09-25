@@ -138,9 +138,7 @@
                 <label for="city">
             [% END %]
             City: </label>
-            <input type="text" id="city" name="city" size="20" value="[% patron.city | html %]" />
             [% IF cities.count %]
-                or choose
                 <select class="select_city" data-addressfield="" name="select_city">
                     <option value="|||"></option>
                     [% FOREACH c IN cities %]
@@ -153,7 +151,9 @@
                         </option>
                     [% END %]
                 </select>
+                <span class="hint">or enter</span>
             [% END %]
+            <input type="text" id="city" name="city" size="20" value="[% patron.city | html %]" />
             [% IF ( mandatorycity ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]

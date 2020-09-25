@@ -132,8 +132,7 @@
                 <label for="altcontactaddress3">
             [% END %]
             City:</label>
-            <input type="text" name="altcontactaddress3" id="altcontactcity" value="[% patron.altcontactaddress3 | html %]" size="20" />
-            [% IF cities.count %]or choose
+            [% IF cities.count %]
                 <select class="select_city" data-addressfield="altcontact" name="select_city">
                     <option value="|||"></option>
                     [% FOREACH c IN cities %]
@@ -146,7 +145,9 @@
                         </option>
                     [% END %]
                 </select>
+                <span class="hint">or enter</span>
             [% END %]
+            <input type="text" name="altcontactaddress3" id="altcontactcity" value="[% patron.altcontactaddress3 | html %]" size="20" />
             [% IF ( mandatoryaltcontactaddress3 ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
