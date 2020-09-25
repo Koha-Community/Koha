@@ -97,7 +97,7 @@
           <button type="button" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue refund</button>
         [% END %]
         [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') %]
-          <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-percent"></i> Apply discount</button>
+          <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs">Apply discount</button>
         [% END %]
       </td>
     </tr>
