@@ -14,12 +14,7 @@ if ( CheckVersion($DBversion) ) {
         }
         else {
             $dbh->do(q|ALTER TABLE items DROP COLUMN paidfor|);
-            $dbh->do(q|
-                DELETE FROM marc_subfield_structure
-                WHERE tagfield = '952'
-                AND tagsubfield = 'x'
-                AND kohafield = 'items.paidfor'
-            |);
+            $dbh->do(q|UPDATE marc_subfield_structure SET kohafield = '' WHERE kohafield = 'items.paidfor'|);
         }
     }
 
