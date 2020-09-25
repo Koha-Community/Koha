@@ -151,7 +151,7 @@
             </td>
             <td class="hq-collection">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => itemsloo.ccode ) | html %]</td>
             <td class="hq-itemtype">[% ItemTypes.GetDescription( itemsloo.itype ) | html %]</td>
-            <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => 'itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
+            <td class="hq-callnumber">[% IF ( itemsloo.location ) %]<em>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => itemsloo.location ) | html %]</em> [% END %][% itemsloo.itemcallnumber | html %]</td>
             <td class="hq-copynumber">[% itemsloo.copynumber | html %]</td>
             <td class="hq-enumchron">[% itemsloo.enumchron | html %]</td>
             <td class="hq-barcode">
