@@ -28,7 +28,7 @@ Koha::SearchEngine::Elasticsearch::Indexer - handles adding new records to the i
 =head1 SYNOPSIS
 
     my $indexer = Koha::SearchEngine::Zebra::Indexer->new();
-    $indexer->index_records( $biblionumbers, $op, $server, $records);
+    $indexer->index_records( $record_numbers, $op, $server, $records);
 
 
 =head1 FUNCTIONS
@@ -45,7 +45,7 @@ sub new {
     my $self = $class->SUPER::new(@_);
 }
 
-=head2 index_records($biblionumbers, $op, $server, $records)
+=head2 index_records($record_numbers, $op, $server, $records)
 
     This is simply a wrapper to C4::Biblio::ModZebra that takes an array of records and
     passes them through individually
@@ -55,10 +55,10 @@ sub new {
 =cut
 
 sub index_records {
-    my ( $self, $biblionumbers, $op, $server, $records ) = @_;
-    $biblionumbers = [$biblionumbers] if ref $biblionumbers ne 'ARRAY' && defined $biblionumbers;
-    foreach my $biblionumber ( @$biblionumbers ){
-        ModZebra( $biblionumber, $op, $server );
+    my ( $self, $record_numbers, $op, $server, $records ) = @_;
+    $record_numbers = [$record_numbers] if ref $record_numbers ne 'ARRAY' && defined $record_numbers;
+    foreach my $record_number ( @$record_numbers ){
+        ModZebra( $record_number, $op, $server );
     }
 }
 

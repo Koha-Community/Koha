@@ -2489,20 +2489,19 @@ sub CountItemsIssued {
 
 =head2 ModZebra
 
-  ModZebra( $biblionumber, $op, $server, $record );
+  ModZebra( $record_number, $op, $server, $record );
 
-$biblionumber is the biblionumber we want to index
+$record_number is the authid or biblionumber we want to index
 
-$op is specialUpdate or recordDelete, and is used to know what we want to do
+$op is the operation: specialUpdate or recordDelete
 
-$server is the server that we want to update
+$server is authorityserver or biblioserver
 
 =cut
 
 sub ModZebra {
-###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-    my ( $biblionumber, $op, $server ) = @_;
-    $debug && warn "ModZebra: updates requested for: $biblionumber $op $server\n";
+    my ( $record_number, $op, $server ) = @_;
+    $debug && warn "ModZebra: updates requested for: $record_number $op $server\n";
     my $dbh = C4::Context->dbh;
 
     # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
@@ -2515,16 +2514,15 @@ sub ModZebra {
         AND   operation = ?
         AND   done = 0";
     my $check_sth = $dbh->prepare_cached($check_sql);
-    $check_sth->execute( $server, $biblionumber, $op );
+    $check_sth->execute( $server, $record_number, $op );
     my ($count) = $check_sth->fetchrow_array;
     $check_sth->finish();
     if ( $count == 0 ) {
         my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
-        $sth->execute( $biblionumber, $server, $op );
+        $sth->execute( $record_number, $server, $op );
         $sth->finish;
     }
 }
-
 
 =head2 EmbedItemsInMarcBiblio
 
