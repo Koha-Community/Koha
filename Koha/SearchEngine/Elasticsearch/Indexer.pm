@@ -284,7 +284,7 @@ sub update_index_background {
 
 =head2 index_records
 
-This function takes an array of biblionumbers and fetches the records to send to update_index
+This function takes an array of record numbers and fetches the records to send to update_index
 for actual indexing.
 
 If $records parameter is provided the records will be used as-is, this is only utilized for authorities
@@ -296,29 +296,34 @@ to Zebra as well.
 =cut
 
 sub index_records {
-    my ( $self, $biblionumbers, $op, $server, $records ) = @_;
-    $biblionumbers = [$biblionumbers] if ref $biblionumbers ne 'ARRAY' && defined $biblionumbers;
+    my ( $self, $record_numbers, $op, $server, $records ) = @_;
+    $record_numbers = [$record_numbers] if ref $record_numbers ne 'ARRAY' && defined $record_numbers;
     $records = [$records] if ref $records ne 'ARRAY' && defined $records;
     if ( $op eq 'specialUpdate' ) {
-        my $index_biblionumbers;
+        my $index_record_numbers;
         unless ($records) {
-            foreach my $biblionumber ( @$biblionumbers ){
-                my $record = C4::Biblio::GetMarcBiblio({
-                    biblionumber => $biblionumber,
-                    embed_items  => 1 });
+            foreach my $record_number ( @$record_numbers ){
+                my $record = _get_record( $record_number, $server );
                 if( $record ){
                     push @$records, $record;
-                    push @$index_biblionumbers, $biblionumber;
+                    push @$index_record_numbers, $record_number;
                 }
             }
         }
-        $self->update_index_background( $index_biblionumbers, $records ) if $index_biblionumbers && $records;
+        $self->update_index_background( $index_record_numbers, $records ) if $index_record_numbers && $records;
     }
     elsif ( $op eq 'recordDelete' ) {
-        $self->delete_index_background( $biblionumbers );
+        $self->delete_index_background( $record_numbers );
     }
     #FIXME Current behaviour is to index Zebra when using ES, at some point we should stop
-    Koha::SearchEngine::Zebra::Indexer::index_records( $self, $biblionumbers, $op, $server, undef );
+    Koha::SearchEngine::Zebra::Indexer::index_records( $self, $record_numbers, $op, $server, undef );
+}
+
+sub _get_record {
+    my ( $id, $server ) = @_;
+    return $server eq 'biblioserver'
+        ? C4::Biblio::GetMarcBiblio({ biblionumber => $id, embed_items  => 1 })
+        : C4::AuthoritiesMarc::GetAuthority($id);
 }
 
 =head2 delete_index($biblionums)
