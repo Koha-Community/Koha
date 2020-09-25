@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2015 Catalyst IT
 #
 # This file is part of Koha.
