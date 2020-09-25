@@ -113,7 +113,7 @@
                     [% hold.date | $KohaDates %]
                 [% END %]
             </td>
-            <td><input type="text" class="datepickerto" value="[% hold.expirationdate | $KohaDates %]" size="10" name="expirationdate" /></td>
+            <td><input type="text" class="datepicker futuredate" value="[% hold.expirationdate | $KohaDates %]" size="10" name="expirationdate" /></td>
 
             <td>
                 [% IF ( hold.found ) %]
