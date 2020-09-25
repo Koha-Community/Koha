@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -196,6 +196,63 @@ subtest "Test build_additional_item_fields_string" => sub {
     is( $attribute_string, sprintf("XY%s|YZ%s|", $item->itemnumber, $item->biblionumber), 'Attribute field generated correctly with multiple params' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest "Test cr_item_field" => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
+    my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    # create some data
+    my $patron1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            password => hash_password( PATRON_PW ),
+        },
+    });
+    my $card1 = $patron1->{cardnumber};
+    my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
+    $findpatron = $sip_patron1;
+    my $item_object = $builder->build_sample_item({
+        damaged => 0,
+        withdrawn => 0,
+        itemlost => 0,
+        restricted => 0,
+        homebranch => $branchcode,
+        holdingbranch => $branchcode,
+    });
+
+    my $mockILS = $mocks->{ils};
+    my $server = { ils => $mockILS, account => {} };
+    $mockILS->mock( 'institution', sub { $branchcode; } );
+    $mockILS->mock( 'supports', sub { return; } );
+    $mockILS->mock( 'checkin', sub {
+        shift;
+        return C4::SIP::ILS->checkin(@_);
+    });
+    my $today = dt_from_string;
+
+    my $respcode;
+
+    # Not checked out, toggle option checked_in_ok
+    my $siprequest = CHECKIN . 'N' . 'YYYYMMDDZZZZHHMMSS' .
+        siprequestdate( $today->clone->add( days => 1) ) .
+        FID_INST_ID . $branchcode . '|'.
+        FID_ITEM_ID . $item_object->barcode . '|' .
+        FID_TERMINAL_PWD . 'ignored' . '|';
+    undef $response;
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    $server->{account}->{cr_item_field} = 'itemnumber';
+
+    $msg->handle_checkin( $server );
+
+    my $id = $item_object->id;
+    ok( $response =~ m/CR$id/, "Found correct CR field in response");
 };
 
 subtest 'Patron info summary > 5 should not crash server' => sub {
