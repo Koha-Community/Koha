@@ -55,7 +55,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('FA', '', '952', 'u', 0, 0, 'Уніфікований ідентифікатор ресурсів', '', 10, 0, 'items.uri', '', '', NULL, '', NULL, NULL),
  ('FA', '', '952', 'v', 0, 0, 'Вартість, ціна заміни', '',              10, 0, 'items.replacementprice', '', '', NULL, '', NULL, NULL),
  ('FA', '', '952', 'w', 0, 0, 'Дата, для якої чинна ціна заміни', '',   10, 0, 'items.replacementpricedate', '', '', NULL, '', NULL, NULL),
- ('FA', '', '952', 'x', 0, 1, 'Службова (незагальнодоступна) примітка', '', 10, 0, 'items.paidfor', '', '', NULL, '', NULL, NULL),
+ ('FA', '', '952', 'x', 0, 1, 'Службова (незагальнодоступна) примітка', '', 10, 0, 'items.itemnotes_nonpublic', '', '', NULL, '', NULL, NULL),
  ('FA', '', '952', 'y', 0, 0, 'Тип одиниці (рівень примірника)', '',    10, 0, 'items.itype', 'itemtypes', '', NULL, '', NULL, NULL),
  ('FA', '', '952', 'z', 0, 0, 'Загальнодоступна примітка щодо примірника', '', 10, 0, 'items.itemnotes', '', '', NULL, '', NULL, NULL);
 

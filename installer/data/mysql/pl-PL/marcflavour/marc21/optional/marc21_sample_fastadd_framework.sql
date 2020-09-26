@@ -132,7 +132,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952','u','Uniform Resource Identifier','Uniform Resource Identifier',0,0,'items.uri',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','v','Cost, replacement price','Cost, replacement price',0,0,'items.replacementprice',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','w','Price effective from','Price effective from',0,0,'items.replacementpricedate',10,'','','',NULL,0,'FA','',NULL,NULL),
-		('952','x','Nonpublic note (lost item payment)','Nonpublic note (lost item payment)',1,0,'items.paidfor',10,'','','',NULL,0,'FA','',NULL,NULL),
+		('952','x','Nonpublic note','Nonpublic note',1,0,'items.itemnotes_nonpublic',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','y','Koha item type','Koha item type',0,0,'items.itype',10,'itemtypes','','',NULL,0,'FA','',NULL,NULL),
 		('952','z','Public note','Public note',0,0,'items.itemnotes',10,'','','',NULL,0,'FA','',NULL,NULL),
                 ('999', 'c', 'Koha biblionumber', 'Koha biblionumber', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, 'FA', '', '', NULL),

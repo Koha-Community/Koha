@@ -406,7 +406,6 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 # restricted					995^3		статус ограничения доступа
 # itemnotes						995^u		общедоступное примечание о экземпляре
 # holdingbranch				995^с		место временного хранения или выдачи (подразделение хранения), код
-# paidfor									платеж за утраченный экземпляр
 # timestamp						995^g		дата последнего редактирования экземпляра
 # location						995^e		текущее полочное расположение
 # permanent_location						постоянное полочное расположение
