@@ -132,17 +132,36 @@ aside {
 
     fieldset {
         &.brief {
-            margin: 0 0 1em 0;
             padding: .4em .7em;
 
+            button + button,
+            input + input {
+                margin-left: 5px;
+            }
+
             fieldset {
-                margin: 0;
-                padding: .5em 0;
+                border-width: 1px;
+                border-radius: 0;
+                margin: 0 0 .5em 0;
+                padding: .5em;
 
                 legend {
                     font-size: 95%;
                     margin: 0;
                 }
+
+                &.action {
+                    margin-left: 0;
+                    padding: .5em 0;
+                }
+            }
+
+            input, select {
+                height: calc(1.5em + .75rem + 2px);
+            }
+
+            label {
+                margin: .5em 0 0 0;
             }
 
             li {

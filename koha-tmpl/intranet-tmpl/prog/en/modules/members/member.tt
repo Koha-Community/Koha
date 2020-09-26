@@ -119,14 +119,14 @@
                 <form method="get" id="searchform">
                   <input type="hidden" id="firstletter_filter" value="" />
                   <fieldset class="brief">
-                    <h3>Filters</h3>
+                    <h3>Search patrons</h3>
                     <ol>
                       <li>
-                        <label for="searchmember_filter">Search:</label>
+                        <label for="searchmember_filter">Search for:</label>
                         <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
                       </li>
                       <li>
-                        <label for="searchfieldstype_filter">Search fields:</label>
+                        <label for="searchfieldstype_filter">Search field:</label>
                         <select name="searchfieldstype" id="searchfieldstype_filter">
                             [% pref_fields = Koha.Preference('DefaultPatronSearchFields').split(',') %]
                             [% default_fields = [ 'standard', 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
@@ -155,7 +155,7 @@
                         </select>
                       </li>
                       <li>
-                        <label for="categorycode_filter">Category:</label>
+                        <label for="categorycode_filter">Patron category:</label>
                         [% SET categories = Categories.all() %]
                         <select id="categorycode_filter">
                           <option value="">Any</option>
