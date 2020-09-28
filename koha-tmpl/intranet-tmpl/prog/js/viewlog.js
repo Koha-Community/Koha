@@ -51,6 +51,13 @@ function limitCheckboxes() {
 
 $(document).ready(function(){
     limitCheckboxes();
+
+    if( $(".compare_info").length == 0 ){
+        /* Remove toolbar if there are no system preference
+           entries to compare */
+        $("#toolbar").remove();
+    }
+
     if ($('#toolbar').length) {
         Sticky = $("#toolbar");
         Sticky.hcSticky({
