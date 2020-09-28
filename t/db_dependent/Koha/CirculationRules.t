@@ -33,7 +33,7 @@ my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'set_rule + get_effective_rule' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -101,6 +101,31 @@ subtest 'set_rule + get_effective_rule' => sub {
     );
     is( $rule->rule_value, 1,
         'Default rule is returned if there is no rule for this branchcode' );
+
+    subtest 'test rules that cannot be blank' => sub {
+        plan tests => 3;
+        foreach my $no_blank_rule ( ('holdallowed','hold_fulfillment_policy','returnbranch') ){
+            Koha::CirculationRules->set_rule(
+                {
+                    branchcode   => $branchcode,
+                    itemtype     => '*',
+                    rule_name    => $no_blank_rule,
+                    rule_value   => '',
+                }
+            );
+
+            $rule = Koha::CirculationRules->get_effective_rule(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => $no_blank_rule,
+                }
+            );
+            is( $rule, undef, 'Rules that cannot be blank are not set when passed blank string' );
+        }
+    };
+
 
     subtest 'test rule matching with different combinations of rule scopes' => sub {
         my ( $tests, $order ) = prepare_tests_for_rule_scope_combinations(
