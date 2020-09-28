@@ -28,6 +28,7 @@ use Try::Tiny;
 use Koha::Database;
 use Koha::Exceptions::Object;
 use Koha::DateUtils;
+use Koha::Object::Message;
 
 =head1 NAME
 
@@ -76,6 +77,8 @@ sub new {
         $self->{_result} =
           $schema->resultset( $class->_type() )->new($attributes);
     }
+
+    $self->{_messages} = [];
 
     croak("No _type found! Koha::Object must be subclassed!")
       unless $class->_type();
@@ -330,6 +333,46 @@ sub get_from_storage {
     return unless $stored_object;
     my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
     return $object_class->_new_from_dbic($stored_object);
+}
+
+=head3 $object->messages
+
+    my @messages = @{ $object->messages };
+
+Returns the (probably non-fatal) messages that were recorded on the object.
+
+=cut
+
+sub messages {
+    my ( $self ) = @_;
+    return $self->{_messages};
+}
+
+=head3 $object->add_message
+
+    try {
+        <some action that might fail>
+    }
+    catch {
+        if ( <fatal condition> ) {
+            Koha::Exception->throw...
+        }
+
+        # This is a non fatal error, notify the caller
+        $self->add_message({ message => $error, type => 'error' });
+    }
+    return $self;
+
+Adds a message.
+
+=cut
+
+sub add_message {
+    my ( $self, $params ) = @_;
+
+    push @{ $self->{_messages} }, Koha::Object::Message->new($params);
+
+    return $self;
 }
 
 =head3 $object->TO_JSON

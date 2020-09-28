@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -866,4 +866,25 @@ subtest 'set_or_blank' => sub {
     isnt($item->timestamp, undef, 'set_or_blank should have set timestamp to a correct value');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'messages() and add_message() tests' => sub {
+
+    plan tests => 6;
+
+    my $patron = Koha::Patron->new;
+
+    my @messages = @{ $patron->messages };
+    is( scalar @messages, 0, 'No messages' );
+
+    $patron->add_message({ message => "message_1" });
+    $patron->add_message({ message => "message_2" });
+
+    @messages = @{ $patron->messages };
+
+    is( scalar @messages, 2, 'Messages are returned' );
+    is( ref($messages[0]), 'Koha::Object::Message', 'Right type returned' );
+    is( ref($messages[1]), 'Koha::Object::Message', 'Right type returned' );
+    is( $messages[0]->message, 'message_1', 'Right message recorded' );
+    is( $messages[1]->message, 'message_2', 'Right message recorded' );
 };
