@@ -497,7 +497,7 @@ sub _process_mappings {
         next unless @{$values};
 
         if (defined $options->{property}) {
-            $values = [ map { { $options->{property} => $_ } } @{$values} ];
+            $values = [ map { { $options->{property} => $_ } if $_} @{$values} ];
         }
         if (defined $options->{nonfiling_characters_indicator}) {
             my $nonfiling_chars = $meta->{field}->indicator($options->{nonfiling_characters_indicator});
@@ -506,6 +506,8 @@ sub _process_mappings {
             # Only apply on first element
             $values->[0] = substr $values->[0], $nonfiling_chars;
         }
+
+        $values = [ grep(!/^$/, @{$values}) ];
 
         $record_document->{$target} //= [];
         push @{$record_document->{$target}}, @{$values};
