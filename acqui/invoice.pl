@@ -33,6 +33,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Acquisition qw( CloseInvoice ReopenInvoice ModInvoice MergeInvoices DelInvoice GetInvoice GetInvoiceDetails get_rounded_price );
 use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
+use JSON qw( encode_json );
 use C4::Log qw(logaction);
 
 use Koha::Acquisition::Booksellers;
@@ -148,19 +149,18 @@ elsif ( $op && $op eq 'del_adj' ) {
     my $del_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id );
     if ($del_adj) {
         if (C4::Context->preference("AcqLog")) {
-            my $reason_length = length $del_adj->reason;
-            my $reason_padded = ( ' ' x (80 - $reason_length) ) . $del_adj->reason;
-            my $infos =
-                sprintf("%010d", $del_adj->invoiceid) .
-                sprintf("%010d", $del_adj->budget_id) .
-                sprintf("%010d", $del_adj->encumber_open) .
-                sprintf("%010.2f", $del_adj->adjustment) .
-                $reason_padded;
+            my $infos = {
+                invoiceid     => $del_adj->invoiceid,
+                budget_id     => $del_adj->budget_id,
+                encumber_open => $del_adj->encumber_open,
+                adjustment    => $del_adj->adjustment,
+                reason        => $del_adj->reason
+            };
             logaction(
                 'ACQUISITIONS',
                 'DELETE_INVOICE_ADJUSTMENT',
                 $adjustment_id,
-                $infos
+                encode_json($infos)
             );
         }
         $del_adj->delete();
@@ -195,12 +195,11 @@ elsif ( $op && $op eq 'mod_adj' ) {
             $new_adj->store();
             # Log this addition
             if (C4::Context->preference("AcqLog")) {
-                my $infos = get_log_string($adj);
                 logaction(
                     'ACQUISITIONS',
                     'CREATE_INVOICE_ADJUSTMENT',
                     $new_adj->adjustment_id,
-                    $infos
+                    encode_json($adj)
                 );
             }
         }
@@ -209,7 +208,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
             unless ( $old_adj->adjustment == $adjustment[$i] && $old_adj->reason eq $reason[$i] && $old_adj->budget_id == $budget_id[$i] && $old_adj->encumber_open == $e_open{$adjustment_id[$i]} && $old_adj->note eq $note[$i] ){
                 # Log this modification
                 if (C4::Context->preference("AcqLog")) {
-                    my $infos = get_log_string({
+                    my $infos = {
                         adjustment        => $adjustment[$i],
                         reason            => $reason[$i],
                         budget_id         => $budget_id[$i],
@@ -218,12 +217,12 @@ elsif ( $op && $op eq 'mod_adj' ) {
                         reason_old        => $old_adj->reason,
                         budget_id_old     => $old_adj->budget_id,
                         encumber_open_old => $old_adj->encumber_open
-                    });
+                    };
                     logaction(
                         'ACQUISITIONS',
                         'UPDATE_INVOICE_ADJUSTMENT',
                         $adjustment_id[$i],
-                        $infos
+                        encode_json($infos)
                     );
                 }
                 $old_adj->timestamp(undef);
@@ -348,37 +347,6 @@ sub get_infos {
     }
 
     return \%line;
-}
-
-sub get_log_string {
-    my ($data) = @_;
-
-    # We specify the keys we're dealing for logging within an array in order
-    # to preserve order, if we just iterate the hash keys, we could get
-    # the values in any order
-    my @keys = (
-        'budget_id',
-        'encumber_open',
-        'budget_id_old',
-        'encumber_open_old'
-    );
-    # Adjustment amount
-    my $return = sprintf("%010.2f", $data->{adjustment});
-    # Left pad "reason" to the maximum length of aqinvoice_adjustments.reason
-    # (80 characters)
-    my $reason_len = length $data->{reason};
-    $return .= ( ' ' x (80 - $reason_len) ) . $data->{reason};
-    # Append the remaining fields
-    foreach my $key(@keys) {
-        $return .= sprintf("%010d", $data->{$key});
-    }
-    # Old adjustment amount
-    $return .= sprintf("%010.2f", $data->{adjustment_old});
-    # Left pad "reason_old" to the maximum length of aqinvoice_adjustments.reason
-    # (80 characters)
-    my $reason_old_len = length $data->{reason_old};
-    $return .= ( ' ' x (80 - $reason_old_len) ) . $data->{reason_old};
-    return $return;
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

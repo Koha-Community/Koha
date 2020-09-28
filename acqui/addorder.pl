@@ -119,7 +119,7 @@ if it is an order from an existing suggestion : the id of this suggestion.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use JSON qw( to_json );
+use JSON qw ( to_json encode_json );
 use C4::Auth qw( get_template_and_user );
 use C4::Acquisition qw( FillWithDefaultValues populate_order_with_prices ModOrder ModOrderUsers );
 use C4::Suggestions qw( ModSuggestion );
@@ -320,15 +320,15 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
         ModOrder($orderinfo);
         # Log the order modification
         if (C4::Context->preference("AcqLog")) {
-            my $infos = '';
+            my $infos = {};
             foreach my $field(@log_order_fields) {
-                $infos .= sprintf("%010d", $orderinfo->{$field});
+                $infos->{$field} = $orderinfo->{$field};
             }
             logaction(
                 'ACQUISITIONS',
                 'MODIFY_ORDER',
                 $orderinfo->{ordernumber},
-                $infos
+                encode_json($infos)
             );
         }
     }
@@ -336,15 +336,15 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
         $order->store;
         # Log the order creation
         if (C4::Context->preference("AcqLog")) {
-            my $infos = '';
+            my $infos = {};
             foreach my $field(@log_order_fields) {
-                $infos .= sprintf("%010d", $orderinfo->{$field});
+                $infos->{$field} = $orderinfo->{$field};
             }
             logaction(
                 'ACQUISITIONS',
                 'CREATE_ORDER',
                 $order->ordernumber,
-                $infos
+                encode_json($infos)
             );
         }
     }

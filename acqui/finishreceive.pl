@@ -23,6 +23,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth qw( checkauth );
+use JSON qw( encode_json );
 use C4::Output;
 use C4::Context;
 use C4::Acquisition qw( GetInvoice GetOrder populate_order_with_prices ModReceiveOrder );
@@ -192,18 +193,19 @@ if ($suggestion_id) {
 
 # Log the receipt
 if (C4::Context->preference("AcqLog")) {
-    my $infos =
-        sprintf("%010d", $quantityrec) .
-        sprintf("%010d", $bookfund) .
-        sprintf("%010.2f", $input->param("tax_rate")) .
-        sprintf("%010.2f", $replacementprice) .
-        sprintf("%010.2f", $unitprice);
+    my $infos = {
+        quantityrec      => $quantityrec,
+        bookfund         => $bookfund,
+        tax_rate         => $input->param("tax_rate"),
+        replacementprice => $replacementprice,
+        unitprice        => $unitprice
+    };
 
     logaction(
         'ACQUISITIONS',
         'RECEIVE_ORDER',
         $ordernumber,
-        $infos
+        encode_json($infos)
     );
 }
 

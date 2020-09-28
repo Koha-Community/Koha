@@ -48,6 +48,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Koha::DateUtils qw( dt_from_string );
+use JSON qw( encode_json );
 use Koha::Database;
 use C4::Koha;
 use C4::Context;
@@ -121,19 +122,20 @@ elsif ( $op eq 'add_validate' ) {
         # Log the budget modification
         if (C4::Context->preference("AcqLog")) {
             my $diff = 0 - ($budgetperiod_old->{budget_period_total} - $budget_period_hashref->{budget_period_total});
-            my $infos =
-                eval { output_pref({ dt => dt_from_string( $input->param('budget_period_startdate') ), dateformat => 'iso', dateonly => 1 } ); } .
-                eval { output_pref({ dt => dt_from_string( $input->param('budget_period_enddate') ), dateformat => 'iso', dateonly => 1 } ); } .
-                sprintf("%010d", $budget_period_hashref->{budget_period_total}) .
-                eval { output_pref({ dt => dt_from_string( $budgetperiod_old->{budget_period_startdate} ), dateformat => 'iso', dateonly => 1 } ); } .
-                eval { output_pref({ dt => dt_from_string( $budgetperiod_old->{budget_period_enddate} ), dateformat => 'iso', dateonly => 1 } ); } .
-                sprintf("%010d", $budgetperiod_old->{budget_period_total}) .
-                sprintf("%010d", $diff);
+            my $infos = {
+                budget_period_startdate     => $input->param('budget_period_startdate'),
+                budget_period_enddate       => $input->param('budget_period_enddate'),
+                budget_period_total         => $budget_period_hashref->{budget_period_total},
+                budget_period_startdate_old => $budgetperiod_old->{budget_period_startdate},
+                budget_period_enddate_old   => $budgetperiod_old->{budget_period_enddate},
+                budget_period_total_old     => $budgetperiod_old->{budget_period_total},
+                budget_period_total_change  => $diff
+            };
             logaction(
                 'ACQUISITIONS',
                 'MODIFY_BUDGET',
                 $budget_period_id,
-                $infos
+                encode_json($infos)
             );
         }
     }

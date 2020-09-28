@@ -18,6 +18,7 @@ package C4::Budgets;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use JSON;
 use C4::Context;
 use Koha::Database;
 use Koha::Patrons;
@@ -645,15 +646,16 @@ sub AddBudget {
 
     # Log the addition
     if (C4::Context->preference("AcqLog")) {
-        my $infos =
-            sprintf("%010d", $budget->{budget_amount}) .
-            sprintf("%010d", $budget->{budget_encumb}) .
-            sprintf("%010d", $budget->{budget_expend});
+        my $infos = {
+            budget_amount => $budget->{budget_amount},
+            budget_encumb => $budget->{budget_encumb},
+            budget_expend => $budget->{budget_expend}
+        };
         logaction(
             'ACQUISITIONS',
             'CREATE_FUND',
             $id,
-            $infos
+            encode_json($infos)
         );
     }
     return $id;
@@ -668,19 +670,20 @@ sub ModBudget {
 
     # Log this modification
     if (C4::Context->preference("AcqLog")) {
-        my $infos =
-            sprintf("%010d", $budget->{budget_amount}) .
-            sprintf("%010d", $budget->{budget_encumb}) .
-            sprintf("%010d", $budget->{budget_expend}) .
-            sprintf("%010d", $result->budget_amount) .
-            sprintf("%010d", $result->budget_encumb) .
-            sprintf("%010d", $result->budget_expend) .
-            sprintf("%010d", 0 - ($result->budget_amount - $budget->{budget_amount}));
+        my $infos = {
+            budget_amount_new    => $budget->{budget_amount},
+            budget_encumb_new    => $budget->{budget_encumb},
+            budget_expend_new    => $budget->{budget_expend},
+            budget_amount_old    => $result->budget_amount,
+            budget_encumb_old    => $result->budget_encumb,
+            budget_expend_old    => $result->budget_expend,
+            budget_amount_change => 0 - ($result->budget_amount - $budget->{budget_amount})
+        };
         logaction(
             'ACQUISITIONS',
             'MODIFY_FUND',
             $budget->{budget_id},
-            $infos
+            encode_json($infos)
         );
     }
 
