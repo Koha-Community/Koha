@@ -150,7 +150,7 @@
             <input type="text" id="B_city" name="B_city" size="20" value="[% patron.B_city | html %]" />
             [% IF cities.count %]
                 or choose
-                <select class="select_city" data_addressfield="B_" name="select_city">
+                <select class="select_city" data-addressfield="B_" name="select_city">
                     <option value="|||"></option>
                     [% FOREACH c IN cities %]
                         [% IF c.city_name == patron.B_city && c.city_state == patron.B_state && c.city_zipcode == patron.B_zipcode %]
