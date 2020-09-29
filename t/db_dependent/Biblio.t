@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
@@ -41,6 +41,30 @@ my $dbh = C4::Context->dbh;
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'AddBiblio' => sub {
+    plan tests => 3;
+
+    my $marcflavour = 'MARC21';
+    t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour );
+    my $record = MARC::Record->new();
+
+    my ( $f, $sf ) = GetMarcFromKohaField('biblioitems.lccn');
+    my $lccn_field = MARC::Field->new( $f, ' ', ' ',
+        $sf => 'ThisisgoingtobetoomanycharactersfortheLCCNfield' );
+    $record->append_fields($lccn_field);
+
+    my $nb_biblios = Koha::Biblios->count;
+    my ( $biblionumber, $biblioitemnumber ) =
+      C4::Biblio::AddBiblio( $record, '' );
+    is( $biblionumber, undef,
+        'AddBiblio returns undef for biblionumber if something went wrong' );
+    is( $biblioitemnumber, undef,
+        'AddBiblio returns undef for biblioitemnumber if something went wrong'
+    );
+    is( Koha::Biblios->count, $nb_biblios,
+        'No biblio should have been added if something went wrong' );
+};
 
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     plan tests => 25;
@@ -758,9 +782,6 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
         "Tolkien, J. R. R. (John Ronald Reuel), 1892-1973. Lord of the rings",
         "The generated record contains the correct subfields"
     );
-
-
-
 };
 
 # Cleanup
