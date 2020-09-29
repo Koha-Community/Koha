@@ -147,6 +147,7 @@ function logOut(){
         delBasket('main', true);
     }
     clearHoldFor();
+    localStorage.removeItem("searches");
 }
 
 function openHelp(){
