@@ -22,7 +22,7 @@ if ( CheckVersion($DBversion) ) {
         my ($count) = $dbh->selectrow_array(
             qq|
                 SELECT COUNT(*)
-                FROM items
+                FROM deleteditems
                 WHERE paidfor IS NOT NULL AND paidfor <> ""
             |
         );
