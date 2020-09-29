@@ -290,13 +290,13 @@ subtest 'orders' => sub {
 
     my @actual_orders;
 
-    for ( 1..10 ) {
+    for ( 1..3 ) {
         push @actual_orders, $builder->build_object({ class => 'Koha::Acquisition::Orders', value => { basketno => $basket->id } });
     }
 
     $orders = $basket->orders;
     is( ref($orders), 'Koha::Acquisition::Orders', 'Type is correct with no attached orders' );
-    is( $orders->count, 10, '10 orders attached, count 10' );
+    is( $orders->count, 3, '3 orders attached, count 3' );
 
     $schema->storage->txn_rollback;
 };
