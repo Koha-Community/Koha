@@ -180,6 +180,7 @@ function logOut(){
     clearHoldFor();
     removeLastBorrower();
     localStorage.removeItem("sql_reports_activetab");
+    localStorage.removeItem("searches");
 }
 
 function openHelp(){
