@@ -240,6 +240,7 @@ sub AddBiblio {
                 }
             )->store;
             $biblionumber = $biblio->biblionumber;
+            Koha::Exceptions::ObjectNotCreated->throw unless $biblio;
 
             my ($cn_sort) = GetClassSort( $olddata->{'biblioitems.cn_source'}, $olddata->{'cn_class'}, $olddata->{'cn_item'} );
             my $biblioitem = Koha::Biblioitem->new(
@@ -276,6 +277,7 @@ sub AddBiblio {
                     agerestriction => $olddata->{agerestriction},
                 }
             )->store;
+            Koha::Exceptions::ObjectNotCreated->throw unless $biblioitem;
             $biblioitemnumber = $biblioitem->biblioitemnumber;
 
             _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
