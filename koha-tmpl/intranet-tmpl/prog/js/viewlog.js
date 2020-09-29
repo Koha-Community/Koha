@@ -144,4 +144,26 @@ $(document).ready(function(){
         e.preventDefault();
         $(".compare:checked").prop("checked", false).change();
     });
+    var obj = $("#user").autocomplete({
+        source: "/cgi-bin/koha/circ/ysearch.pl",
+        minLength: 3,
+        select: function ( event, ui ) {
+            $("#user").val( ui.item.borrowernumber );
+            return false;
+        }
+    }).data("ui-autocomplete");
+    if (obj) {
+        obj._renderItem = function (ul, item) {
+            var cardnumber = "";
+            if (item.cardnumber != "") {
+                // Display card number in parentheses if it exists
+                cardnumber = " (" + item.cardnumber + ") ";
+            }
+            return $("<li></li>")
+                .data("ui-autocomplete-item", item)
+                .append("<a href=\"#\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>")
+                .appendTo(ul);
+        };
+    }
+
 });

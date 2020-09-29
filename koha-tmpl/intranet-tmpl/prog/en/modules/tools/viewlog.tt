@@ -160,7 +160,7 @@
 							</li>
                             [% UNLESS src == "circ" %]
                                 <li>
-                                    <label for="modules">Modules:</label>
+                                    <label>Modules:</label>
                                     <div class="log_modules">
                                         [% IF modules.size == 0 %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"> All</label>
@@ -181,7 +181,7 @@
                                 <input type="hidden" name="modules" value="CIRCULATION" />
                             [% END %]
                             <li>
-                                <label for="actions">Actions:</label>
+                                <label>Actions:</label>
                                 <div class="log_modules">
                                     [% IF actions.length == 0 %]
                                         <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value="" checked="checked"> All</label>
@@ -191,9 +191,9 @@
 
                                     [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'CHANGE PASS' 'Run' ] %]
                                         [% IF actions.grep(actx).size %]
-                                            <label for="action[% actx | html %]" class="viewlog"><input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]" checked="checked"> [% PROCESS translate_log_action action=actx %]</label>
+                                            <label for="action[% actx| replace('\s+', '_') | html %]" class="viewlog"><input type="checkbox" id="action[% actx | replace('\s+', '_') | html %]" name="actions" value="[% actx | html %]" checked="checked"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% ELSE %]
-                                            <label for="action[% actx | html %]" class="viewlog"><input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]"> [% PROCESS translate_log_action action=actx %]</label>
+                                            <label for="action[% actx| replace('\s+', '_') | html %]" class="viewlog"><input type="checkbox" id="action[% actx | replace('\s+', '_') | html %]" name="actions" value="[% actx | html %]"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% END %]
                                     [% END %]
                                 </div>
@@ -212,7 +212,7 @@
                                 <input type="text" id="info" name="info" value="[% info | html %]" />
 							</li>
                             <li>
-                                <label for="interfaces">Interface:</label>
+                                <label>Interface:</label>
                                 [% IF interfaces.size == 0 %]
                                     <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value="" checked="checked"> All</label>
                                 [% ELSE %]
