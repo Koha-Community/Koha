@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 144;
+use Test::More tests => 149;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
@@ -28,6 +28,7 @@ use C4::Biblio;
 use C4::OAI::Sets;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -349,10 +350,12 @@ is ($mappings->{$set2_id}->[0]->{operator}, 'equal', 'operator field is "equal"'
 is ($mappings->{$set2_id}->[0]->{marcvalue}, 'myOtherMarcValue', 'marcvalue field is "myOtherMarcValue"');
 
 
-# ---------- Testing AddOAISetsBiblios ----------
+# ---------- Testing AddOAISetsBiblios with OAI-PMH:AutoUpdateSets disabled ----------
 ok (!defined(AddOAISetsBiblios), 'AddOAISetsBiblios without argument is undef');
 ok (!defined(AddOAISetsBiblios(my $arg=[])), 'AddOAISetsBiblios with a no HASH argument is undef');
 ok (defined(AddOAISetsBiblios($arg={})), 'AddOAISetsBiblios with a HASH argument is def');
+
+t::lib::Mocks::mock_preference( 'OAI-PMH:AutoUpdateSets', 0 );
 
 # Create a biblio instance for testing
 my $biblio_1 = $builder->build_sample_biblio({ author => 'Moffat, Steven' });
@@ -394,6 +397,29 @@ $sth->execute($set2_id);
 $count = $sth->rows;
 is ($count, '0', '$set_id2 has 0 biblio');
 
+# ---------- Testing AddOAISetsBiblios with OAI-PMH:AutoUpdateSets enabled ----------
+
+t::lib::Mocks::mock_preference( 'OAI-PMH:AutoUpdateSets', 1 );
+
+my $biblio_3 = $builder->build_sample_biblio({ author => 'Moffat, Steven' });
+my $biblionumber3 = $biblio_3->biblionumber;
+isa_ok(\$biblionumber3, 'SCALAR', '$biblionumber3 is a SCALAR');
+
+$sth = $dbh->prepare("SELECT count(*) FROM oai_sets_biblios");
+$sth->execute;
+$bibliosCount = $sth->fetchrow_array;
+is ($bibliosCount, 3, 'There are 3 biblios in oai_sets_biblios');
+
+#testing biblio for set1_id
+$sth = $dbh->prepare("SELECT * FROM oai_sets_biblios WHERE set_id = ?");
+$sth->execute($set1_id);
+$count = $sth->rows;
+is ($count, '3', '$set_id1 has 3 biblio');
+
+$sth->execute($set1_id);
+$line = ${ $sth->fetchall_arrayref( {} ) }[2];
+is($line->{set_id}, $set1_id, "set_id is good");
+is($line->{biblionumber}, $biblionumber3, "biblionumber is good");
 
 # ---------- Testing GetOAISetsBiblio -----------
 $oai_sets = GetOAISetsBiblio($biblionumber1);
