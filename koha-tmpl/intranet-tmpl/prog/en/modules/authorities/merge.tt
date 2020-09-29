@@ -109,7 +109,6 @@ div#result { margin-top: 1em; }
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'merge-record-strings.inc' %]
     [% INCLUDE 'authorities_js.inc' %]
     [% Asset.js("js/merge-record.js") | $raw %]
     <script>
