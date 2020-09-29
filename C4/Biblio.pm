@@ -217,26 +217,89 @@ sub AddBiblio {
     # transform the data into koha-table style data
     SetUTF8Flag($record);
     my $olddata = TransformMarcToKoha( $record, $frameworkcode );
-    ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
-    $olddata->{'biblionumber'} = $biblionumber;
-    ( $biblioitemnumber, $error ) = _koha_add_biblioitem( $dbh, $olddata );
+    my $schema = Koha::Database->schema;
+    try {
+        $schema->txn_do(sub {
 
-    _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
+            my $biblio = Koha::Biblio->new(
+                {
+                    frameworkcode => $frameworkcode,
+                    author        => $olddata->{author},
+                    title         => $olddata->{title},
+                    subtitle      => $olddata->{subtitle},
+                    medium        => $olddata->{medium},
+                    part_number   => $olddata->{part_number},
+                    part_name     => $olddata->{part_name},
+                    unititle      => $olddata->{unititle},
+                    notes         => $olddata->{notes},
+                    serial =>
+                      ( $olddata->{serial} || $olddata->{seriestitle} ? 1 : 0 ),
+                    seriestitle   => $olddata->{seriestitle},
+                    copyrightdate => $olddata->{copyrightdate},
+                    datecreated   => \'NOW()',
+                    abstract      => $olddata->{abstract},
+                }
+            )->store;
+            $biblionumber = $biblio->biblionumber;
 
-    # update MARC subfield that stores biblioitems.cn_sort
-    _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
+            my ($cn_sort) = GetClassSort( $olddata->{'biblioitems.cn_source'}, $olddata->{'cn_class'}, $olddata->{'cn_item'} );
+            my $biblioitem = Koha::Biblioitem->new(
+                {
+                    biblionumber          => $biblionumber,
+                    volume                => $olddata->{volume},
+                    number                => $olddata->{number},
+                    itemtype              => $olddata->{itemtype},
+                    isbn                  => $olddata->{isbn},
+                    issn                  => $olddata->{issn},
+                    publicationyear       => $olddata->{publicationyear},
+                    publishercode         => $olddata->{publishercode},
+                    volumedate            => $olddata->{volumedate},
+                    volumedesc            => $olddata->{volumedesc},
+                    collectiontitle       => $olddata->{collectiontitle},
+                    collectionissn        => $olddata->{collectionissn},
+                    collectionvolume      => $olddata->{collectionvolume},
+                    editionstatement      => $olddata->{editionstatement},
+                    editionresponsibility => $olddata->{editionresponsibility},
+                    illus                 => $olddata->{illus},
+                    pages                 => $olddata->{pages},
+                    notes                 => $olddata->{bnotes},
+                    size                  => $olddata->{size},
+                    place                 => $olddata->{place},
+                    lccn                  => $olddata->{lccn},
+                    url                   => $olddata->{url},
+                    cn_source      => $olddata->{'biblioitems.cn_source'},
+                    cn_class       => $olddata->{cn_class},
+                    cn_item        => $olddata->{cn_item},
+                    cn_suffix      => $olddata->{cn_suff},
+                    cn_sort        => $cn_sort,
+                    totalissues    => $olddata->{totalissues},
+                    ean            => $olddata->{ean},
+                    agerestriction => $olddata->{agerestriction},
+                }
+            )->store;
+            $biblioitemnumber = $biblioitem->biblioitemnumber;
 
-    # now add the record
-    ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
+            _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
 
-    # update OAI-PMH sets
-    if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
-        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
-    }
+            # update MARC subfield that stores biblioitems.cn_sort
+            _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
 
-    _after_biblio_action_hooks({ action => 'create', biblio_id => $biblionumber });
+            # now add the record
+            ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
 
-    logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
+            # update OAI-PMH sets
+            if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
+                C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+            }
+
+            _after_biblio_action_hooks({ action => 'create', biblio_id => $biblionumber });
+
+            logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
+        });
+    } catch {
+        warn $_;
+        ( $biblionumber, $biblioitemnumber ) = ( undef, undef );
+    };
     return ( $biblionumber, $biblioitemnumber );
 }
 
@@ -2738,61 +2801,6 @@ sub _koha_marc_update_biblioitem_cn_sort {
     }
 }
 
-=head2 _koha_add_biblio
-
-  my ($biblionumber,$error) = _koha_add_biblio($dbh,$biblioitem);
-
-Internal function to add a biblio ($biblio is a hash with the values)
-
-=cut
-
-sub _koha_add_biblio {
-    my ( $dbh, $biblio, $frameworkcode ) = @_;
-
-    my $error;
-
-    # set the series flag
-    unless (defined $biblio->{'serial'}){
-    	$biblio->{'serial'} = 0;
-    	if ( $biblio->{'seriestitle'} ) { $biblio->{'serial'} = 1 }
-    }
-
-    my $query = "INSERT INTO biblio
-        SET frameworkcode = ?,
-            author = ?,
-            title = ?,
-            subtitle = ?,
-            medium = ?,
-            part_number = ?,
-            part_name = ?,
-            unititle =?,
-            notes = ?,
-            serial = ?,
-            seriestitle = ?,
-            copyrightdate = ?,
-            datecreated=NOW(),
-            abstract = ?
-        ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $frameworkcode,        $biblio->{'author'},      $biblio->{'title'},       $biblio->{'subtitle'},
-        $biblio->{'medium'},   $biblio->{'part_number'}, $biblio->{'part_name'},   $biblio->{'unititle'},
-        $biblio->{'notes'},    $biblio->{'serial'},      $biblio->{'seriestitle'}, $biblio->{'copyrightdate'},
-        $biblio->{'abstract'}
-    );
-
-    my $biblionumber = $dbh->{'mysql_insertid'};
-    if ( $dbh->errstr ) {
-        $error .= "ERROR in _koha_add_biblio $query" . $dbh->errstr;
-        warn $error;
-    }
-
-    $sth->finish();
-
-    #warn "LEAVING _koha_add_biblio: ".$biblionumber."\n";
-    return ( $biblionumber, $error );
-}
-
 =head2 _koha_modify_biblio
 
   my ($biblionumber,$error) == _koha_modify_biblio($dbh,$biblio,$frameworkcode);
@@ -2901,72 +2909,6 @@ sub _koha_modify_biblioitem_nonmarc {
         warn $error;
     }
     return ( $biblioitem->{'biblioitemnumber'}, $error );
-}
-
-=head2 _koha_add_biblioitem
-
-  my ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $biblioitem );
-
-Internal function to add a biblioitem
-
-=cut
-
-sub _koha_add_biblioitem {
-    my ( $dbh, $biblioitem ) = @_;
-    my $error;
-
-    my ($cn_sort) = GetClassSort( $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
-    my $query = "INSERT INTO biblioitems SET
-        biblionumber    = ?,
-        volume          = ?,
-        number          = ?,
-        itemtype        = ?,
-        isbn            = ?,
-        issn            = ?,
-        publicationyear = ?,
-        publishercode   = ?,
-        volumedate      = ?,
-        volumedesc      = ?,
-        collectiontitle = ?,
-        collectionissn  = ?,
-        collectionvolume= ?,
-        editionstatement= ?,
-        editionresponsibility = ?,
-        illus           = ?,
-        pages           = ?,
-        notes           = ?,
-        size            = ?,
-        place           = ?,
-        lccn            = ?,
-        url             = ?,
-        cn_source       = ?,
-        cn_class        = ?,
-        cn_item         = ?,
-        cn_suffix       = ?,
-        cn_sort         = ?,
-        totalissues     = ?,
-        ean             = ?,
-        agerestriction  = ?
-        ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $biblioitem->{'biblionumber'},     $biblioitem->{'volume'},           $biblioitem->{'number'},                $biblioitem->{'itemtype'},
-        $biblioitem->{'isbn'},             $biblioitem->{'issn'},             $biblioitem->{'publicationyear'},       $biblioitem->{'publishercode'},
-        $biblioitem->{'volumedate'},       $biblioitem->{'volumedesc'},       $biblioitem->{'collectiontitle'},       $biblioitem->{'collectionissn'},
-        $biblioitem->{'collectionvolume'}, $biblioitem->{'editionstatement'}, $biblioitem->{'editionresponsibility'}, $biblioitem->{'illus'},
-        $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
-        $biblioitem->{'lccn'},             $biblioitem->{'url'},                   $biblioitem->{'biblioitems.cn_source'},
-        $biblioitem->{'cn_class'},         $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},             $cn_sort,
-        $biblioitem->{'totalissues'},      $biblioitem->{'ean'},              $biblioitem->{'agerestriction'}
-    );
-    my $bibitemnum = $dbh->{'mysql_insertid'};
-
-    if ( $dbh->errstr ) {
-        $error .= "ERROR in _koha_add_biblioitem $query" . $dbh->errstr;
-        warn $error;
-    }
-    $sth->finish();
-    return ( $bibitemnum, $error );
 }
 
 =head2 _koha_delete_biblio
