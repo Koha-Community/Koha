@@ -179,6 +179,7 @@ function logOut(){
     }
     clearHoldFor();
     removeLastBorrower();
+    localStorage.removeItem("searches");
 }
 
 function openHelp(){
