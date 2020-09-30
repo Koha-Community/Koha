@@ -1009,10 +1009,7 @@
                     <xsl:with-param name="codes">a</xsl:with-param>
                     <xsl:with-param name="delimeter"><xsl:text> | </xsl:text></xsl:with-param>
                 </xsl:call-template>
-                <xsl:choose>
-                    <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
-                    <xsl:otherwise> | </xsl:otherwise>
-                </xsl:choose>
+                <xsl:if test="not(position()=last())"><xsl:text> | </xsl:text></xsl:if>
             </xsl:for-each>
         </span>
     </xsl:if>
