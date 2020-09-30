@@ -278,16 +278,34 @@ use C4::Biblio qw( GetMarcFromKohaField );
 }
 
 {
-    my $patrons = Koha::Patrons->search( {}, { order_by => [ 'categorycode', 'borrowernumber' ] } );
+    my $aging_patrons = Koha::Patrons->search(
+        {
+            -not => {
+                -or => {
+                    'me.dateofbirth' => undef,
+                    -and => {
+                        'categorycode.dateofbirthrequired' => undef,
+                        'categorycode.upperagelimit'       => undef,
+                    }
+                }
+            }
+        },
+        { prefetch => ['categorycode'] },
+        { order_by => [ 'me.categorycode', 'me.borrowernumber' ] },
+    );
     my @invalid_patrons;
-    while ( my $patron = $patrons->next ) {
-        push @invalid_patrons, $patron unless $patron->is_valid_age;
+    while ( my $aging_patron = $aging_patrons->next ) {
+        push @invalid_patrons, $aging_patron unless $aging_patron->is_valid_age;
     }
     if (@invalid_patrons) {
         new_section("Patrons with invalid age for category");
-        foreach my $patron (@invalid_patrons) {
-            new_item( sprintf "Patron borrowernumber=%s has an invalid age of %s for their category '%s'",
-                $patron->borrowernumber, $patron->get_age, $patron->category->categorycode, );
+        foreach my $invalid_patron (@invalid_patrons) {
+            my $category = $invalid_patron->category;
+            new_item(
+                sprintf "Patron borrowernumber=%s has an invalid age of %s for their category '%s' (%s-%s)",
+                $invalid_patron->borrowernumber, $invalid_patron->get_age, $category->categorycode,
+                $category->dateofbirthrequired,  $category->upperagelimit
+            );
         }
         new_hint("You may change the patron's category automatically with misc/cronjobs/update_patrons_category.pl");
     }
