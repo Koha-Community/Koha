@@ -23,6 +23,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::BasketGroups;
 use Koha::Acquisition::Orders;
+use Koha::Exceptions::Acquisition::Basket;
 use Koha::Patrons;
 
 use base qw( Koha::Object Koha::Object::Mixin::AdditionalFields );
@@ -155,6 +156,53 @@ sub authorizer {
     return scalar Koha::Patrons->find($self->authorisedby);
 }
 
+=head3 closed
+
+    if ( $basket->closed ) { ... }
+
+Returns a boolean value representing if the basket is closed.
+
+=cut
+
+sub closed {
+    my ($self) = @_;
+
+    return ($self->closedate) ? 1 : 0;
+}
+
+=head3 close
+
+    $basket->close;
+
+Close the basket and mark all open orders as ordered.
+
+A I<Koha::Exceptions::Acquisition::Basket::AlreadyClosed> exception is thrown
+if the basket is already closed.
+
+=cut
+
+sub close {
+    my ($self) = @_;
+
+    Koha::Exceptions::Acquisition::Basket::AlreadyClosed->throw
+        if $self->closed;
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            my $open_orders = $self->orders->search(
+                {
+                    orderstatus => { not_in => [ 'complete', 'cancelled' ] }
+                }
+            );
+            # Mark open orders as ordered
+            $open_orders->update({ orderstatus => 'ordered' }, { no_triggers => 1 });
+            # set as closed
+            $self->set({ closedate => \'NOW()' })->store;
+        }
+    );
+
+    return $self;
+}
 
 =head3 to_api
 
