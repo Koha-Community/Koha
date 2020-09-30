@@ -8,12 +8,22 @@
 
 [% IF ( patronimages ) %]
     <h5 class="text-center">
+[% ELSE %]
+    <h5>
+[% END %]
         [% IF ( patron_is_staff ) %]
             <i class="fa fa-shield fa-fw" title="Staff patron"></i>
         [% END %]
         [% INCLUDE 'patron-title.inc' %]
     </h5>
 
+[% IF Koha.Preference('showLastPatron') %]
+    <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
+    <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
+    <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
+[% END %]
+
+[% IF ( patronimages ) %]
     <div>
         <div class="patronimage-container">
             [% IF ( patron.image ) %]
@@ -29,19 +39,6 @@
             [% END %]
         </div>
     </div>
-[% ELSE %]
-    <h5>
-        [% IF ( patron_is_staff ) %]
-            <i class="fa fa-shield fa-fw" title="Staff patron"></i>
-        [% END %]
-        [% INCLUDE 'patron-title.inc' %]
-    </h5>
-[% END %]
-
-[% IF Koha.Preference('showLastPatron') %]
-    <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
-    <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
-    <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
 [% END %]
 
 <ul class="patronbriefinfo">
