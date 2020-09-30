@@ -11,6 +11,45 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/addbiblio.css") | $raw %]
+[% FILTER collapse %]
+    <style>
+        .marc_field {
+            display: inline-block;
+            padding: .3em;
+            border-radius: 3px;
+        }
+        .marc_subfield {
+            font-weight: bold;
+            color: #666;
+        }
+        .marc_subfield_desc {
+            color: #00698a;
+            font-style: italic;
+        }
+        .auth_subfield {
+            display: flex;
+        }
+        .tag {
+            padding: .4em 0;
+        }
+        .tag_desc {
+            color: #026;
+        }
+        .tag_num {
+            color: #080;
+        }
+        .tag_title {
+            font-size: 100%;
+            font-weight: bold;
+            padding: 0;
+        }
+        .ui-tabs-nav.ui-widget-header {
+            border-bottom: 1px solid #b9d8d9;
+            border-radius: 0;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="auth_detail" class="auth">
@@ -64,35 +103,44 @@
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
         [% IF ( innerloo.tag_number ) %]
             <div class="tag">
-            <div class="tag_title">
-                <span class="tag_num">[% innerloo.tag_number | html %]</span>
-                [% IF (innerloo.defined("ind1") ) %]
-                    <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
-                [% END %]
-                [% IF (innerloo.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% innerloo.tag_desc | html %]</span>[% END %]
-            </div>
+                <div class="tag_title">
+                    <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
+                    [% IF (innerloo.defined("ind1") ) %]
+                        <span class="tag_ind1">[% innerloo.ind1 | html %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
+                    [% END %]
+                    [% IF (innerloo.tag_desc) %]
+                        <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
+                    [% END %]
+                </div>
         [% ELSE %]
             <div class="tag">
         [% END %]
         [% FOREACH subfiel IN innerloo.subfield %]
-            <p>
-                <label class="labelsubfield">&nbsp;
-                [% UNLESS ( subfiel.hide_marc ) %]<strong>[% subfiel.marc_subfield | html %]</strong>[% END %]
-                <span title="[% subfiel.long_desc | html %]" class="desc">[% subfiel.short_desc | html %]</span></label>
-                [% IF ( subfiel.is_url ) %]
-                    <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
-                [% ELSE %]
-                    [% subfiel.marc_value | html %]
-                [% END %]
-                [% IF ( subfiel.link ) %]
-                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | uri %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
-                        <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
-                    </a>
-                [% END %]
-                [% IF ( subfiel.authority ) %]
-                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]" class="button">Auth</a>
-                [% END %]
-            </p>
+            <div class="auth_subfield">
+                <div class="subfield_info marc_field">
+                    [% UNLESS ( subfiel.hide_marc ) %]
+                        <span class="marc_subfield">[% subfiel.marc_subfield | html %]</span>
+                    [% END %]
+                    <span class="marc_subfield_desc">[% subfiel.long_desc | html %]</span>
+                </div> <!-- /.subfield_info.marc_field -->
+                <div class="subfield_content marc_field">
+                    <span class="subfield_value">
+                        [% IF ( subfiel.is_url ) %]
+                            <a href="[% subfiel.marc_value | url %]">[% subfiel.marc_value | html %]</a>
+                        [% ELSE %]
+                            [% subfiel.marc_value | html %]
+                        [% END %]
+                    </span>
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | uri %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
+                            <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]" class="button">Auth</a>
+                    [% END %]
+                </div> <!-- /.subfield_content.marc_field -->
+            </div> <!-- /.auth_subfield -->
         [% END %]
         </div>
     [% END %]
