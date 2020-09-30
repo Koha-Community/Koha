@@ -345,6 +345,10 @@ Returns the (probably non-fatal) messages that were recorded on the object.
 
 sub messages {
     my ( $self ) = @_;
+
+    $self->{_messages} = []
+        unless defined $self->{_messages};
+
     return $self->{_messages};
 }
 

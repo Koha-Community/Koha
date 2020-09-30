@@ -870,7 +870,9 @@ subtest 'set_or_blank' => sub {
 
 subtest 'messages() and add_message() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
 
     my $patron = Koha::Patron->new;
 
@@ -886,5 +888,13 @@ subtest 'messages() and add_message() tests' => sub {
     is( ref($messages[0]), 'Koha::Object::Message', 'Right type returned' );
     is( ref($messages[1]), 'Koha::Object::Message', 'Right type returned' );
     is( $messages[0]->message, 'message_1', 'Right message recorded' );
-    is( $messages[1]->message, 'message_2', 'Right message recorded' );
+
+    my $patron_id = $builder->build_object({ class => 'Koha::Patrons' })->id;
+    # get a patron from the DB, ->new is not called, ->messages should initialize _messages as an empty arrayref
+    $patron = Koha::Patrons->find( $patron_id );
+
+    isnt( $patron->messages, undef, '->messages initializes the array if required' );
+    is( scalar @{ $patron->messages }, 0, '->messages returns an empty arrayref' );
+
+    $schema->storage->txn_rollback;
 };
