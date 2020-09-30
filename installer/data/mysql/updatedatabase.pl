@@ -22867,6 +22867,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25776, "Add letter.updated_on");
 }
 
+$DBversion = '20.06.00.043';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('CircConfirmItemParts', '0', NULL, 'Require staff to confirm that all parts of an item are present at checkin/checkout.', 'YesNo')
+    });
+
+    NewVersion( $DBversion, 25261, "Add CircConfirmItemParts syspref");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
