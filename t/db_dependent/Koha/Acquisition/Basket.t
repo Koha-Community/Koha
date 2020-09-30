@@ -19,7 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
+use Test::Exception;
+
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -297,6 +299,78 @@ subtest 'orders' => sub {
     $orders = $basket->orders;
     is( ref($orders), 'Koha::Acquisition::Orders', 'Type is correct with no attached orders' );
     is( $orders->count, 3, '3 orders attached, count 3' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'closed() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $open_basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                closedate => undef
+            }
+        }
+    );
+
+    my $closed_basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                closedate => \'NOW()'
+            }
+        }
+    );
+
+    ok( $closed_basket->closed, 'Closed basket is tested as closed' );
+    ok( !$open_basket->closed, 'Open basket is tested as open' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'close() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Create an open basket
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                closedate => undef
+            }
+        }
+    );
+
+    for my $status ( qw( new ordered partial complete cancelled ) ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    basketno    => $basket->id,
+                    orderstatus => $status
+                }
+            }
+        );
+    }
+
+    $basket->close;
+
+    ok( $basket->closed, 'Basket is closed' );
+    my $ordered_orders = $basket->orders->search({ orderstatus => 'ordered' });
+    is( $ordered_orders->count, 3, 'Only open orders have been marked as ordered' );
+
+    throws_ok
+        { $basket->close; }
+        'Koha::Exceptions::Acquisition::Basket::AlreadyClosed',
+        'Trying to close an already closed basket throws an exception';
 
     $schema->storage->txn_rollback;
 };
