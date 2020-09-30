@@ -131,7 +131,7 @@ sub cancel {
         my $biblio = $self->biblio;
         if ( $biblio and $delete_biblio ) {
 
-            if (    $biblio->active_orders->count == 0
+            if (    $biblio->active_orders->count - 1 == 0 # minus ourself
                 and $biblio->subscriptions->count == 0
                 and $biblio->items->count == 0 )
             {
@@ -141,7 +141,6 @@ sub cancel {
                   if $error;
             }
             else {
-
                 $self->add_message({ message => 'error_delbiblio' });
             }
         }
