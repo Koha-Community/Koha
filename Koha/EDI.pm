@@ -28,7 +28,7 @@ use DateTime;
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils;
-use C4::Acquisition qw( NewBasket CloseBasket ModOrder);
+use C4::Acquisition qw( NewBasket ModOrder);
 use C4::Suggestions qw( ModSuggestion );
 use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
 use Koha::Edifact::Order;
@@ -592,7 +592,7 @@ sub process_quote {
                     basketno => $b,
                 }
             );
-            CloseBasket($b);
+            Koha::Acquisition::Baskets->find($b)->close;
         }
     }
 

@@ -191,9 +191,12 @@ if ( $op eq 'delete_confirm' ) {
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
     if ($confirm) {
-        my $basketno = $query->param('basketno');
-        my $booksellerid = $query->param('booksellerid');
-        $basketno =~ /^\d+$/ and CloseBasket($basketno);
+
+        # close the basket
+        # FIXME: we should fetch the object at the beginning of this script
+        #        and get rid of the hash that is passed around
+        Koha::Acquisition::Baskets->find($basketno)->close;
+
         # if requested, create basket group, close it and attach the basket
         if ($query->param('createbasketgroup')) {
             my $branchcode;
@@ -524,17 +527,17 @@ sub get_order_infos {
 sub edi_close_and_order {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
     if ($confirm) {
-            my $edi_params = {
-                basketno => $basketno,
-                ean    => $ean,
-            };
-            if ( $basket->{branch} ) {
-                $edi_params->{branchcode} = $basket->{branch};
-            }
-            if ( create_edi_order($edi_params) ) {
-                #$template->param( edifile => 1 );
-            }
-        CloseBasket($basketno);
+        my $edi_params = {
+            basketno => $basketno,
+            ean    => $ean,
+        };
+        if ( $basket->{branch} ) {
+            $edi_params->{branchcode} = $basket->{branch};
+        }
+        if ( create_edi_order($edi_params) ) {
+            #$template->param( edifile => 1 );
+        }
+        Koha::Acquisition::Baskets->find($basketno)->close;
 
         # if requested, create basket group, close it and attach the basket
         if ( $query->param('createbasketgroup') ) {

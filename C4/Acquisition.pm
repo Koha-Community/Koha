@@ -53,7 +53,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-        &GetBasket &NewBasket &CloseBasket &ReopenBasket &ModBasket
+        &GetBasket &NewBasket &ReopenBasket &ModBasket
         &GetBasketAsCSV &GetBasketGroupAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
         &GetBasketsInfosByBookseller
@@ -204,28 +204,6 @@ sub NewBasket {
     ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
         $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
     return $basket;
-}
-
-#------------------------------------------------------------#
-
-=head3 CloseBasket
-
-  &CloseBasket($basketno);
-
-close a basket (becomes unmodifiable, except for receives)
-
-=cut
-
-sub CloseBasket {
-    my ($basketno) = @_;
-    my $dbh        = C4::Context->dbh;
-    $dbh->do('UPDATE aqbasket SET closedate=now() WHERE basketno=?', {}, $basketno );
-
-    $dbh->do(
-q{UPDATE aqorders SET orderstatus = 'ordered' WHERE basketno = ? AND orderstatus NOT IN ( 'complete', 'cancelled')},
-        {}, $basketno
-    );
-    return;
 }
 
 =head3 ReopenBasket

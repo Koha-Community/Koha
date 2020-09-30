@@ -72,7 +72,7 @@ my @orders = C4::Acquisition::GetOrders( $basketno );
 is( scalar(@orders), 2, "2 orders are created" );
 is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new before closing the basket" );
 
-C4::Acquisition::CloseBasket( $basketno );
+Koha::Acquisition::Baskets->find( $basketno )->close;
 @orders = C4::Acquisition::GetOrders( $basketno );
 is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 2, "2 orders are ordered, the basket is closed" );
 
@@ -86,10 +86,10 @@ my ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
 is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
 is( $order->{orderstatus}, 'cancelled', 'cancelling the order should have set status to cancelled' );
 
-C4::Acquisition::CloseBasket( $basketno );
+Koha::Acquisition::Baskets->find( $basketno )->close;
 ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
 is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
-is( $order->{orderstatus}, 'cancelled', 'CloseBasket should not reset the status to ordered for cancelled orders' );
+is( $order->{orderstatus}, 'cancelled', '$basket->close should not reset the status to ordered for cancelled orders' );
 
 C4::Acquisition::ReopenBasket( $basketno );
 ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );

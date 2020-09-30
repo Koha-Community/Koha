@@ -394,7 +394,7 @@ ok( GetBudgetByOrderNumber( $ordernumbers[0] )->{'budget_id'} eq $budgetid,
 my $lateorders = Koha::Acquisition::Orders->filter_by_lates({ delay => 0 });
 is( $lateorders->search({ 'me.basketno' => $basketno })->count,
     0, "GetLateOrders does not get orders from opened baskets" );
-C4::Acquisition::CloseBasket($basketno);
+Koha::Acquisition::Baskets->find($basketno)->close;
 $lateorders = Koha::Acquisition::Orders->filter_by_lates({ delay => 0 });
 isnt( $lateorders->search({ 'me.basketno' => $basketno })->count,
     0, "GetLateOrders gets orders from closed baskets" );

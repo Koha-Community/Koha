@@ -436,7 +436,7 @@ my $order = Koha::Acquisition::Order->new(
 )->store;
 my $ordernumber = $order->ordernumber;
 
-C4::Acquisition::CloseBasket( $basketno );
+Koha::Acquisition::Baskets->find( $basketno )->close;
 my $err;
 warning_like {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }

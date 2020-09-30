@@ -103,7 +103,7 @@ is( $basket->{total_items_cancelled}, 6, 'Both orders deleted, 6 items cancelled
 is( $basket->{expected_items}, 0, 'Both orders delete, now 0 items are expected' );
 is( $basket->{total_biblios_cancelled}, 2, 'Both orders deleted, 2 biblios cancelled' );
 
-C4::Acquisition::CloseBasket( $basketno );
+Koha::Acquisition::Baskets->find( $basketno )->close;
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 0, 'Basket is closed, 0 basket opened' );
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid, 1 );
@@ -120,7 +120,7 @@ my $order3 = Koha::Acquisition::Order->new(
 )->store;
 my $ordernumber3 = $order3->ordernumber;
 
-C4::Acquisition::CloseBasket( $basketno );
+Koha::Acquisition::Baskets->find( $basketno )->close;
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 1, 'Basket is closed and has items to receive' );
 $basket = $baskets->[0];
