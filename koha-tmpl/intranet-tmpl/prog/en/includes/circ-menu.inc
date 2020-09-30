@@ -2,12 +2,13 @@
 [% USE KohaDates %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% IF ( patron.borrowernumber ) %]
-[% SET patrongrade = ( patron.has_permission({ 'catalogue' => 1 }) ) ? 'staffgrade' : 'normalgrade' %]
-<div class="patroninfo [% patrongrade | html %]">
+[% SET patron_is_staff = patron.has_permission({ 'catalogue' => 1 }) %]
+[% SET patron_type_class = patron_is_staff ? 'is-staff' : 'is-not-staff' %]
+<div class="patroninfo [% patron_type_class | html %]">
 
 [% IF ( patronimages ) %]
     <h5 class="text-center">
-        [% IF ( patrongrade == 'staffgrade' ) %]
+        [% IF ( patron_is_staff ) %]
             <i class="fa fa-shield fa-fw" title="Staff patron"></i>
         [% END %]
         [% INCLUDE 'patron-title.inc' %]
@@ -30,7 +31,7 @@
     </div>
 [% ELSE %]
     <h5>
-        [% IF ( patrongrade == 'staffgrade' ) %]
+        [% IF ( patron_is_staff ) %]
             <i class="fa fa-shield fa-fw" title="Staff patron"></i>
         [% END %]
         [% INCLUDE 'patron-title.inc' %]
