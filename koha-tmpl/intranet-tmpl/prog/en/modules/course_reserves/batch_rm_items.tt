@@ -1,3 +1,4 @@
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -42,11 +43,7 @@
                 <p>The following items were removed from all courses:</p>
                 <ul>
                     [% FOREACH i IN item_and_count %]
-                      [% IF i.delcount == 1 %]
-                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount | html %] course.</li>
-                      [% ELSIF i.delcount > 1 %]
-                          <li>[% i.delitem.biblio.title | html %] ([% i.delitem.barcode | html %]) was removed from [% i.delcount | html %] courses.</li>
-                      [% END %]
+                        <li>[% txn('{title} ({barcode}) was removed from {count} course.', '{title} ({barcode}) was removed from {count} courses.', i.delcount, { title = i.delitem.biblio.title, barcode = i.delitem.barcode, count = i.delcount }) | html %]</li>
                     [% END %]
                 </ul>
             [% ELSE %]
