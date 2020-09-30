@@ -194,11 +194,6 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 10
 
-=head2 paidfor
-
-  data_type: 'longtext'
-  is_nullable: 1
-
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -374,8 +369,6 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
-  "paidfor",
-  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -754,8 +747,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-05 20:21:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9AxhV/hJnavWY4OTDTNRcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-30 15:31:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GJJ00YUn85GnJ98wpqNaLg
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

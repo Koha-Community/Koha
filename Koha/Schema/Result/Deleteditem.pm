@@ -190,11 +190,6 @@ __PACKAGE__->table("deleteditems");
   is_nullable: 1
   size: 10
 
-=head2 paidfor
-
-  data_type: 'longtext'
-  is_nullable: 1
-
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -360,8 +355,6 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "paidfor",
-  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -414,8 +407,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-05 20:21:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4xydPpkFXE+oOR46jY5L8Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-30 15:31:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1l4g7uiQo9gkdrWbNxAsJg
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
