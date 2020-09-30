@@ -55,7 +55,12 @@ type is one of this:
 - slip - for ISSUESLIP notice
 - koha - for intranet
 - opac - for online catalogue
-- OpanNavRight - Right column in the online catalogue
+- OpacNavRight - Right column in the online catalogue
+- OpacLoginInstructions
+- OpacMainUserBlock
+- OpacCustomSearch
+- opacheader
+- opaccredits
 
 lang is language code - it is used only when type is opac or OpacNavRight
 
@@ -78,7 +83,7 @@ sub search_for_display {
     }
 
     $search_params->{branchcode} = [ $params->{library_id}, undef ] if $params->{library_id};
-    $search_params->{timestamp} = { '<=' => \'NOW()' };
+    $search_params->{published_on} = { '<=' => \'NOW()' };
     $search_params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
                               expirationdate => undef ];
 

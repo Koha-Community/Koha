@@ -112,7 +112,7 @@ elsif ( $op eq 'add' ) {
             content        => $content,
             lang           => $lang,
             expirationdate => $expirationdate,
-            timestamp      => $timestamp,
+            published_on   => $published_on,
             number         => $number,
             branchcode     => $branchcode,
             borrowernumber => $borrowernumber,
@@ -150,7 +150,7 @@ else {
     my $opac_news = Koha::News->search(
         $params,
         {
-            order_by => { -desc =>  'timestamp' },
+            order_by => { -desc =>  'published_on' },
         }
     );
     $template->param( opac_news => $opac_news );
