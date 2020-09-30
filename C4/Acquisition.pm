@@ -53,7 +53,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-        &GetBasket &NewBasket &CloseBasket &ReopenBasket &DelBasket &ModBasket
+        &GetBasket &NewBasket &CloseBasket &ReopenBasket &ModBasket
         &GetBasketAsCSV &GetBasketGroupAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
         &GetBasketsInfosByBookseller
@@ -482,32 +482,6 @@ sub ReOpenBasketgroup {
         WHERE  id=?
     ");
     $sth->execute($basketgroupno);
-}
-
-#------------------------------------------------------------#
-
-
-=head3 DelBasket
-
-  &DelBasket($basketno);
-
-Deletes the basket that has basketno field $basketno in the aqbasket table.
-
-=over
-
-=item C<$basketno> is the primary key of the basket in the aqbasket table.
-
-=back
-
-=cut
-
-sub DelBasket {
-    my ( $basketno ) = @_;
-    my $query = "DELETE FROM aqbasket WHERE basketno=?";
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($basketno);
-    return;
 }
 
 #------------------------------------------------------------#
