@@ -66,7 +66,7 @@ BEGIN {
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
         &GetBasketgroups &ReOpenBasketgroup
 
-        &DelOrder &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
+        &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
         &GetOrderFromItemnumber
         &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
@@ -1824,67 +1824,6 @@ sub SearchOrders {
 }
 
 #------------------------------------------------------------#
-
-=head3 DelOrder
-
-  &DelOrder($biblionumber, $ordernumber);
-
-Cancel the order with the given order and biblio numbers. It does not
-delete any entries in the aqorders table, it merely marks them as
-cancelled.
-
-=cut
-
-sub DelOrder {
-    my ( $bibnum, $ordernumber, $delete_biblio, $reason ) = @_;
-    my $error;
-    my $dbh = C4::Context->dbh;
-    my $query = "
-        UPDATE aqorders
-        SET    datecancellationprinted=now(), orderstatus='cancelled'
-    ";
-    if($reason) {
-        $query .= ", cancellationreason = ? ";
-    }
-    $query .= "
-        WHERE biblionumber=? AND ordernumber=?
-    ";
-    my $sth = $dbh->prepare($query);
-    if($reason) {
-        $sth->execute($reason, $bibnum, $ordernumber);
-    } else {
-        $sth->execute( $bibnum, $ordernumber );
-    }
-    $sth->finish;
-
-    my $order = Koha::Acquisition::Orders->find($ordernumber);
-    my $items = $order->items;
-    while ( my $item = $items->next ) { # Should be moved to Koha::Acquisition::Order->delete
-        my $delcheck = $item->safe_delete;
-
-        if($delcheck ne '1') {
-            $error->{'delitem'} = 1;
-        }
-    }
-
-    if($delete_biblio) {
-        # We get the number of remaining items
-        my $biblio = Koha::Biblios->find( $bibnum );
-        my $itemcount = $biblio->items->count;
-
-        # If there are no items left,
-        if ( $itemcount == 0 ) {
-            # We delete the record
-            my $delcheck = DelBiblio($bibnum);
-
-            if($delcheck) {
-                $error->{'delbiblio'} = 1;
-            }
-        }
-    }
-
-    return $error;
-}
 
 =head3 TransferOrder
 

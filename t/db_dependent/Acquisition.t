@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 80;
+use Test::More tests => 66;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -292,7 +292,7 @@ for ( 0 .. 5 ) {
     $order_content[$_]->{str}->{ordernumber} = $ordernumbers[$_];
 }
 
-DelOrder( $order_content[3]->{str}->{biblionumber}, $ordernumbers[3] );
+Koha::Acquisition::Orders->find($ordernumbers[3])->cancel;
 
 my $invoiceid = AddInvoice(
     invoicenumber => 'invoice',
@@ -527,40 +527,6 @@ is( $nonexistent_order, undef, 'GetOrder returns undef if no ordernumber is give
 $nonexistent_order = GetOrder( 424242424242 );
 is( $nonexistent_order, undef, 'GetOrder returns undef if a nonexistent ordernumber is given' );
 
-# Tests for DelOrder
-$order1 = GetOrder($ordernumbers[0]);
-my $error = DelOrder($order1->{biblionumber}, $order1->{ordernumber});
-ok((not defined $error), "DelOrder does not fail");
-$order1 = GetOrder($order1->{ordernumber});
-ok((defined $order1->{datecancellationprinted}), "order is cancelled");
-ok((not defined $order1->{cancellationreason}), "order has no cancellation reason");
-ok((defined Koha::Biblios->find( $order1->{biblionumber} )), "biblio still exists");
-
-$order2 = GetOrder($ordernumbers[1]);
-$error = DelOrder($order2->{biblionumber}, $order2->{ordernumber}, 1);
-ok((not defined $error), "DelOrder does not fail");
-$order2 = GetOrder($order2->{ordernumber});
-ok((defined $order2->{datecancellationprinted}), "order is cancelled");
-ok((not defined $order2->{cancellationreason}), "order has no cancellation reason");
-ok((not defined Koha::Biblios->find( $order2->{biblionumber} )), "biblio does not exist anymore");
-
-my $order4 = GetOrder($ordernumbers[3]);
-$error = DelOrder($order4->{biblionumber}, $order4->{ordernumber}, 1, "foobar");
-ok((not defined $error), "DelOrder does not fail");
-$order4 = GetOrder($order4->{ordernumber});
-ok((defined $order4->{datecancellationprinted}), "order is cancelled");
-ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \"foobar\"");
-ok((not defined Koha::Biblios->find( $order4->{biblionumber} )), "biblio does not exist anymore");
-
-my $order5 = GetOrder($ordernumbers[4]);
-Koha::Item->new({ barcode => '0102030405', biblionumber => $order5->{biblionumber} })->store;
-$error = DelOrder($order5->{biblionumber}, $order5->{ordernumber}, 1);
-$order5 = GetOrder($order5->{ordernumber});
-ok((defined $order5->{datecancellationprinted}), "order is cancelled");
-ok((defined Koha::Biblios->find( $order5->{biblionumber} )), "biblio still exists");
-
-# End of tests for DelOrder
-
 subtest 'ModOrder' => sub {
     plan tests => 1;
     ModOrder( { ordernumber => $order1->{ordernumber}, unitprice => 42 } );
@@ -640,8 +606,7 @@ sub run_flavoured_tests {
     $orders = GetHistory( isbn => '0136019706' );
     is( scalar(@$orders), 1, "GetHistory searches correctly by ISBN" );
 
-    my $order = GetOrder($ordernumber);
-    DelOrder($order->{biblionumber}, $order->{ordernumber}, 1);
+    Koha::Acquisition::Orders->find($ordernumber)->cancel;
 }
 
 # Do "flavoured" tests

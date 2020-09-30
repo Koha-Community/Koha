@@ -83,7 +83,7 @@ $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 $basket = $baskets->[0];
 is( $basket->{uncertainprices}, 0, "Uncertain prcies returns number of uncertain items");
 
-C4::Acquisition::DelOrder( $biblionumber2, $ordernumber2 );
+Koha::Acquisition::Orders->find($ordernumber2)->cancel;
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 1, 'Order2 deleted, still 1 basket' );
 $basket = $baskets->[0];
@@ -93,7 +93,7 @@ is( $basket->{total_items_cancelled}, 4, 'Order2 deleted, 4 items cancelled' );
 is( $basket->{expected_items}, 2, 'Order2 deleted, now 2 items are expected' );
 is( $basket->{total_biblios_cancelled}, 1, 'Order2 deleted, 1 biblios cancelled' );
 
-C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
+Koha::Acquisition::Orders->find($ordernumber1)->cancel;
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 1, 'Both orders deleted, still 1 basket' );
 $basket = $baskets->[0];

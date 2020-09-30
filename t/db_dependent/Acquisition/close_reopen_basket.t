@@ -81,10 +81,10 @@ C4::Acquisition::ReopenBasket( $basketno );
 is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 0, "No order is ordered, the basket is reopened" );
 is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new, the basket is reopened" );
 
-C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
+Koha::Acquisition::Orders->find($ordernumber1)->cancel;
 my ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
 is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
-is( $order->{orderstatus}, 'cancelled', 'DelOrder should have set status to cancelled' );
+is( $order->{orderstatus}, 'cancelled', 'cancelling the order should have set status to cancelled' );
 
 C4::Acquisition::CloseBasket( $basketno );
 ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
