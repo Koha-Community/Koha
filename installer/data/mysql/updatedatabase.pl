@@ -22810,6 +22810,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 18958, "Add reserve_id to hold_fill_targets");
 }
 
+$DBversion = '20.06.00.040';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('OpacMetaDescription','','','This description will show in search engine results (160 characters).','Textarea');" );
+
+    NewVersion( $DBversion, 26454, "Add system preference to set meta description for the OPAC");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
