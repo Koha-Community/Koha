@@ -917,14 +917,19 @@
                     var $overdrive_results = $( '<div id="overdrive-results">' + MSG_SEARCHING.format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
                     $( '#numresults' ) .append( ' ' )
                         .append( $overdrive_results );
-                    KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, 1, 0, function( data ) {
+                    //Clean querystring, first we remove CCL entities, then decode HTML entities, then swap double quotes for single quotes
+                    //as the overdrive API treats double quotes as a search term and returns extra results
+                    od_querystring = querystring.replace(/(?:^|\W)([\w-]+)(,[\w-]+)*([:=])/g,' ');
+                    od_querystring = new DOMParser().parseFromString( od_querystring, 'text/html').body.innerText;
+                    od_querystring = od_querystring.replace(/\"/g,"'");
+                    KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", od_querystring, 1, 0, function( data ) {
                         if ( data.error ) {
                             $overdrive_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('OverDrive') );
                             return;
                         }
 
                         if ( data.totalItems ) {
-                            $overdrive_results.html( '<a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + escape( querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.totalItems, 'OverDrive') + '</a>' );
+                            $overdrive_results.html( '<a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + escape( od_querystring ) + '">' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.totalItems, 'OverDrive') + '</a>' );
                         } else {
                             $overdrive_results.remove();
                         }
