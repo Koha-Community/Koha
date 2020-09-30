@@ -22856,6 +22856,17 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 26268, "Remove items.paidfor field" );
 }
 
+$DBversion = '20.06.00.042';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists('letter', 'updated_on') ) {
+        $dbh->do(q|
+            ALTER TABLE letter ADD COLUMN updated_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER lang
+        |);
+    }
+
+    NewVersion( $DBversion, 25776, "Add letter.updated_on");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
