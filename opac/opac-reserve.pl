@@ -601,11 +601,6 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{holdable} = undef;
         $biblioLoopIter{itemholdable} = undef;
     }
-    if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
-        $biblioLoopIter{holdable} = undef;
-        $biblioLoopIter{already_patron_possession} = 1;
-    }
-
     if ( $biblioLoopIter{holdable} ) {
         @not_available_at = uniq @not_available_at;
         $biblioLoopIter{not_available_at} = \@not_available_at ;
@@ -620,7 +615,9 @@ foreach my $biblioNum (@biblionumbers) {
         }
     }
 
-    $biblioLoopIter{holdable} &&= CanBookBeReserved( $borrowernumber, $biblioNum )->{status} eq 'OK';
+    my $status = CanBookBeReserved( $borrowernumber, $biblioNum )->{status};
+    $biblioLoopIter{holdable} &&= $status eq 'OK';
+    $biblioLoopIter{already_patron_possession} = $status eq 'alreadypossession';
 
     # For multiple holds per record, if a patron has previously placed a hold,
     # the patron can only place more holds of the same type. That is, if the

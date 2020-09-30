@@ -321,7 +321,7 @@ sub CanBookBeReserved{
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
         && C4::Circulation::CheckIfIssuedToPatron( $borrowernumber, $biblionumber ) ) {
-        return { status =>'itemAlreadyOnLoan' };
+        return { status =>'alreadypossession' };
     }
 
     my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
@@ -395,7 +395,7 @@ sub CanItemBeReserved {
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
         && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
-        return { status =>'itemAlreadyOnLoan' };
+        return { status =>'alreadypossession' };
     }
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');

@@ -314,6 +314,10 @@ foreach my $biblionumber (@biblionumbers) {
                 $template->param( $canReserve->{status} => 1 );
                 $biblioloopiter{ $canReserve->{status} } = 1;
             }
+            elsif ( $canReserve->{status} eq 'alreadypossession' ) {
+                $template->param( $canReserve->{status} => 1);
+                $biblioloopiter{ $canReserve->{status} } = 1;
+            }
             else {
                 $biblioloopiter{ $canReserve->{status} } = 1;
             }
@@ -342,16 +346,6 @@ foreach my $biblionumber (@biblionumbers) {
         $biblioloopiter{remaining_holds_for_record} = $max_holds_for_record;
         $template->param( max_holds_for_record => $max_holds_for_record );
         $template->param( remaining_holds_for_record => $remaining_holds_for_record );
-
-        { # alreadypossession
-            # Check to see if patron is allowed to place holds on records where the
-            # patron already has an item from that record checked out
-            if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
-                && CheckIfIssuedToPatron( $patron->borrowernumber, $biblionumber ) )
-            {
-                $template->param( alreadypossession => 1, );
-            }
-        }
     }
 
 

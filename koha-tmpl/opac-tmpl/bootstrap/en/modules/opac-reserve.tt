@@ -200,15 +200,15 @@
                                     [% IF ( bibitemloo.already_reserved ) %]
                                         <div class="alert alert-warning">You have already requested this title.</div>
                                     [% ELSE %]
-                                        [% UNLESS ( bibitemloo.bib_available ) %]
-                                            <div class="alert alert-warning">There are no items that can be placed on hold.</div>
+                                        [% IF ( bibitemloo.already_patron_possession ) %]
+                                            <div class="alert alert-warning">This title cannot be requested because it's already in your possession.</div>
                                         [% ELSE %]
-                                            [% IF ( bibitemloo.already_patron_possession ) %]
-                                                <div class="alert alert-warning">This title cannot be requested because it's already in your possession.</div>
+                                            [% UNLESS ( bibitemloo.bib_available ) %]
+                                                <div class="alert">There are no items that can be placed on hold.</div>
                                             [% ELSE %]
-                                                <div class="alert alert-warning">This title cannot be requested.</div>
+                                                <div class="alert">This title cannot be requested.</div>
                                             [% END %]
-                                        [% END # / UNLESS bibitemloo.bib_available %]
+                                        [% END # / UNLESS bibitemloo.already_patron_possession %]
                                     [% END # / IF bibitemloo.already_reserved %]
                                 [% END # / UNLESS bibitemloo.holdable %]
 

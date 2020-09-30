@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1169,12 +1169,12 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
 
     is(C4::Reserves::CanBookBeReserved($patron->borrowernumber,
                                        $item->biblionumber)->{status},
-       'itemAlreadyOnLoan',
+       'alreadypossession',
        'Patron cannot place hold on a book loaned to itself');
 
     is(C4::Reserves::CanItemBeReserved($patron->borrowernumber,
                                        $item->itemnumber)->{status},
-       'itemAlreadyOnLoan',
+       'alreadypossession',
        'Patron cannot place hold on an item loaned to itself');
 
     t::lib::Mocks::mock_preference('AllowHoldsOnPatronsPossessions', 1);

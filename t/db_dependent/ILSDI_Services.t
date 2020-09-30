@@ -424,7 +424,7 @@ subtest 'Holds test' => sub {
     $query->param( 'pickup_location', $origin_branch->{branchcode});
     $reply = C4::ILSDI::Services::HoldItem( $query );
 
-    is( $reply->{code}, 'itemAlreadyOnLoan', "Patron has issued same book" );
+    is( $reply->{code}, 'alreadypossession', "Patron has issued same book" );
     is( $reply->{pickup_location}, undef, "No reserve placed");
 
     $schema->storage->txn_rollback;
