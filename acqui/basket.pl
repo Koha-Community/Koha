@@ -128,45 +128,38 @@ if ( $op eq 'delete_confirm' ) {
     output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
       unless $logged_in_patron->has_permission( { acquisition => 'delete_baskets' } );
 
-    my $basketno = $query->param('basketno');
-    my $delbiblio = $query->param('delbiblio');
-    my @orders = GetOrders($basketno);
-#Delete all orders included in that basket, and all items received.
-    foreach my $myorder (@orders){
-        DelOrder($myorder->{biblionumber},$myorder->{ordernumber});
-    }
-# if $delbiblio = 1, delete the records if possible
-    if ((defined $delbiblio)and ($delbiblio ==1)){
-        my @cannotdelbiblios ;
-        foreach my $myorder (@orders){
-            my $biblionumber = $myorder->{'biblionumber'};
-            my $biblio = Koha::Biblios->find( $biblionumber );
-            my $countbiblio = $biblio->active_orders->count;
-            my $ordernumber = $myorder->{'ordernumber'};
-            my $cnt_subscriptions = $biblio->subscriptions->count;
-            my $itemcount = $biblio->items->count;
-            my $error;
-            if ($countbiblio == 0 && $itemcount == 0 && not $cnt_subscriptions ) {
-                $error = DelBiblio($myorder->{biblionumber}) }
-            else {
-                push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
-                                         title=> $myorder->{'title'},
-                                         author=> $myorder->{'author'},
-                                         countbiblio=> $countbiblio,
-                                         itemcount=>$itemcount,
-                                         subscriptions => $cnt_subscriptions};
-            }
-            if ($error) {
-                push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
-                                         title=> $myorder->{'title'},
-                                         author=> $myorder->{'author'},
-                                         othererror=> $error};
-            }
+    my $basketno   = $query->param('basketno');
+    my $delbiblio  = $query->param('delbiblio');
+    my $basket_obj = Koha::Acquisition::Baskets->find($basketno);
+
+    my $orders = $basket_obj->orders;
+
+    my @cannotdelbiblios;
+
+    while ( my $order = $orders->next ) {
+        # cancel the order
+        $order->cancel({ delete_biblio => $delbiblio });
+        my @messages = @{ $order->messages };
+
+        if ( scalar @messages > 0 ) {
+
+            my $biblio = $order->biblio;
+
+            push @cannotdelbiblios, {
+                biblionumber  => $biblio->id,
+                title         => $biblio->title // '',
+                author        => $biblio->author // '',
+                countbiblio   => $biblio->active_orders->count,
+                itemcount     => $biblio->items->count,
+                subscriptions => $biblio->subscriptions->count,
+            };
         }
-        $template->param( cannotdelbiblios => \@cannotdelbiblios );
     }
- # delete the basket
-    DelBasket($basketno,);
+
+    $template->param( cannotdelbiblios => \@cannotdelbiblios );
+
+    # delete the basket
+    $basket_obj->delete;
     $template->param(
         delete_confirmed => 1,
         booksellername => $bookseller->name,

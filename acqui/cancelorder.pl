@@ -52,15 +52,19 @@ my $biblionumber = $input->param('biblionumber');
 my $basketno = $input->param('basketno');
 my $basket = Koha::Acquisition::Baskets->find({ basketno => $basketno }, { prefetch => 'booksellerid' });
 my $referrer = $input->param('referrer') || $input->referer;
-my $del_biblio = $input->param('del_biblio') ? 1 : 0;
+my $delete_biblio = $input->param('del_biblio') ? 1 : 0;
 
-if($action and $action eq "confirmcancel") {
+if( $action and $action eq "confirmcancel" ) {
     my $reason = $input->param('reason');
-    my $error = DelOrder($biblionumber, $ordernumber, $del_biblio, $reason);
+    my $order  = Koha::Acquisition::Orders->find($ordernumber);
+    $order->cancel({ reason => $reason, delete_biblio => $delete_biblio });
+    my @messages = @{ $order->messages };
 
-    if($error) {
-        $template->param(error_delitem => 1) if $error->{'delitem'};
-        $template->param(error_delbiblio => 1) if $error->{'delbiblio'};
+    if ( scalar @messages > 0 ) {
+        $template->param( error_delitem => 1 )
+            if $messages[0]->message eq 'error_delitem';
+        $template->param( error_delbiblio => 1 )
+            if $messages[0]->message eq 'error_delbiblio';
     } else {
         $template->param(success_cancelorder => 1);
     }
@@ -72,7 +76,7 @@ $template->param(
     biblionumber => $biblionumber,
     basket => $basket,
     referrer => $referrer,
-    del_biblio => $del_biblio,
+    del_biblio => $delete_biblio,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
