@@ -87,11 +87,11 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
         $record->append_fields( MARC::Field->new('101', '', '', 'a' => "lng" ) );
         $record->append_fields( MARC::Field->new('200', '', '', 'a' => "Title $index" ) );
-        $record->append_fields( MARC::Field->new('995', '', '', 'a' => "Code" ) );
+        $record->append_fields( MARC::Field->new('952', '', '', 'a' => "Code" ) );
     } else {
         $record->append_fields( MARC::Field->new('008', '                                   lng' ) );
         $record->append_fields( MARC::Field->new('245', '', '', 'a' => "Title $index" ) );
-        $record->append_fields( MARC::Field->new('995', '', '', 'a' => "Code" ) );
+        $record->append_fields( MARC::Field->new('952', '', '', 'a' => "Code" ) );
     }
     my ($biblionumber) = AddBiblio($record, '');
     my $timestamp = $base_datetime->ymd . ' ' .$base_datetime->hms;
@@ -101,7 +101,7 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     $timestamp =~ s/ /T/;
     $record = GetMarcBiblio({ biblionumber => $biblionumber });
     my $record_transformed = $record->clone;
-    $record_transformed->delete_fields( $record_transformed->field('995'));
+    $record_transformed->delete_fields( $record_transformed->field('952'));
     $record_transformed = XMLin($record_transformed->as_xml_record);
     $record = XMLin($record->as_xml_record);
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
@@ -374,7 +374,7 @@ test_query('ListRecords marcxml with xsl transformation',
         }
     },
 });
-t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" => undef);
+t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" => '');
 
 restore_time();
 
