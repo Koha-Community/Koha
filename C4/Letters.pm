@@ -469,9 +469,10 @@ sub SendAlerts {
             letter_code => $letter_code,
             branchcode => $userenv->{branch},
             tables => {
-                'branches'    => $userenv->{branch},
+                'branches'      => $userenv->{branch},
                 'aqbooksellers' => $databookseller,
                 'aqcontacts'    => $datacontact,
+                'aqbasket'      => $externalid,
             },
             repeat => $dataorders,
             want_librarian => 1,
@@ -762,6 +763,7 @@ sub _parseletter_sth {
     ($table eq 'suggestions'  )    ? "SELECT * FROM $table WHERE   suggestionid = ?"                                  :
     ($table eq 'aqbooksellers')    ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'aqorders'     )    ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
+    ($table eq 'aqbasket'     )    ? "SELECT * FROM $table WHERE       basketno = ?"                                  :
     ($table eq 'opac_news'    )    ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
     ($table eq 'article_requests') ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
