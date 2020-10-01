@@ -101,11 +101,16 @@
                             // Display card number in parentheses if it exists
                             cardnumber = " (" + item.cardnumber + ") ";
                         }
-                        var itemString = "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>";
+                        var itemString = "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", " + ( item.firstname ? item.firstname.escapeHtml() : "" ) + cardnumber.escapeHtml() + " <small>";
                         if( item.dateofbirth ) {
-                            itemString += item.dateofbirth + "<span class=\"age_years\"> (" + item.age + " " +  _("years") + ")</span>, ";
+                            itemString += ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" )
+                                        + "<span class=\"age_years\"> (" + ( item.age ? item.age.escapeHtml() : "" ) + " " +  _("years") + ")</span>, ";
                         }
-                        itemString += item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>";
+                        itemString += ( item.address ? item.address.escapeHtml() : "" ) + " "
+                                    + ( item.city    ? item.city.escapeHtml()    : "" ) + " "
+                                    + ( item.zipcode ? item.city.escapeHtml()    : "" ) + " "
+                                    + ( item.country ? item.country.escapeHtml() : "" )
+                                    + "</small></a>";
                         return $( "<li></li>" )
                         .data( "ui-autocomplete-item", item )
                         .append( itemString )
@@ -137,7 +142,18 @@
                 }
                 return $( "<li></li>" )
                 .data( "ui-autocomplete-item", item )
-                .append( "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                .append(
+                    "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", "
+                        + ( item.firstname ? item.firstname.escapeHtml() : "" )
+                        + cardnumber.escapeHtml()
+                        + " <small>"
+                            + ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" ) + " "
+                            + ( item.address     ? item.address.escapeHtml() : "" )     + " "
+                            + ( item.city        ? item.city.escapeHtml() : "" )        + " "
+                            + ( item.zipcode     ? item.zipcode.escapeHtml() : "" )     + " "
+                            + ( item.country     ? item.country.escapeHtml() : "" )
+                        + "</small>"
+                    + "</a>" )
                 .appendTo( ul );
             };
         }
