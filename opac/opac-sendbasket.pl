@@ -34,7 +34,7 @@ use Koha::Email;
 use Koha::Patrons;
 use Koha::Token;
 
-my $query = new CGI;
+my $query = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
@@ -127,26 +127,15 @@ if ( $email_add ) {
         $subject = "no subject";
     }
 
-    # if you want to use the KohaAdmin address as from, that is the default no need to set it
-    my $email = Koha::Email->create({
-        to       => $email_add,
-        reply_to => $email_replyto,
-        subject  => $subject,
-    });
-
-    $email->header( 'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress') );
-
     my $email_header = "";
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
-        $email_header = Encode::encode("UTF-8", $email_header);
     }
 
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = Encode::encode("UTF-8", $body);
     }
 
     my $THE_body = <<END_OF_BODY;
@@ -154,20 +143,26 @@ $email_header
 $body
 END_OF_BODY
 
-    $email->text_body( $THE_body );
-    $email->attach(
-        $iso2709,
-        content_type => 'application/octet-stream',
-        name         => 'basket.iso2709',
-        disposition  => 'attachment',
-    );
-
     if ( !defined $iso2709 ) {
         carp "Error sending mail: empty basket";
         $template->param( error => 1 );
     }
     else {
         try {
+            # if you want to use the KohaAdmin address as from, that is the default no need to set it
+            my $email = Koha::Email->create({
+                to       => $email_add,
+                reply_to => $email_replyto,
+                subject  => $subject,
+            });
+            $email->header( 'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress') );
+            $email->text_body( $THE_body );
+            $email->attach(
+                Encode::encode( "UTF-8", $iso2709 ),
+                content_type => 'application/octet-stream',
+                name         => 'basket.iso2709',
+                disposition  => 'attachment',
+            );
             my $library = $patron->library;
             $email->transport( $library->smtp_server->transport );
             $email->send_or_die;

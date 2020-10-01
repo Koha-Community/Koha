@@ -128,24 +128,15 @@ if ( $email ) {
         $subject = "no subject";
     }
 
-    my $email = Koha::Email->create(
-        {
-            to      => $email,
-            subject => $subject,
-        }
-    );
-
     my $email_header = "";
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
         $email_header = $1;
         $email_header =~ s|\n?(.*)\n?|$1|;
-        $email_header = Encode::encode("UTF-8", $email_header);
     }
 
     if ( $template_res =~ /<MESSAGE>(.*)<END_MESSAGE>/s ) {
         $body = $1;
         $body =~ s|\n?(.*)\n?|$1|;
-        $body = Encode::encode("UTF-8", $body);
     }
 
     my $THE_body = <<END_OF_BODY;
@@ -153,15 +144,20 @@ $email_header
 $body
 END_OF_BODY
 
-    $email->text_body( $THE_body );
-    $email->attach(
-        $iso2709,
-        content_type => 'application/octet-stream',
-        name         => 'list.iso2709',
-        disposition  => 'attachment',
-    );
-
     try {
+        my $email = Koha::Email->create(
+            {
+                to      => $email,
+                subject => $subject,
+            }
+        );
+        $email->text_body( $THE_body );
+        $email->attach(
+            Encode::encode( "UTF-8", $iso2709 ),
+            content_type => 'application/octet-stream',
+            name         => 'list.iso2709',
+            disposition  => 'attachment',
+        );
         my $library = Koha::Patrons->find( $borrowernumber )->library;
         $email->transport( $library->smtp_server->transport );
         $email->send_or_die;
