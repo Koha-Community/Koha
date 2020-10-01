@@ -1496,14 +1496,6 @@ sub AddIssue {
                 $auto_renew = $rule->rule_value if $rule;
             }
 
-            # Record in the database the fact that the book was issued.
-            unless ($datedue) {
-                my $itype = $item_object->effective_itemtype;
-                $datedue = CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
-
-            }
-            $datedue->truncate( to => 'minute' );
-
             my $issue_attributes = {
                 borrowernumber  => $borrower->{'borrowernumber'},
                 issuedate       => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
@@ -1513,6 +1505,8 @@ sub AddIssue {
                 auto_renew      => $auto_renew ? 1 : 0,
             };
 
+            # In the case that the borrower has an on-site checkout
+            # and SwitchOnSiteCheckouts is enabled this converts it to a regular checkout
             $issue = Koha::Checkouts->find( { itemnumber => $item_object->itemnumber } );
             if ($issue) {
                 $issue->set($issue_attributes)->store;
@@ -1540,8 +1534,8 @@ sub AddIssue {
             $item_object->itemlost(0);
             $item_object->onloan($datedue->ymd());
             $item_object->datelastborrowed( dt_from_string()->ymd() );
+            $item_object->datelastseen( dt_from_string()->ymd() );
             $item_object->store({log_action => 0});
-            ModDateLastSeen( $item_object->itemnumber );
 
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
