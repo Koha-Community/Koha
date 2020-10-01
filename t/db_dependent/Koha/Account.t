@@ -671,7 +671,7 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -711,6 +711,19 @@ subtest 'pay() tests' => sub {
 
     # Disable cash registers
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+
+    # Undef userenv
+    $context->mock( 'userenv', undef );
+    my $result = $account->pay(
+        {
+            amount => 20,
+            payment_Type => 'CASH',
+            interface => 'intranet'
+        }
+    );
+    ok($result, "Koha::Account->pay functions without a userenv");
+    my $payment = Koha::Account::Lines->find({accountlines_id => $result->{payment_id}});
+    is($payment->manager_id, undef, "manager_id left undefined when no userenv found");
 
     $schema->storage->txn_rollback;
 };
