@@ -75,7 +75,7 @@ sub search_for_display {
             $search_params->{lang} = [ $params->{type}, '' ];
         } elsif ( $params->{type} eq 'opac' && $params->{lang} ) {
             $search_params->{lang} = [ $params->{lang}, '' ];
-        } elsif ( $params->{type} eq 'OpacNavRight' && $params->{lang} ) {
+        } elsif ( $params->{lang} ) {
             $search_params->{lang} = $params->{type} . '_' . $params->{lang};
         } else {
             Koha::Exceptions::BadParameter->throw("The type and lang parameters combination is not valid");
@@ -90,7 +90,7 @@ sub search_for_display {
     return $self->SUPER::search($search_params, { order_by => 'number' });
 }
 
-=head3 type
+=head3 _type
 
 =cut
 

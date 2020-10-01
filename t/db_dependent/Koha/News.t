@@ -143,7 +143,7 @@ subtest '->author' => sub {
 
 subtest '->search_for_display' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -247,6 +247,9 @@ subtest '->search_for_display' => sub {
     $new_intra->branchcode($library1->branchcode)->store;
     $news = Koha::News->search_for_display({ library_id => $library2->branchcode});
     is($news->count, 2, 'Filtering by library returns right number of news items');
+
+    $news = Koha::News->search_for_display({ type => 'NonExistantType', lang => 'en'});
+    is($news->count, 0, 'Non-existant type is searched, but should not find any item');
 
     throws_ok { Koha::News->search_for_display({type => 'opac'}) } 'Koha::Exceptions::BadParameter',
         'Exception raised when type is opac and no language given';
