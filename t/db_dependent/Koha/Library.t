@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::Database;
 use Koha::SMTP::Servers;
@@ -90,6 +90,25 @@ subtest 'smtp_server() tests' => sub {
         Koha::SMTP::Servers->get_default->unblessed,
         q{Resetting twice doesn't explode and has the expected results}
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'smtp_server_info() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library     = $builder->build_object({ class => 'Koha::Libraries' });
+    my $smtp_server = $builder->build_object({ class => 'Koha::SMTP::Servers' });
+
+    # No SMTP server assigned to library, return system default
+    is_deeply( $library->smtp_server_info, { name => 'system_default' }, 'System default is returned' );
+
+    # Assign an SMTP server
+    $library->smtp_server({ smtp_server => $smtp_server });
+    is_deeply( $library->smtp_server_info, { name => $smtp_server->name, smtp_server_id => $smtp_server->id }, 'The right information is returned when SMTP server is assigned' );
 
     $schema->storage->txn_rollback;
 };

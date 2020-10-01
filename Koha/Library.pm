@@ -115,6 +115,23 @@ sub smtp_server {
     return $self;
 }
 
+=head3 smtp_server_info
+
+Returns the SMTP server info for the library, or 'system_default' if it is the system default.
+
+=cut
+
+sub smtp_server_info {
+    my ($self) = @_;
+
+    my $smtp_server = $self->smtp_server;
+
+    return { name => 'system_default' }
+        if $smtp_server->is_system_default;
+
+    return { name => $smtp_server->name, smtp_server_id => $smtp_server->id };
+}
+
 =head3 inbound_email_address
 
   my $to_email = Koha::Library->inbound_email_address;
