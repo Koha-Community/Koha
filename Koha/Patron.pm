@@ -39,6 +39,7 @@ use Koha::Holds;
 use Koha::Old::Checkouts;
 use Koha::Patron::Attributes;
 use Koha::Patron::Categories;
+use Koha::Patron::Debarments;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
@@ -575,6 +576,9 @@ sub merge_with {
                 my $rs = $schema->resultset($r)->search({ $field => $patron_id });
                 $results->{merged}->{ $patron_id }->{updated}->{$r} = $rs->count();
                 $rs->update({ $field => $self->id });
+                if ( $r eq 'BorrowerDebarment' ) {
+                    Koha::Patron::Debarments::_UpdateBorrowerDebarmentFlags($self->id);
+                }
             }
 
             $patron->move_to_deleted();
