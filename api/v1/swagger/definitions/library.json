@@ -83,6 +83,20 @@
     "pickup_location": {
         "type": "boolean",
         "description": "If the library can act as a pickup location"
+    },
+    "smtp_server_info": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "SMTP server name. 'system_default' if no SMTP server is assigned",
+            "type": "string"
+          },
+          "smtp_server_id": {
+            "description": "Internal identifier for the SMTP server",
+            "type": ["integer", "null"]
+          }
+        },
+        "description": "The library effective SMTP server information."
     }
   },
   "additionalProperties": false,
