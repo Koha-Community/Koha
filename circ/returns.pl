@@ -268,17 +268,13 @@ if ($barcode) {
         my $biblio   = $item->biblio;
         $template->param(
             title                => $biblio->title,
-            homebranch           => $item->homebranch,
-            holdingbranch        => $item->holdingbranch,
             returnbranch         => $returnbranch,
             author               => $biblio->author,
-            itembarcode          => $item->barcode,
-            itemtype             => $item->effective_itemtype,
-            ccode                => $item->ccode,
             itembiblionumber     => $biblio->biblionumber,
             biblionumber         => $biblio->biblionumber,
             additional_materials => $materials,
             issue                => $checkout,
+            item                 => $item,
         );
     } # FIXME else we should not call AddReturn but set BadBarcode directly instead
 
