@@ -850,7 +850,7 @@
                                                 Not checked out
                                             [% END %]
                                             [% IF ( riloo.damaged ) %]
-                                                <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', riloo.damaged ) | html %]</span>
+                                                <span class="dmg">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.damaged', authorised_value => riloo.damaged ) | html %]</span>
                                             [% END %]
                                         </td>
                                         <td class="ci-title">
