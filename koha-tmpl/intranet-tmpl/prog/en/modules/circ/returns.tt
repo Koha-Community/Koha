@@ -127,7 +127,7 @@
                             [% IF ( collectionItemNeedsTransferred ) %]
                                  <div id="rotating-collection" class="dialog message">
                                     <h3>Please transfer item to: [% Branches.GetName( collectionBranch ) | html %]</h3>
-                                    <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
+                                    <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% item.barcode | html %]: [% title | html %]</a></p>
                                     <p>This item is part of a rotating collection.</p>
                                     <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% collectionBranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
                                 </div>
@@ -188,7 +188,7 @@
                                 <div class="dialog alert audio-alert-warning">
                                     <h3>Check in message</h3>
                                     [% IF itembiblionumber %]
-                                        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
+                                        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% item.barcode | html %]: [% title | html %]</a></p>
                                     [% END %]
                                     [% FOREACH errmsgloo IN errmsgloop %]
                                         [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
@@ -327,7 +327,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <form method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off">
-                                                <input type="hidden" name="barcode" value="[% itembarcode | html %]" />
+                                                <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                                 <input type="hidden" name="multiple_confirm" value="1" />
                                                 [% FOREACH inputloo IN inputloop %]
                                                     <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
@@ -356,7 +356,7 @@
                                             <div class="modal-body">
                                                 <p>
                                                     <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                        [% itembarcode | html %]: [% title | html %]
+                                                        [% item.barcode | html %]: [% title | html %]
                                                     </a>
                                                 </p>
                                                 <p>
@@ -399,7 +399,7 @@
                                             <div class="modal-body">
                                                 <p>
                                                     <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                        [% itembarcode | html %]: [% title | html %]
+                                                        [% item.barcode | html %]: [% title | html %]
                                                     </a>
                                                 </p>
                                                 [% INCLUDE all_checkin_messages %]
@@ -441,7 +441,7 @@
                                                         <br/>
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
                                                         <div class="hold-found-barcode">
-                                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% itembarcode | html %]</a>
+                                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% item.barcode | html %]</a>
                                                         </div>
                                                     </h3>
                                                 </div>
@@ -544,7 +544,7 @@
                                                 <div class="modal-body">
                                                     <p>
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                            [% itembarcode | html %]: [% title | html %]
+                                                            [% item.barcode | html %]: [% title | html %]
                                                         </a>
                                                     </p>
                                                     [% IF !transfer %]
@@ -600,7 +600,7 @@
                                                         <br/>
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
                                                         <div class="hold-found-barcode">
-                                                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% itembarcode | html %]</a>)
+                                                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% item.barcode | html %]</a>)
                                                         </div>
                                                     </h3>
                                                 </div>
