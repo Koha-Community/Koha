@@ -552,6 +552,7 @@ sub _gen_default_values {
             withdrawn          => 0,
             restricted         => 0,
             damaged            => 0,
+            materials          => undef,
             more_subfields_xml => undef,
         },
         Category => {

@@ -208,6 +208,11 @@ SKIP: {
             ) {
                 $v = ""; # The input has been prefilled with %Y-%m-%d already
             }
+            elsif (
+                $id =~ m|^tag_952_subfield_3| # materials
+            ) {
+                $v = ""; # We don't want the checkin/checkout to need confirmation if CircConfirmItemParts is on
+            }
             else {
                 $v = 't_value_bib' . $biblionumber;
             }
