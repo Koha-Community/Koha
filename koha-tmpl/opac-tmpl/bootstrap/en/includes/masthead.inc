@@ -158,7 +158,6 @@
                             <div id="opac-main-search">
                                 [% IF Koha.Preference('OpacCustomSearch') == '' %]
                                     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
-                                        <input type="hidden" name="weight_search" value="1">
                                         <div class="form-row align-items-center">
                                             <div class="col-sm-auto order-1 order-sm-1">
                                                 <label for="masthead_search"> Search
@@ -281,6 +280,7 @@
                                                 </div>
                                             [% END # / OpacAddMastheadLibraryPulldown %]
                                         </div> <!-- /.form-row -->
+                                        <input type="hidden" name="weight_search" value="1">
                                     </form>
                                 [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
                                     [% Koha.Preference('OpacCustomSearch') | $raw %]
