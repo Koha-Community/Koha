@@ -2489,7 +2489,7 @@ sub CountItemsIssued {
 
 =head2 ModZebra
 
-  ModZebra( $record_number, $op, $server, $record );
+    ModZebra( $record_number, $op, $server );
 
 $record_number is the authid or biblionumber we want to index
 
