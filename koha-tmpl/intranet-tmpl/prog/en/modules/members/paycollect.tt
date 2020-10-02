@@ -41,7 +41,7 @@
     [% ELSIF ( writeoff_individual ) %]Write off an individual fine
     [% ELSE %]
         [% IF ( selected_accts ) %]
-            [% IF type == 'writeoff' %]Write off an amount toward selected fines
+            [% IF type == 'WRITEOFF' %]Write off an amount toward selected fines
             [% ELSE                  %]Pay an amount toward selected fines
             [% END %]
         [% ELSE                      %]Pay an amount toward all fines
@@ -225,7 +225,7 @@
         </div>
     </form>
 [% ELSE %]
-    [% IF ( error_registers && type != 'writeoff' ) %]
+    [% IF ( error_registers && type != 'WRITEOFF' ) %]
         [% PROCESS 'cash_register_required' %]
     [% ELSE %]
 
