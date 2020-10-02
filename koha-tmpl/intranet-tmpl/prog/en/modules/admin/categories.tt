@@ -219,6 +219,18 @@
                     </select>
                     <span class="required">Required</span>
                 </li>
+                <li>
+                    <label for="canbeguarantee">Can be guarantee</label>
+                    <select name="canbeguarantee" id="canbeguarantee">
+                        [% IF category.canbeguarantee %]
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
+                        [% ELSE %]
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
+                        [% END %]
+                    <select>
+                </li>
                 <li><label for="branches">Library limitations: </label>
                     <select id="branches" name="branches" multiple size="10">
                         <option value="">All libraries</option>
@@ -478,6 +490,7 @@
                       </td>
                   </tr>
                 [% END %]
+                <tr><th scope="row">Can be guarantee</th><td>[% IF category.canbeguarantee %]Yes[% ELSE %]No[% END %]</td></tr>
                 <tr>
                     <th scope="row">Default privacy: </th>
                     <td>
@@ -538,6 +551,7 @@
                     [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                     <th scope="col">Check previous checkout?</th>
                     [% END %]
+                    <th scope="col">Can be guarantee</th>
                     <th scope="col">Default privacy</th>
                     <th scope="col">Exclude from local holds priority</th>
                     <th scope="col">Actions</th>
@@ -655,6 +669,7 @@
                               [% END %]
                           </td>
                         [% END %]
+                        <td>[% IF category.canbeguarantee %] Yes [% ELSE %] no [% END %]</td>
                         <td>
                             [% SWITCH category.default_privacy %]
                             [% CASE 'default' %]

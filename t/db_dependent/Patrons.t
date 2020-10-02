@@ -106,19 +106,22 @@ foreach my $b ( $patrons->as_list() ) {
 }
 
 subtest "Update patron categories" => sub {
-    plan tests => 24;
+    plan tests => 26;
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
     my $c_categorycode = $builder->build({ source => 'Category', value => {
             category_type=>'C',
             upperagelimit=>17,
             dateofbirthrequired=>5,
+            canbeguarantee=>1,
         } })->{categorycode};
     my $c_categorycode_2 = $builder->build({ source => 'Category', value => {
             category_type=>'C',
             upperagelimit=>17,
             dateofbirthrequired=>5,
+            canbeguarantee=>1,
         } })->{categorycode};
-    my $a_categorycode = $builder->build({ source => 'Category', value => {category_type=>'A'} })->{categorycode};
+    my $a_categorycode = $builder->build({ source => 'Category', value => {category_type=>'A', canbeguarantee=>0} })->{categorycode};
+    my $a_categorycode_2 = $builder->build({ source => 'Category', value => {category_type=>'A', canbeguarantee=>1} })->{categorycode};
     my $p_categorycode = $builder->build({ source => 'Category', value => {category_type=>'P'} })->{categorycode};
     my $i_categorycode = $builder->build({ source => 'Category', value => {category_type=>'I'} })->{categorycode};
     my $branchcode1 = $builder->build({ source => 'Branch' })->{branchcode};
@@ -198,6 +201,8 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_young=>1})->next->borrowernumber, $child1->borrowernumber );
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_young=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category because too young');
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,2,'Guarantee was removed when made adult');
+    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2})->update_category_to({category=>$a_categorycode_2}),2,'Two child patrons updated to adult category');
+    is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,2,'Guarantees were not removed when made adult which can be guarantee');
 
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_old=>1})->next->borrowernumber, $child3->borrowernumber );
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_old=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category because too old');
