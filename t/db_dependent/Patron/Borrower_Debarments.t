@@ -8,7 +8,7 @@ use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 31;
+use Test::More tests => 33;
 
 use_ok('Koha::Patron::Debarments');
 
@@ -161,3 +161,36 @@ is( Koha::Patrons->find( $borrowernumber )->is_debarred, undef, 'A patron withou
 
 $dbh->do(q|UPDATE borrowers SET debarred = '9999-12-31'|); # Note: Change this test before the first of January 10000!
 is( Koha::Patrons->find( $borrowernumber )->is_debarred, '9999-12-31', 'A patron with a debarred date in the future is debarred' );
+
+# Test patrons merge
+my $borrowernumber2 = Koha::Patron->new(
+    {
+        firstname    => 'my firstname bis',
+        surname      => 'my surname bis',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+    }
+)->store->borrowernumber;
+my $debarreddate2    = '9999-06-10'; # Be sure to be in the future
+my $debarredcomment2 = 'Test merge';
+AddDebarment(
+    {
+        borrowernumber => $borrowernumber2,
+        expiration     => $debarreddate2,
+        type           => 'MANUAL',
+        comment        => $debarredcomment2,
+    }
+);
+my $borrowernumber3 = Koha::Patron->new(
+    {
+        firstname    => 'my firstname ter',
+        surname      => 'my surname ter',
+        categorycode => $patron_category->{categorycode},
+        branchcode   => $library->{branchcode},
+    }
+)->store->borrowernumber;
+Koha::Patrons->find($borrowernumber3)->merge_with( [$borrowernumber2] );
+is( Koha::Patrons->find($borrowernumber3)->debarred,
+    $debarreddate2, 'Koha::Patron->merge_with() transfers well debarred' );
+is( Koha::Patrons->find($borrowernumber3)->debarredcomment,
+    $debarredcomment2, 'Koha::Patron->merge_with() transfers well debarredcomment' );
