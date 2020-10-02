@@ -174,7 +174,7 @@ if ( $op eq 'list' ) {
     my $smtp_servers = Koha::SMTP::Servers->search;
     $template->param(
         servers_count  => $smtp_servers->count,
-        default_config => $smtp_servers->default_setting
+        default_config => $smtp_servers->get_default,
     );
 }
 
