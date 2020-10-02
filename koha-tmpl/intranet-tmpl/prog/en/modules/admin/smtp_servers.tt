@@ -71,12 +71,12 @@ SMTP servers
         <fieldset class="rows">
             <ol>
                 <li>
-                    <label for="smtp_host">Host: </label>
+                    <label for="smtp_host" class="required">Host: </label>
                     <input type="text" name="smtp_host" id="smtp_host" size="60" class="required"/>
                     <span class="required">Required</span>
                 </li>
                 <li>
-                    <label for="smtp_port">Port: </label>
+                    <label for="smtp_port" class="required">Port: </label>
                     <input type="text" inputmode="numeric" pattern="[0-9]*" value="25" name="smtp_port" id="smtp_port" size="20" class="required"/>
                     <span class="required">Required</span>
                 </li>
@@ -135,12 +135,12 @@ SMTP servers
         <fieldset class="rows">
             <ol>
                 <li>
-                    <label for="smtp_host">Host: </label>
+                    <label for="smtp_host" class="required">Host: </label>
                     <input type="text" name="smtp_host" id="smtp_host" size="60" class="required" value="[%- smtp_server.host | html -%]"/>
                     <span class="required">Required</span>
                 </li>
                 <li>
-                    <label for="smtp_port">Port: </label>
+                    <label for="smtp_port" class="required">Port: </label>
                     <input type="text" inputmode="numeric" pattern="[0-9]*" name="smtp_port" id="smtp_port" size="20" class="required" value="[%- smtp_server.port | html -%]"/>
                     <span class="required">Required</span>
                 </li>
