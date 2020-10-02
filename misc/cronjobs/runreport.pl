@@ -308,6 +308,7 @@ foreach my $report_id (@ARGV) {
             $message .= $csv->string() . "\n";
             push @rows_to_store, [@$line] if $store_results;
         }
+        $message = Encode::decode_utf8($message);
     }
     if ( $store_results ) {
         my $json = to_json( \@rows_to_store );
@@ -332,7 +333,7 @@ foreach my $report_id (@ARGV) {
         }
 
         $email->attach(
-            encode( 'utf8', $message ),
+            Encode::encode_utf8($message),
             content_type => "text/$format",
             name         => "report$report_id-$date.$format",
             disposition  => 'attachment',
