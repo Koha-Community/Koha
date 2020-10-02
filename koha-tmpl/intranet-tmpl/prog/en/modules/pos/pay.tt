@@ -384,6 +384,17 @@
             }
         });
 
+        $('#payForm').validate({
+            rules: {
+                collected: {
+                    required: true
+                },
+                registerid: {
+                    required: true
+                }
+            }
+        });
+
         [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
             $("#printReceipt").click(function() {
                 var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]', '_blank');
