@@ -172,7 +172,11 @@ SMTP servers
                 </li>
                 <li>
                     <label for="smtp_password">Password: </label>
-                    <input type="password" name="smtp_password" id="smtp_password" size="60"  value="****"/>
+                    [% IF smtp_server.password %]
+                        <input type="password" name="smtp_password" id="smtp_password" size="60"  value="****"/>
+                    [% ELSE %]
+                        <input type="password" name="smtp_password" id="smtp_password" size="60"  value=""/>
+                    [% END %]
                 </li>
                 <li>
                     <label for="smtp_debug_mode">Debug mode: </label>

@@ -138,6 +138,7 @@ elsif ( $op eq 'edit_save' ) {
                     timeout   => $timeout,
                     ssl_mode  => $ssl_mode,
                     user_name => $user_name,
+                    password  => $password,
                     debug     => $debug
                 }
             )->store;
