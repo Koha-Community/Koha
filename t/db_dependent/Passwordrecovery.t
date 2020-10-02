@@ -23,24 +23,29 @@ use C4::Letters;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patrons;
+
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Test::More tests => 22;
 use Test::MockModule;
 use Test::Warn;
 use Carp;
 
-my %mail;
-my $module = Test::MockModule->new('Mail::Sendmail');
-$module->mock(
-    'sendmail',
+my ( $email_object, $sendmail_params );
+
+my $email_sender_module = Test::MockModule->new('Email::Stuffer');
+$email_sender_module->mock(
+    'send_or_die',
     sub {
-        carp 'Fake sendmail';
-        %mail = @_;
+        ( $email_object, $sendmail_params ) = @_;
+        warn 'Fake sendmail';
     }
 );
 
 use_ok('Koha::Patron::Password::Recovery');
+
+t::lib::Mocks::mock_preference('KohaAdminEmailAddress', 'test@koha-community.org');
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -66,6 +71,8 @@ my $patron_category = $builder->build({ source => 'Category' });
 my $branch = $builder->build({
     source => 'Branch',
     value => {
+        branchemail      => undef,
+        branchreplyto    => undef,
         branchreturnpath => $email1,
     },
 });
