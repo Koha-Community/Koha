@@ -116,6 +116,11 @@ $template->param(
 my $relatives_issues_count =
     Koha::Checkouts->count({ borrowernumber => \@relatives });
 
+if ( @guarantees ) {
+    my $total_amount = $patron->relationships_debt({ include_guarantors => 0, only_this_guarantor => 1, include_this_patron => 1 });
+    $template->param( guarantees_fines => $total_amount );
+}
+
 # Calculate and display patron's age
 if ( !$patron->is_valid_age ) {
     $template->param( age_limitations => 1 );

@@ -212,6 +212,13 @@
                                             <li>
                                                 <span class="label">Guarantees:</span>
                                                 <ul>
+                                                    [% IF guarantees_fines and guarantees_fines > 0 %]
+                                                        <li class="guarantees-fines">
+                                                            <span class="circ-hlt">Charges:</span>
+                                                            Patron's guarantees collectively owe [% guarantees_fines | $Price %].
+                                                            <a id="view-guarantees-finesandcharges" href="#guarantees-finesandcharges" >See all charges.</a>
+                                                        </li>
+                                                    [% END %]
                                                     [% FOREACH guarantee IN guarantees %]
                                                         [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
                                                             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
@@ -667,6 +674,11 @@
                                     <a href="#finesandcharges" aria-controls="finesandcharges" role="tab" data-toggle="tab">Charges ([% fines | $Price %])</a>
                                 </li>
                             [% END %]
+                            [% IF ( guarantees_fines ) %]
+                                <li id="guarantees-finestab">
+                                    <a href="#guarantees-finesandcharges">Guarantees' charges ([% guarantees_fines | $Price %])</a>
+                                </li>
+                            [% END %]
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                                 <li role="presentation">
                                         <a href="#reserves" id="holds-tab" aria-controls="reserves" role="tab" data-toggle="tab">Holds ([% holds_count || 0 | html %])</a>
@@ -743,11 +755,38 @@
                                 </div>
                             [% END %]
 
-                            [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
-                                <div id="clubs-tab" role="tabpanel" class="tab-pane">
-                                    Loading...
-                                </div>
-                            [% END %]
+                        [% IF ( guarantees_fines ) %]
+                            <div id="guarantees-finesandcharges">
+                                <table id="tguaranteesfines">
+                                    <thead>
+                                        <tr>
+                                            <th>Guarantee</th>
+                                            <th>Amount outstanding</th>
+                                        </tr>
+                                    </thead>
+                                    [% FOREACH guarantee IN guarantees %]
+                                        <tr>
+                                            <td>[% INCLUDE 'patron-title.inc' patron=guarantee hide_patron_infos_if_needed=1 %]</td>
+                                            [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
+                                                <td>[% guarantee.account.balance | $Price %]</td>
+                                            [% ELSE %]
+                                                <td>-</td>
+                                            [% END %]
+                                        </tr>
+                                    [% END %]
+                                    <tfoot>
+                                        <td>Total due</td>
+                                        <td>[% guarantees_fines | $Price %]</td>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        [% END %]
+
+                        [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
+                            <div id="clubs-tab">
+                                Loading...
+                            </div>
+                        [% END %]
 
                             [% INCLUDE 'patron-restrictions-tab.inc' %]
 
@@ -913,6 +952,11 @@
             $("#view_restrictions").on("click",function(){
                 $('#debarments-tab-link').click();
             });
+
+            $("#view-guarantees-finesandcharges").on("click",function(){
+                $('#guarantees-finestab a').click();
+            });
+
          });
         function uncheck_sibling(me){
             nodename=me.getAttribute("name");
