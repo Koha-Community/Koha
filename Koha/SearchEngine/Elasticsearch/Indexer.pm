@@ -26,6 +26,7 @@ use Data::Dumper;
 
 use Koha::Exceptions;
 use Koha::SearchEngine::Zebra::Indexer;
+use C4::AuthoritiesMarc qw//;
 use C4::Biblio;
 use C4::Context;
 
