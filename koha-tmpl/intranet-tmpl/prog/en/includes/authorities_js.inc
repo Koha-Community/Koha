@@ -47,7 +47,7 @@ function confirm_deletion(id) {
           + "&excluding=[% excluding | html %]"
           + "&operator=[% operator | html %]"
           + "&orderby=[% orderby | html %]"
-          + "&value=[% value |url %]"
+          + "&value=[% value |uri %]"
           + "&startfrom=[% startfrom | html %]"
           + "&resultsperpage=[% resultsperpage | html %]"
           + "&csrf_token=[% csrf_token | html %]";
