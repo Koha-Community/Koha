@@ -44,6 +44,7 @@ use Koha;
 use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Acquisition::Currencies;
 use Koha::BiblioFrameworks;
+use Koha::Email;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Caches;
@@ -195,6 +196,8 @@ my $anonymous_patron = Koha::Patrons->find( $AnonymousPatron );
 my $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist = ( $AnonymousPatron && C4::Context->preference('AnonSuggestions') && not $anonymous_patron );
 
 my $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist = ( not $anonymous_patron and Koha::Patrons->search({ privacy => 2 })->count );
+
+my $warnPrefKohaAdminEmailAddress = not Email::Valid->address(C4::Context->preference('KohaAdminEmailAddress'));
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
@@ -571,6 +574,7 @@ $template->param(
     warnPrefAnonymousPatronAnonSuggestions    => $warnPrefAnonymousPatronAnonSuggestions,
     warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist     => $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist,
     warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist => $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist,
+    warnPrefKohaAdminEmailAddress => $warnPrefKohaAdminEmailAddress,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
