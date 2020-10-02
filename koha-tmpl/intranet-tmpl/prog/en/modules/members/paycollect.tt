@@ -28,7 +28,7 @@
     [% ELSIF ( writeoff_individual ) %]Write off an individual fine
     [% ELSE %]
         [% IF ( selected_accts ) %]
-            [% IF type == 'writeoff' %]Write off an amount toward selected fines
+            [% IF type == 'WRITEOFF' %]Write off an amount toward selected fines
             [% ELSE                  %]Pay an amount toward selected fines
             [% END %]
         [% ELSE                      %]Pay an amount toward all fines
@@ -204,7 +204,7 @@
         </div>
     </form>
 [% ELSE %]
-    [% IF ( error_registers && type != 'writeoff' ) %]
+    [% IF ( error_registers && type != 'WRITEOFF' ) %]
     <div id="error_message" class="dialog alert">
         You must have at least one cash register associated with this branch before you can record payments.
     </div>
