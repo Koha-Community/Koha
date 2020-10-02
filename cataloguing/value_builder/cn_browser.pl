@@ -37,7 +37,7 @@ my $builder = sub {
 
 function Click$function_name(i) {
     q = document.getElementById('$params->{id}');
-    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+q.value,\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
+    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=500,height=400,toolbar=false,scrollbars=yes\");
 }
 
 //]]>
