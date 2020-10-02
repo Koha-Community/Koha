@@ -18,7 +18,6 @@
 use Modern::Perl;
 
 use C4::Context;
-use Mail::Sendmail;
 use C4::Letters;
 use Koha::Database;
 use Koha::DateUtils;

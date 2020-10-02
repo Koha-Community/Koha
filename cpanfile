@@ -74,7 +74,6 @@ requires 'MARC::Record::MiJ', '0.04';
 requires 'MIME::Base64', '3.07';
 requires 'MIME::Lite', '3';
 requires 'MIME::QuotedPrint', '3.07';
-requires 'Mail::Sendmail', '0.79';
 requires 'Modern::Perl', '1.03';
 requires 'Module::CPANfile', '1.1000';
 requires 'Mojolicious', '7.21';
