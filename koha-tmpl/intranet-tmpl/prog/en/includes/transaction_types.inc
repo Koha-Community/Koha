@@ -2,6 +2,7 @@
 [% SET payment_types = [] %]
 [% FOR pt IN AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% NEXT IF pt.authorised_value.grep("^SIP[[:digit:]]{2}$").size() %]
+    [% NEXT IF ( type == 'payout' || type == 'refund' ) && pt.authorised_value == 'CASH' && Koha.Preference('UseCashRegisters') && registers.size == 0 %]
     [% payment_types.push(pt) %]
 [% END %]
 [% IF payment_types.size > 0 %]

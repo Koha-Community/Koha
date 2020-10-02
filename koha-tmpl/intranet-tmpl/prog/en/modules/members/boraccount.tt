@@ -336,7 +336,15 @@
                 </div>
                 <div class="modal-body">
                     [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
-                        <div id="payout_error" class="alert alert-warning"> You must have at least one cash register associated with this branch before you can record cash payouts. </div>
+                        <div id="payout_error" class="alert alert-warning">
+                            <p> You must have at least one cash register associated with this branch before you can record cash payouts. </p>
+                            [% IF ( CAN_user_parameters_manage_cash_registers ) %]
+                                <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
+                                    <input type="hidden" name="op" value="add_form" />
+                                    <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
+                                </form>
+                            [% END %]
+                        </div>
                     [% END %]
                     <fieldset class="rows">
                         <ol>
@@ -349,7 +357,7 @@
 
                             [% INCLUDE 'transaction_types.inc' type="payout" %]
 
-                            [% IF Koha.Preference('UseCashRegisters') %]
+                            [% IF Koha.Preference('UseCashRegisters') && ( registers.size >= 1 ) %]
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="payout_registerid">
@@ -396,7 +404,15 @@
                 </div>
                 <div class="modal-body">
                     [% IF Koha.Preference('UseCashRegisters') && ( registers.size == 0 ) %]
-                        <div id="refund_error" class="alert alert-warning"> You must have at least one cash register associated with this branch before you can record cash refunds. </div>
+                        <div id="refund_error" class="alert alert-warning">
+                            <p> You must have at least one cash register associated with this branch before you can record cash refunds. </p>
+                            [% IF ( CAN_user_parameters_manage_cash_registers ) %]
+                                <form action="/cgi-bin/koha/admin/cash_registers.pl" method="get">
+                                    <input type="hidden" name="op" value="add_form" />
+                                    <button class="new" type="submit"><i class="fa fa-plus"></i> Create a new cash register</button>
+                                </form>
+                            [% END %]
+                        </div>
                     [% END %]
                     <fieldset class="rows">
                         <ol>
@@ -410,7 +426,7 @@
 
                             [% INCLUDE 'transaction_types.inc' type="refund" %]
 
-                            [% IF Koha.Preference('UseCashRegisters') %]
+                            [% IF Koha.Preference('UseCashRegisters')  && ( registers.size >= 1 ) %]
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="refund_registerid">
