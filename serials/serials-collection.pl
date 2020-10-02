@@ -76,7 +76,7 @@ if($op eq 'gennext' && @subscriptionid){
             require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);
             my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
-            my $frequency = C4::Serials::Frequency::GetSubscriptionFrequencies($subscription->{periodicity});
+            my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
             my $expected = GetNextExpected($subscriptionid);
             my (
                  $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
@@ -84,7 +84,6 @@ if($op eq 'gennext' && @subscriptionid){
             ) = GetNextSeq($subscription, $pattern, $frequency, $expected->{publisheddate});
 
              ## We generate the next publication date
-             $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
              my $nextpublisheddate = GetNextDate($subscription, $expected->{publisheddate}, $frequency, 1);
              my $planneddate = $date_received_today ? dt_from_string : $nextpublisheddate;
              ## Creating the new issue
