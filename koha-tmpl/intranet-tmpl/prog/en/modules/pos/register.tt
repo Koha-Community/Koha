@@ -346,7 +346,7 @@
                             </tr>
                             [% FOREACH pt IN payment_types %]
                             <tr>
-                                <td>[% pt.lib %]</td>
+                                <td>[% pt.lib | html %]</td>
                                 <td>[% ( register.last_cashup.cashup_summary.outgoing_transactions.total( payment_type => pt.authorised_value ) + register.last_cashup.cashup_summary.income_transactions.total( payment_type => pt.authorised_value )) * -1 | $Price %]</td>
                             </tr>
                             [% END %]
