@@ -266,7 +266,6 @@ sub BuildReport {
         ShowReviewerPhoto
         SocialNetworks
         suggestion
-        AllowPurchaseSuggestionBranchChoice
         OpacAllowPublicListCreation
         OpacAllowSharingPrivateLists
         OpacRenewalAllowed

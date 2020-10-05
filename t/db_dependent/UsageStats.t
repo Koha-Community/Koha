@@ -527,7 +527,6 @@ sub mocking_systempreferences_to_a_set_value {
         ShowReviewerPhoto
         SocialNetworks
         suggestion
-        AllowPurchaseSuggestionBranchChoice
         OpacAllowPublicListCreation
         OpacAllowSharingPrivateLists
         OpacRenewalAllowed

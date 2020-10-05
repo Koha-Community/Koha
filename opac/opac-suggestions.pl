@@ -219,20 +219,6 @@ foreach my $suggestion(@$suggestions_loop) {
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 
-# Is the person allowed to choose their branch
-if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
-    my $branchcode = $input->param('branchcode') || q{};
-
-    if ( !$branchcode
-        && C4::Context->userenv
-        && C4::Context->userenv->{branch} )
-    {
-        $branchcode = C4::Context->userenv->{branch};
-    }
-
-    $template->param( branchcode => $branchcode );
-}
-
 my @mandatoryfields;
 {
     last unless ($op eq 'add');
