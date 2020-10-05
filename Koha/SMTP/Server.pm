@@ -36,7 +36,8 @@ Koha::SMTP::Server - Koha SMTP Server Object class
 =head3 transport
 
     my $transport = $smtp_server->transport;
-    sendmail( $message, { transport => $transport } );
+    $email->transport($transport);
+    $email->send_or_die;
 
 Returns an I<Email::Sender::Transport::SMTP> object that can be used directly
 with Email::Sender.
