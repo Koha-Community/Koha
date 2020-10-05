@@ -150,7 +150,7 @@ if ( $selected_accts ) {
             accountlines_id   => { 'in' => \@acc },
     };
 
-    my @selected_accountlines = Koha::Account::Lines->search(
+    @selected_accountlines = Koha::Account::Lines->search(
         $search_params,
         { order_by => 'date' }
     );
