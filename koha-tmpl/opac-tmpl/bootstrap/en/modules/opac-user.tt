@@ -378,6 +378,8 @@
                                                             Not renewable <span class="renewals">(on hold)</span>
                                                         [% ELSIF ( ISSUE.too_many ) %]
                                                             Not renewable
+                                                        [% ELSIF ( ISSUE.too_unseen ) %]
+                                                            Item must be renewed at the library. [% ISSUE.renewsleft | html %] renewals remaining
                                                         [% ELSIF ( ISSUE.norenew_overdue ) %]
                                                             Not allowed <span class="renewals">(overdue)</span>
                                                         [% ELSIF ( ISSUE.auto_too_late ) %]

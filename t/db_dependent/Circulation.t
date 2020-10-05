@@ -284,7 +284,7 @@ Koha::CirculationRules->set_rules(
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 87;
+    plan tests => 89;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -1164,12 +1164,34 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'too_many', 'Cannot renew, 0 renewals allowed (returned code is too_many)');
 
     # Too many unseen renewals
-    $dbh->do('UPDATE issuingrules SET unseen_renewals_allowed = 2, renewalsallowed = 10');
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rules        => {
+                unseen_renewals_allowed => 2,
+                renewalsallowed => 10,
+            }
+        }
+    );
+    t::lib::Mocks::mock_preference('UnseenRenewals', 1);
     $dbh->do('UPDATE issues SET unseen_renewals = 2 where borrowernumber = ? AND itemnumber = ?', undef, ($renewing_borrowernumber, $item_1->itemnumber));
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 0, 'Cannot renew, 0 unseen renewals allowed');
     is( $error, 'too_unseen', 'Cannot renew, returned code is too_unseen');
-    $dbh->do('UPDATE issuingrules SET norenewalbefore = NULL, renewalsallowed = 0');
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rules        => {
+                norenewalbefore => undef,
+                renewalsallowed => 0,
+            }
+        }
+    );
+    t::lib::Mocks::mock_preference('UnseenRenewals', 0);
 
     # Test WhenLostForgiveFine and WhenLostChargeReplacementFee
     t::lib::Mocks::mock_preference('WhenLostForgiveFine','1');

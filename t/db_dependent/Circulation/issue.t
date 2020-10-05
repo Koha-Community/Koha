@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 46;
+use Test::More tests => 48;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -297,20 +297,6 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
     }
 };
 
-# Unseen rewnewals
-t::lib::Mocks::mock_preference('UnseenRenewals', 1);
-
-# Does an unseen renewal increment the issue's count
-my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
-AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, $branchcode_1, undef, undef, 0 );
-my ( $unseen_after ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
-is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
-
-# Does a seen renewal reset the unseen count
-AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, $branchcode_1, undef, undef, 1 );
-my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
-is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
-
 #Test GetBiblioIssues
 is( GetBiblioIssues(), undef, "GetBiblio Issues without parameters" );
 
@@ -327,19 +313,19 @@ my $issue3 = C4::Circulation::AddIssue( $borrower_1, $barcode_1 );
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
+    [ 0, 0, 0, 0, 0, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
     "Without issuing rules and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount(-1);
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0 ], # FIXME Need to be fixed
+    [ 0, 0, 0, 0, 0, 0 ], # FIXME Need to be fixed
     "Without issuing rules and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 2, 0, 0 ],
+    [ 2, 0, 0, 0, 0, 0 ],
     "Without issuing rules and with a valid parameter, renewcount = 2, renewsallowed = undef, renewsleft = 0"
 );
 
@@ -347,19 +333,19 @@ is_deeply(
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0 ],
+    [ 0, 0, 0, 0, 0, 0 ],
     "With issuing rules (renewal disallowed) and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = 0, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount(-1);
 is_deeply(
     \@renewcount,
-    [ 0, 0, 0 ],
+    [ 0, 0, 0, 0, 0, 0 ],
     "With issuing rules (renewal disallowed) and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = 0, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 2, 0, 0 ],
+    [ 2, 0, 0, 0, 0, 0 ],
     "With issuing rules (renewal disallowed) and with a valid parameter, Getrenewcount returns renewcount = 2, renewsallowed = 0, renewsleft = 0"
 );
 
@@ -377,7 +363,7 @@ Koha::CirculationRules->set_rules(
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 2, 3, 1 ],
+    [ 2, 3, 1, 0, 0, 0 ],
     "With issuing rules (renewal allowed) and with a valid parameter, Getrenewcount of item1 returns 3 renews left"
 );
 
@@ -386,7 +372,7 @@ AddRenewal( $borrower_id1, $item_id1, $branchcode_1,
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 3, 3, 0 ],
+    [ 3, 3, 0, 0, 0, 0 ],
     "With issuing rules (renewal allowed, 1 remaining) and with a valid parameter, Getrenewcount of item1 returns 0 renews left"
 );
 
@@ -503,6 +489,38 @@ ok( $reserve_id, 'The reserve should have been inserted' );
 AddIssue( $borrower_2, $barcode_1, dt_from_string, 'cancel' );
 my $hold = Koha::Holds->find( $reserve_id );
 is( $hold, undef, 'The reserve should have been correctly cancelled' );
+
+# Unseen rewnewals
+t::lib::Mocks::mock_preference('UnseenRenewals', 1);
+# Add a default circ rule: 3 unseen renewals allowed
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            renewalsallowed => 10,
+            unseen_renewals_allowed => 3
+        }
+    }
+);
+
+my $unseen_library = $builder->build_object( { class => 'Koha::Libraries' } );
+my $unseen_patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+my $unseen_item = $builder->build_sample_item(
+    { library => $unseen_library->branchcode, itype => $itemtype } );
+my $unseen_issue = C4::Circulation::AddIssue( $unseen_patron->unblessed, $unseen_item->barcode );
+
+# Does an unseen renewal increment the issue's count
+my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+AddRenewal( $unseen_patron->borrowernumber, $unseen_item->itemnumber, $branchcode_1, undef, undef, undef, 0 );
+my ( $unseen_after ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
+
+# Does a seen renewal reset the unseen count
+AddRenewal( $unseen_patron->borrowernumber, $unseen_item->itemnumber, $branchcode_1, undef, undef, undef, 1 );
+my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $unseen_patron->borrowernumber, $unseen_item->itemnumber ) )[3];
+is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
 
 #End transaction
 $schema->storage->txn_rollback;

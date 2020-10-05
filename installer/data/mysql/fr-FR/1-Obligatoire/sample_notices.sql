@@ -396,6 +396,8 @@ You have overdue items.
 It\'s too late to renew this item.
 [% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
 Your total unpaid fines are too high.
+[% ELSIF checkout.auto_renew_error == 'too_unseen' %]
+This item must be renewed at the library.
 [% END %]
 [% ELSE %]
 The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due | $KohaDates as_due_date => 1 %]
