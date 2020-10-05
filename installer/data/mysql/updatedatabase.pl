@@ -22950,7 +22950,7 @@ if( CheckVersion( $DBversion ) ) {
         (3, 'manage_background_jobs', 'Manage background jobs')
     });
 
-    NewVersion( $DBversion, 15032, "Add new table background_jobs");
+    NewVersion( $DBversion, 22417, "Add new table background_jobs");
 }
 
 # SEE bug 13068
