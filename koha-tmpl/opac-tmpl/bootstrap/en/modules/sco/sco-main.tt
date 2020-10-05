@@ -133,6 +133,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
+                                    <input type="hidden" name="seen" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="confirm" class="btn btn-primary"><i class="fa fa-refresh" aria-hidden="true"></i> Renew item</button>
                                   </form>
@@ -142,6 +143,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
+                                    <input type="hidden" name="seen" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-refresh" aria-hidden="true"></i> Renew item</button>
                                 </form>
@@ -341,6 +343,8 @@
                                                                     <span>This item has been scheduled for automatic renewal and cannot be renewed</span>
                                                                 [% ELSIF ISSUE.renew_error == 'onsite_checkout' %]
                                                                     <span>This is a on-site checkout, it cannot be renewed.</span>
+                                                                [% ELSIF ISSUE.renew_error == 'too_unseen' %]
+                                                                    <span>You have renewed this item the maximum number of consecutive times without it being seen by the library.</span>
                                                                 [% ELSE %]
                                                                     <span>No renewals allowed</span>
                                                                 [% END %]
