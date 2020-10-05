@@ -96,7 +96,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         template_name   => "acqui/orderreceive.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => {acquisition => 'order_receive'},
         debug           => 1,
     }
