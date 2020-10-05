@@ -83,16 +83,17 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 <label for="showDescription">Description:</label>
                 <textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>
             </li>
-            <li class="radio"><div id="exceptionPosibility" style="position:static">
+            <li class="radio"><div class="exceptionPossibility" style="position:static">
                 <input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception for this repeated holiday.</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">You can make an exception for this holiday rule. This means that you will be able to say that for a repeatable holiday there is one day which is going to be an exception.</div>
             </div></li>
-            <li class="radio"><input type="radio" name="showOperation" id="showOperationExcRange" value="exceptionrange" />
+            <li class="radio"><div class="exceptionPossibility" style="position:static">
+                <input type="radio" name="showOperation" id="showOperationExcRange" value="exceptionrange" />
                 <label for="showOperationExcRange">Generate exceptions on a range of dates.</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">You can make an exception on a range of dates repeated yearly.</div>
-            </li>
+            </div></li>
             <li class="radio"><input type="radio" name="showOperation" id="showOperationDel" value="delete" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
                 <a href="#" class="helptext">[?]</a>
                 <div class="hint">This will delete this holiday rule. If it is a repeatable holiday, this option checks for possible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.</div></li>
@@ -383,7 +384,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
         }
 
         // This function shows the "Show Holiday" panel //
-        function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description, holidayType) {
+        function showHoliday (exceptionPossibility, dayName, day, month, year, weekDay, title, description, holidayType) {
             $("#newHoliday").slideUp("fast");
             $("#showHoliday").slideDown("fast");
             $('#showDaynameOutput').html(dayName);
@@ -415,10 +416,10 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 $("#holtype").attr("class","key holiday").html(_("Unique holiday"));
             }
 
-            if (exceptionPosibility == 1) {
-                $("#exceptionPosibility").parent().show();
+            if (exceptionPossibility == 1) {
+                $(".exceptionPossibility").parent().show();
             } else {
-                $("#exceptionPosibility").parent().hide();
+                $(".exceptionPossibility").parent().hide();
             }
         }
 
