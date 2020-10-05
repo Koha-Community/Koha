@@ -580,7 +580,7 @@
                             <label for="branchcode">Library:</label>
                             <select name="branchcode" id="branchcode">
                                 <option value="">Any</option>
-                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter || branchcode ) %]
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                             </select>
                         </li>
                         <li>
