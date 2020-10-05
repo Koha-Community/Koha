@@ -18,6 +18,7 @@
         [%- CASE 'Lost Item'      -%]<span>Lost item returned</span>
         [%- CASE 'Writeoff'       -%]<span>Writeoff</span>
         [%- CASE 'Void Payment'   -%]<span>Void payment</span>
+        [%- CASE 'CANCELLATION'   -%]<span>Cancelled charge</span>
         [%- CASE                  -%][% account_offset.type | html %]
     [%- END -%]
 [%- END -%]
@@ -65,6 +66,7 @@
         [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
         [%- CASE 'OVERPAYMENT'      -%]Overpayment refund
         [%- CASE 'REFUND'           -%]Refund
+        [%- CASE 'CANCELLATION'     -%]Cancelled charge
         [%- CASE                    -%][% credit_type.description | html %]
     [%- END -%]
 [%- END -%]

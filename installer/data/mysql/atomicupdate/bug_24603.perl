@@ -5,7 +5,7 @@ if ( CheckVersion($DBversion) ) {
         qq{
             INSERT IGNORE INTO account_credit_types (code, description, can_be_added_manually, is_system)
             VALUES
-              ('CANCELLATION', 'A cancellation applied to a patron charge', 0, 1)
+              ('CANCELLATION', 'Cancelled charge', 0, 1)
         }
     );
 
