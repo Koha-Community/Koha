@@ -662,6 +662,7 @@ my $pl_files = {
          'blib/KOHA_CONF_DIR/koha-conf.xml',
          'blib/KOHA_CONF_DIR/koha-httpd.conf',
          'blib/KOHA_CONF_DIR/log4perl.conf',
+         'blib/KOHA_CONF_DIR/koha-worker.service',
          'blib/ZEBRA_CONF_DIR/etc/default.idx',
          'blib/MISC_DIR/koha-install-log'
          ],
