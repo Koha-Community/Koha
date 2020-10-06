@@ -21,12 +21,24 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
+use CGI;
 use CGI::Compile;
 use CGI::Emulate::PSGI;
 use IO::Scalar;
 
 sub register {
     my ($self, $app, $conf) = @_;
+
+    # CGI::Compile calls CGI::initialize_globals before each request, which resets PARAM_UTF8 to 0
+    # We need to set it back to the correct value
+    {
+        no warnings 'redefine';
+        my $old_new = \&CGI::new;
+        *CGI::new = sub {
+            $CGI::PARAM_UTF8 = 1;
+            return $old_new->(@_);
+        };
+    }
 
     my $opac = $conf->{opac};
 
