@@ -245,7 +245,8 @@ sub advance {
             my $exception = $_;
             my $found_transfer = $_->transfer;
             if (   $found_transfer->in_transit
-                || $found_transfer->reason eq 'Reserve' )
+                || $found_transfer->reason eq 'Reserve'
+                || $found_transfer->reason eq 'RotatingCollection' )
             {
                 return $item->request_transfer(
                     {
