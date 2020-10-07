@@ -130,7 +130,7 @@ is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
 my @transfers = GetTransfers($item_id1);
 cmp_deeply(
     \@transfers,
-    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*') ],
+    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*'), re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), undef ],
     "Transfers of the item1"
 );    #NOTE: Only the first transfer is returned
 @transfers = GetTransfers;
