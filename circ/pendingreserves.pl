@@ -164,8 +164,9 @@ my %where = (
 );
 
 # date boundaries
-my $startdate_iso = output_pref({ dt => $startdate, dateformat => 'iso', dateonly => 1 });
-my $enddate_iso   = output_pref({ dt => $enddate, dateformat => 'iso', dateonly => 1 });
+my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+my $startdate_iso = $dtf->format_date($startdate);
+my $enddate_iso   = $dtf->format_date($enddate);
 if ( $startdate_iso && $enddate_iso ){
     $where{'reserve.reservedate'} = [ -and => { '>=', $startdate_iso }, { '<=', $enddate_iso } ];
 } elsif ( $startdate_iso ){
@@ -204,19 +205,26 @@ foreach my $bibnum ( @biblionumbers ){
     my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
     my @issues = map { $_->itemnumber } Koha::Checkouts->search({}, { columns => [ 'itemnumber' ], collapse => 1 });
 
+    my $items = Koha::Items->search(
+        {
+            biblionumber => $bibnum,
+            itemlost     => 0,
+            withdrawn    => 0,
+            notforloan   => 0,
+            itemnumber   => { -not_in => [ @branchtransfers, @issues ] },
+        }
+    );
+
     # get available item types for each biblio
     my $res_itemtypes;
     if ( C4::Context->preference('item-level_itypes') ){
-        $res_itemtypes = Koha::Items->search(
-            { biblionumber => $bibnum,
-              itype => { '!=', undef },
-              itemlost => 0,
-              withdrawn => 0,
-              notforloan => 0,
-              itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        $res_itemtypes = $items->search(
+            {
+                itype => { '!=', undef },
             },
-            { columns => 'itype',
-              distinct => 1,
+            {
+                columns  => 'itype',
+                distinct => 1,
             }
         );
     } else {
@@ -230,105 +238,79 @@ foreach my $bibnum ( @biblionumbers ){
     $reserves->{$bibnum}->{itemtypes} = $res_itemtypes;
 
     # get available locations for each biblio
-    my $res_locations = Koha::Items->search(
-        { biblionumber => $bibnum,
-          location => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_locations = $items->search(
+        {
+            location => { '!=', undef },
         },
-        { columns => 'location',
-          distinct => 1,
+        {
+            columns  => 'location',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{locations} = $res_locations;
 
     # get available callnumbers for each biblio
-    my $res_callnumbers = Koha::Items->search(
-        { biblionumber => $bibnum,
-          itemcallnumber => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_callnumbers = $items->search(
+        {
+            itemcallnumber => { '!=', undef },
         },
-        { columns => 'itemcallnumber',
-          distinct => 1,
+        {
+            columns  => 'itemcallnumber',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{callnumbers} = $res_callnumbers;
 
     # get available enumchrons for each biblio
-    my $res_enumchrons = Koha::Items->search(
-        { biblionumber => $bibnum,
-          enumchron => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_enumchrons = $items->search(
+        {
+            enumchron => { '!=', undef },
         },
-        { columns => 'enumchron',
-          distinct => 1,
+        {
+            columns  => 'enumchron',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{enumchrons} = $res_enumchrons;
 
     # get available copynumbers for each biblio
-    my $res_copynumbers = Koha::Items->search(
-        { biblionumber => $bibnum,
-          copynumber => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_copynumbers = $items->search(
+        {
+            copynumber => { '!=', undef },
         },
-        { columns => 'copynumber',
-          distinct => 1,
+        {
+            columns  => 'copynumber',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{copynumbers} = $res_copynumbers;
 
     # get available barcodes for each biblio
-    my $res_barcodes = Koha::Items->search(
-        { biblionumber => $bibnum,
-          barcode => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_barcodes = $items->search(
+        {
+            barcode => { '!=', undef },
         },
-        { columns => 'barcode',
-          distinct => 1,
+        {
+            columns  => 'barcode',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{barcodes} = $res_barcodes;
 
     # get available holding branches for each biblio
-    my $res_holdingbranches = Koha::Items->search(
-        { biblionumber => $bibnum,
-          holdingbranch => { '!=', undef },
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+    my $res_holdingbranches = $items->search(
+        {
+            holdingbranch => { '!=', undef },
         },
-        { columns => 'holdingbranch',
-          distinct => 1,
+        {
+            columns  => 'holdingbranch',
+            distinct => 1,
         }
     );
     $reserves->{$bibnum}->{holdingbranches} = $res_holdingbranches;
 
     # items available
-    my $items_count = Koha::Items->search(
-        { biblionumber => $bibnum,
-          itemlost => 0,
-          withdrawn => 0,
-          notforloan => 0,
-          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
-        },
-        { select => [ { distinct => 'itemnumber' } ] }
-    )->count;
+    my $items_count = $items->count;
     $reserves->{$bibnum}->{items_count} = $items_count;
 
     # patrons with holds
