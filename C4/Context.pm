@@ -211,8 +211,8 @@ sub import {
 
 =head2 new
 
-  $context = new C4::Context;
-  $context = new C4::Context("/path/to/koha-conf.xml");
+  $context = C4::Context->new;
+  $context = C4::Context->new("/path/to/koha-conf.xml");
 
 Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
