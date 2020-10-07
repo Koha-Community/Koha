@@ -48,10 +48,13 @@ if ($plugins_enabled) {
         method       => $method,
     );
 
-    my @plugins = Koha::Plugins->new()->GetPlugins({
-        method => $method,
-        all    => 1,
-    });
+    my @plugins = Koha::Plugins->new()->GetPlugins(
+        {
+            method => $method,
+            all    => 1,
+            errors => 1
+        }
+    );
 
     $template->param( plugins => \@plugins, );
 
