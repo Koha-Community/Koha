@@ -1037,6 +1037,7 @@
 
             $('.print').on("click",function(e){
                 this.form.print_slip.value = 1;
+                this.form.barcode.remove();
                 this.form.submit();
             });
 
