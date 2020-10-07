@@ -89,6 +89,26 @@ my $item_id2 = Koha::Item->new(
         itype          => $itemtype
     },
 )->store->itemnumber;
+my $item_id3 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 3,
+        itemcallnumber => 'callnumber3',
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        itype          => $itemtype
+    },
+)->store->itemnumber;
+my $item_id4 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 4,
+        itemcallnumber => 'callnumber4',
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        itype          => $itemtype
+    },
+)->store->itemnumber;
 
 #Add transfers
 ModItemTransfer(
@@ -105,6 +125,24 @@ ModItemTransfer(
     $branchcode_1,
     $branchcode_2
 );
+
+# Add an "unsent" transfer for tests
+ModItemTransfer(
+    $item_id3,
+    $branchcode_1,
+    $branchcode_2
+);
+my $transfer_requested = Koha::Item::Transfers->search( { itemnumber => $item_id3 }, { rows => 1 })->single;
+$transfer_requested->set({ daterequested => dt_from_string, datesent => undef })->store;
+
+# Add a "cancelled" transfer for tests
+ModItemTransfer(
+    $item_id4,
+    $branchcode_1,
+    $branchcode_2
+);
+my $transfer_cancelled = Koha::Item::Transfers->search( { itemnumber => $item_id4 }, { rows => 1 })->single;
+$transfer_cancelled->set( { daterequested => dt_from_string, datesent => undef, datecancelled => dt_from_string } )->store;
 
 #Begin Tests
 #Test CreateBranchTransferLimit
