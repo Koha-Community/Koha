@@ -232,6 +232,13 @@
                                     [% IF total_owing && total_owing > 0 %]
                                         <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span> due in fines and charges</a></li>
                                     [% END %]
+                                    [% IF patron_messages && patron_messages.count > 0 || opacnote %]
+                                        [% IF opacnote %]
+                                            <li><a href="/cgi-bin/koha/opac-user.pl"><span class="count_label">[% patron_messages.count + 1 | html %]</span> message(s)</a></li>
+                                        [% ELSE %]
+                                            <li><a href="/cgi-bin/koha/opac-user.pl"><span class="count_label">[% patron_messages.count | html %]</span> message(s)</a></li>
+                                        [% END %]
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]

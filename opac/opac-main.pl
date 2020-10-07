@@ -30,6 +30,7 @@ use C4::Overdues;
 use Koha::Checkouts;
 use Koha::Holds;
 use Koha::News;
+use Koha::Patron::Messages;
 
 my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
@@ -81,10 +82,14 @@ if ( $patron ) {
     my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
     my $holds_pending = Koha::Holds->search({ borrowernumber => $borrowernumber, found => undef })->count;
     my $holds_waiting = Koha::Holds->search({ borrowernumber => $borrowernumber })->waiting->count;
-
+    my $patron_messages = Koha::Patron::Messages->search(
+            {
+                borrowernumber => $borrowernumber,
+                message_type => 'B',
+            });
+    my $patron_note = $patron->opacnote;
     my $total = $patron->account->balance;
-
-    if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 ) {
+    if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 || $patron_note || $patron_messages->count ) {
         $template->param(
             dashboard_info => 1,
             checkouts           => $checkouts,
@@ -92,6 +97,8 @@ if ( $patron ) {
             holds_pending       => $holds_pending,
             holds_waiting       => $holds_waiting,
             total_owing         => $total,
+            patron_messages     => $patron_messages,
+            opacnote            => $patron_note,
         );
     }
 }
