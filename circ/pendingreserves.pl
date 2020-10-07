@@ -349,7 +349,7 @@ foreach my $bibnum ( @biblionumbers ){
     my $res_info = Koha::Holds->search(
         { 'reserve.biblionumber' => $bibnum, %where },
         { prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
-          order_by => 'reserve.reservedate',
+          order_by => 'priority',
           alias => 'reserve'
         }
     )->next; # get first item in results
