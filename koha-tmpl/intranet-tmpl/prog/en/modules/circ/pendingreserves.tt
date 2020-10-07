@@ -91,48 +91,48 @@
             <td>"</td>
         [% END %]
         <td>
-            [% IF ( reserve.value.holdingbranches ) %]
+            [% IF ( reserve.value.holdingbranches.size ) %]
             <ul>
                 [% FOREACH holdingbranch IN reserve.value.holdingbranches %]
-                    <li>[% Branches.GetName ( holdingbranch.holdingbranch ) | html %]</li>
+                    <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
                 [% END %]
             </ul>
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.barcodes.count ) %]
-                [% SET barcode = reserve.value.barcodes.next.barcode %]
+            [% IF ( reserve.value.barcodes.size ) %]
+                [% SET barcode = reserve.value.barcodes.first %]
                 [% IF ( reserve.value.itemnumber ) %]Only [% barcode | html %][% ELSE %][% barcode | html %] or any available.[% END %]
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.callnumbers ) %]
+            [% IF ( reserve.value.callnumbers.size ) %]
                 <ul>
                     [% FOREACH callnumber IN reserve.value.callnumbers %]
                         <li>
-                            [% callnumber.itemcallnumber | html %]
+                            [% callnumber | html %]
                         </li>
                     [% END %]
                 </ul>
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.copynumbers ) %]
+            [% IF ( reserve.value.copynumbers.size ) %]
                 <ul>
                     [% FOREACH copyno IN reserve.value.copynumbers %]
                         <li>
-                            [% copyno.copynumber | html %]
+                            [% copyno | html %]
                         </li>
                     [% END %]
                 </ul>
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.enumchrons ) %]
+            [% IF ( reserve.value.enumchrons.size ) %]
                 <ul>
                     [% FOREACH enumchron IN reserve.value.enumchrons %]
                         <li>
-                            [% enumchron.enumchron | html %]
+                            [% enumchron | html %]
                         </li>
                     [% END %]
                 </ul>
@@ -142,9 +142,9 @@
             <ul>
             [% FOREACH type IN reserve.value.itemtypes %]
                 [% IF Koha.Preference('item-level_itypes') %]
-                    <li>[% ItemTypes.GetDescription( type.itype ) | html %]</li>
+                    <li>[% ItemTypes.GetDescription( type ) | html %]</li>
                 [% ELSE %]
-                    <li>[% ItemTypes.GetDescription( type.itemtype ) | html %]</li>
+                    <li>[% ItemTypes.GetDescription( type ) | html %]</li>
                 [% END %]
             [% END %]
             </ul>
@@ -152,7 +152,7 @@
         <td>
             <ul>
             [% FOREACH loc IN reserve.value.locations %]
-                <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc.location) | html %]</li>
+                <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc ) | html %]</li>
             [% END %]
             </ul>
         </td>
