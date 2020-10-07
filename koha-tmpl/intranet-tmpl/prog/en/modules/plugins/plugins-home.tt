@@ -116,6 +116,19 @@
                             </tr>
 
                             [% FOREACH plugin IN plugins %]
+                                [% IF plugin.error %]
+                                <tr class="warn">
+                                    <td>
+                                        <strong>[% plugin.name | html %]</strong>
+                                        <span class="label label-warning">ERRORS</span>
+                                    </td>
+                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                    <td colspan="7">Error found whilst attempting to load plugin</td>
+                                    [% ELSE %]
+                                    <td colspan="6">Error found whilst attempting to load plugin</td>
+                                    [% END %]
+                                </tr>
+                                [% ELSE %]
                                 <tr>
                                     <td>
                                         <strong>[% plugin.metadata.name | html %]</strong>
@@ -181,6 +194,8 @@
                                             </div>
                                         </td>
                                     [% END %]
+                                </tr>
+                                [% END %]
                             [% END %]
                         </table>
                     [% END %]
