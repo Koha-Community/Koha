@@ -83,7 +83,7 @@ subtest 'field population tests' => sub {
     is( $dotransfer, 1, 'Transfer succeeded' );
     is_deeply(
         $messages,
-        { 'WasTransfered' => 1 },
+        { 'WasTransfered' => $library2->branchcode },
         "WasTransfered was set correctly"
     );
 
