@@ -463,9 +463,6 @@ elsif ($op eq "add-branch-item") {
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
     my $returnbranch            = $input->param('returnbranch');
 
-    $holdallowed =~ s/\s//g;
-    $holdallowed = undef if $holdallowed !~ /^\d+/;
-
     if ($branch eq "*") {
         if ($itemtype eq "*") {
             Koha::CirculationRules->set_rules(
