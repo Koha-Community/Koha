@@ -1,0 +1,437 @@
+[% USE raw %]
+[% USE To %]
+[% USE Asset %]
+[% USE Branches %]
+[% USE Koha %]
+[% USE ItemTypes %]
+[% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Library checkin and transfer policy</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style>td { text-align: center; } .sorted { min-width: 50%; }</style>
+</head>
+
+[% SET BranchTransferLimitsType = Koha.Preference('BranchTransferLimitsType') %]
+[% SET branches = Branches.all %]
+
+<body id="admin_branch_transfer_limits" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set library checkin and transfer policy</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+                <h1>Checkin and transfer policy</h1>
+
+                <p>
+                    [% IF BranchTransferLimitsType == "itemtype" %]
+                        <label for="value_selector">Select an item type:</label>
+                        <select id="value_selector">
+                            <option value="" selected></option>
+                            [% SET itemtypes = ItemTypes.Get %]
+                            [%  FOREACH i IN itemtypes %]
+                                <option value="[% i.itemtype | html %]">[% i.description | html %]</option>
+                            [% END %]
+                        </select>
+                    [% ELSE #BranchTransferLimitsType == "ccode" %]
+                        <label for="value_selector">Select a collection code:</label>
+                        <select id="value_selector">
+                            <option value="" selected></option>
+                            [% SET ccodes = AuthorisedValues.Get('CCODE') %]
+                            [%  FOREACH c IN ccodes %]
+                                <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
+                            [% END %]
+                        </select>
+                    [% END %]
+
+                    <span id="loading_limits">
+                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        <span>Loading...</span>
+                    </span>
+                </p>
+
+                <p class="help">Check the boxes for the libraries you allow your items to be transferred to.</p>
+                <fieldset>
+                    <a id="check-all" class="limit-action" href="#"><i class="fa fa-check"></i> Check all</a>
+                    |
+                    <a id="uncheck-all" class="limit-action" href="#"><i class="fa fa-remove"></i> Uncheck all</a>
+                    |
+                    <a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Switch to basic editor</a>
+                </fieldset>
+
+                <table id="transfer_limits" class="table table-striped table-bordered table-hover table-condensed">
+
+                    <thead>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            [% FOREACH to IN branches %]
+                                <td>
+                                    <p><a class="btn btn-default btn-xs check-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
+                                    <p><a class="btn btn-default btn-xs uncheck-all-col limit-action" data-to="[% to.branchcode | html %]" href="#"><i class="fa fa-remove"></i> Uncheck</a></p>
+                                </td>
+                            [% END %]
+                        </tr>
+
+                        <tr>
+                            <td>&nbsp;</td>
+                            <th>From / To</th>
+                            [% FOREACH b IN branches %]
+                                <th style="word-break: break-all !important" title="[% b.branchname | html %]">[% b.branchname | html %]</th>
+                            [% END %]
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH from IN branches %]
+                            <tr>
+                                <td>
+                                    <p><a class="btn btn-default btn-xs check-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-check"></i> Check</a></p>
+                                    <p><a class="btn btn-default btn-xs uncheck-all-row limit-action" data-from="[% from.branchcode | html %]" href="#"><i class="fa fa-remove"></i> Uncheck</a></p>
+                                </td>
+                                <th>[% from.branchname | html %]</th>
+                                [% FOREACH to IN branches %]
+                                    <td class="checkbox-cell">
+                                        [% IF to.branchcode == from.branchcode %]
+                                            &nbsp;
+                                        [% ELSE %]
+                                            <input class="limit-checkboxes from-[% from.branchcode | html %] to-[% to.branchcode | html %]" id="limit-[% from.branchcode | html %]-[% to.branchcode | html %]" type="checkbox" title="From: [%  from.branchname | html %], To: [%  to.branchname | html %]" checked/>
+                                            <i id="spinner-limit-[% from.branchcode | html %]-[% to.branchcode | html %]" class="spinner fa fa-spinner fa-pulse fa-fw"></i>
+                                        [% END %]
+                                    </td>
+                                [% END %]
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    <script>
+        const branchTransferLimitsType = "[% BranchTransferLimitsType | html %]";
+        const val_type = branchTransferLimitsType == "itemtype" ? "item_type" : "collection_code";
+        const branches = [% To.json(branches) | $raw %];
+
+        $('#loading_limits').hide();
+        $('.spinner').hide();
+
+        $(document).ready(function() {
+            $("#check-all").click(function() {
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                let checkboxes = [];
+                $(".limit-checkboxes").each(function() {
+                    const checkbox = $(this);
+                    if (checkbox.data('limit_id')) {
+                        checkboxes.push(checkbox);
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                del_limits( checkboxes, val );
+                return false;
+            });
+
+
+            $("#uncheck-all").click(function() {
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                let checkboxes = [];
+                $(".limit-checkboxes").each(function() {
+                    const checkbox = $(this);
+                    if (!checkbox.data('limit_id')) {
+                        checkboxes.push(checkbox);
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                add_limits( checkboxes, val );
+                return false;
+            });
+
+            $('.check-all-col').click(function() {
+                let checkboxes = [];
+                const to = $(this).data('to');
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                $(`.to-${to}`).each(function() {
+                    const checkbox = $(this);
+                    if (checkbox.data('limit_id')) {
+                        checkboxes.push(checkbox);
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                del_limits( checkboxes, val, to );
+                return false;
+            });
+
+            $('.uncheck-all-col').click(function() {
+                let checkboxes = [];
+                const to = $(this).data('to');
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                $(`.to-${to}`).each(function() {
+                    const checkbox = $(this);
+                    if (!checkbox.data('limit_id')) {
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                add_limits( checkboxes, val, to );
+                return false;
+            });
+
+            $('.check-all-row').click(function() {
+                let checkboxes = [];
+                const from = $(this).data('from');
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                $(`.from-${from}`).each(function() {
+                    const checkbox = $(this);
+                    if (checkbox.data('limit_id')) {
+                        checkboxes.push(checkbox);
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                del_limits( checkboxes, val, null, from );
+                return false;
+            });
+
+
+            $('.uncheck-all-row').click(function() {
+                let checkboxes = [];
+                const from = $(this).data('from');
+                const val = $('#value_selector').val();
+
+                $('.limit-action').addClass('disabled');
+                $('#value_selector').prop('disabled',true);
+
+                $(`.from-${from}`).each(function() {
+                    const checkbox = $(this);
+                    if (!checkbox.data('limit_id')) {
+                        checkbox.hide();
+                        $(`#spinner-${checkbox.attr('id')}`).show();
+                    }
+                });
+
+                add_limits( checkboxes, val, null, from );
+                return false;
+            });
+
+            $(".checkbox-cell").click(function(e) {
+                var checkbox = $(this).find(".limit-checkboxes").get(0);
+                if (checkbox && !checkbox.disabled) {
+                    if (e.target != checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                        $(checkbox).change();
+                    }
+                }
+            });
+
+            $("#value_selector").on('change', function() {
+                updateTransferLimitsTable();
+            });
+
+            $(".limit-checkboxes").on('change', function() {
+                const checkbox = $(this);
+                const id = checkbox.attr('id');
+
+                checkbox.hide();
+                $(`#spinner-${id}`).show();
+
+                const limit_id = checkbox.data('limit_id');
+
+                if (limit_id) { // limit id exists, so limit needs to be deleted
+                    delLimit(checkbox);
+                } else { // limit does not exist, needs to be created
+                    addLimit(checkbox);
+                }
+            });
+
+            updateTransferLimitsTable();
+        });
+
+        function delLimit(checkbox) {
+            const id = checkbox.attr('id');
+            const limit_id = checkbox.data('limit_id');
+
+            return $.ajax({
+                url: `/api/v1/transfer_limits/${limit_id}`,
+                type: 'DELETE',
+                success: function(result) {
+                    checkbox.data('limit_id', null);
+                    checkbox.attr('checked', true);
+                    $(`#spinner-${id}`).hide();
+                    checkbox.show();
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText
+                    alert('Error - ' + errorMessage);
+                }
+            });
+        }
+
+        function addLimit(checkbox) {
+            const id = checkbox.attr('id');
+            const parts = id.split('-');
+            const from = parts[1];
+            const to = parts[2];
+
+            const val = $('#value_selector').val();
+
+            let data = {
+                to_library_id: to,
+                from_library_id: from,
+            };
+            data[val_type] = val;
+            return $.ajax({
+                url: `/api/v1/transfer_limits`,
+                type: 'POST',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(result) {
+                    checkbox.data('limit_id', result.limit_id);
+                    checkbox.attr('checked', false);
+                    $(`#spinner-${id}`).hide();
+                    checkbox.show();
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText
+                    alert('Error - ' + errorMessage);
+                }
+            });
+        }
+
+        function add_limits( checkboxes, val, to, from ){
+            let data = {};
+            data[val_type] = val;
+            if (to) data["to_library_id"] = to;
+            if (from) data["from_library_id"] = from;
+
+            return $.ajax({
+                url: `/api/v1/transfer_limits/batch`,
+                type: 'POST',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(result) {
+                    for ( i = 0; i < result.length; i++ ) {
+                        const r = result[i];
+                        let checkbox = $(`#limit-${r.from_library_id}-${r.to_library_id}`);
+                        const id = checkbox.attr('id');
+                        checkbox.data('limit_id', r.limit_id);
+                        checkbox.attr('checked', false);
+                        $(`#spinner-${id}`).hide();
+                        checkbox.show();
+                        $('.limit-action').removeClass('disabled');
+                        $('#value_selector').prop('disabled',false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText
+                    alert('Error - ' + errorMessage);
+                }
+            });
+        }
+
+        function del_limits( checkboxes, val, to, from ){
+            let data = {};
+            data[val_type] = val;
+            if (to) data["to_library_id"] = to;
+            if (from) data["from_library_id"] = from;
+
+            return $.ajax({
+                url: `/api/v1/transfer_limits/batch`,
+                type: 'DELETE',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(result) {
+                    for ( i = 0; i < checkboxes.length; i++ ) {
+                        const checkbox = checkboxes[i];
+                        const id = checkbox.attr('id');
+                        checkbox.data('limit_id', '');
+                        checkbox.attr('checked', true);
+                        $(`#spinner-${id}`).hide();
+                        checkbox.show();
+                        $('.limit-action').removeClass('disabled');
+                        $('#value_selector').prop('disabled',false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText
+                    alert('Error - ' + errorMessage);
+                }
+            });
+        }
+
+        function updateTransferLimitsTable() {
+            const val = $('#value_selector').val();
+            const url = `/api/v1/transfer_limits?_per_page=-1&q={"${val_type}": "${val}"}`;
+
+            if ( val ) {
+                $('#transfer_limits').show();
+            } else {
+                $('#transfer_limits').hide();
+            }
+
+            $(".limit-checkboxes").attr("disabled", true);
+            $(".limit-checkboxes").attr("checked", false);
+
+            if (val) {
+                $('#loading_limits').show();
+
+                $.getJSON(url, function(data) {
+                    $(".limit-checkboxes").attr("disabled", false);
+                    $(".limit-checkboxes").attr("checked", true);
+                    $(".limit-checkboxes").data('limit_id', null);
+
+                    for (var i = 0; i < data.length; i++) {
+                        let limit = data[i];
+                        let checkbox = $(`#limit-${limit.from_library_id}-${limit.to_library_id}`);
+                        checkbox.attr('checked', false);
+                        checkbox.data('limit_id', limit.limit_id);
+                    }
+
+                    $('#loading_limits').hide();
+                });
+            }
+        }
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
