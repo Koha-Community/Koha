@@ -104,24 +104,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                [% FOR order IN orders %]
+                [% FOR suborder IN orders %]
                     <tr>
                         <td>
-                        [% IF order.invoice %]
+                        [% IF suborder.invoice %]
                             [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
-                                   [% order.invoice.invoicenumber | html %]</a>
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% suborder.invoiceid | uri %]" title="Invoice detail page">
+                                   [% suborder.invoice.invoicenumber | html %]</a>
                             [% ELSE %]
-                                [% order.invoice.invoicenumber | html %]
+                                [% suborder.invoice.invoicenumber | html %]
                             [% END %]
                         [% END %]
                         </td>
-                        <td>[% order.ordernumber | html %]</td>
-                        <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
-                        <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
-                        <td>[% order.quantityreceived | html %]</td>
+                        <td>[% suborder.ordernumber | html %]</td>
+                        <td><span title="[% suborder.basket.creationdate | uri %]">[% suborder.basket.creationdate | $KohaDates%]</span></td>
+                        <td>[% IF suborder.datereceived %]<span title="[% suborder.datereceived | uri %]">[% suborder.datereceived | $KohaDates %]</span>[% END %]</td>
+                        <td>[% suborder.quantityreceived | html %]</td>
                         <td>
-                          [% SWITCH order.orderstatus %]
+                          [% SWITCH suborder.orderstatus %]
                           [%# FIXME We should only see/display Complete here, right? %]
                             [% CASE 'new' %]<span title="status_1">New</span>
                             [% CASE 'ordered' %]<span title="status_2">Ordered</span>
@@ -131,12 +131,12 @@
                           [% END %]
                         </td>
                         <td>
-                            [% IF order.datereceived %][%# FIXME Should only be true, right? %]
+                            [% IF suborder.datereceived %][%# FIXME Should only be true, right? %]
                                 [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
+                                [% suborder.unitprice_tax_excluded * suborder.quantity | $Price %] / [% suborder.unitprice_tax_included * suborder.quantity | $Price %]
                             [% END %]
                         </td>
-                        <td>[% order.order_internalnote | html %]</td>
+                        <td>[% suborder.order_internalnote | html %]</td>
                     </tr>
                 [% END %]
                 </tbody>
