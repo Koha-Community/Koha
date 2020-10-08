@@ -623,8 +623,7 @@ subtest 'cancel() tests' => sub {
     $order->add_item( $item->id );
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    t::lib::Mocks::mock_userenv(
-        { patron => $patron, branchcode => $patron->branchcode } );
+    t::lib::Mocks::mock_userenv({ patron => $patron });
 
     # Add a checkout so cancelling fails because od 'book_on_loan'
     C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
