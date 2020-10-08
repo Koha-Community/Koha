@@ -722,6 +722,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 alerts
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Alert>
+
+=cut
+
+__PACKAGE__->has_many(
+  "alerts",
+  "Koha::Schema::Result::Alert",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 api_keys
 
 Type: has_many
@@ -1668,8 +1683,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-20 10:54:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pH5cKJCrjwfiLnk7iCO4tA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-10-08 14:17:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kzx7ildKCEFF6YDr6MRCrw
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
