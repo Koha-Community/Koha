@@ -1,0 +1,254 @@
+---
+"/transfer_limits":
+  get:
+    x-mojo-to: TransferLimits#list
+    operationId: listTransferLimits
+    tags:
+    - transfer
+    parameters:
+    - name: to_library_id
+      in: query
+      description: Search on to_library_id
+      required: false
+      type: string
+    - name: from_library_id
+      in: query
+      description: Search on from_library_id
+      required: false
+      type: string
+    - name: item_type
+      in: query
+      description: Search on item_type
+      required: false
+      type: string
+    - name: collection_code
+      in: query
+      description: Search on collection_code
+      required: false
+      type: string
+    - "$ref": "../parameters.json#/match"
+    - "$ref": "../parameters.json#/order_by"
+    - "$ref": "../parameters.json#/page"
+    - "$ref": "../parameters.json#/per_page"
+    - "$ref": "../parameters.json#/q_param"
+    - "$ref": "../parameters.json#/q_body"
+    - "$ref": "../parameters.json#/q_header"
+    produces:
+    - application/json
+    responses:
+      '200':
+        description: A list of transfer limits
+        schema:
+          type: array
+          items:
+            "$ref": "../definitions.json#/transfer_limit"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../definitions.json#/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../definitions.json#/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_transfers
+  post:
+    x-mojo-to: TransferLimits#add
+    operationId: addTransferLimit
+    tags:
+    - transfer
+    parameters:
+    - name: body
+      in: body
+      description: A JSON object containing information about a new transfer limit
+      required: true
+      schema:
+        "$ref": "../definitions.json#/transfer_limit"
+    produces:
+    - application/json
+    responses:
+      '201':
+        description: Transfer limit added
+        schema:
+          "$ref": "../definitions.json#/transfer_limit"
+      '400':
+        description: Bad request
+        schema:
+          "$ref": "../definitions.json#/error"
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../definitions.json#/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../definitions.json#/error"
+      '409':
+        description: Conflict in creating resource
+        schema:
+          "$ref": "../definitions.json#/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../definitions.json#/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../definitions.json#/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_transfers
+"/transfer_limits/{limit_id}":
+  delete:
+    x-mojo-to: TransferLimits#delete
+    operationId: deleteTransferLimit
+    tags:
+    - transfer
+    parameters:
+    - "$ref": "../parameters.json#/transfer_limit_id_pp"
+    produces:
+    - application/json
+    responses:
+      '204':
+        description: Transfer limit deleted
+        schema:
+          type: string
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../definitions.json#/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../definitions.json#/error"
+      '404':
+        description: Library not found
+        schema:
+          "$ref": "../definitions.json#/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../definitions.json#/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../definitions.json#/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_transfers
+"/transfer_limits/batch":
+  post:
+    x-mojo-to: TransferLimits#batch_add
+    operationId: batchAddTransferLimits
+    tags:
+    - transfer
+    parameters:
+    - name: body
+      in: body
+      description: A JSON object containing information about new transfer limits.
+      required: true
+      schema:
+        type: object
+        properties:
+          to_library_id:
+            type: string
+            description: Internal library id for which library the item is going to
+          from_library_id:
+            type: string
+            description: Internal library id for which library the item is coming
+              from
+          item_type:
+            type:
+            - string
+            - 'null'
+            description: Itemtype defining the type for this limi
+          collection_code:
+            type:
+            - string
+            - 'null'
+            description: Authorized value for the collection code associated with
+              this limit
+        additionalProperties: false
+    produces:
+    - application/json
+    responses:
+      '201':
+        description: A list of transfer limits
+        schema:
+          type: array
+          items:
+            "$ref": "../definitions.json#/transfer_limit"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../definitions.json#/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../definitions.json#/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_transfers
+  delete:
+    x-mojo-to: TransferLimits#batch_delete
+    operationId: batchDeleteTransferLimits
+    tags:
+    - transfer
+    parameters:
+    - name: body
+      in: body
+      description: A JSON object containing information about new transfer limits.
+      required: true
+      schema:
+        type: object
+        properties:
+          to_library_id:
+            type: string
+            description: Internal library id for which library the item is going to
+          from_library_id:
+            type: string
+            description: Internal library id for which library the item is coming
+              from
+          item_type:
+            type:
+            - string
+            - 'null'
+            description: Itemtype defining the type for this limi
+          collection_code:
+            type:
+            - string
+            - 'null'
+            description: Authorized value for the collection code associated with
+              this limit
+        additionalProperties: false
+    produces:
+    - application/json
+    responses:
+      '204':
+        description: Transfer limits deleted
+        schema:
+          type: string
+      '401':
+        description: Authentication required
+        schema:
+          "$ref": "../definitions.json#/error"
+      '403':
+        description: Access forbidden
+        schema:
+          "$ref": "../definitions.json#/error"
+      '404':
+        description: Library not found
+        schema:
+          "$ref": "../definitions.json#/error"
+      '500':
+        description: Internal error
+        schema:
+          "$ref": "../definitions.json#/error"
+      '503':
+        description: Under maintenance
+        schema:
+          "$ref": "../definitions.json#/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_transfers

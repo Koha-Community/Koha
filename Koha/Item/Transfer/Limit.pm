@@ -34,6 +34,23 @@ Koha::Item::Transfer::Limit - Koha Item Transfer Limit Object class
 
 =cut
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Item object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        limitId    => 'limit_id',
+        toBranch   => 'to_library_id',
+        fromBranch => 'from_library_id',
+        itemtype   => 'item_type',
+        ccode      => 'collection_code',
+    };
+}
+
 =head3 type
 
 =cut
