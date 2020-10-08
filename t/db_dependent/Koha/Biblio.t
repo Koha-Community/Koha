@@ -131,7 +131,7 @@ subtest 'get_coins and get_openurl' => sub {
 
     my $record = MARC::Record->new();
     $record->append_fields( MARC::Field->new('100','','','a' => 'Author 2'), MARC::Field->new('880','','','a' => 'Something') );
-    my $biblionumber = C4::Biblio::AddBiblio($record, '');
+    my ( $biblionumber ) = C4::Biblio::AddBiblio($record, '');
     my $biblio_no_title = Koha::Biblios->find($biblionumber);
     is(
         $biblio_no_title->get_coins,
