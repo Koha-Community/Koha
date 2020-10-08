@@ -1457,7 +1457,7 @@ sub AddIssue {
                         comments    => 'Forced branchtransfer'
                     }
                 )->store;
-                if ( $transfer->reason eq 'Reserve' ) {
+                if ( $transfer->reason && $transfer->reason eq 'Reserve' ) {
                     my $hold = $item_object->holds->search( { found => 'T' } )->next;
                     if ( $hold ) { # Is this really needed?
                         $hold->set( { found => undef } )->store;
