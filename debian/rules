@@ -17,6 +17,8 @@ override_dh_auto_install:
 	rm $(TMP)/etc/koha/README.txt
 	rm $(TMP)/etc/koha/SIPconfig.xml
 	rm $(TMP)/etc/koha/log4perl.conf
+	rm $(TMP)/etc/koha/apache.conf
+	rm $(TMP)/etc/koha/nginx.conf
 	rm -r $(TMP)/usr/share/koha/doc
 	rm -r $(TMP)/var/run
 	rm -r $(TMP)/var/lock
