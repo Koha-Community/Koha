@@ -45,6 +45,28 @@ sub register {
     my ( $self, $app ) = @_;
 
     $app->helper(
+        'objects.find' => sub {
+            my ( $c, $result_set, $id ) = @_;
+
+            my $attributes = {};
+
+            # Look for embeds
+            my $embed = $c->stash('koha.embed');
+            # Generate prefetches for embedded stuff
+            $c->dbic_merge_prefetch(
+                {
+                    attributes => $attributes,
+                    result_set => $result_set
+                }
+            );
+
+            my $object = $result_set->find( $id, $attributes );
+
+            return $object->to_api({ embed => $embed });
+        }
+    );
+
+    $app->helper(
         'objects.search' => sub {
             my ( $c, $result_set ) = @_;
 
