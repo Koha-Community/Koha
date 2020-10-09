@@ -55,8 +55,13 @@ subtest 'AddBiblio' => sub {
     $record->append_fields($lccn_field);
 
     my $nb_biblios = Koha::Biblios->count;
-    my ( $biblionumber, $biblioitemnumber ) =
-      C4::Biblio::AddBiblio( $record, '' );
+    my ( $biblionumber, $biblioitemnumber );
+    {
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
+        close STDERR;
+    }
     is( $biblionumber, undef,
         'AddBiblio returns undef for biblionumber if something went wrong' );
     is( $biblioitemnumber, undef,
