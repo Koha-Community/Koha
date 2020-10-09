@@ -255,6 +255,9 @@
                                         [% IF ( errmsgloo.localuse) %]
                                             <p class="problem ret_localuse">Local use recorded</p>
                                         [% END %]
+                                        [% IF ( errmsgloo.transferred ) %]
+                                            <p class="problem ret_transferred">Item recieved from [% Branches.GetName( errmsgloo.transferred ) | html %]</p>
+                                        [% END %]
                                         [% IF ( errmsgloo.waslost ) %]
                                             [% IF Koha.Preference('BlockReturnOfLostItems') %]
                                                 <p class="problem ret_blocked">Item is lost, cannot be checked in.</p>

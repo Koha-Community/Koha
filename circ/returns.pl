@@ -511,6 +511,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'TransferTrigger' ) {
         ;    # Handled alongside NeedsTransfer
     }
+    elsif ( $code eq 'TransferArrived' ) {
+        $err{transferred} = $messages->{'TransferArrived'};
+    }
     elsif ( $code eq 'Wrongbranch' ) {
     }
     elsif ( $code eq 'Debarred' ) {

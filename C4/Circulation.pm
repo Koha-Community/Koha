@@ -2053,7 +2053,7 @@ sub AddReturn {
     # check if we have a transfer for this document
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->itemnumber );
 
-    # if we have a transfer to do, we update the line of transfers with the datearrived
+    # if we have a transfer to complete, we update the line of transfers with the datearrived
     my $is_in_rotating_collection = C4::RotatingCollections::isItemInAnyCollection( $item->itemnumber );
     if ($datesent) {
         # At this point we will either fill the transfer or it is a wrong transfer
@@ -2064,6 +2064,7 @@ sub AddReturn {
                 "UPDATE branchtransfers SET datearrived = now() WHERE itemnumber= ? AND datearrived IS NULL"
             );
             $sth->execute( $item->itemnumber );
+            $messages->{'TransferArrived'} = $frombranch;
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
