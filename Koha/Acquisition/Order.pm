@@ -131,17 +131,31 @@ sub cancel {
         my $biblio = $self->biblio;
         if ( $biblio and $delete_biblio ) {
 
-            if (    $biblio->active_orders->count - 1 == 0 # minus ourself
+            if (
+                $biblio->active_orders->search(
+                    { ordernumber => { '!=' => $self->ordernumber } }
+                )->count == 0
                 and $biblio->subscriptions->count == 0
-                and $biblio->items->count == 0 )
+                and $biblio->items->count == 0
+              )
             {
 
                 my $error = DelBiblio( $biblio->id );
-                $self->add_message({ message => 'error_delbiblio', error => $error })
+                $self->add_message( { message => 'error_delbiblio'} )
                   if $error;
             }
             else {
-                $self->add_message({ message => 'error_delbiblio' });
+                if ( $biblio->active_orders->search(
+                    { ordernumber => { '!=' => $self->ordernumber } }
+                )->count > 0 ) {
+                    $self->add_message( { message => 'error_delbiblio_active_orders' } );
+                }
+                elsif ( $biblio->subscriptions->count > 0 ) {
+                    $self->add_message( { message => 'error_delbiblio_subscriptions' } );
+                }
+                else { # $biblio->items->count > 0
+                    $self->add_message( { message => 'error_delbiblio_items' } );
+                }
             }
         }
     }

@@ -619,7 +619,7 @@ subtest 'cancel() tests' => sub {
                 cancellationreason      => undef,
             }
         }
-    )->reset_messages; # reset them as TestBuilder doesn't call new
+    );
     $order->add_item( $item->id );
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -651,7 +651,7 @@ subtest 'cancel() tests' => sub {
 
     C4::Circulation::AddReturn( $item->barcode );
 
-    $order->reset_messages;
+    $order = Koha::Acquisition::Orders->find($order->ordernumber);
     $order->cancel({ reason => $reason })
           ->discard_changes;
 
@@ -684,7 +684,7 @@ subtest 'cancel() tests' => sub {
                 cancellationreason      => undef,
             }
         }
-    )->reset_messages;
+    );
     $order->add_item( $item_1->id );
 
     $order->cancel({ reason => $reason, delete_biblio => 1 })
@@ -697,7 +697,7 @@ subtest 'cancel() tests' => sub {
     is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The item is still present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->messages };
-    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
+    is( $messages[0]->message, 'error_delbiblio_items', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
     # * order with one item attached
@@ -719,7 +719,7 @@ subtest 'cancel() tests' => sub {
                 cancellationreason      => undef,
             }
         }
-    )->reset_messages;
+    );
     $order->add_item( $item->id );
 
     # Add another order
@@ -744,7 +744,7 @@ subtest 'cancel() tests' => sub {
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->messages };
-    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
+    is( $messages[0]->message, 'error_delbiblio_active_orders', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
     # * order with one item attached
@@ -766,7 +766,7 @@ subtest 'cancel() tests' => sub {
                 cancellationreason      => undef,
             }
         }
-    )->reset_messages;
+    );
     $order->add_item( $item->id );
 
     # Add a subscription
@@ -788,7 +788,7 @@ subtest 'cancel() tests' => sub {
     is( Koha::Items->find($item->id), undef, 'The item is no longer present' );
     is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
     @messages = @{ $order->messages };
-    is( $messages[0]->message, 'error_delbiblio', 'Cannot delete biblio and it gets notified' );
+    is( $messages[0]->message, 'error_delbiblio_subscriptions', 'Cannot delete biblio and it gets notified' );
 
     # Scenario:
     # * order with one item attached
@@ -812,9 +812,8 @@ subtest 'cancel() tests' => sub {
     );
     $order->add_item( $item->id );
 
-    $order->cancel({ reason => $reason, delete_biblio => 1 });
-    # refresh the order object
-    $order->discard_changes;
+    $order->cancel({ reason => $reason, delete_biblio => 1 })
+          ->discard_changes;
 
     is( $order->orderstatus, 'cancelled', 'Order is not marked as cancelled' );
     isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is not undef' );
