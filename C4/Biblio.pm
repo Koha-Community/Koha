@@ -482,6 +482,7 @@ sub LinkBibHeadingsToAuthorities {
     my $bib           = shift;
     my $frameworkcode = shift;
     my $allowrelink = shift;
+    my $tagtolink     = shift;
     my %results;
     if (!$bib) {
         carp 'LinkBibHeadingsToAuthorities called on undefined bib record';
@@ -493,6 +494,9 @@ sub LinkBibHeadingsToAuthorities {
     $allowrelink = 1 unless defined $allowrelink;
     my $num_headings_changed = 0;
     foreach my $field ( $bib->fields() ) {
+        if ( defined $tagtolink ) {
+          next unless $field->tag() == $tagtolink ;
+        }
         my $heading = C4::Heading->new_from_field( $field, $frameworkcode );
         next unless defined $heading;
 
