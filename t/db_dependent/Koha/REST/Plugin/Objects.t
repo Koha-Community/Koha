@@ -18,6 +18,8 @@
 use Modern::Perl;
 
 use Koha::Acquisition::Orders;
+use Koha::AuthorisedValueCategories;
+use Koha::AuthorisedValues;
 use Koha::Cities;
 use Koha::Biblios;
 use Koha::Patrons;
@@ -117,7 +119,7 @@ get '/my_patrons' => sub {
 };
 
 # The tests
-use Test::More tests => 14;
+use Test::More tests => 16;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -385,7 +387,7 @@ subtest 'objects.search helper, embed' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'object.search helper with query parameter' => sub {
+subtest 'objects.search helper with query parameter' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
@@ -409,7 +411,7 @@ subtest 'object.search helper with query parameter' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'object.search helper with q parameter' => sub {
+subtest 'objects.search helper with q parameter' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
@@ -433,7 +435,7 @@ subtest 'object.search helper with q parameter' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'object.search helper with x-koha-query header' => sub {
+subtest 'objects.search helper with x-koha-query header' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin;
@@ -457,7 +459,7 @@ subtest 'object.search helper with x-koha-query header' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'object.search helper with all query methods' => sub {
+subtest 'objects.search helper with all query methods' => sub {
     plan tests => 6;
 
     $schema->storage->txn_begin;
@@ -484,8 +486,7 @@ subtest 'object.search helper with all query methods' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'object.search helper order by embedded columns' => sub {
-
+subtest 'objects.search helper order by embedded columns' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
@@ -615,6 +616,197 @@ subtest 'objects.search helper, search_limited() tests' => sub {
       ->tx->res->json;
 
     is( scalar @{$res}, 1, 'Only one patron returned' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.find helper with expanded authorised values' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $t = Test::Mojo->new;
+
+    Koha::AuthorisedValues->search( { category => 'Countries' } )->delete;
+    Koha::AuthorisedValueCategories->search( { category_name => 'Countries' } )
+      ->delete;
+
+    my $cat = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValueCategories',
+            value => { category_name => 'Countries' }
+        }
+    );
+    my $fr = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'FR',
+                lib              => 'France',
+                category         => $cat->category_name
+            }
+        }
+    );
+    my $us = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'US',
+                lib              => 'United States of America',
+                category         => $cat->category_name
+            }
+        }
+    );
+    my $ar = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'AR',
+                lib              => 'Argentina',
+                category         => $cat->category_name
+            }
+        }
+    );
+
+    my $city_class = Test::MockModule->new('Koha::City');
+    $city_class->mock(
+        '_fetch_authorised_values',
+        sub {
+            my ($self) = @_;
+            use Koha::AuthorisedValues;
+            my $av = Koha::AuthorisedValues->find(
+                {
+                    authorised_value => $self->city_country,
+                    category         => 'Countries'
+                }
+            );
+            return { country => $av->unblessed };
+        }
+    );
+
+    my $manuel = $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name    => 'Manuel',
+                city_country => 'AR'
+            }
+        }
+    );
+    my $manuela = $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name    => 'Manuela',
+                city_country => 'US'
+            }
+        }
+    );
+
+    $t->get_ok( '/cities/' . $manuel->cityid => { 'x-koha-av-expand' => 1 } )
+      ->status_is(200)->json_is( '/name' => 'Manuel' )
+      ->json_has('/_authorised_values')
+      ->json_is( '/_authorised_values/country/lib' => $ar->lib );
+
+    $t->get_ok( '/cities/' . $manuela->cityid => { 'x-koha-av-expand' => 1 } )
+      ->status_is(200)->json_is( '/name' => 'Manuela' )
+      ->json_has('/_authorised_values')
+      ->json_is( '/_authorised_values/country/lib' => $us->lib );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.search helper with expanded authorised values' => sub {
+
+    plan tests => 11;
+
+    my $t = Test::Mojo->new;
+
+    $schema->storage->txn_begin;
+
+    Koha::AuthorisedValues->search( { category => 'Countries' } )->delete;
+    Koha::AuthorisedValueCategories->search( { category_name => 'Countries' } )
+      ->delete;
+
+    my $cat = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValueCategories',
+            value => { category_name => 'Countries' }
+        }
+    );
+    my $fr = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'FR',
+                lib              => 'France',
+                category         => $cat->category_name
+            }
+        }
+    );
+    my $us = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'US',
+                lib              => 'United States of America',
+                category         => $cat->category_name
+            }
+        }
+    );
+    my $ar = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'AR',
+                lib              => 'Argentina',
+                category         => $cat->category_name
+            }
+        }
+    );
+
+    my $city_class = Test::MockModule->new('Koha::City');
+    $city_class->mock(
+        '_fetch_authorised_values',
+        sub {
+            my ($self) = @_;
+            use Koha::AuthorisedValues;
+            my $av = Koha::AuthorisedValues->find(
+                {
+                    authorised_value => $self->city_country,
+                    category         => 'Countries'
+                }
+            );
+            return { country => $av->unblessed };
+        }
+    );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name    => 'Manuel',
+                city_country => 'AR'
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Cities',
+            value => {
+                city_name    => 'Manuela',
+                city_country => 'US'
+            }
+        }
+    );
+
+    $t->get_ok( '/cities?name=manuel&_per_page=4&_page=1&_match=starts_with' =>
+          { 'x-koha-av-expand' => 1 } )->status_is(200)->json_has('/0')
+      ->json_has('/1')->json_hasnt('/2')->json_is( '/0/name' => 'Manuel' )
+      ->json_has('/0/_authorised_values')
+      ->json_is( '/0/_authorised_values/country/lib' => $ar->lib )
+      ->json_is( '/1/name' => 'Manuela' )->json_has('/1/_authorised_values')
+      ->json_is( '/1/_authorised_values/country/lib' => $us->lib );
 
     $schema->storage->txn_rollback;
 };
