@@ -37,12 +37,27 @@ get '/cities' => sub {
     $c->render( status => 200, json => $cities );
 };
 
+get '/cities/:city_id' => sub {
+    my $c = shift;
+    my $id = $c->stash("city_id");
+    my $city = $c->objects->find(Koha::Cities->new, $id);
+    $c->render( status => 200, json => $city );
+};
+
 get '/orders' => sub {
     my $c = shift;
     $c->stash('koha.embed', ( { fund => {} } ) );
     $c->validation->output($c->req->params->to_hash);
     my $orders = $c->objects->search(Koha::Acquisition::Orders->new);
     $c->render( status => 200, json => $orders );
+};
+
+get '/orders/:order_id' => sub {
+    my $c = shift;
+    $c->stash('koha.embed', ( { fund => {} } ) );
+    my $id = $c->stash("order_id");
+    my $order = $c->objects->find(Koha::Acquisition::Orders->new, $id);
+    $c->render( status => 200, json => $order );
 };
 
 get '/biblios' => sub {
@@ -65,7 +80,7 @@ get '/biblios' => sub {
 };
 
 # The tests
-use Test::More tests => 10;
+use Test::More tests => 12;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -433,7 +448,10 @@ subtest 'object.search helper with all query methods' => sub {
 };
 
 subtest 'object.search helper order by embedded columns' => sub {
+
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     my $patron1 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron1'} } );
     my $patron2 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron2'} } );
@@ -447,5 +465,43 @@ subtest 'object.search helper order by embedded columns' => sub {
       ->json_is('/biblios/0/biblio_id' => $biblio2->biblionumber, 'Biblio 2 should be first')
       ->json_is('/biblios/1/biblio_id' => $biblio1->biblionumber, 'Biblio 1 should be second');
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.find helper' => sub {
+
+    plan tests => 6;
+
+    my $t = Test::Mojo->new;
+
     $schema->storage->txn_begin;
-}
+
+    my $city_1 = $builder->build_object( { class => 'Koha::Cities' } );
+    my $city_2 = $builder->build_object( { class => 'Koha::Cities' } );
+
+    $t->get_ok( '/cities/' . $city_1->id )
+      ->status_is(200)
+      ->json_is( $city_1->to_api );
+
+    $t->get_ok( '/cities/' . $city_2->id )
+      ->status_is(200)
+      ->json_is( $city_2->to_api );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.find helper, embed' => sub {
+
+    plan tests => 2;
+
+    my $t = Test::Mojo->new;
+
+    $schema->storage->txn_begin;
+
+    my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
+
+    $t->get_ok( '/orders/' . $order->ordernumber )
+      ->json_is( $order->to_api( { embed => ( { fund => {} } ) } ) );
+
+    $schema->storage->txn_rollback;
+};
