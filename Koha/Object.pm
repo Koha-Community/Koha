@@ -581,6 +581,8 @@ sub to_api {
         }
     }
 
+    my $av_expand = $params->{av_expand};
+
     # Make sure we duplicate the $params variable to avoid
     # breaking calls in a loop (Koha::Objects->to_api)
     $params    = {%$params};
@@ -627,6 +629,49 @@ sub to_api {
         }
     }
 
+    if ( $av_expand && $self->can('_fetch_authorised_values') ) {
+
+        # _fetch_authorised_values should return a hash as the following
+        # {
+        #  column_name => <authorised_value>->unblessed
+        #  ...
+        # }
+        my $avs = $self->_fetch_authorised_values($av_expand);
+
+        # Language selection will be implemented when lang overlay for av is ready
+        # Now we will just fetch plain authorised values from the Koha::AuthorisedValues
+        $avs = $self->_do_api_mapping($avs);
+
+        $json_object->{_authorised_values} = $avs || {};
+    }
+
+    return $json_object;
+}
+
+=head3 _do_api_mapping
+
+=cut
+
+sub _do_api_mapping {
+    my ($self, $json_object) = @_;
+    # Rename attributes if there's a mapping
+    if ( $self->can('to_api_mapping') ) {
+        foreach my $column ( keys %{ $self->to_api_mapping } ) {
+            my $mapped_column = $self->to_api_mapping->{$column};
+            if ( exists $json_object->{$column}
+                && defined $mapped_column )
+            {
+                # key != undef
+                $json_object->{$mapped_column} = delete $json_object->{$column};
+            }
+            elsif ( exists $json_object->{$column}
+                && !defined $mapped_column )
+            {
+                # key == undef
+                delete $json_object->{$column};
+            }
+        }
+    }
     return $json_object;
 }
 
