@@ -1,6 +1,7 @@
 [% USE Branches %]
 [% USE ItemTypes %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 
 [% IF ( HOLDS.count ) %]
     <div id="opac-user-holds">
@@ -185,7 +186,7 @@
                                     <form id="delete_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                     <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                     <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                    <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
+                                    <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove" aria-hidden="true"></i> [% tp('Cancel hold button', 'Cancel') | html %]</button>
                                 </form>
                                 [% END %]
                             </td>
