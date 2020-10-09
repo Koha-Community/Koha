@@ -27,9 +27,9 @@
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF ( invoice ) %]
-                <span>Receive items from: [% name | html %] [[% invoice | html %]] (order #[% order.ordernumber | html %])</span>
+                <span>Receive items from: [% name | html %] [[% invoice | html %]] (order #[% multiple_orders | html %])</span>
             [% ELSE %]
-                <span>Receive items from: [% name | html %] (order #[% order.ordernumber | html %])</span>
+                <span>Receive items from: [% name | html %] (order #[% multiple_orders | html %])</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -37,423 +37,301 @@
 
 <div class="main container-fluid">
     <div class="row">
-    [% AcqCreateItem = order.basket.effective_create_items %]
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% order.ordernumber | html %])</h1>
+<h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% multiple_orders | html %])</h1>
 
-[% IF ( order ) %]
-    <form id="f" action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
-<div class="row">
-<div class="col-sm-6">
-    <div class="dialog alert order_error" style="display:none"></div>
+[% IF multiple_orders %]
+    <table id="multiple_orders" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order</td>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Date received</th>
+                <th>Fund</th>
+                <th>Quantity</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+    </table>
 
-    <fieldset class="rows">
-    <legend>Catalog details</legend>
-    <ol>
-        <li>
-            <span class="label">Title: </span>
-            [% INCLUDE 'biblio-title.inc' biblio=order.biblio link = 1 %]
-        </li>
-    <li> <span class="label">Author: </span>
-        [% order.biblio.author | html %]</li>
-    <li><span class="label">Copyright: </span>
-        [% order.biblio.copyrightdate | html %]</li>
-    <li> <span class="label">ISBN: </span>
-        [% order.biblio.biblioitem.isbn | html %]</li>
-    <li> <span class="label">Series: </span>
-        [% order.biblio.seriestitle | html %]</li>
-    </ol>
-	</fieldset>
-
-    [% IF suggestion %]
-        <fieldset class="rows">
-        <legend>Suggestion</legend>
-        <ol>
-          <li>
-            <span class="label">Suggested by: </span>
-            [% suggestion.surnamesuggestedby | html %][% IF suggestion.firstnamesuggestedby %], [% suggestion.firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show">suggestion #[% suggestion.suggestionid | html %]</a>)
-            [% IF suggestion.reason %]
-                <li>
-                    <span class="label">Reason:</span>
-                    [% SET suggestion_reasons = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
-                    [% SET other_reason = 1 %]
-                    <select class="select-reason" id="reason" name="reason">
-                        <option value=""> -- Choose a reason -- </option>
-                        [% FOREACH reason IN suggestion_reasons %]
-                            [% IF reason.lib == suggestion.reason %]
-                                <option value="[% reason.lib | html %]" selected="selected">[% reason.lib | html %]</option>
-                                [% SET other_reason = 0 %]
-                            [% ELSE %]
-                                <option value="[% reason.lib | html %]">[% reason.lib | html %]</option>
-                            [% END %]
-                        [% END %]
-                        <option value="other">Others...</option>
-                    </select>
-
-                    <span id="other_reason" name="other_reason">
-                        [% IF other_reason %]
-                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." value="[% suggestion.reason | html %]"/>
-                        [% ELSE %]
-                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
-                        [% END %]
-                        <a href="#back">Cancel</a>
-                    </span>
-
-                    <input type="hidden" name="suggestionid" value="[% suggestion.suggestionid | html %]" />
-                </li>
-            [% END %]
-          </li>
-        </ol>
+    <div class="col">
+        <fieldset class="action">
+            <button class="save btn btn-primary" disabled>Save</button>
+            <a class="cancel btn btn-default" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
         </fieldset>
-    [% END %]
+        <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+    </div>
 
-    [% IF order.subscriptionid and orders.count %]
-        <fieldset class="rows">
-            <legend>Receipt history for this subscription</legend>
-            <table id="orders">
-                <thead>
-                    <tr>
-                        <th>Invoice</th>
-                        <th>Order number</th>
-                        <th>Creation date</th>
-                        <th>Receive date</th>
-                        <th>Quantity received</th>
-                        <th>Status</th>
-                        <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
-                        <th>Internal note</th>
-                    </tr>
-                </thead>
-                <tbody>
-                [% FOR suborder IN orders %]
-                    <tr>
-                        <td>
-                        [% IF suborder.invoice %]
-                            [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% suborder.invoiceid | uri %]" title="Invoice detail page">
-                                   [% suborder.invoice.invoicenumber | html %]</a>
-                            [% ELSE %]
-                                [% suborder.invoice.invoicenumber | html %]
-                            [% END %]
-                        [% END %]
-                        </td>
-                        <td>[% suborder.ordernumber | html %]</td>
-                        <td data-order="[% suborder.basket.creationdate | uri %]">[% suborder.basket.creationdate | $KohaDates%]</td>
-                        <td data-order="[% suborder.datereceived | uri %]">
-                            [% IF suborder.datereceived %]
-                                [% suborder.datereceived | $KohaDates %]
-                            [% END %]
-                        </td>
-                        <td>[% suborder.quantityreceived | html %]</td>
-                        [% SWITCH suborder.orderstatus %]
-                            [%# FIXME We should only see/display Complete here, right? %]
-                            [% CASE 'new' %]
-                                <td data-order="status_1">
-                                    <span>New</span>
-                            [% CASE 'ordered' %]
-                                <td data-order="status_2">
-                                    <span>Ordered</span>
-                            [% CASE 'partial' %]
-                                <td data-order="status_3">
-                                    <span>Partial</span>
-                            [% CASE 'complete' %]
-                                <td data-order="status_4">
-                                    <span>Complete</span>
-                            [% CASE 'cancelled' %]
-                                <td data-order="status_5">
-                                    <span>Cancelled</span>
-                          [% END %]
-                        </td>
-                        <td>
-                            [% IF suborder.datereceived %][%# FIXME Should only be true, right? %]
-                                [%# FIXME What if unitprice has not been filled? %]
-                                [% suborder.unitprice_tax_excluded * suborder.quantity | $Price %] / [% suborder.unitprice_tax_included * suborder.quantity | $Price %]
-                            [% END %]
-                        </td>
-                        <td>[% suborder.order_internalnote | html %]</td>
-                    </tr>
-                [% END %]
-                </tbody>
-            </table>
-        </fieldset>
-    [% ELSIF (AcqCreateItem == 'receiving') %]
-        <div id="items_list" style="display:none">
-            <p><strong>Items list</strong></p>
-            <div style="width:100%;overflow:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="noExport">Actions</th>
-                            <th>Barcode</th>
-                            <th>Home library</th>
-                            <th>Holding library</th>
-                            <th>Not for loan</th>
-                            <th>Restricted</th>
-                            <th>Location</th>
-                            <th>Call number</th>
-                            <th>Copy number</th>
-                            <th>Inventory number</th>
-                            <th>Collection</th>
-                            <th>Item type</th>
-                            <th>Materials</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+    <div class="modal fade" id="order_edit" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+        <div id="receive-modal" class="modal-dialog modal-lg" role="document">
+            <div class="modal-content modal-lg">
+                <div class="modal-header row">
+                    <h4 class="col-md-11 modal-title"></h4>
+                    <button type="button" class="close col-md-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="hide" id="loading">Loading ...</div>
+                    <div id="modal-order-main row">
+                        <!--ul>
+                            <li><a href="#info-panel">Info</a></li>
+                            <li><a href="#accounting-panel">Accounting</a></li>
+                            <li><a href="#history-panel">Receipt history</a></li>
+                            <li><a href="#items-panel">Items</a></li>
+                        </ul-->
+
+                        <div class="col-md-12 col-lg-6">
+                            <div id="info-panel" class="page-section">
+                                <div>
+                                    <h4>Catalog details</h4>
+
+                                    <div class="row"> <span class="lbl col-sm-4">Title: </span><span class="col-sm-8" id="biblio_title"></span></div>
+                                    <div class="row"> <span class="lbl col-sm-4">Author: </span><span class="col-sm-8" id="biblio_author"></span></div>
+                                    <div class="row"> <span class="lbl col-sm-4">Copyright: </span><span class="col-sm-8" id="biblio_copyright_date"></span></div>
+                                    <div class="row"> <span class="lbl col-sm-4">ISBN: </span><span class="col-sm-8" id="biblio_isbn"></span></div>
+                                    <div class="row"> <span class="lbl col-sm-4">Series: </span><span class="col-sm-8" id="biblio_series_title"></span></div>
+
+                                </div>
+                                <div id="suggestion_fieldset">
+                                    <h4>Suggestion</h4>
+                                    <div class="row">
+                                        <span class="lbl col-sm-4">Suggested by: </span> <span class="col-sm-8" id="biblio_suggestion_suggester"></span>
+                                    </div>
+                                    <div class="row" id="suggestion_reason">
+                                        <span class="lbl col-sm-4">Reason:</span>
+                                        <div class="col-sm-8">
+                                            [% SET suggestion_reasons = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
+                                            <select class="select-reason" id="reason" name="reason">
+                                                <option value=""> -- Choose a reason -- </option>
+                                                [% FOREACH reason IN suggestion_reasons %]
+                                                <option value="[% reason.lib | html %]">[% reason.lib | html %]</option>
+                                                [% END %]
+                                                <option value="other">Others...</option>
+                                            </select>
+
+                                            <span id="other_reason" name="other_reason">
+                                                <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
+                                                <a href="#back">Cancel</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="history-panel" class="page-section">
+                                <div id="child_orders">
+                                    <h4>Receipt history for this subscription</h4>
+                                    <table id="child_orders_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Invoice</th>
+                                                <th>Order number</th>
+                                                <th>Creation date</th>
+                                                <th>Receive date</th>
+                                                <th>Quantity received</th>
+                                                <th>Status</th>
+                                                <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
+                                                <th>Internal note</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="items-panel" class="page-section">
+                                <div id="acq-create-receiving">
+                                    <div id="items_list" style="display: none">
+                                        <h4>Items list</h4>
+                                        <div style="width:100%;overflow:auto;">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Actions</th>
+                                                        <th>Barcode</th>
+                                                        <th>Home library</th>
+                                                        <th>Holding library</th>
+                                                        <th>Not for loan</th>
+                                                        <th>Restricted</th>
+                                                        <th>Location</th>
+                                                        <th>Call number</th>
+                                                        <th>Copy number</th>
+                                                        <th>Inventory number</th>
+                                                        <th>Collection</th>
+                                                        <th>Item type</th>
+                                                        <th>Materials</th>
+                                                        <th>Notes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div id="itemfieldset">
+                                        <h4>Item</h4>
+                                        [% IF ( NoACQframework ) %]
+                                            <p class="required">
+                                                No ACQ framework, using default. You should create a
+                                                framework with code ACQ, the items framework would be
+                                                used
+                                            </p>
+                                        [% END %]
+                                        <div id="outeritemblock"></div>
+                                    </div>
+                                </div>
+                                <div id="acq-create-ordering">
+                                    <h4>Items</h4>
+                                    <div style="width:100%;overflow:auto">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Receive?</th>
+                                                    <th>&nbsp;</th>
+                                                    <th>Barcode</th>
+                                                    <th>Home library</th>
+                                                    <th>Current library</th>
+                                                    <th>Not for loan</th>
+                                                    <th>Restricted</th>
+                                                    <th>Location</th>
+                                                    <th>Call number</th>
+                                                    <th>Copy number</th>
+                                                    <th>Inventory number</th>
+                                                    <th>Collection</th>
+                                                    <th>Item type</th>
+                                                    <th>Materials</th>
+                                                    <th>Notes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div id="accounting-panel" class="page-section">
+                                <h4>Accounting details</h4>
+                                <ol>
+                                    <li>
+                                        <label for="datereceived">Date received: </label>
+                                        <input type="text" size="10" id="datereceived" name="datereceived" class="datepicker" />
+                                    </li>
+                                    <li>
+                                        <label for="bookfund">Fund: </label>
+                                        <select id="bookfund" name="bookfund">
+                                            <option value=""></option>
+                                            [% FOREACH period IN budget_loop %]
+                                            <optgroup label="[% period.description | html %]">
+                                            [% FOREACH fund IN period.funds %]
+                                                <option value="[% fund.b_id | html %]">[% fund.b_txt | html %]</option>
+                                            [% END %]
+                                            </optgroup>
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label>&nbsp;</label>
+                                        <span id="current-fund"></span>
+                                    </li>
+                                    <li>
+                                        <label for="creator">Ordered by: </label>
+                                        <span id="creator"></span>
+                                    </li>
+                                    <li>
+                                        <label for="quantity_to_receive">Quantity ordered: </label>
+                                        <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" />
+                                    </li>
+                                    <li>
+                                        <label for="quantity">Quantity received: </label>
+                                        <input type="text" size="20" name="quantityrec" id="quantity" />
+                                        <div id="qtyrecerror" style="display:none">
+                                            <p class="error">Warning, you have entered more items than expected.
+                                            Items will not be created.</p>
+                                        </div>
+                                    </li>
+
+                                    [% IF ( gst_values ) %]
+                                    <li>
+                                        <label for="tax_rate">Tax rate: </label>
+                                        <select name="tax_rate" id="tax_rate">
+                                        [% FOREACH gst IN gst_values %]
+                                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
+                                        [% END %]
+                                        </select>
+                                    </li>
+                                    [% END %]
+
+                                    <li>
+                                        <label for="rrp">Retail price: </label>
+                                        <span id="rrp"></span>
+                                    <li>
+                                        <label for="replacementprice">Replacement price:</label>
+                                        <input type="text" size="20" name="replacementprice" id="replacementprice" />
+                                    </li>
+                                    <li>
+                                        <label for="ecost">Budgeted cost: </label>
+                                        <span id="ecost"></span>
+                                    </li>
+                                    <li>
+                                        <label for="unitprice">Actual cost:</label>
+                                        <input type="text" size="20" name="unitprice" id="unitprice" />
+                                        <span id="unitprice_hint" class="hint"></span>
+                                        <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
+                                    </li>
+                                    <li id="select_currency">
+                                        <label for="unitprice_currency"></label>
+                                        <input type="text" size="20" name="unitprice_currency" id="unitprice_currency" value="" />
+                                        [% IF currencies.count %]
+                                        <select name="currency">
+                                            <option value="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
+                                            [% FOR currency IN currencies %]
+                                            <option value="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
+                                            [% END %]
+                                        </select>
+                                        [% END %]
+                                    </li>
+                                    <li>
+                                        <label for="order_internalnote">Internal note: </label>
+                                        <textarea name="order_internalnote" id="order_internalnote" width="40" rows="8" ></textarea>
+                                    </li>
+                                    <li>
+                                        <label for="order_vendornote">Vendor note: </label>
+                                        <span id="order_vendornote"></span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-defualt modal-prev">Previous order</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary modal-save">Save changes</button>
+                    <button type="button" class="btn btn-defualt modal-next">Next order</button>
+                </div>
             </div>
         </div>
-
-        [% UNLESS order.subscriptionid %]
-          <fieldset class="rows" id="itemfieldset">
-              <legend>Item</legend>
-              [% IF ( NoACQframework ) %]
-                  <p class="required">
-                      No ACQ framework, using default. You should create a
-                      framework with code ACQ, the items framework would be
-                      used
-                  </p>
-              [% END %]
-              <div id="outeritemblock"></div>
-          </fieldset>
-        [% END %]
-    [% ELSIF (AcqCreateItem == 'ordering') %]
-        [% IF (order.items) %]
-            <div class="page-section" style="width:100%;overflow:auto">
-                <h2>Items</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Receive?</th>
-                            <th>&nbsp;</th>
-                            <th>Barcode</th>
-                            <th>Home library</th>
-                            <th>Current library</th>
-                            <th>Not for loan</th>
-                            <th>Restricted</th>
-                            <th>Location</th>
-                            <th>Call number</th>
-                            <th>Copy number</th>
-                            <th>Inventory number</th>
-                            <th>Collection</th>
-                            <th>Item type</th>
-                            <th>Materials</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH item IN order.items %]
-                            <tr id="item_[% item.itemnumber | html %]">
-                                <td style="text-align:center"><input type="checkbox" name="items_to_receive" value="[% item.itemnumber | html %]" /></td>
-                                <td><a style="cursor:pointer" onclick="PopupEditPage([% item.biblionumber | html %],[% item.itemnumber | html %]);">Edit</a></td>
-                                <td>[% item.barcode | html %]</td>
-                                <td>[% Branches.GetName( item.homebranch ) | html %]</td>
-                                <td>[% Branches.GetName( item.holdingbranch ) | html %]</td>
-                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]</td>
-                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) | html %]</td>
-                                <td><span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</span></td>
-                                <td>[% item.itemcallnumber | html %]</td>
-                                <td>[% item.copynumber | html %]</td>
-                                <td>[% item.stocknumber | html %]</td>
-                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
-                                <td>[% ItemTypes.GetDescription( item.itype ) | html %]</td>
-                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.materials', authorised_value => item.materials ) | html %]</td>
-                                <td>[% item.itemnotes | html %]</td>
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table>
+    </div>
+    <div class="modal fade" id="modal_messages" tabindex="-1" role="dialog" aria-labelledby="Order edit">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="col-md-11 modal-title"></h4>
+                    <button type="button" class="close col-md-1" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <ul></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary accept">Accept</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                </div>
             </div>
-        [% END %]
-    [% END %]
-    <input type="hidden" name="biblionumber" value="[% order.biblionumber | html %]" />
-    <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
-    <input type="hidden" name="ordernumber" value="[% order.ordernumber | html %]" />
-    <input type="hidden" name="booksellerid" value="[% order.basket.booksellerid | html %]" />
-	</div>
-    <div class="col-sm-6">
-    <fieldset class="rows">
-    <legend>Accounting details</legend>
-        <ol>
-            <li>
-                <label for="datereceived">Date received: </label>
-                <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | html %]" class="flatpickr" />
-                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-            </li>
-       <li>
-            <label class="required" for="bookfund">Fund: </label>
-            [% active_count = 0 %]
-            [% IF !ordernumber %]
-                [% FOREACH budget_period IN budget_loops.keys %]
-                    [% FOREACH fund IN budget_loops.$budget_period.funds %]
-                        [% active_count= active_count + fund.b_active %]
-                    [% END %]
-                [% END %]
-            [% END %]
-            <select class="select2" id="bookfund" name="bookfund">
-                <optgroup label="Current">
-                        <option value="[% order.fund.budget.id | html %]" selected="selected" data-sort1-authcat="[% order.fund.sort1_authcat | html %]" data-sort2-authcat="[% order.fund.sort2_authcat | html %]">
-                            Keep current ([% order.fund.budget_name | html %])</option>
-                </optgroup>
-            [% FOREACH budget_period_id IN budget_loops.keys %]
-                [% SET budget_period = budget_loops.$budget_period_id %]
-                [% IF budget_period.active %]
-                    <optgroup label="[% budget_period.description | html %]">
-                [% ELSE %]
-                    <optgroup class="inactive_budget" label="[% budget_period.description | html %] (Inactive)">
-                [% END %]
-                [% FOREACH budget_loo IN budget_period.funds %]
-                   [% level_indent_cnt = 0 %]
-                    [% level_indent = "" %]
-                    [% WHILE level_indent_cnt < budget_loo.b_level %]
-                        [% level_indent = level_indent _ " -- " %]
-                        [% level_indent_cnt = level_indent_cnt +1 %]
-                    [% END %]
-
-                    [% IF ( budget_loo.b_sel ) %]
-                        [% active_count = 0 #select no other fund %]
-                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                    [% ELSIF active_count==1 && budget_loo.b_active %]
-                        <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                    [% ELSE %]
-                        [% bdgclass=budget_loo.b_active? "": "inactive_budget" | html %]
-                        <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">
-                    [% END %]
-                        [% level_indent | html %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
-                    </option>
-                [% END %]
-                </optgroup>
-            [% END %]
-            </select>
-            <span class="required">Required</span>
-            <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
-            <input type="checkbox" id="showallbudgets" />
-       </li>
-       <li><label>&nbsp;</label><span>(Current: [% budget_period_description | html %] - [% bookfund | html %])</span></li>
-       <li>
-        <label for="creator">Ordered by: </label>
-        <span>
-            [% INCLUDE 'patron-title.inc' patron = creator %]
-        </span>
-       </li>
-       <li><label for="quantity_to_receive">Quantity ordered: </label><span class="label">
-           [% IF edit or order.subscriptionid %]
-               <input type="text" id="quantity_to_receive" name="quantity" value="[% order.quantity | html %]" />
-           [% ELSE%]
-               <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% order.quantity | html %]" />
-           [% END %]
-           </span></li>
-        <li><label for="quantity">Quantity received: </label>
-          [% IF order.subscriptionid %]
-              <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% order.quantity | html %]" />
-              <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
-          [% ELSIF AcqCreateItem == 'receiving' %]
-              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
-          [% ELSE %]
-            [% IF ( order.quantityreceived ) %]
-                [% IF ( edit ) %]
-                    <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived | html %]" />
-                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
-                [% ELSE %]
-                    [% IF ( order.items.count ) %]
-                        <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived + 1 | html %]" />
-                    [% ELSE %]
-                        <input type="text" inputmode="numeric" pattern="[0-9]*" size="20" name="quantityrec" id="quantity" value="[% quantityreceived + 1 | html %]" />
-                    [% END %]
-                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
-                [% END %]
-            [% ELSE %]
-                <input type="text" inputmode="numeric" pattern="[0-9]*" id="quantity" size="20" name="quantityrec" value="1" />
-                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
-            [% END %]
-            <div id="qtyrecerror" style="display:none">
-                <p class="error">Warning, you have entered more items than expected.
-                Items will not be created.</p>
-            </div>
-          [% END %][%# IF (order.subscriptionid) ELSIF (AcqCreateItem == 'receiving' ) %]
-		</li>
-
-        [% IF ( gst_values ) %]
-            <li>
-                <label for="tax_rate">Tax rate: </label>
-                <select name="tax_rate" id="tax_rate">
-                [% tax_rate = order.tax_rate_on_receiving || order.tax_rate_on_ordering %]
-                [% tax_rate = tax_rate + 0 %]
-                [% FOREACH gst IN gst_values %]
-                    [% IF gst.option == tax_rate %]
-                        <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
-                    [% ELSE %]
-                        <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
-                    [% END %]
-                [% END %]
-                </select>
-            </li>
-        [% ELSE %]
-            <input type="hidden" name="tax_rate" value="0" />
-        [% END %]
-
-        <li><label for="rrp">Retail price: </label>
-            [% IF (invoiceincgst == 1) %]
-                [% order.rrp_tax_included | $Price %]<span class="hint">(adjusted for [% active_currency.currency | html %],tax inclusive)</span></li>
-            [% ELSE %]
-                [% order.rrp_tax_excluded | $Price %]<span class="hint">(adjusted for [% active_currency.currency | html %],tax exclusive)</span></li>
-            [% END %]
-        <li>
-            <label for="replacementprice">Replacement price:</label>
-            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% order.replacementprice | $Price on_editing => 1 %]" />
-        </li>
-        <li>
-            [% IF (invoiceincgst) %]
-                <label for="ecost">Budgeted cost: </label>[% order.ecost_tax_included | $Price %] <span class="hint">(tax inclusive)</span>
-            [% ELSE %]
-                <label for="ecost">Budgeted cost: </label>[% order.ecost_tax_excluded | $Price %] <span class="hint">(tax exclusive)</span>
-            [% END %]
-            </li>
-        <li>
-            <label for="unitprice">Actual cost:</label>
-            [% IF (invoiceincgst) %]
-                [% SET unitprice = order.unitprice_tax_included > 0 ? order.unitprice_tax_included : order.ecost_tax_included %]
-                <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" /> <span class="hint">(tax inclusive)</span>
-            [% ELSE %]
-                [% SET unitprice = order.unitprice_tax_included > 0 ? order.unitprice_tax_excluded : order.ecost_tax_excluded %]
-                <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" /> <span class="hint">(tax exclusive)</span>
-            [% END %]
-            <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
-        </li>
-        <li id="select_currency">
-            <label for="invoice_unitprice"></label>
-            <input type="text" size="20" name="invoice_unitprice" id="invoice_unitprice" value="[% order.invoice_unitprice | $Price on_editing => 1 %]" />
-            [% IF currencies.count %]
-                <select name="invoice_currency">
-                    [% IF order.invoice_currency == active_currency.currency %]
-                        <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
-                    [% ELSE %]
-                        <option value="[% active_currency.currency | html %]" data-rate="[% active_currency.rate | html %]">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
-                    [% END %]
-                    [% FOR currency IN currencies %]
-                        [% IF order.invoice_currency == currency.currency %]
-                            <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]" selected="selected">[% currency.currency | html %] ([% currency.symbol | html %])</option>
-                        [% ELSE %]
-                            <option value="[% currency.currency | html%]" data-rate="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
-                        [% END %]
-                    [% END %]
-                </select>
-            [% END %]
-        </li>
-        <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote | html %]</textarea></li>
-        [% IF order_vendornote %]
-            <li><label for="order_vendornote">Vendor note: </label><span>[% order_vendornote | html %]</span></li>
-        [% END %]
-        </ol>
-    </fieldset>
-
-</div>
-</div><div class="row"><fieldset class="action">
-        <input type="submit" value="Save" class="btn btn-primary" accesskey="w" />
-        <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]">Cancel</a>
-</fieldset></div>    </form>
+        </div>
+    </div>
 [% ELSE %]
     This ordernumber does not exist.
 [% END %]
@@ -469,182 +347,910 @@
 </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
-[% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
-    <script>
-        function Check(form) {
-            [% IF (AcqCreateItem == 'receiving') %]
-                var total_errors = CheckMandatorySubfields(form);
-                if (total_errors != 0) {
-                    var alertString = _("Form not submitted because of the following problem(s)");
-                    alertString += "\n------------------------------------------------------------------------------------\n";
-                    alertString += "\n- " + _("%s mandatory fields empty (highlighted)").format(total_errors);
-                    alert(alertString);
-                    return false;
-                }
-
-                if(check_additem('[% Koha.Preference("UniqueItemFields") | html %]') == false){
-                    alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
-                    return false;
-                };
-
-                // Remove last itemblock if it is not in items_list
-                var lastitemblock = $("#outeritemblock > div:last");
-                var tobedeleted = true;
-                var listitems = $("#items_list tr");
-                $(listitems).each(function(){
-                    if($(this).attr('idblock') == $(lastitemblock).attr('id')){
-                        tobedeleted = false;
-                    }
-                });
-                if(tobedeleted){
-                    $(lastitemblock).remove();
-                }
-
-                if(check_additem('[% Koha.Preference("UniqueItemFields") | html %]') == false){
-                    alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
-                    if(tobedeleted) {
-                        $(lastitemblock).appendTo("#outeritemblock");
-                    }
-                    return false;
-                };
-            [% END %]
-
-            if( $("#quantity").val() < 1 ) {
-                alert(_("You must receive at least one item"));
-                return false;
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
+    [% INCLUDE 'format_price.inc' %]
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+    <style>
+        @media (min-width: 1200px) {
+            #receive-modal, #receive-modal .modal-content {
+                width: 1150px;
             }
-
-            return true;
+        }
+        #receive-modal .modal-body {
+            background-color: #F3F4F4;
         }
 
-        [% IF (AcqCreateItem == 'ordering') %]
-            var items_columns = [null, null, 'barcode', 'homebranchname',
-                'holdingbranchname', 'notforloan', 'restricted', 'location',
-                'itemcallnumber', 'copynumber', 'stocknumber', 'collection',
-                'itemtype', 'materials', 'itemnotes'];
+        .lbl {
+            font-weight: 700;
+            text-align: right;
+        }
+        .modal-body ol {
+            list-style-type: none;
+        }
 
-            function PopupEditPage(biblionumber, itemnumber) {
-                var url = "/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber="
-                    + biblionumber + "&itemnumber=" + itemnumber + "&popup=1#edititem";
-                var w = window.open(url);
-                var watchClose = setInterval(function() {
-                    if (w.closed) {
-                        clearTimeout(watchClose);
-                        $.getJSON('/cgi-bin/koha/catalogue/getitem-ajax.pl',
-                            {
-                                'itemnumber': itemnumber
-                            },
-                            function(item) {
-                                var tds = $("#item_"+itemnumber+" td");
-                                for(var i=2; i<tds.length; i++) {
-                                    var column = items_columns[i];
-                                    var text = item[column];
-                                    if ( text == null ) text = '';
-                                    $(tds[i]).text(text);
-                                }
-                            }
-                        );
-                    }
-                }, 500);
+        .modal-body ol li {
+            list-style-type: none;
+            padding-bottom: 1em;
+            width: 100%;
+        }
+
+        .modal-body h4 {
+            margin-left: 1em;
+            padding: .2em .5em;
+            margin-bottom: 17px;
+        }
+
+        .modal-body label {
+            margin-right: 1em;
+            text-align: right;
+            width: 11em;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .modal-body textarea {
+            vertical-align: text-top;
+        }
+    </style>
+    <script>
+        function display_string(key, strings, fallback) {
+            if ( strings.hasOwnProperty(key) ) {
+                return strings[key].str && escape_str(strings[key].str) || '';
             }
+            return fallback != null ? fallback : '';
+        }
 
-            function CalcQtyToReceive() {
-                var qty = $("input[name='items_to_receive']:checked").length;
-                $("#quantity").val(qty);
-            }
-
-            function CheckNItems(n) {
-                $("input[name='items_to_receive']").each(function() {
-                    $(this).prop('checked', false);
+        var _build_item = function(item, tr) {
+            var chb = $('<input type="checkbox" name="items_to_receive" value="'+item.item_id+'" />')
+                .prop('checked', item._checked)
+                .change(function() {
+                    item._checked = $(this).prop('checked');
                 });
-                $("input[name='items_to_receive']:lt("+n+")").each(function () {
-                    $(this).prop('checked', true);
-                });
-            }
-        [% END %]
+            tr.append($('<td style="text-align:center"></td>').append(chb));
+            tr.append('<td><a style="cursor:pointer" onclick="PopupEditPage('+item.biblio_id+', '+item.item_id+');">'+EDIT[0].toUpperCase()+EDIT.substr(1).toLowerCase()+'</a></td>');
+            tr.append('<td>'+(item.external_id||'')+'</td>');
+            tr.append('<td>'+display_string( 'home_library_id', item._strings, item.home_library_id ) || ''+'</td>');
+            tr.append('<td>'+display_string( 'holding_library_id', item._strings, item.holding_library_id )+'</td>');
+            tr.append('<td>'+display_string( 'not_for_loan_status', item._strings, item.not_for_loan_status )+'</td>');
+            tr.append('<td>'+display_string( 'restricted_status', item._strings, item.restricted_status )+'</td>');
+            tr.append('<td><span class="shelvingloc">'+display_string( 'location', item._strings, item.location )+'</span></td>');
+            tr.append('<td>'+(item.callnumber||'')+'</td>');
+            tr.append('<td>'+(item.copy_number||'')+'</td>');
+            tr.append('<td>'+(item.inventory_number||'')+'</td>');
+            tr.append('<td>'+display_string( 'collection', item._strings, item.collection )+'</td>');
+            tr.append('<td>'+display_string( 'item_type_id', item._strings, item.item_type_id )+'</td>');
+            tr.append('<td>'+display_string( 'materials_notes', item._strings, item.materials_notes )+'</td>');
+            tr.append('<td>'+(item.public_notes||'')+'</td>');
+        };
 
-        $(document).ready(function() {
+        var items_columns = [null, null, 'external_id', 'home_library_id',
+                'holding_library_id', 'not_for_loan_status', 'restricted_status', 'location',
+                'callnumber', 'copy_number', 'inventory_number', 'collection_code',
+                'item_type', 'materials_notes', 'public_notes'];
 
-            //keep a copy of all budgets before removing the inactives
-            disabledBudgetsCopy = $('#bookfund').html();
-            $('#bookfund .inactive_budget').remove();
-
-            $('#showallbudgets').click(function() {
-                if ($(this).is(":checked")) {
-                    $('#bookfund').html(disabledBudgetsCopy); //Puts back all the funds
+        function PopupEditPage(biblionumber, itemnumber) {
+            var url = "/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber="
+                + biblionumber + "&itemnumber=" + itemnumber + "&popup=1#edititem";
+            var w = window.open(url);
+            var watchClose = setInterval(function() {
+                if (w.closed) {
+                    clearTimeout(watchClose);
+                    $.ajax({
+                        dataType: "json",
+                        headers: {
+                            "x-koha-embed": "+strings"
+                        },
+                        url: '/api/v1/items/'+itemnumber,
+                        success: function(item) {
+                            var tr = $("#item_"+itemnumber);
+                            tr.html('');
+                            _build_item(item, tr);
+                        }
+                    });
                 }
-                else {
-                    $('#bookfund .inactive_budget').remove();
+            }, 500);
+        }
+
+        var periods={};
+        var funds={};
+        var funds_tree = [];
+
+        var QTY_TOTAL = _("Receiving %0$s out of %1$s");
+        var EDIT = _("edit");
+        var MOD_TITLE = _("Edit %s");
+        var SUGGESTION = _("suggestion #%s");
+        var FUND_KEEP = _("Keep current (%0$s - %1$s)");
+        var FUNC_CUR = _("(Current: %0$s - %1$s)");
+        var ADJ_TAX_INC = _("(adjusted for %s, tax inclusive)");
+        var ADJ_TAX_EXC = _("(adjusted for %s, tax exclusive)");
+        var TAX_INC = _("(tax inclusive)");
+        var TAX_EXC = _("(tax exclusive)");
+        var SAVE_WARNING = _("Order %s: Warning, you have entered more items than expected. Extra items will not be created.");
+        var SAVE_WARNING_NO_ITEMS = _("Order %s: No quantity to receive set. No items will be created.");
+        var SAVE_ERROR = _("Order %s: An error occurred while saving");
+        var SAVE_WARNING_TITLE = _("Warning");
+        var SAVE_ERROR_TITLE = _("Error");
+
+
+        var CAN_user_acquisition = "[% CAN_user_acquisition | html %]";
+        var AcqCreateItem = "[% Koha.Preference('AcqCreateItem') | html %]";
+        var edit_mode = "[% edit | html %]";
+        var invoiceincgst = "[% invoiceincgst | html %]";
+        var active_currency = "[% active_currency.currency | html %]";
+        var invoice_id = "[% invoiceid | html %]";
+
+        $(document).ready(function(){
+            var base_query = { "order_id": {"in": [[% multiple_orders | html %]]}};
+            var pending_orders_url = "/api/v1/acquisitions/orders?only_active=1";
+            var options = {
+                "ajax": {
+                    "url": pending_orders_url + "&q=" + encodeURI(JSON.stringify(base_query))
+                },
+                "embed": [
+                    "basket",
+                    "biblio.suggestions.suggester",
+                    "fund.budget",
+                    "items+strings",
+                    "creator"
+                ],
+                'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "columns": [
+                    {
+                        "data": "order_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "biblio.title",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            if ( data == null ) {
+                                return "";
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "data": "biblio.author",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            if ( data == null ) {
+                                return "";
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "data": "biblio.isbn",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function(data, type, row, meta) {
+                            if ( data == null ) {
+                                return "";
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
+                    {
+                        "searchable": false,
+                        "orderable": false,
+                        "data": function(row, type, val, meta) {
+                            return $date(row.date_received||new Date().toISOString());
+                        }
+                    },
+                    {
+                        "data": "fund.name",
+                        "searchable": true,
+                        "orderable": false,
+                        "render": function(data, type, row, meta) {
+                            return row.fund.budget.budget_period_description+" - "+row.fund.name;
+                        }
+                    },
+                    {
+                        "searchable": false,
+                        "orderable": true,
+                        "data": "quantity_received",
+                        "render": function(data, type, row, meta) {
+                            var data = $("#order_edit").data();
+                            return QTY_TOTAL.format(row.subscription_id&&(!data.saved||!data.saved.hasOwnProperty(row.order_id))?row.quantity:row.quantity_received, row.quantity);
+                        }
+                    },
+                    {
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function(data, type, row, meta) {
+                            return '<a data-toggle="modal" href="#order_edit" data-row="'+meta.row+'" class="order_edit_toggle">'+EDIT+'</a>';
+                        }
+                    }
+                ]
+            };
+            var orders_table = $("#multiple_orders").kohaTable(options);
+            var api = orders_table.api();
+
+            api.on('preDraw', function() {
+                var saved = $("#order_edit").data('saved');
+                if(saved) {
+                    var data = api.data();
+                    for(var i = 0; i<data.length; i++) {
+                        var row = data[i];
+                        var srow = saved[row.order_id];
+                        if(srow) {
+                            if(row.fund_id != srow.fund_id) {
+                                row.fund.budget.budget_period_description = $("#bookfund option[value="+srow.fund_id+"]").parent().attr('label');
+                                row.fund.name = $("#bookfund option[value="+srow.fund_id+"]").html();
+                            }
+                            row.date_received = srow.date_received;
+                            row.quantity = srow.quantity;
+                            row.quantity_received = srow.quantity_received;
+                        }
+                    }
                 }
             });
 
-            [% IF (AcqCreateItem == 'receiving') %]
-                cloneItemBlock(0, '[% Koha.Preference('UniqueItemFields') | html %]');
-            [% ELSIF (AcqCreateItem == 'ordering') && not order.subscriptionid %]
-                $("input[name='items_to_receive']").change(function() {
-                    CalcQtyToReceive();
-                });
-                CalcQtyToReceive();
-                $("#quantity").keyup(function() {
-                    var qty = parseInt($("#quantity").val());
-                    var qtyto = parseInt($("#quantity_to_receive").val());
-                    if(qty > qtyto) {
-                        $("#qtyrecerror").show();
-                    } else {
-                        $("#qtyrecerror").hide();
-                    }
-                    CheckNItems($(this).val());
-                });
-            [% END %]
+            var _doSave = function(params) {
+                $.ajax($.extend({
+                    method: 'POST',
+                    url: '/cgi-bin/koha/acqui/finishreceive.pl'
+                }, params));
+            };
 
-            $("input[name='change_currency']").on("change", function(){
+            var _transform_row = function(row, origrec) {
+                var params = {};
+                params['biblionumber'] = row.biblio_id;
+                params['invoiceid'] = invoice_id;
+                params['ordernumber'] = row.order_id;
+                params['booksellerid'] = row.basket.vendor_id;
+
+                if(row.biblio.suggestions.length && row.biblio.suggestions[0].reason) {
+                    params["suggestionid"] = row.biblio.suggestions[0].suggestion_id;
+                    if($("#reason option[value='"+row.biblio.suggestions[0].reason+"']").length) {
+                        params['reason'] =  row.biblio.suggestions[0].reason;
+                    } else {
+                        params['reason'] = 'other';
+                        params['other_reason'] = row.biblio.suggestions[0].reason;
+                    }
+                }
+                params['datereceived'] = row.date_received;
+                params['bookfund'] = row.fund_id;
+                params['quantity'] = row.quantity;
+                params['quantityrec'] = row.quantity_received;
+                params['origquantityrec'] = origrec;
+                var effective_create_items = row.basket.create_items || AcqCreateItem;
+                params['tax_rate'] = (effective_create_items == 'receiving')?row.tax_rate_on_receiving:row.tax_rate_on_ordering;
+                params['replacementprice'] = row.replacement_price;
+                params['unitprice'] = invoiceincgst=="1"?row.unit_price_tax_included:row.unit_price_tax_excluded;
+                params['order_internalnote'] = row.internal_note;
+                if(effective_create_items == 'receiving') {
+                    Object.keys(row.items).forEach(function(key) {
+                        var item = row.items[key];
+                        Object.keys(item).forEach(function(key) {
+                            var field = item[key];
+                            Object.keys(field).forEach(function(key) {
+                                if(!params[key]) params[key] = [];
+                                params[key].push(item[key]);
+                            });
+                        });
+                    });
+                } else if(effective_create_items == 'ordering') {
+                    params['items_to_receive'] = (row.items||[])
+                        .filter(function(item) {
+                            return item._checked
+                        })
+                        .map(function(item) {
+                            item.item_id;
+                        })
+                }
+                return params;
+            };
+
+            var save_rows = function(rows, data) {
+                if(rows.length) {
+                    $('#jobpanel, #jobstatus').show();
+                    errors = []
+                    var loopRows = function(i) {
+                        var row = rows[i];
+                        if(!row) {
+                            if(!errors.length) {
+                                location.href = "/cgi-bin/koha/acqui/parcel.pl?invoiceid="+invoice_id
+                            } else {
+                                $('#modal_messages .modal-header h4').html(SAVE_ERROR_TITLE);
+                                $('#modal_messages .modal-body ul').html('');
+                                errors.forEach(function(error) {
+                                    $('#modal_messages .modal-body ul').append('<li>'+error+'</li>');
+                                });
+                                $('#modal_messages .modal-footer .cancel').hide();
+                                $('#modal_messages .modal-footer .accept').html(_("Accept"));
+                                $('#modal_messages .modal-footer .accept').one('click', function() {
+                                    location.href = "/cgi-bin/koha/acqui/parcel.pl?invoiceid="+invoice_id
+                                });
+                                $('#modal_messages').modal('show');
+                            }
+                            return;
+                        }
+                        if(data.saved && data.saved[row.order_id]) {
+                            row = data.saved[row.order_id];
+                            var origrec = data.origrec[row.order_id];
+                        } else {
+                            var origrec = row.quantity_received;
+                        }
+                        var _set_percentage = function() {
+                            var percentage = Math.round(( (i+1) / rows.length) * 100);
+                            var bgproperty = (parseInt(percentage*2)-300)+"px 0px";
+                            $("#jobprogress").css("background-position",bgproperty);
+                            $("#jobprogresspercent").text(percentage);
+                        }
+                        _doSave({
+                            data: _transform_row(row, origrec),
+                            success: function() {
+                                _set_percentage();
+                                loopRows(i+1);
+                            },
+                            error: function() {
+                                _set_percentage()
+                                errors.push(SAVE_ERROR.format(row.order_id));
+                                loopRows(i+1);
+                            }
+                        });
+                    };
+                    loopRows(0)
+                }
+            };
+
+            var get_warnings = function(rows) {
+                var warnings = [];
+                rows.forEach(function(row) {
+                    if(row.quantity_received > row.quantity) {
+                        warnings.push(SAVE_WARNING.format(row.order_id));
+                        row.quantity_received = row.quantity;
+                    }
+                    if(row.quantity_received == '0') {
+                        warnings.push(SAVE_WARNING_NO_ITEMS.format(row.order_id));
+                    }
+                })
+                return warnings;
+            }
+
+            $('#modal_messages .modal-footer .cancel').on('click', function() {
+                $('#modal_messages .modal-footer .accept').off('click');
+                $('#modal_messages').modal('hide');
+            })
+            $('.save').click(function() {
+                var data = $("#order_edit").data();
+                var rows = api.rows().data().toArray();
+                var redirect = true;
+                var warnings = get_warnings(rows);
+                if(warnings.length) {
+                    $('#modal_messages .modal-header h4').html(SAVE_WARNING_TITLE);
+                    $('#modal_messages .modal-body ul').html('');
+                    warnings.forEach(function(warning) {
+                        $('#modal_messages .modal-body ul').append('<li>'+warning+'</li>');
+                    });
+                    $('#modal_messages .modal-footer .cancel').show();
+                    $('#modal_messages .modal-footer .accept').html(_("Continue"));
+                    $('#modal_messages .modal-footer .accept').one('click', function() {
+                        $('#modal_messages').modal('hide');
+                        save_rows(rows, data);
+                    });
+                    $('#modal_messages').modal('show');
+                } else {
+                    save_rows(rows, data);
+                }
+            });
+
+
+            $("#order_edit").on("change", "#reason", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                if(val == 'other') {
+                    $("#other_reason").show();
+                    $(this).hide();
+                } else {
+                    row.biblio.suggestions[0].reason = val;
+                }
+            });
+
+            $("#order_edit").on("change", "#select-other_reason", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.biblio.suggestions[0].reason = val;
+            });
+
+            $("#order_edit").on("click", "#other_reason a", function() {
+                $("#other_reason").hide();
+                $("#reason").val(null).show();
+            });
+
+            $("#order_edit").on("change", "#datereceived", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.date_received = val;
+            });
+
+            $("#order_edit").on("change", "#bookfund", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.fund_id = val;
+            });
+
+            $("#order_edit").on("change", "#quantity_to_receive", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.quantity = val;
+                if(row.subscription_id) {
+                    $("#quantity").val(val).change();
+                }
+            });
+
+            $("#order_edit").on("change", "#quantity", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.quantity_received = val;
+                var qtyto = parseInt($("#quantity_to_receive").val());
+                if(parseInt(val) > qtyto) {
+                    $("#qtyrecerror").show();
+                } else {
+                    $("#qtyrecerror").hide();
+                }
+                $("input[name='items_to_receive']").each(function() {
+                    $(this).prop('checked', false).change();
+                });
+                $("input[name='items_to_receive']:lt("+val+")").each(function () {
+                    $(this).prop('checked', true).change();
+                });
+            });
+
+            $("#order_edit").on("change", "input[name='items_to_receive']", function() {
+                var qty = $("input[name='items_to_receive']:checked").length;
+                $("#quantity").val(qty);
+                var row = $("#order_edit").data('row');
+                row.quantity_received = qty;
+            })
+
+            $("#order_edit").on("change", "#tax_rate", function() {
+                var val = $(this).val();
+                if(val === null) $(this).val($('option:first-child', this).attr('value'));
+                val = $(this).val();
+                var row = $("#order_edit").data('row');
+                var effective_create_items = row.basket.create_items || AcqCreateItem;
+                if(effective_create_items == 'receiving') {
+                    row.tax_rate_on_receiving = val;
+                } else {
+                    row.tax_rate_on_ordering = val;
+                }
+
+            });
+
+            $("#order_edit").on("change", "#unitprice", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                if(invoiceincgst == "1") {
+                    row.unit_price_tax_included = val;
+                } else {
+                    row.unit_price_tax_excluded = val;
+                }
+
+            });
+
+            $("#order_edit").on("change", "input[name='change_currency']", function(){
                 if ( $(this).is(":checked") ) {
                     $("#select_currency").show();
                     $("#unitprice").prop("readonly", "true");
                 } else {
                     $("#select_currency").hide();
-                    $("#invoice_unitprice").val(""); // Empty to not store the values
-                    $("#invoice_currency").val("");
                     $("#unitprice").prop("readonly", "");
                 }
             });
 
-            [% IF order.invoice_unitprice %]
-                $("input[name='change_currency']").click();
-            [% ELSE %]
-                $("input[name='change_currency']").trigger('change');
-            [% END %]
-
-            function update_unitprice() {
-                var rate = Number($("select[name='invoice_currency'] option:selected").data('rate'));
-                var unitprice = $("#invoice_unitprice").val();
+            function _update_unitprice() {
+                var rate = Number($("select[name='currency'] option:selected").val());
+                var unitprice = $("#unitprice_currency").val();
                 var new_unitprice = Number( unitprice * rate ).toFixed(2);
-                $("#unitprice").val(new_unitprice);
+                $("#unitprice").val(new_unitprice).change();
             }
-            $("select[name='invoice_currency']").on("change", function(){update_unitprice()} );
-            $("#invoice_unitprice").on("change", function(){update_unitprice()} );
+            $("#order_edit").on("change", "select[name='currency']", _update_unitprice );
+            $("#order_edit").on("change", "#unitprice_currency", _update_unitprice );
 
-            [% IF other_reason %]
-                $(".select-reason").hide();
-                $(".select-reason").find("option[value='other']").attr("selected","selected");
-                $("#other_reason").show();
-            [% ELSE %]
-                $("#other_reason").hide();
-            [% END %]
-            $(".select-reason").change(function(){
-                if($(this).val() == "other"){
-                    $(this).hide();
-                    $("#other_reason").show();
+            $("#order_edit").on("change", "#replacementprice", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.replacement_price = val;
+            });
+
+            $("#order_edit").on("change", "#order_internalnote", function() {
+                var val = $(this).val();
+                var row = $("#order_edit").data('row');
+                row.internal_note = val;
+
+            });
+
+            var keep_row = function() {
+                var row = $("#order_edit").data('row');
+                var kept = $("#order_edit").data('kept')||{};
+                if($('#items_list tbody tr').length) {
+                    row.items = [];
+                    $('#items_list tbody tr').each(function() {
+                        var item = {};
+                        $('#'+$(this).attr('idblock')).find('*[name=kohafield]').each(function() {
+                            var kf = $(this).val();
+                            var obj = {};
+                            $(this).parent().find('*[name]').each(function() {
+                                obj[$(this).prop('name')] = $(this).val();
+                            });
+                            item[kf] = obj;
+                        });
+                        row.items.push(item);
+                    });
+                }
+                kept[row.order_id] = row;
+                $("#order_edit").data('kept', kept);
+            };
+
+            var save_row = function() {
+                keep_row();
+                var saved = $("#order_edit").data('saved')||{};
+                var kept = $("#order_edit").data('kept');
+                var saved_rows = $.extend(saved, kept);
+                $("#order_edit").data('saved', saved_rows);
+                api.draw();
+                return saved_rows;
+            }
+
+            var set_modal_buttons = function() {
+                var n = $("#order_edit").data('n');
+                var info = api.page.info();
+
+                $('.modal-prev').prop('disabled', info.page == 0 && n == 0);
+                $('.modal-next').prop('disabled', info.pages - 1 == info.page && info.end - info.start - 1 == n);
+            };
+
+            var show_subs = function(row) {
+                //$("#child_orders").show();
+                var had_rows = false;
+                var base_query = { "subscription_id": row.subscription_id, "parent_order_id": row.order_id, "order_id": {"!=": row.order_id}};
+                var pending_orders_url = "/api/v1/acquisitions/orders";
+                var options = {
+                    "ajax": {
+                        "url": pending_orders_url + "?q=" + encodeURI(JSON.stringify(base_query))
+                    },
+                    "header_filter": true,
+                    "embed": [
+                        "invoice",
+                        "basket"
+                    ],
+                    "order": [[1, 'asc']],
+                    'dom': 'C<"top pager"ilpfB>tr<"bottom pager"ip>',
+                    "columns": [
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": function(row, type, val, meta) {
+                                if(row.invoice) {
+                                    if(CAN_user_acquisition) {
+                                        return '<a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid='+row.invoice_id+'" title="Invoice detail page">'+row.invoice.invoice_number+"</a>";
+                                    }
+                                    return row.invoice.invoice_number;
+                                }
+                            }
+                        },
+                        {
+                            "data": "order_id",
+                            "searchable": false,
+                            "orderable": false
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": "basket.creation_date",
+                            "render": function(data, type, row, meta) {
+                                return $date(row.basket.creation_date);
+                            }
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": function(row, type, val, meta) {
+                                return $date(row.date_received);
+                            }
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": function(row, type, val, meta) {
+                                return row.quantity_received;
+                            }
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": true,
+                            "data": function(row, type, val, meta) {
+                                if(!row.status) return;
+                                var first_letter = row.status[0].toUpperCase();
+                                return first_letter+row.status.substr(1).toLowerCase();
+                            }
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": function(row, type, val, meta) {
+                                if(!row.date_received) return;
+                                return Number(row.unit_price_tax_excluded * row.quantity_received).format_price()+' / '+Number(row.unit_price_tax_included * row.quantity_received).format_price()
+                            }
+                        },
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "data": function(row, type, val, meta) {
+                                return row.internal_note;
+                            }
+                        }
+                    ]
+                };
+                var child_orders_table = $("#child_orders_table").api(options);
+                var child_api = child_orders_table.api();
+                child_api.on('preDraw', function() {
+                    if(!child_api.data().length && !had_rows) return;
+                    $("#history-panel").show();
+                    had_rows = true;
+                });
+            };
+
+            var set_editor = function() {
+                var modal = $("#order_edit");
+                var row = modal.data('row');
+                var origrec = $("#order_edit").data('origrec')||{};
+                if(!origrec.hasOwnProperty(row.order_id)) {
+                    origrec[row.order_id] = row.quantity_received;
+                    $("#order_edit").data('origrec', origrec);
+                }
+                if(row.subscription_id) {
+                    row.quantity_received = row.quantity;
+                }
+                var keep = $("#order_edit").data('kept');
+                if(keep && keep[row.order_id]) {
+                    row = keep[row.order_id];
+                    modal.data('row', row);
+                }
+                $('input, select, textarea', '.modal-body').val(null)
+                modal.find(".modal-title").text(MOD_TITLE.format(row.biblio.title));
+                ["title", "author", "copyright_date", "isbn", "series_title"].forEach(function(key){
+                    var o = modal.find(".modal-body #biblio_"+key);
+                    if(row.biblio[key] !== null) {
+                        o.parent().show();
+                        o.html(row.biblio[key]);
+                    } else {
+                        o.parent().hide();
+                    }
+                });
+                if(row.biblio.suggestions.length) {
+                    $("#suggestion_fieldset").show();
+                    if(row.biblio.suggestions[0].suggester) {
+                        $("#biblio_suggestion_suggester").parent().show();
+                        $("#biblio_suggestion_suggester")
+                            .html(
+                                [row.biblio.suggestions[0].suggester.surname, row.biblio.suggestions[0].suggester.firstname]
+                                    .filter(function(name){
+                                        return name
+                                    })
+                                    .join(', ')+' (<a href="http://localhost:8081/cgi-bin/koha/suggestion/suggestion.pl?suggestionid='+row.biblio.suggestions[0].suggestionid+'&op=show">'+SUGGESTION.format(row.biblio.suggestions[0].suggestionid)+'</a>)'
+                            );
+                    } else {
+                        $("#biblio_suggestion_suggester").parent().hide();
+                    }
+                    if(row.biblio.suggestions[0].reason) {
+                        $("#suggestion_reason").show();
+                        if($("#reason option[value='"+row.biblio.suggestions[0].reason+"']").length) {
+                             $("#other_reason a").click();
+                            $("#reason").val(row.biblio.suggestions[0].reason);
+                            $("#select-other_reason").val(null);
+                        } else {
+                            $("#reason").val("other").change();
+                            $("#select-other_reason").val(row.biblio.suggestions[0].reason);
+                        }
+
+                    } else {
+                        $("#suggestion_reason").hide();
+                    }
+                } else {
+                    $("#suggestion_fieldset").hide();
+                }
+
+                var effective_create_items = row.basket.create_items || AcqCreateItem;
+                $("#datereceived").val(row.date_received||$date(new Date().toISOString())).change();
+                $("#bookfund option[value='']").html(FUND_KEEP.format(row.fund.budget.budget_period_description, row.fund.name));
+                if(row.fund_id != row.fund.fund_id) {
+                    $("#bookfund").val(row.fund_id);
+                }
+                $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
+                $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
+                $("#quantity_to_receive").val(row.quantity).prop('readonly', !row.subscription_id);
+                $("#quantity").val(row.quantity_received).prop('readonly', !row.subscription_id && effective_create_items == 'receiving');
+                $('#qtyrecerror').hide();
+                var tax_rate = row.tax_rate_on_receiving || row.tax_rate_on_ordering;
+                $("#tax_rate").val(tax_rate).change();
+                var rrp_txt;
+                var ecost_txt;
+                if(invoiceincgst == "1") {
+                    rrp_txt = Number(row.rrp_tax_included).format_price()+'<span class="hint">'+ADJ_TAX_INC.format(active_currency)+"</span>";
+                    ecost_txt = Number(row.ecost_tax_included).format_price()+'<span class="hint">'+TAX_INC+"</span>";
+                    $("#unitprice").val(row.unit_price_tax_included);
+                    $("#unitprice_hint").html(TAX_INC);
+                } else {
+                    rrp_txt = Number(row.rrp_tax_excluded).format_price()+'<span class="hint">'+ADJ_TAX_EXC.format(active_currency)+"</span>";
+                    ecost_txt = Number(row.ecost_tax_excluded).format_price()+'<span class="hint">'+TAX_EXC+"</span>";
+                    $("#unitprice").val(row.unit_price_tax_excluded);
+                    $("#unitprice_hint").html(TAX_EXC);
+                }
+                $("#rrp").html(rrp_txt);
+                $("#replacementprice").val(row.replacement_price);
+                $("#ecost").html(ecost_txt);
+                $("#order_internalnote").val(row.internal_note);
+                if(row.vendor_note) {
+                    $("#order_vendornote").html(row.vendor_note);
+                    $("#order_vendornote").parent().show();
+                } else {
+                    $("#order_vendornote").parent().hide();
+                }
+
+
+                $("#history-panel").hide();
+
+                $('#items_list tbody tr, #outeritemblock > *, #acq-create-ordering tbody tr').remove();
+                $('#items_list').hide();
+                if(row.subscription_id) {
+                    $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
+                    $('#modal-order-main #history-panel').removeClass('hide').addClass('show');
+                    /*$('#modal-order-main').tabs("disable", "#items-panel");
+                    $('#modal-order-main').tabs("enable", "#history-panel");
+                    if($('#modal-order-main').tabs( "option", "active" ) == 3) {
+                        $('#modal-order-main').tabs( "option", "active", 0);
+                    }*/
+                } else {
+                    $('#modal-order-main #history-panel').removeClass('show').addClass('hide');
+                    $('#modal-order-main #items-panel').removeClass('hide').addClass('show');
+                    /*$('#modal-order-main').tabs("enable", "#items-panel");
+                    $('#modal-order-main').tabs("disable", "#history-panel");
+                    if($('#modal-order-main').tabs( "option", "active" ) == 2) {
+                        $('#modal-order-main').tabs( "option", "active", 0);
+                    }*/
+                    if(effective_create_items == 'receiving') {
+                        $("#acq-create-receiving").show();
+                        $("#acq-create-ordering").hide();
+                        if(row.items && row.items.length) {
+                            row.items.forEach(function(item, index) {
+                                cloneItemBlock(index, '[% UniqueItemFields | html %]', function(block_id) {
+                                    var block = $('#'+block_id).hide();
+                                    Object.keys(item).forEach(function(key) {
+                                        block
+                                            .find('*[name=kohafield][value="'+key+'"]')
+                                            .parent()
+                                            .find('*[name=field_value]')
+                                            .val(item[key].field_value);
+                                    });
+                                    addItemInList(block_id, '[% UniqueItemFields | html %]');
+                                    block.find("input[name='buttonPlus']").val( (window.MSG_ADDITEM_JS_UPDATEITEM ) );
+                                    block.find("input[name='buttonPlusMulti']").remove();
+                                    block.find("input[name='multiValue']").remove();
+                                });
+                            });
+                        }
+                        cloneItemBlock((row.items && row.items.length) || 0, '[% UniqueItemFields | html %]');
+                    } else if (effective_create_items == 'ordering') {
+                        $("#acq-create-receiving").hide();
+                        $("#acq-create-ordering").show();
+                        if(row.items.length) {
+                            $("#acq-create-ordering tbody").append(
+                                row.items.map(function(item) {
+                                    var tr = $('<tr id="item_'+item.item_id+'"/>');
+                                    _build_item(item, tr);
+                                    return tr;
+                                })
+                            );
+                        }
+                    } else {
+                        $('#modal-order-main #items-panel').removeClass('show').addClass('hide');
+                        /*
+                        if($('#modal-order-main').tabs( "option", "active" ) == 3) {
+                            $('#modal-order-main').tabs( "option", "active", 0);
+                        }
+                        $('#modal-order-main').tabs("disable", "#items-panel");
+                        */
+                    }
+                }
+                $("#select_currency").hide();
+                $("#unitprice").prop("readonly", "");
+                $("input[name='change_currency']").prop('checked', false);
+                set_modal_buttons();
+            };
+
+            $('.modal-prev').click(function() {
+                var modal = $("#order_edit");
+                keep_row();
+                var n = modal.data('n');
+                if(n > 0) {
+                    n--;
+                    modal.data('row', JSON.parse(JSON.stringify(api.row(n).data())));
+                    modal.data('n', n);
+                    set_editor();
+                } else {
+                    $('.modal-next, .modal-prev').prop('disabled', true);
+                    orders_table.one('draw.dt', function() {
+                        var info = api.page.info();
+                        n = info.end - info.start - 1;
+                        modal.data('row', JSON.parse(JSON.stringify(api.row(n).data())));
+                        modal.data('n', n);
+                        set_editor();
+                    });
+                    api.page('previous').draw( 'page' );
                 }
             });
-            $("a[href*=back]").click(function(){
-                $(".select-reason").show().find("option[value='']").attr("selected","selected");
-                $("#other_reason").hide();
+
+            $('.modal-next').click(function() {
+                var modal = $("#order_edit");
+                keep_row();
+                var n = modal.data('n');
+                var info = api.page.info();
+                if(n < info.end - info.start - 1) {
+                    n++;
+                    modal.data('row', JSON.parse(JSON.stringify(api.row(n).data())));
+                    modal.data('n', n);
+                    set_editor();
+                } else {
+                    $('.modal-next, .modal-prev').prop('disabled', true);
+                    orders_table.one('draw.dt', function() {
+                        var info = api.page.info();
+                        n = 0;
+                        modal.data('row', JSON.parse(JSON.stringify(api.row(n).data())));
+                        modal.data('n', n);
+                        set_editor();
+                    });
+                    api.page('next').draw( 'page' );
+                }
             });
 
+            $('.modal-save').click(function() {
+                var saved_rows = save_row();
+                if(Object.keys(saved_rows).length) $('.save').prop('disabled', false);
+                $("#order_edit").modal('hide');
+            })
+
+            /*$('#modal-order-main').tabs({
+                activate: function(event, ui) {
+                    var active = ui.newPanel.attr('id')
+                    if(active == 'history-panel') {
+                        show_subs($("#order_edit").data('row'));
+                    }
+                }
+            });*/
+
+            $("#order_edit").on("show.bs.modal", function (event) {
+                var anchor = $(event.relatedTarget);
+                var n = anchor.data("row");
+                var row = api.row(n).data();
+
+                var modal = $(this);
+                modal.data('row', JSON.parse(JSON.stringify(row)));
+                modal.data('n', n);
+                modal.data('keep', modal.data('saved')||{});
+                //$('#modal-order-main').tabs("option", "active", 0);
+                set_editor();
+            });
+
+            $("#order_edit").on("hide.bs.modal", function() {
+                $("#child_orders_table").DataTable().off('preDraw').destroy();
+            });
         });
     </script>
 [% END %]

@@ -114,6 +114,7 @@
         <table id="pending_orders" class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th><!--input type="checkbox" id="selectAll"/--></th>
                     <th>Basket</th>
                     <th>Basket group</th>
                     <th>Order line</th>
@@ -129,6 +130,9 @@
                 </tr>
             </thead>
         </table>
+      <fieldset class="action">
+        <button id="select_multiple" class="btn btn-primary"></button>
+      </fieldset>
     </div>
 [% ELSE %]
     <p>
@@ -341,8 +345,10 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+    <style>fieldset.action { margin-bottom: 20px }</style>
     <script>
         dt_overwrite_html_sorting_localeCompare();
+        var PENDING_MULTI_SELECTION = _("Receive selected (%s)");
         var columns_filter = {};
 
         $(document).ready(function(){
@@ -374,7 +380,7 @@
                 }));
             }
 
-            var pending_orders_table = $("#pending_orders").kohaTable({
+            var options = {
                 "ajax": {
                     "url": '/api/v1/acquisitions/orders?only_active=1'
                 },
@@ -401,7 +407,7 @@
                 },
                 "columns": [
                     { "data": "basket.name",
-                    "searchable": true,
+                      "searchable": true,
                       "orderable": true,
                       "render": function(data, type, row, meta) {
                         if (type != 'display') return escape_str(data);
@@ -565,7 +571,7 @@
                     {
                         "data": "",
                         "render": function(data, type, row, meta) {
-                            return '<a href="orderreceive.pl?ordernumber='
+                            return '<a href="orderreceive.pl?multiple_orders='
                                     + encodeURIComponent(row.order_id) + '&amp;invoiceid=[% invoiceid | uri %]' + '">'
                                     + _("Receive") + '</a><br/>'
                                     + '<a href="#" onclick="transfer_order_popup(' + escape_str(row.order_id) + '); return false;">'
@@ -638,7 +644,50 @@
                         "searchable": false
                     }
                 ]
-            }, null, 1, {"basket.vendor_id": [% booksellerid | html %]});
+            };
+
+            var selected_rows = {};
+            $('#select_multiple').click(function() {
+              var ids = Object.keys(selected_rows);
+              if(!ids.length) return;
+              location.href = 'orderreceive.pl?multiple_orders='+ids.join(',')+ '&invoiceid=[% invoiceid | uri %]';
+            }).html(PENDING_MULTI_SELECTION.format('0'))
+            options.select = {
+              style: 'api'
+            };
+            options.order = [[1, 'asc']];
+            options.columns.unshift({
+              "data": function(row, type, val, meta) {
+                  return '<input type="checkbox" class="selOrder" />';
+              },
+              "searchable": false,
+              "orderable": false
+            });
+
+            var pending_orders_table = $("#pending_orders").kohaTable(options, {}, 1, {"basket.vendor_id": [% booksellerid | html %]});
+
+            var api = pending_orders_table.api();
+            api.on('draw', function() {
+              api.rows().every(function() {
+                var row = this;
+                var data = row.data();
+                $('.selOrder', row.node()).on('click', function(event) {
+                  if($(this).prop('checked')) {
+                    row.select();
+                    selected_rows[data.order_id] = data;
+                  } else {
+                    row.deselect();
+                    delete selected_rows[data.order_id];
+                  }
+                  $('#select_multiple').html(PENDING_MULTI_SELECTION.format(Object.keys(selected_rows).length));
+                });
+                if(selected_rows[data.order_id]) {
+                  row.select();
+                  $('.selOrder', row.node()).prop('checked', true);
+                }
+              });
+            });
+
 
             $(".previewData").on("click", function(e){
                 e.preventDefault();

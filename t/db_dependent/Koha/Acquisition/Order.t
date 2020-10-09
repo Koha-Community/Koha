@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -634,6 +634,21 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
     is( $orders->filter_by_current->count, 2);
     is( $orders->filter_by_cancelled->count, 1);
 
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'creator ()' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders', value => { created_by => $patron->borrowernumber } });
+
+    my $creator = $order->creator;
+
+    is($creator->borrowernumber, $patron->borrowernumber, 'Patron is order creator');
 
     $schema->storage->txn_rollback;
 };

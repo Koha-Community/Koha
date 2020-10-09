@@ -33,6 +33,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Old::Items;
 use Koha::Recalls;
+use Koha::AuthorisedValues;
 
 use List::MoreUtils qw(all);
 
@@ -1475,6 +1476,8 @@ subtest 'columns_to_str' => sub {
         }
     );
 
+    Koha::Caches->get_instance->flush_all;
+
     $item = $item->get_from_storage;
 
     my $s = $item->columns_to_str;
@@ -1619,6 +1622,8 @@ subtest 'strings_map() tests' => sub {
             }
         }
     )->store();
+
+    Koha::Caches->get_instance->flush_all;
 
     $item->set(
         {

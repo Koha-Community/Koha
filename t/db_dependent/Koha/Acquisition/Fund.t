@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::TestBuilder;
 
@@ -39,6 +39,19 @@ subtest 'to_api() tests' => sub {
 
     is( $fund->budget_id, $fund_api->{fund_id}, 'Mapping is correct for budget_id' );
     is( $fund->budget_period_id, $fund_api->{budget_id}, 'Mapping is correct for budget_period_id' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'budget ()' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $budget = $builder->build_object({ class => 'Koha::Acquisition::Budgets' });
+    my $fund = $builder->build_object({ class => 'Koha::Acquisition::Funds', value => { budget_period_id => $budget->budget_period_id } });
+
+    is($budget->budget_period_id, $fund->budget->budget_period_id, 'Fund\'s budget retrieved correctly');
 
     $schema->storage->txn_rollback;
 };

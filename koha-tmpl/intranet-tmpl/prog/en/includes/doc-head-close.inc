@@ -23,6 +23,7 @@
 [% Asset.css("lib/bootstrap/bootstrap-theme.min.css") | $raw %]
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("lib/datatables/datatables.min.css") | $raw %]
+[% Asset.css("lib/datatables/select.dataTables.min.css") | $raw %]
 [% Asset.css("css/print.css", { media = "print" }) | $raw %]
 [% INCLUDE intranetstylesheet.inc %]
 [% IF ( bidi ) %][% Asset.css("css/right-to-left.css") | $raw %][% END %]

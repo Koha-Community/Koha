@@ -33,6 +33,7 @@ use Koha::Biblios;
 use Koha::Holds;
 use Koha::Items;
 use Koha::Number::Price;
+use Koha::Patrons;
 use Koha::Subscriptions;
 
 use base qw(Koha::Object);
@@ -398,6 +399,20 @@ sub claimed_date {
     my $last_claim = $self->claims->last;
     return unless $last_claim;
     return $last_claim->claimed_on;
+}
+
+=head3 creator
+
+my $creator = $order->creator;
+
+Retrieves patron that created this order.
+
+=cut
+
+sub creator {
+    my ( $self )  = @_;
+    my $creator_rs = $self->_result->creator;
+    return Koha::Patron->_new_from_dbic( $creator_rs );
 }
 
 =head3 duplicate_to

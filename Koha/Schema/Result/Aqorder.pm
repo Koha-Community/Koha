@@ -860,6 +860,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 creator
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "creator",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "created_by" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 __PACKAGE__->belongs_to(
   "subscription",
   "Koha::Schema::Result::Subscription",

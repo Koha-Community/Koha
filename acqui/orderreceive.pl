@@ -85,6 +85,7 @@ my $invoice      = GetInvoice($invoiceid);
 my $booksellerid   = $invoice->{booksellerid};
 my $freight      = $invoice->{shipmentcost};
 my $ordernumber  = $input->param('ordernumber');
+my $multiple_orders = $input->param('multiple_orders');
 
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $order = Koha::Acquisition::Orders->find( $ordernumber );
@@ -98,13 +99,61 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     }
 );
 
-unless ( $order ) {
+unless ( $order || $multiple_orders ) {
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
-# prepare the form for receiving
-my $basket = $order->basket;
+my $budget;
+if ($order) {
+
+    # prepare the form for receiving
+    my $creator = Koha::Patrons->find( $order->created_by );
+
+    $budget = GetBudget( $order->budget_id );
+
+    my $datereceived = $order->datereceived || dt_from_string;
+
+    my $order_internalnote = $order->order_internalnote;
+    my $order_vendornote   = $order->order_vendornote;
+    if ( $order->subscriptionid ) {
+
+        # Order from a subscription, we will display an history of what has been received
+        my $orders = Koha::Acquisition::Orders->search(
+            {
+                subscriptionid     => $order->subscriptionid,
+                parent_ordernumber => $order->ordernumber,
+                ordernumber        => { '!=' => $order->ordernumber }
+            }
+        );
+        if ( $order->parent_ordernumber != $order->ordernumber ) {
+            my $parent_order = Koha::Acquisition::Orders->find( $order->parent_ordernumber );
+            $order_internalnote = $parent_order->order_internalnote;
+            $order_vendornote   = $parent_order->order_vendornote;
+        }
+        $template->param( orders => $orders, );
+    }
+
+    my $suggestion = GetSuggestionInfoFromBiblionumber( $order->biblionumber );
+
+    if ($suggestion) {
+        $template->param( suggestion => $suggestion );
+    }
+
+    $template->param(
+        order              => $order,
+        creator            => $creator,
+        bookfund           => $budget->{budget_name},
+        datereceived       => $datereceived,
+        order_internalnote => $order_internalnote,
+        order_vendornote   => $order_vendornote,
+    );
+}
+
+if ($multiple_orders) {
+    $template->param( multiple_orders => $multiple_orders );
+}
+
 my $currencies = Koha::Acquisition::Currencies->search;
 my $active_currency = $currencies->get_active;
 
@@ -114,60 +163,21 @@ unless($acq_fw) {
     $template->param('NoACQframework' => 1);
 }
 
-
-my $creator = Koha::Patrons->find( $order->created_by );
-
-my $budget = GetBudget( $order->budget_id );
-
-my $datereceived = $order->datereceived || dt_from_string;
-
 # get option values for TaxRates syspref
 my @gst_values = map {
     option => $_ + 0.0
 }, split( '\|', C4::Context->preference("TaxRates") );
 
-my $order_internalnote = $order->order_internalnote;
-my $order_vendornote   = $order->order_vendornote;
-if ( $order->subscriptionid ) {
-    # Order from a subscription, we will display an history of what has been received
-    my $orders = Koha::Acquisition::Orders->search(
-        {
-            subscriptionid     => $order->subscriptionid,
-            parent_ordernumber => $order->ordernumber,
-            ordernumber        => { '!=' => $order->ordernumber }
-        }
-    );
-    if ( $order->parent_ordernumber != $order->ordernumber ) {
-        my $parent_order = Koha::Acquisition::Orders->find($order->parent_ordernumber);
-        $order_internalnote = $parent_order->order_internalnote;
-        $order_vendornote   = $parent_order->order_vendornote;
-    }
-    $template->param(
-        orders => $orders,
-    );
-}
-
 $template->param(
-    order                 => $order,
     freight               => $freight,
     name                  => $bookseller->name,
     active_currency       => $active_currency,
     currencies            => $currencies->search({ rate => { '!=' => 1 } }),
     invoiceincgst         => $bookseller->invoiceincgst,
-    bookfund              => $budget->{budget_name},
-    creator               => $creator,
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
-    datereceived          => $datereceived,
-    order_internalnote    => $order_internalnote,
-    order_vendornote      => $order_vendornote,
     gst_values            => \@gst_values,
 );
-
-my $suggestion = GetSuggestionInfoFromBiblionumber($order->biblionumber);
-if ( $suggestion ) {
-    $template->param( suggestion => $suggestion );
-}
 
 my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 my %budget_loops;
@@ -185,7 +195,7 @@ foreach my $budget (@{$budgets}) {
         b_sort1_authcat => $budget->{'sort1_authcat'},
         b_sort2_authcat => $budget->{'sort2_authcat'},
         b_active => $budget->{budget_period_active},
-        b_sel => ( $budget->{budget_id} == $order->budget_id ) ? 1 : 0,
+        # b_sel => ( $budget->{budget_id} == $order->budget_id ) ? 1 : 0,
         b_level => $budget->{budget_level},
     };
 }
