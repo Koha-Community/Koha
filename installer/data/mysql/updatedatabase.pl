@@ -22999,6 +22999,16 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 23420, "Allow configuration of hidden fields on the suggestion form in OPAC" );
 }
 
+$DBversion = '20.06.00.048';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        DELETE FROM circulation_rules WHERE
+        rule_name IN ('holdallowed','hold_fulfillment_policy','returnbranch') AND
+        rule_value = ''
+    });
+    NewVersion( $DBversion, 26529, "Remove blank default branch rules");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
