@@ -42,6 +42,7 @@ Return the checked out item
 sub item {
     my ( $self ) = @_;
     my $item_rs = $self->_result->item;
+    return unless $item_rs;
     return Koha::Item->_new_from_dbic( $item_rs );
 }
 
