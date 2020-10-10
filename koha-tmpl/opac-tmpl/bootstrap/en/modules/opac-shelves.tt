@@ -353,7 +353,12 @@
                                         <tbody>
                                             [% FOREACH itemsloo IN itemsloop %]
                                                 <tr>
-                                                    <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" /></td>
+                                                    [% IF ( itemsloo.title ) %]
+                                                        [% check_title = itemsloo.title %]
+                                                    [% ELSE %]
+                                                        [% check_title = itemsloo.biblionumber %]
+                                                    [% END %]
+                                                    <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" aria-label="[% check_title | html %]"/></td>
                                                     [% UNLESS ( item_level_itypes ) %]
                                                         <td>
                                                             [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
