@@ -37,6 +37,7 @@ my $auth_limit;
 my $bib_limit;
 my $commit = 100;
 my $tagtolink;
+my $allowrelink = C4::Context->preference("CatalogModuleRelink") || '';
 
 my $result = GetOptions(
     'v|verbose'      => \$verbose,
@@ -79,13 +80,15 @@ my %linked_headings;
 my %fuzzy_headings;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-process_bibs( $linker, $bib_limit, $auth_limit, $commit, $tagtolink );
+process_bibs( $linker, $bib_limit, $auth_limit, $commit, { tagtolink => $tagtolink, allowrelink => $allowrelink });
 $dbh->commit();
 
 exit 0;
 
 sub process_bibs {
-    my ( $linker, $bib_limit, $auth_limit, $commit, $tagtolink ) = @_;
+    my ( $linker, $bib_limit, $auth_limit, $commit, $args ) = @_;
+    my $tagtolink = $args->{tagtolink};
+    my $allowrelink = $args->{allowrelink};
     my $bib_where = '';
     my $starttime = time();
     if ($bib_limit) {
@@ -95,9 +98,10 @@ sub process_bibs {
       "SELECT biblionumber FROM biblio $bib_where ORDER BY biblionumber ASC";
     my $sth = $dbh->prepare($sql);
     $sth->execute();
+    my $linker_args = { tagtolink => $tagtolink, allowrelink => $allowrelink };
     while ( my ($biblionumber) = $sth->fetchrow_array() ) {
         $num_bibs_processed++;
-        process_bib( $linker, $biblionumber, $tagtolink );
+        process_bib( $linker, $biblionumber, $linker_args );
 
         if ( not $test_only and ( $num_bibs_processed % $commit ) == 0 ) {
             print_progress_and_commit($num_bibs_processed);
@@ -189,8 +193,9 @@ _FUZZY_HEADER_
 sub process_bib {
     my $linker       = shift;
     my $biblionumber = shift;
-    my $tagtolink    = shift;
-
+    my $args = shift;
+    my $tagtolink    = $args->{tagtolink};
+    my $allowrelink = $args->{allowrelink};
     my $bib = GetMarcBiblio({ biblionumber => $biblionumber });
     unless ( defined $bib ) {
         print
@@ -200,7 +205,6 @@ sub process_bib {
     }
 
     my $frameworkcode = GetFrameworkCode($biblionumber);
-    my $allowrelink = C4::Context->preference("CatalogModuleRelink") || '';
 
     my ( $headings_changed, $results ) =
       LinkBibHeadingsToAuthorities( $linker, $bib, $frameworkcode, $allowrelink, $tagtolink );
