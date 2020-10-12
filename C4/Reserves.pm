@@ -830,9 +830,9 @@ sub CheckReserves {
                 if ($res->{'found'} eq 'W') {
                     return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
                 } elsif ($res->{'found'} eq 'P') {
-                    return ( "Processing", $res, \@reserves ); # Found determinated hold, e. g. the tranferred one
+                    return ( "Processing", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
                  } else {
-                    return ( "Reserved", $res, \@reserves ); # Found determinated hold, e. g. the tranferred one
+                    return ( "Reserved", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
                 }
             } else {
                 my $patron;

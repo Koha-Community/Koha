@@ -48,7 +48,7 @@ sub new {
 sub do_checkout {
 	my $self = shift;
 	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
-	my $shelf          = $self->{item}->hold_attached;
+    my $shelf          = $self->{item}->hold_attached;
 	my $barcode        = $self->{item}->id;
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue

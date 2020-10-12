@@ -316,7 +316,7 @@ sub pending_queue {
 }
 sub hold_attached {
     my $self = shift;
-	(defined $self->{hold_attached}) or return [];
+    (defined $self->{hold_attached}) or return [];
     return $self->{hold_attached};
 }
 
@@ -371,8 +371,8 @@ sub hold_pickup_date {
 sub available {
 	my ($self, $for_patron) = @_;
 	my $count  = (defined $self->{pending_queue}) ? scalar @{$self->{pending_queue}} : 0;
-	my $count2 = (defined $self->{hold_attached}   ) ? scalar @{$self->{hold_attached}   } : 0;
-	$debug and print STDERR "availability check: pending_queue size $count, hold_attached size $count2\n";
+    my $count2 = (defined $self->{hold_attached}   ) ? scalar @{$self->{hold_attached}   } : 0;
+    $debug and print STDERR "availability check: pending_queue size $count, hold_attached size $count2\n";
     if (defined($self->{borrowernumber})) {
         ($self->{borrowernumber} eq $for_patron) or return 0;
 		return ($count ? 0 : 1);

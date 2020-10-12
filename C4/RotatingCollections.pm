@@ -67,7 +67,8 @@ BEGIN {
 
 =head2  CreateCollection
  ( $success, $errorcode, $errormessage ) = CreateCollection( $title, $description );
- Creates a new collection
+
+Creates a new collection
 
  Input:
    $title: short description of the club or service
@@ -166,7 +167,8 @@ sub UpdateCollection {
 =head2 DeleteCollection
 
  ( $success, $errorcode, $errormessage ) = DeleteCollection( $colId );
- Deletes a collection of the given id
+
+Deletes a collection of the given id
 
  Input:
    $colId : id of the Archetype to be deleted
@@ -199,7 +201,8 @@ sub DeleteCollection {
 =head2 GetCollections
 
  $collections = GetCollections();
- Returns data about all collections
+
+Returns data about all collections
 
  Output:
   On Success:
@@ -229,8 +232,8 @@ sub GetCollections {
 
  ( $results, $success, $errorcode, $errormessage ) = GetItemsInCollection( $colId );
 
- Returns information about the items in the given collection
- 
+Returns information about the items in the given collection
+
  Input:
    $colId: The id of the collection
 
@@ -510,7 +513,7 @@ sub isItemInThisCollection {
 
 =head2 isItemInAnyCollection
 
-$inCollection = isItemInAnyCollection( $itemnumber );
+  my $inCollection = isItemInAnyCollection( $itemnumber );
 
 =cut
 
