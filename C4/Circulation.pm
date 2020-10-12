@@ -1523,7 +1523,7 @@ sub AddIssue {
             # Get ID of logged in user.  if called from a batch job,
             # no user session exists and C4::Context->userenv() returns
             # the scalar '0'. Only do this is the syspref says so
-            if ( C4::Context->preference('RecordIssuer') ) {
+            if ( C4::Context->preference('RecordStaffUserOnCheckout') ) {
                 my $userenv = C4::Context->userenv();
                 my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : undef;
                 if ($usernumber) {

@@ -122,8 +122,8 @@ for my $branch ( $branches->next ) {
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM borrowers');
 
-# Disable recording of issuer until we're ready for it
-t::lib::Mocks::mock_preference('RecordIssuer', 0);
+# Disable recording of the staff who checked out an item until we're ready for it
+t::lib::Mocks::mock_preference('RecordStaffUserOnCheckout', 0);
 
 my $module = new Test::MockModule('C4::Context');
 
@@ -4605,7 +4605,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     is( $hold->priority, 1, );
 }
 
-subtest 'AddIssue records issuer if appropriate' => sub  {
+subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
     plan tests => 2;
 
     $module->mock( 'userenv', sub { { branch => $library->{id} } } );
@@ -4638,14 +4638,14 @@ subtest 'AddIssue records issuer if appropriate' => sub  {
     my $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
 
-    is( $issue->issuer, undef, "Issuer not recorded when RecordIssuer turned off" );
+    is( $issue->issuer, undef, "Staff who checked out the item not recorded when RecordStaffUserOnCheckout turned off" );
 
-    t::lib::Mocks::mock_preference('RecordIssuer', 1);
+    t::lib::Mocks::mock_preference('RecordStaffUserOnCheckout', 1);
 
     my $issue2 =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
 
-    is( $issue->issuer, $issuer->{borrowernumber}, "Issuer recorded when RecordIssuer turned on" );
+    is( $issue->issuer, $issuer->{borrowernumber}, "Staff who checked out the item recorded when RecordStaffUserOnCheckout turned on" );
 };
 
 $schema->storage->txn_rollback;

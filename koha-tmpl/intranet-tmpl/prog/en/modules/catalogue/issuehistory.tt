@@ -37,7 +37,7 @@
             [% END %]
             <th>Barcode</th>
             <th>Checked out from</th>
-            [% IF Koha.Preference('RecordIssuer') %]
+            [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
             <th>Checked out by</th>
             [% END %]
             <th>Renewed</th>
@@ -66,10 +66,10 @@
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
-                [% IF Koha.Preference('RecordIssuer') %]
+                [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                 <td>[% IF checkout.issuer %]
                     <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer | uri %]">
-                    [% checkout.issued_by.firstname | html %] [% checkout.issued_by.surname | html %]
+                    [% INCLUDE 'patron-title.inc' patron=checkout.issued_by %]
                     </a>
                     [% END %]</td>
                 [% END %]

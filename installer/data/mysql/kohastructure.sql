@@ -1618,7 +1618,7 @@ DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` ( -- information related to check outs or issues
   `issue_id` int(11) NOT NULL AUTO_INCREMENT, -- primary key for issues table
   `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
-  `issuer` int(11), -- foreign key, linking this to the borrowers table for the user who checked out this item
+  `issuer` int(11) default NULL, -- foreign key, linking this to the borrowers table for the user who checked out this item
   `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
