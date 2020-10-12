@@ -206,19 +206,18 @@ sub AddBiblio {
         $defer_marc_save = 1;
     }
 
-    if (C4::Context->preference('BiblioAddsAuthorities')) {
-        BiblioAutoLink( $record, $frameworkcode );
-    }
-
-    my ( $biblionumber, $biblioitemnumber, $error );
-    my $dbh = C4::Context->dbh;
-
-    # transform the data into koha-table style data
-    SetUTF8Flag($record);
-    my $olddata = TransformMarcToKoha( $record, $frameworkcode );
     my $schema = Koha::Database->schema;
+    my ( $biblionumber, $biblioitemnumber );
     try {
         $schema->txn_do(sub {
+
+            if (C4::Context->preference('BiblioAddsAuthorities')) {
+                BiblioAutoLink( $record, $frameworkcode );
+            }
+
+            # transform the data into koha-table style data
+            SetUTF8Flag($record);
+            my $olddata = TransformMarcToKoha( $record, $frameworkcode );
 
             my $biblio = Koha::Biblio->new(
                 {
