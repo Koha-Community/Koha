@@ -282,7 +282,7 @@ sub set_rule {
     my $rule_name    = $params->{rule_name};
     my $rule_value   = $params->{rule_value};
     my $can_be_blank = defined $kind_info->{can_be_blank} ? $kind_info->{can_be_blank} : 1;
-    $rule_value = undef if $rule_value eq "" && !$can_be_blank;
+    $rule_value = undef if $rule_value && $rule_value eq "" && !$can_be_blank;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
