@@ -471,10 +471,10 @@ subtest 'suspend and resume tests' => sub {
       ->status_is( 400, 'Cannot suspend waiting hold' )
       ->json_is( '/error', 'Found hold cannot be suspended. Status=W' );
 
-    $hold->set_waiting(1)->discard_changes;
+    $hold->set_transfer->discard_changes;
 
     $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
-      ->status_is( 400, 'Cannot suspend waiting hold' )
+      ->status_is( 400, 'Cannot suspend hold on transfer' )
       ->json_is( '/error', 'Found hold cannot be suspended. Status=T' );
 
     $schema->storage->txn_rollback;
