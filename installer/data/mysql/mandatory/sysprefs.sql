@@ -120,6 +120,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('casAuthentication','0','','Enable or disable CAS authentication','YesNo'),
 ('casLogout','0','','Does a logout from Koha should also log the user out of CAS?','YesNo'),
 ('casServerUrl','https://localhost:8443/cas','','URL of the cas server','Free'),
+('casServerVersion','2', '2|3','Version of the CAS server Koha will connect to.','Choice'),
 ('CatalogModuleRelink','0',NULL,'If OFF the linker will never replace the authids that are set in the cataloging module.','YesNo'),
 ('CataloguingLog','1',NULL,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.','YesNo'),
 ('ChargeFinesOnClosedDays','0',NULL,'Charge fines on days the library is closed.','YesNo'),
