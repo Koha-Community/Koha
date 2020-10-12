@@ -541,6 +541,21 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 cover_images
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CoverImage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cover_images",
+  "Koha::Schema::Result::CoverImage",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 creator_batches
 
 Type: has_many
@@ -747,8 +762,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-30 15:31:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GJJ00YUn85GnJ98wpqNaLg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-10-12 09:13:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pmAVO6LxCb6wAJvfh+rndw
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

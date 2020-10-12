@@ -210,21 +210,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 biblioimages
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::Biblioimage>
-
-=cut
-
-__PACKAGE__->has_many(
-  "biblioimages",
-  "Koha::Schema::Result::Biblioimage",
-  { "foreign.biblionumber" => "self.biblionumber" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 biblioitems
 
 Type: has_many
@@ -252,6 +237,21 @@ __PACKAGE__->has_many(
   "club_holds",
   "Koha::Schema::Result::ClubHold",
   { "foreign.biblio_id" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 cover_images
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CoverImage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cover_images",
+  "Koha::Schema::Result::CoverImage",
+  { "foreign.biblionumber" => "self.biblionumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -451,8 +451,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 09:15:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p2SIq565zPyE3ZUkSuXyBA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-10-12 09:13:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R4PNOXHa9cRIx/up7HWz4Q
 
 
 __PACKAGE__->has_one(
