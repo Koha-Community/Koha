@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use CGI;
 
 use t::lib::Mocks;
@@ -62,3 +62,9 @@ $ENV{SCRIPT_NAME} = '/cgi-bin/koha/circ/circulation-home.pl';
 is(C4::Auth_with_cas::_url_with_get_params($cgi, 'intranet'),
     "$staff_base_url/cgi-bin/koha/circ/circulation-home.pl?bar=baz",
    "Intranet URL should be returned when using intranet login (Bug 13507)");
+
+# logout parameter
+t::lib::Mocks::mock_preference('casServerVersion','3');
+is(C4::Auth_with_cas::_fix_logout_url('https://mycasserver.url/logout/?url=https://mykoha.url'),
+    'https://mycasserver.url/logout/?service=https://mykoha.url',
+    'service parameter should be used on logout when Cas server is 3.0 or superior (Bug 20854)');
