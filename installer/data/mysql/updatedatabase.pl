@@ -23009,6 +23009,33 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26529, "Remove blank default branch rules");
 }
 
+$DBversion = '20.06.00.049';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'biblioimages', 'itemnumber' ) ) {
+        $dbh->do(q|
+            ALTER TABLE biblioimages
+            ADD COLUMN itemnumber INT(11) DEFAULT NULL
+            AFTER biblionumber;
+        |);
+        $dbh->do(q|
+            ALTER TABLE biblioimages
+            ADD FOREIGN KEY bibliocoverimage_fk2 (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+        |);
+        $dbh->do(q|
+            ALTER TABLE biblioimages MODIFY biblionumber INT(11) DEFAULT NULL
+        |)
+    }
+
+    if( !TableExists('cover_images') ) {
+        $dbh->do(q|
+            ALTER TABLE biblioimages RENAME cover_images
+        |);
+    }
+
+    NewVersion( $DBversion, '26145', ["Add the biblioimages.itemnumber column", "Rename table biblioimages with cover_images"] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
