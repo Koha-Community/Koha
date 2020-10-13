@@ -3,7 +3,9 @@ if ( CheckVersion($DBversion) ) {
 
     # ACCOUNT_CREDIT
     my $account_credit = q{
-        [% PROCESS "accounts.inc" %]
+        [%- USE AuthorisedValues -%]
+        [%- USE Price -%]
+        [%- PROCESS "accounts.inc" -%]
         <table>
             [% IF ( LibraryName ) %]
             <tr>
@@ -21,7 +23,7 @@ if ( CheckVersion($DBversion) ) {
             [% END %]
             <tr>
               <th colspan="2" class="centerednames">
-                <h3>[% credit.date | $KohaDates %]</h3>
+                <h3>[% today | $KohaDates %]</h3>
               </th>
             </tr>
             <tr>
@@ -32,40 +34,76 @@ if ( CheckVersion($DBversion) ) {
               <td>Operator ID: </td>
               <td>[% credit.manager_id %]</td>
             </tr>
+            [% IF credit.payment_type %]
             <tr>
               <td>Payment type: </td>
-              <td>[% credit.payment_type %]</td>
+              <td>[% AuthorisedValues.GetByCode('PAYMENT_TYPE', credit.payment_type) %]</td>
             </tr>
+            [% END %]
             <tr>
               <th colspan="2" class="centerednames">
-                <h2><u>Payment receipt</u></h2>
+                <h2><u>[%- PROCESS credit_type_description credit_type = credit.credit_type -%] receipt</u></h2>
               </th>
             </tr>
+            [% IF ( credit.credit_type_code == 'PAYMENT' ) %]
             <tr>
               <th colspan="2">
                 Received with thanks from  [% credit.patron.firstname | html %] [% credit.patron.surname | html %] <br />
                 Card number: [% credit.patron.cardnumber | html %]<br />
               </th>
             </tr>
+            [% ELSIF ( credit.credit_type_code == 'CREDIT' ) %]
+            <tr>
+              <th colspan="2">
+                Credit added to account for [% credit.patron.firstname | html %] [% credit.patron.surname | html %] <br />
+                Card number: [% credit.patron.cardnumber | html %]<br />
+              </th>
+            </tr>
+            [% ELSIF ( credit.credit_type_code == 'WRITEOFF' ) %]
+            <tr>
+              <th colspan="2">
+                Writeoff added to account for [% credit.patron.firstname | html %] [% credit.patron.surname | html %] <br />
+                Card number: [% credit.patron.cardnumber | html %]<br />
+              </th>
+            </tr>
+            [% END %]
+            [% IF credit.amountoutstanding + 0 != 0 %]
+            <tr>
+              <th>Description of credit</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>[%- PROCESS credit_type_description credit_type = credit.credit_type -%]</td>
+              <td>[% credit.amount * -1 | $Price %]</td>
+            </tr>
+            <tr>
+              <th style="text-align:right;">Total available:</th>
+              <td>[% credit.amountoutstanding * -1 | $Price %]</td>
+            </tr>
+            [% END %]
+            [% IF credit.amount != credit.amountoutstanding %]
             <tr>
               <th>Description of charges</th>
               <th>Amount</th>
             </tr>
             [% FOREACH offset IN credit.credit_offsets %]
             <tr>
-              <td>[% PROCESS account_type_description account=offset.debit %]</td>
+              <td>[% PROCESS account_type_description account=offset.debit %][% IF ( offset.debit.itemnumber ) %] - [% offset.debit.item.biblio.title %][% END %]</td>
               <td>[% offset.amount * -1 | $Price %]</td>
             </tr>
+            [% END %]
             [% END %]
           <tfoot>
             <tr class="highlight">
               <td>Total:</td>
               <td>[% credit.amount * -1 | $Price %]</td>
             </tr>
+            [% IF change.defined %]
             <tr>
               <td>Change given: </td>
               <td>[% change | $Price %]</td>
             </tr>
+            [% END %]
             <tr>
               <td colspan="2"></td>
             </tr>
@@ -112,11 +150,6 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLAC
             </tr>
             [% END %]
             <tr>
-              <th colspan="3" class="centerednames">
-                <h3>[% debit.date | $KohaDates %]</h3>
-              </th>
-            </tr>
-            <tr>
               <td colspan="2" style="text-align:right;">Fee ID: </td>
               <td>[% debit.accountlines_id %]</td>
             </tr>
@@ -137,6 +170,22 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLAC
                 Card number: [% debit.patron.cardnumber | html %]<br />
               </th>
             </tr>
+            [% IF debit.amountoutstanding != 0 %]
+            <tr>
+              <th>Date</th>
+              <th>Description of charges</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>[% debit.date | $KohaDates %]</td>
+              <td>[% PROCESS account_type_description account=debit %]</td>
+              <td>[% debit.amount | $Price %]</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align:right;">Total owed:</td>
+              <td>[% debit.amount | $Price %]</td>
+            </tr>
+            [% END %]
             [% IF debit.amount != debit.amountoutstanding %]
             <tr>
               <th>Date</th>
@@ -160,11 +209,7 @@ q{UPDATE letter SET content = ? WHERE code = 'ACCOUNT_CREDIT' AND REPLACE(REPLAC
             <tr>
           <tfoot>
             <tr>
-              <td colspan="2" style="text-align:right;">Total owed:</td>
-              <td>[% debit.amount | $Price %]</td>
-            </tr>
-            <tr>
-              <td colspan="2" style="text-align:right;">Total outstanding:</td>
+              <th colspan="2" style="text-align:right;">Total outstanding:</th>
               <td>[% debit.amountoutstanding | $Price %]</td>
             </tr>
           </tfoot>
