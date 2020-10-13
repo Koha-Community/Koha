@@ -857,7 +857,7 @@ sub CanBookBeIssued {
     my $no_issues_charge_guarantors = C4::Context->preference("NoIssuesChargeGuarantorsWithGuarantees");
     $no_issues_charge_guarantors = undef unless looks_like_number( $no_issues_charge_guarantors );
     if ( defined $no_issues_charge_guarantors ) {
-        my $guarantors_non_issues_charges += $patron->relationships_debt({ include_guarantors => 1, only_this_guaranor => 0, include_this_patron => 1 });
+        my $guarantors_non_issues_charges += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 });
 
         if ( $guarantors_non_issues_charges > $no_issues_charge_guarantors && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT_GUARANTORS} = $guarantors_non_issues_charges;

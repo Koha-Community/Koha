@@ -70,7 +70,7 @@ sub new {
     my $fines_amount = $flags->{CHARGES}->{amount}; #TODO Replace with $patron->account->non_issues_charges
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     if ( C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees') ) {
-        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guaranor => 0, include_this_patron => 1 });
+        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guarantor => 0, include_this_patron => 1 });
     } else {
         my $guarantees_fines_amount = $flags->{CHARGES_GUARANTEES} ? $flags->{CHARGES_GUARANTEES}->{amount} : 0; #TODO: Replace with $patron->relationships_debt
         $fines_amount += $guarantees_fines_amount;
