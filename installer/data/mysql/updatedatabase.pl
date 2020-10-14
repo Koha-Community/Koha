@@ -23036,6 +23036,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, '26145', ["Add the biblioimages.itemnumber column", "Rename table biblioimages with cover_images"] );
 }
 
+$DBversion = '20.06.00.050';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('NoIssuesChargeGuarantorsWithGuarantees','','','Define maximum amount withstanding before checkouts are blocked including guarantors and their other guarantees','Integer');
+    });
+
+    NewVersion( $DBversion, 19382, "Add ability to block guarantees based on fees owed by guarantor and other guarantee - new system preference 'NoIssuesChargeGuarantorsWithGuarantees'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
