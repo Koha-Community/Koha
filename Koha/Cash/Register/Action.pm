@@ -112,6 +112,7 @@ sub cashup_summary {
         {
             join     => { 'debit' => 'debit_type_code' },
             group_by => [ 'debit.debit_type_code', 'debit_type_code.description' ],
+            order_by => { '-asc' => 'debit.debit_type_code' },
             'select' => [ { sum => 'me.amount' }, 'debit.debit_type_code', 'debit_type_code.description' ],
             'as'     => [ 'total', 'debit_type_code', 'debit_description' ],
         }
@@ -126,6 +127,7 @@ sub cashup_summary {
         {
             join     => { 'credit' => 'credit_type_code' },
             group_by => [ 'credit.credit_type_code', 'credit_type_code.description' ],
+            order_by => { '-asc' => 'credit.credit_type_code' },
             'select' => [ { sum => 'me.amount' }, 'credit.credit_type_code', 'credit_type_code.description' ],
             'as'     => [ 'total', 'credit_type_code', 'credit_description' ],
         }
