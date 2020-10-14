@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+package Net::Z3950::RPN::Term;
 
 # Copyright The National Library of Finland 2018
 #
@@ -35,7 +35,6 @@ C<Net::Z3950::SimpleServer>.
 
 =cut
 
-package Net::Z3950::RPN::Term;
 sub to_koha {
     my ($self, $mappings) = @_;
 
