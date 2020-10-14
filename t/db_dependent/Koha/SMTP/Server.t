@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 use Test::Warn;
 
@@ -67,6 +67,18 @@ subtest 'is_system_default() tests' => sub {
 
     my $system_default_server = Koha::SMTP::Servers->get_default;
     ok( $system_default_server->is_system_default, 'The server returned by get_default is the system default' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'to_api() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $smtp_server = $builder->build_object({ class => 'Koha::SMTP::Servers' });
+    ok( !exists $smtp_server->to_api->{password}, 'Password is not part of the API representation' );
 
     $schema->storage->txn_rollback;
 };

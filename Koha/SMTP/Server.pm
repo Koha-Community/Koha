@@ -99,6 +99,24 @@ sub is_system_default {
     return $self->{_is_system_default};
 }
 
+=head3 to_api
+
+    my $json = $smtp_server->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::SMTP::Server object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $json = $self->SUPER::to_api( $params );
+    delete $json->{password};
+
+    return $json;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::SMTP::Server object
