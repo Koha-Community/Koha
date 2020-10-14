@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package C4::ShelfBrowser;
 
 # Copyright 2010 Catalyst IT

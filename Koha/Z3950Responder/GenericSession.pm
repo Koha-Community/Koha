@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package Koha::Z3950Responder::GenericSession;
 
 # Copyright The National Library of Finland 2018

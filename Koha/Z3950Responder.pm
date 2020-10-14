@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package Koha::Z3950Responder;
 
 # Copyright ByWater Solutions 2016

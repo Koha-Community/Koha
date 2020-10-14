@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 package C4::SIP::Logger;
 
 use Modern::Perl;

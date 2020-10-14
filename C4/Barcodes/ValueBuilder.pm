@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-#
 # Copyright 2008-2010 Foundations Bible College
 # Parts copyright 2012 C & P Bibliography Services
 #
@@ -19,7 +17,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 package C4::Barcodes::ValueBuilder::incremental;
-
 use Modern::Perl;
 use C4::Context;
 
