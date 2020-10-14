@@ -17,6 +17,22 @@ package Koha::Template::Plugin::Registers;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+=head1 NAME
+
+Koha::Template::Plugin::Registers
+
+=head1 DESCRIPTION
+
+The Registers plugin is a helper that returns register related session information for templates
+
+=head1 SYNOPSIS
+
+    [% USE Registers %]
+    [% SET registers = Registers.all() %]
+    [% SET registers = Registers.all( { filters => { current_branch => 1 } } );
+
+=cut
+
 use Modern::Perl;
 
 use Template::Plugin;
@@ -26,6 +42,14 @@ use C4::Koha;
 use C4::Context;
 use Koha::Cash::Registers;
 
+=head1 FUNCTIONS
+
+=head2 session_register_id
+
+Return the register_id for the register attached to the current session.
+
+=cut
+
 sub session_register_id {
     my ($self) = @_;
 
@@ -33,6 +57,12 @@ sub session_register_id {
         C4::Context->userenv->{'register_id'} :
         '';
 }
+
+=head2 session_register_name
+
+Return the register_name for the register attached to the current session.
+
+=cut
 
 sub session_register_name {
     my ($self) = @_;
@@ -42,7 +72,7 @@ sub session_register_name {
       : '';
 }
 
-=head2
+=head2 all
 
     [% SET registers = Registers.all() %]
     [% SET registers = Registers.all( { filters => { current_branch => 1 } } );
