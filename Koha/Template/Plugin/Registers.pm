@@ -84,14 +84,15 @@ Returns a list of all cash registers available that adhere to the passed filters
 sub all {
     my ( $self, $params ) = @_;
 
-    my $filters = $params->{filters};
+    my $filters = $params->{filters} // {};
     my $where;
-    $where->{branch} = C4::Context->userenv->{'branch'}
+    $where->{branch} =
+      C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef
       if $filters->{current_branch};
     my $registers = Koha::Cash::Registers->search($where)->unblessed();
     for my $register ( @{$registers} ) {
         $register->{selected} = ( defined( $self->session_register_id )
-              && $register->{id} == $self->session_register_id ) ? 1 : 0;
+              && $register->{id} eq $self->session_register_id ) ? 1 : 0;
     }
 
     return $registers;
