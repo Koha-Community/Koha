@@ -139,7 +139,7 @@ sub _test_combinations {
     # C1 => P1 + P2 + C1 + C2 ( - C1 )
     # C2 => P1 + P2 + C1 + C2 ( - C2 )
 
-# 3 params, count from 0 to 6 in binary ( 3 places ) to get the set of switches, then do that 4 times, one for each parent and child
+# 3 params, count from 0 to 7 in binary ( 3 places ) to get the set of switches, then do that 4 times, one for each parent and child
     for my $i ( 0 .. 7 ) {
         my ( $only_this_guarantor, $include_guarantors, $include_this_patron )
           = split '', sprintf( "%03b", $i );
