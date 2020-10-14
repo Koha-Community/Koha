@@ -268,6 +268,12 @@ sub themelanguage {
     # Select a language based on cookie, syspref available languages & browser
     my $lang = C4::Languages::getlanguage($query);
 
+    return activethemes($htdocs, $tmpl, $interface, $lang);
+}
+
+sub activethemes {
+    my ($htdocs, $tmpl, $interface, $lang) = @_;
+
     # Get theme
     my @themes;
     my $theme_syspref    = ($interface eq 'intranet') ? 'template' : 'opacthemes';
@@ -302,7 +308,6 @@ sub themelanguage {
         return ( $themes[0], $lang, [ uniq(@themes) ] );
     }
 }
-
 
 sub setlanguagecookie {
     my ( $query, $language, $uri ) = @_;

@@ -30,10 +30,10 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/printinvoice.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {
+        template_name => "members/printinvoice.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => {
             borrowers     => 'edit_borrowers',
             updatecharges => 'remaining_permissions'
         }
@@ -41,8 +41,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $debit_id = $input->param('accountlines_id');
-my $debit = Koha::Account::Lines->find($debit_id);
-my $patron = $debit->patron;
+my $debit    = Koha::Account::Lines->find($debit_id);
+my $patron   = $debit->patron;
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 output_and_exit_if_error(
@@ -55,13 +55,22 @@ output_and_exit_if_error(
     }
 );
 
-my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_DEBIT',
-    C4::Context::mybranch, 'print', $patron->lang );
+my $letter = C4::Letters::GetPreparedLetter(
+    module                 => 'circulation',
+    letter_code            => 'ACCOUNT_DEBIT',
+    branchcode             => C4::Context::mybranch,
+    message_transport_type => 'print',
+    lang                   => $patron->lang,
+    tables                 => {
+        debits    => $debit_id,
+        borrowers => $patron->borrowernumber
+    }
+);
 
 $template->param(
-    letter  => $letter,
-    debit   => $debit
-
+    slip   => $letter->{content},
+    plain  => !$letter->{is_html},
+    patron => $patron,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

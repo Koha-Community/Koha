@@ -1,23 +1,33 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
-[% USE Branches %]
-[% USE KohaDates %]
-[% USE Price %]
 [% SET footerjs = 1 %]
-
-[% PROCESS 'accounts.inc' %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print receipt for [% patron.cardnumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/img/favicon.ico[% END %]" type="image/x-icon" />
+
 [% Asset.css("css/printreceiptinvoice.css") | $raw %]
+[% INCLUDE 'blocking_errors.inc' %]
 </head>
 
 <body id="printinvoice" class="pat">
 
 <div id="receipt">
-    [% letter.content | $raw | evaltt %]
+  [% IF slip %]
+    [% IF plain %]
+    <pre>
+      [% slip | html %]
+    </pre>
+    [% ELSE %]
+      [% slip | $raw %]
+    [% END %]
+  [% ELSE %]
+    No print template found
+  [% END %]
 </div>
 
 [% MACRO jsinclude BLOCK %]

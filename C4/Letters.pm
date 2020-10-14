@@ -31,6 +31,7 @@ use Try::Tiny;
 use C4::Members;
 use C4::Log;
 use C4::SMS;
+use C4::Templates;
 use C4::Debug;
 use Koha::DateUtils;
 use Koha::SMS::Providers;
@@ -627,13 +628,13 @@ sub GetPreparedLetter {
     my %params = @_;
 
     my $letter = $params{letter};
+    my $lang   = $params{lang} || 'default';
 
     unless ( $letter ) {
         my $module      = $params{module} or croak "No module";
         my $letter_code = $params{letter_code} or croak "No letter_code";
         my $branchcode  = $params{branchcode} || '';
         my $mtt         = $params{message_transport_type} || 'email';
-        my $lang        = $params{lang} || 'default';
 
         $letter = getletter( $module, $letter_code, $branchcode, $mtt, $lang );
 
@@ -728,6 +729,7 @@ sub GetPreparedLetter {
             tables  => $tables,
             loops  => $loops,
             substitute => $substitute,
+            lang => $lang
         }
     );
 
@@ -784,8 +786,11 @@ sub _parseletter_sth {
     #       broke things for the rest of us. prepare_cached is a better
     #       way to cache statement handles anyway.
     my $query = 
+    ($table eq 'accountlines' )    ? "SELECT * FROM $table WHERE   accountlines_id = ?"                               :
     ($table eq 'biblio'       )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
     ($table eq 'biblioitems'  )    ? "SELECT * FROM $table WHERE   biblionumber = ?"                                  :
+    ($table eq 'credits'      )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
+    ($table eq 'debits'       )    ? "SELECT * FROM accountlines WHERE   accountlines_id = ?"                         :
     ($table eq 'items'        )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
     ($table eq 'issues'       )    ? "SELECT * FROM $table WHERE     itemnumber = ?"                                  :
     ($table eq 'old_issues'   )    ? "SELECT * FROM $table WHERE     itemnumber = ? ORDER BY timestamp DESC LIMIT 1"  :
@@ -1524,6 +1529,16 @@ sub _process_tt {
     my $tables = $params->{tables};
     my $loops = $params->{loops};
     my $substitute = $params->{substitute} || {};
+    my $lang = defined($params->{lang}) && $params->{lang} ne 'default' ? $params->{lang} : 'en';
+    my ($theme, $activethemes);
+
+    my $htdocs = C4::Context->config('intrahtdocs');
+    ($theme, $lang, $activethemes)= C4::Templates::activethemes( $htdocs, 'about.tt', 'intranet', $lang);
+    my @includes;
+    foreach (@$activethemes) {
+        push @includes, "$htdocs/$_/$lang/includes";
+        push @includes, "$htdocs/$_/en/includes" unless $lang eq 'en';
+    }
 
     my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template           = Template->new(
@@ -1533,6 +1548,7 @@ sub _process_tt {
             PLUGIN_BASE  => 'Koha::Template::Plugin',
             COMPILE_EXT  => $use_template_cache ? '.ttc' : '',
             COMPILE_DIR  => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
+            INCLUDE_PATH => \@includes,
             FILTERS      => {},
             ENCODING     => 'UTF-8',
         }
@@ -1591,6 +1607,18 @@ sub _get_tt_params {
             singular => 'branch',
             plural   => 'branches',
             pk       => 'branchcode',
+        },
+        credits => {
+            module => 'Koha::Account::Lines',
+            singular => 'credit',
+            plural => 'credits',
+            pk => 'accountlines_id',
+        },
+        debits => {
+            module => 'Koha::Account::Lines',
+            singular => 'debit',
+            plural => 'debits',
+            pk => 'accountlines_id',
         },
         items => {
             module   => 'Koha::Items',

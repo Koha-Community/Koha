@@ -30,10 +30,10 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/printfeercpt.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => {
+        template_name => "members/printfeercpt.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => {
             borrowers     => 'edit_borrowers',
             updatecharges => 'remaining_permissions'
         }
@@ -55,15 +55,26 @@ output_and_exit_if_error(
     }
 );
 
-my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_CREDIT',
-    C4::Context::mybranch, 'print', $patron->lang );
+my $letter = C4::Letters::GetPreparedLetter(
+    module                 => 'circulation',
+    letter_code            => 'ACCOUNT_CREDIT',
+    branchcode             => C4::Context::mybranch,
+    message_transport_type => 'print',
+    lang                   => $patron->lang,
+    tables                 => {
+        credits   => $credit_id,
+        borrowers => $patron->borrowernumber
+    },
+    substitute => {
+        tendered => scalar $input->param('tendered'),
+        change   => scalar $input->param('change')
+    }
+);
 
 $template->param(
-    letter => $letter,
-    credit => $credit,
-
-    tendered => scalar $input->param('tendered'),
-    change   => scalar $input->param('change')
+    slip   => $letter->{content},
+    plain  => !$letter->{is_html},
+    patron => $patron,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
