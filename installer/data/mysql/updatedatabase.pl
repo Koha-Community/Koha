@@ -23046,6 +23046,16 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 19382, "Add ability to block guarantees based on fees owed by guarantor and other guarantee - new system preference 'NoIssuesChargeGuarantorsWithGuarantees'");
 }
 
+$DBversion = '20.06.00.051';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('HoldsNeedProcessingSIP', '0', NULL, 'Require staff to check-in before hold is set to waiting state', 'YesNo' )
+    });
+
+    NewVersion( $DBversion, 12556, "Add new syspref HoldsNeedProcessingSIP");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
