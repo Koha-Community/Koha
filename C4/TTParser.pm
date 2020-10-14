@@ -1,5 +1,3 @@
-#!/usr/bin/env perl
-
 # Copyright Tamil 2011
 #
 # This file is part of Koha.
