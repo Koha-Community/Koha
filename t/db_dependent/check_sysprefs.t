@@ -30,7 +30,7 @@ GetOptions( 'showsql' => \$showsql );
 
 use Test::More qw(no_plan);
 our $dbh = C4::Context->dbh;
-my $root_dir = C4::Context->config('intranetdir') . '/installer/data/mysql';
+my $root_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/mandatory';
 my $base_syspref_file = "sysprefs.sql";
 
 open my $ref_fh, '<', "$root_dir/$base_syspref_file" or croak "Can't open '$root_dir/$base_syspref_file': $!";
