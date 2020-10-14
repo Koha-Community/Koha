@@ -222,6 +222,10 @@ sub set_waiting {
 
 =head3 set_processing
 
+$hold->set_processing;
+
+Mark the hold as in processing.
+
 =cut
 
 sub set_processing {
