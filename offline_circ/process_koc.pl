@@ -338,7 +338,7 @@ sub kocReturnItem {
             $patron->privacy
         );
 
-        $item->onloadn(undef)->store;
+        $item->onloan(undef)->store;
         ModDateLastSeen( $item->itemnumber );
 
         push @output,
