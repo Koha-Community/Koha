@@ -73,11 +73,11 @@
     [% ELSIF ( create ) %]
         &rsaquo; Create from SQL
     [% ELSIF ( showsql ) %]
-        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; SQL view
+        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; [% reportname | html %] ([% id | html %])
     [% ELSIF ( editsql ) %]
-        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Edit report <em>[% reportname | html %] ([% id | html %])</em>
+        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% reportname | html %] ([% id | html %])</a> &rsaquo; Edit
     [% ELSIF ( execute ) %]
-        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; Report <em>[% name | html %] ([% id | html %])</em>
+        &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | uri %]&amp;phase=Show%20SQL">[% name | html %] ([% id | html %])</a> &rsaquo; Run
     [% ELSIF ( build1 || build2 || build3 || build4 || build5 || build6 ) %]
         &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a report</a>
         [% IF ( build1 ) %]
