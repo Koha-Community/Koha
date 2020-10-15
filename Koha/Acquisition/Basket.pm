@@ -156,15 +156,15 @@ sub authorizer {
     return scalar Koha::Patrons->find($self->authorisedby);
 }
 
-=head3 closed
+=head3 is_closed
 
-    if ( $basket->closed ) { ... }
+    if ( $basket->is_closed ) { ... }
 
 Returns a boolean value representing if the basket is closed.
 
 =cut
 
-sub closed {
+sub is_closed {
     my ($self) = @_;
 
     return ($self->closedate) ? 1 : 0;
@@ -185,7 +185,7 @@ sub close {
     my ($self) = @_;
 
     Koha::Exceptions::Acquisition::Basket::AlreadyClosed->throw
-        if $self->closed;
+        if $self->is_closed;
 
     $self->_result->result_source->schema->txn_do(
         sub {

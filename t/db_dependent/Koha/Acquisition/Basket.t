@@ -303,7 +303,7 @@ subtest 'orders' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'closed() tests' => sub {
+subtest 'is_closed() tests' => sub {
 
     plan tests => 2;
 
@@ -327,8 +327,8 @@ subtest 'closed() tests' => sub {
         }
     );
 
-    ok( $closed_basket->closed, 'Closed basket is tested as closed' );
-    ok( !$open_basket->closed, 'Open basket is tested as open' );
+    ok( $closed_basket->is_closed, 'Closed basket is tested as closed' );
+    ok( !$open_basket->is_closed, 'Open basket is tested as open' );
 
     $schema->storage->txn_rollback;
 };
@@ -363,7 +363,7 @@ subtest 'close() tests' => sub {
 
     $basket->close;
 
-    ok( $basket->closed, 'Basket is closed' );
+    ok( $basket->is_closed, 'Basket is closed' );
     my $ordered_orders = $basket->orders->search({ orderstatus => 'ordered' });
     is( $ordered_orders->count, 3, 'Only open orders have been marked as ordered' );
 
