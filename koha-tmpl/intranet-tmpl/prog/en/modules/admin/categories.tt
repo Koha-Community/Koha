@@ -536,8 +536,8 @@
                                                 [% ELSIF ( prefs.Hold_Filled ) %]Hold filled
                                                 [% ELSIF ( prefs.Item_Check_in ) %]Item check-in
                                                 [% ELSIF ( prefs.Item_Checkout ) %]Item checkout
-                                                [% ELSIF ( prefs.Ill_ready ) %]Interlibrary loan ready
-                                                [% ELSIF ( prefs.Ill_unavailable ) %]Interlibrary loan unavailable
+                                                [% ELSIF ( Koha.Preference('ILLModule') && prefs.Ill_ready ) %]Interlibrary loan ready
+                                                [% ELSIF ( Koha.Preference('ILLModule') && prefs.Ill_unavailable ) %]Interlibrary loan unavailable
                                                 [% ELSE %]Unknown
                                                 [% END %]:
                                                 <strong>[% transport.transport | html %]</strong><br />

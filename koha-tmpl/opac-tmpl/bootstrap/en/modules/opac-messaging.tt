@@ -67,8 +67,8 @@
                                                     [% ELSE %]
                                                         Item checkout
                                                     [% END %]
-                                                [% ELSIF ( messaging_preference.Ill_ready ) %]Interlibrary loan ready
-                                                [% ELSIF ( messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
+                                                [% ELSIF ( Koha.Preference( 'ILLModule' ) && messaging_preference.Ill_ready ) %]Interlibrary loan ready
+                                                [% ELSIF ( Koha.Preference( 'ILLModule' ) && messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
                                                 [% ELSE %]Unknown [% END %]</td>
                                             [% IF ( messaging_preference.takes_days ) %]
                                                 <td><select class="input-mini" name="[% messaging_preference.message_attribute_id | html %]-DAYS">
