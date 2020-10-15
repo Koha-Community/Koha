@@ -592,7 +592,7 @@ subtest 'filter_by_current & filter_by_cancelled' => sub {
 
 subtest 'cancel() tests' => sub {
 
-    plan tests => 38;
+    plan tests => 52;
 
     $schema->storage->txn_begin;
 
@@ -608,13 +608,13 @@ subtest 'cancel() tests' => sub {
     # => message about not being able to delete
 
     my $item      = $builder->build_sample_item;
-    my $biblio_id = $item->biblio->id;
+    my $biblio_id = $item->biblionumber;
     my $order     = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
             value => {
                 orderstatus             => 'new',
-                biblionumber            => $item->biblio->id,
+                biblionumber            => $item->biblionumber,
                 datecancellationprinted => undef,
                 cancellationreason      => undef,
             }
@@ -625,7 +625,7 @@ subtest 'cancel() tests' => sub {
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     t::lib::Mocks::mock_userenv({ patron => $patron });
 
-    # Add a checkout so cancelling fails because od 'book_on_loan'
+    # Add a checkout so deleting the item fails because od 'book_on_loan'
     C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
     my $result = $order->cancel({ reason => $reason });
@@ -672,7 +672,7 @@ subtest 'cancel() tests' => sub {
     # => biblio remains untouched
 
     my $item_1 = $builder->build_sample_item;
-    $biblio_id = $item_1->biblio->id;
+    $biblio_id = $item_1->biblionumber;
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio_id });
     $order     = $builder->build_object(
         {
@@ -708,7 +708,7 @@ subtest 'cancel() tests' => sub {
     # => biblio delete error notified
 
     $item      = $builder->build_sample_item;
-    $biblio_id = $item->biblio->id;
+    $biblio_id = $item->biblionumber;
     $order     = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
@@ -755,7 +755,7 @@ subtest 'cancel() tests' => sub {
     # => biblio delete error notified
 
     $item      = $builder->build_sample_item;
-    $biblio_id = $item->biblio->id;
+    $biblio_id = $item->biblionumber;
     $order     = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
@@ -798,13 +798,13 @@ subtest 'cancel() tests' => sub {
     # => biblio in order is removed
 
     $item      = $builder->build_sample_item;
-    $biblio_id = $item->biblio->id;
+    $biblio_id = $item->biblionumber;
     $order     = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
             value => {
                 orderstatus             => 'new',
-                biblionumber            => $item->biblio->id,
+                biblionumber            => $item->biblionumber,
                 datecancellationprinted => undef,
                 cancellationreason      => undef,
             }
@@ -822,6 +822,66 @@ subtest 'cancel() tests' => sub {
     is( Koha::Biblios->find($biblio_id), undef, 'The biblio is not present' );
     @messages = @{ $order->messages };
     is( scalar @messages, 0, 'No errors' );
+
+    # Scenario:
+    # * order with two items attached
+    # * one of the items is on loan
+    # => order is cancelled
+    # => item on loan is kept
+    # => the other item is removed
+    # => biblio remains untouched
+    # => biblio delete error notified
+    # => item delete error notified
+
+    $item_1    = $builder->build_sample_item;
+    $item_2    = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+    my $item_3 = $builder->build_sample_item({ biblionumber => $item_1->biblionumber });
+    $biblio_id = $item_1->biblionumber;
+    $order     = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                orderstatus             => 'new',
+                biblionumber            => $biblio_id,
+                datecancellationprinted => undef,
+                cancellationreason      => undef,
+            }
+        }
+    );
+    $order->add_item( $item_1->id );
+    $order->add_item( $item_2->id );
+    $order->add_item( $item_3->id );
+
+    # Add a checkout so deleting the item fails because od 'book_on_loan'
+    C4::Circulation::AddIssue( $patron->unblessed, $item_2->barcode );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $item_3->holdingbranch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_id,
+            itemnumber     => $item_3->id,
+            found          => 'W',
+        }
+    );
+
+    $order->cancel({ reason => $reason, delete_biblio => 1 })
+          ->discard_changes;
+
+    is( $order->orderstatus, 'cancelled', 'Order is marked as cancelled' );
+    isnt( $order->datecancellationprinted, undef, 'datecancellationprinted is set' );
+    is( $order->cancellationreason, $reason, 'cancellationreason is undef' );
+    is( Koha::Items->find($item_1->id), undef, 'The item is no longer present' );
+    is( ref(Koha::Items->find($item_2->id)), 'Koha::Item', 'The on loan item is still present' );
+    is( ref(Koha::Biblios->find($biblio_id)), 'Koha::Biblio', 'The biblio is still present' );
+    @messages = @{ $order->messages };
+    is( $messages[0]->message, 'error_delitem', 'Cannot delete on loan item' );
+    is( $messages[0]->payload->{item}->id, $item_2->id, 'Cannot delete on loan item' );
+    is( $messages[0]->payload->{reason}, 'book_on_loan', 'Item on loan notified' );
+    is( $messages[1]->message, 'error_delitem', 'Cannot delete reserved and found item' );
+    is( $messages[1]->payload->{item}->id, $item_3->id, 'Cannot delete reserved and found item' );
+    is( $messages[1]->payload->{reason}, 'book_reserved', 'Item reserved notified' );
+    is( $messages[2]->message, 'error_delbiblio_items', 'Cannot delete on loan item' );
+    is( $messages[2]->payload->{biblio}->id, $biblio_id, 'The right biblio is attached' );
 
     $schema->storage->txn_rollback;
 };

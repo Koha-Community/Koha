@@ -124,49 +124,67 @@ sub cancel {
     my $delete_biblio = $params->{delete_biblio};
     my $reason        = $params->{reason};
 
-    try {
-        # Delete the related items
-        $self->items->safe_delete;
-
-        my $biblio = $self->biblio;
-        if ( $biblio and $delete_biblio ) {
-
-            if (
-                $biblio->active_orders->search(
-                    { ordernumber => { '!=' => $self->ordernumber } }
-                )->count == 0
-                and $biblio->subscriptions->count == 0
-                and $biblio->items->count == 0
-              )
-            {
-
-                my $error = DelBiblio( $biblio->id );
-                $self->add_message( { message => 'error_delbiblio'} )
-                  if $error;
-            }
-            else {
-                if ( $biblio->active_orders->search(
-                    { ordernumber => { '!=' => $self->ordernumber } }
-                )->count > 0 ) {
-                    $self->add_message( { message => 'error_delbiblio_active_orders' } );
+    # Delete the related items
+    my $items = $self->items;
+    while ( my $item = $items->next ) {
+        my $safe_to_delete = $item->safe_to_delete;
+        if ( $safe_to_delete eq '1' ) {
+            $item->safe_delete;
+        }
+        else {
+            $self->add_message(
+                {
+                    message => 'error_delitem',
+                    payload => { item => $item, reason => $safe_to_delete }
                 }
-                elsif ( $biblio->subscriptions->count > 0 ) {
-                    $self->add_message( { message => 'error_delbiblio_subscriptions' } );
-                }
-                else { # $biblio->items->count > 0
-                    $self->add_message( { message => 'error_delbiblio_items' } );
-                }
-            }
+            );
         }
     }
-    catch {
-        if ( ref($_) eq 'Koha::Exceptions::Object::CannotBeDeleted' ) {
-            my $object = $_->object;
-            if ( ref($object) eq 'Koha::Item' ) {
-                $self->add_message({ message => 'error_delitem' });
-            }
+
+    my $biblio = $self->biblio;
+    if ( $biblio and $delete_biblio ) {
+
+        if (
+            $biblio->active_orders->search(
+                { ordernumber => { '!=' => $self->ordernumber } }
+            )->count == 0
+            and $biblio->subscriptions->count == 0
+            and $biblio->items->count == 0
+            )
+        {
+
+            my $error = DelBiblio( $biblio->id );
+            $self->add_message(
+                {
+                    message => 'error_delbiblio',
+                    payload => { biblio => $biblio, reason => $error }
+                }
+            ) if $error;
         }
-    };
+        else {
+
+            my $message;
+
+            if ( $biblio->active_orders->search(
+                { ordernumber => { '!=' => $self->ordernumber } }
+            )->count > 0 ) {
+                $message = 'error_delbiblio_active_orders';
+            }
+            elsif ( $biblio->subscriptions->count > 0 ) {
+                $message = 'error_delbiblio_subscriptions';
+            }
+            else { # $biblio->items->count > 0
+                $message = 'error_delbiblio_items';
+            }
+
+            $self->add_message(
+                {
+                    message => $message,
+                    payload => { biblio => $biblio }
+                }
+            );
+        }
+    }
 
     # Update order status
     $self->set(
