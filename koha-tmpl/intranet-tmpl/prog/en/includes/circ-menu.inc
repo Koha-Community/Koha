@@ -3,7 +3,13 @@
 [% PROCESS 'member-display-address-style.inc' %]
 [% IF ( patron.borrowernumber ) %]
 [% SET patron_is_staff = patron.has_permission({ 'catalogue' => 1 }) %]
-[% SET patron_type_class = patron_is_staff ? 'is-staff' : 'is-not-staff' %]
+[% SET patron_is_superlibrarian = patron.is_superlibrarian %]
+[% SET patron_type_class = 'is-not-staff' %]
+[% IF ( patron_is_superlibrarian ) %]
+    [% patron_type_class = 'is-staff is-superlibrarian' %]
+[% ELSIF ( patron_is_staff ) %]
+    [% patron_type_class = 'is-staff' %]
+[% END %]
 <div class="patroninfo [% patron_type_class | html %]">
 
 [% IF ( patronimages ) %]
@@ -13,6 +19,9 @@
 [% END %]
         [% IF ( patron_is_staff ) %]
             <i class="fa fa-shield fa-fw" title="Staff patron"></i>
+        [% END %]
+        [% IF ( patron_is_superlibrarian ) %]
+            <i class="fa fa-bolt fa-fw" title="Superlibrarian patron"></i>
         [% END %]
         [% INCLUDE 'patron-title.inc' %]
     </h5>
