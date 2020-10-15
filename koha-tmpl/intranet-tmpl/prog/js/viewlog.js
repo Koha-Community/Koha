@@ -159,9 +159,15 @@ $(document).ready(function(){
                 // Display card number in parentheses if it exists
                 cardnumber = " (" + item.cardnumber + ") ";
             }
+            var itemString = "<a href=\"#\">" + (item.surname ? item.surname.escapeHtml() : "") + ", " + (item.firstname ? item.firstname.escapeHtml() : "") + cardnumber.escapeHtml() + " <small>";
+            itemString += (item.address ? item.address.escapeHtml() : "") + " "
+                + (item.city ? item.city.escapeHtml() : "") + " "
+                + (item.zipcode ? item.zipcode.escapeHtml() : "") + " "
+                + (item.country ? item.country.escapeHtml() : "")
+                + "</small></a>";
             return $("<li></li>")
                 .data("ui-autocomplete-item", item)
-                .append("<a href=\"#\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>")
+                .append(itemString)
                 .appendTo(ul);
         };
     }
