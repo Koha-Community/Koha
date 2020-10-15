@@ -23056,6 +23056,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 12556, "Add new syspref HoldsNeedProcessingSIP");
 }
 
+$DBversion = '20.06.00.052';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('OAI-PMH:AutoUpdateSetEmbedItemData', '0', '', 'Embed item information when automatically updating OAI sets. Requires OAI-PMH:AutoUpdateSets syspref to be enabled', 'YesNo')
+    });
+
+    $dbh->do(q{
+        UPDATE systempreferences SET explanation = 'Automatically update OAI sets when a bibliographic or item record is created or updated' WHERE variable = 'OAI-PMH:AutoUpdateSets'
+    });
+
+    NewVersion( $DBversion, 25460, "Update OAI set when adding/editing/deleting item records" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
