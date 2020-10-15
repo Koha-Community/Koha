@@ -929,7 +929,6 @@ CREATE TABLE `auth_header` (
   `heading` longtext DEFAULT NULL,
   `origincode` varchar(20) DEFAULT NULL,
   `authtrees` longtext DEFAULT NULL,
-  `marc` blob DEFAULT NULL,
   `linkid` bigint(20) DEFAULT NULL,
   `marcxml` longtext NOT NULL,
   PRIMARY KEY (`authid`),

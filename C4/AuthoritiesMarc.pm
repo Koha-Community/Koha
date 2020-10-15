@@ -705,7 +705,6 @@ sub AddAuthority {
     $authority->update(
         {
             authtypecode => $authtypecode,
-            marc         => $record->as_usmarc,
             marcxml      => $record->as_xml_record($format),
             heading      => $heading ? $heading->display_form : '',
         }
