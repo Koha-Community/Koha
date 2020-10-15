@@ -381,7 +381,14 @@
                     paid: { required: true },
                     collected: {
                         required: true
+                    },
+                    [% IF Koha.Preference('UseCashRegisters') %]
+                    cash_register: {
+                        required: function() {
+                            return $('#payment_type').val() == 'CASH'
+                        }
                     }
+                    [% END %]
                 }
             });
         });
