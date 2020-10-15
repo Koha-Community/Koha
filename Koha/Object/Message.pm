@@ -21,7 +21,7 @@ use base qw(Class::Accessor);
 
 use Koha::Exceptions;
 
-__PACKAGE__->mk_ro_accessors(qw( message type ));
+__PACKAGE__->mk_ro_accessors(qw( message payload type ));
 
 =head1 NAME
 
@@ -41,7 +41,8 @@ Koha::Object::Message - Class encapsulating action feedback messages in Koha::Ob
     my $message = Koha::Object::Message->new(
         {
             message => $some_message,
-          [ type    => 'error' ]
+          [ type    => 'error',
+            payload => $payload ]
         }
     );
 
@@ -54,6 +55,7 @@ sub new {
 
     my $message = $params->{message};
     my $type    = $params->{type} // 'error';
+    my $payload = $params->{payload};
 
     Koha::Exceptions::MissingParameter->throw( "Mandatory parameter missing: 'message'" )
         unless $message;
@@ -61,7 +63,8 @@ sub new {
     my $self = $class->SUPER::new(
         {
             message => $message,
-            type    => $type
+            type    => $type,
+            payload => $payload,
         }
     );
 

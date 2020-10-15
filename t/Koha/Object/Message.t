@@ -28,7 +28,7 @@ BEGIN {
 
 subtest 'new() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     my $some_error = 'Some error';
 
@@ -41,6 +41,11 @@ subtest 'new() tests' => sub {
     is( ref($message), 'Koha::Object::Message', 'Type is correct' );
     is( $message->message, $some_error, 'The message attribute has the right value' );
     is( $message->type, 'callback', 'type is correct' );
+
+    $message = Koha::Object::Message->new({ message => $some_error, payload => { some => 'structure' } });
+    is( ref($message), 'Koha::Object::Message', 'Type is correct' );
+    is( $message->message, $some_error, 'The message attribute has the right value' );
+    is_deeply( $message->payload, { some => 'structure' }, 'payload is correct' );
 
     throws_ok
         { Koha::Object::Message->new({ blah => 'ohh' }); }
