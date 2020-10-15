@@ -28,7 +28,7 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo DelCourseReserve GetCourseIt
 
 use Koha::Items;
 
-my $cgi = new CGI;
+my $cgi = CGI->new;
 
 my $action    = $cgi->param('action')    || q{};
 my $barcodes  = $cgi->param('barcodes')  || q{};

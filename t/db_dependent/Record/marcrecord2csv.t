@@ -134,7 +134,7 @@ subtest 'Test for subfields 0' => sub {
 
     # We change the barcode of the second item record to prevent an error "duplicate entry"
     my $field     = $record->field('952');
-    my $new_field = new MARC::Field(
+    my $new_field = MARC::Field->new(
         '952', ' ', ' ',
         0 => '1',
         p => '3010023918',

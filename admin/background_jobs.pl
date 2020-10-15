@@ -27,7 +27,7 @@ use C4::Output;
 use Koha::BackgroundJobs;
 use Koha::Virtualshelves;
 
-my $input             = new CGI;
+my $input             = CGI->new;
 my $op                = $input->param('op') || 'list';
 my @messages;
 
