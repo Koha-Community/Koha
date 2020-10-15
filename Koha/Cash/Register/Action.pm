@@ -57,7 +57,6 @@ Return the register linked to this cash register::action
 sub register {
     my ($self) = @_;
     my $rs = $self->_result->register;
-    return unless $rs;
     return Koha::Cash::Register->_new_from_dbic($rs);
 }
 
