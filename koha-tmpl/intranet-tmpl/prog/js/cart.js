@@ -1,8 +1,9 @@
+/* global __ dataTablesDefaults showMore showLess delSelRecords addSelToShelf sendBasket printBasket delBasket openBiblio selRecord */
 
 function placeHold () {
     var checkedItems = $("input:checkbox:checked");
     if ($(checkedItems).size() === 0) {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __("No item was selected") );
         return false;
     }
 
@@ -28,7 +29,7 @@ function placeHold () {
 function batchDelete(){
     var checkedItems = $("input:checkbox:checked");
     if ($(checkedItems).size() === 0) {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __("No item was selected") );
         return false;
     }
     var newloc;
@@ -48,7 +49,7 @@ function batchDelete(){
 function batchModify(){
     var checkedItems = $("input:checkbox:checked");
     if ($(checkedItems).size() === 0) {
-        alert(MSG_NO_RECORD_SELECTED);
+        alert( __("No item was selected") );
         return false;
     }
     var newloc;
@@ -82,7 +83,7 @@ $(document).ready(function(){
     });
 
     $(".holdsep").text("| ");
-    $(".hold").text(_("Place hold"));
+    $(".hold").text( __("Place hold") );
     $("#downloadcartc").empty();
 
     $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
