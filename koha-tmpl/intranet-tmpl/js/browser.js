@@ -73,7 +73,11 @@ KOHA.browser = function (searchid, biblionumber) {
     me.show = function () {
         if (current_search) {
             me.curPos = $.inArray(biblionumber, current_search.results);
-            me.offset = Math.floor((current_search.offset + me.curPos - 1) / current_search.pagelen) * current_search.pagelen;
+            if ( current_search.offset + me.curPos <= current_search.pagelen ) { // First page
+                me.offset = 0;
+            } else {
+                me.offset = current_search.offset - 1;
+            }
 
             $(document).ready(function () {
                 if (me.curPos > -1) {
