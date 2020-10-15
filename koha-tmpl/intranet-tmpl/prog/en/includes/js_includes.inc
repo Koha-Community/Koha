@@ -108,7 +108,7 @@
                         }
                         itemString += ( item.address ? item.address.escapeHtml() : "" ) + " "
                                     + ( item.city    ? item.city.escapeHtml()    : "" ) + " "
-                                    + ( item.zipcode ? item.city.escapeHtml()    : "" ) + " "
+                                    + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " "
                                     + ( item.country ? item.country.escapeHtml() : "" )
                                     + "</small></a>";
                         return $( "<li></li>" )
