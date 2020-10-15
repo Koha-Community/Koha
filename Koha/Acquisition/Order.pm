@@ -127,15 +127,12 @@ sub cancel {
     # Delete the related items
     my $items = $self->items;
     while ( my $item = $items->next ) {
-        my $safe_to_delete = $item->safe_to_delete;
-        if ( $safe_to_delete eq '1' ) {
-            $item->safe_delete;
-        }
-        else {
+        my $deleted = $item->safe_delete;
+        unless ( ref($deleted) eq 'Koha::Item' ) {
             $self->add_message(
                 {
                     message => 'error_delitem',
-                    payload => { item => $item, reason => $safe_to_delete }
+                    payload => { item => $item, reason => $deleted }
                 }
             );
         }
