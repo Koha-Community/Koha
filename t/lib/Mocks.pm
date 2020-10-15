@@ -60,9 +60,18 @@ sub mock_userenv {
     my $branchname   = $params->{branchname}   || $userenv->{branchname};
     my $flags        = $params->{flags}        || $userenv->{flags}          || 0;
     my $emailaddress = $params->{emailaddress} || $userenv->{emailaddress};
+    my $desk_id       = $params->{desk_id}       || $userenv->{desk_id};
+    my $desk_name     = $params->{desk_name}     || $userenv->{desk_name};
+    my $register_id   = $params->{register_id}   || $userenv->{register_id};
+    my $register_name = $params->{register_name} || $userenv->{register_name};
     my ( $shibboleth );
 
-    C4::Context->set_userenv($usernum, $userid, $cardnumber, $firstname, $surname, $branchcode, $branchname, $flags, $emailaddress, $shibboleth );
+    C4::Context->set_userenv(
+        $usernum,      $userid,     $cardnumber, $firstname,
+        $surname,      $branchcode, $branchname, $flags,
+        $emailaddress, $shibboleth, $desk_id,    $desk_name,
+        $register_id,  $register_name
+    );
 }
 
 1;
