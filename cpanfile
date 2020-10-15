@@ -96,6 +96,7 @@ requires 'Schedule::At', '1.06';
 requires 'Search::Elasticsearch', '5.01';
 requires 'Sereal::Decoder', '3.0';
 requires 'Sereal::Encoder', '3.0';
+requires 'Starman', '0.4014';
 requires 'Storable', '2.20';
 requires 'String::Random', '0.22';
 requires 'Template', '>= 2.22, != 3.008';
