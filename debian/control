@@ -114,7 +114,6 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libpdf-table-perl,
  libplack-middleware-logwarn-perl,
  libplack-middleware-reverseproxy-perl,
- libppi-perl,
  libreadonly-perl,
  libreadonly-xs-perl,
  libscalar-list-utils-perl,
@@ -126,6 +125,7 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libstring-random-perl,
  libsys-cpu-perl,
  libtemplate-perl,
+ libtemplate-plugin-gettext-perl,
  libtemplate-plugin-htmltotext-perl,
  libtemplate-plugin-json-escape-perl,
  libtemplate-plugin-stash-perl,
@@ -178,7 +178,6 @@ Depends: ${misc:Depends}, ${koha:Depends},
  daemon,
  debconf,
  idzebra-2.0,
- libnet-stomp-perl,
  memcached,
  mysql-client | virtual-mysql-client,
  perl-doc,
@@ -227,7 +226,6 @@ Depends: ${misc:Depends},
  daemon,
  debconf,
  idzebra-2.0,
- libnet-stomp-perl,
  mysql-client | virtual-mysql-client,
  mysql-server | virtual-mysql-server,
  perl-doc,
@@ -353,7 +351,6 @@ Depends: libalgorithm-checkdigits-perl,
  libpdf-table-perl,
  libplack-middleware-logwarn-perl,
  libplack-middleware-reverseproxy-perl,
- libppi-perl,
  libreadonly-perl,
  libreadonly-xs-perl,
  libscalar-list-utils-perl,
@@ -365,6 +362,7 @@ Depends: libalgorithm-checkdigits-perl,
  libstring-random-perl,
  libsys-cpu-perl,
  libtemplate-perl,
+ libtemplate-plugin-gettext-perl,
  libtemplate-plugin-htmltotext-perl,
  libtemplate-plugin-json-escape-perl,
  libtemplate-plugin-stash-perl,
@@ -411,3 +409,43 @@ Description: Perl dep. for koha
  .
  This meta-package contains perl dependencies packages for koha (all
  perl lib).
+
+Package: koha-core
+Architecture: all
+Description: integrated (physical) library management system
+ Koha is an Integrated Library Management system for real-world libraries
+ (the kinds with books).
+ .
+ This package provides a version of Koha identical to that of koha-full,
+ but without third-party systems such as MariaDB, RabbitMQ, et cetera.
+Depends: ${misc:Depends}, ${koha:Depends},
+ at,
+ cron-daemon,
+ daemon,
+ debconf,
+ mysql-client | virtual-mysql-client,
+ perl-doc,
+ pwgen,
+ starman,
+ sudo,
+ fonts-dejavu | ttf-dejavu,
+ unzip,
+ xmlstarlet,
+ yaz
+
+Package: koha-full
+Depends:
+ koha-core,
+ apache2,
+ apache2-mpm-itk | libapache2-mpm-itk,
+ idzebra-2.0,
+ memcached,
+ mysql-server | virtual-mysql-server,
+ rabbitmq-server,
+Architecture: all
+Description: integrated (physical) library management system
+ Koha is an Integrated Library Management system for real-world libraries
+ (the kinds with books).
+ .
+ This metapackage provides a version of Koha with the complete set of third-party
+ systems such as MariaDB, RabbitMQ, et cetera.
