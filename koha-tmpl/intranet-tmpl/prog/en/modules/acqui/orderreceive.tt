@@ -185,7 +185,7 @@
           </fieldset>
         [% END %]
     [% ELSIF (AcqCreateItem == 'ordering') %]
-        [% IF (order.items.size) %]
+        [% IF (order.items) %]
             <h5>Items</h5>
             <div style="width:100%;overflow:auto">
                 <table>
