@@ -81,7 +81,7 @@ subtest 'register' => sub {
 };
 
 subtest 'cashup_summary' => sub {
-    plan tests => 8;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -280,6 +280,69 @@ subtest 'cashup_summary' => sub {
         "income arrayref is correct" );
     is_deeply( $summary->{outgoing}, $expected_outgoing,
         "outgoing arrayref is correct" );
+
+    # Backdate cashup1 so we can add a new cashup to check 'previous'
+    $cashup1->timestamp(\'NOW() - INTERVAL 2 MINUTE')->store();
+    $cashup1->discard_changes;
+
+    # Transaction 4
+    my $debt4 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id       => undef,
+                amount            => '2.75',
+                amountoutstanding => '0.00',
+                credit_type_code  => undef,
+                debit_type_code   => 'OVERDUE',
+                date              => \'NOW() - INTERVAL 1 MINUTE'
+            },
+        }
+    );
+    my $income3 = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                register_id       => $register->id,
+                amount            => '-2.75',
+                amountoutstanding => '0.00',
+                credit_type_code  => 'PAYMENT',
+                debit_type_code   => undef,
+                date              => \'NOW() - INTERVAL 1 MINUTE'
+            },
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Account::Offsets',
+            value => {
+                credit_id => $income3->accountlines_id,
+                debit_id  => $debt4->accountlines_id,
+                amount    => '2.75',
+                type      => 'Payment'
+            },
+        }
+    );
+
+    my $cashup2 =
+      $register->add_cashup( { manager_id => $manager->id, amount => '2.75' } );
+
+    $summary = $cashup2->cashup_summary;
+
+    is( $summary->{from_date}, $cashup1->timestamp,
+        "from_date returns the timestamp of the previous cashup action" );
+    is( $summary->{to_date}, $cashup2->timestamp,
+        "to_date equals cashup timestamp" );
+    is( ref( $summary->{income_transactions} ),
+        'Koha::Account::Lines',
+        "income_transactions contains Koha::Account::Lines" );
+    is( $summary->{income_transactions}->count,
+        1, "income_transactions contains 2 transactions" );
+    is( ref( $summary->{outgoing_transactions} ),
+        'Koha::Account::Lines',
+        "outgoing_transactions contains Koha::Account::Lines" );
+    is( $summary->{outgoing_transactions}->count,
+        0, "outgoing_transactions contains 1 transaction" );
 
     $schema->storage->txn_rollback;
 };
