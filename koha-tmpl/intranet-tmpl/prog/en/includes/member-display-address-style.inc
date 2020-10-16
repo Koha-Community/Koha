@@ -45,8 +45,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | html %][%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%][% line_break | html %][%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
@@ -69,8 +69,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | html %][%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%][% line_break | html %][%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
