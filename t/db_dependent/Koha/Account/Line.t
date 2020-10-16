@@ -615,7 +615,7 @@ subtest 'checkout() tests' => sub {
 };
 
 subtest 'credits() and debits() tests' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -669,6 +669,17 @@ subtest 'credits() and debits() tests' => sub {
     is($debit->amount + 0, 8, 'Correct first debit');
     $debit = $debits->next;
     is($debit->amount + 0, 12, 'Correct second debit');
+
+    throws_ok
+        { $debit1->debits; }
+        'Koha::Exceptions::Account::IsNotCredit',
+        'Exception is thrown when requesting debits linked to debit';
+
+    throws_ok
+        { $credit1->credits; }
+        'Koha::Exceptions::Account::IsNotDebit',
+        'Exception is thrown when requesting credits linked to credit';
+
 
     $schema->storage->txn_rollback;
 };
