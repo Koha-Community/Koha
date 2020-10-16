@@ -1,3 +1,4 @@
+[% PROCESS 'accounts.inc' %]
 <form method="post" action="opac-account-pay.pl" class="form-horizontal">
     [% IF ( ACCOUNT_LINES ) %]
         <table class="table table-bordered table-striped" id="finestable">
@@ -169,54 +170,3 @@
         </fieldset>
     [% END # /IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
 </form>
-
-[%- BLOCK account_type_description -%]
-    <span>
-        [%- IF account.credit_type_code -%]
-            [%- SWITCH account.credit_type_code -%]
-                [%- CASE 'PAYMENT'          -%]Payment
-                [%- CASE 'WRITEOFF'         -%]Writeoff
-                [%- CASE 'FORGIVEN'         -%]Forgiven
-                [%- CASE 'CREDIT'           -%]Credit
-                [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
-                [%- CASE 'OVERPAYMENT'      -%]Overpayment refund
-                [%- CASE 'REFUND'           -%]Refund
-                [%- CASE 'CANCELLATION'     -%]Cancelled charge
-                [%- CASE                    -%][% account.credit_type.description | html %]
-            [%- END -%]
-        [%- ELSIF account.debit_type_code -%]
-            [%- SWITCH account.debit_type_code -%]
-                [%- CASE 'ACCOUNT'          -%]Account creation fee
-                [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
-                [%- CASE 'LOST'             -%]Lost item
-                [%- CASE 'MANUAL'           -%]Manual fee
-                [%- CASE 'NEW_CARD'         -%]New card
-                [%- CASE 'OVERDUE'          -%]Fine
-                [%- CASE 'PROCESSING'       -%]Lost item processing fee
-                [%- CASE 'RENT'             -%]Rental fee
-                [%- CASE 'RENT_DAILY'       -%]Daily rental fee
-                [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
-                [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
-                [%- CASE 'RESERVE'          -%]Hold fee
-                [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
-                [%- CASE 'Payout'           -%]Payout
-                [%- CASE                    -%][% account.debit_type.description | html %]
-            [%- END -%]
-        [%- END -%]
-        [%- PROCESS account_status_description account=account -%]
-    </span>
-[%- END # /BLOCK account_type_description -%]
-
-[%- BLOCK account_status_description -%]
-    [%- SWITCH account.status -%]
-            [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
-            [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
-            [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
-            [%- CASE 'REFUNDED'   -%]<span> (Refunded)</span>
-            [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
-            [%- CASE 'VOID'       -%]<span> (Voided)</span>
-            [%- CASE 'LOST'       -%]<span> (Lost)</span>
-            [%- CASE 'CANCELLED'  -%]<span> (Cancelled)</span>
-            [%- CASE              -%]
-        [%- END -%]
-[%- END -%]
