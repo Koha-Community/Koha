@@ -335,7 +335,7 @@
                         $("#tag_hides").hide();
                         $("#tagsel_form").show();
                     } else {
-                        alert(MSG_NO_RECORD_SELECTED);
+                        alert( __("No item was selected") );
                     }
                 }
 
@@ -350,7 +350,7 @@
                 function tagAdded() {
                     var checkedBoxes = $("input:checkbox:checked");
                     if (!$(checkedBoxes).size()) {
-                        alert(MSG_NO_RECORD_SELECTED);
+                        alert( __("No item was selected") );
                         return false;
                     }
 

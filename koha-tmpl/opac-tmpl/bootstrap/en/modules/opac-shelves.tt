@@ -819,7 +819,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
     function holdSelections() {
         var checkedBoxes = $("input:checkbox:checked");
         if ($(checkedBoxes).size() == 0) {
-            alert(MSG_NO_RECORD_SELECTED);
+            alert( __("No item was selected") );
         } else {
             var bibs = "";
             $(checkedBoxes).each(function(){
@@ -837,7 +837,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
             $(".tag_hides").hide();
             $("#tagsel_form").show();
         } else {
-            alert(MSG_NO_RECORD_SELECTED);
+            alert( __("No item was selected") );
         }
     }
 
@@ -852,7 +852,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
     function tagAdded() {
         var checkedBoxes = $("input:checkbox:checked");
         if (!$(checkedBoxes).size()) {
-            alert(MSG_NO_RECORD_SELECTED);
+            alert( __("No item was selected") );
             return false;
         }
 
@@ -976,7 +976,7 @@ $(function() {
                     return confirmDelete(MSG_REMOVE_ONE_FROM_LIST);
                 }
             } else {
-                alert(MSG_NO_RECORD_SELECTED);
+                alert( __("No item was selected") );
                 return false;
             }
         });
