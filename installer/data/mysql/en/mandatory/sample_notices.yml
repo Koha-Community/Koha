@@ -668,26 +668,26 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for:"
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for:"
             - ""
             - "- [% ill_bib_title %] - [% ill_bib_author %]"
             - ""
-            - "is ready for pick up from [% branches.branchname %]."
+            - "is ready for pick up from [% branch.branchname %]."
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: ill
           code: ILL_REQUEST_UNAVAIL
@@ -698,9 +698,9 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for"
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for"
             - ""
             - "- [% ill_bib_title %] - [% ill_bib_author %]"
             - ""
@@ -708,16 +708,16 @@ tables:
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: ill
           code: ILL_REQUEST_CANCEL
@@ -728,7 +728,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
+            - "The patron for interlibrary loans request [% illrequest.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
             - ""
             - "[% ill_full_metadata %]"
 
@@ -741,7 +741,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has modified this ILL request:"
+            - "The patron for interlibrary loans request [% illrequest.illrequest_id %], with the following details, has modified this ILL request:"
             - ""
             - "[% ill_full_metadata %]"
 
@@ -764,16 +764,16 @@ tables:
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: ill
           code: ILL_PICKUP_READY
@@ -784,26 +784,26 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for:"
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for:"
             - ""
             - "- [% ill_bib_title %] - [% ill_bib_author %]"
             - ""
-            - "is ready for pick up from [% branches.branchname %]."
+            - "is ready for pick up from [% branch.branchname %]."
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: ill
           code: ILL_REQUEST_UNAVAIL
@@ -814,9 +814,9 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear [% borrowers.firstname %] [% borrowers.surname %],"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "The Interlibrary loans request number [% illrequests.illrequest_id %] you placed for"
+            - "The Interlibrary loans request number [% illrequest.illrequest_id %] you placed for"
             - ""
             - "- [% ill_bib_title %] - [% ill_bib_author %]"
             - ""
@@ -824,16 +824,16 @@ tables:
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: ill
           code: ILL_REQUEST_CANCEL
@@ -844,7 +844,7 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
+            - "The patron for interlibrary loans request [% illrequest.illrequest_id %], with the following details, has requested cancellation of this ILL request:"
             - ""
             - "[% ill_full_metadata %]"
 
@@ -857,7 +857,7 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "The patron for interlibrary loans request [% illrequests.illrequest_id %], with the following details, has modified this ILL request:"
+            - "The patron for interlibrary loans request [% illrequest.illrequest_id %], with the following details, has modified this ILL request:"
             - ""
             - "[% ill_full_metadata %]"
 
@@ -880,16 +880,16 @@ tables:
             - ""
             - "Kind Regards"
             - ""
-            - "[% branches.branchname %]"
-            - "[% branches.branchaddress1 %]"
-            - "[% branches.branchaddress2 %]"
-            - "[% branches.branchaddress3 %]"
-            - "[% branches.branchcity %]"
-            - "[% branches.branchstate %]"
-            - "[% branches.branchzip %]"
-            - "[% branches.branchphone %]"
-            - "[% branches.branchillemail %]"
-            - "[% branches.branchemail %]"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %]"
+            - "[% branch.branchstate %]"
+            - "[% branch.branchzip %]"
+            - "[% branch.branchphone %]"
+            - "[% branch.branchillemail %]"
+            - "[% branch.branchemail %]"
 
         - module: members
           code: ACCTDETAILS

@@ -528,6 +528,7 @@
                                 [% SET default_messaging = category.default_messaging %]
                                 [% IF default_messaging.size %]
                                     [% FOREACH prefs IN default_messaging %]
+                                        [% NEXT IF !Koha.Preference( 'ILLModule' ) && prefs.message_name.match('^Ill_') %]
                                         [% FOREACH transport IN prefs.transports %]
                                             [% IF ( transport.transport ) %]
                                                 [% IF ( prefs.Item_Due ) %]Item due
@@ -536,8 +537,8 @@
                                                 [% ELSIF ( prefs.Hold_Filled ) %]Hold filled
                                                 [% ELSIF ( prefs.Item_Check_in ) %]Item check-in
                                                 [% ELSIF ( prefs.Item_Checkout ) %]Item checkout
-                                                [% ELSIF ( Koha.Preference('ILLModule') && prefs.Ill_ready ) %]Interlibrary loan ready
-                                                [% ELSIF ( Koha.Preference('ILLModule') && prefs.Ill_unavailable ) %]Interlibrary loan unavailable
+                                                [% ELSIF ( prefs.Ill_ready ) %]Interlibrary loan ready
+                                                [% ELSIF ( prefs.Ill_unavailable ) %]Interlibrary loan unavailable
                                                 [% ELSE %]Unknown
                                                 [% END %]:
                                                 <strong>[% transport.transport | html %]</strong><br />

@@ -1328,8 +1328,8 @@ sub generic_confirm {
             "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
           if ( !$to );
         # Create the from, replyto and sender headers
-        my $from = $branch->branchillemail || $branch->branchemail;
-        my $replyto = $branch->branchreplyto || $from;
+        my $from = $branch->branchemail;
+        my $replyto = $branch->inbound_ill_address;
         Koha::Exceptions::Ill::NoLibraryEmail->throw(
             "Your library has no usable email address. Please set it.")
           if ( !$from );
@@ -1568,8 +1568,8 @@ sub get_notice {
             branches    => $self->branchcode,
         },
         substitute  => {
-            ill_bib_title      => $title ? $title->value : qw{},
-            ill_bib_author     => $author ? $author->value : qw{},
+            ill_bib_title      => $title ? $title->value : '',
+            ill_bib_author     => $author ? $author->value : '',
             ill_full_metadata  => $metastring
         }
     );

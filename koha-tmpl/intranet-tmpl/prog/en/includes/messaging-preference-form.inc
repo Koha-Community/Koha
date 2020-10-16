@@ -13,6 +13,7 @@
         <!-- <th>RSS</th> -->
     </tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
+    [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
     <tr>
       <td>[% IF ( messaging_preference.Item_Due ) %]Item due
           [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance notice
@@ -25,8 +26,8 @@
             [% ELSE %]
                 Item checkout
             [% END %]
-          [% ELSIF ( Koha.Preference('ILLModule') && messaging_preference.Ill_ready ) %]Interlibrary loan ready
-          [% ELSIF ( Koha.Preference('ILLModule') && messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
+          [% ELSIF ( messaging_preference.Ill_ready ) %]Interlibrary loan ready
+          [% ELSIF ( messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
