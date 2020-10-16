@@ -22398,6 +22398,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, undef, '20.05.04 release' );
 }
 
+$DBversion = '20.05.04.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE `search_field` MODIFY COLUMN `type` enum('','string','date','number','boolean','sum','isbn','stdno','year') NOT NULL" );
+    $dbh->do( "UPDATE `search_field` SET type = 'year' WHERE name = 'date-of-publication'" );
+
+    NewVersion( $DBversion, 24807, "Add 'year' type to improve sorting behaviour" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
