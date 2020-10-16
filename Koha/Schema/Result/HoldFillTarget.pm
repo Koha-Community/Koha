@@ -54,6 +54,11 @@ __PACKAGE__->table("hold_fill_targets");
   default_value: 0
   is_nullable: 0
 
+=head2 reserve_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -67,6 +72,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "item_level_request",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "reserve_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -149,8 +156,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uSU9PBMr4e6XKuDgBV583A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-10-16 16:54:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p5nGQocXxa/8eP3m5/c4mA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
