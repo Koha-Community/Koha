@@ -484,22 +484,36 @@ function updateLink(val, op, target){
     var cartR = target ? target.$("#cartR" + val) : $("#cartR" + val);
 
     if(op == "add"){
-        cart.html(__("In your cart")).addClass("incart");
+        if( cart.hasClass("btn") ){
+            /* Cart link is a button with an icon */
+            cart.html("<i class=\"fa fa-shopping-cart\"></i> " + __("Add to cart")).addClass("incart");
+            cart.hide();
+        } else {
+            cart.html( __("In your cart") ).addClass("incart");
+        }
         cartR.show();
     } else {
-        cart.html(__("Add to cart")).removeClass("incart").addClass("addtocart");
+        if (cart.hasClass("btn")) {
+            cart.html("<i class=\"fa fa-shopping-cart\"></i> " + __("Add to cart")).addClass("addtocart");
+            cart.show();
+        } else {
+            cart.html(__("Add to cart")).addClass("addtocart");
+        }
         cartR.hide();
     }
 }
 
 function updateAllLinks(target){
-    if(target){
-        target.$("a.incart").html(__("Add to cart")).removeClass("incart").addClass("addtocart");
-        target.$(".cartRemove").hide();
+    var cart = target ? target.$("a.incart") : $("a.incart");
+    var cartR = target ? target.$(".cartRemove") : $(".cartRemove");
+    if( cart.hasClass("btn") ){
+        /* Cart link is a button with an icon */
+        cart.html("<i class=\"fa fa-shopping-cart\"></i> " + __("Add to cart")).addClass("incart");
+        cartR.hide();
     } else {
-        $("a.incart").html(__("Add to cart")).removeClass("incart").addClass("addtocart");
-        $(".cartRemove").hide();
+        cart.html( __("In your cart") ).addClass("incart");
     }
+    cart.show();
 }
 
 $(document).ready(function(){

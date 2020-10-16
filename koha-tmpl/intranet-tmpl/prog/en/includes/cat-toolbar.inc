@@ -100,19 +100,68 @@ CAN_user_serials_create_subscription ) %]
     </ul>
     </div>
 
-[% IF ( virtualshelves && intranetbookbag ) %]
-    <div class="btn-group">
-    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-        <li><a href="#" id="addtocart">Cart</a></li>
-        <li><a href="#" id="addtoshelf">List</a></li>
-    </ul>
-    </div>
-[% ELSIF ( virtualshelves ) %]
-    <div class="btn-group"><a id="addtoshelf" class="btn btn-default"><i class="fa fa-list"></i> Add to list</a> </div>
-[% ELSIF ( intranetbookbag ) %]
-    <div class="btn-group"><a id="addtocart" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a> </div>
-[% END %]
+    [% IF ( intranetbookbag ) %]
+        [% IF ( incart ) %]
+            <div class="btn-group">
+                <a id="cart[% biblionumber | html %]" class="btn btn-default addtocart incart" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+            </div>
+            <div class="btn-group">
+                <a id="cartR[% biblionumber | html %]" class="btn btn-default cartRemove incart" href="#"><i class="fa fa-shopping-cart"></i> Remove from cart</a>
+            </div>
+        [% ELSE %]
+            <div class="btn-group">
+                <a id="cart[% biblionumber | html %]" class="btn btn-default addtocart" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+            </div>
+            <div class="btn-group">
+                <a id="cartR[% biblionumber | html %]" class="btn btn-default cartRemove" href="#"><i class="fa fa-shopping-cart"></i> Remove from cart</a>
+            </div>
+        [% END %]
+    [% END %]
+
+    [% IF Koha.Preference('virtualshelves') %]
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-list"></i> Add to list <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                [% IF add_to_some_private_shelves.count %]
+                    <li class="dropdown-header">Your lists</li>
+                    [% SET number_of_private_shelves = 0 %]
+                    [% FOREACH s IN add_to_some_private_shelves %]
+                        [% IF shelfnumber != s.shelfnumber %]
+                            <li>
+                                <a href="#" class="addtolist" data-shelfnumber="[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
+                            </li>
+                            [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                            [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                        [% END %]
+                    [% END %]
+                [% END %]
+                [% IF add_to_some_public_shelves.count %]
+                    <li class="dropdown-header">Public lists</li>
+                    [% SET number_of_public_shelves = 0 %]
+                    [% FOREACH s IN add_to_some_public_shelves %]
+                        [% IF shelfnumber != s.shelfnumber %]
+                            <li>
+                                <a href="#" data-shelfnumber="[% s.shelfnumber | html %]" class="addtolist">[% s.shelfname | html %]</a>
+                            </li>
+                            [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                            [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                        [% END %]
+                    [% END %]
+                [% END %]
+                <li role="separator" class="divider"></li>
+                [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+                    <li>
+                        <a href="#" class="addtolist morelists">More lists</a>
+                    </li>
+                [% END %]
+                <li>
+                    <a href="#" class="addtolist newlist">New list</a>
+                </li>
+            </ul>
+        </div>
+    [% END # /IF virtualshelves %]
 
     <div class="btn-group"><a id="printbiblio" class="btn btn-default"><i class="fa fa-print"></i> Print</a></div>
 

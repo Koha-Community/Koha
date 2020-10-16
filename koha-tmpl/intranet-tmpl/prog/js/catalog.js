@@ -1,4 +1,4 @@
-/* global __ biblionumber count holdcount countorders countdeletedorders searchid addRecord */
+/* global __ biblionumber count holdcount countorders countdeletedorders searchid addRecord delSingleRecord */
 /* exported GetZ3950Terms PopupZ3950Confirmed */
 /* IF ( CAN_user_editcatalogue_edit_catalogue ) */
     /* this function open a popup to search on z3950 server.  */
@@ -15,7 +15,10 @@
     }
 /* END IF( CAN_user_editcatalogue_edit_catalogue ) */
 
-function addToCart() { addRecord( biblionumber ); }
+function addToCart(){
+    addRecord( biblionumber );
+}
+
 function addToShelf() { window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=' + biblionumber,'Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function printBiblio() {window.print(); }
@@ -94,11 +97,22 @@ $(document).ready(function() {
         printBiblio();
         return false;
     });
-    $("#addtocart").click(function(){
-        addToCart();
-        $(".btn-group").removeClass("open");
-        return false;
+
+    $(".addtocart").on("click", function (e) {
+        e.preventDefault();
+        var selection_id = this.id;
+        var biblionumber = selection_id.replace("cart", "");
+        addRecord(biblionumber);
     });
+
+    $(".cartRemove").on("click", function (e) {
+        e.preventDefault();
+        var selection_id = this.id;
+        var biblionumber = selection_id.replace("cartR", "");
+        delSingleRecord(biblionumber);
+        $(".addtocart").html("<i class=\"fa fa-shopping-cart\"></i> " + __("Add to cart"));
+    });
+
     $("#addtoshelf").click(function(){
         addToShelf();
         $(".btn-group").removeClass("open");
@@ -112,4 +126,17 @@ $(document).ready(function() {
             alertNoItems();
         })
         .tooltip();
+
+    $(".addtolist").on("click", function (e) {
+        e.preventDefault();
+        var shelfnumber = $(this).data("shelfnumber");
+        if ($(this).hasClass("morelists")) {
+            openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=' + biblionumber);
+        } else if ($(this).hasClass("newlist")) {
+            openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&biblionumber=' + biblionumber);
+        } else {
+            openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber=' + shelfnumber + '&confirm=1&biblionumber=' + biblionumber);
+        }
+    });
+
 });

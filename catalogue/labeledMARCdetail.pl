@@ -32,6 +32,7 @@ use C4::Serials;
 use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
+use Koha::Virtualshelves;
 
 my $query        = CGI->new;
 my $dbh          = C4::Context->dbh;
@@ -119,6 +120,38 @@ for my $field ($record->fields)
 		value => $value,
 	};
 }
+
+# get biblionumbers stored in the cart
+my @cart_list;
+
+if($query->cookie("intranet_bib_list")){
+    my $cart_list = $query->cookie("intranet_bib_list");
+    @cart_list = split(/\//, $cart_list);
+    if ( grep {$_ eq $biblionumber} @cart_list) {
+        $template->param( incart => 1 );
+    }
+}
+
+my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 1,
+    }
+);
+my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 2,
+    }
+);
+
+
+$template->param(
+    add_to_some_private_shelves => $some_private_shelves,
+    add_to_some_public_shelves  => $some_public_shelves,
+);
 
 $template->param (
 	marc_data				=> \@marc_data,

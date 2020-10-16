@@ -62,6 +62,7 @@ use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
 use Koha::DateUtils;
+use Koha::Virtualshelves;
 
 use List::MoreUtils qw( uniq );
 
@@ -325,6 +326,38 @@ if ($subscriptionscount) {
     );
 }
 
+# get biblionumbers stored in the cart
+my @cart_list;
+
+if($query->cookie("intranet_bib_list")){
+    my $cart_list = $query->cookie("intranet_bib_list");
+    @cart_list = split(/\//, $cart_list);
+    if ( grep {$_ eq $biblionumber} @cart_list) {
+        $template->param( incart => 1 );
+    }
+}
+
+my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 1,
+    }
+);
+my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 2,
+    }
+);
+
+
+$template->param(
+    add_to_some_private_shelves => $some_private_shelves,
+    add_to_some_public_shelves  => $some_public_shelves,
+);
+
 $template->param (
     item_loop               => \@item_loop,
     item_header_loop        => \@item_header_loop,
@@ -337,6 +370,7 @@ $template->param (
 	C4::Search::enabled_staff_search_views,
     searchid                => scalar $query->param('searchid'),
     biblio                  => $biblio_object,
+    loggedinuser => $loggedinuser,
 );
 
 $template->param( holdcount => $biblio_object->holds->count );

@@ -49,6 +49,7 @@ use C4::Search;		# enabled_staff_search_views
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::RecordProcessor;
+use Koha::Virtualshelves;
 
 
 my $query = CGI->new;
@@ -137,6 +138,38 @@ if ($subscriptionsnumber) {
         subscriptiontitle   => $subscriptiontitle,
     );
 }
+
+# get biblionumbers stored in the cart
+my @cart_list;
+
+if($query->cookie("intranet_bib_list")){
+    my $cart_list = $query->cookie("intranet_bib_list");
+    @cart_list = split(/\//, $cart_list);
+    if ( grep {$_ eq $biblionumber} @cart_list) {
+        $template->param( incart => 1 );
+    }
+}
+
+my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 1,
+    }
+);
+my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+    {
+        borrowernumber => $loggedinuser,
+        add_allowed    => 1,
+        category       => 2,
+    }
+);
+
+
+$template->param(
+    add_to_some_private_shelves => $some_private_shelves,
+    add_to_some_public_shelves  => $some_public_shelves,
+);
 
 $template->param (
     ISBD                => $res,
