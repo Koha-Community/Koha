@@ -1379,7 +1379,7 @@ sub _SearchItems_build_where_fragment {
             }
 
             if ( defined $ifnull ) {
-                $column = "IFNULL($column, ?)";
+                $column = "COALESCE($column, ?)";
             }
 
             if (ref $query eq 'ARRAY') {
