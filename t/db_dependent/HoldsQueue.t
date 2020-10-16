@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 55;
+use Test::More tests => 54;
 use Data::Dumper;
 
 use C4::Calendar;
