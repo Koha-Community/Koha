@@ -334,14 +334,16 @@ sub ModItemFromMarc {
 
 =head2 ModItemTransfer
 
-  ModItemTransfer($itemnumber, $frombranch, $tobranch, $trigger);
+  ModItemTransfer($itemnumber, $frombranch, $tobranch, $trigger, [$params]);
 
 Marks an item as being transferred from one branch to another and records the trigger.
+
+The last optional parameter allows for passing skip_record_index through to the items store call.
 
 =cut
 
 sub ModItemTransfer {
-    my ( $itemnumber, $frombranch, $tobranch, $trigger ) = @_;
+    my ( $itemnumber, $frombranch, $tobranch, $trigger, $params ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $item = Koha::Items->find( $itemnumber );
@@ -358,30 +360,32 @@ sub ModItemTransfer {
     $sth->execute($itemnumber, $frombranch, $tobranch, $trigger);
 
     # FIXME we are fetching the item twice in the 2 next statements!
-    Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ log_action => 0 });
-    ModDateLastSeen($itemnumber);
+    Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
+    ModDateLastSeen($itemnumber, undef, { skip_record_index => $params->{skip_record_index} });
     return;
 }
 
 =head2 ModDateLastSeen
 
-ModDateLastSeen( $itemnumber, $leave_item_lost );
+ModDateLastSeen( $itemnumber, $leave_item_lost, $params );
 
 Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking.
 C<$itemnumber> is the item number
 C<$leave_item_lost> determines if a lost item will be found or remain lost
 
+The last optional parameter allows for passing skip_record_index through to the items store call.
+
 =cut
 
 sub ModDateLastSeen {
-    my ( $itemnumber, $leave_item_lost ) = @_;
+    my ( $itemnumber, $leave_item_lost, $params ) = @_;
 
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
     my $item = Koha::Items->find($itemnumber);
     $item->datelastseen($today);
     $item->itemlost(0) unless $leave_item_lost;
-    $item->store({ log_action => 0 });
+    $item->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
 }
 
 =head2 CheckItemPreSave
