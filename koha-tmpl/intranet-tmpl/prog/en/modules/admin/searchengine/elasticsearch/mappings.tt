@@ -183,19 +183,23 @@ a.add, a.delete {
                 </thead>
                 <tbody>
                   [% FOREACH search_field IN all_search_fields %]
-                      [% IF search_field.mandatory %]
-                          [% SET is_readonly = "readonly" %]
-                      [% ELSE %]
-                          [% SET is_readonly = "" %]
-                      [% END %]
                     <tr>
                       <td>
-                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" [% is_readonly | html %]/>
+                        [% IF search_field.mandatory %]
+                            <input type="text" name="search_field_name" value="[% search_field.name | html %]" readonly />
+                        [% ELSE %]
+                            <input type="text" name="search_field_name" value="[% search_field.name | html %]" />
+                        [% END %]
                       </td>
                       <td>
-                        <input type="text" name="search_field_label" value="[% search_field.label | html %]" [% is_readonly | html %]/>
+                        [% IF search_field.mandatory %]
+                            <input type="text" name="search_field_label" value="[% search_field.label | html %]" readonly />
+                        [% ELSE %]
+                            <input type="text" name="search_field_label" value="[% search_field.label | html %]" />
+                        [% END %]
+
                       <td>
-                        [% IF is_readonly %]
+                        [% IF search_field.mandatory %]
                             <input type="hidden" name="search_field_type" value="[% search_field.type | html %]" />
                             <select name="search_field_type" disabled>
                         [% ELSE %]
