@@ -1066,6 +1066,8 @@ subtest 'store' => sub {
             is( $overdue->status, 'LOST',
                 'Overdue status set to LOST' );
 
+            t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 0 );
+
             # Forgive fine
             $credit = $account->add_credit(
                 {
