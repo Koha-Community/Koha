@@ -59,6 +59,7 @@ use Koha::Config::SysPrefs;
 use Koha::Charges::Fees;
 use Koha::Util::SystemPreferences;
 use Koha::Checkouts::ReturnClaims;
+use Koha::SearchEngine::Indexer;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -1874,7 +1875,7 @@ sub AddReturn {
                 . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
-        $item->onloan(undef)->store if defined $item->onloan;
+        $item->onloan(undef)->store({skip_record_index=>1}) if defined $item->onloan;
 
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
@@ -1902,9 +1903,9 @@ sub AddReturn {
         if (defined $update_loc_rules->{_ALL_}) {
             if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->permanent_location; }
             if ($update_loc_rules->{_ALL_} eq '_BLANK_') { $update_loc_rules->{_ALL_} = ''; }
-            if ( $item->location ne $update_loc_rules->{_ALL_}) {
+            if ( defined $item->location && $item->location ne $update_loc_rules->{_ALL_}) {
                 $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
-                $item->location($update_loc_rules->{_ALL_})->store;
+                $item->location($update_loc_rules->{_ALL_})->store({skip_record_index=>1});
             }
         }
         else {
@@ -1913,7 +1914,7 @@ sub AddReturn {
                 if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
                 if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
                     $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
-                    $item->location($update_loc_rules->{$key})->store;
+                    $item->location($update_loc_rules->{$key})->store({skip_record_index=>1});
                     last;
                 }
             }
@@ -1932,7 +1933,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->notforloan eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$key} };
-                    $item->notforloan($rules->{$key})->store({ log_action => 0 });
+                    $item->notforloan($rules->{$key})->store({ log_action => 0, skip_record_index => 1 });
                     last;
                 }
             }
@@ -1946,7 +1947,8 @@ sub AddReturn {
             Wrongbranch => $branch,
             Rightbranch => $message
         };
-        $doreturn = 0;
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
         return ( $doreturn, $messages, $issue, $patron_unblessed);
     }
 
@@ -1966,7 +1968,7 @@ sub AddReturn {
 
         if ($patron) {
             eval {
-                MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy );
+                MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy, { skip_record_index => 1} );
             };
             unless ( $@ ) {
                 if (
@@ -1982,26 +1984,29 @@ sub AddReturn {
             } else {
                 carp "The checkin for the following issue failed, Please go to the about page, section 'data corrupted' to know how to fix this problem ($@)" . Dumper( $issue->unblessed );
 
+                my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+                $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
+
                 return ( 0, { WasReturned => 0, DataCorrupted => 1 }, $issue, $patron_unblessed );
             }
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
             $messages->{'WasReturned'} = 1;
 
+        } else {
+            $item->onloan(undef)->store({ log_action => 0 , skip_record_index => 1 });
         }
-
-        $item->onloan(undef)->store({ log_action => 0 });
     }
 
     # the holdingbranch is updated if the document is returned to another location.
     # this is always done regardless of whether the item was on loan or not
     my $item_holding_branch = $item->holdingbranch;
     if ($item->holdingbranch ne $branch) {
-        $item->holdingbranch($branch)->store;
+        $item->holdingbranch($branch)->store({ skip_record_index => 1 });
     }
 
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-    ModDateLastSeen( $item->itemnumber, $leave_item_lost );
+    ModDateLastSeen( $item->itemnumber, $leave_item_lost, { skip_record_index => 1 } );
 
     # check if we have a transfer for this document
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->itemnumber );
@@ -2138,7 +2143,7 @@ sub AddReturn {
            )) {
             $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s, %s)", $item->itemnumber,$branch, $returnbranch, $transfer_trigger;
             $debug and warn "item: " . Dumper($item->unblessed);
-            ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger);
+            ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger, { skip_record_index => 1 });
             $messages->{'WasTransfered'} = 1;
         } else {
             $messages->{'NeedsTransfer'} = $returnbranch;
@@ -2159,12 +2164,15 @@ sub AddReturn {
         }
     }
 
+    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
+
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ));
 }
 
 =head2 MarkIssueReturned
 
-  MarkIssueReturned($borrowernumber, $itemnumber, $returndate, $privacy);
+  MarkIssueReturned($borrowernumber, $itemnumber, $returndate, $privacy, [$params] );
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
@@ -2180,10 +2188,12 @@ Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently used in misc/cronjobs/longoverdue.pl
 and offline_circ/process_koc.pl.
 
+The last optional parameter allos passing skip_record_index to the item store call.
+
 =cut
 
 sub MarkIssueReturned {
-    my ( $borrowernumber, $itemnumber, $returndate, $privacy ) = @_;
+    my ( $borrowernumber, $itemnumber, $returndate, $privacy, $params ) = @_;
 
     # Retrieve the issue
     my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
@@ -2229,7 +2239,7 @@ sub MarkIssueReturned {
         # And finally delete the issue
         $issue->delete;
 
-        $issue->item->onloan(undef)->store({ log_action => 0 });
+        $issue->item->onloan(undef)->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
 
         if ( C4::Context->preference('StoreLastBorrower') ) {
             my $item = Koha::Items->find( $itemnumber );

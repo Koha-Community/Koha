@@ -18,7 +18,9 @@ use t::lib::Mocks;
 use C4::AuthoritiesMarc;
 use C4::Biblio;
 use C4::Circulation;
+use C4::Items;
 use Koha::Database;
+use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Indexer;
 
 use t::lib::TestBuilder;
@@ -58,13 +60,13 @@ subtest 'Test indexer object creation' => sub {
 };
 
 subtest 'Test indexer calls' => sub {
-    plan tests => 24;
+    plan tests => 40;
 
     my @engines = ('Zebra');
     eval { Koha::SearchEngine::Elasticsearch->get_elasticsearch_params; };
     push @engines, 'Elasticsearch' unless $@;
     SKIP: {
-    skip 'Elasticsearch configuration not available', 12
+    skip 'Elasticsearch configuration not available', 20
             if scalar @engines == 1;
     }
 
@@ -109,12 +111,52 @@ subtest 'Test indexer calls' => sub {
         my $item;
         my $item2;
         warnings_are{
-            $item = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
-            $item2 = $builder->build_sample_item({biblionumber => $biblio->biblionumber});
+            $item = $builder->build_sample_item({
+                biblionumber => $biblio->biblionumber,
+                onloan => '2020-02-02',
+                datelastseen => '2020-01-01'
+            });
+            $item2 = $builder->build_sample_item({
+                biblionumber => $biblio->biblionumber,
+                onloan => '2020-12-12',
+                datelastseen => '2020-11-11'
+            });
         } [$engine,"Koha::Item",$engine,"Koha::Item"], "index_records is called for $engine when adding an item (Item->store)";
         warnings_are{
             $item->store({ skip_record_index => 1 });
         } undef, "index_records is not called for $engine when adding an item (Item->store) if skip_record_index passed";
+
+        my $issue = $builder->build({
+            source => 'Issue',
+            value  => {
+                itemnumber => $item->itemnumber
+            }
+        });
+        my $issue2 = $builder->build({
+            source => 'Issue',
+            value  => {
+                itemnumber => $item2->itemnumber
+            }
+        });
+        warnings_are{
+            MarkIssueReturned( $issue->{borrowernumber}, $item->itemnumber);
+        } [$engine,"Koha::Item"], "index_records is called for $engine when calling MarkIssueReturned";
+        warnings_are{
+            MarkIssueReturned( $issue2->{borrowernumber}, $item2->itemnumber, undef, undef, { skip_record_index => 1});
+        } undef, "index_records is not called for $engine when calling MarkIssueReturned if skip_record_index passed";
+
+        warnings_are{
+            AddReturn($item->barcode, $item->homebranch, 0, undef);
+        } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
+        $issue = $builder->build({
+            source => 'Issue',
+            value  => {
+                itemnumber => $item->itemnumber
+            }
+        });
+        warnings_are{
+            AddReturn($item->barcode, $item->homebranch, 0, undef);
+        } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
 
         $builder->build({
             source => 'Branchtransfer',
@@ -134,6 +176,22 @@ subtest 'Test indexer calls' => sub {
         warnings_are{
             LostItem( $item->itemnumber, "tests", undef, { skip_record_index => 1 });
         } undef, "index_records is not called for $engine when calling LostItem and transfer exists if skip_record_index";
+
+        $item->datelastseen('2020-02-02');
+        $item->store({skip_record_index=>1});
+        warnings_are{
+            my $t1 = ModDateLastSeen( $item->itemnumber, 1, undef );
+        } [$engine, "Koha::Item"], "index_records is called for $engine when calling ModDateLastSeen";
+        warnings_are{
+            ModDateLastSeen( $item->itemnumber, 1, { skip_record_index =>1 } );
+        } undef, "index_records is not called for $engine when calling ModDateLastSeen if skip_record_index";
+
+        warnings_are{
+            ModItemTransfer( $item->itemnumber, $item->homebranch, $item2->homebranch,'Manual');
+        } [$engine,"Koha::Item"], "index_records is called for $engine when calling ModItemTransfer";
+        warnings_are{
+            ModItemTransfer( $item->itemnumber, $item2->homebranch, $item->homebranch,'Manual',{skip_record_index=>1});
+        } undef, "index_records is not called for $engine when calling ModItemTransfer with skip_record_index";
 
         warnings_are{
             $item->delete();
