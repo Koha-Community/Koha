@@ -152,6 +152,10 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-02 12:47:22
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EbUa4eprgxeUkoOUiXO/Cg
 
+__PACKAGE__->add_columns(
+    '+mandatory' => { is_boolean => 1 },
+);
+
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
 1;

@@ -190,10 +190,10 @@ a.add, a.delete {
                       [% END %]
                     <tr>
                       <td>
-                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" [% is_readonly %]/>
+                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" [% is_readonly | html %]/>
                       </td>
                       <td>
-                        <input type="text" name="search_field_label" value="[% search_field.label | html %]" [% is_readonly %]/>
+                        <input type="text" name="search_field_label" value="[% search_field.label | html %]" [% is_readonly | html %]/>
                       <td>
                         [% IF is_readonly %]
                             <input type="hidden" name="search_field_type" value="[% search_field.type | html %]" />
@@ -385,7 +385,7 @@ a.add, a.delete {
                                     <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                 </td>
                                 [% IF mapping.search_field_mandatory %]
-                                    <td><a class="btn btn-default btn-xs delete mandatory" data-field_name="[% mapping.search_field_name %]" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
+                                    <td><a class="btn btn-default btn-xs delete mandatory" data-field_name="[% mapping.search_field_name | html %]" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                 [% ELSE %]
                                     <td><a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                 [% END %]
