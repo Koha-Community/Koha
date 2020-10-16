@@ -1,4 +1,5 @@
 [%~ USE Koha ~%]
+[%~ USE raw ~%]
 [%~ BLOCK 'display-address-style' ~%]
     [%~ SET line_break = "<br/>" ~%]
     [%~ IF no_line_break %][% SET line_break = " " %][% END ~%]
