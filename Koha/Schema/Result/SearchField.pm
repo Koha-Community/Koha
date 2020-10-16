@@ -78,6 +78,13 @@ the order place of the field in facet list if faceted
   default_value: 1
   is_nullable: 0
 
+=head2 mandatory
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+if marked this field is not editable or removable
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -103,6 +110,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "opac",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "mandatory",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -149,8 +158,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-02 12:47:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EbUa4eprgxeUkoOUiXO/Cg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-10-16 14:32:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HBEJWxqos7/LzD/QzTi45Q
 
 __PACKAGE__->add_columns(
     '+mandatory' => { is_boolean => 1 },
