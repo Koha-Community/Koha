@@ -125,7 +125,7 @@ Enabling this flag ensures that the issuing library is the sender of
 the digested message.  It has no effect unless the borrower has
 chosen 'Digests only' on the advance messages.
 
-=item B<-library>
+=item B<--library>
 
 select notices for one specific library. Use the value in the
 branches.branchcode table. This option can be repeated in order
@@ -240,7 +240,10 @@ unless ($confirm) {
 }
 cronlogaction();
 
-my %branches = map { $_ => 1 } @branchcodes if @branchcodes;
+my %branches = {};
+if (@branchcodes) {
+    %branches = map { $_ => 1 } @branchcodes;
+}
 
 # The fields that will be substituted into <<items.content>>
 my @item_content_fields = split(/,/,$itemscontent);
@@ -294,14 +297,14 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
-	    my $branchcode;
-	    if($owning_library) {
-		$branchcode = $upcoming->{'homebranch'};
-	    } else {
-		$branchcode = $upcoming->{'branchcode'};
-	    }
-	    # Skip this DUE if we specify list of libraries and this one is not part of it
-	    next if (@branchcodes && !$branches{$branchcode});
+        my $branchcode;
+        if($owning_library) {
+        $branchcode = $upcoming->{'homebranch'};
+        } else {
+        $branchcode = $upcoming->{'branchcode'};
+        }
+        # Skip this DUE if we specify list of libraries and this one is not part of it
+        next if (@branchcodes && !$branches{$branchcode});
 
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'DUE';
@@ -341,14 +344,14 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
-	    my $branchcode;
-	    if($owning_library) {
-		$branchcode = $upcoming->{'homebranch'};
-	    } else {
-		$branchcode = $upcoming->{'branchcode'};
-	    }
-	    # Skip this PREDUE if we specify list of libraries and this one is not part of it
-	    next if (@branchcodes && !$branches{$branchcode});
+        my $branchcode;
+        if($owning_library) {
+        $branchcode = $upcoming->{'homebranch'};
+        } else {
+        $branchcode = $upcoming->{'branchcode'};
+        }
+        # Skip this PREDUE if we specify list of libraries and this one is not part of it
+        next if (@branchcodes && !$branches{$branchcode});
 
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'PREDUE';

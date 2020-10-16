@@ -341,8 +341,8 @@ if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
 
-my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();	# Branches with overdue rules
-my @branches;									# Branches passed as parameter with overdue rules
+my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();    # Branches with overdue rules
+my @branches;                                    # Branches passed as parameter with overdue rules
 my $branchcount = scalar(@overduebranches);
 
 my $overduebranch_word = scalar @overduebranches > 1 ? 'branches' : 'branch';
@@ -366,8 +366,8 @@ if (@branchcodes) {
     
     if (@branches) {
 
-    	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
-	$verbose and warn "$branch_word @branches have overdue rules\n";
+        my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
+    $verbose and warn "$branch_word @branches have overdue rules\n";
 
     } else {
     
@@ -529,7 +529,7 @@ END_SQL
             # $letter->{'content'} is the text of the mail that is sent.
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
             # The following fields are available :
-	    # itemcount is interpreted here as the number of items in the overdue range defined by the current notice or all overdues < max if(-list-all).
+        # itemcount is interpreted here as the number of items in the overdue range defined by the current notice or all overdues < max if(-list-all).
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode> <country>
 
             my $borrower_sql = <<"END_SQL";
@@ -543,11 +543,11 @@ AND    TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
             my @borrower_parameters;
             if ($branchcode) {
-		if($owning_library) {
-		    $borrower_sql .= ' AND items.homebranch=? ';
-		} else {
-		    $borrower_sql .= ' AND issues.branchcode=? ';
-		}
+        if($owning_library) {
+            $borrower_sql .= ' AND items.homebranch=? ';
+        } else {
+            $borrower_sql .= ' AND issues.branchcode=? ';
+        }
                 push @borrower_parameters, $branchcode;
             }
             if ( $overdue_rules->{categorycode} ) {
@@ -557,7 +557,7 @@ END_SQL
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ORDER BY issues.borrowernumber';
 
             # $sth gets borrower info iff at least one overdue item has triggered the overdue action.
-	        my $sth = $dbh->prepare($borrower_sql);
+            my $sth = $dbh->prepare($borrower_sql);
             $sth->execute(@borrower_parameters);
 
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays, ".  $date_to_run->datetime() .")\nreturns " . $sth->rows . " rows";
