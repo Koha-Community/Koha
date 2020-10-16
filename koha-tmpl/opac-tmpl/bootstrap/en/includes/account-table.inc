@@ -181,6 +181,7 @@
                 [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
                 [%- CASE 'OVERPAYMENT'      -%]Overpayment refund
                 [%- CASE 'REFUND'           -%]Refund
+                [%- CASE 'CANCELLATION'     -%]Cancelled charge
                 [%- CASE                    -%][% account.credit_type.description | html %]
             [%- END -%]
         [%- ELSIF account.debit_type_code -%]
@@ -198,6 +199,7 @@
                 [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
                 [%- CASE 'RESERVE'          -%]Hold fee
                 [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
+                [%- CASE 'Payout'           -%]Payout
                 [%- CASE                    -%][% account.debit_type.description | html %]
             [%- END -%]
         [%- END -%]
@@ -210,9 +212,11 @@
             [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
             [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
             [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
+            [%- CASE 'REFUNDED'   -%]<span> (Refunded)</span>
             [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
             [%- CASE 'VOID'       -%]<span> (Voided)</span>
             [%- CASE 'LOST'       -%]<span> (Lost)</span>
+            [%- CASE 'CANCELLED'  -%]<span> (Cancelled)</span>
             [%- CASE              -%]
         [%- END -%]
 [%- END -%]
