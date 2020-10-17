@@ -423,7 +423,7 @@ if ( $op eq 'list' ) {
         #
         # (The template has another implicit restriction that the order cannot be closed if there
         # are any orders with uncertain prices.)
-        unclosable           => @orders ? $basket->{is_standing} : 1,
+        unclosable           => @orders || @cancelledorders ? $basket->{is_standing} : 1,
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
         csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' }) ],
