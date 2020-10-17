@@ -35,11 +35,11 @@
                     <h2>Your privacy management</h2>
 
                     [% IF deleted %]
-                        <div class="alert alert-success">Your reading history has been deleted.</div>
+                        <div class="alert alert-success">Your checkout history has been deleted.</div>
                     [% ELSIF history_not_deleted %]
-                        <div class="alert alert-warning">The deletion of your reading history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
+                        <div class="alert alert-warning">The deletion of your checkout history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
                     [% ELSIF nothing_to_delete %]
-                        <div class="alert alert-warning">No reading history to delete</div>
+                        <div class="alert alert-warning">No checkout history to delete</div>
                     [% END %]
 
                     [% IF ( privacy_updated ) %]
@@ -47,12 +47,12 @@
                     [% END %]
 
                     [% IF ( Ask_data ) %]
-                        <p>We take great care in protecting your privacy. On this screen, you can define how long we keep your reading history.</p>
+                        <p>We take great care in protecting your privacy. On this screen, you can define how long we keep your checkout history.</p>
                         <p>Your options are: <p>
                         <ul id="opac-privacy-options-list">
-                            <li class="privacy0">Forever: keep my reading history without limit. This is the option for users who want to keep track of what they are reading.</li>
-                            <li class="privacy1">Default: keep my reading history according to local laws. This is the default option : the library will keep your reading history for the duration permitted by local laws.</li>
-                            <li class="privacy2">Never: Delete my reading history immediately. This will delete all record of the item that was checked-out upon check-in.</li>
+                            <li class="privacy0">Forever: keep my checkout history without limit. This is the option for users who want to keep track of what they are reading.</li>
+                            <li class="privacy1">Default: keep my checkout history according to local laws. This is the default option : the library will keep your checkout history for the duration permitted by local laws.</li>
+                            <li class="privacy2">Never: Delete my checkout history immediately. This will delete all record of the item that was checked-out upon check-in.</li>
                         </ul>
                         <p id="note1">Please note that information on any book still checked-out must be kept by the library no matter which privacy option you choose.</p>
                         <p id="note2">Please also note that the library staff can't update these values for you: it's your privacy!</p>
@@ -138,7 +138,7 @@
 
                         <form action="/cgi-bin/koha/opac-privacy.pl" method="post" id="opac-privacy-delete-form">
                             <input type="hidden" name="op" value="delete_record" />
-                            <p>Whatever your privacy rule you choose, you can delete all your reading history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
+                            <p>Whatever your privacy rule you choose, you can delete all your checkout history immediately by clicking here. <strong>BE CAREFUL</strong>. Once you've confirmed the deletion, no one can retrieve the list!</p>
                             <fieldset class="action">
                                 <input type="submit" value="Immediate deletion" class="btn btn-danger" onclick="return confirmDelete(MSG_CONFIRM_AGAIN);" />
                             </fieldset>

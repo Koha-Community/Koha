@@ -427,7 +427,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_anonymize_patrons' -%]
         <span class="sub_permission delete_anonymize_patrons_subpermission">
-            Delete old borrowers and anonymize circulation history (deletes borrower reading history)
+            Delete old borrowers and anonymize circulation history (deletes borrower checkout history)
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'batch_extend_due_dates' -%]

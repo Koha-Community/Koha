@@ -63,7 +63,7 @@
                 [% ELSE %]
                     <li>
                 [% END %]
-                <a href="/cgi-bin/koha/opac-readingrecord.pl">your reading history</a></li>
+                <a href="/cgi-bin/koha/opac-readingrecord.pl">your checkout history</a></li>
                 [% IF ( OPACPrivacy ) %]
                     [% IF ( privacyview ) %]
                         <li class="active">

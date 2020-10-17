@@ -600,7 +600,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
-  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
+  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their checkout history  KEY `borrowernumber` (`borrowernumber`),
   `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's fines
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
   `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.
@@ -1527,7 +1527,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
-  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
+  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their checkout history
   `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's fines
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
   `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.

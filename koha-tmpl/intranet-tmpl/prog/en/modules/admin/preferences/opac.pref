@@ -261,7 +261,7 @@ OPAC:
               type: textarea
               class: code
         -
-            - 'Include a "Links" column on the "my summary" and "my reading history" tabs when a patron is logged in to the OPAC, with the following HTML (leave blank to disable):'
+            - 'Include a "Links" column on the "my summary" and "my checkout history" tabs when a patron is logged in to the OPAC, with the following HTML (leave blank to disable):'
             - '<br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
             - pref: OPACMySummaryHTML
               type: textarea
@@ -710,7 +710,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons to choose their own privacy settings for their reading history. This requires opacreadinghistory and AnonymousPatron system preferences."
+            - "patrons to choose their own privacy settings for their checkout history. This requires opacreadinghistory and AnonymousPatron system preferences."
         -
             - pref: AllowPatronToSetCheckoutsVisibilityForGuarantor
               default: 0
@@ -729,7 +729,7 @@ OPAC:
             - Use borrowernumber
             - pref: AnonymousPatron
               class: integer
-            - "as the anonymous patron (for anonymous suggestions and reading history)."
+            - "as the anonymous patron (for anonymous suggestions and checkout history)."
         -
             - pref: TrackClicks
               default: 0
