@@ -260,7 +260,7 @@ $(document).ready(function() {
                     <label for='suspend-modal-until'>" + __("Suspend until:") + "</label>\
                     <input name='suspend_until' id='suspend-modal-until' class='suspend-until' size='10' />\
 \
-                    <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + __("Clear date to suspend indefinitely") + "</a></p>\
+                    <p><a class='btn btn-link' id='suspend-modal-clear-date' >" + __("Clear date to suspend indefinitely") + "</a></p>\
 \
                 </div>\
 \
