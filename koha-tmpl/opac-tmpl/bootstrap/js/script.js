@@ -65,4 +65,7 @@ $(document).ready(function(){
         e.preventDefault();
         $("#loginModal").modal("show");
     });
+    $("#loginModal").on("shown.bs.modal", function(){
+        $("#muserid").focus();
+    });
 });
