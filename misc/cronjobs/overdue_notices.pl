@@ -439,7 +439,7 @@ elsif ( defined $text_filename ) {
     $fh = *STDOUT;
   } else {
     my $today = DateTime->now(time_zone => C4::Context->tz );
-    open $fh, ">",File::Spec->catdir ($text_filename,"notices-".$today->ymd().".txt");
+    open $fh, ">:encoding(UTF-8)",File::Spec->catdir ($text_filename,"notices-".$today->ymd().".txt");
   }
 }
 
