@@ -193,7 +193,7 @@
         <tr>
             [% UNLESS uploadedbarcodesflag %]<th>Seen</th>[% END %]
             <th>Barcode</th>
-            <th>Call number</th>
+            <th class="title-string">Call number</th>
             <th>Library</th>
             <th class="anti-the">Title</th>
             <th>Not for loan</th>
@@ -215,7 +215,9 @@
             <td>
             [% result.barcode | html %]
             </td>
-            <td>[% result.itemcallnumber | html %]</td>
+            <td>
+                <span title="[% result.cn_sort %]">[% result.itemcallnumber | html %]</span>
+            </td>
             <td>
                 [% Branches.GetName( result.homebranch ) | html %]
                 <span class="shelvingloc">[% result.location | html %]</span>
