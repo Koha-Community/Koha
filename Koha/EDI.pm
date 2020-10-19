@@ -33,6 +33,7 @@ use C4::Suggestions qw( ModSuggestion );
 use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
 use Koha::Edifact::Order;
 use Koha::Edifact;
+use C4::Log qw(logaction);
 use Log::Log4perl;
 use Text::Unidecode;
 use Koha::Plugins::Handler;
