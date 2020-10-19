@@ -439,10 +439,13 @@ Return values are:
 
 =over 2
 
-=item 0 - Do not refund
-=item refund - Refund the lost item charge
-=item restore - Refund the lost item charge and restore the original overdue fine
-=item charge - Refund the lost item charge and charge a new overdue fine
+=item '0' - Do not refund
+
+=item 'refund' - Refund the lost item charge
+
+=item 'restore' - Refund the lost item charge and restore the original overdue fine
+
+=item 'charge' - Refund the lost item charge and charge a new overdue fine
 
 =back
 
