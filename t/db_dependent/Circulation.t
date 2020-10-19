@@ -4603,7 +4603,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     $hold = $hold->get_from_storage;
     is( $hold->found, undef, 'Hold is waiting' );
     is( $hold->priority, 1, );
-}
+};
 
 subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
     plan tests => 2;

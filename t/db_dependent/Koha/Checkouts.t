@@ -94,6 +94,9 @@ subtest 'item' => sub {
     is( $item->itemnumber, $item_1->itemnumber, 'Koha::Checkout->item should return the correct item' );
 };
 
+$retrieved_checkout_1->delete;
+is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
+
 subtest 'patron' => sub {
     plan tests => 3;
     my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
@@ -127,7 +130,7 @@ subtest 'issuer' => sub {
     my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
     my $issuer = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
 
-    my $item = $builder->build_object( { class=> 'Koha::Items' } );
+    my $item = $builder->build_sample_item;
     my $checkout = Koha::Checkout->new({
         borrowernumber => $patron->borrowernumber,
         issuer         => $issuer->borrowernumber,
@@ -141,8 +144,9 @@ subtest 'issuer' => sub {
     is( $i->borrowernumber, $issuer->borrowernumber,
         'Koha::Checkout->issued_by should return the correct patron' );
 
+    # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
-    C4::Circulation::MarkIssueReturned( $i->borrowernumber, $checkout->itemnumber );
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $checkout->itemnumber );
     $i->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
     is( $old_issue->issuer, undef,
@@ -150,9 +154,6 @@ subtest 'issuer' => sub {
     );
 
 };
-
-$retrieved_checkout_1->delete;
-is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
 
 $schema->storage->txn_rollback;
 
