@@ -89,6 +89,38 @@ if ($plugins_enabled) {
                     push( @results, { repo => $r, result => $result } );
                 }
             }
+            elsif ( $r->{service} eq 'gitlab' ) {
+                my $org_name = $r->{org_name};
+                my $url = "https://gitlab.com/api/v4/groups/$org_name/projects?with_issues_enabled=no\&with_merge_requests_enabled=no\&with_shared=no\&include_subgroups=yes\&search=koha-plugin+$plugin_search";
+                my $response = from_json( get($url) );
+                foreach my $result ( @{ $response } ) {
+                    next unless $result->{name} =~ /^koha-plugin-/;
+                    my $project_id   = $result->{id};
+                    my $description  = $result->{description} // '';
+                    my $web_url      = $result->{web_url};
+                    my $releases_url = "https://gitlab.com/api/v4/projects/$project_id/releases";
+                    my @releases     = @{ from_json( get($releases_url) ) };
+
+                    if ( scalar @releases > 0 ) {
+                        # Pick the first one, the latest release
+                        my $latest = $releases[0];
+                        my $name  = $latest->{name};
+                        my @links = @{$latest->{assets}->{links}};
+                        my $url   = $links[0]->{direct_asset_url};
+                        my @parts = split( '/', $url);
+                        my $filename = $parts[-1];
+                        next unless $url =~ m/\.kpz$/;
+                        my $result = {
+                            description  => $description,
+                            install_name => $filename,
+                            install_url  => $url,
+                            html_url     => $web_url,
+                            name         => $name,
+                        };
+                        push @results, { repo => $r, result => $result };
+                    }
+                }
+            }
         }
 
         $template->param(
