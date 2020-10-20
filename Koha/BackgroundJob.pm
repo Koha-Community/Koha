@@ -62,8 +62,28 @@ Connect to the message broker using default guest/guest credential
 
 sub connect {
     my ( $self );
-    my $stomp = Net::Stomp->new( { hostname => 'localhost', port => '61613' } );
-    $stomp->connect( { login => 'guest', passcode => 'guest' } );
+    my $hostname = 'localhost';
+    my $port = '61613';
+    my $config = C4::Context->config('message_broker');
+    my $credentials = {
+        login => 'guest',
+        passcode => 'guest',
+    };
+    if ($config){
+        $hostname = $config->{hostname} if $config->{hostname};
+        $port = $config->{port} if $config->{port};
+        $credentials->{login} = $config->{username} if $config->{username};
+        $credentials->{passcode} = $config->{password} if $config->{password};
+        $credentials->{host} = $config->{vhost} if $config->{vhost};
+    }
+    my $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
+    my $frame = $stomp->connect( $credentials );
+    unless ($frame && $frame->command eq 'CONNECTED'){
+        if ($frame){
+            warn $frame->as_string;
+        }
+        die "Cannot connect to message broker";
+    }
     return $stomp;
 }
 
