@@ -208,7 +208,18 @@
                                     <div class="list-actions">
                                         <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
 
-                                        <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link download" data-toggle="modal" data-target="#modalWin"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download list</a>
+                                        <div id="download-list" class="btn-group dropdown">
+                                            <a id="format" class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
+                                            <div class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
+                                                <a role="menuitem" class="dropdown-item download-list" data-format="bibtex" href="#">BibTeX</a>
+                                                <a role="menuitem" class="dropdown-item download-list" data-format="isbd" href="#">ISBD</a>
+                                                <a role="menuitem" class="dropdown-item download-list" data-format="iso2709" href="#">MARC</a>
+                                                <a role="menuitem" class="dropdown-item download-list" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a>
+                                                [% FOREACH csv_profile IN csv_profiles %]
+                                                    <a role="menuitem" class="dropdown-item download-list" data-format="[% csv_profile.export_format_id | html %]" href="#">CSV - [% csv_profile.profile | html %]</a>
+                                                [% END %]
+                                            </div>
+                                        </div>
 
                                         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                             <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=yes,resizable=yes,height=400,width=500,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send list</a></span>
@@ -782,15 +793,10 @@
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
-<div class="modal" id="modalWin" role="dialog" aria-hidden="true" tabindex="-1">
-    <div class="modal-content">
-        <div class="modal-body">
-            <div style="margin:1em;padding:1em;font-size:150%;">
-                <img src="[% interface | html %]/[% theme | html %]/images/loading.gif" alt="" /> Loading
-            </div>
-        </div>
-    </div>
-</div>
+<form method="post" id="download_list" action="/cgi-bin/koha/opac-downloadshelf.pl">
+    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+    <input type="hidden" name="format" id="download_format" value="" />
+</form>
 
 <!-- DEBUG -->
     <div id="debug"></div>
@@ -1042,6 +1048,13 @@ $(function() {
                 }
             }
         );
+    });
+
+    $(".download-list").on("click", function(e){
+        e.preventDefault();
+        var format = $(this).data("format");
+        $("#download_format").val( format );
+        $("#download_list").submit();
     });
 
 }); // document.ready

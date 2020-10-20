@@ -33,6 +33,7 @@ use C4::XSLT;
 use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::CirculationRules;
+use Koha::CsvProfiles;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -385,6 +386,11 @@ if ( $op eq 'view' ) {
                 itemsloop          => \@items,
                 sortfield          => $sortfield,
                 direction          => $direction,
+                csv_profiles => [
+                    Koha::CsvProfiles->search(
+                        { type => 'marc', used_for => 'export_records', staff_only => 0 }
+                    )
+                ],
             );
             if ( $page ) {
                 my $pager = $contents->pager;
