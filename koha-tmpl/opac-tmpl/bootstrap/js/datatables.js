@@ -27,7 +27,8 @@ var dataTablesDefaults = {
             "copySuccess": {
                 _: window.MSG_DT_COPIED_ROWS || "Copied %d rows to clipboard",
                 1: window.MSG_DT_COPIED_ONE_ROW || "Copied one row to clipboard",
-            }
+            },
+            "print": __("Print")
         }
     },
     "dom": 't',
