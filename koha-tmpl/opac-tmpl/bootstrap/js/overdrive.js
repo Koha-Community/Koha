@@ -95,9 +95,11 @@ KOHA.OverDriveCirculation = new function() {
             var ODpassword = $("input[name='ODpassword']").val();
             login( ODpassword );
         });
-    });
 
-    $( document ).ready(function() {
+        $("#overdrive-login").on("shown.bs.modal", function(){
+            $("#ODpassword").focus();
+        });
+
         var p = window.opener;
         var cb;
         if (p) {
