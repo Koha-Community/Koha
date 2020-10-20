@@ -83,7 +83,11 @@
                 function ( data ) {
                     if ( data.error ) return;
 
-                    $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Items available:") + ' </b>' +  data.copiesAvailable + " " + _("out of") + ' ' + data.copiesOwned + '</span>' );
+                    if( data.availabilityType == 'AlwaysAvailable' ){
+                        $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Always available") + '</b></span>' );
+                     } else {
+                        $availability_summary.html( '<span class="label">' + _("Availability:") + ' </span> ' + '<span class="available"><b>' + _("Items available:") + ' </b>' +  data.copiesAvailable + " " + _("out of") + ' ' + data.copiesOwned + '</span>' );
+                    }
 
                     if ( data.numberOfHolds ) {
                         $availability_summary.find( '.available' ).append( ', ' + _("waiting holds:") + ' <strong>' + data.numberOfHolds + '</strong>' );
