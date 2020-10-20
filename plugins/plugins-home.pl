@@ -66,6 +66,12 @@ if ($plugins_enabled) {
     my @results;
     if ($plugin_search) {
         my $repos = C4::Context->config('plugin_repos');
+
+        # Fix data structure if only one repo defined
+        if ( ref($repos->{repo}) eq 'HASH' ) {
+            $repos = { repo => [ $repos->{repo} ] };
+        }
+
         foreach my $r ( @{ $repos->{repo} } ) {
             if ( $r->{service} eq 'github' ) {
                 my $url = "https://api.github.com/search/repositories?q=$plugin_search+user:$r->{org_name}+in:name,description";
