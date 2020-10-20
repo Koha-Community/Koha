@@ -30,15 +30,15 @@
 
 [% IF ( QUEUED_MESSAGES ) %]
     <table id="noticestable">
-	<thead>
-	    <tr>
-		<th>Notice</th>
-		<th>Type</th>
-		<th>Status</th>
-        <th>Updated on</th>
-        <th>Time created</th>
-	    </tr>
-	</thead>
+        <thead>
+            <tr>
+                <th>Notice</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th class="title-string">Updated on</th>
+                <th class="title-string">Time created</th>
+            </tr>
+        </thead>
 	<tbody>
 	    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
 	    <tr>
@@ -74,7 +74,7 @@
             </div>
             [% END %]
         </td>
-        <td><span title="[% QUEUED_MESSAGE.time_status_changed | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</span></td>
+        <td><span title="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</span></td>
         <td><span title="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</span></td>
 	    </tr>
 	    [% END %]
