@@ -194,6 +194,8 @@ sub delete {
     # FIXME check the item has no current issues
     # i.e. raise the appropriate exception
 
+    my $result = $self->SUPER::delete;
+
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
@@ -203,7 +205,7 @@ sub delete {
     logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item" )
       if C4::Context->preference("CataloguingLog");
 
-    return $self->SUPER::delete;
+    return $result;
 }
 
 =head3 safe_delete
