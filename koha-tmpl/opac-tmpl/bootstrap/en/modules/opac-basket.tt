@@ -29,18 +29,16 @@
                                 [% END %]
 
                                 <div id="download-cart" class="btn-group dropdown">
-                                    <a id="format" class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
-                                    <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
-                                        <li><a role="menuitem" class="download-cart" data-format="bibtex" href="#">BibTeX</a></li>
-                                        <li><a role="menuitem" class="download-cart" data-format="isbd" href="#">ISBD</a></li>
-                                        <li><a role="menuitem" class="download-cart" data-format="iso2709" href="#">MARC</a></li>
-                                        <li><a role="menuitem" class="download-cart" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a></li>
+                                    <a id="format" class="btn btn-link dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download <b class="caret"></b></a>
+                                    <div class="dropdown-menu" role="menu" aria-labelledby="format">
+                                        <a role="menuitem" class="dropdown-item download-cart" data-format="bibtex" href="#">BibTeX</a>
+                                        <a role="menuitem" class="dropdown-item download-cart" data-format="isbd" href="#">ISBD</a>
+                                        <a role="menuitem" class="dropdown-item download-cart" data-format="iso2709" href="#">MARC</a>
+                                        <a role="menuitem" class="dropdown-item download-cart" data-format="ris" href="#">RIS (Zotero, EndNote, others)</a>
                                         [% FOREACH csv_profile IN csv_profiles %]
-                                            <li>
-                                                <a role="menuitem" class="download-cart" data-format="[% csv_profile.export_format_id | html %]" href="#">CSV - [% csv_profile.profile | html %]</a>
-                                            </li>
+                                            <a role="menuitem" class="dropdown-item download-cart" data-format="[% csv_profile.export_format_id | html %]" href="#">CSV - [% csv_profile.profile | html %]</a>
                                         [% END %]
-                                    </ul>
+                                    </div>
                                 </div>
 
                                 <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash" aria-hidden="true"></i> Empty and close</a>
