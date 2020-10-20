@@ -765,63 +765,65 @@ legend:hover {
                                                 </li>
                                             [% END #/UNLESS nofax %]
 
-                                            <li>
-                                                [% IF mandatoryprimary_contact_method %]
-                                                    <label for="primary_contact_method" class="required">
-                                                [% ELSE %]
-                                                    <label for="primary_contact_method">
-                                                [% END %]
-                                                Main contact method: </label>
+                                            [% UNLESS noprimary_contact_method %]
+                                                <li>
+                                                    [% IF mandatoryprimary_contact_method %]
+                                                        <label for="primary_contact_method" class="required">
+                                                    [% ELSE %]
+                                                        <label for="primary_contact_method">
+                                                    [% END %]
+                                                    Main contact method: </label>
 
-                                                <select id="primary_contact_method" name="primary_contact_method">
-                                                    <option value=""></option>
-                                                    [% UNLESS nophone %]
-                                                        [% IF ( primary_contact_method == 'phone' ) %]
-                                                            <option value="phone" selected="selected">Primary phone</option>
-                                                        [% ELSE %]
-                                                            <option value="phone">Primary phone</option>
+                                                    <select id="primary_contact_method" name="primary_contact_method">
+                                                        <option value=""></option>
+                                                        [% UNLESS nophone %]
+                                                            [% IF ( primary_contact_method == 'phone' ) %]
+                                                                <option value="phone" selected="selected">Primary phone</option>
+                                                            [% ELSE %]
+                                                                <option value="phone">Primary phone</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    [% UNLESS nophonepro %]
-                                                        [% IF ( primary_contact_method == 'phonepro' ) %]
-                                                            <option value="phonepro" selected="selected">Secondary phone</option>
-                                                        [% ELSE %]
-                                                            <option value="phonepro">Secondary phone</option>
+                                                        [% UNLESS nophonepro %]
+                                                            [% IF ( primary_contact_method == 'phonepro' ) %]
+                                                                <option value="phonepro" selected="selected">Secondary phone</option>
+                                                            [% ELSE %]
+                                                                <option value="phonepro">Secondary phone</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    [% UNLESS nomobile %]
-                                                        [% IF ( primary_contact_method == 'mobile' ) %]
-                                                            <option value="mobile" selected="selected">Other phone</option>
-                                                        [% ELSE %]
-                                                            <option value="mobile">Other phone</option>
+                                                        [% UNLESS nomobile %]
+                                                            [% IF ( primary_contact_method == 'mobile' ) %]
+                                                                <option value="mobile" selected="selected">Other phone</option>
+                                                            [% ELSE %]
+                                                                <option value="mobile">Other phone</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    [% UNLESS noemail %]
-                                                        [% IF ( primary_contact_method == 'email' ) %]
-                                                            <option value="email" selected="selected">Primary email</option>
-                                                        [% ELSE %]
-                                                            <option value="email">Primary email</option>
+                                                        [% UNLESS noemail %]
+                                                            [% IF ( primary_contact_method == 'email' ) %]
+                                                                <option value="email" selected="selected">Primary email</option>
+                                                            [% ELSE %]
+                                                                <option value="email">Primary email</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    [% UNLESS noemailpro %]
-                                                        [% IF ( primary_contact_method == 'emailpro' ) %]
-                                                            <option value="emailpro" selected="selected">Secondary email</option>
-                                                        [% ELSE %]
-                                                            <option value="emailpro">Secondary email</option>
+                                                        [% UNLESS noemailpro %]
+                                                            [% IF ( primary_contact_method == 'emailpro' ) %]
+                                                                <option value="emailpro" selected="selected">Secondary email</option>
+                                                            [% ELSE %]
+                                                                <option value="emailpro">Secondary email</option>
+                                                            [% END %]
                                                         [% END %]
-                                                    [% END %]
-                                                    [% UNLESS nofax %]
-                                                        [% IF ( primary_contact_method == 'fax' ) %]
-                                                            <option value="fax" selected="selected">Fax</option>
-                                                        [% ELSE %]
-                                                            <option value="fax">Fax</option>
+                                                        [% UNLESS nofax %]
+                                                            [% IF ( primary_contact_method == 'fax' ) %]
+                                                                <option value="fax" selected="selected">Fax</option>
+                                                            [% ELSE %]
+                                                                <option value="fax">Fax</option>
+                                                            [% END %]
                                                         [% END %]
+                                                    </select>
+                                                    [% IF mandatoryprimary_contact_method %]
+                                                        <span class="required">Required</span>
                                                     [% END %]
-                                                </select>
-                                                [% IF mandatoryprimary_contact_method %]
-                                                    <span class="required">Required</span>
-                                                [% END %]
-                                            </li>
+                                                </li>
+                                            [% END %]
                                         </ol>
                                     </fieldset> <!-- /#memberentry_contact -->
                                 [% END # hide fieldset %]

@@ -327,10 +327,10 @@
                                                 </li>
                                         [% END %]
 
-                                        [% IF ( primary_contact_method ) %]
+                                        [% IF ( patron.primary_contact_method ) %]
                                             <li>
                                                 <span class="label">Main contact method: </span>
-                                                [% SWITCH primary_contact_method %]
+                                                [% SWITCH patron.primary_contact_method %]
                                                     [% CASE 'phone' %]
                                                         Primary phone
                                                     [% CASE 'phonepro' %]
