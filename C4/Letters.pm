@@ -708,6 +708,15 @@ sub GetPreparedLetter {
         }
     );
 
+    $letter->{title} = _process_tt(
+        {
+            content => $letter->{title},
+            tables  => $tables,
+            loops  => $loops,
+            substitute => $substitute,
+        }
+    );
+
     $letter->{content} =~ s/<<\S*>>//go; #remove any stragglers
 
     return $letter;
