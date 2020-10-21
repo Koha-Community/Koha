@@ -161,15 +161,15 @@ $(document).ready(function() {
 
                                     if ( oObj.waiting_here ) {
                                         data += __("Item is <strong>waiting here</strong>");
-					if (oObj.desk_name) {
-					    data += ", " + __("at %s").format( oObj.desk_name );
-					}
+                                        if (oObj.desk_name) {
+                                            data += ", " + __("at %s").format(oObj.desk_name);
+                                        }
                                     } else {
                                         data += __("Item is <strong>waiting</strong>");
                                         data += " " + __("at %s").format(oObj.waiting_at);
-					if (oObj.desk_name) {
-					    data += ", " + __("at %s").format( oObj.desk_name );
-					}
+                                        if (oObj.desk_name) {
+                                            data += ", " + __("at %s").format(oObj.desk_name);
+                                        }
 
                                     }
 

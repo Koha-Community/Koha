@@ -373,9 +373,9 @@ subtest 'Desks' => sub {
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     my $desk = Koha::Desk->new({
-	desk_name  => 'my_desk_name_for_test',
-	branchcode => $library->branchcode ,
-			       })->store;
+        desk_name  => 'my_desk_name_for_test',
+        branchcode => $library->branchcode ,
+                               })->store;
     ok($desk, "Desk created");
     my $item = $builder->build_sample_item({ library => $library->branchcode });
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
@@ -386,7 +386,7 @@ subtest 'Desks' => sub {
             class => 'Koha::Patrons',
             value => { branchcode => $library->branchcode, }
         }
-	);
+        );
 
     my $reserve_id = C4::Reserves::AddReserve(
         {
