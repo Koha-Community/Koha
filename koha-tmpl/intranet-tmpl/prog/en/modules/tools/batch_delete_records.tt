@@ -180,7 +180,7 @@
                 <tr>
                   <td><input type="checkbox" name="record_id" value="[% authority.authid | html %]" data-usage="[% authority.count_usage | html %]" /></td>
                   <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | uri %]">[% authority.authid | html %]</a></td>
-                  <td>[% PROCESS authresult summary=authority.summary %]</td>
+                  <td>[% PROCESS authresult summary=authority.summary authid=authority.authid %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% authority.authid | uri %]">[% authority.count_usage | html %] record(s)</a></td>
                 </tr>
               [% END %]

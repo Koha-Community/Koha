@@ -30,7 +30,8 @@
 <div id="authorities_searchresultlist_results">
   <table>
       <tr>
-        <th colspan="2">Summary</th>
+        <th>Summary</th>
+        <th>Heading type</th>
         [% UNLESS ( isEDITORS ) %]
           <th>Used in</th>
         [% END %]
@@ -40,8 +41,8 @@
       </tr>
     [% FOREACH resul IN result %]
     <tr data-authid="[% resul.authid | html %]">
-      <td>[% PROCESS authresult summary=resul.summary %]</td>
-      <td><a href="detail.pl?authid=[% resul.authid | uri %]">Details</a></td>
+      <td>[% PROCESS authresult summary=resul.summary authid=resul.authid %]</td>
+      <td>[% resul.summary.label | html %]</td>
     [% UNLESS ( resul.isEDITORS ) %]
       <td>
       [% IF resul.used > 0 %]

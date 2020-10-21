@@ -53,6 +53,7 @@
         [% END %]
     [% END %]
 [% END %]
+
 [% BLOCK authresult %]
     [% IF ( summary.label ) %][% summary.label | html %]:[% END %]
     [% IF summary.summary %]
@@ -63,7 +64,9 @@
     [% UNLESS ( summary.summaryonly ) %]
         <div class="authorizedheading">
           [% FOREACH authorize IN summary.authorized %]
-            <span class="authorizedheading">[% authorize.heading | html %]</span>
+            <span class="authorizedheading">
+                <a data-authid="[% authid | html %]" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | uri %]">[% authorize.heading | html %]</a>
+            </span>
             [% UNLESS loop.last %] | [% END %]
           [% END %]
         </div>
@@ -126,6 +129,7 @@
         [% END %]
     [% END %]
 [% END %]
+
 [% BLOCK language %]
   [% SWITCH lang %]
    [% CASE ['en', 'eng'] %]English
