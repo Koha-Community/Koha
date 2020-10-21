@@ -95,18 +95,6 @@ a {
     &:link,
     &:visited {
         color: $links;
-
-        &.btn {
-            color: #FFF;
-
-            &.btn-link {
-                color: $links;
-
-                &.disabled {
-                    color: #333;
-                }
-            }
-        }
     }
 }
 
@@ -115,22 +103,6 @@ button {
     &:hover,
     &:active {
         color: $links-hover;
-
-        &.btn {
-            color: #FFF;
-
-            &.btn-link {}
-        }
-    }
-
-    &.btn-link {
-
-        &:focus,
-        &:hover {
-            // border: 1px solid $input-btn-focus-color;
-            box-shadow: none;
-            text-decoration: none;
-        }
     }
 }
 
@@ -222,43 +194,88 @@ h1 {
     }
 }
 
-.btn-primary,
-.btn-primary:link,
-.btn-primary:visited {
+.btn-primary {
     $base-bg: #77b50f;
+    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
     background-color: $base-bg;
-    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
     background-position: 0;
-    border: 1px solid darken( $base-bg, 5% );
-    font-family: 'NotoSans';
+    border: 1px solid darken($base-bg, 5%);
+    color: #FFF;
+
+    &:link,
+    &:visited {
+        color: #FFF;
+    }
 
     &:hover,
-    &:active,
-    &:focus {
+    &:active {
         $base-bg: darken( $base-bg, 2);
         background-color: $base-bg;
-        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
         border-color: darken($base-bg, 5%);
         box-shadow: 0 0 0 1px lighten(saturate($base-bg, 0.5), 4);
+        color: #FFF;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 2px lighten($base-bg, 10%);
     }
 }
 
-.btn-danger,
-.btn-danger:link,
-.btn-danger:visited {
+.btn-danger {
     $base-bg: #B92020;
     background-color: $base-bg;
     background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
     background-position: 0;
     border: 1px solid darken( $base-bg, 5% );
-    font-family: 'NotoSans';
+    color: #FFF;
+
+    &:link,
+    &:visited {
+        color: #FFF;
+    }
 
     &:hover,
-    &:active,
-    &:focus {
+    &:active {
         $base-bg: darken( $base-bg, 2);
         background-color: $base-bg;
         background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg );
+        color: #FFF;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 2px lighten($base-bg, 10%);
+    }
+}
+
+.btn-default,
+.btn-secondary {
+    $base-bg: #e6e6e6;
+    background-color: $base-bg;
+    background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
+    background-position: 0;
+    border: 1px solid darken($base-bg, 20%);
+    color: #000;
+
+    &:link,
+    &:visited {
+        color: #000;
+    }
+
+    &:hover,
+    &:active {
+        $base-bg: darken($base-bg, 2);
+        background-color: $base-bg;
+        background-image: linear-gradient(to bottom, lighten(saturate($base-bg, 0.5), 4), $base-bg);
+        color: #000;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 2px darken($base-bg, 10%);
+    }
+
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active {
+        color: #000;
     }
 }
 
@@ -539,15 +556,6 @@ ul {
     background: #FFFFFF none;
     border: 1px solid #AAA;
     color: #222222;
-
-    a:link,
-    a:visited {
-        color: $links;
-    }
-    a:hover,
-    a:active {
-        color: $links-hover;
-    }
 }
 
 .ui-widget-header {
@@ -650,15 +658,6 @@ ul {
 }
 
 button {
-    &.btn-link {
-        color: $links;
-        &:focus,
-        &:hover {
-            color: $links-hover;
-            text-decoration: none;
-        }
-    }
-
     &.closebtn {
         background: transparent;
         border: 0;
@@ -679,13 +678,18 @@ button {
     }
 }
 
-.btn-default {
-    color: #212529;
-    background-color: #666666;
-    border-color: #666666;
-}
-
 .btn-link {
+    color: $links;
+
+    &:focus,
+    &:hover {
+        text-decoration: none;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 1px lighten($links, 20%);
+    }
+
     &.btn-lg {
         font-size: 100%;
     }
@@ -971,6 +975,10 @@ button {
             }
         }
     }
+}
+
+.dropdown-item:active {
+    background-color: $links;
 }
 
 #koha_url {
