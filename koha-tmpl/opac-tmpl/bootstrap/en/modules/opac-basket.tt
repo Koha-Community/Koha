@@ -55,16 +55,16 @@
                                 </div>
                                 <span class="links" id="tag_hides">
                                     <span class="selections">Select titles to: </span>
-                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
+                                    <a href="#" class="btn btn-link btn-sm remove deleteshelf disabled" aria-disabled="true"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                                            <a href="#" class="btn btn-link btn-sm newshelf disabled"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
+                                            <a href="#" class="btn btn-link btn-sm newshelf disabled" aria-disabled="true"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
                                         [% END %]
                                         [% IF ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
-                                            <a href="#" class="btn btn-link btn-sm hold disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
+                                            <a href="#" class="btn btn-link btn-sm hold disabled" aria-disabled="true"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                         [% END %]
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <a href="#" id="tagsel_tag" class="btn btn-link btn-sm disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
+                                            <a href="#" id="tagsel_tag" class="btn btn-link btn-sm disabled" aria-disabled="true"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
                                         [% END %]
                                     [% END # / IF opacuserlogin %]
                                 </span>
@@ -500,10 +500,10 @@
                 var checkedBoxes = $(".cb:checked");
                 if ( checkedBoxes.length ) {
                   $(".selections").html(_("With selected titles: "));
-                  $(".selections-toolbar .links a").removeClass("disabled");
+                  $(".selections-toolbar .links a").removeClass("disabled").attr("aria-disabled", "false");
                 } else {
                   $(".selections").html(_("Select titles to: "));
-                  $(".selections-toolbar .links a").addClass("disabled");
+                  $(".selections-toolbar .links a").addClass("disabled").attr("aria-disabled", "true");
                 }
             }
         </script>
