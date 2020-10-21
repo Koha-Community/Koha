@@ -189,8 +189,7 @@
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
                     <td class="tf-title">
-                        [% INCLUDE 'biblio-view-menu.inc' biblionumber = trsfitemloo.item.biblionumber %]
-                        [% INCLUDE 'biblio-title.inc' biblio=trsfitemloo.item.biblio %]
+                        [% INCLUDE 'biblio-title.inc' biblio=trsfitemloo.item.biblio link=1 %]
                         </a>
                     </td>
                     <td class="tf-author">[% trsfitemloo.item.biblio.author | html %]</td>
