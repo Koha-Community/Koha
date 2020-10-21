@@ -151,7 +151,7 @@ if ($add) {
 
     unless ($failed) {
         try {
-            $patron->account->add_debit(
+            my $line = $patron->account->add_debit(
                 {
                     amount      => $amount,
                     description => $desc,
@@ -170,9 +170,18 @@ if ($add) {
             }
 
             if ( $add eq 'save and pay' ) {
-                print $input->redirect(
-                    "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber"
+                my $url = sprintf(
+                    '/cgi-bin/koha/members/paycollect.pl?borrowernumber=%s&pay_individual=1&debit_type_code=%s&amount=%s&amountoutstanding=%s&description=%s&itemnumber=%s&accountlines_id=%s',
+                    $borrowernumber,
+                    $line->debit_type_code,
+                    sprintf('%.2f', $line->amount),
+                    sprintf('%.2f', $line->amountoutstanding),
+                    $line->description,
+                    $line->itemnumber,
+                    $line->id
                 );
+
+                print $input->redirect($url);
             }
             else {
                 print $input->redirect(
