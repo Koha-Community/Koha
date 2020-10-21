@@ -304,7 +304,6 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
     [% Asset.js("js/autocomplete/patrons.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% Asset.js("js/funds_sorts.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         function update_ordernumber_list(){
             var ordernumbers = [];
@@ -368,17 +367,15 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
                 update_ordernumber_list();
             });
             function selectAll () {
-                $("#table_orders").checkCheckboxes();
                 $("#table_orders").find("input[type='checkbox'][name='ordernumber']").each(function(){
-                    $(this).change();
-                } );
+                    $(this).prop("checked", true).change();
+                });
                 return false;
             }
             function clearAll () {
-                $("#table_orders").unCheckCheckboxes();
                 $("#table_orders").find("input[type='checkbox'][name='ordernumber']").each(function(){
-                    $(this).change();
-                } );
+                    $(this).prop("checked", false).change();
+                });
                 return false;
             }
 
