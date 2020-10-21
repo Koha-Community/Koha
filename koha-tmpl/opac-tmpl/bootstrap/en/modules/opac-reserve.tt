@@ -166,7 +166,7 @@
                         [% FOREACH bibitemloo IN bibitemloop %]
                             <div class="holdrow">
                                 [% IF bibitemloo.forced_hold_level %]
-                                    <span class="forced_hold_level"><h3>
+                                    <div class="alert alert-info forced_hold_level">
                                         [% IF bibitemloo.forced_hold_level == 'item' %]
                                             You already have at least one item level hold on this title.
                                             All further holds must be item level.
@@ -174,7 +174,7 @@
                                             You already have at least one record level hold on this title.
                                             All further holds must be record level.
                                         [% END %]
-                                    </h3></span>
+                                    </div>
                                 [% END %]
                                 <p>
                                     [% IF ( bibitemloo.holdable ) %]
