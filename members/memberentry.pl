@@ -673,7 +673,9 @@ my @typeloop;
 my $no_categories = 1;
 my $no_add;
 foreach my $category_type (qw(C A S P I X)) {
-    my $patron_categories = Koha::Patron::Categories->search_with_library_limits({ category_type => $category_type }, {order_by => ['categorycode']});
+    my $categories_limits = { category_type => $category_type };
+    $categories_limits->{canbeguarantee} = 1 if ($guarantor_id);
+    my $patron_categories = Koha::Patron::Categories->search_with_library_limits( $categories_limits, {order_by => ['categorycode']} );
     $no_categories = 0 if $patron_categories->count > 0;
 
     my @categoryloop;
