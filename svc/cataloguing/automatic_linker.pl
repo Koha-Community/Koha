@@ -25,7 +25,7 @@ use C4::Auth;
 use C4::Biblio;
 use C4::Context;
 
-my $input = new CGI;
+my $input = CGI->new;
 print $input->header('application/json');
 
 # Check the user's permissions
