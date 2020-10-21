@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Warn;
 
 use C4::Reserves;
@@ -366,6 +366,46 @@ subtest 'cancel all with reason' => sub {
 
     $av->delete;
     $message->delete;
+};
+
+subtest 'Desks' => sub {
+    plan tests => 5;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $desk = Koha::Desk->new({
+	desk_name  => 'my_desk_name_for_test',
+	branchcode => $library->branchcode ,
+			       })->store;
+    ok($desk, "Desk created");
+    my $item = $builder->build_sample_item({ library => $library->branchcode });
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, }
+        }
+	);
+
+    my $reserve_id = C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+
+    my $hold = Koha::Holds->find($reserve_id);
+
+    ok($reserve_id, "Hold created");
+    ok($hold, "Hold found");
+    $hold->set_waiting($desk->desk_id);
+    is($hold->found, 'W', 'Hold is waiting with correct status set');
+    is($hold->desk_id, $desk->desk_id, 'Hold is attach to its desk');
+
 };
 
 $schema->storage->txn_rollback;
