@@ -158,7 +158,6 @@
                     <div id="bigloop">
 
                         [% FOREACH bibitemloo IN bibitemloop %]
-                                    [% IF ( bibitemloo.holdable ) %]
                             <div class="holdrow">
                                 [% IF bibitemloo.forced_hold_level %]
                                     <span class="forced_hold_level"><h3>
@@ -172,6 +171,7 @@
                                     </h3></span>
                                 [% END %]
                                 <p>
+                                    [% IF ( bibitemloo.holdable ) %]
                                         <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
                                         <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber | html %]"/>
                                         <span class="confirmjs_hold" title="[% bibitemloo.biblionumber | html %]" style="padding:.3em"></span>
