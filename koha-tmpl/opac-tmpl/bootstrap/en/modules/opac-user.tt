@@ -909,7 +909,7 @@
 
                 $(".js_submitnote").click(function(e){
                     var $self = $(this);
-                    var title = $(this).parent().siblings('.title').html();
+                    var title = $(this).parent().parent().find('a.title')[0].outerHTML;
                     var $noteinput = $(this).siblings('input[name="note"]').first();
 
                     var ajaxData = {
