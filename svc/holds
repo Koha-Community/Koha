@@ -72,6 +72,12 @@ while ( my $h = $holds_rs->next() ) {
 
     my $biblionumber = $h->biblio()->biblionumber();
 
+    my $desk_id = $h->desk_id;
+    my $desk_name = '';
+    if ($desk_id) {
+        $desk_name = $h->desk()->desk_name();
+    }
+
     my $itemtype_limit;
     if ( $h->itemtype ) {
         my $itemtype = Koha::ItemTypes->find( $h->itemtype );
@@ -97,7 +103,7 @@ while ( my $h = $holds_rs->next() ) {
         reserve_id     => $h->reserve_id(),
         branchcode     => $h->branch()->branchname(),
         branches       => $libraries,
-        desk_name      => $h->desk()->desk_name(),
+        desk_name      => $desk_name,
         reservedate    => $h->reservedate(),
         expirationdate => $h->expirationdate(),
         suspend        => $h->suspend(),
