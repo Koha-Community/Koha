@@ -91,9 +91,9 @@
             <thead>
             <tr>
                 <th>&nbsp;</th>
-                <th>Patron category</th>
+                <th class="fixed_sort">Patron category</th>
                 <th>&nbsp;</th>
-                <th>Item type</th>
+                <th class="fixed_sort">Item type</th>
                 <th>Actions</th>
                 <th>Note</th>
                 <th>Current checkouts allowed</th>
@@ -969,7 +969,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     <script>
-        $(document).ready(function() {
+         $(document).ready(function() {
             $("#default-circulation-rules").dataTable($.extend(true,{},dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "bVisible": false, "aTargets": [ 0,2 ] },
