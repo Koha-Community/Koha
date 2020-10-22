@@ -100,7 +100,7 @@
                                 <i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i>
                                 [% IF ( HOLD.is_at_destination ) %]
                                     Item waiting at <strong> [% HOLD.branch.branchname | html %]</strong>
-                                    [% IF ( HOLD.desk_id ) %], [% Desks.GetName ( HOLD.desk_id ) | html %],[% END %]
+                                    [% IF ( HOLD.desk_id ) %], [% HOLD.desk.desk_name | html %],[% END %]
                                     [% IF ( HOLD.waitingdate ) %]
                                         since [% HOLD.waitingdate | $KohaDates %]
                                         [% IF HOLD.expirationdate %]

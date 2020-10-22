@@ -37,7 +37,7 @@
                     [% END %]
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
-                <td>[% Branches.GetName( reserveloo.item.holdingbranch ) | html %][% IF (reserveloo.desk_id  ) %], [% Desks.GetName (reserveloo.desk_id) | html %][% END %]</td>
+                <td>[% Branches.GetName( reserveloo.item.holdingbranch ) | html %][% IF (reserveloo.desk_id  ) %], [% reserveloo.desk.desk_name | html %][% END %]</td>
                 <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => reserveloo.item.location) | html %]</td>
                 <td>[% reserveloo.item.itemcallnumber | html %]</td>
                 <td>[% reserveloo.item.copynumber | html %]</td>
