@@ -526,7 +526,7 @@ sub delete_field {
     my $subfieldName = $params->{subfield};
     my $field_numbers = $params->{field_numbers} // [];
 
-    if ( not $subfieldName or $subfieldName eq '' ) {
+    if ( !defined $subfieldName or $subfieldName eq '' ) {
         _delete_field({ record => $record, field => $fieldName, field_numbers => $field_numbers });
     } else {
         _delete_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, field_numbers => $field_numbers });
