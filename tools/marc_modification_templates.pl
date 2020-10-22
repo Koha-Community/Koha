@@ -121,13 +121,17 @@ foreach my $action ( @actions ) {
   $action->{'action_copy_field'} = ( $action->{'action'} eq 'copy_field' );
   $action->{'action_copy_and_replace_field'} = ( $action->{'action'} eq 'copy_and_replace_field' );
 
-  $action->{'conditional_if'} = ( $action->{'conditional'} eq 'if' );
-  $action->{'conditional_unless'} = ( $action->{'conditional'} eq 'unless' );
+  if( defined $action->{'conditional'} ){
+      $action->{'conditional_if'} = ( $action->{'conditional'} eq 'if' );
+      $action->{'conditional_unless'} = ( $action->{'conditional'} eq 'unless' );
+  }
 
-  $action->{'conditional_comparison_exists'} = ( $action->{'conditional_comparison'} eq 'exists' );
-  $action->{'conditional_comparison_not_exists'} = ( $action->{'conditional_comparison'} eq 'not_exists' );
-  $action->{'conditional_comparison_equals'} = ( $action->{'conditional_comparison'} eq 'equals' );
-  $action->{'conditional_comparison_not_equals'} = ( $action->{'conditional_comparison'} eq 'not_equals' );
+  if( defined $action->{'conditional_comparison'} ){
+      $action->{'conditional_comparison_exists'} = ( $action->{'conditional_comparison'} eq 'exists' );
+      $action->{'conditional_comparison_not_exists'} = ( $action->{'conditional_comparison'} eq 'not_exists' );
+      $action->{'conditional_comparison_equals'} = ( $action->{'conditional_comparison'} eq 'equals' );
+      $action->{'conditional_comparison_not_equals'} = ( $action->{'conditional_comparison'} eq 'not_equals' );
+  }
 }
 
 $template->param(
