@@ -1676,7 +1676,7 @@ subtest 'move_field' => sub {
 subtest 'delete_field' => sub {
     plan tests                => 2;
     subtest 'delete subfield' => sub {
-        plan tests => 2;
+        plan tests => 3;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
@@ -1710,6 +1710,18 @@ subtest 'delete_field' => sub {
         @fields_952p =
           read_field( { record => $record, field => '952', subfield => 'p' } );
         is_deeply( \@fields_952p, [], 'Delete all 952$p' );
+
+        $record = new_record;
+        $record->append_fields(
+            MARC::Field->new(
+                600, ' ', ' ',
+                a => 'Murakami, Haruki',
+                0 => 'https://id.loc.gov/authorities/names/n81152393.html',
+            ),
+        );
+        delete_field( { record => $record, field => '600', subfield => '0' } );
+        my @fields_600 = read_field( { record => $record, field => '600' } );
+        is_deeply( \@fields_600, ['Murakami, Haruki'], 'Delete all 600$0, only subfield 0 deleted' );
     };
 
     subtest 'delete field' => sub {
