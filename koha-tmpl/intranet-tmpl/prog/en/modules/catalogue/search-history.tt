@@ -30,17 +30,17 @@
         <div id="biblio_tab">
           [% IF ( current_biblio_searches ) %]
             <h2>Current session</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-              <div class="selections-toolbar">
-                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+            <form id="current_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+              <p class="selections-toolbar">
+                <a class="CheckAll" data-form="current_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
-                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                <a class="CheckNone" data-form="current_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
                   <a href="#" class="action_delete disabled">Delete</a>
                 </span>
-              </div>
+              </p>
               <input type="hidden" name="action" value="delete" />
               <table class="historyt">
                 <thead>
@@ -65,19 +65,23 @@
             </form>
           [% END %]
 
+            [% IF ( current_biblio_searches && previous_biblio_searches) %]
+                <hr />
+            [% END %]
+
           [% IF ( previous_biblio_searches ) %]
             <h2>Previous sessions</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-              <div class="selections-toolbar">
-                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+            <form id="previous_cat" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+              <p class="selections-toolbar">
+                <a class="CheckAll" data-form="previous_cat" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
-                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                <a class="CheckNone" data-form="previous_cat" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
                   <a href="#" class="action_delete disabled">Delete</a>
                 </span>
-              </div>
+              </p>
               <input type="hidden" name="action" value="delete" />
               <table class="historyt">
                 <thead>
@@ -110,17 +114,17 @@
         <div id="authority_tab">
           [% IF ( current_authority_searches ) %]
             <h2>Current session</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-              <div class="selections-toolbar">
-                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+            <form id="current_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+              <p class="selections-toolbar">
+                <a class="CheckAll" data-form="current_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
-                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                <a class="CheckNone" data-form="current_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
                   <a href="#" class="action_delete disabled">Delete</a>
                 </span>
-              </div>
+              </p>
               <input type="hidden" name="action" value="delete" />
               <table class="historyt">
                 <thead>
@@ -145,19 +149,23 @@
             </form>
           [% END %]
 
+            [% IF ( current_authority_searches && previous_authority_searches) %]
+                <hr />
+            [% END %]
+
           [% IF ( previous_authority_searches ) %]
             <h2>Previous sessions</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
-              <div class="selections-toolbar">
-                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+            <form id="previous_auth" action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
+              <p class="selections-toolbar">
+                <a class="CheckAll" data-form="previous_auth" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
-                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
+                <a class="CheckNone" data-form="previous_auth" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
                   <a href="#" class="action_delete disabled">Delete</a>
                 </span>
-              </div>
+              </p>
               <input type="hidden" name="action" value="delete" />
               <table class="historyt">
                 <thead>
@@ -192,7 +200,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
     $(document).ready(function() {
         // We show table ordered by descending dates by default
@@ -234,15 +241,15 @@
 
         $(".CheckNone").click(function(e){
             e.preventDefault();
-            var form = $(this).parents("form").first();
-            form.find('table input[type="checkbox"]').prop('checked', false);
-            enableCheckboxActions(form);
+            var form = $(this).data("form");
+            $("#" + form ).find('table input[type="checkbox"]').prop('checked', false);
+            enableCheckboxActions($("#" + form ));
         });
         $(".CheckAll").click(function(e){
             e.preventDefault();
-            var form = $(this).parents("form").first();
-            form.find('table input[type="checkbox"]').prop('checked', true);
-            enableCheckboxActions(form);
+            var form = $(this).data("form");
+            $("#" + form ).find('table input[type="checkbox"]').prop('checked', true);
+            enableCheckboxActions($("#" + form ));
         });
 
         $('#tabs table').on('click', 'input:checkbox', function() {
