@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -197,6 +197,30 @@ subtest 'Test handling of in transit reserves by CancelExpiredReserves' => sub {
     CancelExpiredReserves();
     is(Koha::Holds->search->count, $count-1, "Transit hold is cancelled if ExpireReservesMaxPickUpDelay unset");
 
+};
+
+subtest 'Test handling of cancellation reason if passed' => sub {
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $expdate = dt_from_string->add( days => -2 );
+    my $reserve = $builder->build({
+        source => 'Reserve',
+        value  => {
+            expirationdate => '2018-01-01',
+            found => 'T',
+            cancellationdate => undef,
+            suspend => 0,
+            suspend_until => undef
+        }
+    });
+    my $reserve_id = $reserve->{reserve_id};
+    my $count = Koha::Holds->search->count;
+    CancelExpiredReserves("EXPIRED");
+    is(Koha::Holds->search->count, $count-1, "Hold is cancelled when reason is passed");
+    my $old_reserve = Koha::Old::Holds->find($reserve_id);
+    is($old_reserve->cancellation_reason, 'EXPIRED', "Hold cancellation_reason was set correctly");
 };
 
 $schema->storage->txn_rollback;

@@ -913,6 +913,7 @@ Cancels all reserves with an expiration date from before today.
 =cut
 
 sub CancelExpiredReserves {
+    my $cancellation_reason = shift;
     my $today = dt_from_string();
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
     my $expireWaiting = C4::Context->preference('ExpireReservesMaxPickUpDelay');
@@ -930,7 +931,8 @@ sub CancelExpiredReserves {
         next if !$cancel_on_holidays && $calendar->is_holiday( $today );
 
         my $cancel_params = {};
-        if ( $hold->found eq 'W' ) {
+        $cancel_params->{cancellation_reason} = $cancellation_reason if defined($cancellation_reason);
+        if ( defined($hold->found) && $hold->found eq 'W' ) {
             $cancel_params->{charge_cancel_fee} = 1;
         }
         $hold->cancel( $cancel_params );
