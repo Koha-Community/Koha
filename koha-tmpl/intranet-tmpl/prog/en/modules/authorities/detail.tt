@@ -12,44 +12,6 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/addbiblio.css") | $raw %]
-[% FILTER collapse %]
-    <style>
-        .marc_field {
-            display: inline-block;
-            padding: .3em;
-            border-radius: 3px;
-        }
-        .marc_subfield {
-            font-weight: bold;
-            color: #666;
-        }
-        .marc_subfield_desc {
-            color: #00698a;
-            font-style: italic;
-        }
-        .auth_subfield {
-            display: flex;
-        }
-        .tag {
-            padding: .4em 0;
-        }
-        .tag_desc {
-            color: #026;
-        }
-        .tag_num {
-            color: #080;
-        }
-        .tag_title {
-            font-size: 100%;
-            font-weight: bold;
-            padding: 0;
-        }
-        .ui-tabs-nav.ui-widget-header {
-            border-bottom: 1px solid #b9d8d9;
-            border-radius: 0;
-        }
-    </style>
-[% END %]
 </head>
 
 <body id="auth_detail" class="auth">
