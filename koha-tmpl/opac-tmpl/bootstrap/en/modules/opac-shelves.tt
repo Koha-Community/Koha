@@ -354,7 +354,7 @@
                                 </div> <!-- / #selections-toolbar -->
                             </div> <!-- /#floating -->
 
-                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
+                            <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform">
                                 [% IF can_manage_shelf %]
                                     <input type="hidden" name="op" value="remove_biblios" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -804,7 +804,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 [% IF OpenLibraryCovers || OpenLibrarySearch %]
     [% Asset.js("js/openlibrary.js") | $raw %]
@@ -875,7 +874,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
 
 function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
-    var checkedBoxes = $(".checkboxed input:checkbox:checked");
+    var checkedBoxes = $(".cb:checked");
     if ($(checkedBoxes).size()) {
       $("#selections").html(_("With selected titles: "));
       $("#selections-toolbar .links a").removeClass("disabled");
@@ -899,15 +898,15 @@ $(function() {
         });
     [% END %]
 
-    $("#CheckAll").click(function(){
-        $(".checkboxed").checkCheckboxes();
+    $("#CheckAll").on("click",function(e){
+        e.preventDefault();
+        $(".cb").prop("checked", true);
         enableCheckboxActions();
-        return false;
     });
-    $("#CheckNone").click(function(){
-        $(".checkboxed").unCheckCheckboxes();
+    $("#CheckNone").on("click",function(e){
+        e.preventDefault();
+        $(".cb").prop("checked", false);
         enableCheckboxActions();
-        return false;
     });
 
     $(".cb").click(function(){
@@ -967,7 +966,7 @@ $(function() {
         });
 
         $("#myform").submit(function(){
-            var checkedBoxes = $(".checkboxed input:checkbox:checked");
+            var checkedBoxes = $(".cb:checked");
             var numchecked = $(checkedBoxes).size();
             if (numchecked) {
                 if( numchecked > 1 ){

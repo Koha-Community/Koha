@@ -160,7 +160,7 @@
                     [% IF ( total ) %]
 
                         <div class="searchresults">
-                            <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
+                            <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
                                 [% IF ( searchdesc ) %]
                                     [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
                                         <input type="hidden" name="[% QUERY_INPUT.input_name | html %]" value="[% QUERY_INPUT.input_value | html %]"/>
@@ -625,7 +625,6 @@
     [% END %]
     [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
     [% IF ( RecordedBooksEnabled ) %][% Asset.js("js/recordedbooks.js") | $raw %][% END %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/authtoresults.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% IF ( OpacHighlightedWords ) %]
@@ -710,7 +709,7 @@
 
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
-            var checkedBoxes = $(".checkboxed input:checkbox:checked");
+            var checkedBoxes = $(".cb:checked");
             var controls = $("#selections-toolbar .links a, #selections-toolbar .links input, #selections-toolbar .links select, #selections-toolbar .links label, #selections-toolbar .links button");
             if ($(checkedBoxes).size()) {
             $("#selections").html(_("With selected titles: "));
@@ -879,15 +878,15 @@
                     return false;
                 }
             }
-            $("#CheckAll").click(function(){
-                $("#bookbag_form").checkCheckboxes();
+            $("#CheckAll").on("click",function(e){
+                e.preventDefault();
+                $(".cb").prop("checked", true);
                 enableCheckboxActions();
-                return false;
             });
-            $("#CheckNone").click(function(){
-                $("#bookbag_form").unCheckCheckboxes();
+            $("#CheckNone").on("click",function(e){
+                e.preventDefault();
+                $(".cb").prop("checked", false);
                 enableCheckboxActions();
-                return false;
             });
 
             [% IF ( ( Koha.Preference( 'RequestOnOpac' ) == 1 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) && DisplayMultiPlaceHold ) %]

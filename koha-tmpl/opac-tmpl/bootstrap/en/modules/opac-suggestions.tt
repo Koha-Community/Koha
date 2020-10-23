@@ -337,7 +337,7 @@
                                         </div>
                                     [% END %]
 
-                                    <table id="suggestt" class="checkboxed table table-bordered table-striped">
+                                    <table id="suggestt" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
@@ -465,13 +465,12 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script>
     [% IF ( loggedinusername ) %]
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
-            var checkedBoxes = $(".checkboxed input:checkbox:checked");
+            var checkedBoxes = $(".cb:checked");
             if ($(checkedBoxes).size()) {
               $("#selections").html(_("With selected suggestions: "));
               $("#selections-toolbar .links a").removeClass("disabled");
@@ -501,15 +500,15 @@
         }));
         [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
         $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
-        $("#CheckAll").click(function(){
-            $(".checkboxed").checkCheckboxes();
+        $("#CheckAll").on("click",function(e){
+            e.preventDefault();
+            $(".cb").prop("checked", true);
             enableCheckboxActions();
-            return false;
         });
-        $("#CheckNone").click(function(){
-            $(".checkboxed").unCheckCheckboxes();
+        $("#CheckNone").on("click",function(e){
+            e.preventDefault();
+            $(".cb").prop("checked", false);
             enableCheckboxActions();
-            return false;
         });
         $(".cb").click(function(){
           enableCheckboxActions();

@@ -241,7 +241,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 <script>
 
     var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete selected search history entries?");
@@ -261,13 +260,13 @@
         $(".CheckNone").click(function(e){
             e.preventDefault();
             var form = $(this).parents("form").get(0);
-            $(form).unCheckCheckboxes();
+            $(form).find("input:checkbox").prop("checked", false);
             enableCheckboxActions(form);
         });
         $(".CheckAll").click(function(e){
             e.preventDefault();
             var form = $(this).parents("form").get(0);
-            $(form).checkCheckboxes();
+            $(form).find("input:checkbox").prop("checked", true);
             enableCheckboxActions(form);
         });
 

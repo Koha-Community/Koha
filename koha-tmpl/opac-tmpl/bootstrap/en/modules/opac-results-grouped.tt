@@ -290,7 +290,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         var q_array = new Array();  // will hold the search terms, if possible
         $(document).ready(function(){
@@ -331,13 +330,13 @@
                     return false;
                 }
             }
-            $("#CheckAll").click(function(){
-                $("#bookbag_form").checkCheckboxes();
-                return false;
+            $("#CheckAll").on("click", function(e){
+                e.preventDefault();
+                $("#bookbag_form").find("input:checkbox").prop("checked", true);
             });
-            $("#CheckNone").click(function(){
-                $("#bookbag_form").unCheckCheckboxes();
-                return false;
+            $("#CheckNone").on("click", function(e){
+                e.preventDefault();
+                $("#bookbag_form").find("input:checkbox").prop("checked", true);
             });
             [% IF ( query_desc ) %]
             var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
