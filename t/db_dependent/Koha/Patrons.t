@@ -1430,13 +1430,6 @@ subtest 'get_overdues' => sub {
             value  => { branchcode => $library->{branchcode} }
         }
     );
-    my $issuer = $builder->build(
-        {
-            source => 'Borrower',
-            value  => { branchcode => $library->{branchcode} }
-        }
-    );
-    t::lib::Mocks::mock_userenv({ number => $issuer->{borrowernumber} });
 
     t::lib::Mocks::mock_preference({ branchcode => $library->{branchcode} });
 
