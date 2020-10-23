@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 73;
+use Test::More tests => 67;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -125,8 +125,6 @@ sub _check_fields_of_orders {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-t::lib::Mocks::mock_preference('AcqLog', 1);
-
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
@@ -149,9 +147,6 @@ ok(
     "NewBasket(  $booksellerid , 1  ) returns $basketno"
 );
 ok( $basket = GetBasket($basketno), "GetBasket($basketno) returns $basket" );
-
-my @create_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'ADD_BASKET', object => $basketno });
-ok( scalar @create_logs == 1, 'Basket creation is logged');
 
 my $bpid=AddBudgetPeriod({
         budget_period_startdate => '2008-01-01'
@@ -415,27 +410,6 @@ $search_orders = SearchOrders({
     ordered      => 1,
 });
 is( scalar (@$search_orders), 4, "SearchOrders with pending and ordered params gets only pending ordered orders. After closing the basket, orders are marked as 'ordered' (bug 11170)" );
-
-my @close_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basketno });
-ok( scalar @close_logs == 1, 'Basket closure is logged');
-C4::Acquisition::ReopenBasket($basketno);
-my @reopen_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'REOPEN_BASKET', object => $basketno });
-ok( scalar @reopen_logs == 1, 'Basket reopen is logged');
-C4::Acquisition::CloseBasket($basketno, 1);
-my @approve_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'APPROVE_BASKET', object => $basketno });
-ok( scalar @approve_logs == 1, 'Basket approval is logged');
-C4::Acquisition::ModBasket({
-    basketno => $basketno,
-    booksellerid => $booksellerid
-});
-my @mod_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET', object => $basketno });
-ok( scalar @mod_logs == 1, 'Basket modify is logged');
-C4::Acquisition::ModBasketHeader($basketno,"Test","","","",$booksellerid);
-my @mod_header_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_HEADER', object => $basketno });
-ok( scalar @mod_header_logs == 1, 'Basket header modify is logged');
-C4::Acquisition::ModBasketUsers($basketno,(1));
-my @mod_users_logs = Koha::ActionLogs->find({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_USERS', object => $basketno });
-ok( scalar @mod_users_logs == 1, 'Basket users modify is logged');
 
 #
 # Test AddClaim
@@ -923,6 +897,48 @@ subtest 'GetHistory - is_standing' => sub {
         "GetHistory returns number of standing orders"
     );
 
+};
+
+subtest 'Acquisition logging' => sub {
+
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference('AcqLog', 1);
+
+    Koha::ActionLogs->delete;
+    my $basketno = NewBasket( $booksellerid, 1 );
+    my @create_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'ADD_BASKET', object => $basketno });
+    is (scalar @create_logs, 1, 'Basket creation is logged');
+
+    Koha::ActionLogs->delete;
+    C4::Acquisition::CloseBasket($basketno);
+    my @close_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basketno });
+    is (scalar @close_logs, 1, 'Basket closure is logged');
+
+    Koha::ActionLogs->delete;
+    C4::Acquisition::ReopenBasket($basketno);
+    my @reopen_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'REOPEN_BASKET', object => $basketno });
+    is (scalar @reopen_logs, 1, 'Basket reopen is logged');
+
+    Koha::ActionLogs->delete;
+    C4::Acquisition::ModBasket({
+        basketno => $basketno,
+        booksellerid => $booksellerid
+    });
+    my @mod_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET', object => $basketno });
+    is (scalar @mod_logs, 1, 'Basket modify is logged');
+
+    Koha::ActionLogs->delete;
+    C4::Acquisition::ModBasketHeader($basketno,"Test","","","",$booksellerid);
+    my @mod_header_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_HEADER', object => $basketno });
+    is (scalar @mod_header_logs, 1, 'Basket header modify is logged');
+
+    Koha::ActionLogs->delete;
+    C4::Acquisition::ModBasketUsers($basketno,(1));
+    my @mod_users_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'MODIFY_BASKET_USERS', object => $basketno });
+    is (scalar @mod_users_logs, 1, 'Basket users modify is logged');
+
+    t::lib::Mocks::mock_preference('AcqLog', 0);
 };
 
 $schema->storage->txn_rollback();
