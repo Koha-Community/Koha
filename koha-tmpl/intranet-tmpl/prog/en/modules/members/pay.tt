@@ -172,7 +172,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
@@ -200,15 +199,17 @@
             });
             $('#CheckAll').click(function(e){
                 e.preventDefault();
-                $("#finest").checkCheckboxes();
+                $(".cb").each(function(){
+                    $(this).prop("checked", true );
+                });
                 enableCheckboxActions();
-                return false;
             });
             $('#CheckNone').click(function(e){
                 e.preventDefault();
-                $("#finest").unCheckCheckboxes();
+                $(".cb").each(function(){
+                    $(this).prop("checked", false );
+                });
                 enableCheckboxActions();
-                return false;
             });
             $(".cb").change(function(){
                 enableCheckboxActions();
