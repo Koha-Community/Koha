@@ -167,7 +167,7 @@ sub get_template {
         CLASS       => $self->{'class'},
         METHOD      => scalar $self->{'cgi'}->param('method'),
         PLUGIN_PATH => $self->get_plugin_http_path(),
-        PLUGIN_DIR  => $self->get_plugin_dir(),
+        PLUGIN_DIR  => $self->bundle_path(),
         LANG        => C4::Languages::getlanguage($self->{'cgi'}),
     );
 
@@ -213,22 +213,6 @@ sub get_plugin_http_path {
     my ($self) = @_;
 
     return "/plugin/" . join( '/', split( '::', $self->{'class'} ) );
-}
-
-=head2 get_plugin_dir
-
-To [% INCLUDE %] another TT template from a template, an absolute path to the
-template is required. This method returns that absolute file system path.
-
-usage: my $path = $self->get_plugin_dir();
-
-=cut
-
-sub get_plugin_dir {
-    my ($self) = @_;
-
-    my $base = C4::Context->config('pluginsdir');
-    return "$base/" . join( '/', split( '::', $self->{'class'} ) );
 }
 
 =head2 go_home
