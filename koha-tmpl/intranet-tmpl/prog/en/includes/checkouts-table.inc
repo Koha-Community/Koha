@@ -6,7 +6,7 @@
                 <a id="issues-table-load-now-button" href="#" class="btn btn-default"><i class="fa fa-book"></i> Show checkouts</a>
             </p>
         </div>
-        <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post" class="checkboxed">
+        <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post">
             <table id="issues-table" style="width: 100% !Important;">
                 <thead>
                     <tr>
