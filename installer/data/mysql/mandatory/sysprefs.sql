@@ -435,7 +435,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacPrivacy','0',NULL,'if ON, allows patrons to define their privacy rules (reading history)','YesNo'),
 ('OpacPublic','1',NULL,'Turn on/off public OPAC','YesNo'),
 ('opacreadinghistory','1','','If ON, enables display of Patron Circulation History in OPAC','YesNo'),
-('OpacRenewalAllowed','0',NULL,'If ON, users can renew their issues directly from their OPAC account','YesNo'),
+('OpacRenewalAllowed','1',NULL,'If ON, users can renew their issues directly from their OPAC account','YesNo'),
 ('OpacRenewalBranch','checkoutbranch','itemhomebranch|patronhomebranch|checkoutbranch|none','Choose how the branch for an OPAC renewal is recorded in statistics','Choice'),
 ('OPACReportProblem', 0, NULL, 'Allow patrons to submit problem reports for OPAC pages to the library or Koha Administrator', 'YesNo'),
 ('OpacResetPassword','0','','Shows the ''Forgot your password?'' link in the OPAC','YesNo'),
