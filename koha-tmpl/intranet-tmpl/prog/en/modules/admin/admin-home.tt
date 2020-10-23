@@ -60,17 +60,17 @@
                 <dl>
                     [% IF ( CAN_user_parameters_manage_libraries ) %]
                         <dt><a href="/cgi-bin/koha/admin/branches.pl">Libraries</a></dt>
-                        <dd>Define libraries.</dd>
+                        <dd>Define libraries</dd>
                         <dt><a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a></dt>
-                        <dd>Define hierarchical library groups.</dd>
+                        <dd>Define hierarchical library groups</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_itemtypes ) %]
                         <dt><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></dt>
-                        <dd>Define item types used for circulation rules.</dd>
+                        <dd>Define item types used for circulation rules</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_auth_values ) %]
                         <dt><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a></dt>
-                        <dd>Define categories and authorized values for them.</dd>
+                        <dd>Define categories and authorized values for them</dd>
                     [% END %]
                 </dl>
             [% END %]
@@ -80,7 +80,7 @@
                 <dl>
                 [% IF ( CAN_user_parameters_manage_patron_categories ) %]
                     <dt><a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a></dt>
-                    <dd>Define patron categories.</dd>
+                    <dd>Define patron categories</dd>
                 [% END %]
                 [% IF CAN_user_parameters_manage_circ_rules %]
                     <dt><a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fines rules</a></dt>
@@ -92,7 +92,7 @@
                 [% END %]
                 [% IF ( CAN_user_parameters_manage_transfers ) %]
                     <dt><a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Library transfer limits</a></dt>
-                    <dd>Limit the ability to transfer items between libraries based on the library sending, the library receiving, and the item type involved. These rules only go into effect if the preference UseBranchTransferLimits is set to ON.</dd>
+                    <dd>Limit the ability to transfer items between libraries based on the library sending, the library receiving, and the item type involved. These rules only go into effect if the preference UseBranchTransferLimits is set to ON</dd>
                     <dt><a href="/cgi-bin/koha/admin/transport-cost-matrix.pl">Transport cost matrix</a></dt>
                     <dd>Define transport costs between branches</dd>
                 [% END %]
@@ -106,7 +106,7 @@
                 [% END %]
                 [% IF ( CAN_user_parameters_manage_cities ) %]
                     <dt><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></dt>
-                    <dd>Define cities and towns that your patrons live in.</dd>
+                    <dd>Define cities and towns that your patrons live in</dd>
                 [% END %]
                 </dl>
             [% END %]
@@ -116,9 +116,9 @@
                 <dl>
                 [% IF ( CAN_user_parameters_manage_accounts ) %]
                     <dt><a href="/cgi-bin/koha/admin/debit_types.pl">Debit types</a></dt>
-                    <dd>Define debit types.</dd>
+                    <dd>Define debit types</dd>
                     <dt><a href="/cgi-bin/koha/admin/credit_types.pl">Credit types</a></dt>
-                    <dd>Define credit types.</dd>
+                    <dd>Define credit types</dd>
                 [% END %]
                 [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_parameters_manage_cash_registers ) %]
                     <dt><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></dt>
@@ -142,23 +142,23 @@
                 <dl>
                     [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
                         <dt><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC bibliographic framework</a></dt>
-                        <dd>Create and manage Bibliographic frameworks that define the characteristics of your MARC Records (field and subfield definitions) as well as templates for the MARC editor.</dd>
+                        <dd>Create and manage Bibliographic frameworks that define the characteristics of your MARC Records (field and subfield definitions) as well as templates for the MARC editor</dd>
                         <dt><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></dt>
-                        <dd>Define the mapping between the Koha transactional database (SQL) and the MARC Bibliographic records.</dd>
+                        <dd>Define the mapping between the Koha transactional database (SQL) and the MARC Bibliographic records</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
                         <dt><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></dt>
-                        <dd>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition.</dd>
+                        <dd>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition</dd>
                         <dt><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></dt>
-                        <dd>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).</dd>
+                        <dd>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions)</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_classifications ) %]
                         <dt><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></dt>
-                        <dd>Define classification sources (i.e. call number schemes) used by your collection.  Also define filing rules used for sorting call numbers and splitting rules for splitting them.</dd>
+                        <dd>Define classification sources (i.e. call number schemes) used by your collection.  Also define filing rules used for sorting call numbers and splitting rules for splitting them</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_matching_rules ) %]
                         <dt><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></dt>
-                        <dd>Manage rules for automatically matching MARC records during record imports.</dd>
+                        <dd>Manage rules for automatically matching MARC records during record imports</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_oai_sets ) %]
                         <dt><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a></dt>
@@ -166,11 +166,11 @@
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_item_search_fields ) %]
                         <dt><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></dt>
-                        <dd>Manage custom fields for item search.</dd>
+                        <dd>Manage custom fields for item search</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                         <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></dt>
-                        <dd>Manage indexes, facets, and their mappings to MARC fields and subfields.</dd>
+                        <dd>Manage indexes, facets, and their mappings to MARC fields and subfields</dd>
                     [% END %]
                 </dl>
             [% END %]
@@ -180,7 +180,7 @@
                 <dl>
                     [% IF ( CAN_user_acquisition_currencies_manage ) %]
                         <dt><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></dt>
-                        <dd>Define currencies and exchange rates used for acquisitions.</dd>
+                        <dd>Define currencies and exchange rates used for acquisitions</dd>
                     [% END %]
                     [% IF ( CAN_user_acquisition_period_manage ) %]
                         <dt><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></dt>
@@ -206,19 +206,19 @@
                         <dd>Printers (UNIX paths).</dd> -->
                     [% IF ( CAN_user_parameters_manage_search_targets ) %]
                         <dt><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50/SRU servers</a></dt>
-                        <dd>Define which external servers to query for MARC data.</dd>
+                        <dd>Define which external servers to query for MARC data</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_smtp_servers ) %]
                         <dt><a href="/cgi-bin/koha/admin/smtp_servers.pl">SMTP servers</a></dt>
-                        <dd>Define which SMTP servers to use.</dd>
+                        <dd>Define which SMTP servers to use</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_didyoumean ) %]
                         <dt><a href="/cgi-bin/koha/admin/didyoumean.pl">Did you mean?</a></dt>
-                        <dd>Choose which plugins to use to suggest searches to patrons and staff.</dd>
+                        <dd>Choose which plugins to use to suggest searches to patrons and staff</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_column_config ) %]
                         <dt><a href="/cgi-bin/koha/admin/columns_settings.pl">Table settings</a></dt>
-                        <dd>Configure and hide or show columns for tables.</dd>
+                        <dd>Configure and hide or show columns for tables</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_audio_alerts ) %]
                         <dt><a href="/cgi-bin/koha/admin/audio_alerts.pl">Audio alerts</a></dt>
@@ -226,11 +226,11 @@
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) %]
                             <dt><a href="/cgi-bin/koha/admin/sms_providers.pl">SMS cellular providers</a></dt>
-                            <dd>Define a list of cellular providers for sending SMS messages via email.</dd>
+                            <dd>Define a list of cellular providers for sending SMS messages via email</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_usage_stats ) %]
                         <dt><a href="/cgi-bin/koha/admin/usage_statistics.pl">Share your usage statistics</a></dt>
-                        <dd>Share with the Koha community the usage statistics of your Koha installation.</dd>
+                        <dd>Share with the Koha community the usage statistics of your Koha installation</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters_manage_mana ) %]
                         <dt><a href="/cgi-bin/koha/admin/share_content.pl">Share content with Mana KB</a></dt>
