@@ -268,6 +268,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-10-14 15:07:03
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3OJBkRJzqxZpuRp0GYGixw
 
+__PACKAGE__->add_columns(
+    '+old' => { is_boolean => 1 },
+    '+item_level_recall' => { is_boolean => 1 },
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
