@@ -194,12 +194,12 @@
                     [% ELSE %]
                       [% IF ( delete ) %]
                         [% IF serialsid.grep("${serial.serialid}").size %]
-                          <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" disabled checked />
+                          <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" disabled checked />
                         [% ELSE %]
-                          <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" disabled />
+                          <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" disabled />
                         [% END %]
                       [% ELSE %]
-                    <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" />
+                    <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" />
                       [% END %]
                     [% END %]
                   [% END %]

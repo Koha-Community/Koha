@@ -129,7 +129,7 @@
 
     <h3>Contents of <em>[% shelf.shelfname | html %]</em></h3>
     <div class="pages">[% pagination_bar | $raw %]</div>
-    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post" class="checkboxed">
+    <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
         <input type="hidden" name="op" value="remove_biblios" />
         <input type="hidden" name="referer" value="view" />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
