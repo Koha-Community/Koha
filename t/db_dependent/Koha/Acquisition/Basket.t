@@ -335,7 +335,11 @@ subtest 'is_closed() tests' => sub {
 
 subtest 'close() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
+
+    # Turn on acquisitions logging and ensure the logs are empty
+    t::lib::Mocks::mock_preference('AcqLog', 1);
+    Koha::ActionLogs->delete;
 
     $schema->storage->txn_begin;
 
@@ -371,6 +375,9 @@ subtest 'close() tests' => sub {
         { $basket->close; }
         'Koha::Exceptions::Acquisition::Basket::AlreadyClosed',
         'Trying to close an already closed basket throws an exception';
+
+    my @close_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basket->id });
+    is (scalar @close_logs, 1, 'Basket closure is logged');
 
     $schema->storage->txn_rollback;
 };

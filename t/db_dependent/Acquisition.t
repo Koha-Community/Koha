@@ -901,7 +901,7 @@ subtest 'GetHistory - is_standing' => sub {
 
 subtest 'Acquisition logging' => sub {
 
-    plan tests => 6;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference('AcqLog', 1);
 
@@ -909,11 +909,6 @@ subtest 'Acquisition logging' => sub {
     my $basketno = NewBasket( $booksellerid, 1 );
     my @create_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'ADD_BASKET', object => $basketno });
     is (scalar @create_logs, 1, 'Basket creation is logged');
-
-    Koha::ActionLogs->delete;
-    C4::Acquisition::CloseBasket($basketno);
-    my @close_logs = Koha::ActionLogs->search({ module =>'ACQUISITIONS', action => 'CLOSE_BASKET', object => $basketno });
-    is (scalar @close_logs, 1, 'Basket closure is logged');
 
     Koha::ActionLogs->delete;
     C4::Acquisition::ReopenBasket($basketno);
