@@ -80,7 +80,7 @@
                     [% END %]
 
                     [% IF ( NEEDSCONFIRMATION ) %]
-                        <div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
+                        <div id="circ_needsconfirmation" class="dialog alert audio-alert-action focus" tabindex="-1">
                             [% IF CAN_user_circulate_force_checkout or ADDITIONAL_MATERIALS %]
                                 <h3>Please confirm checkout</h3>
                             [% ELSE %]
@@ -313,7 +313,7 @@
                     [% END # /NEEDSCONFIRMATION %]
 
                     [% IF ( IMPOSSIBLE ) %]
-                        <div id="circ_impossible" class="dialog alert audio-alert-warning">
+                        <div id="circ_impossible" class="dialog alert audio-alert-warning focus" tabindex="-1">
                             [% IF ( UNKNOWN_BARCODE ) %]
                                 <h3>Barcode not found</h3>
                             [% END %]
