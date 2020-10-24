@@ -441,7 +441,7 @@
                 <td><span title="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</span></td>
                 <td>
                   [% IF ( period_active.budget_period_locked ) %]
-                    <span style="color:green;">Locked</span>&nbsp;
+                  <i class="fa fa-lock"></i><span style="color:red;">Locked</span>&nbsp;
                   [% END %]
                 </td>
                 <td class="data">[% period_active.budget_period_total | $Price %]</td>
@@ -475,7 +475,7 @@
                   <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | uri %]" title="View funds for [% period_loo.budget_period_description | html %]">[% period_loo.budget_period_description | html %]</a></td>
                   <td><span title="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
                   <td><span title="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
-                  <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
+                  <td> [% IF ( period_loo.budget_period_locked ) %]<i class="fa fa-lock"></i><span style="color:red;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
                   <td class="data">[% period_loo.budget_period_total | $Price %]</td>
                   <td>
                         [% PROCESS action_menu block_budget=period_loo %]
