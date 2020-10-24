@@ -156,7 +156,9 @@
                 <div class="row">
                     <div class="col">
                             <div id="opac-main-search">
-                                [% IF Koha.Preference('OpacCustomSearch') == '' %]
+                                [% IF ( OpacCustomSearch ) %]
+                                    [% PROCESS koha_news_block news => OpacCustomSearch %]
+                                [% ELSE %]
                                     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
                                         <div class="form-row align-items-center">
                                             <div class="col-sm-auto order-1 order-sm-1">
@@ -282,9 +284,7 @@
                                         </div> <!-- /.form-row -->
                                         <input type="hidden" name="weight_search" value="1">
                                     </form>
-                                [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
-                                    [% Koha.Preference('OpacCustomSearch') | $raw %]
-                                [% END # / Koha.Preference('OpacCustomSearch') == '' %]
+                                [% END # / ( OpacCustomSearch ) %]
                             </div><!-- /#opac-main-search -->
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
