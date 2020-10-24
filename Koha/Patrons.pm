@@ -195,9 +195,7 @@ sub anonymise_issue_history {
         }
         );
         my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
-        $nb_rows += $old_issues_to_anonymise->update( {
-            'old_issues.borrowernumber' => $anonymous_patron
-        } );
+        $nb_rows += $old_issues_to_anonymise->update( { 'old_issues.borrowernumber' => $anonymous_patron } );
     }
     return $nb_rows;
 }

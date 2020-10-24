@@ -94,9 +94,6 @@ subtest 'item' => sub {
     is( $item->itemnumber, $item_1->itemnumber, 'Koha::Checkout->item should return the correct item' );
 };
 
-$retrieved_checkout_1->delete;
-is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
-
 subtest 'patron' => sub {
     plan tests => 3;
     my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
@@ -124,6 +121,9 @@ subtest 'patron' => sub {
         'Koha::Checkout->patron should return undef if the patron record has been deleted'
     );
 };
+
+$retrieved_checkout_1->delete;
+is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
 
 subtest 'issuer' => sub {
     plan tests => 3;
