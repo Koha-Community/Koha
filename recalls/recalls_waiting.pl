@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         template_name   => "recalls/recalls_waiting.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { recalls => "manage_recalls" },
         debug           => 1,
     }

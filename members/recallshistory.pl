@@ -27,7 +27,6 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user(
        template_name => "members/recallshistory.tt",
        query => $input,
        type => "intranet",
-       authnotrequired => 0,
        flagsrequired => { recalls => 1 },
        debug => 1,
     }

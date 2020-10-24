@@ -30,7 +30,6 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user(
        template_name => "recalls/request.tt",
        query => $input,
        type => "intranet",
-       authnotrequired => 0,
        flagsrequired => { recalls => "manage_recalls" },
        debug => 1,
     }
