@@ -14,7 +14,7 @@ Searching:
               choices:
                   yes: Try
                   no: "Don't try"
-            - to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; REQUIRES ZEBRA).
+            - to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.).
         -
             - pref: QueryStemming
               type: boolean
