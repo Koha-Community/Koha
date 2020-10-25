@@ -230,20 +230,20 @@ subtest 'Recall overdue fines' => sub {
     my $recall = Koha::Recall->new({
         borrowernumber => $patron->{borrowernumber},
         recalldate => dt_from_string,
-        biblionumber => $item->{biblionumber},
+        biblionumber => $item->biblionumber,
         branchcode => $branch->{branchcode},
         status => 'R',
-        itemnumber => $item->{itemnumber},
+        itemnumber => $item->itemnumber,
         expirationdate => undef,
         item_level_recall => 1
     })->store;
     $recall->set_overdue;
 
-    my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    my ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 25, 'Use recall fine amount specified in circulation rules' );
 
     $recall->set_finished;
-    ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    ($amount) = CalcFine( $item->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
     is( int($amount), 5, 'With no recall, use normal fine amount' );
 
 
