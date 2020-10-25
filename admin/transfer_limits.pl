@@ -27,7 +27,7 @@ use C4::Koha;
 use C4::Circulation
   qw{ IsBranchTransferAllowed DeleteBranchTransferLimits CreateBranchTransferLimit };
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
