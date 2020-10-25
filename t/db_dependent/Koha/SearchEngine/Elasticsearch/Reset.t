@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use Koha::Database;
@@ -29,6 +29,7 @@ my $indexes = {
             'label' => 'Match',
             'type' => '',
             'weight' => 15,
+            'mandatory' => 0,
             'mappings' => []
         }
     },
@@ -37,6 +38,7 @@ my $indexes = {
             'label' => 'title',
             'type' => '',
             'weight' => 20,
+            'mandatory' => 1,
             'mapping' => []
         }
     }
@@ -66,9 +68,11 @@ is($search_fields->count, 2, 'There is 2 search fields after reset');
 
 my $match_sf = Koha::SearchFields->search({ name => 'Match' })->next;
 is($match_sf->weight, '15.00', 'Match search field is weighted with 15');
+is($match_sf->mandatory, '0', 'Match search field is not mandatory');
 
 my $title_sf = Koha::SearchFields->search({ name => 'title' })->next;
 is($title_sf->weight, '20.00', 'Title search field is weighted with 20');
+is($title_sf->mandatory, '1', 'Title search field is mandatory');
 
 $schema->storage->txn_rollback;
 

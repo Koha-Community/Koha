@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -128,10 +128,17 @@ ok($search_field->is_mapped_biblios, 'Search field is mapped with authorities an
 
 my $sf3 = $builder->build({
     source => 'SearchField',
+    value => {
+        mandatory => 1,
+    }
 });
 
 $search_field = Koha::SearchFields->find($sf3->{id});
 ok(!$search_field->is_mapped_biblios, 'Search field is not mapped');
+
+ok($search_field->mandatory, 'Search field can be marked mandatory');
+$search_field->mandatory(0)->store;
+ok(!$search_field->mandatory, 'Search field can be marked not mandatory');
 
 Koha::SearchFields->search({})->delete;
 

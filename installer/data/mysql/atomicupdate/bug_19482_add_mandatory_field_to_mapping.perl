@@ -2,7 +2,7 @@ $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
     if( !column_exists( 'search_field', 'mandatory' ) ) {
-        $dbh->do( "ALTER TABLE search_field ADD COLUMN mandatory tinyint(1) NULL DEFAULT NULL" );
+        $dbh->do( "ALTER TABLE search_field ADD COLUMN mandatory tinyint(1) NULL DEFAULT NULL AFTER opac" );
     }
 
     SetVersion( $DBversion );
