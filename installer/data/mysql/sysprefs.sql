@@ -276,7 +276,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('item-level_itypes','1','','If ON, enables Item-level Itemtype / Issuing Rules','YesNo'),
 ('itemBarcodeFallbackSearch','',NULL,'If set, uses scanned item barcodes as a catalogue search if not found as barcodes','YesNo'),
 ('itemBarcodeInputFilter','','whitespace|T-prefix|cuecat|libsuite8|EAN13','If set, allows specification of a item barcode input filter','Choice'),
-('itemcallnumber','082ab',NULL,'The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record','free'),
+('itemcallnumber','',NULL,'The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record','free'),
 ('ItemsDeniedRenewal','','','This syspref allows to define custom rules for denying renewal of specific items.','Textarea'),
 ('KohaAdminEmailAddress','root@localhost','','Define the email address where patron modification requests are sent','free'),
 ('KohaManualBaseURL','https://koha-community.org/manual/','','Where is the Koha manual/documentation located?','Free'),
