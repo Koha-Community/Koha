@@ -45,7 +45,7 @@ my %ignore = (
 
 my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl5/[0-9.]+)";
 
-my $pm   = Parallel::ForkManager( Sys::CPU::cpu_count() )->new;
+my $pm   = Parallel::ForkManager->new( Sys::CPU::cpu_count() );
 
 my $modules = C4::Installer::PerlModules->new();
 my $prereqs = $modules->prereqs;
