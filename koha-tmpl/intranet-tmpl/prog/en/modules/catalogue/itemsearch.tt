@@ -90,7 +90,7 @@
 [% END %]
 
 [% BLOCK form_field_radio_yes_no %]
-  <div class="form-field">
+  <div class="form-field [% divclass | html %]">
     <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
     <input type="radio" name="[% name | html %]" id="[% name | html %]_indifferent" value="" checked="checked"/>
     <label for="[% name | html %]_indifferent">Ignore</label>
@@ -195,7 +195,9 @@
               <span class="hint">(inclusive)</span>
             </div>
             [% INCLUDE form_field_radio_yes_no name="damaged" %]
-            [% INCLUDE form_field_radio_yes_no name="new_status" %]
+            [% IF ( has_new_status ) %]
+                [% INCLUDE form_field_radio_yes_no name="new_status" divclass='item-new-status' %]
+            [% END %]
             <div class="form-field">
               <label class="form-field-label" for="issues_op">Checkout count:</label>
               <select id="issues_op" name="issues_op">

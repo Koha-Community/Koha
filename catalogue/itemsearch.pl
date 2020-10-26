@@ -102,6 +102,10 @@ my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_v
 $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my $withdrawn_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
+if ( Koha::MarcSubfieldStructures->search( { frameworkcode => '', kohafield => 'items.new_status' } )->count ) {
+    $template->param( has_new_status => 1 );
+}
+
 if (scalar keys %params > 0) {
     # Parameters given, it's a search
 
