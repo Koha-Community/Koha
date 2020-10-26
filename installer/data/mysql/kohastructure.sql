@@ -2843,6 +2843,24 @@ CREATE TABLE `aqbasketgroups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `aqbudgetperiods`
+--
+
+DROP TABLE IF EXISTS `aqbudgetperiods`;
+CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
+  `budget_period_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
+  `budget_period_startdate` date NOT NULL, -- date when the budget starts
+  `budget_period_enddate` date NOT NULL, -- date when the budget ends
+  `budget_period_active` tinyint(1) default '0', -- whether this budget is active or not (1 for yes, 0 for no)
+  `budget_period_description` LONGTEXT, -- description assigned to this budget
+  `budget_period_total` decimal(28,6), -- total amount available in this budget
+  `budget_period_locked` tinyint(1) default NULL, -- whether this budget is locked or not (1 for yes, 0 for no)
+  `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
+  `sort2_authcat` varchar(10) default NULL, -- second statistical category for this budget
+  PRIMARY KEY  (`budget_period_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `aqbudgets`
 --
 
@@ -2887,25 +2905,6 @@ CREATE TABLE aqbudgetborrowers (
   CONSTRAINT aqbudgetborrowers_ibfk_2 FOREIGN KEY (borrowernumber)
     REFERENCES borrowers (borrowernumber)
     ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `aqbudgetperiods`
---
-
-
-DROP TABLE IF EXISTS `aqbudgetperiods`;
-CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
-  `budget_period_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
-  `budget_period_startdate` date NOT NULL, -- date when the budget starts
-  `budget_period_enddate` date NOT NULL, -- date when the budget ends
-  `budget_period_active` tinyint(1) default '0', -- whether this budget is active or not (1 for yes, 0 for no)
-  `budget_period_description` LONGTEXT, -- description assigned to this budget
-  `budget_period_total` decimal(28,6), -- total amount available in this budget
-  `budget_period_locked` tinyint(1) default NULL, -- whether this budget is locked or not (1 for yes, 0 for no)
-  `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
-  `sort2_authcat` varchar(10) default NULL, -- second statistical category for this budget
-  PRIMARY KEY  (`budget_period_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
