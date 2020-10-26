@@ -199,8 +199,6 @@ sub NewBasket {
     $basketname           ||= q{}; # default to empty strings
     $basketnote           ||= q{};
     $basketbooksellernote ||= q{};
-    ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
-        $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
 
     # Log the basket creation
     if (C4::Context->preference("AcquisitionLog")) {
@@ -212,6 +210,9 @@ sub NewBasket {
             to_json($created->unblessed)
         );
     }
+
+    ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
+        $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
 
     return $basket;
 }
