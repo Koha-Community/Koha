@@ -297,7 +297,7 @@
                 <xsl:with-param name="basetags">260</xsl:with-param>
                 <xsl:with-param name="codes">abcg</xsl:with-param>
                 <xsl:with-param name="class">results_summary publisher</xsl:with-param>
-                <xsl:with-param name="label">Publisher: </xsl:with-param>
+                <xsl:with-param name="label">Publication details: </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
 
@@ -309,7 +309,7 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:when test="marc:datafield[@tag=260]">
-             <span class="results_summary publisher"><span class="label">Publisher: </span>
+             <span class="results_summary publisher"><span class="label">Publication details: </span>
                  <xsl:for-each select="marc:datafield[@tag=260]">
                      <span property="publisher" typeof="Organization">
                      <xsl:if test="marc:subfield[@code='a']">
