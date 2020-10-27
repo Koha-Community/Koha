@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 10:36-0300\n"
+"POT-Creation-Date: 2020-10-21 00:04-0300\n"
 "PO-Revision-Date: 2019-07-25 16:56+0000\n"
 "Last-Translator: Mubassir Ahsan <mahsandu@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -42,7 +42,7 @@ msgstr "%s %s %s %s %s শিরোনামহীন %s %s %s %s"
 #. %7$s:  FOREACH subtitl IN SEARCH_RESULT.subtitle 
 #. %8$s:  subtitl.subfield | html 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:350
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s %s %s শিরোনামহীন %s %s , %s %s"
@@ -165,6 +165,17 @@ msgstr "%s %s (%s) %s.%s,%s %s %s %s এই রেকর্ডের কোন �
 #, c-format
 msgid "%s %s (not approved) %s "
 msgstr "%s %s (অননুমোদিত) %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %3$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %4$s:  HTML5MediaSet.child | html 
+#. %5$s:  HTML5MediaSet.srcblock | url 
+#. %6$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1021
+#, fuzzy, c-format
+msgid "%s %s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s <%s > <%s src=\"%s\" %s /> "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -408,16 +419,6 @@ msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s এবং %s"
 msgid "%s (Record no. %s)"
 msgstr "%s (নথি নং. %s)"
 
-#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
-#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
-#. %3$s:  HTML5MediaSet.child | html 
-#. %4$s:  HTML5MediaSet.srcblock | html 
-#. %5$s:  HTML5MediaSet.typeblock | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1018
-#, c-format
-msgid "%s <%s > <%s src=\"%s\" %s /> "
-msgstr "%s <%s > <%s src=\"%s\" %s /> "
-
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
@@ -542,7 +543,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:430
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:435
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -584,7 +585,7 @@ msgid "%s Holds (%s) "
 msgstr "%s বুকিং লিস্ট (%s) "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:454
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:459
 #, fuzzy, c-format
 msgid "%s Internet user critics"
 msgstr "%s ইন্টারনেট ব্যবহারকারী সমালোচক"
@@ -703,7 +704,7 @@ msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s অনিষ্পন্ন %s প্রক্রিয়াধীন %s সম্পন্ন হয়েছে %s বাতিল করা হয়েছে %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:457
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:462
 #, fuzzy, c-format
 msgid "%s Professional critics"
 msgstr "%s পেশাদার সমালোচকগণ"
@@ -722,7 +723,7 @@ msgid ""
 msgstr "%s ক্রয় পরামর্শ %s %s অাপনার ক্রয় পরামর্শ %s ক্রয় পরামর্শ %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:463
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:468
 #, fuzzy, c-format
 msgid "%s Quotations"
 msgstr "%s উদ্ধৃতি"
@@ -861,7 +862,7 @@ msgid ""
 msgstr "%s দুঃখজনকভাবে , বর্তমানে ছবিগুলো এই ক্যাটালগে প্রদর্শনে সক্ষম নয় . %s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:465
 #, fuzzy, c-format
 msgid "%s Video extracts"
 msgstr "%s ভিডিও সারসংক্ষেপ"
@@ -944,7 +945,7 @@ msgstr "%s বিবলিও"
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:357
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:362
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:385
 #, c-format
 msgid "%s by "
@@ -2041,8 +2042,8 @@ msgstr "%sএকটি তালিকা:%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "%sby %s%s"
 msgstr "%sদ্বারা %s%s"
@@ -2589,7 +2590,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:456
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (%s হারের উপর)"
@@ -2660,7 +2661,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; অবিকল শিরোনাম"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:531
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s ভোট)"
@@ -2880,7 +2881,7 @@ msgid "(Voided)"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:193
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:560
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:418
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
 #, c-format
@@ -2895,7 +2896,7 @@ msgstr "(পরিস্রুত থেকে _MAX_ মোট এন্ট্�
 
 #. For the first occurrence,
 #. %1$s:  SEARCH_RESULT.timestamp | html 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:384
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:204
 #, fuzzy, c-format
 msgid "(modified on %s)"
@@ -2921,7 +2922,7 @@ msgstr "(সময় অতিক্রান্ত)"
 #. For the first occurrence,
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:664
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 #, c-format
 msgid "(priority %s)"
 msgstr "(অগ্রাধিকার %s)"
@@ -2944,8 +2945,8 @@ msgstr "(সম্পর্কিত অনুসন্ধানসমূহ: %s
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:571
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:578
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:485
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
 #, fuzzy, c-format
@@ -3171,7 +3172,7 @@ msgstr "অর্জনের তারিখ: পুরোনো থেকে �
 
 #. INPUT type=submit name=tagsel_button
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:192
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:559
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:417
@@ -3193,7 +3194,7 @@ msgstr "সংযোজন %s উপাদানের প্রতি %s"
 msgid "Add another field"
 msgstr "অন্য একটি ফিল্ড যোগ করুন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:555
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:460
 #, c-format
 msgid "Add tag"
@@ -3232,13 +3233,13 @@ msgstr "সংযুক্ত করো:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:32
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:578
 #, fuzzy, c-format
 msgid "Add to your cart"
 msgstr " item(s) added to your cart"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #, fuzzy
 msgid "Add to..."
 msgstr "যোগ করো..."
@@ -3295,7 +3296,7 @@ msgid "Adlibris cover image"
 msgstr "প্রচ্ছদ "
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:259
 msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 
@@ -3791,7 +3792,7 @@ msgstr "লেখক"
 msgid "Availability"
 msgstr "উপস্থিতি "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:396
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:401
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, fuzzy, c-format
 msgid "Availability:"
@@ -3817,7 +3818,7 @@ msgstr "প্রাপ্য সমস্যা"
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 #, fuzzy, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr "গড় মূল্যনির্ধারণ: %s (%s ভোট সমূহ)"
@@ -3843,13 +3844,13 @@ msgstr "BT"
 msgid "Back to lists"
 msgstr "তালিকায় ফিরে যান"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 #, c-format
 msgid "Back to results"
 msgstr "ফলাফলে ফিরে যান"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
 msgid "Back to the results search list"
 msgstr "ফলাফলের অনুসন্ধান তালিকায় ফিরে যান"
 
@@ -3860,7 +3861,7 @@ msgstr "ফলাফলের অনুসন্ধান তালিকায�
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:197
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:427
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1214
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1219
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
@@ -3949,14 +3950,14 @@ msgstr "অনুক্রম অনুযায়ী দেখুন"
 msgid "Browse our catalog"
 msgstr "আমাদের ক্যাটালগ এ দেখুন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1089
 #, fuzzy, c-format
 msgid "Browse results"
 msgstr "ফলাফল ব্রাউজ করুন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1299
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1301
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1304
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1306
 #, c-format
 msgid "Browse shelf"
 msgstr "সেল্ফ ব্রাউজ"
@@ -4014,7 +4015,7 @@ msgstr "ডাক নং.:"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1208
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:225
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:588
@@ -4158,7 +4159,7 @@ msgid "Card number:"
 msgstr "কার্ড নাম্বারঃ"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:27
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #, c-format
 msgid "Cart"
@@ -4370,7 +4371,7 @@ msgstr "পরিষ্কার"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
@@ -4418,7 +4419,7 @@ msgstr "দেখার জন্য এখানে ক্লিক করু�
 msgid "Click here to view them all."
 msgstr "সবগুলো দেখার জন্য এখানে ক্লিক করুন."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1036
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "ইমেজ ভিউয়ারে দেখার জন্য একটি ইমেজের উপর ক্লিক করুন"
@@ -4456,8 +4457,8 @@ msgstr "নতুন উইন্ডোতে ওপেন করতে ক্�
 msgid "Click to view in Google Books"
 msgstr "গুগল বুকসে দেখতে ক্লিক করুন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1086
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1134
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
 #, c-format
 msgid "Close"
 msgstr "বন্ধ করুন"
@@ -4508,7 +4509,7 @@ msgstr "আপনার প্রিয় আইটেম গুলো সংগ�
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:123
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
 #, c-format
 msgid "Collection"
 msgstr "সংগ্রহ"
@@ -4651,7 +4652,7 @@ msgstr "বিষয়বস্তুর"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1214
 #, fuzzy, c-format
 msgid "Copy number"
 msgstr "কপি নাম্বার"
@@ -4713,7 +4714,7 @@ msgstr "কোর্স নম্বর:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:279
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:22
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1226
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:20
 #, c-format
 msgid "Course reserves"
@@ -4790,7 +4791,7 @@ msgstr "ক্রেডিট"
 msgid "Credits (%s)"
 msgstr "ক্রেডিট সমূহ (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
 #, c-format
 msgid "Current location"
 msgstr "বর্তমান অবস্থান"
@@ -4858,7 +4859,7 @@ msgid "Date added:"
 msgstr "তারিখ সংযোজনঃ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1213
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
 #, fuzzy, c-format
 msgid "Date due"
 msgstr "নির্দিষ্ট তারিখ"
@@ -4892,7 +4893,7 @@ msgid "Date received"
 msgstr "রিসিভের তারিখ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:395
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:81
 #, c-format
@@ -5253,7 +5254,7 @@ msgid "Editions"
 msgstr "সংস্করণ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:42
 #, c-format
 msgid "Email"
@@ -5523,7 +5524,7 @@ msgid "Extends the due date for a patron's existing loan."
 msgstr ""
 "ব্যাবহারকারীর বিদ্যমান ধারকৃত বই এর মেয়াদ বাড়াইয়া দেত্তয়া নির্দিষ্ট তারিখ পর্যন্ত  "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #, c-format
 msgid "Facebook"
 msgstr "ফেসবুক"
@@ -5870,8 +5871,8 @@ msgid "Go"
 msgstr "যাওয়া"
 
 #. LI
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, fuzzy
 msgid "Go to detail"
 msgstr "বিস্তারিত দেখুন"
@@ -6118,7 +6119,7 @@ msgid "Home libraries"
 msgstr "হোম লাইব্রেরি"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:134
 #, fuzzy, c-format
 msgid "Home library"
@@ -6437,7 +6438,7 @@ msgstr "ট্রানজিট থেকে %s প্রতি %s হতে %s
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:30
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:576
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:485
 #, fuzzy, c-format
 msgid "In your cart"
@@ -6474,7 +6475,7 @@ msgstr "প্রশিক্ষকগণ"
 msgid "Instructors:"
 msgstr "প্রশিক্ষকগণ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:274
 #, fuzzy, c-format
 msgid "Interlibrary loan request"
@@ -6560,12 +6561,12 @@ msgstr "ইস্যু হয়েছে"
 msgid "Item damaged"
 msgstr "আইটেমটি ক্ষতিগ্রস্থ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1223
 #, fuzzy, c-format
 msgid "Item hold queue priority"
 msgstr "আইটেম হোল্ডের সারির প্রাধান্য"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1216
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "আইটেমটি হোল্ড করা"
@@ -6598,7 +6599,7 @@ msgstr "রি-ইস্যু অসম্ভব"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:194
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, fuzzy, c-format
 msgid "Item type"
@@ -6633,7 +6634,7 @@ msgstr "আইটেমটি অপসারিত"
 msgid "Items available at:"
 msgstr "আইটেমগুলো পাওয়া যাবে:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:398
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #, fuzzy, c-format
 msgid "Items available:"
@@ -6886,13 +6887,13 @@ msgstr "পর্যন্ত সীমিত: "
 msgid "Link"
 msgstr "Link"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1329
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1331
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1334
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1336
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "রিসোর্সের সাথে যুক্ত"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
 #, c-format
 msgid "LinkedIn"
 msgstr "লিঙ্কডইন"
@@ -6954,7 +6955,7 @@ msgstr "তালিকা (গুলি) এই আইটেমটিতে প
 msgid "Lists"
 msgstr "তালিকা"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:488
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:493
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #, fuzzy, c-format
 msgid "Lists:"
@@ -7040,7 +7041,7 @@ msgstr "অবস্থান"
 msgid "Log in"
 msgstr "লগ ইন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:566
 #, fuzzy, c-format
 msgid "Log in to add tags"
 msgstr "ট্যাগ যুক্ত করতে লগ ইন করুন।"
@@ -7211,15 +7212,15 @@ msgstr "MARCXML"
 msgid "Main address"
 msgstr "প্রধান ঠিকানা"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:267
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:270
 #, fuzzy, c-format
 msgid "Make a "
 msgstr "তৈরি"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:274
 #, fuzzy, c-format
 msgid "Make an "
@@ -7255,7 +7256,7 @@ msgstr "মার্চ"
 msgid "March"
 msgstr "মার্চ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:507
 #, fuzzy, c-format
 msgid "Match:"
 msgstr "মেলানো:"
@@ -7334,7 +7335,7 @@ msgstr "সোম"
 msgid "Monday"
 msgstr "সোমবার"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1043
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1048
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
 msgstr "iDreamBooks.com এ আরো রিভিউ রয়েছে । "
@@ -7346,7 +7347,7 @@ msgid "More details"
 msgstr "আরো বিস্তারিত"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #, fuzzy
 msgid "More lists"
 msgstr "আরো তালিকা"
@@ -7479,7 +7480,7 @@ msgstr "নতুন ক্রয়ের পরামর্শ"
 msgid "New search"
 msgstr "নতুন অনুসন্ধান"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:552
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:557
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:407
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:462
@@ -7508,12 +7509,12 @@ msgstr "সংবাদ  %s%s%sthe library%s হতে"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1102
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1107
 #, c-format
 msgid "Next"
 msgstr "পরবর্তী"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
 #, fuzzy, c-format
 msgid "Next "
 msgstr "পরবর্তী"
@@ -7574,13 +7575,13 @@ msgstr "চেকআউট(গুলো)"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:131
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:142
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:278
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:287
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:295
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:304
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:267
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:321
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
@@ -7635,7 +7636,7 @@ msgstr "কোনো আইটেম নির্বাচিত  করা হ�
 msgid "No items available."
 msgstr "কোনো আইটেম নেই."
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:426
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:431
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:222
 #, fuzzy, c-format
 msgid "No items available:"
@@ -7817,7 +7818,7 @@ msgstr "সাধারণ দৃশ্যপট "
 msgid "Not checked in %s"
 msgstr "চেকড আউট (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:603
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:263
 #, fuzzy, c-format
 msgid "Not finding what you're looking for? "
@@ -7936,7 +7937,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:147
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1212
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1217
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:38
 #, c-format
 msgid "Notes"
@@ -7989,8 +7990,8 @@ msgid "Nov"
 msgstr "নভে"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:594
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1050
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1055
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1148
 #, fuzzy, c-format
 msgid "Novelist Select"
 msgstr "উপন্যাসকার নির্বাচন"
@@ -8423,8 +8424,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:8
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:237
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
@@ -8745,8 +8746,8 @@ msgstr "দেখা"
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1093
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1098
 #, c-format
 msgid "Previous"
 msgstr "পূর্ববর্তী"
@@ -8859,7 +8860,7 @@ msgid "Public lists"
 msgstr "গণ তালিকা"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 msgid "Public lists:"
 msgstr ""
 
@@ -8892,7 +8893,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:394
 #, fuzzy, c-format
 msgid "Publication:"
@@ -8992,8 +8993,8 @@ msgstr "জন্য ছবি %s "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 msgid "Rating based on reviews of "
 msgstr ""
 
@@ -9229,7 +9230,7 @@ msgid "Request ID:"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:18
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:549
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:17
 #, c-format
 msgid "Request article"
@@ -9473,12 +9474,12 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 msgid "Review date: "
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 msgid "Review result: "
 msgstr ""
 
@@ -9546,7 +9547,7 @@ msgstr "শনিবার"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
@@ -9567,7 +9568,7 @@ msgstr "ভিডিও রেকর্ডিং "
 msgid "Save to another list"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:566
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:571
 #, fuzzy, c-format
 msgid "Save to lists"
 msgstr "তালিকায় ফিরে যান"
@@ -9657,7 +9658,7 @@ msgstr ""
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:365
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:388
 msgid "Search for works by this author"
@@ -9746,8 +9747,8 @@ msgstr ""
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:302
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:240
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:514
@@ -9764,12 +9765,12 @@ msgid "See also:"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -9786,7 +9787,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
@@ -9826,7 +9827,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:309
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
@@ -9942,7 +9943,7 @@ msgstr ""
 msgid "Settings updated"
 msgstr "টিংস আপডেট করা হয়েছে"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1162
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:712
 #, c-format
 msgid "Share"
@@ -9959,7 +9960,7 @@ msgid "Share a list with another patron"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1160
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 msgid "Share by email"
 msgstr ""
 
@@ -9969,16 +9970,16 @@ msgid "Share list"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 msgid "Share on Facebook"
 msgstr "ফেইসবুকে শেয়ার করুন"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
 msgid "Share on LinkedIn"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1202
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1207
 #, c-format
 msgid "Shelving location"
 msgstr ""
@@ -10302,7 +10303,7 @@ msgstr "পরিসংখ্যান"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:848
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1215
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:287
 #, c-format
 msgid "Status"
@@ -10646,7 +10647,7 @@ msgid "Tag status here."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:557
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:562
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:421
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
 #, c-format
@@ -10675,7 +10676,7 @@ msgstr ""
 msgid "Tags from this library:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:479
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:433
 #, c-format
 msgid "Tags:"
@@ -11151,7 +11152,7 @@ msgid "This news item does not exist. "
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11338,7 +11339,7 @@ msgstr "মঙ্গল"
 msgid "Tuesday"
 msgstr "মঙ্গলবার"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
 #, c-format
 msgid "Tweet"
 msgstr "টুইট"
@@ -11372,7 +11373,7 @@ msgstr "টাইপ:"
 msgid "UF"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1207
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1212
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -11560,9 +11561,9 @@ msgstr "পরামর্শ গুলি"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:116
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:340
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:343
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:348
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:350
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
@@ -11588,7 +11589,7 @@ msgid "View on Amazon.com"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #, fuzzy
 msgid "View record \"%s\""
 msgstr "ভিডিও রেকর্ডিং "
@@ -11599,7 +11600,7 @@ msgid "View your search history"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
 #, c-format
 msgid "Vol info"
 msgstr ""
@@ -11692,7 +11693,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:309
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 msgid "With selected titles: "
@@ -12090,7 +12091,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 msgid "You must be logged in to create or add to lists"
 msgstr ""
 
@@ -12327,7 +12328,7 @@ msgid "Your lists"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 msgid "Your lists:"
 msgstr ""
 
@@ -12425,7 +12426,7 @@ msgid "Your purchase suggestions"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "আপনার তালিকা : %s "
@@ -12509,7 +12510,7 @@ msgstr "জিপ/পোস্টাল কোড:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 msgid "[ New list ]"
 msgstr "[ নতুন তালিকা ]"
@@ -12520,7 +12521,7 @@ msgid "[% limit or"
 msgstr ""
 
 #. %1$s:  HTML5MediaParent | html 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1026
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr ""
@@ -12576,7 +12577,7 @@ msgid "bib_id"
 msgstr "বিব_আইডি"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:239
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:244
 msgid "bonus"
 msgstr ""
 
@@ -12594,10 +12595,10 @@ msgstr "দ্বারা"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:635
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:116
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:999
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 #, c-format
 msgid "by "
 msgstr "দ্বারা "
@@ -12686,7 +12687,7 @@ msgid "for more information on what it does and how to configure it."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1171
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
 #, c-format
 msgid "here"
 msgstr "এখানে"
@@ -12702,7 +12703,7 @@ msgid "hold(s) waiting"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -12923,8 +12924,8 @@ msgstr "প্রাথমিক ইমেইল"
 msgid "privacy policy"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:267
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:270
 #, c-format
@@ -12932,7 +12933,7 @@ msgid "purchase suggestion"
 msgstr "ক্রয়ের পরামর্শ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1398
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr ""
 

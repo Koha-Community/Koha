@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 10:43-0300\n"
-"PO-Revision-Date: 2020-09-18 15:37+0000\n"
-"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
+"POT-Creation-Date: 2020-10-21 00:11-0300\n"
+"PO-Revision-Date: 2020-10-06 18:55+0000\n"
+"Last-Translator: marieluce <marie-luce.laflamme@inLibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1600443433.486964\n"
+"X-POOTLE-MTIME: 1602010546.117631\n"
 "X-Pootle-Path: /fr_CA/18.05/fr-CA-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1129,7 +1129,7 @@ msgid ""
 "%s %s %s Can't be cancelled when item is in transit %s %sWaiting%sOn hold%s "
 "%sfor "
 msgstr ""
-"%s %s %s Ne peut être annulé lorsque l’exemplaire est en transit %s %sen "
+"%s %s %s Annulation impossible lorsque l'exemplaire est en transfert %s %sEn "
 "attente%sRéservé%s %spour "
 
 #. %1$s:  IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) 
@@ -1300,7 +1300,7 @@ msgid ""
 "Please create a new active budget and retry. "
 msgstr ""
 "%s %s %s Vous ne pouvez pas déplacer les postes budgétaires de ce budget, il "
-"n'y a pas de budget actif. Merci de créer un budget actif et réessayer. "
+"n'y a pas de budget actif. Veuillez créer un budget actif et réessayer. "
 
 #. %1$s:  IF UsageStatsLastUpdateTime 
 #. %2$s:  UsageStatsLastUpdateTime | html 
@@ -3812,6 +3812,21 @@ msgid ""
 msgstr ""
 "%s 0 inscription(s) à des listes de circulation %s %s Inscription à un liste "
 "de circulation%s %s Inscription à des listes de circulation %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#, fuzzy, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"<%s controls preload=none><%s src=\"%s\"%s />[%s mot-clé non supporté par "
+"votre navigateur.] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -10860,20 +10875,6 @@ msgstr ": l'exemplaire est lié"
 msgid ": item is checked out."
 msgstr ": le document est prêté."
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:699
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none><%s src=\"%s\"%s />[%s mot-clé non supporté par "
-"votre navigateur.] "
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -13277,7 +13278,7 @@ msgstr "Une erreur s'est produite. La facture ne peut pas être créée."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "An error occurred on deleting this image"
 msgstr "Une erreur s'est produite lors de la suppression cette image"
 
@@ -13875,7 +13876,7 @@ msgstr "Voulez-vous vraiment supprimer ce cours? Il y a %s exemplaire attaché."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Voulez-vous vraiment supprimer cette image de couverture?"
 
@@ -15656,10 +15657,10 @@ msgid ""
 "Please log in with the username and password given to you by your systems "
 "administrator and located in your "
 msgstr ""
-"Avant que nous commencions, merci de vérifier que vous avez les "
-"autoristattions qu'il faut pour continuer. Merci d'ouvrir une session avec "
-"le nom d'utilisateur et le mot de passe qui vous ont été donnés par votre "
-"administrateur système et localisé dans votre"
+"Avant de commencer, veuillez vérifier que vous avez les autorisations "
+"nécessaires pour continuer. Veuillez ouvrir une session avec l'identifiant "
+"et le mot de passe qui vous ont été donnés par votre administrateur système "
+"et qui sont inscrits dans votre "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:155
 #, c-format
@@ -17946,7 +17947,7 @@ msgstr "Vérifier les listes"
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:53
 #, c-format
 msgid "Check logs for more details."
-msgstr "Merci de voir le journal des erreurs pour plus d'information."
+msgstr "Vérifiez le registre des erreurs pour plus d'information."
 
 #: intranet-tmpl/prog/en/includes/prefs-admin-search.inc:27
 #: intranet-tmpl/prog/en/includes/home-search.inc:44
@@ -19297,7 +19298,7 @@ msgstr "Échec du clonage des règles de circulation et d'amendes !"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:173
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:748
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:753
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -23468,7 +23469,7 @@ msgid "Download list "
 msgstr "Télécharger la liste "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 msgid "Download record"
 msgstr "Télécharger notice"
 
@@ -23503,7 +23504,7 @@ msgid "Draw guide boxes: "
 msgstr "Tracer des cases modèles&nbsp;: "
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
@@ -23650,7 +23651,7 @@ msgstr "Dupliquer ce rapport enregistré"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:543
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr ""
-"Valeurs en double détectées. Merci de corriger les erreurs et soumettre à "
+"Valeurs en double détectées. Veuillez corriger les erreurs et soumettre à "
 "nouveau."
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
@@ -25492,7 +25493,7 @@ msgstr "Échec"
 msgid ""
 "Failed to add field. Please make sure the field name doesn't already exist."
 msgstr ""
-"L'ajout du champ a échoué. Merci de vérifier que le nom du champ n'existe "
+"L'ajout du champ a échoué. Veuillez vérifier que le nom du champ n'existe "
 "pas déjà."
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:34
@@ -26404,7 +26405,7 @@ msgstr "Pour toujours"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:136
 #, c-format
 msgid "Forget %s %s (%s)"
-msgstr "Amnistie %s %s (%s)"
+msgstr "Oublier %s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:774
 #, c-format
@@ -26414,7 +26415,7 @@ msgstr "Amnistier les amendes pour les réservations expirées manuellement"
 #: intranet-tmpl/prog/en/includes/checkouts-table-footer.inc:11
 #, c-format
 msgid "Forgive fines on return:"
-msgstr "Effacer les amendes au retour: "
+msgstr "Effacer les amendes au retour : "
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:756
 #, c-format
@@ -27653,7 +27654,7 @@ msgstr "Réservation trouvée (document déjà en attente de retrait) : "
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:51
 #, c-format
 msgid "Hold found for (%s), please transfer"
-msgstr "Réservation trouvée pour (%s), merci de transférer"
+msgstr "Réservation trouvée pour (%s), veuillez transférer"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:481
 #, c-format
@@ -28503,7 +28504,7 @@ msgstr "Votre adresse IP a changé, reconnectez-vous"
 #: intranet-tmpl/prog/en/modules/auth.tt:37
 #, c-format
 msgid "IP address has changed. Please log in again "
-msgstr "Votre adresse IP a changé, reconnectez-vous"
+msgstr "Votre adresse IP a changé. Veuillez vous reconnecter "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:146
 #, c-format
@@ -28936,18 +28937,18 @@ msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
 msgstr ""
-"Si vous avez un compte CAS, merci de choisir avec quel compte vous souhaitez "
-"vous authentifier&nbsp;:"
+"Si vous avez un compte CAS, veuillez choisir lequel vous souhaitez utiliser "
+"pour vous authentifier :"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:99
 #, c-format
 msgid "If you have a CAS account, please click here to login"
-msgstr "Si vous avez un compte CAS, merci de cliquer ici pour vous connecter"
+msgstr "Si vous avez un compte CAS, cliquez ici pour vous connecter"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:58
 #, c-format
 msgid "If you have a shibboleth account, please "
-msgstr "Si vous avez un compte shibboleth, merci "
+msgstr "Si vous avez un compte shibboleth, veuillez "
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:68
 #, c-format
@@ -30426,8 +30427,8 @@ msgid ""
 "Item statuses may be inaccurate. Please view the record details for accurate "
 "item statuses"
 msgstr ""
-"Les statuts des exemplaires peuvent être inexact. Merci de vérifier la "
-"notice pour corriger les statuts des exemplaires."
+"Les statuts des exemplaires pourraient être inexacts. Veuillez consulter la "
+"notice détaillée pour voir les statuts des exemplaires."
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:57
 #, c-format
@@ -32228,6 +32229,11 @@ msgstr "Koha &rsaquo; Catalogage &rsaquo; Fureteur de cotes"
 msgid "Koha &rsaquo; Cataloging &rsaquo; Editor"
 msgstr "Koha &rsaquo; Catalogage &rsaquo; Éditeur"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Cataloging &rsaquo; Link to host record"
+msgstr "Koha &rsaquo; Catalogage &rsaquo; Lien vers l'hôte de l'exemplaire"
+
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:2
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; MARC import"
@@ -32238,11 +32244,6 @@ msgstr "Koha &rsaquo; Catalogage &rsaquo; Importation MARC"
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Merging records"
 msgstr "Koha &rsaquo; Catalogage &rsaquo; Fusion de notices"
-
-#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Cataloging &rsquo; Link to host record"
-msgstr "Koha &rsaquo; Catalogage &rsaquo; Lien vers l'hôte de l'exemplaire"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:6
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:5
@@ -33470,10 +33471,10 @@ msgstr ""
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
-"&rsquo; Add or remove items"
+"&rsaquo; Add or remove items"
 msgstr ""
 "Koha &rsaquo; Outils &rsaquo; Rotation des collections &rsaquo; Collection "
 "%s &rsquo; Ajouter/Supprimer des exemplaires"
@@ -34842,7 +34843,7 @@ msgstr "Listes comprenant ce titre&nbsp;: "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -34859,7 +34860,7 @@ msgstr "Chargement"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -35298,7 +35299,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -35310,7 +35311,7 @@ msgstr "MARC (Unicode/UTF-8, standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -35410,7 +35411,7 @@ msgstr "Code MARC d'organisation"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -35498,7 +35499,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35536,7 +35537,7 @@ msgid "MIT license"
 msgstr "Licence MIT"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -37485,17 +37486,17 @@ msgstr "Nom de la saison (abrégé)"
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:14
 #, c-format
 msgid "Name or ISSN: "
-msgstr "Nom ou ISSN&nbsp;: "
+msgstr "Nom ou ISSN : "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:165
 #, c-format
 msgid "Name or barcode not found. Please try an other "
-msgstr "Nom ou code-barres non trouvé, merci de réessayer un autre "
+msgstr "Nom ou code-barres introuvable, veuillez en essayer un autre "
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:117
 #, c-format
 msgid "Name or cardnumber:"
-msgstr "Nom ou Numéro de carte&nbsp;:"
+msgstr "Nom ou numéro de carte :"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:23
 #, c-format
@@ -38393,7 +38394,7 @@ msgstr "Aucune devise active n'est définie"
 #: intranet-tmpl/prog/en/modules/about.tt:249
 #, c-format
 msgid "No active currency is defined. Please go to "
-msgstr "Aucune devise active n'est définie. Merci d'aller à"
+msgstr "Aucune devise active n'est définie. Veuillez aller à "
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:57
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
@@ -38629,7 +38630,7 @@ msgid "No images are currently available. "
 msgstr "Aucune image n'est disponible."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr ""
 "Aucune image n'a encore été téléversée pour cette notice bibliographique."
@@ -38957,8 +38958,8 @@ msgstr "Pas d'imprimante définie."
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:74
 msgid "No quotes available. Please use the 'Add quote' button to add a quote."
 msgstr ""
-"Aucune citation disponible. Merci de cliquer sur le bouton \"Ajouter une "
-"citation\" pour en ajouter une."
+"Aucune citation disponible. Veuillez cliquer sur le bouton 'Ajouter une "
+"citation' pour en ajouter une."
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:187
@@ -41220,7 +41221,7 @@ msgstr "Amende de retard (montant)"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:114
 #, c-format
 msgid "Overdue notice required: "
-msgstr "Message de retard requis&nbsp;: "
+msgstr "Avis de retard requis : "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:29
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:48
@@ -42940,12 +42941,12 @@ msgstr "Jouer le son"
 #: intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
 #, c-format
 msgid "Please add a library"
-msgstr "Merci d'ajouter un site"
+msgstr "Veuillez ajouter une bibliothèque"
 
 #: intranet-tmpl/prog/en/includes/noadd-warnings.inc:8
 #, c-format
 msgid "Please add a patron category"
-msgstr "Merci d'ajouter une catégorie d'utilisateur"
+msgstr "Veuillez ajouter une catégorie d'utilisateurs"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:170
@@ -42953,13 +42954,13 @@ msgid ""
 "Please add barcodes using either the direct entry text area or the item "
 "search."
 msgstr ""
-"Merci d'ajouter des codes-barres en utilisant la zone de saisie ou via la "
+"Veuillez ajouter des codes-barres en utilisant la zone de texte ou via la "
 "recherche d'exemplaire."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:247
 msgid "Please check at least one action"
-msgstr "Merci de sélectionner au moins une action."
+msgstr "Veuillez sélectionner au moins une action"
 
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:7
 #, c-format
@@ -42975,16 +42976,14 @@ msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
 "less than 30 days. %s %s "
 msgstr ""
-"Merci de vérifier le journal des transactions pour avoir plus de détails. "
-"%sMerci de sélectionner une date d'expiration du cache de moins de 30 jours. "
-"%s %s"
+"Veuillez vérifier les registres pour avoir plus de détails. %sVeuillez "
+"sélectionner une date d'expiration du cache de moins de 30 jours. %s %s "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:346
 #, c-format
 msgid "Please choose a cache_expiry less than 30 days "
 msgstr ""
-"S'il vous plaît choisir une expiration de cache(cache_expiry) moins de 30 "
-"jours"
+"Veuillez choisir une expiration de cache (cache_expiry) de moins de 30 jours "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
@@ -43009,7 +43008,7 @@ msgstr "Veuillez choisir une période d'inscription en mois OU par date."
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/z3950_search.inc:1
 msgid "Please choose at least one external target"
-msgstr "Merci de choisir au moins une source externe"
+msgstr "Veuillez choisir au moins une source externe"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:28
 #, c-format
@@ -43053,7 +43052,7 @@ msgstr "Confirmer le prêt"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:42
 #, c-format
 msgid "Please confirm subscription deletion"
-msgstr "Merci de confirmer la suppression de l'abonnement"
+msgstr "Veuillez confirmer la suppression de l'abonnement"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1153
@@ -43063,22 +43062,22 @@ msgstr "Veuillez confirmer que c'est une utilisateur en doublon"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #, c-format
 msgid "Please contact your system administrator"
-msgstr "Merci de contacter votre administrateur système"
+msgstr "Veuillez contacter votre administrateur système"
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:52
 #, c-format
 msgid "Please correct these errors. "
-msgstr "Veuillez corriger ces erreurs."
+msgstr "Veuillez corriger ces erreurs. "
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:41
 #, c-format
 msgid "Please create the database before continuing."
-msgstr "Merci de créer la base de données avant de continuer."
+msgstr "Veuillez créer la base de données avant de continuer."
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:42
 #, c-format
 msgid "Please define one"
-msgstr "Merci d'en créer une"
+msgstr "Veuillez en créer une"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:6
@@ -43280,12 +43279,12 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "Please fill at least one template."
-msgstr "Merci de remplir au moins un modèle."
+msgstr "Veuillez remplir au moins un modèle."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
 msgid "Please fix this field."
-msgstr "Veuillez corriger ce champ. "
+msgstr "Veuillez corriger ce champ."
 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:1
 #, c-format
@@ -43297,7 +43296,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/auth.tt:33
 #, c-format
 msgid "Please log in again"
-msgstr "Merci de vous reconnecter"
+msgstr "Veuillez vous reconnecter"
 
 #: intranet-tmpl/prog/en/modules/about.tt:191
 #, c-format
@@ -43314,7 +43313,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 msgid "Please log in to Koha and try again. (Error: '%s')"
-msgstr "Merci de vous connecter à Koha et de réessayer. (Erreur:'%s')"
+msgstr "Veuillez vous connecter à Koha et réessayer. (Erreur : '%s')"
 
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:16
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:14
@@ -43346,7 +43345,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/installer-strings.inc:1
 msgid "Please only choose one enrollment period."
-msgstr "Merci de choisir qu'une période d'inscription."
+msgstr "Veuillez ne choisir qu'une durée d'inscription."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/installer-strings.inc:1
@@ -43364,7 +43363,7 @@ msgid ""
 "Please pick your language from the following list. If your language is not "
 "listed, please inform your system administrator."
 msgstr ""
-"Merci de choisir votre langue dans la liste suivante. Si votre langue n'est "
+"Veuillez choisir votre langue dans la liste suivante. Si votre langue n'est "
 "pas dans la liste, informez votre administrateur système."
 
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:49
@@ -43375,10 +43374,10 @@ msgid ""
 "that you want to use. (NOTE: 'Did you mean?' functionality is not yet "
 "enabled on the staff client) "
 msgstr ""
-"Merci de positionner les outils 'Voulez-vous dire?' par ordre d'importance, "
-"du plus important au moins important, et cocher la case de l'outil que vous "
-"voulez activer. (NOTE: 'Voulez-vous dire?' ne fonctionne pas pour l'instant "
-"pour l'intranet) "
+"Placez les outils 'Voulez-vous dire?' par ordre d'importance, du plus "
+"important au moins important, et cochez la case des outils que vous voulez "
+"activer. (NOTE: 'Voulez-vous dire?' ne fonctionne pas à l'intranet pour "
+"l'instant) "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
@@ -43389,25 +43388,25 @@ msgstr "Veuillez actualiser la page et réessayer."
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:121
 #, c-format
 msgid "Please return item to home library: %s"
-msgstr "Merci de renvoyer ce document au site permanent&nbsp;: %s"
+msgstr "Veuillez renvoyer cet exemplaire à sa bibliothèque propriétaire : %s"
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:639
 #, c-format
 msgid "Please return item to: %s"
-msgstr "Merci de renvoyer l'exemplaire à: %s"
+msgstr "Veuillez renvoyer cet exemplaire à : %s"
 
 #. %1$s:  Branches.GetName( TransferWaitingAt ) | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:212
 #, c-format
 msgid "Please return item to: %s "
-msgstr "Merci de renvoyer l'exemplaire à: %s "
+msgstr "Veuillez renvoyer cet exemplaire à : %s "
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:402
 #, c-format
 msgid "Please return this item to %s "
-msgstr "Merci de renvoyer l'exemplaire à: %s "
+msgstr "Veuillez renvoyer cet exemplaire à %s "
 
 #. %1$s:  ELSIF ( error.queryerr ) 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
@@ -43430,36 +43429,34 @@ msgstr "Vérifiez les registres d'erreur pour plus de détails."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:179
 msgid "Please select ..."
-msgstr "Merci de sélectionner un ..."
+msgstr "Veuillez sélectionner ..."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:128
 msgid "Please select a %s."
-msgstr "Merci de sélectionner un %s."
+msgstr "Veuillez sélectionner un %s."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
-msgstr ""
-"Merci de sélectionner une feuille de calcul CSV (.csv), ODS (.ods) ou XML (."
-"xml)."
+msgstr "Veuillez sélectionner une feuille de calcul CSV (.csv) ou ODS (.ods)."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 msgid "Please select a modification template."
-msgstr "Merci de sélectionner un modèle de modification."
+msgstr "Veuillez sélectionner un modèle de modification."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 msgid "Please select a news item to delete."
-msgstr "Merci de sélectionner une nouvelle à supprimer."
+msgstr "Veuillez sélectionner une nouvelle à supprimer."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 msgid "Please select a patron list."
-msgstr "Merci de sélectionner une liste d'utilisateur."
+msgstr "Veuillez sélectionner une liste d'utilisateurs."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -43468,26 +43465,26 @@ msgstr "Merci de sélectionner une liste d'utilisateur."
 msgid ""
 "Please select a quote(s) by clicking the quote id(s) you desire to delete."
 msgstr ""
-"S'il vous plaît sélectionner une(des) citation(s) en cliquant sur "
-"l'identifiant de la (des) citation(s) que vous désirez supprimer."
+"Veuillez sélectionner une ou plusieurs citations en cliquant sur "
+"l'identifiant des citations à supprimer."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 msgid "Please select at least one %s to %s."
-msgstr "Veuillez sélectionner au moins un de %s à %s."
+msgstr "Veuillez sélectionner au moins un %s à %s."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:128
 msgid "Please select at least one batch to export."
-msgstr "Sélectionner au moins un lot à exporter."
+msgstr "Veuillez sélectionner au moins un lot à exporter."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:136
 msgid "Please select at least one card to export."
-msgstr "Sélectionner au moins une carte à exporter."
+msgstr "Veuillez sélectionner au moins une carte à exporter."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_extend_due_dates.tt:203
@@ -43498,32 +43495,32 @@ msgstr "Merci de sélectionner au moins une notice pour commencer le traitement"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:212
 msgid "Please select at least one issue."
-msgstr "Merci de sélectionner au moins un numéro."
+msgstr "Veuillez sélectionner au moins un numéro."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:212
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:200
 msgid "Please select at least one item to export."
-msgstr "Sélectionner au moins un élément à exporter."
+msgstr "Veuillez sélectionner au moins un élément à exporter."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:136
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:170
 msgid "Please select at least one item."
-msgstr "Sélectionner au moins un élément."
+msgstr "Veuillez sélectionner au moins un élément."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:170
 msgid "Please select at least one label to delete."
-msgstr "Merci de sélectionner au moins une étiquette à supprimer."
+msgstr "Veuillez sélectionner au moins une étiquette à supprimer."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:170
 msgid "Please select at least one label to export."
-msgstr "Sélectionner au moins une étiquette à exporter."
+msgstr "Veuillez sélectionner au moins une étiquette à exporter."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:136
@@ -43533,12 +43530,12 @@ msgstr "Veuillez sélectionner au moins un utilisateur à supprimer."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 msgid "Please select at least one record to process"
-msgstr "Merci de sélectionner au moins une notice pour commencer le traitement"
+msgstr "Veuillez sélectionner au moins une notice à traiter"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:786
 msgid "Please select at least one suggestion to delete"
-msgstr "Merci de sélectionner au moins une suggestion à supprimer"
+msgstr "Veuillez sélectionner au moins une suggestion à supprimer"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:146
@@ -43548,47 +43545,47 @@ msgstr "Veuillez sélectionner les images à supprimer."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 msgid "Please select one %s to %s."
-msgstr "Veuillez en sélectionner un de %s à %s."
+msgstr "Veuillez sélectionner un %s à %s."
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:138
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:128
 msgid "Please select only one %s to %s."
-msgstr "Merci de sélectionner un seul %s pour %s."
+msgstr "Veuillez sélectionner un seul %s à %s."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:140
 msgid "Please select or enter a sound."
-msgstr "Merci de sélectionner ou entrer un son."
+msgstr "Veuillez sélectionner ou entrer un son."
 
 #: intranet-tmpl/prog/en/includes/budgets-active-currency.inc:9
 #, c-format
 msgid "Please specify an active currency."
-msgstr "Merci d'indiquer une devise active."
+msgstr "Veuillez indiquer une devise active."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:318
 msgid "Please specify the reason for cancelling selected item(s):"
-msgstr "Veuillez spécifier la raison de l'annulation de l'exemplaire choisi:"
+msgstr ""
+"Veuillez spécifier la raison de l'annulation du ou des éléments choisis :"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "Please specify title and content for %s"
-msgstr "Préciser le titre et le contenu pour %s"
+msgstr "Veuillez saisir le titre et le contenu de %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:74
 msgid "Please supply both the text and source of the quote before saving."
 msgstr ""
-"S'il vous plaît fournir à la fois le texte et la source de la citation avant "
-"l'enregistrement."
+"Veuillez fournir le texte et la source de la citation avant d'enregistrer."
 
 #. %1$s:  Branches.GetName( collectionBranch ) | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:124
 #, c-format
 msgid "Please transfer item to: %s"
-msgstr "Merci de transférer cet exemplaire à&nbsp;: %s."
+msgstr "Veuillez transférer cet exemplaire à : %s"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -43602,7 +43599,7 @@ msgstr "Veuillez d'abord téléverser un fichier."
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:95
 #, c-format
 msgid "Please verify that it exists."
-msgstr "Merci de vérifier qu'il existe."
+msgstr "Veuillez vérifier qu'il existe."
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:29
 #, c-format
@@ -43616,18 +43613,18 @@ msgstr ""
 #, c-format
 msgid "Please verify that you are using either a single quote or a tab."
 msgstr ""
-"Merci de vérifier que vous utilisez soit un guillemet simple, soit une "
+"Veuillez vérifier que vous utilisez soit un guillemet simple, soit une "
 "tabulation."
 
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:97
 #, c-format
 msgid "Please verify the integrity of the ZIP file and retry."
-msgstr "Merci de vérifier l'intégrité de votre archive zip er réessayer."
+msgstr "Veuillez vérifier l'intégrité de votre fichier zip et réessayer."
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:28
 #, c-format
 msgid "Please verify the integrity of the zip file and retry."
-msgstr "Merci de vérifier l'intégrité de votre fichier zip et réessayer."
+msgstr "Veuillez vérifier l'intégrité de votre fichier zip et réessayer."
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:69
 #, c-format
@@ -43639,12 +43636,12 @@ msgstr "Version de l'extension"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:301
 #, c-format
 msgid "Plugin:"
-msgstr "Extension&nbsp;:"
+msgstr "Extension :"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:83
 #, c-format
 msgid "Plugin: "
-msgstr "Extension&nbsp;: "
+msgstr "Extension : "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:107
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:43
@@ -45022,7 +45019,7 @@ msgstr "Reçoit les commandes"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:347
 #, c-format
 msgid "Receives overdue notices: "
-msgstr "Recoit des notifications de retard&nbsp;: "
+msgstr "Reçoit des avis de retard : "
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:83
@@ -47227,7 +47224,7 @@ msgstr "Enregistrer la description"
 msgid "Save quotes"
 msgstr "Sauvegarder les citations"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, c-format
 msgid "Save record"
 msgstr "Enregistrer la notice"
@@ -48317,7 +48314,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Sélectionnez le jour&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "Select download format: "
 msgstr "Sélectionner le format de téléchargement&nbsp;: "
@@ -52203,7 +52200,8 @@ msgstr "Le code-barres n'a pas été trouvé&nbsp;: "
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:241
 #, c-format
 msgid "The barcode you enter will be incremented for each additional item."
-msgstr "Le code-barres saisi sera incrément pour tous les exemplaires ajoutés"
+msgstr ""
+"Le code-barres saisi sera incrémenté pour tous les exemplaires ajoutés."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:212
@@ -52485,8 +52483,8 @@ msgid ""
 "The following holds have not been filled. Please retrieve them and check "
 "them in."
 msgstr ""
-"Les réservations suivantes n'ont pas été mises en attente de retrait. Merci "
-"de les récupérer et de les passer au retour."
+"Les réservations suivantes n'ont pas été mises en attente de retrait. "
+"Veuillez les récupérer et les passer au retour."
 
 #. For the first occurrence,
 #. %1$s:  "borrowers" | $HtmlTags tag="strong" 
@@ -52663,14 +52661,14 @@ msgid ""
 "The library code entered contains whitespace characters. Please remove any "
 "whitespace characters from the library code"
 msgstr ""
-"Le code de la bibliothèque saisi contient des espaces. Merci d'enlever tous "
+"Le code de la bibliothèque saisi contient des espaces. Veuillez enlever tous "
 "les espaces du code de la bibliothèque"
 
 #. %1$s:  email | html 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:9
 #, c-format
 msgid "The list was sent to: %s"
-msgstr "La liste a été envoyée à&nbsp;: %s"
+msgstr "La liste a été envoyée à : %s"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:42
 #, c-format
@@ -52985,11 +52983,11 @@ msgid ""
 "moderator must exist in your borrowers table. Please log in as a different "
 "authorized staff user to moderate tags. %sUnrecognized error! %s "
 msgstr ""
-"L'utilisateur root de koha dans votre fichier KOHA_CONF (défaut: kohaadmin) "
-"n'est pas un modérateur de tag valide. Ces actions sont journalisées par "
-"borrowernumber, le modérateur doit donc existé dans la table borrowers. "
-"Merci de vous identifier avec un utilisateur autorisé à modérer les tags. "
-"%sErreur inconnue! %s "
+"L'utilisateur root de Koha dans votre fichier KOHA_CONF (par défaut : "
+"kohaadmin) n'est pas un modérateur de mot-clés autorisé. Ces actions sont "
+"journalisées par borrowernumber, le modérateur doit donc exister dans la "
+"table borrowers. Veuillez vous identifier avec un utilisateur autorisé à "
+"modérer les mots-clés. %sErreur inconnue! %s "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:40
 #, c-format
@@ -52997,8 +52995,8 @@ msgid ""
 "The rules are applied from most specific to less specific, using the first "
 "found in this order:"
 msgstr ""
-"Les règles sont appliquées de la plus spécifique à la plus générale. Dans "
-"l'ordre suivant&nbsp;:"
+"Les règles sont appliquées de la plus spécifique à la plus générale, "
+"utilisant la première règle trouvée dans l'ordre suivant :"
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:29
 #, c-format
@@ -53738,8 +53736,8 @@ msgid ""
 "a list of anonymized loans, please run a report."
 msgstr ""
 "Il s'agit de l'utilisateur anonyme, c'est pour cela qu'aucun historique de "
-"circulation n'est affiché. Pour avoir la liste des prêts anonymisés, merci "
-"de faire un rapport."
+"circulation n'est affiché. Pour avoir la liste des prêts anonymisés, "
+"veuillez faire un rapport."
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:32
 #, c-format
@@ -53911,7 +53909,7 @@ msgstr "Ce document ne peut normalement pas être réservé."
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:98
 #, c-format
 msgid "This list does not exist."
-msgstr "Cette liste n'exise pas."
+msgstr "Cette liste n'existe pas."
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:46
 #, c-format
@@ -54640,7 +54638,7 @@ msgstr "Jusqu'au&nbsp;:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:103
 #, c-format
 msgid "To edit patron permissions, go to: "
-msgstr "Pour modifier les permissions de l'utilisateur, allez à&nbsp;: "
+msgstr "Pour modifier les permissions de l'utilisateur, allez à: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:22
 #, c-format
@@ -56124,7 +56122,7 @@ msgid "Upload an image file: "
 msgstr "Téléverser une image : "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Upload an image file: %sUpload%s"
 msgstr "Téléverser un fichier image: %sTéléverser%s"
 
@@ -57899,7 +57897,7 @@ msgstr "Amnistie %s"
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:209
 #, c-format
 msgid "Writeoff amount: "
-msgstr "Montant de l'amnistie&nbsp;: "
+msgstr "Montant de l'amnistie : "
 
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:118
 #, c-format
@@ -58241,9 +58239,9 @@ msgid ""
 "Please add it, pointing to the configured file upload directory for your "
 "Koha instance. "
 msgstr ""
-"Il vous l'entrée &lt;upload_path&gt; dans le fichier koha-conf.xml. Veuillez "
-"l'ajouter en la faisant pointer vers le dossier de téléversement de fichiers "
-"configuré pour votre instance Koha."
+"Il manque l'entrée &lt;upload_path&gt; dans le fichier koha-conf.xml. "
+"Veuillez l'ajouter en la faisant pointer vers le dossier de téléversement de "
+"fichiers configuré pour votre instance Koha. "
 
 #: intranet-tmpl/prog/en/modules/about.tt:368
 #, c-format
@@ -58426,13 +58424,13 @@ msgstr "Vous pouvez utiliser les caractères génériques suivants: %% _"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:543
 msgid "You can't add a new item, please create a new order line"
 msgstr ""
-"Vous ne pouvez pas ajouter d'exemplaire. Merci de créer une nouvelle ligne "
+"Vous ne pouvez pas ajouter d'exemplaire, veuillez créer une nouvelle ligne "
 "de commande"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:26
 #, c-format
 msgid "You can't create any orders unless you first "
-msgstr "Vous ne pouvoir pas créer des commandes avant d'avoir "
+msgstr "Vous ne pouvez pas créer de commandes avant d'avoir "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
@@ -58515,15 +58513,15 @@ msgid ""
 "You don't have patron categories defined, or the patron categories are not "
 "set to receive overdue notices."
 msgstr ""
-"Vous n'avez pas défini de catégorie d'utilisateur, ou bien aucune catégorie "
-"d'utilisateur ne doit recevoir de message de retard."
+"Vous n'avez pas défini de catégorie d'utilisateurs, ou bien aucune catégorie "
+"d'utilisateurs ne doit recevoir d'avis de retard."
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:21
 #, c-format
 msgid "You followed an outdated link e.g. from a search engine or a bookmark"
 msgstr ""
-"Vous avez suivi un lien brisé, par exemple depuis un moteur de recherche ou "
-"un favoris."
+"Vous avez suivi un lien obsolète, par exemple depuis un moteur de recherche "
+"ou un favori."
 
 #. %1$s:  total | html 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:265
@@ -58532,7 +58530,7 @@ msgid ""
 "You have %s error(s) in your MARC configuration. Please fix them before "
 "using Koha"
 msgstr ""
-"Vous avez %s erreur(s) dans votre configuration MAR . Merci de les corriger "
+"Vous avez %s erreur(s) dans votre configuration MARC. Veuillez les corriger "
 "avant d'utiliser Koha"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:985
@@ -58541,7 +58539,7 @@ msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
 "process..."
 msgstr ""
-"Vous avec déjà envoyé un code-barres, merci d'attendre que le prêt soit "
+"Vous avec déjà envoyé un code-barres, veuillez attendre que le prêt soit "
 "traité..."
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:183
@@ -58573,7 +58571,7 @@ msgstr ""
 msgid ""
 "You have entered a username that already exists. Please choose another one."
 msgstr ""
-" Vous avez saisi un Identifiant qui existe déjà. Merci d'en choisir un autre."
+"Vous avez saisi un identifiant qui existe déjà. Veuillez en choisir un autre."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:179
@@ -60599,7 +60597,8 @@ msgstr "est publié sous la licence MIT par Ludo van den Boom."
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr ""
-"est restreint. Merci de vérifier si l'utilisateur doit toujours restreint."
+"est suspendu. Veuillez vérifier si l'utilisateur doit toujours être "
+"suspendu. "
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:28
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:53
@@ -62010,7 +62009,7 @@ msgstr "| Statut : %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:741
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:746
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175

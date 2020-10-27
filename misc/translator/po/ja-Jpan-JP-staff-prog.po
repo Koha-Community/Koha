@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 10:50-0300\n"
+"POT-Creation-Date: 2020-10-21 00:18-0300\n"
 "PO-Revision-Date: 2019-01-26 07:11+0000\n"
 "Last-Translator: DeigoHiga <diegomh27@hotmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -3665,6 +3665,19 @@ msgstr "%s 個のレコード"
 msgid ""
 "%s 0 subscription routing lists %s %s subscription routing list %s %s "
 "subscription routing lists %s "
+msgstr ""
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
 msgstr ""
 
 #. %1$s:  IF !rota.active 
@@ -10848,18 +10861,6 @@ msgstr ""
 msgid ": item is checked out."
 msgstr "%s アイテムが貸出中"
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:699
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -13302,7 +13303,7 @@ msgstr "エラーが発生しました"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "An error occurred on deleting this image"
 msgstr ""
 
@@ -13905,7 +13906,7 @@ msgstr "このリストを本当に削除しますか?"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #, fuzzy
 msgid "Are you sure you want to delete this cover image?"
 msgstr "このリストを本当に削除しますか?"
@@ -19234,7 +19235,7 @@ msgstr "買って拒絶されると提案している"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:173
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:748
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:753
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -23349,7 +23350,7 @@ msgid "Download list "
 msgstr "新しく増加して本棚を仮想する "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 #, fuzzy
 msgid "Download record"
 msgstr "ダウンロード"
@@ -23385,7 +23386,7 @@ msgid "Draw guide boxes: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core (XML)"
@@ -31910,6 +31911,16 @@ msgstr "%s %s%s%sKoha オンライン%s カタログ &rsaquo; 高度な検索 %s
 msgid "Koha &rsaquo; Cataloging &rsaquo; Editor"
 msgstr "%s%s カタログ &rsaquo; %s %s のアカウント %s"
 
+# %1$s: INCLUDE 'doc-head-open.inc'
+# %2$s: LibraryNameTitle or "Koha Online"
+# %3$s: firstname
+# %4$s: surname
+# %5$s: INCLUDE 'doc-head-close.inc'
+#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Cataloging &rsaquo; Link to host record"
+msgstr "%s%s カタログ &rsaquo; %s %s のアカウント %s"
+
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:2
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; MARC import"
@@ -31920,16 +31931,6 @@ msgstr ""
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Merging records"
 msgstr ""
-
-# %1$s: INCLUDE 'doc-head-open.inc'
-# %2$s: LibraryNameTitle or "Koha Online"
-# %3$s: firstname
-# %4$s: surname
-# %5$s: INCLUDE 'doc-head-close.inc'
-#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Cataloging &rsquo; Link to host record"
-msgstr "%s%s カタログ &rsaquo; %s %s のアカウント %s"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:6
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:5
@@ -33064,7 +33065,7 @@ msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s"
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
-"&rsquo; Add or remove items"
+"&rsaquo; Add or remove items"
 msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:6
@@ -34406,7 +34407,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -34424,7 +34425,7 @@ msgstr "館所蔵"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -34862,7 +34863,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr ""
@@ -34874,7 +34875,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr ""
@@ -34978,7 +34979,7 @@ msgstr "館所蔵"
 # %2$s: INCLUDE 'doc-head-close.inc' 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -35060,7 +35061,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35098,7 +35099,7 @@ msgid "MIT license"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -38149,7 +38150,7 @@ msgid "No images are currently available. "
 msgstr "複本がない。 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr ""
 
@@ -46694,7 +46695,7 @@ msgstr "陳述"
 msgid "Save quotes"
 msgstr "を管理する"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, fuzzy, c-format
 msgid "Save record"
 msgstr "図書目録は番号を記録する："
@@ -47804,7 +47805,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "選択 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "Select download format: "
 msgstr ""
@@ -55461,7 +55462,7 @@ msgid "Upload an image file: "
 msgstr "（%1$s 全部で）"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #, fuzzy
 msgid "Upload an image file: %sUpload%s"
 msgstr "定期刊行物の数量を購読する"
@@ -61136,7 +61137,7 @@ msgstr "%s %s| %s %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:741
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:746
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175

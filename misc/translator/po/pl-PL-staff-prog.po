@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 10:59-0300\n"
+"POT-Creation-Date: 2020-10-21 00:26-0300\n"
 "PO-Revision-Date: 2020-06-02 14:26+0000\n"
 "Last-Translator: Null404 <spamx@onet.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -3724,6 +3724,21 @@ msgid ""
 msgstr ""
 "%s 0 list obiegu prenumerat %s %s lista obiegu prenumeraty %s %s listy "
 "obiegu prenumeraty %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#, fuzzy, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
+"browser.] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -10729,20 +10744,6 @@ msgstr ": egzemplarz został połączony "
 msgid ": item is checked out."
 msgstr ": egzemplarz wypożyczony."
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:699
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -13129,7 +13130,7 @@ msgstr "Wystąpił błąd. Nie można utworzyć faktury."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "An error occurred on deleting this image"
 msgstr "Wystąpił błąd podczas usuwania zdjęcia"
 
@@ -13720,7 +13721,7 @@ msgstr "Czy na pewno chcesz usunąć %s podłączonych egzemplarzy?"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Czy na pewno chcesz usunąć tę okładkę?"
 
@@ -19088,7 +19089,7 @@ msgstr "Powielenie zasady nie powiodło się!"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:173
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:748
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:753
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -23247,7 +23248,7 @@ msgid "Download list "
 msgstr "Pobierz listę "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 #, fuzzy
 msgid "Download record"
 msgstr "Pobierz rekordy"
@@ -23283,7 +23284,7 @@ msgid "Draw guide boxes: "
 msgstr "Rysuj pomocnicze pola: "
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
@@ -31954,6 +31955,11 @@ msgstr "Koha &rsaquo; Katalogowanie &rsaquo; Import MARC"
 msgid "Koha &rsaquo; Cataloging &rsaquo; Editor"
 msgstr "Koha &rsaquo; Katalogowanie &rsaquo; Edytor"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Cataloging &rsaquo; Link to host record"
+msgstr "Koha &rsaquo; Katalogowanie &rsquo; Połącz z dokumentem macierzystym"
+
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:2
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; MARC import"
@@ -31964,11 +31970,6 @@ msgstr "Koha &rsaquo; Katalogowanie &rsaquo; Import MARC"
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Merging records"
 msgstr "Koha &rsaquo; Katalogowanie &rsaquo; Scalanie rekordów"
-
-#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Cataloging &rsquo; Link to host record"
-msgstr "Koha &rsaquo; Katalogowanie &rsquo; Połącz z dokumentem macierzystym"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:6
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:5
@@ -33172,10 +33173,10 @@ msgstr ""
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
-"&rsquo; Add or remove items"
+"&rsaquo; Add or remove items"
 msgstr ""
 "Koha &rsaquo; Narzędzia &rsaquo; Kolekcje &rsaquo; Kolekcja %s Dodaj/usuń "
 "egzemplarze"
@@ -34532,7 +34533,7 @@ msgstr "Listy zawierające ten tytuł: "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -34549,7 +34550,7 @@ msgstr "Wczytywanie"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -34983,7 +34984,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -34995,7 +34996,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -35095,7 +35096,7 @@ msgstr "Kod organizacji MARC"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -35181,7 +35182,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35219,7 +35220,7 @@ msgid "MIT license"
 msgstr "MIT"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -38281,7 +38282,7 @@ msgid "No images are currently available. "
 msgstr "Brak zdjęć. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "Nie wczytano jeszcze żadnej okładki do tego rekordu bibliograficznego."
 
@@ -46805,7 +46806,7 @@ msgstr "Zapisz prenumeratę"
 msgid "Save quotes"
 msgstr "Zapisz cytaty"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, c-format
 msgid "Save record"
 msgstr "Zapisz rekord"
@@ -47894,7 +47895,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Wybierz dzień: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "Select download format: "
 msgstr "Wybierz format pobierania: "
@@ -55595,7 +55596,7 @@ msgid "Upload an image file: "
 msgstr "Wczytaj plik"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Upload an image file: %sUpload%s"
 msgstr "Prześlij plik obrazu: %sPrześlij%s "
 
@@ -61367,7 +61368,7 @@ msgstr "| Status: %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:741
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:746
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175

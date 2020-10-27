@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 11:09-0300\n"
+"POT-Creation-Date: 2020-10-21 00:36-0300\n"
 "PO-Revision-Date: 2019-06-02 08:05+0000\n"
 "Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -3559,6 +3559,21 @@ msgid ""
 "%s 0 subscription routing lists %s %s subscription routing list %s %s "
 "subscription routing lists %s "
 msgstr "%s %s 加入传阅清单 %s 0 加入传阅清单 %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#, fuzzy, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s 浏览器不支持您的标"
+"签。] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -10399,20 +10414,6 @@ msgstr "：馆藏已连结 "
 msgid ": item is checked out."
 msgstr "：馆藏已被借出。"
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:699
-#, fuzzy, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [%s 浏览器不支持您的标"
-"签。] "
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -12788,7 +12789,7 @@ msgstr "发生错误。不能新增发票。"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "An error occurred on deleting this image"
 msgstr "当删除这个封面时发生程序错误"
 
@@ -13375,7 +13376,7 @@ msgstr "确定删除此 %s 附加的馆藏吗？"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Are you sure you want to delete this cover image?"
 msgstr "确定删除此封面吗？"
 
@@ -18686,7 +18687,7 @@ msgstr "复制借出规则失败！"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:173
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:748
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:753
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -22790,7 +22791,7 @@ msgid "Download list "
 msgstr "下载虚拟书架 "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 #, fuzzy
 msgid "Download record"
 msgstr "下载纪录"
@@ -22826,7 +22827,7 @@ msgid "Draw guide boxes: "
 msgstr "绘制书标边界："
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "都伯林核心(XML)"
@@ -31323,6 +31324,11 @@ msgstr "Koha &rsaquo; 编目 &rsaquo; 输入 MARC"
 msgid "Koha &rsaquo; Cataloging &rsaquo; Editor"
 msgstr "Koha &rsaquo; 编目 &rsaquo; 编辑器"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Cataloging &rsaquo; Link to host record"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 连结至主馆藏"
+
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:2
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; MARC import"
@@ -31333,11 +31339,6 @@ msgstr "Koha &rsaquo; 编目 &rsaquo; 输入 MARC"
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Merging records"
 msgstr "Koha &rsaquo; 编目 &rsaquo; 合并纪录"
-
-#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Cataloging &rsquo; Link to host record"
-msgstr "Koha &rsaquo; 编目 &rsaquo; 连结至主馆藏"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:6
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:5
@@ -32484,10 +32485,10 @@ msgstr ""
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
-"&rsquo; Add or remove items"
+"&rsaquo; Add or remove items"
 msgstr ""
 "Koha &rsaquo; 工具 &rsaquo; 巡回馆藏 &rsaquo; 馆藏 %s &rsaquo; 新增/删除馆藏"
 
@@ -33820,7 +33821,7 @@ msgstr "清单包括此题名："
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -33837,7 +33838,7 @@ msgstr "装入中"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -34271,7 +34272,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -34283,7 +34284,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -34383,7 +34384,7 @@ msgstr "机构"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -34465,7 +34466,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -34503,7 +34504,7 @@ msgid "MIT license"
 msgstr "MIT license"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -37531,7 +37532,7 @@ msgid "No images are currently available. "
 msgstr "当前无可用的照片。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "还未上传此书目纪录的封面。"
 
@@ -45986,7 +45987,7 @@ msgstr "存储订阅"
 msgid "Save quotes"
 msgstr "存储引句"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, c-format
 msgid "Save record"
 msgstr "存储纪录"
@@ -47069,7 +47070,7 @@ msgstr "选定上传的图档或ZIP档。此工具将接受GIF、JPEG、PNG与XP
 msgid "Select day: "
 msgstr "选定日期："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "Select download format: "
 msgstr "选定下载格式："
@@ -54614,7 +54615,7 @@ msgid "Upload an image file: "
 msgstr "上传文件"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #, fuzzy
 msgid "Upload an image file: %sUpload%s"
 msgstr "批次或逐一上传读者照片"
@@ -60228,7 +60229,7 @@ msgstr "%s %s 至 %s %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:741
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:746
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175

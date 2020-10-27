@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 10:40-0300\n"
-"PO-Revision-Date: 2020-04-14 22:53+0000\n"
-"Last-Translator: Dimitris Antonakis <dimantonak@gmail.com>\n"
+"POT-Creation-Date: 2020-10-21 00:07-0300\n"
+"PO-Revision-Date: 2020-10-26 09:17+0000\n"
+"Last-Translator: Eugenios Papadopoulos <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1586904789.487786\n"
+"X-POOTLE-MTIME: 1603703878.618800\n"
 "X-Pootle-Path: /el/18.05/el-GR-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1201,16 +1201,15 @@ msgstr "%s %s %s Κανένα άλλο τεκμήριο. %s "
 #. %21$s:  END 
 #. %22$s:  IF ( item.restricted ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s Not for loan %s (%s) %s %s %s %s %s Waiting at %s since %s. %s Hold "
 "for: %s %s %s There is an item level hold on this item (priority = %s). %s "
 "%s %s Available %s %s "
 msgstr ""
 "%s %s %s Μη δανειζόμενο %s (%s) %s %s %s %s %s Αναμονή σε %s από %s. %s "
-"Κράτηση σε επίπεδο αντιτύπου (πραγματοποιήθηκε %s) για μεταφορά σε %s. %s "
-"Υπάρχει κράτηση σε επίπεδο τεκμηρίου σε αυτό το αντίτυπο (προτεραιότητα = "
-"%s). %s %s Κράτηση για: %s %s %s %s Διαθέσιμο %s %s "
+"Κράτηση σε: %s %s %s Υπάρχει κράτηση επιπέδου τεκμηρίου σε αυτό το αντίτυπο "
+"(προτεραιότητα = %s). %s %s %s Διαθέσιμο %s %s "
 
 #. %1$s:  END 
 #. %2$s:  SWITCH unit.type 
@@ -1820,6 +1819,18 @@ msgid ""
 "The authorized value category 'branches', 'itemtypes' and 'cn_source' are "
 "used internally by Koha and are not valid. %s %s %s "
 msgstr ""
+"%s %s Παρουσιάστηκε σφάλμα κατά την αναθεώρηση της καθιερωμένης τιμής. "
+"Πιθανώς η τιμή υπάρχει ήδη. %s Παρουσιάστηκε σφάλμα κατά την εισαγωγή της "
+"καθιερωμένης τιμής. Πιθανώς η τιμή ή η κατηγορία υπάρχει ήδη. %s "
+"Παρουσιάστηκε σφάλμα κατά την εισαγωγή της κατηγορίας καθιερωμένων τιμών. "
+"Πιθανώς το όνομα της κατηγορίας υπάρχει ήδη. %s Παρουσιάστηκε σφάλμα κατά τη "
+"διαγραφή της καθιερωμένης τιμής. Έλέγξτε το αρχείο καταγραφών. %s Η "
+"καθιερωμένη τιμή αναθεωρήθηκε επιτυχώς. %s Η καθιερωμένη τιμή προστέθηκε "
+"επιτυχώς. %s Η κατηγορία καθιερωμένων τιμών προστέθηκε επιτυχώς. %s Η "
+"καθιερωμένη τιμή διαγράφηκε επιτυχώς. %s Η καθιερωμένη τιμή υπάρχει ήδη. %s "
+"Η κατηγορία καθιερωμένων τιμών υπάρχει ήδη. %s Οι κατηγορίες καθιερωμένων "
+"τιμών 'branches', 'itemtypes' και 'cn_source' χρησιμοποιούνται εσωτερικά από "
+"το Koha και δεν είναι έγκυρες. %s %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -3677,6 +3688,21 @@ msgid ""
 msgstr ""
 "%s 0 λίστες δρομολόγησης συνδρομής %s %s λίστα δρομολόγησης συνδρομής %s %s "
 "λίστες δρομολόγησης συνδρομής %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s οι επισημειώσεις δεν "
+"υποστηρίζεται από το πρόγραμμα περιήγησης.] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -5608,9 +5634,9 @@ msgstr "%s από %s%s %s &ndash; %s%s %s "
 #. %2$s:  END 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:49
-#, fuzzy, c-format
+#, c-format
 msgid "%s by you %s %s "
-msgstr "%s από %s%s "
+msgstr "%s από εσάς %s %s "
 
 #. %1$s:  IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) 
 #. %2$s:  END 
@@ -10695,20 +10721,6 @@ msgstr ": το αντίτυπο έχει συνδεθεί "
 msgid ": item is checked out."
 msgstr ": το αντίτυπο είναι δανεισμένο."
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:699
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s δεν υποστηρίζεται από το "
-"πρόγραμμα περιήγησης.] "
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -13093,7 +13105,7 @@ msgstr "Προέκυψε σφάλμα. Το τιμολόγιο δε μπορεί
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "An error occurred on deleting this image"
 msgstr "Προέκυψε σφάλμα κατά τη διαγραφή της εικόνας"
 
@@ -13710,7 +13722,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Are you sure you want to delete this cover image?"
 msgstr ""
 "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε αυτήν την εικόνα εξωφύλλου;"
@@ -19125,7 +19137,7 @@ msgstr "Αποτυχία αντιγραφής των κανόνων κυκλοφ
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:173
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:748
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:753
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -23296,7 +23308,7 @@ msgid "Download list "
 msgstr "Λήψη λίστας "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 #, fuzzy
 msgid "Download record"
 msgstr "Λήψη εγγραφών"
@@ -23332,7 +23344,7 @@ msgid "Draw guide boxes: "
 msgstr "Προσθήκη πλαισίων: "
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
@@ -32022,6 +32034,11 @@ msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo; Εισαγωγή M
 msgid "Koha &rsaquo; Cataloging &rsaquo; Editor"
 msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo;"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Cataloging &rsaquo; Link to host record"
+msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo; Σύνδεση με το κύριο τεκμήριο"
+
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:2
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; MARC import"
@@ -32032,11 +32049,6 @@ msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo; Εισαγωγή M
 #, c-format
 msgid "Koha &rsaquo; Cataloging &rsaquo; Merging records"
 msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo; Συγχώνευση εγγραφών"
-
-#: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Cataloging &rsquo; Link to host record"
-msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo; Σύνδεση με το κύριο τεκμήριο"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:6
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:5
@@ -33259,10 +33271,10 @@ msgstr ""
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
-"&rsquo; Add or remove items"
+"&rsaquo; Add or remove items"
 msgstr ""
 "Σύστημα &rsaquo; Εργαλεία &rsaquo; Περιφερόμενες συλλογές &rsaquo; Συλλογή "
 "%s &rsquo; Προσθήκη ή αφαίρεση αντιτύπων"
@@ -34617,7 +34629,7 @@ msgstr "Λίστες που περιέχουν αυτό τον τίτλο: "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -34634,7 +34646,7 @@ msgstr "Γίνεται φόρτωση"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:745
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -35073,7 +35085,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -35085,7 +35097,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -35185,7 +35197,7 @@ msgstr "Οργανισμός"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -35268,7 +35280,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35306,7 +35318,7 @@ msgid "MIT license"
 msgstr "Άδεια MIT"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -38377,7 +38389,7 @@ msgid "No images are currently available. "
 msgstr "Δεν υπάρχουν διαθέσιμες εικόνες. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr ""
 "Δεν υπάρχουν αναρτηθεί ακόμα εικόνες για αυτή τη βιβλιογραφική εγγραφή."
@@ -39193,7 +39205,7 @@ msgstr "Το μέλος είναι περιορισμένο"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:347
 #, c-format
 msgid "Not available"
-msgstr "Μηι διαθέσιμο"
+msgstr "Μη διαθέσιμο"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:57
 #, c-format
@@ -42593,7 +42605,7 @@ msgstr "Τοποθετημένο σε"
 #: intranet-tmpl/prog/en/includes/facets.inc:20
 #, c-format
 msgid "Places"
-msgstr "Θέσεις"
+msgstr "Τοποθεσίες"
 
 #. %1$s:  auth_cats_loo | html 
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:55
@@ -43470,9 +43482,9 @@ msgstr "Ταχυδρομική διεύθυνση: "
 #. %1$s:  koha_new.newdate | html 
 #. %2$s:  IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) 
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "Posted on %s%s by "
-msgstr "Καταχωρήθηκε στις %s %s "
+msgstr "Δημοσιεύτηκε στις %s%s από "
 
 #: intranet-tmpl/prog/en/includes/delimiter_text.inc:2
 #, fuzzy, c-format
@@ -46965,7 +46977,7 @@ msgstr "Αποθήκευση συνδρομής"
 msgid "Save quotes"
 msgstr "Αποθήκευση αποφθεγμάτων"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, fuzzy, c-format
 msgid "Save record"
 msgstr "Αποθήκευση Εγγραφής"
@@ -48065,7 +48077,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Επιλογή ημέρας: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "Select download format: "
 msgstr "Επιλογή μορφότυπου λήψης: "
@@ -55745,7 +55757,7 @@ msgid "Upload an image file: "
 msgstr "Μεταφόρτωση αρχείου"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:770
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 msgid "Upload an image file: %sUpload%s"
 msgstr "Μεταφόρτωση αρχείου εικόνας: %sUpload%s"
 
@@ -56231,9 +56243,9 @@ msgstr "Ταυτότητα Χρήστη:"
 
 #. %1$s:  e.userid | html 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Userid %s is already used by another patron. "
-msgstr "Η τιμή απόδοσης %s χρησιμοποιείται ήδη σε μία άλλη εγγραφή μέλους."
+msgstr "Ο κωδικός μέλους %s χρησιμοποιείται ήδη σε άλλη εγγραφή μέλους."
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:71
 #, c-format
@@ -61532,7 +61544,7 @@ msgstr "| Κατάσταση: %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:741
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:746
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
