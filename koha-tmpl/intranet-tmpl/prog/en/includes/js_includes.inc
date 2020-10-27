@@ -98,7 +98,7 @@
                         var cardnumber = "";
                         if( item.cardnumber != "" ){
                             // Display card number in parentheses if it exists
-                            cardnumber = " (" + ( item.cardnumber ? item.surname.escapeHtml() : "" ) + ") ";
+                            cardnumber = " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ") ";
                         }
                         return $( "<li></li>" )
                         .data( "ui-autocomplete-item", item )
