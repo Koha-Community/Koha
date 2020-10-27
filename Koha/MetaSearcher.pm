@@ -127,7 +127,7 @@ sub search {
                 extra => $2,
                 id => $server_id,
                 host => $server_id,
-                name => $server_id,
+                servername => $server_id,
             };
         }
     }

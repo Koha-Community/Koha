@@ -41,20 +41,22 @@ require.config( {
 
 <script>
 require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'preferences', 'resources', 'text-marc', 'widget' ], function( KohaBackend, Search, Macros, MARCEditor, MARC, Preferences, Resources, TextMARC, Widget ) {
-    var z3950Servers = {
-        'koha:biblioserver': {
+    var z3950Servers = [
+        {
+            server_id: 'koha:biblioserver',
             name: _("Local catalog"),
             recordtype: 'biblio',
             checked: false,
         },
         [%- FOREACH server = z3950_servers -%]
-            [% server.id | html %]: {
+            {
+                server_id: [% server.id | html %],
                 name: '[% server.servername | html %]',
                 recordtype: '[% server.recordtype | html %]',
                 checked: [% server.checked ? 'true' : 'false' | html %],
             },
         [%- END -%]
-    };
+    ];
 
     // The columns that should show up in a search, in order, and keyed by the corresponding <metadata> tag in the XSL and Pazpar2 config
     var z3950Labels = [
@@ -405,8 +407,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     // Search functions
     function showAdvancedSearch() {
         $('#advanced-search-servers').empty();
-        $.each( z3950Servers, function( server_id, server ) {
-            $('#advanced-search-servers').append( '<li data-server-id="' + server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</label></li>' );
+        $.each( z3950Servers, function( index, server ) {
+            $('#advanced-search-servers').append( '<li data-server-id="' + index + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</label></li>' );
         } );
         $('#advanced-search-ui').modal('show');
     }
@@ -457,18 +459,18 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $('#searchresults tbody').empty();
         $('#search-serversinfo').empty();
 
-        $.each( z3950Servers, function( server_id, server ) {
-            var num_fetched = data.num_fetched[server_id];
+        $.each( z3950Servers, function( index, server ) {
+            var num_fetched = data.num_fetched[server.server_id];
 
-            if ( data.errors[server_id] ) {
-                num_fetched = data.errors[server_id];
+            if ( data.errors[server.server_id] ) {
+                num_fetched = data.errors[server.server_id];
             } else if ( num_fetched == null ) {
                 num_fetched = '-';
-            } else if ( num_fetched < data.num_hits[server_id] ) {
+            } else if ( num_fetched < data.num_hits[server.server_id] ) {
                 num_fetched += '+';
             }
 
-            $('#search-serversinfo').append( '<li data-server-id="' + server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</label></li>' );
+            $('#search-serversinfo').append( '<li data-server-id="' + index + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</label></li>' );
         } );
 
         var seenColumns = {};
@@ -511,7 +513,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             }
 
             var result = '<tr>';
-            result += '<td class="sourcecol">' + z3950Servers[ hit.server ].name + '</td>';
+            var server_name = hit.servername == 'koha:biblioserver' ? _("Local catalog") : hit.servername;
+            result += '<td class="sourcecol">' + server_name + '</td>';
 
             $.each( z3950Labels, function( undef, label ) {
                 if ( !seenColumns[ label[0] ] ) return;
@@ -641,8 +644,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 // Macros loaded on first show of modal
                 break;
             case 'selected_search_targets':
-                $.each( z3950Servers, function( server_id, server ) {
-                    var saved_val = Preferences.user.selected_search_targets[server_id];
+                $.each( z3950Servers, function( index, server ) {
+                    var saved_val = Preferences.user.selected_search_targets[server.server_id];
 
                     if ( saved_val != null ) server.checked = saved_val;
                 } );
