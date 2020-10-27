@@ -1986,6 +1986,7 @@ sub AddReturn {
             Wrongbranch => $branch,
             Rightbranch => $message
         };
+        $doreturn = 0;
         my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
         $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
         return ( $doreturn, $messages, $issue, $patron_unblessed);
