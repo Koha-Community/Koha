@@ -8,19 +8,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 10:21-0300\n"
-"PO-Revision-Date: 2020-06-03 07:46+0000\n"
-"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
+"POT-Creation-Date: 2020-10-20 23:51-0300\n"
+"PO-Revision-Date: 2020-10-22 03:03+0000\n"
+"Last-Translator: Stebeneva Anna <stebeneva@lib.tsu.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1591170369.159780\n"
+"X-POOTLE-MTIME: 1603335805.802094\n"
 "X-Pootle-Path: /ru/18.05/ru-RU-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3664,6 +3664,21 @@ msgid ""
 "subscription routing lists %s "
 msgstr ""
 
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
+#, fuzzy, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"<%s controls preload=none> <%s src=\"%s\"%s /> [Тег %s не поддерживается "
+"Вашим браузером.] "
+
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -4432,11 +4447,9 @@ msgstr "%sПравка данных заказа %sНовый заказ%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "%s Modify patron list %s Create a new patron list %s "
-msgstr ""
-"%s Правка типа авторитетного источника %s Новый тип авторитетного источника "
-"%s"
+msgstr "%s Изменить список читателей %s Создать новый список читателей %s"
 
 #. %1$s:  IF list.patron_list_id 
 #. %2$s:  ELSE 
@@ -9232,9 +9245,9 @@ msgid "&rsaquo; Patron card creator "
 msgstr "&rsaquo; Создатель билетов посетителей "
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Patron clubs"
-msgstr "&rsaquo; посетителей statistics"
+msgstr "&rsaquo; Читательские клубы"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:13
 #, fuzzy, c-format
@@ -9714,8 +9727,7 @@ msgstr "&rsaquo; Статистика оборота по «%s»"
 #, c-format
 msgid "&rsaquo;%s Approved comments%s Comments awaiting moderation%s"
 msgstr ""
-"&rsaquo; %s Одобренные комментарии %s Комментарии, которые ожидают одобрения "
-"%s"
+"&rsaquo; %s Одобренные комментарии %s Комментарии, ожидающие одобрения%s"
 
 #. %1$s:  IF is_edit || course_reserve 
 #. %2$s:  ELSE 
@@ -10669,20 +10681,6 @@ msgstr "Ни одной единицы не было выбрано"
 #, c-format
 msgid ": item is checked out."
 msgstr ""
-
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [Тег %s не поддерживается "
-"Вашим браузером.] "
 
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
@@ -13151,7 +13149,7 @@ msgstr "Одна или несколько выбранных единиц не 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "An error occurred on deleting this image"
 msgstr "Произошла ошибка при удалении этого изображения"
 
@@ -13691,13 +13689,12 @@ msgstr "Вы уверены, что хотите удалить %s выбран�
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:145
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the club %s? This will cancel all patron "
 "enrollments in this club."
 msgstr ""
-"Вы действительно хотите удалить этого посетителя? Не будет возможности "
-"отменить это."
+"Вы действительно хотите удалить клуб %s? Это отменит все регистрации "
+"читателей в этом клубе."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:145
@@ -13705,6 +13702,8 @@ msgid ""
 "Are you sure you want to delete the club template %s? This will delete all "
 "clubs using this template and cancel patron enrollments"
 msgstr ""
+"Вы действительно хотите удалить шаблон клуба %s? Это удалит все клубы, "
+"использующие этот шаблон, и отменит регистрацию читателей."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
@@ -13803,7 +13802,7 @@ msgstr "Вы действительно хотите удалить этот э�
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Вы уверены, что хотите удалить это изображение обложки?"
 
@@ -19510,7 +19509,7 @@ msgstr "Сдублировать правила выдачи не удалось
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:72
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:189
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:363
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:781
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:786
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:444
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:280
@@ -20010,24 +20009,24 @@ msgstr "Комментарии"
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:20
 #: intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:42
-#, fuzzy, c-format
+#, c-format
 msgid "Comments "
-msgstr "Комментарии"
+msgstr "Комментарии "
 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:108
 #, c-format
 msgid "Comments about this file: "
-msgstr "Комментарии по поводу этого файла: "
+msgstr "Комментарии к этому файлу:"
 
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:26
 #, c-format
 msgid "Comments awaiting moderation"
-msgstr "Комментарии ожидающие на регулирование"
+msgstr "Комментарии, ожидающие одобрения"
 
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:151
 #, c-format
 msgid "Comments pending approval"
-msgstr "Комментарии ожидают одобрения"
+msgstr "Комментарии, ожидающие утверждения"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:108
 #, c-format
@@ -21175,9 +21174,9 @@ msgid "Create new stage"
 msgstr "Создаем новый список"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:139
-#, fuzzy, c-format
+#, c-format
 msgid "Create patron list: "
-msgstr "создать посетителя"
+msgstr "Создать список читателей:"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:461
 #, fuzzy, c-format
@@ -23924,7 +23923,7 @@ msgid "Download list "
 msgstr "Скачать список "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:766
 msgid "Download record"
 msgstr "Скачать запись"
 
@@ -23970,7 +23969,7 @@ msgid "Drop default"
 msgstr "нет (по умолчанию)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:757
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:762
 #, c-format
 msgid "Dublin Core"
 msgstr "Дублинское ядро"
@@ -24982,9 +24981,9 @@ msgid "Enroll in "
 msgstr "Плата за регистрацию"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:656
-#, fuzzy, c-format
+#, c-format
 msgid "Enroll patrons in clubs "
-msgstr "Список маршрутизации"
+msgstr "Регистрировать читателей в клубах"
 
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:14
 #, fuzzy, c-format
@@ -29472,8 +29471,8 @@ msgid ""
 "If a cardnumber exists in the table, you can choose whether to ignore the "
 "new one or overwrite the old one."
 msgstr ""
-"Если номер билета уже существует в таблице, Вы можете выбрать, пренебрегать "
-"ли новой записью или записать поверх старой."
+"Если номер билета уже есть в таблице, вы можете выбрать, игнорировать ли "
+"новую запись или перезаписать старую."
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:68
 #, c-format
@@ -29481,6 +29480,8 @@ msgid ""
 "If a template allows public enrollment, patrons can enroll in a club based "
 "on this template from the public catalog."
 msgstr ""
+"Если шаблон допускает общедоступную регистрацию, читатели могут "
+"регистрироваться в клубе на основе этого шаблона из общедоступного каталога."
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:119
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:226
@@ -29612,6 +29613,8 @@ msgid ""
 "If set, a club based on this template can only be enrolled in by patrons "
 "with a valid email address."
 msgstr ""
+"Если это установлено, то основанный на этом шаблоне клуб может быть "
+"зарегистрирован только читателями с действующим адресом электронной почты."
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:87
 #, c-format
@@ -30047,7 +30050,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:130
 #, c-format
 msgid "Import into the borrowers table"
-msgstr "Импортирование в таблицу заемщиков"
+msgstr "Импорт в таблицу заемщиков"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
 #, c-format
@@ -30065,7 +30068,7 @@ msgstr "Импортирование данных о посетителях"
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:38
 #, c-format
 msgid "Import patrons"
-msgstr "Импорт посетителей"
+msgstr "Импорт читателей"
 
 #: intranet-tmpl/prog/en/includes/quotes-toolbar.inc:4
 #, c-format
@@ -34079,8 +34082,8 @@ msgid ""
 "Koha &rsaquo; Tools &rsaquo; Comments &rsaquo; %s Approved comments%s "
 "Comments awaiting moderation%s"
 msgstr ""
-"Коха &rsaquo; Инструменты &rsaquo; Комментарии &rsaquo; %s Одобренные "
-"комментарии %s Комментарии ожидающие одобрения %s"
+"Koha &rsaquo; Инструменты &rsaquo; Комментарии &rsaquo; %s Одобренные "
+"комментарии%s Комментарии, ожидающие одобрения%s"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:6
 #, fuzzy, c-format
@@ -34093,8 +34096,7 @@ msgstr "Коха &rsaquo; Инструменты &rsaquo; Выгрузка из�
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Import patrons %s&rsaquo; Results%s"
 msgstr ""
-"Коха &rsaquo; Инструменты &rsaquo; Импорт посетителей %s &rsaquo; Результаты "
-"%s"
+"Koha &rsaquo; Инструменты &rsaquo; Импорт читателей %s&rsaquo; Результаты%s"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:7
 #, c-format
@@ -34306,9 +34308,9 @@ msgid ""
 msgstr "Коха &rsaquo; Инструменты &rsaquo; Наклейки &rsaquo; Создание макета"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Patron clubs"
-msgstr "Коха &rsaquo; Инструменты &rsaquo; Плагины "
+msgstr "Koha &rsaquo; Инструменты &rsaquo; Читательские клубы"
 
 #. %1$s:  IF club 
 #. %2$s:  club.name | html 
@@ -34316,27 +34318,33 @@ msgstr "Коха &rsaquo; Инструменты &rsaquo; Плагины "
 #. %4$s:  club_template.name | html 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; %s Modify club %s %s "
 "Create a new %s club %s "
-msgstr "Коха &rsaquo; Инструменты &rsaquo; Новости Коха"
+msgstr ""
+"Koha &rsaquo; Инструменты &rsaquo; Читательские клубы &rsaquo; %s Изменить "
+"клуб %s %s Создать новый %s клуб %s"
 
 #. %1$s:  IF club_template 
 #. %2$s:  club_template.name | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; %s Modify club template "
 "%s %s Create a new club template %s "
-msgstr "Коха &rsaquo; Инструменты &rsaquo; Новости Коха"
+msgstr ""
+"Koha &rsaquo; Инструменты &rsaquo; Читательские клубы &rsaquo; %s Изменить "
+"шаблон клуба %s %s Создать новый шаблон клуба %s"
 
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; Club enrollments"
-msgstr "Коха &rsaquo; Инструменты &rsaquo; Новости Коха"
+msgstr ""
+"Koha &rsaquo; Инструменты &rsaquo; Читательские клубы &rsaquo; Регистрация в "
+"клубе"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:5
 #, fuzzy, c-format
@@ -35738,7 +35746,7 @@ msgstr "Название списка"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:141
 #, c-format
 msgid "List name will be file name with timestamp"
-msgstr ""
+msgstr "Имя списка будет именем файла с отметкой времени"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:83
 #, c-format
@@ -35820,7 +35828,7 @@ msgstr "Списки, которые включают этот заголово�
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:540
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:458
@@ -35837,7 +35845,7 @@ msgstr "Загрузка"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:67
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:778
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:783
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
@@ -36273,7 +36281,7 @@ msgstr "МАРК"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:760
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:765
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "МАРК (Юникод/UTF-8)"
@@ -36285,7 +36293,7 @@ msgstr "МАРК (Юникод/UTF-8, стандартный)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:759
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "МАРК (не Юникод/MARC-8)"
@@ -36383,7 +36391,7 @@ msgstr "Коллектив"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:411
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:780
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -36465,7 +36473,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:758
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:763
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -36511,7 +36519,7 @@ msgstr ""
 "распространения свободного программного обеспечения)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:756
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -36965,9 +36973,9 @@ msgid "Manage library transfer limits and transport cost matrix "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Manage lists of patrons"
-msgstr "Данные посетителя - %s %s (%s)"
+msgstr "Управление списками читателей"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:481
 #, fuzzy, c-format
@@ -36990,9 +36998,9 @@ msgid "Manage patron categories "
 msgstr "Категории посетителей"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Manage patron clubs"
-msgstr "Управление изображением посетителя"
+msgstr "Управление читательскими клубами"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:312
 #, c-format
@@ -37855,14 +37863,14 @@ msgid "Modal title"
 msgstr "Тип дороги: "
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid "Moderate patron comments"
-msgstr "Регулирование комментариев посетителей. "
+msgstr "Модерация комментариев читателей"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:486
-#, fuzzy, c-format
+#, c-format
 msgid "Moderate patron comments "
-msgstr "Регулирование комментариев посетителей. "
+msgstr "Одобрить комментарии читателей"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
@@ -38618,7 +38626,7 @@ msgstr ""
 msgid "Near East University"
 msgstr "Университет ближнего востока {Near East University}"
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:21
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:23
 #, c-format
 msgid ""
 "Necessary Elasticsearch packages are not installed on your server. Please "
@@ -39573,6 +39581,7 @@ msgid ""
 "No clubs defined. A club template must be defined before a club can be "
 "defined."
 msgstr ""
+"Клубы не определены. Шаблон клуба должен быть определен до определения клуба."
 
 # 116^a - Цвет
 #. SCRIPT
@@ -39594,7 +39603,7 @@ msgstr "Нет одобренных комментариев."
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:66
 #, c-format
 msgid "No comments to moderate."
-msgstr "Нет комментариев для регулирования."
+msgstr "Нет комментариев для модерации."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -39727,7 +39736,7 @@ msgid "No images are currently available. "
 msgstr "Только экземпляры доступные в настоящее время"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "Еще нет изображений, загруженных для этой библиографической записи."
 
@@ -40849,7 +40858,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:149
 #, c-format
 msgid "Notes/Comments"
-msgstr "Заметки/комментарии"
+msgstr "Заметки/комментарии "
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:253
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:45
@@ -42869,9 +42878,9 @@ msgstr "Категория посетителя: "
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Patron clubs"
-msgstr "Отметки учётной записи посетителя"
+msgstr "Читательские клубы"
 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:70
 #, fuzzy, c-format
@@ -43466,7 +43475,7 @@ msgstr "Посетитель: "
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:37
 #, c-format
 msgid "Patronlist with imported patrons: %s"
-msgstr ""
+msgstr "Список читателей с импортированными читателями: %s"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:14
@@ -48733,7 +48742,7 @@ msgstr "Сохранить подписку"
 msgid "Save quotes"
 msgstr "Сохранить цитаты"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:754
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:759
 #, fuzzy, c-format
 msgid "Save record"
 msgstr "Сохранить запись"
@@ -49311,9 +49320,9 @@ msgid "Search patrons"
 msgstr "Поиск посетителей"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Search patrons or clubs"
-msgstr "Поиск посетителей"
+msgstr "Поиск читателей или клубов"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:142
 #, fuzzy, c-format
@@ -49693,8 +49702,8 @@ msgid ""
 "Select a MARC file to stage in the import reservoir. It will be parsed, and "
 "each valid record staged for later import into the catalog."
 msgstr ""
-"Выберите МАРК-файл, который необходимо заготовить в хранилище. Он будет "
-"проанализирован, и каждая правильная запись будет заготовлена для "
+"Выберите MARC-файл для размещения в хранилище для импорта. Он будет "
+"проанализирован, и каждая правильная запись будет подготовлена для "
 "последующего импорта в каталог."
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:336
@@ -49733,7 +49742,7 @@ msgid "Select a department"
 msgstr "Выбираем посетителя: "
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:124
-#, fuzzy, c-format
+#, c-format
 msgid "Select a file to import into the borrowers table"
 msgstr "Выберите файл для импорта в таблицу заемщиков"
 
@@ -49912,7 +49921,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "выберите день: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:760
 #, c-format
 msgid "Select download format: "
 msgstr "Выберите формат для скачивания: "
@@ -50034,7 +50043,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:134
 #, c-format
 msgid "Select the file to import: "
-msgstr "Выбираем файл для импорта: "
+msgstr "Выберите файл для импорта: "
 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:78
 #, c-format
@@ -54029,7 +54038,7 @@ msgstr ""
 msgid "The budget is locked"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:19
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:21
 #, c-format
 msgid "The budget is locked, fund creation is not possible."
 msgstr ""
@@ -54271,8 +54280,9 @@ msgid ""
 "The following holds have not been filled. Please retrieve them and check "
 "them in."
 msgstr ""
-"Следующие резервирования не были полностью выполнены. Пожалуйста, получите "
-"их и сделайте возвращение."
+"%s Экземпляр ожидается %s Заблаговременное сообщение %s Предстоящие события %"
+"s Резервирование выполнено %s Возврат экземпляра %sВыдача экземпляра %"
+"sНеизвестно %s"
 
 #. For the first occurrence,
 #. %1$s:  "borrowers" | $HtmlTags tag="strong" 
@@ -54332,7 +54342,7 @@ msgid ""
 "but do not exist in the 'borrowerRelationship' system preference:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:19
 #, c-format
 msgid ""
 "The form submission failed (Wrong CSRF token). Try to come back, refresh the "
@@ -55275,6 +55285,8 @@ msgid ""
 "These fields will be used when enrolling a patron in a club based on this "
 "template"
 msgstr ""
+"Эти поля будут использоваться при регистрации читателя в клубе на основе "
+"этого шаблона."
 
 #. %1$s:  ratio | html 
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:35
@@ -55664,6 +55676,11 @@ msgstr "Это сообщение отображается при выдаче �
 #, c-format
 msgid "This message may have been caused by any of the following reasons:"
 msgstr ""
+
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#, fuzzy, c-format
+msgid "This order cannot be edited, the basket is closed."
+msgstr "Кажется, загруженный файл пустой."
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:50
 #, fuzzy, c-format
@@ -57312,7 +57329,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:40
 #, c-format
 msgid "Unable to delete staff user"
-msgstr "Не удаётся удалить работника библиотеки"
+msgstr "Не удается удалить сотрудника библиотеки"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:145
@@ -57882,7 +57899,7 @@ msgid "Upload an image file: "
 msgstr "Загрузить изображение: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "Upload an image file: %sUpload%s"
 msgstr "Загрузить изображение: %sЗагрузить%s"
 
@@ -61722,9 +61739,8 @@ msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
-#, fuzzy
 msgid "comments"
-msgstr "Комментарии"
+msgstr "комментарии "
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:39
 #, c-format
@@ -63946,7 +63962,7 @@ msgstr "%s %s %s %s (%s)"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:62
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:774
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:779
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:430
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176

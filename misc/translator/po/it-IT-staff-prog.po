@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-09-15 10:05-0300\n"
-"PO-Revision-Date: 2020-09-15 09:55+0000\n"
-"Last-Translator: bargioni <bargioni@pusc.it>\n"
+"POT-Creation-Date: 2020-10-20 23:38-0300\n"
+"PO-Revision-Date: 2020-10-22 21:02+0000\n"
+"Last-Translator: ztajoli <ztajoli@gmail.com>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1600163734.936098\n"
+"X-POOTLE-MTIME: 1603400552.389511\n"
 "X-Poedit-Basepath: ../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/18.05/it-IT-staff-prog.po\n"
@@ -3832,6 +3832,21 @@ msgid ""
 msgstr ""
 "%s 0 routing lists dell'abbonamento %s %s routing list dell'abbonamento %s "
 "%s routing lists dell'abbonamento %s "
+
+#. %1$s:  ELSE 
+#. %2$s:  HTML5MediaParent | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | url 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#. %6$s:  HTML5MediaParent | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
+#, c-format
+msgid ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
+"your browser.] "
+msgstr ""
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag non gestito dal "
+"tuo browser.] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -10885,20 +10900,6 @@ msgstr ": la copia è stata collegata "
 msgid ": item is checked out."
 msgstr ": la copia è in prestito."
 
-#. %1$s:  HTML5MediaParent | html 
-#. %2$s:  HTML5MediaSet.child | html 
-#. %3$s:  HTML5MediaSet.srcblock | html 
-#. %4$s:  HTML5MediaSet.typeblock | html 
-#. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag non gestito dal tuo "
-"browser.] "
-
 #. INPUT type=button name=back
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:404
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:456
@@ -13361,7 +13362,7 @@ msgstr "Si è verificato un errore. Fattura non può essere creata."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "An error occurred on deleting this image"
 msgstr "Un errore è occorso nella cancellazione dell'immagine"
 
@@ -13992,7 +13993,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Sei sicuro di voler cancellare questa immagine di copertina?"
 
@@ -19687,7 +19688,7 @@ msgstr "Clonazione delle regole di prestito e delle multe fallita!"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:72
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:189
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:363
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:781
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:786
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:444
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:280
@@ -24117,7 +24118,7 @@ msgid "Download list "
 msgstr "Scarica la lista "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:766
 #, fuzzy
 msgid "Download record"
 msgstr "Scarica i record"
@@ -24164,7 +24165,7 @@ msgid "Drop default"
 msgstr "No (default)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:757
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:762
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
@@ -36045,7 +36046,7 @@ msgstr "Liste che includono questo titolo: "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:290
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:540
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:458
@@ -36062,7 +36063,7 @@ msgstr "Caricamento in corso..."
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:67
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:778
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:783
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
@@ -36492,7 +36493,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:760
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:765
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -36504,7 +36505,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:759
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -36604,7 +36605,7 @@ msgstr "Codice MARC biblioteca"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:411
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:167
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:780
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -36689,7 +36690,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:758
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:763
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -36727,7 +36728,7 @@ msgid "MIT license"
 msgstr "Licenza MIT"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:756
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -38836,7 +38837,7 @@ msgstr ""
 msgid "Near East University"
 msgstr "Near East University"
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:21
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:23
 #, c-format
 msgid ""
 "Necessary Elasticsearch packages are not installed on your server. Please "
@@ -39936,7 +39937,7 @@ msgid "No images are currently available. "
 msgstr "Nessuna immagine è disponibile "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr ""
 "Nessuna immagine è stata caricata per questo record bibliografico ancora."
@@ -48906,7 +48907,7 @@ msgstr "Salva abbonamento"
 msgid "Save quotes"
 msgstr "Salva cit./sugg."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:754
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:759
 #, c-format
 msgid "Save record"
 msgstr "Salva record"
@@ -50052,7 +50053,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Seleziona giorno: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:760
 #, c-format
 msgid "Select download format: "
 msgstr "Seleziona un formato per il download: "
@@ -54201,7 +54202,7 @@ msgstr ""
 msgid "The budget is locked"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:19
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:21
 #, fuzzy, c-format
 msgid "The budget is locked, fund creation is not possible."
 msgstr ". Impossibile cancellare."
@@ -54518,7 +54519,7 @@ msgid ""
 "but do not exist in the 'borrowerRelationship' system preference:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:19
 #, c-format
 msgid ""
 "The form submission failed (Wrong CSRF token). Try to come back, refresh the "
@@ -55906,6 +55907,13 @@ msgstr "Questo messaggio appare al momento di un prestito all'utente"
 #, c-format
 msgid "This message may have been caused by any of the following reasons:"
 msgstr "Questo messaggio è stato causato da una delle seguenti ragioni:"
+
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#, fuzzy, c-format
+msgid "This order cannot be edited, the basket is closed."
+msgstr ""
+"Questo record nonn può essere cancellato, almeno una copia è attualmente in "
+"prestito."
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:50
 #, c-format
@@ -58148,7 +58156,7 @@ msgid "Upload an image file: "
 msgstr "Carica qualsiasi file"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:809
 msgid "Upload an image file: %sUpload%s"
 msgstr "Carica un'immagine: %sUpload%s"
 
@@ -64281,7 +64289,7 @@ msgstr "| Status: %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:62
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:774
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:779
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:430
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:454
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
