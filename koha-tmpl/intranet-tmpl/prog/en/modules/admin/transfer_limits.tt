@@ -359,9 +359,11 @@
                         checkbox.attr('checked', false);
                         $(`#spinner-${id}`).hide();
                         checkbox.show();
-                        $('.limit-action').removeClass('disabled');
-                        $('#value_selector').prop('disabled',false);
                     }
+                },
+                complete: function() {
+                    $('.limit-action').removeClass('disabled');
+                    $('#value_selector').prop('disabled',false);
                 },
                 error: function(xhr, status, error) {
                     var errorMessage = xhr.status + ': ' + xhr.statusText
@@ -389,9 +391,11 @@
                         checkbox.attr('checked', true);
                         $(`#spinner-${id}`).hide();
                         checkbox.show();
-                        $('.limit-action').removeClass('disabled');
-                        $('#value_selector').prop('disabled',false);
                     }
+                },
+                complete: function() {
+                    $('.limit-action').removeClass('disabled');
+                    $('#value_selector').prop('disabled',false);
                 },
                 error: function(xhr, status, error) {
                     var errorMessage = xhr.status + ': ' + xhr.statusText
