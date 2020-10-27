@@ -102,7 +102,7 @@
                         }
                         return $( "<li></li>" )
                         .data( "ui-autocomplete-item", item )
-                        .append( "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", " + ( item.firstname ? item.firstname.escapeHtml : "" ) + ( cardnumber ? cardnumber.escapeHtml() : "" ) + " <small>" + ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" ) + " " + ( item.address ? item.address.escapeHtml() : "" ) + " " + ( item.city ? item.city.escapeHtml() : "" ) + " " + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " " + ( item.country ? item.country.escapeHtml() : "" ) + "</small></a>" )
+                        .append( "<a href=\"" + item.link + "\">" + ( item.surname ? item.surname.escapeHtml() : "" ) + ", " + ( item.firstname ? item.firstname.escapeHtml() : "" ) + ( cardnumber ? cardnumber.escapeHtml() : "" ) + " <small>" + ( item.dateofbirth ? item.dateofbirth.escapeHtml() : "" ) + " " + ( item.address ? item.address.escapeHtml() : "" ) + " " + ( item.city ? item.city.escapeHtml() : "" ) + " " + ( item.zipcode ? item.zipcode.escapeHtml() : "" ) + " " + ( item.country ? item.country.escapeHtml() : "" ) + "</small></a>" )
                         .appendTo( ul );
                     };
                 }
