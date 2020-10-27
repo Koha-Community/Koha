@@ -73,8 +73,8 @@ define( [ 'koha-backend', 'marc-record' ], function( KohaBackend, MARC ) {
 
             var itemTag = KohaBackend.GetSubfieldForKohaField('items.itemnumber')[0];
 
-            $.each( servers, function ( id, info ) {
-                if ( info.checked ) Search.includedServers.push( id );
+            $.each( servers, function ( index, info ) {
+                if ( info.checked ) Search.includedServers.push( info.server_id );
             } );
 
             if ( Search.includedServers.length == 0 ) return false;
