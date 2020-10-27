@@ -893,6 +893,11 @@ our $PERL_DEPS = {
         required => '1',
         min_ver  => '0.37',
     },
+    'Array::Utils' => {
+        usage    => 'Plugin system',
+        required => '1',
+        min_ver  => '0.5',
+    },
 };
 
 1;
