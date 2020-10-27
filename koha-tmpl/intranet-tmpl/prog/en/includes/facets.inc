@@ -6,13 +6,22 @@
 <div id="search-facets">
 <h4>Refine your search</h4>
 <ul>
-    <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]<strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all items</a>[% ELSE %]<a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to currently available items</a>[% END %]</li></ul>
-	[% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])</li>[% END %]
-	</li>
+  <li id="availability_facet">
+    <span id="facet-availability">Availability</span>
+    <ul>
+    [% IF ( available ) %]
+      <li><strong>Showing only available items</strong></li>
+      <li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all items</a></li>
+    [% ELSE %]
+      <li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to currently available items</a></li>
+    [% END %]
+    </ul>
+  </li>
+  [% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])</li>[% END %]
 
-	[% FOREACH facets_loo IN facets_loop %]
+[% FOREACH facets_loo IN facets_loop %]
 [% IF facets_loo.facets.size > 0 %]
-	<li id="[% facets_loo.type_id | html %]">
+<li id="[% facets_loo.type_id | html %]">
 [% facets_loo.type_label | html %]
 [% IF facets_loo.type_label_Authors %]<span id="facet-authors">Authors</span>[% END %]
 [% IF facets_loo.type_label_Titles %]<span id="facet-titles">Titles</span>[% END %]
