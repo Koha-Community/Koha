@@ -187,7 +187,7 @@ subtest '_split_query() tests' => sub {
 };
 
 subtest '_clean_search_term() tests' => sub {
-    plan tests => 10;
+    plan tests => 11;
 
     my $qb;
     ok(
@@ -208,10 +208,10 @@ subtest '_clean_search_term() tests' => sub {
     is($res, ' unbalanced  quotes ', 'unbalanced quotes removed');
 
     $res = $qb->_clean_search_term('test : query');
-    is($res, 'test query', 'dangling colon removed');
+    is($res, 'test  query', 'dangling colon removed');
 
     $res = $qb->_clean_search_term('test :: query');
-    is($res, 'test query', 'dangling double colon removed');
+    is($res, 'test  query', 'dangling double colon removed');
 
     $res = $qb->_clean_search_term('test "another : query"');
     is($res, 'test "another : query"', 'quoted dangling colon not removed');
@@ -221,6 +221,9 @@ subtest '_clean_search_term() tests' => sub {
 
     $res = $qb->_clean_search_term('test {another part');
     is($res, 'test  another part', 'unbalanced curly brackets replaced correctly');
+
+    $res = $qb->_clean_search_term('ti:test AND kw:test');
+    is($res, 'title:test AND test', 'ti converted to title, kw converted to empty string, dangling colon removed with space preserved');
 };
 
 subtest '_join_queries' => sub {
