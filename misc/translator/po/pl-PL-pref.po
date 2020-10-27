@@ -9,8 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-POOTLE-MTIME: 1600367424.579744\n"
 "X-Pootle-Path: /pl/20.05/pl-PL-pref.po\n"
@@ -650,9 +649,7 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
-msgstr ""
-"admin.pref#UsageStats# <br><strong>Uwaga:</strong> Pozostałe preferencje "
-"„UsageStats” nie działają, jeśli ta opcja jest ustawiona na „Nie”."
+msgstr "admin.pref#UsageStats# <br><strong>Uwaga:</strong> Pozostałe preferencje „UsageStats” nie działają, jeśli ta opcja jest ustawiona na „Nie”."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -2979,6 +2976,10 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "Nie zezwalaj"
 
 # Circulation > Self check-out module
+msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
+msgstr ""
+
+# Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr "i hasła"
 
@@ -3351,7 +3352,7 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
 msgstr ""
 
 # Circulation > Holds policy
@@ -3892,8 +3893,8 @@ msgid "circulation.pref#OverduesBlockCirc# Don't block"
 msgstr "Nie blokuj"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "przy wypożyczaniu egzemplarzy użytkownikowi, który ma niezapłacone należności"
+msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -3932,8 +3933,8 @@ msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Wydrukuj do"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr "pozycji egzemplarzy w powiadomieniu o przetrzymaniu. Jeśli liczba egzemplarzy jest większa niż wprowadzona liczba, powiadomienie kończy się komunikatem, aby użytkownik sprawdził swoje konto w OPAC, gdzie uzyska pełną listę egzemplarzy przetrzymanych z należnościami.  Ustaw na 0, aby uwzględnić wszystkie egzemplarze przetrzymane z należnościami w powiadomieniu, niezależnie od ich ilości."
+msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr ""
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -9743,7 +9744,11 @@ msgid "tools.pref#NewsAuthorDisplay# Staff client only"
 msgstr "tylko w Interfejsie bibliotekarza"
 
 # Tools > News
-msgid "tools.pref#NewsToolEditor# Use"
+msgid "tools.pref#NewsToolEditor# ."
+msgstr ""
+
+# Tools > News
+msgid "tools.pref#NewsToolEditor# By default edit news items with"
 msgstr ""
 
 # Tools > News
@@ -9752,10 +9757,6 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# when editing news."
 msgstr ""
 
 # Tools > Reports
@@ -10025,3 +10026,4 @@ msgstr "Liczba wyświetlanych wersów wymaganego raportu poprzez usługę siecio
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "."
+

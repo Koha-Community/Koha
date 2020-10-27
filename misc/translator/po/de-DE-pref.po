@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2020-09-16 09:00+0000\n"
+"PO-Revision-Date: 2020-10-21 13:39+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1600246837.459542\n"
+"X-POOTLE-MTIME: 1603287541.179749\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2978,6 +2978,12 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "Erlaube nicht,"
 
 # Circulation > Self check-out module
+msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
+msgstr ""
+"Hinweis: Der hier angegebene Benutzer kann sich nicht länger im OPAC "
+"anmelden."
+
+# Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr "und dieses Passwort"
 
@@ -3103,9 +3109,7 @@ msgstr "Markiere Exemplare nicht als verloren"
 
 # Circulation > Holds policy
 msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
-msgstr ""
-"von der Seite \"Zu erledigende Vormerkungen\". Die Werte, die verwendet "
-"werden sollen, müssen in UpdateItemWhenLostFromHoldList konfiguriert werden."
+msgstr "von der Seite \"Zu erledigende Vormerkungen\". Die Werte, die verwendet werden sollen, müssen in UpdateItemWhenLostFromHoldList konfiguriert werden."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3293,21 +3297,15 @@ msgstr "."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Leave this field empty if you don't want to skip any lost statuses."
-msgstr ""
-"<br>Lassen Sie dieses Feld frei, wenn keine Verloren-Status übergangen "
-"werden sollen."
+msgstr "<br>Lassen Sie dieses Feld frei, wenn keine Verloren-Status übergangen werden sollen."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>."
-msgstr ""
-"<br>Tragen Sie eine Liste von komma-separierten Werten ein, z.B. "
-"<em>5,6,7</em>."
+msgstr "<br>Tragen Sie eine Liste von komma-separierten Werten ein, z.B. <em>5,6,7</em>."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
-msgstr ""
-"Wenn die automatische Verlust-Bearbeitung verwendet wird, dann übergehe "
-"Exemplare mit einem der folgenden Verloren-Status:"
+msgstr "Wenn die automatische Verlust-Bearbeitung verwendet wird, dann übergehe Exemplare mit einem der folgenden Verloren-Status:"
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3358,8 +3356,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "dass Vormerkungen automatisch ablaufen, wenn diese nicht innerhalb der in ReservesMaxPickUpDelay festgelegten Zeitspanne abgeholt wurden.<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Bitten Sie Ihren Systemadministrator darum diesen einzurichten."
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
-msgstr "Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für nicht abgeholte Vormerkungen eine Gebühr in Höhe von"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
+msgstr ""
+"Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für "
+"nicht abgeholte Vormerkungen eine Gebühr ein Höhe von"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3899,7 +3899,7 @@ msgid "circulation.pref#OverduesBlockCirc# Don't block"
 msgstr "Erlaube"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
+msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
 msgstr "Ausleihen an Benutzer mit überfälligen Medien."
 
 # Circulation > Checkout policy
@@ -3939,8 +3939,13 @@ msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Drucke bis zu"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr "Exemplarzeilen in gedruckten Mahnschreiben. Wenn die Anzahl der angemahnten Exemplare größer als Anzahl der Zeilen ist, endet die Benachrichtigung mit einem Hinweis, dass Benutzerkonto auf die vollständige Liste der Exemplare zu prüfen. Bei 0 werden alle überfälligen Exemplare unabhängig von der Gesamtzahl gedruckt."
+msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr ""
+"Exemplarzeilen in gedruckten Mahnschreiben. Wenn die Anzahl der angemahnten "
+"Exemplare größer als Anzahl der Zeilen ist, endet die Benachrichtigung mit "
+"einem Hinweis, dass Benutzerkonto auf die vollständige Liste der Exemplare "
+"zu prüfen. Bei 0 werden alle überfälligen Exemplare unabhängig von der "
+"Gesamtzahl gedruckt."
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -4488,10 +4493,7 @@ msgstr "_BLANK_: FIC - sorgt dafür, dass ein Exemplar, dass bisher keinen Stand
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
-msgstr ""
-"Beispiel: \"itemlost: 1\" um den Verlust-Status (items.itemlost) auf 1 zu "
-"setzen, wenn das Exemplar als Verloren markiert wird. (Erfordert "
-"CanMarkHoldsToPullAsLost)"
+msgstr "Beispiel: \"itemlost: 1\" um den Verlust-Status (items.itemlost) auf 1 zu setzen, wenn das Exemplar als Verloren markiert wird. (Erfordert CanMarkHoldsToPullAsLost)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -6206,7 +6208,7 @@ msgstr "Aufzeichnung"
 
 # Logging > Logging
 msgid "logs.pref#SubscriptionLog# when serials are added, deleted or changed."
-msgstr "über Heftzugänge, Löschungen oder Änderungen."
+msgstr "von Anlegen, Löschen und Ändern von Zeitschriftenabos."
 
 # OPAC
 msgid "opac.pref"
@@ -9753,8 +9755,14 @@ msgid "tools.pref#NewsAuthorDisplay# Staff client only"
 msgstr "Nur in der Dienstoberfläche"
 
 # Tools > News
-msgid "tools.pref#NewsToolEditor# Use"
-msgstr "Verwende"
+msgid "tools.pref#NewsToolEditor# ."
+msgstr "."
+
+# Tools > News
+msgid "tools.pref#NewsToolEditor# By default edit news items with"
+msgstr ""
+"Verwende als voreingestellten Editor für das Bearbeiten von "
+"Nachrichteneinträgen"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
@@ -9763,10 +9771,6 @@ msgstr "den WYSIWYG-Editor (TinyMCE)"
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
 msgstr "einen Text-Editor (CodeMirror)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# when editing news."
-msgstr "für die Bearbeitung von Nachrichteneinträgen."
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"

@@ -3,18 +3,16 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2020-09-19 10:28+0000\n"
-"Last-Translator: KnowledgeWare Technologies Est. "
-"<massoudalshareef@kwareict.com>\n"
+"PO-Revision-Date: 2020-10-17 08:59+0000\n"
+"Last-Translator: KnowledgeWare Technologies Est. <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1600511293.448392\n"
+"X-POOTLE-MTIME: 1602925194.862123\n"
 "X-Pootle-Path: /ar/20.05/ar-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2979,6 +2977,10 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "لا تسمح"
 
 # Circulation > Self check-out module
+msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
+msgstr "ملاحظة: أي مستفيد يتم إدخاله هنا لن يتمكن من تسجيل الدخوا إلى الأوباك."
+
+# Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr " وكلمة المرور هذه"
 
@@ -3104,9 +3106,7 @@ msgstr "عدم السماح بوضع علامة مفقود على المواد"
 
 # Circulation > Holds policy
 msgid "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' screen. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
-msgstr ""
-"من شاشة 'حجوزات للسحب'. يجب تعريف القيم التي سيتم تطبيقها في "
-"UpdateItemWhenLostFromHoldList."
+msgstr "من شاشة 'حجوزات للسحب'. يجب تعريف القيم التي سيتم تطبيقها في UpdateItemWhenLostFromHoldList."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3302,9 +3302,7 @@ msgstr "<br>تعيين إلى قائمة بقيم مفثولة بفاصلة، م
 
 # Circulation > Checkout policy
 msgid "circulation.pref#DefaultLongOverdueSkipLostStatuses# When using the automatic item loss process, skip items with lost values matching any of"
-msgstr ""
-"عند استخدام عملية فقدان المادة التلقائية، تخطي المواد ذات قيم مفقودة التي "
-"تطابق أي من"
+msgstr "عند استخدام عملية فقدان المادة التلقائية، تخطي المواد ذات قيم مفقودة التي تطابق أي من"
 
 # Circulation > Interface
 msgid "circulation.pref#DisplayClearScreenButton# Don't show"
@@ -3355,8 +3353,8 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "الحجوزات لتنتهي تلقائيًا إذا لم يتم التقاطها خلال الفترة الزمنية المحددة في ReservesMaxPickUpDelay.<br><strong> ملاحظة:</strong> يتطلب هذا التفضيل الكرون <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> اطلب من مدير نظامك جدولته."
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
-msgstr "عند استخدام ExpireReservesMaxPickUpDelay، قم بفرض رسم على المستعير الذي يسمح بانتهاء حجزه الذي في الانتظار بقيمة "
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
+msgstr "عند استخدام ExpireReservesMaxPickUpDelay، قم بفرض رسم على المستفيد الذي يسمح بانتهاء حجزه الموجود في الانتظار بقيمة "
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3896,8 +3894,8 @@ msgid "circulation.pref#OverduesBlockCirc# Don't block"
 msgstr "عدم حظر"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "عند الإعارة إلى مستعير لديه متأخرات معلقة"
+msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
+msgstr "عند الإعارة إلى مستفيد لديه متأخرات معلقة."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -3936,8 +3934,8 @@ msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr " يشمل حتى"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr " أسطر المادة في إخطار تأخير مطبوع. إذا كان عدد المواد أكبر من هذا العدد, سوف ينتهي الإخطار بتحذير يطلب من المستعير تفقد حسابه على الخط المباشر للحصول على قائمة كاملة بالمواد المتأخرة.  قم بضبطه إلى 0 لإدراج كافة المواد المتأخرة في الإخطار,بغض النظر عن عددها."
+msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr "سطور المادة في إخطار تأخير مطبوع. إذا كان عدد المواد أكبر من هذا الرقم، سيختتم الإخطار بتحذير يطلب من المستفيد التحقق من حساه على الإنترنت للحصول على قائمة كاملة بالمواد المتأخرة. قم بضبطه إلى 0 لإدراج كل المواد المتأخرة في الإخطار، بغض النظر عن عددها."
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -4485,9 +4483,7 @@ msgstr "_BLANK_: FIC -يسبب تحديث أي مادةة بدون موقع إل
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)"
-msgstr ""
-"مثال: \"itemlost: 1\" لتعيين items.itemlost إلى 1 عند الإشارة إلى فقدان "
-"المادة. (يتطلب CanMarkHoldsToPullAsLost)"
+msgstr "مثال: \"itemlost: 1\" لتعيين items.itemlost إلى 1 عند الإشارة إلى فقدان المادة. (يتطلب CanMarkHoldsToPullAsLost)"
 
 # Circulation > Holds policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# This is a list of values to update an item when it is marked as lost from the holds to pull screen."
@@ -9749,8 +9745,12 @@ msgid "tools.pref#NewsAuthorDisplay# Staff client only"
 msgstr "برنامج العميل فقط"
 
 # Tools > News
-msgid "tools.pref#NewsToolEditor# Use"
-msgstr "استخدام"
+msgid "tools.pref#NewsToolEditor# ."
+msgstr ""
+
+# Tools > News
+msgid "tools.pref#NewsToolEditor# By default edit news items with"
+msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
@@ -9759,10 +9759,6 @@ msgstr "محرر WYSIWYG (TinyMCE)"
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
 msgstr "محرر نص (CodeMirror)"
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# when editing news."
-msgstr "عند تحرير الأخبار."
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
@@ -10031,3 +10027,4 @@ msgstr "الإعادة فقط"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير ويب."
+

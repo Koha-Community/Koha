@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2020-09-14 12:57+0000\n"
-"Last-Translator: Tomáš Wünsch <fraktik@gmail.com>\n"
+"PO-Revision-Date: 2020-10-12 19:51+0000\n"
+"Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1600088257.298214\n"
+"X-POOTLE-MTIME: 1602532276.205311\n"
 "X-Pootle-Path: /cs/20.05/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2977,6 +2977,10 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Self check-out module
+msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
+msgstr ""
+
+# Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr "samoobslužné vypůjčení a toto heslo"
 
@@ -3010,7 +3014,7 @@ msgstr "Neposlat"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
-msgstr "automaticky vrácené výtisky do jejich domovské knihovny."
+msgstr "vrácené jednotky automaticky do jejich domovské knihovny."
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Allow"
@@ -3349,7 +3353,7 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr ""
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
 msgstr ""
 
 # Circulation > Holds policy
@@ -3743,7 +3747,7 @@ msgstr "[% local_currency %] na pokutách."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Calculate \"No renewal before\" based on"
-msgstr "Vypočítat \"Neprodloužit před\" na základě"
+msgstr "Vypočítat \"Prodloužit lze až po\" na základě"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Only relevant for loans calculated in days, hourly loans are not affected."
@@ -3890,8 +3894,8 @@ msgid "circulation.pref#OverduesBlockCirc# Don't block"
 msgstr "Neblokovat"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "výpůjčky čtenáři, který má překročené(ných) výpůjčky(ček)"
+msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -3930,8 +3934,8 @@ msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Vypsat až"
 
 # Circulation > Checkout policy
-msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr "položek do upomínky. Jestliže počet položek překročí toto číslo, upomínka bude končit výzvou, aby si čtenář zkontroloval svůj online účet, kde má vše vypsáno.  Nastavit na 0, jestliže chcete v upomínce vypisovat všechny položky."
+msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr ""
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -9741,7 +9745,11 @@ msgid "tools.pref#NewsAuthorDisplay# Staff client only"
 msgstr "pouze v intranetu"
 
 # Tools > News
-msgid "tools.pref#NewsToolEditor# Use"
+msgid "tools.pref#NewsToolEditor# ."
+msgstr ""
+
+# Tools > News
+msgid "tools.pref#NewsToolEditor# By default edit news items with"
 msgstr ""
 
 # Tools > News
@@ -9750,10 +9758,6 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# when editing news."
 msgstr ""
 
 # Tools > Reports

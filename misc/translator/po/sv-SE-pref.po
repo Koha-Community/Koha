@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-20 11:46-0300\n"
-"PO-Revision-Date: 2020-09-07 12:20+0000\n"
-"Last-Translator: Emma Ternrud <emma.gustafsson@ub.gu.se>\n"
+"PO-Revision-Date: 2020-10-20 11:27+0000\n"
+"Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1599481246.479820\n"
+"X-POOTLE-MTIME: 1603193250.098885\n"
 "X-Pootle-Path: /sv/20.05/sv-SE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2977,6 +2977,10 @@ msgid "circulation.pref#AutoSelfCheckAllowed# Don't allow"
 msgstr "Tillåt inte "
 
 # Circulation > Self check-out module
+msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
+msgstr ""
+
+# Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
 msgstr "och detta lösenord"
 
@@ -3349,8 +3353,8 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr " reservationer avslutas automatiskt om de inte har hämtats inom den tid som anges i ReservesMaxPickUpDelay.<br><strong>OBS:</strong> Denna systeminställning kräver cron-jobbet <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Be din systemadministratör att schemalägga det."
 
 # Circulation > Holds policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
-msgstr "circulation.pref#ExpireReservesMaxPickUpDelayCharge# Om ExpireReservesMaxPickUpDelay används, debitera låntagare som inte hämtat ut sin infångade reservation en avgift på"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
+msgstr ""
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3739,11 +3743,11 @@ msgstr "circulation.pref#noissuescharge# Förhindra låntagare att låna böcker
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# [% local_currency %] in fines."
-msgstr "circulation.pref#noissuescharge# [% local_currency %] i böter."
+msgstr "circulation.pref#noissuescharge# [% local_currency %] i avgifter."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Calculate \"No renewal before\" based on"
-msgstr "circulation.pref#finesCalendar# Beräkna böter baserat på antalet förseningsdagar"
+msgstr "circulation.pref#finesCalendar# Beräkna avgifter baserat på"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Only relevant for loans calculated in days, hourly loans are not affected."
@@ -3890,8 +3894,8 @@ msgid "circulation.pref#OverduesBlockCirc# Don't block"
 msgstr "Blockera inte "
 
 # Circulation > Checkout policy
-msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "vid lån till en låntagare som har utestående förseningar "
+msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
+msgstr ""
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -3930,8 +3934,8 @@ msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Inkludera upp till "
 
 # Circulation > Checkout policy
-msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr "exemplarsrader i ett utskrivet förseningsmeddelande. Om antalet exemplar är högre än detta nummer, avslutas meddelandet med en varning till låntagaren om att han/hon bör kontrollera sitt konto online för att se en komplett lista med försenade exemplar.  Ange 0 för att ta med alla försenade exemplar i meddelandet, oavsett antal."
+msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr ""
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -4767,7 +4771,7 @@ msgstr "Förhindra låntagare att reservera i OPAC om de är skyldiga mer än "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#maxoutstanding# [% local_currency %] in fines."
-msgstr "[% local_currency %] i böter."
+msgstr "[% local_currency %] i avgift."
 
 # Circulation > Holds policy
 msgid "circulation.pref#maxreserves# Patrons can only have"
@@ -4783,7 +4787,7 @@ msgstr "Förhindra låntagare att låna böcker om de har fler än "
 
 # Circulation > Checkout policy
 msgid "circulation.pref#noissuescharge# [% local_currency %] in fines."
-msgstr "[% local_currency %] i böter."
+msgstr "[% local_currency %] i avgifter."
 
 # Circulation > Interface
 msgid "circulation.pref#numReturnedItemsToShow# Show the"
@@ -6522,7 +6526,7 @@ msgstr "Låt endast låntagare låna om sina egna böcker i OPAC om de har färr
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewals# [% local_currency %] in fines (leave blank to disable)."
-msgstr "[% local_currency %] i böter (lämna tomt för att avaktivera)."
+msgstr "[% local_currency %] i avgifter (lämna tomt för att avaktivera)."
 
 # OPAC > Policy
 msgid "opac.pref#OPACFineNoRenewalsIncludeCredits# Don't include"
@@ -6546,7 +6550,7 @@ msgstr "Tillåt inte "
 
 # OPAC > Features
 msgid "opac.pref#OPACFinesTab# patrons to access the Fines tab on the My Account page on the OPAC."
-msgstr "låntagare åtkomst till fliken Böter på sidan Mitt konto i OPAC."
+msgstr "låntagare åtkomst till fliken Avgifter på sidan Mitt konto i OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACHoldingsDefaultSortField# First column of the table"
@@ -7386,7 +7390,7 @@ msgstr "låntagarens hembibliotek"
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword#  to recover their password via e-mail in the OPAC"
-msgstr "låntagare att låna om sina egna böcker i OPAC."
+msgstr "låntagare att återställa sitt lösenord via E-post i OPAC."
 
 # OPAC > Features
 msgid "opac.pref#OpacResetPassword# Library users are "
@@ -9741,7 +9745,11 @@ msgid "tools.pref#NewsAuthorDisplay# Staff client only"
 msgstr "Endast personalklient"
 
 # Tools > News
-msgid "tools.pref#NewsToolEditor# Use"
+msgid "tools.pref#NewsToolEditor# ."
+msgstr ""
+
+# Tools > News
+msgid "tools.pref#NewsToolEditor# By default edit news items with"
 msgstr ""
 
 # Tools > News
@@ -9750,10 +9758,6 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a text editor (CodeMirror)"
-msgstr ""
-
-# Tools > News
-msgid "tools.pref#NewsToolEditor# when editing news."
 msgstr ""
 
 # Tools > Reports
