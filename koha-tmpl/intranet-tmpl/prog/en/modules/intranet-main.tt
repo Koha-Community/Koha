@@ -158,7 +158,7 @@
 
                                     Suggestions pending approval:
                                     <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=[% Branches.GetLoggedInBranchcode | url %]#ASKED">
-                                    <span id="pendingsuggestions" class="pending-number-link">[% LoginBranchname | html %]: [% pendingsuggestions | html %]</span>
+                                    <span id="pendingsuggestions" class="pending-number-link">[% Branches.GetLoggedInBranchname | html %]: [% pendingsuggestions | html %]</span>
                                     </a>
                                     [% IF (all_pendingsuggestions > 0) %]
                                         /

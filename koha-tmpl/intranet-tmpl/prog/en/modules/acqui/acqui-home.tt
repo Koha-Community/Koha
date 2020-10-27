@@ -57,7 +57,7 @@
         <p>
             Manage suggestions:
             <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=[% Branches.GetLoggedInBranchcode | url %]#ASKED">
-                <span id="pendingsuggestions" class="pending-number-link">[% LoginBranchname | html %]: [% suggestions_count | html %]</span>
+                <span id="pendingsuggestions" class="pending-number-link">[% Branches.GetLoggedInBranchname | html %]: [% suggestions_count | html %]</span>
             </a>
             [% IF (all_pendingsuggestions > 0) %]
                 /
