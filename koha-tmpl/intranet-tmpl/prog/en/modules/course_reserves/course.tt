@@ -169,7 +169,23 @@
                 .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                     return $( "<li></li>" )
                     .data( "ui-autocomplete-item", item )
-                    .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                    .append(
+                        "<a>"
+                            + ( item.surname ? item.surname.escapeHtml() : "" )
+                            + ", "
+                            + ( item.firstname ? item.firstname.escapeHtml() : "" )
+                            + " (" + ( item.cardnumber ? item.cardnumber.escapeHtml() : "" ) + ")"
+                            + " "
+                            + "<small>"
+                                + ( item.address ? item.address.escapeHtml() : "" )
+                                + " "
+                                + ( item.city ? item.city.escapeHtml() : "" )
+                                + " "
+                                + ( item.zipcode ? item.zipcode.escapeHtml() : "" )
+                                + " "
+                                + ( item.country ? item.country.escapeHtml() : "" )
+                            + "</small>"
+                        + "</a>" )
                     .appendTo( ul );
                 };
 
@@ -186,7 +202,7 @@
             });
 
             function AddInstructor( name, borrowernumber ) {
-                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + name + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
+                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + ( name ? name.escapeHtml() : "" ) + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
                 $('#instructors').append( div );
 
                 $('#find_instructor').val('').focus();
