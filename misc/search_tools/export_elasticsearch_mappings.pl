@@ -80,4 +80,5 @@ if ( $type && $type !~ /^(marc21|unimarc|normarc)$/ ) {
 
 my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings( $type );
 
+binmode STDOUT, ":encoding(UTF-8)";
 print Dump($mappings);
