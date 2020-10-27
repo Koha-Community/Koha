@@ -1054,24 +1054,30 @@
             <span class="results_summary publisher"><span class="label">Publication details: </span>
                 <xsl:for-each select="marc:datafield[@tag=260]">
                     <xsl:if test="marc:subfield[@code='a']">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">a</xsl:with-param>
-                        </xsl:call-template>
+                        <span class="publisher_place" property="location">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">a</xsl:with-param>
+                            </xsl:call-template>
+                        </span>
                     </xsl:if>
                     <xsl:text> </xsl:text>
                     <xsl:if test="marc:subfield[@code='b']">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">b</xsl:with-param>
-                        </xsl:call-template>
+                        <span property="name" class="publisher_name">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">b</xsl:with-param>
+                            </xsl:call-template>
+                        </span>
                     </xsl:if>
                     <xsl:text> </xsl:text>
-                    <xsl:call-template name="chopPunctuation">
-                      <xsl:with-param name="chopString">
-                        <xsl:call-template name="subfieldSelect">
-                            <xsl:with-param name="codes">cg</xsl:with-param>
+                    <span property="datePublished" class="publisher_date">
+                        <xsl:call-template name="chopPunctuation">
+                            <xsl:with-param name="chopString">
+                                    <xsl:call-template name="subfieldSelect">
+                                        <xsl:with-param name="codes">cg</xsl:with-param>
+                                    </xsl:call-template>
+                            </xsl:with-param>
                         </xsl:call-template>
-                       </xsl:with-param>
-                    </xsl:call-template>
+                    </span>
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
                 </xsl:for-each>
                 <xsl:if test="marc:datafield[@tag=264]">
