@@ -116,6 +116,26 @@ $(document).ready(function() {
                 $('#illfilter_patron').val('');
             }
         },
+        keyword: {
+            listener: function () {
+                var me = 'keyword';
+                $('#illfilter_keyword').change(function () {
+                    var val = $('#illfilter_keyword').val();
+                    if (val && val.length > 0) {
+                        activeFilters[me] = function () {
+                            table.api().search(val);
+                        }
+                    } else {
+                        if (activeFilters.hasOwnProperty(me)) {
+                            delete activeFilters[me];
+                        }
+                    }
+                });
+            },
+            clear: function () {
+                $('#illfilter_keyword').val('');
+            }
+        },
         dateModified: {
             clear: function() {
                 $('#illfilter_datemodified_start, #illfilter_datemodified_end').val('');
@@ -455,6 +475,7 @@ $(document).ready(function() {
                 'sPaginationType': "full_numbers", // Pagination display
                 'deferRender': true, // Improve performance on big datasets
                 'data': dataCopy,
+                "dom": '<"top pager"<"table_entries"ilp><"table_controls"B>>tr<"bottom pager"ip>',
                 'columns': colData,
                 'originalData': data, // Enable render functions to access
                                         // our original data
