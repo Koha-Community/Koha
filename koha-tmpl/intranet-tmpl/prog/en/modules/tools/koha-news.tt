@@ -155,8 +155,25 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                             <td><span title="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</span></td>
                             <td>[% opac_new.title | html %]</td>
                             <td>[% opac_new.author_title | html %] [% opac_new.author_firstname | html %] [% opac_new.author_surname | html %]</td>
-                           <td>
-                                [% opac_new.content | $raw %]
+                            <td>
+                                <div class="btn-group">
+                                    <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
+                                </div>
+                                <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">Preview of: "[% opac_new.title | html %]"</h5>
+                                      </div>
+                                      <div class="modal-body">
+                                        [% opac_new.content | $raw %]
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                             </td>
                             <td class="actions">
                                 [% IF ( wysiwyg ) %]
@@ -242,6 +259,10 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script>
+            $('.preview_news').click( function() {
+                modalNumber = $(this).attr('data-number');
+                $('.modal[data-number="'+modalNumber+'"]').modal('show');
+            })
             function Checkbox(){
                 var form = document.getElementById('del_form');
                 var inputs = form.getElementsByTagName('input');
