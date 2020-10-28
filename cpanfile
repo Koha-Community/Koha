@@ -1,4 +1,5 @@
 requires 'Algorithm::CheckDigits', '0.5';
+requires 'Array::Utils', '0.5';
 requires 'Authen::CAS::Client', '0.05';
 requires 'Biblio::EndnoteStyle', '0.05';
 requires 'Business::ISBN', '2.05';
@@ -133,7 +134,6 @@ recommends 'AnyEvent', '5.0';
 recommends 'AnyEvent::HTTP', '2.13';
 recommends 'Archive::Extract', '0.60';
 recommends 'Archive::Zip', '1.30';
-recommends 'Array::Utils', '0.5';
 recommends 'CGI::Session::Driver::memcached', '0.04';
 recommends 'DBD::SQLite2', '0.33';
 recommends 'Devel::Cover', '0.89';
