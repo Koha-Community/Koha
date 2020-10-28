@@ -14,6 +14,7 @@ use Data::Dumper;
 use C4::Calendar;
 use C4::Context;
 use C4::Members;
+use C4::Circulation;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Items;
@@ -1657,3 +1658,69 @@ sub dump_records {
     my ($tablename) = @_;
     return $dbh->selectall_arrayref("SELECT * from $tablename where borrowernumber = ?", { Slice => {} }, $borrowernumber);
 }
+
+subtest 'Remove holds on check-in match' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    $dbh->do('DELETE FROM tmp_holdsqueue');
+    $dbh->do('DELETE FROM hold_fill_targets');
+
+    my $lib = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $lib->branchcode }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $lib->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        { homebranch => $lib->branchcode, holdingbranch => $lib->branchcode } );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $lib->branchcode } );
+
+    AddIssue( $patron1->unblessed, $item->barcode, dt_from_string );
+
+    my $hold_id = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $patron2->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            itemnumber     => undef,
+            priority       => 1
+        }
+    );
+
+    my $hold = Koha::Holds->find($hold_id);
+
+    AddReturn( $item->barcode, $item->homebranch );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $sth = $dbh->prepare("SELECT count(*) FROM tmp_holdsqueue");
+    $sth->execute();
+    my ($count_1) = $sth->fetchrow_array;
+
+    is( $count_1, 1, "Holds queue has one element" );
+
+    AddReturn( $item->barcode, $item->homebranch, undef, dt_from_string );
+
+    ModReserveAffect( $item->itemnumber, $hold->borrowernumber, 0,
+        $hold->reserve_id );
+
+    $sth->execute();
+    my ($count_2) = $sth->fetchrow_array;
+
+    is( $count_2, 0,
+        "Holds queue has no elements, even when queue was not rebuilt" );
+
+    $schema->storage->txn_rollback;
+};
