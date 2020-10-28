@@ -174,7 +174,7 @@ if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $cancel_recall  = $query->param('cancel_recall');
-my $recall_id     = $query->param('recall_id');
+my $recall_id      = $query->param('recall_id');
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
 my $charges        = $query->param('charges') || q{};
 
@@ -394,7 +394,6 @@ if (@$barcodes) {
         }
         unless($confirm_required) {
             my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-            my $recall_id = $messages->{RECALLED};
             my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');

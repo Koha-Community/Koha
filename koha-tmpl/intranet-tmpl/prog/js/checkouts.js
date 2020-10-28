@@ -467,7 +467,7 @@ $(document).ready(function() {
                             // Do nothing
                         } else if ( oObj.can_renew_error == "recalled" ) {
                             msg += "<span>"
-                                    + "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + RECALLED + "</a>"
+                                    + "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>"
                                     + "</span>";
 
                             span_style = "display: none";

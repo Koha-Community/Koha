@@ -8,18 +8,24 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-recalls' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 <div class="main">
-    <ul class="breadcrumb">
-        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#">Your recalls history</a></li>
-    </ul>
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/cgi-bin/koha/opac-main.pl">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#">Your recalls history</a>
+            </li>
+        </ul>
+    </nav>
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+        <div class="row">
+            <div class="col col-lg-2 order-2 order-lg-1">
                 <div id="navigation">
                     [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                 </div>
             </div>
-            <div class="span10">
+            <div class="col-md-12 col-lg-10 order-1 order-lg-2">
                 <div id="recalls" class="maincontent">
                     <h2>Recalls history</h2>
                     [% IF Koha.Preference('UseRecalls') %]
@@ -125,8 +131,8 @@
                             Recalls have not been enabled. Please contact your library.
                         [% END %]
                         </div> <!-- /#recalls -->
-                    </div> <!-- /.span10 -->
-            </div> <!-- /.row-fluid -->
+                    </div> <!-- /.col-md-12 -->
+            </div> <!-- /.row -->
         </div> <!-- /.container-fluid -->
 </div> <!-- /#main -->
 

@@ -61,8 +61,7 @@
                             <td class="recall-patrons">[% recall.patrons_count | html %]</td>
                             <td class="recall-firstpatron"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% recall.first_recall.borrowernumber | uri %]">[% recall.first_recall.patron.firstname | html %] [% recall.first_recall.patron.surname | html %]</a></td>
                             <td class="recall-title">
-                                [% INCLUDE 'biblio-default-view.inc' biblionumber=recall.first_recall.biblio.biblionumber %]
-                                [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio %]
+                                [% INCLUDE 'biblio-title.inc' biblio=recall.first_recall.biblio link=1 %]
                                 [% IF recall.first_recall.biblio.author %] by [% recall.first_recall.biblio.author | html %][% END %]
                             </td>
                             <td class="recall-libraries">
