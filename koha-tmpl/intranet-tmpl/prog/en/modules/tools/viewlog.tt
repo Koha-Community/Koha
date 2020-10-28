@@ -67,20 +67,33 @@
 
 [% BLOCK translate_log_module %]
 [%    SWITCH module %]
-[%        CASE 'AUTH'         %]Authentication
-[%        CASE 'CATALOGUING'  %]Catalog
-[%        CASE 'AUTHORITIES'  %]Authorities
-[%        CASE 'MEMBERS'      %]Patrons
-[%        CASE 'ACQUISITIONS' %]Acquisitions
-[%        CASE 'SERIAL'       %]Serials
-[%        CASE 'HOLDS'        %]Holds
-[%        CASE 'ILL'          %]Interlibrary loans
-[%        CASE 'CIRCULATION'  %]Circulation
-[%        CASE 'LETTER'       %]Letter
-[%        CASE 'FINES'        %]Fines
+[%        CASE 'AUTH'         %]Authentication[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+[%        CASE 'CATALOGUING'  %]Catalog[% UNLESS Koha.Preference('CataloguingLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'AUTHORITIES'  %]Authorities[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'MEMBERS'      %]Patrons[% UNLESS Koha.Preference('BorrowersLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'ACQUISITIONS' %]Acquisitions <i class="fa fa-warning" title="Log not enabled"></i>
+
+[%        CASE 'SERIAL'       %]Serials[% UNLESS Koha.Preference('SubscriptionLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'HOLDS'        %]Holds[% UNLESS Koha.Preference('HoldsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'ILL'          %]Interlibrary loans[% UNLESS Koha.Preference('IllLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'CIRCULATION'  %]Circulation[% UNLESS Koha.Preference('IssueLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'LETTER'       %]Letter[% UNLESS Koha.Preference('LetterLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'FINES'        %]Fines[% UNLESS Koha.Preference('FinesLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
 [%        CASE 'SYSTEMPREFERENCE' %]System prefs
-[%        CASE 'CRONJOBS' %]Cron jobs
-[%        CASE 'REPORTS'      %]Reports
+
+[%        CASE 'CRONJOBS' %]Cron jobs[% UNLESS Koha.Preference('CronjobLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
+[%        CASE 'REPORTS'      %]Reports[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
+
 [%        CASE %][% module | html %]
 [%    END %]
 [% END %]
