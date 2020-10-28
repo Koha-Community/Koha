@@ -706,7 +706,7 @@ END_SQL
                             message_transport_type => $letter_exists ? $effective_mtt : $mtt,
                         }
                     );
-                    unless ($letter) {
+                    unless ($letter && $letter->{content}) {
                         $verbose and warn qq|Message '$overdue_rules->{"letter$i"}' content not found|;
                         # this transport doesn't have a configured notice, so try another
                         next;
