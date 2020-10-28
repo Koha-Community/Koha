@@ -1160,6 +1160,8 @@ if $transferToDo is not set, then the status is set to "Waiting" as well.
 otherwise, a transfer is on the way, and the end of the transfer will
 take care of the waiting status
 
+This function also removes any entry of the hold in holds queue table.
+
 =cut
 
 sub ModReserveAffect {
@@ -1209,6 +1211,19 @@ sub ModReserveAffect {
         && ( !$item->permanent_location || $item->permanent_location ne 'CART' ) ) {
       CartToShelf( $itemnumber );
     }
+
+    my $std = $dbh->prepare(q{
+        DELETE  q, t
+        FROM    tmp_holdsqueue q
+        INNER JOIN hold_fill_targets t
+        ON  q.borrowernumber = t.borrowernumber
+            AND q.biblionumber = t.biblionumber
+            AND q.itemnumber = t.itemnumber
+            AND q.item_level_request = t.item_level_request
+            AND q.holdingbranch = t.source_branchcode
+        WHERE t.reserve_id = ?
+    });
+    $std->execute($hold->reserve_id);
 
     logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
         if C4::Context->preference('HoldsLog');
