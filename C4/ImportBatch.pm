@@ -1637,7 +1637,7 @@ sub _add_biblio_fields {
     # FIXME no controlnumber, originalsource
     $isbn = C4::Koha::GetNormalizedISBN($isbn);
     my $sth = $dbh->prepare("INSERT INTO import_biblios (import_record_id, title, author, isbn, issn) VALUES (?, ?, ?, ?, ?)");
-    $sth->execute($import_record_id, $title, $author, $isbn, $issn);
+    $sth->execute($import_record_id, $title, $author, $isbn, $issn) or die $sth->errstr;
     $sth->finish();
                 
 }
