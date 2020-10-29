@@ -787,16 +787,16 @@ CREATE TABLE `import_biblios` (
   `matched_biblionumber` int(11) default NULL,
   `control_number` varchar(25) default NULL,
   `original_source` varchar(25) default NULL,
-  `title` varchar(128) default NULL,
-  `author` varchar(80) default NULL,
-  `isbn` varchar(30) default NULL,
-  `issn` varchar(9) default NULL,
+  `title` LONGTEXT default NULL,
+  `author` LONGTEXT default NULL,
+  `isbn` LONGTEXT default NULL,
+  `issn` LONGTEXT default NULL,
   `has_items` tinyint(1) NOT NULL default 0,
   CONSTRAINT `import_biblios_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `matched_biblionumber` (`matched_biblionumber`),
-  KEY `title` (`title`),
-  KEY `isbn` (`isbn`)
+  KEY `title` (`title`(191)),
+  KEY `isbn` (`isbn`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
