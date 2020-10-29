@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use base 'Class::Accessor';
 
-use C4::Charset qw( MarcToUTF8Record );
+use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use C4::Search qw(); # Purely for new_record_from_zebra
 use DBIx::Class::ResultClass::HashRefInflator;
 use IO::Select;
@@ -298,6 +298,7 @@ sub _import_record {
 
     my ( $marcrecord ) = MarcToUTF8Record( $raw, $marcflavour, $encoding ); #ignores charset return values
 
+    SetUTF8Flag($marcrecord);
     return $marcrecord;
 }
 
