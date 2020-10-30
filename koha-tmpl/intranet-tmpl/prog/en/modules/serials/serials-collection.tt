@@ -101,7 +101,7 @@
         <td> [% subscription.notes | html | html_line_break %]
             [% UNLESS subscription.closed %]
                 [% IF ( subscription.subscriptionexpired ) %]
-                    <br /><span class="problem"> Subscription expired</span>
+                    <p class="problem"><i class="fa fa-exclamation-circle problem" aria-hidden="true"></i> Subscription expired</p>
                 [% END %]
             [% ELSE %]
                 <br /> Subscription closed

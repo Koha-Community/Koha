@@ -615,10 +615,8 @@ ol {
 }
 
 .problem {
-    background-color: #FFFFCC;
     color: #990000;
     font-weight: bold;
-    line-height: 1.7em;
 }
 
 fieldset {
@@ -1775,7 +1773,7 @@ i {
     h2,
     h3,
     h4 {
-        margin: auto;
+        margin: 5px auto;
         text-align: center;
     }
 
@@ -1796,6 +1794,13 @@ i {
 
     li {
         list-style-position: inside;
+    }
+
+    p {
+        margin-top: 0;
+        &+p {
+            margin-top: 5px;
+        }
     }
 
     table {
@@ -2350,19 +2355,11 @@ td {
         &.alert {
             background: #FFFADE none;
             border-color: #E0C726;
-
-            .problem {
-                background-color: transparent;
-            }
         }
 
         &.message {
             background: #E8EDF6 none;
             border-color: #A4BEDD;
-
-            .problem {
-                background-color: transparent;
-            }
         }
     }
 

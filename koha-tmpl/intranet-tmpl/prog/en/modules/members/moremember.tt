@@ -560,7 +560,7 @@
                                             [% IF ( patron.password ) %]
                                                 *******
                                             [% ELSE %]
-                                                <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a></span>
+                                                <i class="fa fa-exclamation-circle problem" aria-hidden="true"></i> <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a>
                                             [% END %]
                                         </li>
 
