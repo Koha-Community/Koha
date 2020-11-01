@@ -83,7 +83,7 @@
                     SMS
                   [% CASE 'feed' %]
                     Feed
-                  [% CASE 'phone' %]
+                  [% CASE 'itiva' %]
                     Phone
                   [% CASE %]
                     [% mtt | html %]
@@ -125,7 +125,7 @@
                   [% ELSE %]
                     [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
-                    [% ELSIF mtt.value == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
+                    [% ELSIF mtt.value == "itiva" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSE %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
