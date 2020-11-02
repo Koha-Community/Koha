@@ -74,8 +74,7 @@ use Koha::Biblios;
 
 use JSON;
 
-my $input=CGI->new;
-my $sticky_filters = $input->param('sticky_filters') || 0;
+my $input = CGI->new;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tt",
@@ -109,6 +108,25 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
+
+my $sticky_filters = $input->param('sticky_filters') || 0;
+
+if ($sticky_filters) {
+    my $search          = $input->cookie("filter_parcel_summary");
+    my $ean             = $input->cookie("filter_parcel_ean");
+    my $basketname      = $input->cookie("filter_parcel_basketname");
+    my $orderno         = $input->cookie("filter_parcel_orderno");
+    my $basketgroupname = $input->cookie("filter_parcel_basketgroupname");
+
+    $template->param(
+        summaryfilter         => $search,
+        eanfilter             => $ean,
+        basketfilter          => $basketname,
+        orderfilter           => $orderno,
+        basketgroupnamefilter => $basketgroupname,
+    );
+}
+
 
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );

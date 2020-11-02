@@ -372,6 +372,39 @@
         dt_overwrite_html_sorting_localeCompare();
         var sticky_filters = [% sticky_filters | html %];
 
+        function query_from_filters( base_query, params ) {
+
+            var query_and = [];
+
+            if ( params.basket_name != "" ) {
+                query_and.push( { "basket.name": { "like": '%'+params.basket_name+'%' } } );
+            }
+            if (params.basket_group != "") {
+                query_and.push( { "basket.basket_group.name": { "like": '%'+params.basket_group+'%' } } );
+            }
+            if (params.summary != "") {
+                query_and.push( { "-or": [{"biblio.title":  { "like": '%'+params.summary+'%' } },
+                            {"biblio.author": { "like": '%'+params.summary+'%' } },
+                            {"biblio.isbn":   { "like": '%'+params.summary+'%' } } ] } );
+            }
+            if (params.ean != "") {
+                query_and.push( { "biblio.ean": params.ean } );
+            }
+
+            var query_params = [];
+
+            if ( query_and.length > 0 ) {
+                query_and.push(base_query);
+                query_params.push('q=' + encodeURIComponent(JSON.stringify({ "-and": query_and })));
+            }
+
+            if ( params.order_id != "" ) {
+                query_params.push("order_id="+params.order_id);
+            }
+
+            return query_params;
+        }
+
         $(document).ready(function(){
 
             if ( $("#receivedt").length ) {
@@ -403,10 +436,30 @@
             }
 
             var base_query = { "basket.vendor_id": [% booksellerid | html %]  };
+
+            var summary      = $("#summaryfilter").val();
+            var basket_name  = $("#basketfilter").val();
+            var basket_group = $("#basketgroupnamefilter").val();
+            var order_id     = $("#orderfilter").val();
+            var ean          = $("#eanfilter").val();
+
+            var query_params = query_from_filters(
+                base_query,
+                {
+                    "summary": summary,
+                    "basket_name": basket_name,
+                    "basket_group": basket_group,
+                    "order_id": order_id,
+                    "ean": (ean === undefined) ? '' : ean // ean == undefined if the DOM doens't have it
+                }
+            );
+
+            var THE_query = query_params.join("&");
+
             var pending_orders_url = '/api/v1/acquisitions/orders?only_active=1';
             var pending_orders_table = $("#pending_orders").api({
                 "ajax": {
-                    "url": pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query))
+                    "url": pending_orders_url + '&' + THE_query
                 },
                 "header_filter": true,
                 "embed": [
@@ -688,45 +741,32 @@
 
             $("#filterform").on("submit", function(e) {
                 e.preventDefault();
-                // Update the datatable URL
+
                 var summary      = $("#summaryfilter").val();
                 var basket_name  = $("#basketfilter").val();
                 var basket_group = $("#basketgroupnamefilter").val();
                 var order_id     = $("#orderfilter").val();
                 var ean          = $("#eanfilter").val();
 
-                var query_and = [];
+                // Save the filters in the cookie
+                $.cookie("filter_parcel_summary", summary);
+                $.cookie("filter_parcel_basketname", basket_name);
+                $.cookie("filter_parcel_orderno", basket_group);
+                $.cookie("filter_parcel_basketgroupname", order_id);
+                $.cookie("filter_parcel_ean", ean);
 
-                if (basket_name != "") {
-                    query_and.push( { "basket.name": { "like": '%'+basket_name+'%' } } );
-                }
-                if (basket_group != "") {
-                    query_and.push( { "basket.basket_group.name": { "like": '%'+basket_group+'%' } } );
-                }
-                if (summary != "") {
-                    query_and.push( { "-or": [{"biblio.title":  { "like": '%'+summary+'%' } },
-                                {"biblio.author": { "like": '%'+summary+'%' } },
-                                {"biblio.isbn":   { "like": '%'+summary+'%' } } ] } );
-                }
-            [% IF (UNIMARC) %]
-                if (ean != "") {
-                    query_and.push( { "biblio.ean": ean } );
-                }
-            [% END %]
-
-                if ( !jQuery.isEmptyObject(query_and) || order_id != "" ) {
-
-                    var query_params = [];
-
-                    if ( order_id != "" ) {
-                        query_params.push("order_id="+order_id);
+                var query_params = query_from_filters(
+                    base_query,
+                    {
+                        "summary": summary,
+                        "basket_name": basket_name,
+                        "basket_group": basket_group,
+                        "order_id": order_id,
+                        "ean": (ean === undefined) ? '' : ean // ean == undefined if the HTML doens't have it
                     }
+                );
 
-                    if ( !jQuery.isEmptyObject(query_and) ) {
-                        query_and.push(base_query);
-                        query_params.push('q=' + encodeURI(JSON.stringify({ "-and": query_and })));
-                    }
-
+                if ( query_params.length > 0 ) {
                     pending_orders_table.api().ajax.url( pending_orders_url + '&' + query_params.join("&") );
                 }
                 else {
@@ -738,21 +778,6 @@
             $('#clear_form_filters').on("click", function(){
                 $(this).closest('form').find("input[type=text], textarea").val("");
                 pending_orders_table.api().ajax.url(pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query))).draw();
-            });
-
-            // Keep filters from finishreceive.pl to parcel.pl
-            $.cookie("filter_parcel_summary", $("#summaryfilter").val());
-            $.cookie("filter_parcel_basketname", $("#basketfilter").val());
-            $.cookie("filter_parcel_orderno", $("#orderfilter").val());
-            $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
-            $.cookie("filter_parcel_ean", $("#eanfilter").val());
-
-            $("#filterform").on('submit', function(){
-                $.cookie("filter_parcel_summary", $("#summaryfilter").val());
-                $.cookie("filter_parcel_basketname", $("#basketfilter").val());
-                $.cookie("filter_parcel_orderno", $("#orderfilter").val());
-                $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
-                $.cookie("filter_parcel_ean", $("#eanfilter").val());
             });
 
             $(".previewData").on("click", function(e){
