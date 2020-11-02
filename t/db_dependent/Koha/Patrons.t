@@ -566,7 +566,7 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     plan tests => 17;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $biblionumber_1 = $builder->build_sample_biblio->biblionumber;
     my $item_1 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
@@ -579,7 +579,7 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
             biblionumber => $biblionumber_1,
         }
     );
-    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
+    my $biblionumber_2 = $builder->build_sample_biblio->biblionumber;
     my $item_3 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
@@ -937,7 +937,7 @@ subtest 'holds and old_holds' => sub {
     plan tests => 6;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $biblionumber_1 = $builder->build_sample_biblio->biblionumber;
     my $item_1 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
@@ -950,7 +950,7 @@ subtest 'holds and old_holds' => sub {
             biblionumber => $biblionumber_1,
         }
     );
-    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
+    my $biblionumber_2 = $builder->build_sample_biblio->biblionumber;
     my $item_3 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
@@ -1394,7 +1394,7 @@ subtest 'get_overdues' => sub {
     plan tests => 7;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $biblionumber_1 = $builder->build_sample_biblio->biblionumber;
     my $item_1 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
@@ -1407,11 +1407,9 @@ subtest 'get_overdues' => sub {
             biblionumber => $biblionumber_1,
         }
     );
-    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
     my $item_3 = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
-            biblionumber => $biblionumber_2,
         }
     );
 
