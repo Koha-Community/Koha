@@ -1,3 +1,5 @@
+package Koha::Z3950Responder::RPN;
+
 package Net::Z3950::RPN::Term;
 
 # Copyright The National Library of Finland 2018

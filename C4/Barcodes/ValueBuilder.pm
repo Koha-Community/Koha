@@ -1,3 +1,5 @@
+package C4::Barcodes::ValueBuilder;
+
 # Copyright 2008-2010 Foundations Bible College
 # Parts copyright 2012 C & P Bibliography Services
 #
