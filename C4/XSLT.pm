@@ -296,9 +296,14 @@ sub XSLTParse4Display {
             if ( $biblio->components() ) {
                 my @componentPartRecordXML = ('<componentPartRecords>');
                 for my $cb ( @{ $biblio->components() } ) {
+                    if( ref $cb eq 'MARC::Record'){
+                        $cb = $cb->as_xml_record();
+                    } else {
+                        $cb = decode('utf8', $cb);
+                    }
                     # Remove the xml header
                     $cb =~ s/^<\?xml.*?\?>//;
-                    push @componentPartRecordXML, decode('utf8', $cb);
+                    push @componentPartRecordXML,$cb;
                 }
                 push @componentPartRecordXML, '</componentPartRecords>';
                 $partsxml = join "\n", @componentPartRecordXML;

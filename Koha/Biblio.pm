@@ -505,12 +505,11 @@ sub components {
             $searchstr = "rcn='".$pf001->data()."'";
         } else {
             # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
-            $searchstr = "(rcn='".$pf001->data()."' and cni='".$pf003->data()."')";
-            $searchstr .= " or rcn='".$pf003->data()." ".$pf001->data()."'";
+            $searchstr = "(rcn='".$pf001->data()."' AND cni='".$pf003->data()."')";
+            $searchstr .= " OR rcn='".$pf003->data()." ".$pf001->data()."'";
         }
 
         my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, undef );
-
         $self->{_components} = $results if ( defined($results) && scalar(@$results) );
     } else {
         warn "Record $self->id has no 001";
