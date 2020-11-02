@@ -1315,7 +1315,7 @@ sub IsAvailableForItemLevelRequest {
             GetReservesControlBranch( $item->unblessed(), $patron->unblessed() );
         my $branchitemrule =
             C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->itype );
-        my $home_library = Koka::Libraries->find( {branchcode => $item->homebranch} );
+        my $home_library = Koha::Libraries->find( {branchcode => $item->homebranch} );
         return 0 unless $branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $home_library->validate_hold_sibling( {branchcode => $pickup_branchcode} );
     }
 
