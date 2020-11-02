@@ -187,10 +187,15 @@ h1 {
     padding: 1rem 0;
 }
 
+
 .alert {
     &.alert-info,
     &.alert-warning {
         color: #000;
+    }
+
+    &.alert-error {
+        @extend .alert-warning
     }
 }
 
