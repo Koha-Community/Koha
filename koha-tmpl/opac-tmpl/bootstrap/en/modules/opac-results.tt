@@ -547,6 +547,8 @@
                                                     </span>
                                                 [% END %]
 
+                                                [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
+
                                                 [% IF ( OpacStarRatings == 'all' ) %]
                                                     <div class="results_summary ratings">
                                                         [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
@@ -573,10 +575,9 @@
                                                     </div> <!-- / .results_summary -->
                                                 [% END # / IF OpacStarRatings %]
 
-                                                    [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
+                                                [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
 
                                                 </div>
-                                                [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
 
                                             </td>
                                         </tr>

@@ -48,7 +48,6 @@ KOHA.OpenLibrary = new function() {
                     if (is_opacdetail) {
                         img.src = book.cover.medium;
                         $(this).empty().append(img);
-                        $(this).append('<div class="results_summary">' + '<a href="' + book.url + '">' + OL_PREVIEW + '</a></div>');
                     } else {
                         img.src = book.cover.medium;
                         img.height = '110';
@@ -150,11 +149,11 @@ function create_query() {
 function make_read_button(bookdata) {
     buttons = {
         'full access':
-        "http://openlibrary.org/images/button-read-open-library.png",
+        "https://openlibrary.org/images/button-read-open-library.png",
         'lendable':
-        "http://openlibrary.org/images/button-borrow-open-library.png",
+        "https://openlibrary.org/images/button-borrow-open-library.png",
         'checked out':
-        "http://openlibrary.org/images/button-checked-out-open-library.png"
+        "https://openlibrary.org/images/button-checked-out-open-library.png"
     };
     if (bookdata.items.length == 0) {
         return false;
@@ -163,9 +162,10 @@ function make_read_button(bookdata) {
     if (!(first.status in buttons)) {
         return false;
     }
-    result = '<a href="' + first.itemURL + '">' +
+    result = '<a target="_blank" href="' + first.itemURL + '">' +
       '<img class="' + ol_button_classname +
       '" src="' + buttons[first.status] + '"/></a>';
+    console.log( result );
     return result;
 }
 
@@ -179,8 +179,9 @@ function default_decorate_el_fn(el, bookdata) {
     }
     if (decoration) {
         el.innerHTML += decoration;
+        el.style.display = 'block'
     } else {
-        el.style.visibility = 'hidden';
+        el.style.display = 'none';
     }
 }
 

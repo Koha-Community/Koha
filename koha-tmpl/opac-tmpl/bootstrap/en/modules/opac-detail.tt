@@ -418,6 +418,9 @@
                         [% END # / IF SyndeticsAwards && SyndeticsAWARDS1Exists %]
                     [% END # / IF SyndeticsEnabled%]
 
+                    [%# Following on one line due to translation issues %]
+                    [% INCLUDE "openlibrary-readapi.inc" bib = { normalized_isbn => normalized_isbn,lccn => lccn, normalized_oclc => normalized_oclc } %]
+
                     [% IF ( OpacStarRatings != 'disable' ) %]
                         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
                             <div class="results_summary ratings">
@@ -1042,9 +1045,6 @@
                         <div id="BW_videos"></div>
                     </div>
                 [% END # / IF Babeltheque %]
-
-                [%# Following on one line due to translation issues %]
-                [% INCLUDE "openlibrary-readapi.inc" bib = { normalized_isbn => normalized_isbn,lccn => lccn, normalized_oclc => normalized_oclc } %]
 
             </div> <!-- /.col-lg-10 -->
 

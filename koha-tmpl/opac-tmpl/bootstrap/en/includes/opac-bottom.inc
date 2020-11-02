@@ -207,7 +207,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     [% END %]
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         var NO_OL_JACKET = _("No cover image available");
-        var OL_PREVIEW = _("Preview");
     [% END %]
     [% IF (query_desc) %]
         var query_desc = "[% query_desc | html %]";
