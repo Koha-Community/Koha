@@ -118,7 +118,7 @@
                     [% ELSE %]
                         [% SWITCH can_be_deleted %]
                         [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
-                        [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belongs to your library") %]
+                        [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
                         [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
                         [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
                         [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record wich biblio-level hold on it") %]
@@ -260,7 +260,7 @@
                 <td>
                     [% SWITCH not_deleted_loo.reason %]
                     [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
-                    [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belongs to your library") %]
+                    [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belong to your library") %]
                     [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
                     [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
                     [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record wich biblio-level hold on it") %]
