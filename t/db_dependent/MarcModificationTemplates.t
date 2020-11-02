@@ -713,7 +713,19 @@ sub expected_record_0 {
             9 => '462',
         ),
         MARC::Field->new(
+            600, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
             600, ' ', ' ',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
