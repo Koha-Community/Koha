@@ -160,19 +160,18 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                                     <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
                                 </div>
                                 <div id="contentModal[% loop.count | html %]" class="modal" tabindex="-1" role="dialog" data-number="[% loop.count | html %]">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title">Preview of: "[% opac_new.title | html %]"</h5>
-                                      </div>
-                                      <div class="modal-body">
-                                        [% opac_new.content | $raw %]
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      </div>
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content modal-lg">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Preview of: "[% opac_new.title | html %]"</h5>
+                                            </div>
+                                        <div class="modal-body">
+                                            [% opac_new.content | $raw %]
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
                             </td>
                             <td class="actions">
