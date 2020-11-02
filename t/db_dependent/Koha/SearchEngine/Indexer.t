@@ -97,7 +97,7 @@ subtest 'Test indexer calls' => sub {
         } [$engine,"C4::AuthoritiesMarc"], "index_records is called for $engine is called when adding authority";
 
         warnings_are{
-            $authid = DelAuthority({ authid => $authid });
+            $authid = DelAuthority({ authid => $authid, skip_merge => 1 });
         } [$engine,"C4::AuthoritiesMarc"], "index_records is called for $engine is called when adding authority";
 
         my $biblio;
