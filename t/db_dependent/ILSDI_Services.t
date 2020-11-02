@@ -412,12 +412,12 @@ subtest 'Holds test' => sub {
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'damaged', "Item is damaged" );
 
-    my $module = new Test::MockModule('C4::Context');
+    my $module = Test::MockModule->new('C4::Context');
     $module->mock('userenv', sub { { patron => $patron } });
     my $issue = C4::Circulation::AddIssue($patron, $item3->barcode);
     t::lib::Mocks::mock_preference( 'AllowHoldsOnPatronsPossessions', '0' );
 
-    $query = new CGI;
+    $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
     $query->param( 'bib_id', $item3->biblionumber);
     $query->param( 'item_id', $item3->itemnumber);
