@@ -141,8 +141,8 @@ sub copy_and_replace_field {
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
 
-    if ( not $fromSubfieldName or $fromSubfieldName eq ''
-      or not $toSubfieldName or $toSubfieldName eq ''
+    if ( !defined $fromSubfieldName or $fromSubfieldName eq ''
+      or !defined $toSubfieldName or $toSubfieldName eq ''
     ) {
         _copy_move_field(
             {   record        => $record,
@@ -480,9 +480,9 @@ sub move_field {
     my $regex = $params->{regex};
     my $field_numbers = $params->{field_numbers} // [];
 
-    if (   not $fromSubfieldName
+    if (   !defined $fromSubfieldName
         or $fromSubfieldName eq ''
-        or not $toSubfieldName
+        or !defined $toSubfieldName
         or $toSubfieldName eq '' ) {
         _copy_move_field(
             {   record        => $record,
@@ -564,6 +564,7 @@ sub _delete_subfield {
 
     foreach my $field ( @fields ) {
         $field->delete_subfield( code => $subfieldName );
+        $record->delete_field( $field ) unless $field->subfields();
     }
 }
 
