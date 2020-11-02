@@ -127,18 +127,18 @@
                                      [% IF cr.course_item.enabled == 'yes' %]
                                      <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorized_value => cr.item.ccode ) | html %]</strong>
                                         [% IF cr.item.ccode %]
-                                            ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', cr.course_item.ccode_storage ) | html %])
+                                            ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorized_value => cr.course_item.ccode_storage ) | html %])
                                         [% END %]
                                      [% ELSE %]
-                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', cr.course_item.ccode ) | html %]
+                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorized_value => cr.course_item.ccode ) | html %]
                                         [% IF cr.item.ccode %]
-                                            (<strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', cr.item.ccode ) | html %]</strong>)
+                                            (<strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorized_value => cr.item.ccode ) | html %]</strong>)
                                         [% END %]
                                      [% END %]
                                  [% ELSE %]
                                      <em>Unchanged</em>
                                      [% IF cr.item.ccode %]
-                                         ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', cr.item.ccode ) | html %])
+                                         ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorized_value => cr.item.ccode ) | html %])
                                      [% END %]
                                  [% END %]
                             </td>
