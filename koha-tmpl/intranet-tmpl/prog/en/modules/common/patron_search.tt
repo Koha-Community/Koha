@@ -285,7 +285,11 @@
         [% ELSIF selection_type == 'select' %]
             function select_user(borrowernumber, data) {
                 var p = window.opener;
-                p.select_user(borrowernumber, data);
+                [%  IF callback %]
+                    p.[% callback %](borrowernumber, data);
+                [%  ELSE %]
+                    p.select_user(borrowernumber, data);
+                [%  END %]
                 window.close();
             }
         [% END %]

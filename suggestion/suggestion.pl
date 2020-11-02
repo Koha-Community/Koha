@@ -135,13 +135,25 @@ if ( $op =~ /save/i ) {
             itemtype => $suggestion_only->{itemtype},
     });
 
-    if ( !$suggestion_only->{suggestionid} && ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) && !$save_confirmed ) {
+    my $manager = Koha::Patrons->find( $suggestion_only->{managedby} );
+    if ( $manager && not $manager->has_permission({suggestions => 'suggestions_manage'})) {
+        push @messages, { type => 'error', code => 'manager_not_enough_permissions' };
+        $template->param(
+            messages => \@messages,
+        );
+        delete $suggestion_ref->{suggesteddate};
+        delete $suggestion_ref->{manageddate};
+        delete $suggestion_ref->{managedby};
+        Init($suggestion_ref);
+    }
+    elsif ( !$suggestion_only->{suggestionid} && ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) && !$save_confirmed ) {
         push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
         $template->param(
             messages => \@messages,
             need_confirm => 1
         );
         delete $suggestion_ref->{suggesteddate};
+        delete $suggestion_ref->{manageddate};
         Init($suggestion_ref);
     }
     else {
