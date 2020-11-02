@@ -24,6 +24,8 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
+use JSON qw( encode_json );
+
 use Koha::Acquisition::Orders;
 use Koha::Database;
 
@@ -35,7 +37,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
-    plan tests => 8;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -48,11 +50,20 @@ subtest 'list() tests' => sub {
     my $userid = $patron->userid;
 
     my $basket = $builder->build_object({ class => 'Koha::Acquisition::Baskets' });
+
+    my $biblio = $builder->build_sample_biblio;
+    my $biblioitem = $biblio->biblioitem;
+    $biblioitem->set({ isbn => 'SOMETHING' })->store;
+
     # Create test context
     my $order = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { basketno => $basket->basketno, orderstatus => 'new' }
+            value => {
+                basketno     => $basket->basketno,
+                orderstatus  => 'new',
+                biblionumber => $biblio->biblionumber
+            }
         }
     );
     my $another_order = $order->unblessed; # create a copy of $order but make
@@ -97,6 +108,26 @@ subtest 'list() tests' => sub {
             }
         }
     };
+
+    my $query = { "biblio.isbn" => { "-like" => "\%SOMETHING\%" } };
+
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?q=" . encode_json($query) => {'x-koha-embed' => 'biblio'} )
+      ->status_is( 200, "Embeddig biblio.isbn doesn't make it explode" )
+      ->json_has( "/0/biblio", "biblio object correctly embedded" )
+      ->json_is( "/0/biblio/isbn", 'SOMETHING', 'Filtering by a biblioitems column works!' );
+
+    my $result = $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?biblio_id=" . $biblio->biblionumber )
+      ->status_is( 200 );
+
+    is( scalar @{ $result->tx->res->json}, 2, 'Two orders fetched' );
+
+    # Mark $another_order as cancelled
+    $another_order->set({ orderstatus => 'cancelled' })->store;
+
+    $result = $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?only_active=1&biblio_id=" . $biblio->biblionumber )
+      ->status_is( 200, "only_active parameter accepted" );
+
+    is( scalar @{ $result->tx->res->json}, 1, 'Only one order is active' );
 
     # Warn on unsupported query parameter
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?order_blah=blah" )
