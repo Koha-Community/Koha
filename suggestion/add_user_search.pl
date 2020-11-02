@@ -43,16 +43,17 @@ my $selection_type = $input->param('selection_type') || 'add';
 
 my $referer = $input->referer();
 
-# If this script is called by suggestion/suggestion.pl
-# the patrons to return should be superlibrarian or have the suggestions_manage flag
+# The patrons to return should be superlibrarian or have the suggestions_manage flag
+my $permissions = $input->param('permissions');
 my $search_patrons_with_suggestion_perm_only =
-    ( $referer =~ m|suggestion/suggestion.pl| )
+    ( $permissions && $permissions eq 'suggestions.suggestions_manage' )
         ? 1 : 0;
 
 my $patron_categories = Koha::Patron::Categories->search_limited;
 $template->param(
     patrons_with_suggestion_perm_only => $search_patrons_with_suggestion_perm_only,
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
+    callback => scalar $input->param('callback'),
     columns => ['cardnumber', 'name', 'branch', 'category', 'action'],
     json_template => 'acqui/tables/members_results.tt',
     selection_type => $selection_type,
