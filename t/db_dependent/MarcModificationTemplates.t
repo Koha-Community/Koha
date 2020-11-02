@@ -701,6 +701,11 @@ sub expected_record_0 {
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
         MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
             245, '1', '4',
             0 => '12345',
             a => 'The art of computer programming',
@@ -713,9 +718,7 @@ sub expected_record_0 {
             9 => '462',
         ),
         MARC::Field->new(
-            600, '1', ' ',
-            a => 'Knuth, Donald Ervin',
-            d => '1938',
+            600, ' ', ' ',
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
@@ -723,9 +726,7 @@ sub expected_record_0 {
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
-            100, '1', ' ',
-            a => 'Knuth, Donald Ervin',
-            d => '1938',
+            100, ' ', ' ',
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
@@ -733,10 +734,8 @@ sub expected_record_0 {
             0 => 'TestUpdated',
         ),
         MARC::Field->new(
-            700, '1', '4',
+            700, ' ', ' ',
             0 => '12345',
-            a => 'The art of computer programming',
-            c => 'Donald E. Knuth.',
         ),
     );
     $record->append_fields(@fields);
