@@ -76,7 +76,9 @@ sub do_checkin {
     }
 
     my ( $return, $messages, $issue, $borrower );
+
     my $item = Koha::Items->find( { barcode => $barcode } );
+
     my $human_required = 0;
     if (   C4::Context->preference("CircConfirmItemParts")
         && defined($item)
@@ -86,10 +88,12 @@ sub do_checkin {
         $messages->{additional_materials} = 1;
     }
 
+    my $checkin_blocked_by_holds = $holds_block_checkin && $item->biblio->holds->count;
+
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     ( $return, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $branch, undef, $return_date )
-      unless $human_required;
+      unless $human_required || $checkin_blocked_by_holds;
 
     if ( $checked_in_ok ) {
         delete $messages->{ItemLocationUpdated};
@@ -132,8 +136,8 @@ sub do_checkin {
         $self->{item}->destination_loc($issue->item->homebranch);
         $self->alert_type('04');            # send to other branch
     }
-    if ($messages->{ResFound}) {
-        if ($holds_block_checkin) {
+    if ($messages->{ResFound} || $checkin_blocked_by_holds ) {
+        if ($checkin_blocked_by_holds) {
             $self->alert_type('99');
             $return = 0;
         } elsif ($branch eq $messages->{ResFound}->{branchcode}) {
