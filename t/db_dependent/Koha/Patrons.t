@@ -1078,10 +1078,12 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
 
     subtest 'Anonymous Patron should be undeleteable' => sub {
-        plan tests => 1;
+        plan tests => 2;
 
         my $anonymous_patron = Koha::Patrons->find( $anonymous->{borrowernumber} );
-        $anonymous_patron->delete();
+        throws_ok { $anonymous_patron->delete(); }
+            'Koha::Exceptions::Patron::FailedDeleteAnonymousPatron',
+            'Attempt to delete anonymous patron throws exception.';
         $anonymous_patron = Koha::Patrons->find( $anonymous->{borrowernumber} );
         is( $anonymous_patron->id, $anonymous->{borrowernumber}, "Anonymous Patron was not deleted" );
     };

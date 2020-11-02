@@ -362,7 +362,7 @@ sub delete {
     my ($self) = @_;
 
     my $anonymous_patron = C4::Context->preference("AnonymousPatron");
-    return $self if $anonymous_patron && $self->id eq $anonymous_patron;
+    Koha::Exceptions::Patron::FailedDeleteAnonymousPatron->throw() if $anonymous_patron && $self->id eq $anonymous_patron;
 
     $self->_result->result_source->schema->txn_do(
         sub {
