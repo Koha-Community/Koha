@@ -200,7 +200,9 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                 if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{isurl} ) {
                     $subfield_data{marc_value} = $subf[$i][1];
                     $subfield_data{is_url}     = 1;
-                } elsif ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{kohafield} eq "biblioitems.isbn" ) {
+                } elsif ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{kohafield}
+                    && $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{kohafield} eq "biblioitems.isbn" )
+                {
 
                     #                    warn " tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}. "ISBN : ".$subf[$i][1]."PosttraitementISBN :".DisplayISBN($subf[$i][1]);
                     $subfield_data{marc_value} = $subf[$i][1];
