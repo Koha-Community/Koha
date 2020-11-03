@@ -94,7 +94,11 @@
     <fieldset id="searchterms">
     <legend>Search for </legend>
     [% FOREACH search_box IN search_boxes_loop %]
-        [% IF ( search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]
+        [% IF ( search_boxes_label ) %]
+        <div class="search_set" style="text-indent: 4.5em;">
+        [% ELSE %]
+        <div class="search_set">
+        [% END %]
 			[% IF ( expanded_options ) %]
             [% IF ( search_box.boolean ) %]
                 <select name="op">

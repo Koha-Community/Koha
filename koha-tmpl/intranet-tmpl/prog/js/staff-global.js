@@ -131,6 +131,17 @@ $.fn.selectTabByID = function (tabID) {
     /* Search results browsing */
     /* forms with action leading to search */
     $("form[action*='search.pl']").submit(function(){
+        var removedPrior = false;
+        $(".search_set").each(function(){
+            if( removedPrior ){
+                $(this).find('select[name="op"]').remove();
+                removedPrior = false;
+            }
+            if( $(this).find('input[name="q"]').val() == "" ){
+                $(this).remove();
+                removedPrior = true;
+            }
+        });
         resetSearchContext();
     });
     /* any link to launch a search except navigation links */
