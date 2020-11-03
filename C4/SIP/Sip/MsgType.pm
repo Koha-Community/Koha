@@ -533,7 +533,7 @@ sub handle_checkout {
 
         # Does the transaction date really matter for items that are
         # checkout out while the terminal is online?  I'm guessing 'no'
-        $status = $ils->checkout( $patron_id, $item_id, $sc_renewal_policy, $fee_ack );
+        $status = $ils->checkout( $patron_id, $item_id, $sc_renewal_policy, $fee_ack, $account );
     }
 
     $item   = $status->item;

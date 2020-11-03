@@ -126,7 +126,7 @@ sub offline_ok {
 # the response.
 #
 sub checkout {
-    my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack ) = @_;
+    my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack, $account ) = @_;
     my ( $patron, $item, $circ );
 
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
@@ -153,7 +153,7 @@ sub checkout {
         $circ->screen_msg("Item checked out to another patron");
     }
     else {
-        $circ->do_checkout();
+        $circ->do_checkout($account);
         if ( $circ->ok ) {
             $debug and warn "circ is ok";
 
