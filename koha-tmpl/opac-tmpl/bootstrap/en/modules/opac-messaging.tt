@@ -48,6 +48,7 @@
                                             <th>Days in advance</th>
                                             [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
                                             [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
+                                            [% IF Koha.Preference('PhoneNotification') %]<th>Phone</th>[% END %]
                                             <th>Email</th>
                                             <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
                                         </tr>
@@ -87,6 +88,25 @@
                                                         <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                         [% ELSE %]
                                                             <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
+                                                        [% END %]
+                                                    </td>
+                                                [% ELSE %]
+                                                    <td>-</td>
+                                                [% END %]
+                                            [% END %]
+                                            [% IF Koha.Preference('PhoneNotification') %]
+                                                [% IF ( messaging_preference.transport_phone ) %]
+                                                    <td>
+                                                        [% IF ( messaging_preference.transports_phone ) %]
+                                                            <input type="checkbox"
+                                                                   id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                                   name="[% messaging_preference.message_attribute_id | html %]"
+                                                                   value="phone" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox"
+                                                                   id="phone[% messaging_preference.message_attribute_id | html %]"
+                                                                   name="[% messaging_preference.message_attribute_id | html %]"
+                                                                   value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                         [% END %]
                                                     </td>
                                                 [% ELSE %]
