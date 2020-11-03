@@ -84,7 +84,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             $firstNonEmptyEmail = $emails[0] if @emails;
 
             # Is the given email one of the borrower's ?
-            if ( $email && !( any { /^$email$/i } @emails ) ) {
+            if ( $email && !( any { lc($_) eq lc($email) } @emails ) ) {
                 $hasError    = 1;
                 $errNoBorrowerFound = 1;
             }
