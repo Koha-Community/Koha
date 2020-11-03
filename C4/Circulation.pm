@@ -1330,7 +1330,6 @@ sub checkHighHolds {
 
         my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
-        my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
         my $rule = Koha::CirculationRules->get_effective_rule(
             {
                 categorycode => $borrower->{categorycode},
@@ -1339,16 +1338,15 @@ sub checkHighHolds {
                 rule_name    => 'decreaseloanholds',
             }
         );
-        my $reduced_datedue;
+
         my $duration;
         if ( defined($rule) && $rule->rule_value ne '' ){
             # overrides decreaseLoanHighHoldsDuration syspref
             $duration = $rule->rule_value;
-            $reduced_datedue = $calendar->addDate( $issuedate, $rule->rule_value );
         } else {
-            $duration = $decreaseLoanHighHoldsDuration;
-            $reduced_datedue = $calendar->addDate( $issuedate, $decreaseLoanHighHoldsDuration );
+            $duration = C4::Context->preference('decreaseLoanHighHoldsDuration');
         }
+        my $reduced_datedue = $calendar->addDate( $issuedate, $duration );
         $reduced_datedue->set_hour($orig_due->hour);
         $reduced_datedue->set_minute($orig_due->minute);
         $reduced_datedue->truncate( to => 'minute' );
