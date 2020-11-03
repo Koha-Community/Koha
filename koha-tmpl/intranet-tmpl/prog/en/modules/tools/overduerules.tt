@@ -84,6 +84,8 @@
                   [% CASE 'feed' %]
                     Feed
                   [% CASE 'itiva' %]
+                    Phone (i-tiva)
+                  [% CASE 'phone' %]
                     Phone
                   [% CASE %]
                     [% mtt | html %]
@@ -127,6 +129,8 @@
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSIF mtt.value == "itiva" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
+                    [% ELSIF mtt.value == "phone" and not Koha.Preference("PhoneNotification") %]
+                        <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSE %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
                     [% END %]
