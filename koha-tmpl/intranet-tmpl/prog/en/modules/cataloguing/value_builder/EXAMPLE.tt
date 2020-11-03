@@ -10,7 +10,7 @@
 <p>Hi, you are looking at the result of launching the EXAMPLE plugin.</p>
 <p>I received this from you:</p>
 <input type="text" id="received" value="[% result | html %]" disabled />
-</p>
+
 <p>I will pass back what you type here, if you press OK.</p>
 <input type="text" id="return" value="[% result | html %]" />
 <p>
@@ -19,8 +19,7 @@
 </p>
 </form>
 
-<script type="text/javascript">
-//<![CDATA[
+<script>
     $(document).ready(function () {
         $('#return').focus();
     });
@@ -31,7 +30,6 @@
         $(window.opener.document).find('#[% index | html %]').val($('#return').val() );
         window.close();
     }
-//]]>
 </script>
 
 [% INCLUDE 'popup-bottom.inc' %]
