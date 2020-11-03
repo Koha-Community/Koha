@@ -317,6 +317,9 @@
                         .append( '<td><button class="printReceipt btn btn-default btn-xs" data-accountline="'+group+'"><i class="fa fa-print"></i> ' + _("Print receipt") + '</button></td>');
                 },
                 endRender: null,
+            },
+            initComplete: function() {
+                $("#sales").show();
             }
         }));
 
