@@ -81,16 +81,14 @@ sub cashup_summary {
             order_by => { '-desc' => [ 'timestamp', 'id' ] },
             rows     => 1
         }
-    );
-
-    my $previous = $prior_cashup->single;
+    )->single;
 
     my $conditions =
-      $previous
+      $prior_cashup
       ? {
         'date' => {
             '-between' =>
-              [ $previous->_result->get_column('timestamp'), $self->timestamp ]
+              [ $prior_cashup->timestamp, $self->timestamp ]
         }
       }
       : { 'date' => { '<' => $self->timestamp } };
@@ -105,7 +103,7 @@ sub cashup_summary {
     my $income_summary = Koha::Account::Offsets->search(
         {
             'me.credit_id' =>
-              { '-in' => $income_transactions->_resultset->get_column('accountlines_id')->as_query },
+              { '-in' => [ $income_transactions->get_column('accountlines_id') ] },
             'me.debit_id' => { '!=' => undef }
         },
         {
@@ -120,7 +118,7 @@ sub cashup_summary {
     my $outgoing_summary = Koha::Account::Offsets->search(
         {
             'me.debit_id' =>
-              { '-in' => $outgoing_transactions->_resultset->get_column('accountlines_id')->as_query },
+              { '-in' => [ $outgoing_transactions->get_column('accountlines_id') ] },
             'me.credit_id' => { '!=' => undef }
         },
         {
@@ -148,7 +146,7 @@ sub cashup_summary {
     } $outgoing_summary->as_list;
 
     $summary = {
-        from_date             => $previous ? $previous->timestamp : undef,
+        from_date             => $prior_cashup? $prior_cashup->timestamp : undef,
         to_date               => $self->timestamp,
         income                => \@income,
         outgoing              => \@outgoing,
