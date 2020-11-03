@@ -81,14 +81,14 @@
                             </tbody>
                         </table>
 
-                        [% FOREACH p IN patrons %]
-                            <input type="hidden" name="id" value="[% p.id | html %]" />
-                        [% END %]
+                        <fieldset class="action">
+                            [% FOREACH p IN patrons %]
+                                <input type="hidden" name="id" value="[% p.id | html %]" />
+                            [% END %]
+                            <input type="hidden" name="action" value="merge" />
+                            <input id="merge-patrons" type="submit" value="Merge patrons" />
+                        </fieldset>
 
-                        <br>
-
-                        <input type="hidden" name="action" value="merge" />
-                        <input id="merge-patrons" type="submit" value="Merge patrons" />
                     [% ELSE %]
                         <div class="dialog alert">Error: Two or more patrons need to be selected for merging</div>
                     [% END %]
