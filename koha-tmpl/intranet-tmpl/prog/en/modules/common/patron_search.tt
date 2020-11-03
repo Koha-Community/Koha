@@ -286,7 +286,7 @@
             function select_user(borrowernumber, data) {
                 var p = window.opener;
                 [%  IF callback %]
-                    p.[% callback %](borrowernumber, data);
+                    p.[% callback | html %](borrowernumber, data);
                 [%  ELSE %]
                     p.select_user(borrowernumber, data);
                 [%  END %]
