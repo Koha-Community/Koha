@@ -47,11 +47,13 @@ sub new {
 
 sub do_checkout {
 	my $self = shift;
+    my $account = shift;
 	siplog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
     my $shelf          = $self->{item}->hold_attached;
 	my $barcode        = $self->{item}->id;
     my $patron         = Koha::Patrons->find($self->{patron}->{borrowernumber});
     my $overridden_duedate; # usually passed as undef to AddIssue
+    my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
     $debug and warn "do_checkout borrower: . " . $patron->borrowernumber;
     my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode,
         C4::Context->preference("AllowItemsOnHoldCheckoutSIP")
@@ -95,6 +97,7 @@ sub do_checkout {
                 }
             } elsif ($confirmation eq 'PREVISSUE') {
                 $self->screen_msg("This item was previously checked out by you");
+                $noerror = 0 if ($prevcheckout_block_checkout);
                 last;
             } elsif ( $confirmation eq 'ADDITIONAL_MATERIALS' ) {
                 $self->screen_msg('Item must be checked out at a circulation desk');

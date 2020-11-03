@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -30,6 +30,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Reserves qw(AddReserve);
+use C4::Circulation qw( AddReturn );
 use Koha::Database;
 use Koha::AuthUtils qw(hash_password);
 use Koha::DateUtils;
@@ -63,6 +64,15 @@ subtest 'Testing Patron Info Request V2' => sub {
     plan tests => 24;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Checkout V2' => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    plan tests => 3;
+    $C4::SIP::Sip::protocol_version = 2;
+    test_checkout_v2();
     $schema->storage->txn_rollback;
 };
 
@@ -504,6 +514,69 @@ sub test_request_patron_info_v2 {
     check_field( $respcode, $response, FID_SCREEN_MSG, '.+', 'But we have a screen msg', 'regex' );
 }
 
+sub test_checkout_v2 {
+    my $builder = t::lib::TestBuilder->new();
+    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
+    my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
+
+    # create some data
+    my $patron1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            password => hash_password( PATRON_PW ),
+        },
+    });
+    my $card1 = $patron1->{cardnumber};
+    my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
+    $findpatron = $sip_patron1;
+    my $item_object = $builder->build_sample_item({
+        damaged => 0,
+        withdrawn => 0,
+        itemlost => 0,
+        restricted => 0,
+        homebranch => $branchcode,
+        holdingbranch => $branchcode,
+    });
+
+    my $mockILS = $mocks->{ils};
+    my $server = { ils => $mockILS, account => {} };
+    $mockILS->mock( 'institution', sub { $branchcode; } );
+    $mockILS->mock( 'supports', sub { return; } );
+    $mockILS->mock( 'checkout', sub {
+        shift;
+        return C4::SIP::ILS->checkout(@_);
+    });
+    my $today = dt_from_string;
+    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, flags => 1 });
+    t::lib::Mocks::mock_preference( 'CheckPrevCheckout',  'hardyes' );
+
+    my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item_object->itemnumber })->store;
+    my $return = AddReturn($item_object->barcode, $branchcode);
+
+    my $siprequest = CHECKOUT . 'YN' . siprequestdate($today) .
+    siprequestdate( $today->clone->add( days => 1) ) .
+    FID_INST_ID . $branchcode . '|'.
+    FID_PATRON_ID . $sip_patron1->id . '|' .
+    FID_ITEM_ID . $item_object->barcode . '|' .
+    FID_TERMINAL_PWD . 'ignored' . '|';
+    undef $response;
+
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $server->{account}->{prevcheckout_block_checkout} = 1;
+    $msg->handle_checkout( $server );
+    my $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_SCREEN_MSG, 'This item was previously checked out by you', 'Check screen msg', 'equals' );
+
+    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 0, "Item was not checked out (prevcheckout_block_checkout enabled)");
+
+    $server->{account}->{prevcheckout_block_checkout} = 0;
+    $msg->handle_checkout( $server );
+    $respcode = substr( $response, 0, 2 );
+    is( Koha::Checkouts->search({ itemnumber => $item_object->id })->count, 1, "Item was checked out (prevcheckout_block_checkout disabled)");
+}
+
 sub test_checkin_v2 {
     my $builder = t::lib::TestBuilder->new();
     my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
@@ -774,5 +847,6 @@ sub fixed_length { #length of fixed fields including response code
       ( PATRON_STATUS_RESP )  => 37,
       ( PATRON_INFO_RESP )    => 61,
       ( CHECKIN_RESP )        => 24,
+      ( CHECKOUT_RESP )       => 24,
     }->{$_[0]};
 }
