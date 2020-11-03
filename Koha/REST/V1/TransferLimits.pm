@@ -72,7 +72,7 @@ sub add {
         if ( Koha::Item::Transfer::Limits->search( $transfer_limit->attributes_from_api($params) )->count == 0 ) {
             $transfer_limit->store;
         } else {
-            Koha::Exceptions::TransferLimit::Duplicate->throw()
+            Koha::Exceptions::TransferLimit::Duplicate->throw();
         }
 
         return $c->render(
@@ -81,10 +81,10 @@ sub add {
         );
     }
     catch {
-        if ( blessed $_ && $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::TransferLimit::Duplicate') ) {
             return $c->render(
                 status  => 409,
-                openapi => { error => $_->error, conflict => $_->duplicate_id }
+                openapi => { error => "$_" }
             );
         }
 

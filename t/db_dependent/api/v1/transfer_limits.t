@@ -62,7 +62,7 @@ subtest 'list() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -108,6 +108,14 @@ subtest 'add() tests' => sub {
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
       ->status_is( 201, 'SWAGGER3.2.1' )
       ->json_has( '' => $limit_hashref, 'SWAGGER3.3.1' );
+
+    $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
+      ->status_is( 409, 'Conflict creating the resource' )
+      ->json_is(
+        {
+            error => "[A transfer limit with the given parameters already exists!]"
+        }
+      );
 
     $schema->storage->txn_rollback;
 };
