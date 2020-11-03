@@ -24,6 +24,9 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+
+use Try::Tiny;
+
 use C4::Context;
 use C4::Output;
 use C4::Auth;
@@ -127,9 +130,13 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
         });
     my $patron = Koha::Patrons->find( $member );
     $patron->move_to_deleted;
-    $patron->delete;
+    try {
+        $patron->delete;
+        print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+    } catch {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
+    }
     # TODO Tell the user everything went ok
-    print $input->redirect("/cgi-bin/koha/members/members-home.pl");
     exit 0; # Exit without error
 }
 

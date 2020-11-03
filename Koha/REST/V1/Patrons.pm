@@ -310,11 +310,23 @@ sub delete {
         $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
 
         # check if loans, reservations, debarrment, etc. before deletion!
-        $patron->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        try {
+            $patron->delete;
+            return $c->render(
+                status  => 204,
+                openapi => q{}
+            );
+        } catch {
+            if ( $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
+                return $c->render(
+                    status  => 403,
+                    openapi => { error => "Anonymous patron cannot be deleted" }
+                );
+            }
+            else {
+                $c->unhandled_exception($_);
+            }
+        };
     }
     catch {
         unless ($patron) {
