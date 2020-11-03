@@ -20707,6 +20707,21 @@ if( CheckVersion( $DBversion ) ) {
         note
     );
 
+    $dbh->do(q|
+        DELETE i FROM issuingrules i
+        LEFT JOIN itemtypes it ON i.itemtype=it.itemtype
+        WHERE it.itemtype IS NULL AND i.itemtype!='*'
+    |);
+    $dbh->do(q|
+        DELETE i FROM issuingrules i
+        LEFT JOIN branches b ON i.branchcode=b.branchcode
+        WHERE b.branchcode IS NULL AND i.branchcode!='*'
+    |);
+    $dbh->do(q|
+        DELETE i FROM issuingrules i
+        LEFT JOIN categories c ON i.categorycode=c.categorycode
+        WHERE c.categorycode IS NULL AND i.categorycode!='*'
+    |);
     if ( column_exists( 'issuingrules', 'categorycode' ) ) {
         foreach my $column ( @columns ) {
             $dbh->do("
