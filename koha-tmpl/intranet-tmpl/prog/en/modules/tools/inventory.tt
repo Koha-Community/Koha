@@ -239,7 +239,7 @@
             [% result.withdrawn | html %]
             </td>
             <td>
-                <span title="[% result.datelastseen %]">[% result.datelastseen | $KohaDates%]</span>
+                <span title="[% result.datelastseen | html %]">[% result.datelastseen | $KohaDates%]</span>
             </td>
             <td>
             [% FOREACH problem IN result.problems %]
