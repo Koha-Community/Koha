@@ -115,9 +115,9 @@
     <li><span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span></li>
     [% IF patron.account_locked %]
         [% IF patron.login_attempts < 0 %]
-            <li class="blocker account_admin_locked">Account has been administratively locked.</li>
+            <li class="blocker account_admin_locked">Account has been administratively locked</li>
         [% ELSE %]
-            <li class="blocker account_locked">Account has been locked.</li>
+            <li class="blocker account_locked">Account has been locked</li>
         [% END %]
     [% END %]
   </ul></div>
