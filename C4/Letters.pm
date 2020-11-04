@@ -1525,7 +1525,13 @@ sub _get_tt_params {
             singular => 'article_request',
             plural   => 'article_requests',
             pk       => 'id',
-          },
+        },
+        aqbasket => {
+            module   => 'Koha::Acquisition::Baskets',
+            singular => 'basket',
+            plural   => 'baskets',
+            pk       => 'basketno',
+        },
         biblio => {
             module   => 'Koha::Biblios',
             singular => 'biblio',
