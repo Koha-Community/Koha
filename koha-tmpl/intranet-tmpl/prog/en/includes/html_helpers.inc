@@ -32,12 +32,12 @@
     [% FOREACH r IN registers %]
         [% IF r.branch == Branches.GetLoggedInBranchcode %]
             [% IF r.selected %]
-                <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]" selected="selected">[% r.name | html %]</option>
+                <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" selected="selected">[% r.name | html %]</option>
             [% ELSE %]
-                <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]">[% r.name | html %]</option>
+                <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]">[% r.name | html %]</option>
             [% END%]
         [% ELSE %]
-            <option class="[% r.branch | html %] [% IF r.branch_default %]default[% END %]" value="[% r.id | html %]" disabled hidden>[% r.name | html %]</option>
+            <option class="[%- r.branch | html -%][%- IF r.branch_default -%] default[%- END -%]" value="[% r.id | html %]" disabled hidden>[% r.name | html %]</option>
         [% END %]
     [% END %]
 [% END %]
