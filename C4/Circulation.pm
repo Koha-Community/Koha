@@ -543,10 +543,11 @@ sub TooMany {
             $checkouts = $patron->checkouts->search(
                 { 'me.branchcode' => $branch} );
         } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
-            ; # if branch is the patron's home branch, then count all loans by patron
+            $checkouts = $patron->checkouts; # if branch is the patron's home branch, then count all loans by patron
         } else {
             $checkouts = $patron->checkouts->search(
-                { 'item.homebranch' => $branch} );
+                { 'item.homebranch' => $branch},
+                { prefetch          => 'item' } );
         }
 
         my $checkout_count = $checkouts->count;
