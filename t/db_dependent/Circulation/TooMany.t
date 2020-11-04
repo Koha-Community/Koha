@@ -505,6 +505,18 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         }
     );
 
+    # Set default maximum issue quantity limits for branch
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => '*',
+            rules        => {
+                patron_maxissueqty       => 1,
+                patron_maxonsiteissueqty => 1,
+            }
+        }
+    );
+
     # Set an All->All for an itemtype
     Koha::CirculationRules->set_rules(
         {
