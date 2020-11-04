@@ -23174,6 +23174,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26638, "Add missing system preference ArticleRequestsMandatoryFieldsItemOnly");
 }
 
+$DBversion = '20.06.00.058';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE message_transport_types SET message_transport_type = "itiva" WHERE message_transport_type = "phone"
+    });
+
+    NewVersion( $DBversion, 25333, q{Change message transport type for Talking Tech from "phone" to "itiva"});
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
