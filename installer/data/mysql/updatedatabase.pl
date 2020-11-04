@@ -23161,6 +23161,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 26853, "Update import_biblios columns and indexes" );
 }
 
+$DBversion = '20.06.00.057';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES
+            ('ArticleRequestsMandatoryFieldsItemOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''item_only''', 'multiple')
+    });
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable = "ArticleRequestsMandatoryFieldsItemsOnly"
+    });
+
+    NewVersion( $DBversion, 26638, "Add missing system preference ArticleRequestsMandatoryFieldsItemOnly");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
