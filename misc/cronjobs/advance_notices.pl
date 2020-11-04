@@ -131,9 +131,11 @@ select notices for one specific library. Use the value in the
 branches.branchcode table. This option can be repeated in order
 to select notices for a group of libraries.
 
-=item B<--owning>
+=item B<--frombranch>
 
-Use the address information from the item homebranch library instead of the issuing library.
+Set the from address for the notice to one of 'item-homebranch' or 'item-issuebranch'.
+
+Defaults to 'item-issuebranch'
 
 =back
 
@@ -202,7 +204,7 @@ my $maxdays     = 30;                                               # -e: the En
 my $verbose     = 0;                                                # -v: verbose
 my $digest_per_branch = 0;                                          # -digest-per-branch: Prepare and send digests per branch
 my @branchcodes; # Branch(es) passed as parameter
-my $owning_library = 0;
+my $frombranch   = 'item-issuebranch';
 my $itemscontent = join(',',qw( date_due title author barcode ));
 
 my $help    = 0;
@@ -212,7 +214,7 @@ GetOptions(
             'help|?'         => \$help,
             'man'            => \$man,
             'library=s'      => \@branchcodes,
-            'owning'         => \$owning_library,
+            'frombranch'     => \$frombranch,
             'c'              => \$confirm,
             'n'              => \$nomail,
             'm:i'            => \$maxdays,
@@ -244,6 +246,11 @@ my %branches = {};
 if (@branchcodes) {
     %branches = map { $_ => 1 } @branchcodes;
 }
+
+die "--frombranch takes item-homebranch or item-issuebranch only"
+  unless ( $frombranch eq 'item-issuebranch'
+    || $frombranch eq 'item-homebranch' );
+my $owning_library = ( $frombranch eq 'item-homebranch' ) ? 1 : 0;
 
 # The fields that will be substituted into <<items.content>>
 my @item_content_fields = split(/,/,$itemscontent);
