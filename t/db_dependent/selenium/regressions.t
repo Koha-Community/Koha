@@ -49,8 +49,8 @@ my $AudioAlerts_value = C4::Context->preference('AudioAlerts');
 C4::Context->set_preference('AudioAlerts', '1');
 
 our @cleanup;
-subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
-    plan tests => 2;
+subtest 'OPAC - borrowernumber, branchcode and categorycode as html attributes' => sub {
+    plan tests => 3;
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 1 } } );
@@ -66,6 +66,9 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
     );
     is( $elt->get_attribute('data-borrowernumber', 1), $patron->borrowernumber,
 "Since bug 20921 span.loggedinusername should contain data-borrowernumber"
+    );
+    is( $elt->get_attribute('data-categorycode'), $patron->categorycode,
+"Since bug 26847 span.loggedinusername should contain data-categorycode"
     );
     push @cleanup, $patron, $patron->category, $patron->library;
 };
