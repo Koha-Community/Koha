@@ -122,7 +122,7 @@ elsif ( $input->param('confirm_writeoff') ) {
                 interface  => C4::Context->interface,
                 library_id => $branch,
             }
-        );
+        )->{payment_id};
     }
 }
 
