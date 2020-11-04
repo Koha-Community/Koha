@@ -360,23 +360,23 @@ HERE
         eval {
             $preference->message_transport_types('email')->store;
         };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired',
             'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_types', 'The previous exception '
-            .' tells us it was the message_transport_types');
-        like ($@->error, qr/^Patron has not set email address/, 'Exception '
-            .' is because of patron has not set email address.');
+            .' => Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired');
+        is ($@->message_name, $preference->message_name, 'The previous exception '
+            .' tells us it which message name it was.');
+        is ($@->borrowernumber, $patron->borrowernumber, 'The previous exception '
+            .' tells us which patron it was.');
         eval {
             $preference->message_transport_types('sms')->store;
         };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired',
             'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_types', 'The previous exception '
-            .' tells us it was the message_transport_types');
-        like ($@->error, qr/^Patron has not set sms number/, 'Exception '
-            .' is because of patron has not set sms number.');
+            .' => Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired');
+        is ($@->message_name, $preference->message_name, 'The previous exception '
+            .' tells us it which message name it was.');
+        is ($@->borrowernumber, $patron->borrowernumber, 'The previous exception '
+            .' tells us which patron it was.');
 
         $schema->storage->txn_rollback;
     };
@@ -466,27 +466,23 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
     };
 
     subtest 'Bad parameter' => sub {
-        plan tests => 22;
+        plan tests => 18;
 
         $schema->storage->txn_begin;
 
         eval { Koha::Patron::Message::Preference->new({
                 borrowernumber => -999,
             })->store };
-        is(ref $@, 'Koha::Exceptions::BadParameter',
+        is(ref $@, 'Koha::Exceptions::Patron::NotFound',
             'Adding a message preference with invalid borrowernumber'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'borrowernumber', 'The previous exception tells us it'
-            .' was the borrowernumber.');
+            .' => Koha::Exceptions::Patron::NotFound');
 
         eval { Koha::Patron::Message::Preference->new({
                 categorycode => 'nonexistent',
             })->store };
-        is(ref $@, 'Koha::Exceptions::BadParameter',
+        is(ref $@, 'Koha::Exceptions::Patron::Category::NotFound',
             'Adding a message preference with invalid categorycode'
-            .' => Koha::Exceptions::BadParameter');
-        is($@->parameter, 'categorycode', 'The previous exception tells us it'
-            .' was the categorycode.');
+            .' => Koha::Exceptions::Patron::Category::NotFound');
 
         my $attribute = build_a_test_attribute({ takes_days => 0 });
         my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
@@ -495,33 +491,40 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
                 message_attribute_id => $attribute->message_attribute_id,
                 days_in_advance => 10,
             })->store };
-        is(ref $@, 'Koha::Exceptions::BadParameter',
+        is(ref $@, 'Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceNotAvailable',
             'Adding a message preference with days in advance option when not'
-            .' available => Koha::Exceptions::BadParameter');
-        is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
-            .' was the days_in_advance.');
+            .' available => Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceNotAvailable');
 
         $attribute->set({ takes_days => 1 })->store;
         eval { Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
                 message_attribute_id => $attribute->message_attribute_id,
+                days_in_advance => -1,
+            })->store };
+        is(ref $@, 'Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange',
+            'Adding a message preference with days in advance option is out of range'
+            .' => Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange');
+        is ($@->min, 0, 'The previous exception min value is 0.');
+
+        eval { Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->borrowernumber,
+                message_attribute_id => $attribute->message_attribute_id,
                 days_in_advance => 31,
             })->store };
-        is(ref $@, 'Koha::Exceptions::BadParameter',
-            'Adding a message preference with days in advance option too large'
-            .' => Koha::Exceptions::BadParameter');
-        is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
-            .' was the days_in_advance.');
+        is(ref $@, 'Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange',
+            'Adding a message preference with days in advance option is out of range'
+            .' => Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange');
+        is ($@->max, 30, 'The previous exception max value is 30.');
 
         eval { Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
                 message_transport_types => ['nonexistent']
             })->store };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Transport::TypeNotFound',
             'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_types', 'The previous exception '
-            .'tells us it was the message_transport_types.');
+            .' => Koha::Exceptions::Patron::Message::Transport::TypeNotFound');
+        is ($@->transport_type, 'nonexistent', 'The previous exception '
+            .'tells us it which transport type it was.');
 
         my $mtt_new = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
         eval {
@@ -531,13 +534,13 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
                 message_transport_types => [$mtt_new->message_transport_type],
                 wants_digest => 1,
             })->store };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::NoTransportType',
             'Adding a message preference with invalid message_transport_type'
-           .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_types', 'The previous exception '
-            .'tells us it was the message_transport_types.');
-        like ($@->error, qr/^No transport configured/, 'Exception is because of '
-            .'given message_transport_type is not a valid option.');
+           .' => Koha::Exceptions::Patron::Message::Preference::NoTransportType');
+        is ($@->message_name, $attribute->message_name, 'The previous exception '
+            .'tells us which message it was.');
+        is ($@->transport_type, $mtt_new->message_transport_type, 'The previous exception '
+            .'tells us which message transport type it was.');
 
         eval {
             Koha::Patron::Message::Preference->new({
@@ -546,13 +549,11 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
                 message_transport_types => [],
                 wants_digest => 1,
             })->store };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
-            'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'wants_digest', 'The previous exception tells us it'
-            .' was the wants_digest');
-        like ($@->error, qr/^Digest cannot be selected/, 'Exception s because of'
-            .' given digest is not available for this transport.');
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::DigestNotAvailable',
+            'Adding a message preference that has no digest setting'
+            .' => Koha::Exceptions::Patron::Message::Preference::DigestNotAvailable');
+        is ($@->message_name, $attribute->message_name, 'The previous exception tells us'
+            .' which message it was');
 
         eval {
             Koha::Patron::Message::Preference->new({
@@ -561,27 +562,22 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
                 message_transport_types => [],
                 wants_digest => 0,
             })->store };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
-            'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'wants_digest', 'The previous exception tells us it'
-            .' was the wants_digest');
-        like ($@->error, qr/^Digest must be selected/, 'Exception s because of'
-            .' digest has to be on for this transport.');
-
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::DigestRequired',
+            'Adding a message preference, that requires digest, with no digest'
+            .' => Koha::Exceptions::Patron::Message::Preference::DigestRequired');
+        is ($@->message_name, $attribute->message_name, 'The previous exception tells us'
+            .' which message it was');
         eval {
             Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
                 message_attribute_id => -1,
                 message_transport_types => [],
             })->store };
-        is (ref $@, 'Koha::Exceptions::BadParameter',
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::AttributeNotFound',
             'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_attribute_id', 'The previous exception tells'
-            .' us it was the message_attribute_id');
-        like ($@->error, qr/^Message attribute with id -1 not found/, 'Exception '
-            .' is because of given message attribute id is not found.');
+            .' => KKoha::Exceptions::Patron::Message::Preference::AttributeNotFound');
+        is ($@->message_attribute_id, -1, 'The previous exception tells'
+            .' us which message attribute id it was.');
 
         $schema->storage->txn_rollback;
     };

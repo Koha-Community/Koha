@@ -32,7 +32,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Patron',
         description => "Mandatory extended attribute missing",
         fields      => ['type']
-    }
+    },
+    'Koha::Exceptions::Patron::NotFound' => {
+        isa => 'Koha::Exceptions::Patron',
+        description => "Patron not found"
+    },
 );
 
 sub full_message {

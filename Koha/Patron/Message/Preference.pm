@@ -21,6 +21,9 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Exceptions;
+use Koha::Exceptions::Patron::Message::Preference;
+use Koha::Exceptions::Patron::Message::Transport;
+use Koha::Exceptions::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patron::Message::Attributes;
 use Koha::Patron::Message::Preferences;
@@ -284,16 +287,7 @@ sub store {
 
 Makes a basic validation for object.
 
-Throws following exceptions regarding parameters.
-- Koha::Exceptions::MissingParameter
-- Koha::Exceptions::TooManyParameters
-- Koha::Exceptions::BadParameter
-
-See $_->parameter to identify the parameter causing the exception.
-
-Throws Koha::Exceptions::DuplicateObject if this preference already exists.
-
-Returns Koha::Patron::Message::Preference object.
+Returns Koha::Patron::Message::Preference object, or throws and exception.
 
 =cut
 
@@ -311,15 +305,13 @@ sub validate {
         );
     }
     if ($self->borrowernumber) {
-        Koha::Exceptions::BadParameter->throw(
+        Koha::Exceptions::Patron::NotFound->throw(
             error => 'Patron not found.',
-            parameter => 'borrowernumber',
         ) unless Koha::Patrons->find($self->borrowernumber);
     }
     if ($self->categorycode) {
-        Koha::Exceptions::BadParameter->throw(
+        Koha::Exceptions::Patron::Category::NotFound->throw(
             error => 'Category not found.',
-            parameter => 'categorycode',
         ) unless Koha::Patron::Categories->find($self->categorycode);
     }
 
@@ -341,25 +333,27 @@ sub validate {
         $self->message_attribute_id
     );
     unless ($attr) {
-        Koha::Exceptions::BadParameter->throw(
+        Koha::Exceptions::Patron::Message::Preference::AttributeNotFound->throw(
             error => 'Message attribute with id '.$self->message_attribute_id
             .' not found',
-            parameter => 'message_attribute_id'
+            message_attribute_id => $self->message_attribute_id,
         );
     }
     if (defined $self->days_in_advance) {
         if ($attr && $attr->takes_days == 0) {
-            Koha::Exceptions::BadParameter->throw(
+            Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceNotAvailable->throw(
                 error => 'days_in_advance cannot be defined for '.
                 $attr->message_name . '.',
-                parameter => 'days_in_advance',
+                message_name => $attr->message_name,
             );
         }
         elsif ($self->days_in_advance < 0 || $self->days_in_advance > 30) {
-            Koha::Exceptions::BadParameter->throw(
+            Koha::Exceptions::Patron::Message::Preference::DaysInAdvanceOutOfRange->throw(
                 error => 'days_in_advance has to be a value between 0-30 for '.
                 $attr->message_name . '.',
-                parameter => 'days_in_advance',
+                message_name => $attr->message_name,
+                min => 0,
+                max => 30,
             );
         }
     }
@@ -368,12 +362,19 @@ sub validate {
             message_attribute_id => $self->message_attribute_id,
             is_digest            => $self->wants_digest ? 1 : 0,
         });
-        Koha::Exceptions::BadParameter->throw(
-            error => (!$self->wants_digest ? 'Digest must be selected'
-                                           : 'Digest cannot be selected')
-            . ' for '.$attr->message_name.'.',
-            parameter => 'wants_digest',
-        ) if $transports->count == 0;
+        unless ($transports->count) {
+            if (!$self->wants_digest) {
+                Koha::Exceptions::Patron::Message::Preference::DigestRequired->throw(
+                    error => 'Digest must be selected for '.$attr->message_name.'.',
+                    message_name => $attr->message_name
+                );
+            } else {
+                Koha::Exceptions::Patron::Message::Preference::DigestNotAvailable->throw(
+                    error => 'Digest cannot be selected for '.$attr->message_name.'.',
+                    message_name => $attr->message_name
+                );
+            }
+        }
     }
 
     return $self;
@@ -395,10 +396,11 @@ sub _set_message_transport_types {
                 message_transport_type => $type
             });
             unless ($transport) {
-                Koha::Exceptions::BadParameter->throw(
+                Koha::Exceptions::Patron::Message::Preference::NoTransportType->throw(
                     error => 'No transport configured for '.$self->message_name.
                         " transport type $type.",
-                    parameter => 'message_transport_types'
+                    message_name => $self->message_name,
+                    transport_type => $type,
                 );
             }
             if (defined $self->borrowernumber) {
@@ -406,19 +408,21 @@ sub _set_message_transport_types {
                 if ($type eq 'email') {
                     if ( !$patron->email )
                     {
-                        Koha::Exceptions::BadParameter->throw(
+                        Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired->throw(
                             error => 'Patron has not set email address, '.
                                      'cannot use email as message transport',
-                            parameter => 'message_transport_types'
+                            message_name => $self->message_name,
+                            borrowernumber => $self->borrowernumber,
                         );
                     }
                 }
                 elsif ($type eq 'sms') {
                     if ( !$patron->smsalertnumber ){
-                        Koha::Exceptions::BadParameter->throw(
-                            error => 'Patron has not set sms number, '.
-                                     'cannot set sms as message transport',
-                            parameter => 'message_transport_types'
+                        Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired->throw(
+                            error => 'Patron has not set SMS number'.
+                                     'cannot use sms as message transport',
+                            message_name => $self->message_name,
+                            borrowernumber => $self->borrowernumber,
                         );
                     }
                 }
@@ -443,9 +447,9 @@ sub _validate_message_transport_types {
             unless (Koha::Patron::Message::Transport::Types->find({
                 message_transport_type => $type
             })) {
-                Koha::Exceptions::BadParameter->throw(
+                Koha::Exceptions::Patron::Message::Transport::TypeNotFound->throw(
                     error => "Message transport type '$type' does not exist",
-                    parameter => 'message_transport_types',
+                    transport_type => $type,
                 );
             }
         }
