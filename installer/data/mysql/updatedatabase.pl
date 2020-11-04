@@ -23183,6 +23183,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25333, q{Change message transport type for Talking Tech from "phone" to "itiva"});
 }
 
+$DBversion = '20.06.00.059';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'search_field', 'mandatory' ) ) {
+        $dbh->do( "ALTER TABLE search_field ADD COLUMN mandatory tinyint(1) NULL DEFAULT NULL AFTER opac" );
+    }
+
+    NewVersion( $DBversion, 19482, "Add mandatory column to search_field for ES mapping" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
