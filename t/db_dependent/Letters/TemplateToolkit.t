@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 27;
 use Test::MockModule;
 use Test::Warn;
 
@@ -100,9 +100,9 @@ my $modification = $builder->build_object(
 my $prepared_letter;
 
 my $sth =
-  $dbh->prepare(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test',?,'Test','Test',?)});
+  $dbh->prepare(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test',?,'Test',?,?)});
 
-$sth->execute( "TEST_PATRON", "[% borrower.id %]" );
+$sth->execute( "TEST_PATRON", "[% borrower.firstname %]", "[% borrower.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -112,7 +112,8 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with scalar' );
+is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with scalar for content' );
+is( $prepared_letter->{title}, $patron->{firstname}, 'Patron object used correctly with scalar for title' );
 
 $prepared_letter = GetPreparedLetter(
     (
@@ -123,7 +124,8 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with hashref' );
+is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with hashref for content' );
+is( $prepared_letter->{title}, $patron->{firstname}, 'Patron object used correctly with hashref for title' );
 
 $prepared_letter = GetPreparedLetter(
     (
@@ -134,9 +136,10 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with arrayref' );
+is( $prepared_letter->{content}, $patron->{borrowernumber}, 'Patron object used correctly with arrayref for content' );
+is( $prepared_letter->{title}, $patron->{firstname}, 'Patron object used correctly with arrayref for title' );
 
-$sth->execute( "TEST_BIBLIO", "[% biblio.id %]" );
+$sth->execute( "TEST_BIBLIO", "[% biblio.title %]", "[% biblio.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -146,9 +149,10 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $item->biblionumber, 'Biblio object used correctly' );
+is( $prepared_letter->{content}, $item->biblionumber, 'Biblio object used correctly for content' );
+is( $prepared_letter->{title}, $item->biblio->title, 'Biblio object used correctly for title' );
 
-$sth->execute( "TEST_LIBRARY", "[% branch.id %]" );
+$sth->execute( "TEST_LIBRARY", "[% branch.branchcode %]", "[% branch.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -158,9 +162,10 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $library->{branchcode}, 'Library object used correctly' );
+is( $prepared_letter->{content}, $library->{branchcode}, 'Library object used correctly for content' );
+is( $prepared_letter->{title}, $library->{branchcode}, 'Library object used correctly for title' );
 
-$sth->execute( "TEST_ITEM", "[% item.id %]" );
+$sth->execute( "TEST_ITEM", "[% item.barcode %]", "[% item.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -170,9 +175,10 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $item->id(), 'Item object used correctly' );
+is( $prepared_letter->{content}, $item->id(), 'Item object used correctly for content' );
+is( $prepared_letter->{title}, $item->barcode, 'Item object used correctly for title' );
 
-$sth->execute( "TEST_NEWS", "[% news.id %]" );
+$sth->execute( "TEST_NEWS", "[% news.id %]", "[% news.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -182,9 +188,10 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $news->id(), 'News object used correctly' );
+is( $prepared_letter->{content}, $news->id(), 'News object used correctly for content' );
+is( $prepared_letter->{title}, $news->id(), 'News object used correctly for title' );
 
-$sth->execute( "TEST_HOLD", "[% hold.id %]" );
+$sth->execute( "TEST_HOLD", "[% hold.borrowernumber %]", "[% hold.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -194,7 +201,8 @@ $prepared_letter = GetPreparedLetter(
         },
     )
 );
-is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly' );
+is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly for content' );
+is( $prepared_letter->{title}, $hold->borrowernumber, 'Hold object used correctly for title' );
 
 eval {
     $prepared_letter = GetPreparedLetter(
@@ -227,7 +235,7 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly' );
 
-$sth->execute( "TEST_SERIAL", "[% serial.id %]" );
+$sth->execute( "TEST_SERIAL", "[% serial.id %]", "[% serial.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -239,7 +247,7 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $serial->id(), 'Serial object used correctly' );
 
-$sth->execute( "TEST_SUBSCRIPTION", "[% subscription.id %]" );
+$sth->execute( "TEST_SUBSCRIPTION", "[% subscription.id %]", "[% subscription.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -251,7 +259,7 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $subscription->id(), 'Subscription object used correctly' );
 
-$sth->execute( "TEST_SUGGESTION", "[% suggestion.id %]" );
+$sth->execute( "TEST_SUGGESTION", "[% suggestion.id %]", "[% suggestion.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -263,7 +271,7 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $suggestion->id(), 'Suggestion object used correctly' );
 
-$sth->execute( "TEST_ISSUE", "[% checkout.id %]" );
+$sth->execute( "TEST_ISSUE", "[% checkout.id %]", "[% checkout.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
@@ -275,7 +283,7 @@ $prepared_letter = GetPreparedLetter(
 );
 is( $prepared_letter->{content}, $checkout->id(), 'Checkout object used correctly' );
 
-$sth->execute( "TEST_MODIFICATION", "[% patron_modification.id %]" );
+$sth->execute( "TEST_MODIFICATION", "[% patron_modification.id %]", "[% patron_modification.id %]" );
 $prepared_letter = GetPreparedLetter(
     (
         module      => 'test',
