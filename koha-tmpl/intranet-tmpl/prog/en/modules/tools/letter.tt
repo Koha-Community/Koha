@@ -394,7 +394,7 @@
                             <div class="transport-types" style="clear:both">
                                 [% FOR mtt IN letters.$lang.templates.keys.sort %]
                                     [% SET letter = letters.$lang.templates.$mtt %]
-                                    [% NEXT IF letter.message_transport_type == "talkingtech" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                                    [% NEXT IF letter.message_transport_type == "itiva" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
                                     [% NEXT IF letter.message_transport_type == "phone" && !Koha.Preference('PhoneNotification') %]
                                     <h3>
                                         [% SWITCH letter.message_transport_type %]
