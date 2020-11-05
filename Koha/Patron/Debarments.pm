@@ -98,7 +98,7 @@ sub AddDebarment {
 
     my $r = C4::Context->dbh->do( $sql, {}, ( $borrowernumber, $expiration, $type, $comment, $manager_id ) );
 
-    _UpdateBorrowerDebarmentFlags($borrowernumber);
+    UpdateBorrowerDebarmentFlags($borrowernumber);
 
     return $r;
 }
@@ -120,7 +120,7 @@ sub DelDebarment {
 
     my $r = C4::Context->dbh->do( $sql, {}, ($id) );
 
-    _UpdateBorrowerDebarmentFlags($borrowernumber);
+    UpdateBorrowerDebarmentFlags($borrowernumber);
 
     return $r;
 }
@@ -163,7 +163,7 @@ sub ModDebarment {
 
     my $r = C4::Context->dbh->do( $sql, {}, ( @values, $borrower_debarment_id ) );
 
-    _UpdateBorrowerDebarmentFlags( _GetBorrowernumberByDebarmentId($borrower_debarment_id) );
+    UpdateBorrowerDebarmentFlags( _GetBorrowernumberByDebarmentId($borrower_debarment_id) );
 
     return $r;
 }
@@ -211,7 +211,7 @@ sub AddUniqueDebarment {
         $r = AddDebarment($params);
     }
 
-    _UpdateBorrowerDebarmentFlags($borrowernumber);
+    UpdateBorrowerDebarmentFlags($borrowernumber);
 
     return $r;
 }
@@ -245,9 +245,9 @@ sub DelUniqueDebarment {
     return DelDebarment( $debarment->{'borrower_debarment_id'} );
 }
 
-=head2 _UpdateBorrowerDebarmentFlags
+=head2 UpdateBorrowerDebarmentFlags
 
-my $success = _UpdateBorrowerDebarmentFlags( $borrowernumber );
+my $success = UpdateBorrowerDebarmentFlags( $borrowernumber );
 
 So as not to create additional latency, the fields borrowers.debarred
 and borrowers.debarredcomment remain in the borrowers table. Whenever
@@ -257,7 +257,7 @@ in the borrowers table accordingly.
 
 =cut
 
-sub _UpdateBorrowerDebarmentFlags {
+sub UpdateBorrowerDebarmentFlags {
     my ($borrowernumber) = @_;
 
     return unless ($borrowernumber);
