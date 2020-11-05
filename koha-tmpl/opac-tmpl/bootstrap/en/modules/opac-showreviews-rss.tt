@@ -25,7 +25,10 @@
 [% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>[% END %]
 
 [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-    <a href="[% review.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% review.biblio_object.custom_cover_image_url | url %]" /></a>
+    [% SET custom_cover_image_url = review.biblio_object.custom_cover_image_url %]
+    [% IF custom_cover_image_url %]
+        <a href="[% custom_cover_image_url | url %]"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
+    [% END %]
 [% END %]
 
         [% IF ( review.author ) %]<p>By [% review.author | html %].</p> [% END %]

@@ -189,7 +189,7 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'custom_cover_image_url' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{isbn}_{issn}.png' );
 
@@ -213,6 +213,10 @@ subtest 'custom_cover_image_url' => sub {
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{normalized_isbn}.png' );
     my $normalized_isbn = C4::Koha::GetNormalizedISBN($isbn);
     is( $biblio->custom_cover_image_url, "https://my_url/$normalized_isbn.png" );
+
+    $biblio->biblioitem->isbn('')->store;
+    is( $biblio->custom_cover_image_url, undef, "Don't generate the url if the biblio does not have the value needed to generate it" );
+
 };
 
 $schema->storage->txn_rollback;

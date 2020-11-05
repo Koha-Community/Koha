@@ -213,12 +213,15 @@
                     [% END %]
 
                     [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-                        <div class="cover-image" id="custom-coverimg">
-                            <a class="custom_cover_image" href="[% biblio.custom_cover_image_url | url %]">
-                                <img id="custom-img" alt="Custom cover image" src="[% biblio.custom_cover_image_url | url %]" />
-                            </a>
-                            <div class="hint">Custom cover image</div>
-                        </div>
+                        [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
+                        [% IF custom_cover_image_url %]
+                            <div class="cover-image" id="custom-coverimg">
+                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]">
+                                    <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
+                                </a>
+                                <div class="hint">Custom cover image</div>
+                            </div>
+                        [% END %]
                     [% END %]
                 </div> <!-- /.cover-slider -->
             </div> <!-- /.bookcoverimg.col-xs-3 -->
