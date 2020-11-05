@@ -373,6 +373,7 @@ sub SendAlerts {
         my $sthorders;
         my $dataorders;
         my $action;
+        my $basketno;
         if ( $type eq 'claimacquisition') {
             $strsth = qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*
@@ -419,6 +420,7 @@ sub SendAlerts {
         }
 
         if ( $type eq 'orderacquisition') {
+            my $basketno = $externalid;
             $strsth = qq{
             SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*
             FROM aqorders
@@ -429,13 +431,13 @@ sub SendAlerts {
             AND orderstatus IN ('new','ordered')
             };
 
-            if (!$externalid){
+            unless ( $basketno ) {
                 carp "No basketnumber given";
                 return { error => "no_basketno" };
             }
             $action = "ACQUISITION ORDER";
             $sthorders = $dbh->prepare($strsth);
-            $sthorders->execute($externalid);
+            $sthorders->execute($basketno);
             $dataorders = $sthorders->fetchall_arrayref( {} );
         }
 
@@ -472,7 +474,7 @@ sub SendAlerts {
                 'branches'      => $userenv->{branch},
                 'aqbooksellers' => $databookseller,
                 'aqcontacts'    => $datacontact,
-                'aqbasket'      => $externalid,
+                'aqbasket'      => $basketno,
             },
             repeat => $dataorders,
             want_librarian => 1,
