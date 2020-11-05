@@ -116,7 +116,6 @@ else {
 }
 
 $template->param(
-    plugins_enabled => C4::Context->config("enable_plugins"),
     code_qualifiers => [
         {
             code        => '14',
