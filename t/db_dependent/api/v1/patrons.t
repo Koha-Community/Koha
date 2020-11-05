@@ -405,7 +405,7 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access test' => sub {
-        plan tests => 5;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
 
@@ -425,6 +425,12 @@ subtest 'delete() tests' => sub {
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
+        t::lib::Mocks::mock_preference('AnonymousPatron', $patron->borrowernumber);
+        $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
+          ->status_is(403, 'Anonymous patron cannot be deleted')
+          ->json_is( { error => 'Anonymous patron cannot be deleted' } );
+
+        t::lib::Mocks::mock_preference('AnonymousPatron', 0); # back to default
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
           ->status_is(204, 'SWAGGER3.2.4')
           ->content_is('', 'SWAGGER3.3.4');
