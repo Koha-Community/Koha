@@ -304,40 +304,31 @@ Controller function that handles deleting a Koha::Patron object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron;
+    my $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
+
+    unless ( $patron ) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Patron not found" }
+        );
+    }
 
     return try {
-        $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
 
-        # check if loans, reservations, debarrment, etc. before deletion!
-        try {
-            $patron->delete;
+        $patron->delete;
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
+    } catch {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
             return $c->render(
-                status  => 204,
-                openapi => q{}
-            );
-        } catch {
-            if ( $_->isa('Koha::Exceptions::Patron::FailedDeleteAnonymousPatron') ) {
-                return $c->render(
-                    status  => 403,
-                    openapi => { error => "Anonymous patron cannot be deleted" }
-                );
-            }
-            else {
-                $c->unhandled_exception($_);
-            }
-        };
-    }
-    catch {
-        unless ($patron) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Patron not found" }
+                status  => 403,
+                openapi => { error => "Anonymous patron cannot be deleted" }
             );
         }
-        else {
-            $c->unhandled_exception($_);
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
