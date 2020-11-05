@@ -10,7 +10,6 @@ use C4::Context;
 use Koha::Patron::Password::Recovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery DeleteExpiredPasswordRecovery);
 use Koha::Patrons;
-use Koha::Patrons;
 my $query = CGI->new;
 use HTML::Entities;
 use Try::Tiny;
@@ -42,8 +41,6 @@ my $errNoBorrowerFound;
 my $errNoBorrowerEmail;
 my $errMultipleAccountsForEmail;
 my $errAlreadyStartRecovery;
-my $errTooManyEmailFound;
-my $errBadEmail;
 my $errResetForbidden;
 
 #new password form error
@@ -123,11 +120,8 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     if ($hasError) {
         $template->param(
             hasError                => 1,
-
             errNoBorrowerFound      => $errNoBorrowerFound,
-            errTooManyEmailFound    => $errTooManyEmailFound,
             errAlreadyStartRecovery => $errAlreadyStartRecovery,
-            errBadEmail             => $errBadEmail,
             errNoBorrowerEmail      => $errNoBorrowerEmail,
             errMultipleAccountsForEmail => $errMultipleAccountsForEmail,
             errResetForbidden       => $errResetForbidden,
