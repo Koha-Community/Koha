@@ -205,6 +205,7 @@ our $mapping = {
     'suggestion/suggestion'                    => '/acquisitions.html#managing-suggestions',
     'tags/list'                                => '/tools.html#tag-moderation',
     'tags/review'                              => '/tools.html#tag-moderation',
+    'tools/automatic_item_modification_by_age' => '/tools.html#automatic-item-modifications-by-age',
     'tools/batchMod'                           => '/tools.html#batch-item-deletion',
     'tools/batch_delete_records'               => '/tools.html#batch-record-deletion',
     'tools/batch_record_modification'          => '/tools.html#batch-record-modification',
