@@ -131,15 +131,16 @@ $.fn.selectTabByID = function (tabID) {
     /* Search results browsing */
     /* forms with action leading to search */
     $("form[action*='search.pl']").submit(function(){
-        var removedPrior = false;
+        var disabledPrior = false;
         $(".search_set").each(function(){
-            if( removedPrior ){
-                $(this).find('select[name="op"]').remove();
-                removedPrior = false;
+            if( disabledPrior ){
+                $(this).find('select[name="op"]').prop("disabled","disabled");
+                disabledPrior = false;
             }
             if( $(this).find('input[name="q"]').val() == "" ){
-                $(this).remove();
-                removedPrior = true;
+                $(this).find('input').prop("disabled","disabled");
+                $(this).find('select').prop("disabled","disabled");
+                disabledPrior = true;
             }
         });
         resetSearchContext();
