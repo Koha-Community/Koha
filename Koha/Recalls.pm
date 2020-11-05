@@ -145,7 +145,7 @@ sub add_recall {
     my $message = Koha::Recalls->move_recall({
         recall_id = $recall_id,
         action => $action,
-        itemnumber => $itemnumber,
+        item => $item_object,
         borrowernumber => $borrowernumber,
     });
 
@@ -155,7 +155,7 @@ We can also fulfill the recall here if the recall is placed by this borrower.
 
 recall_id = ID of the recall to perform the action on
 action = either cancel or revert
-itemnumber = itemnumber the patron is attempting to check out
+item = item object that the patron is attempting to check out
 borrowernumber = borrowernumber of the patron that is attemptig to check out
 
 =cut
@@ -166,7 +166,7 @@ sub move_recall {
     my $recall_id = $params->{recall_id};
     my $action = $params->{action};
     return 'no recall_id provided' if ( !defined $recall_id );
-    my $itemnumber = $params->{itemnumber};
+    my $item = $params->{item};
     my $borrowernumber = $params->{borrowernumber};
 
     my $message = 'no action provided';
@@ -181,9 +181,9 @@ sub move_recall {
         $message = 'reverted';
     }
 
-    if ( $message eq 'no action provided' and $itemnumber and $borrowernumber ) {
+    if ( $message eq 'no action provided' and $item and $item->biblionumber and $borrowernumber ) {
         # move_recall was not called to revert or cancel, but was called to fulfill
-        my $recall = Koha::Recalls->find({ borrowernumber => $borrowernumber, itemnumber => $itemnumber, old => undef });
+        my $recall = Koha::Recalls->find({ borrowernumber => $borrowernumber, biblionumber => $item->biblionumber, itemnumber => [ $item->itemnumber, undef ], old => undef });
         if ( $recall ) {
             $recall->set_finished;
             $message = 'fulfilled';

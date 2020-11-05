@@ -1131,10 +1131,10 @@ sub CanBookBeIssued {
             if ( $r->itemnumber and
                 $r->itemnumber == $item_object->itemnumber and
                 $r->borrowernumber == $patron->borrowernumber and
-                $r->waiting ) {
+                ( $r->waiting or $r->requested ) ) {
                 $messages{RECALLED} = $r->recall_id;
                 $recall = $r;
-                # this item is already waiting for this borrower and the recall can be fulfilled
+                # this item is recalled by or already waiting for this borrower and the recall can be fulfilled
                 last;
             }
             elsif ( $r->itemnumber and
@@ -1570,7 +1570,7 @@ sub AddIssue {
                 $item_object->discard_changes;
             }
 
-            Koha::Recalls->move_recall({ action => $cancel_recall, recall_id => $recall_id, itemnumber => $item_object->itemnumber, borrowernumber => $borrower->{borrowernumber} }) if C4::Context->preference('UseRecalls');
+            Koha::Recalls->move_recall({ action => $cancel_recall, recall_id => $recall_id, item => $item_object, borrowernumber => $borrower->{borrowernumber} }) if C4::Context->preference('UseRecalls');
 
             C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
 

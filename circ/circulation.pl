@@ -394,6 +394,11 @@ if (@$barcodes) {
         }
         unless($confirm_required) {
             my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
+            if ( !$recall_id ) {
+                my $item = Koha::Items->find({ barcode => $barcode });
+                my $recall = Koha::Recalls->find({ biblionumber => $item->biblionumber, itemnumber => [ undef, $item->itemnumber ], status => [ 'R','W' ], old => undef, borrowernumber => $patron->borrowernumber });
+                $recall_id = ( $recall and $recall->recall_id ) ? $recall->recall_id : undef;
+            }
             my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall, recall_id => $recall_id, } );
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');
