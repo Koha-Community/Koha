@@ -25,7 +25,11 @@ use Koha::Token;
 my $cgi = CGI->new;
 
 my $authnotrequired = 0;
-my $flags = { updatecharges => 'remaining_permissions' };
+my $flags = {
+    borrowers     => 'edit_borrowers',
+    updatecharges => 'remaining_permissions'
+};
+
 my $type = 'intranet';
 my ($user, $cookie) = C4::Auth::checkauth($cgi, $authnotrequired, $flags, $type);
 
