@@ -121,7 +121,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         const branchTransferLimitsType = "[% BranchTransferLimitsType | html %]";
         const val_type = branchTransferLimitsType == "itemtype" ? "item_type" : "collection_code";
