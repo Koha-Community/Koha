@@ -243,7 +243,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
         qr/^csrf_token$/,
-        qr/^add_debarment$/, qr/^debarred_expiration$/, qr/^remove_debarment$/, # We already dealt with debarments previously
+        qr/^add_debarment$/, qr/^debarred_comment$/,qr/^debarred_expiration$/, qr/^remove_debarment$/, # We already dealt with debarments previously
         qr/^housebound_chooser$/, qr/^housebound_deliverer$/,
         qr/^select_city$/,
         qr/^new_guarantor_/,
@@ -531,8 +531,6 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             delete $newdata{'B_email'};
         }
 
-        $newdata{debarredcomment} = $newdata{debarred_comment};
-        delete $newdata{debarred_comment};
         delete $newdata{password2};
 
         eval {
