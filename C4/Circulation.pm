@@ -3045,7 +3045,7 @@ sub CanBookBeRenewed {
             $soonestrenewal->truncate( to => 'day' );
         }
 
-        if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
+        if ( $soonestrenewal > dt_from_string() )
         {
             return ( 0, "auto_too_soon" ) if $issue->auto_renew;
             return ( 0, "too_soon" );

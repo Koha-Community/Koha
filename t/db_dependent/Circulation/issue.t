@@ -32,7 +32,6 @@ use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
-use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Library;
 use Koha::Patrons;
