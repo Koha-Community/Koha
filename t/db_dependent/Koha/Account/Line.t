@@ -1095,45 +1095,17 @@ subtest "cancel() tests" => sub {
 
     $schema->storage->txn_begin;
 
-    # Create a borrower
-    my $categorycode =
-      $builder->build( { source => 'Category' } )->{categorycode};
-    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library = $builder->build_object( { class => 'Koha::Libraries' });
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library->branchcode } });
+    my $staff   = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library->branchcode } });
 
-    my $borrower = Koha::Patron->new(
-        {
-            cardnumber => 'dariahall',
-            surname    => 'Hall',
-            firstname  => 'Daria',
-        }
-    );
-    $borrower->categorycode($categorycode);
-    $borrower->branchcode($branchcode);
-    $borrower->store;
+    t::lib::Mocks::mock_userenv({ patron => $patron });
 
-    my $staff = Koha::Patron->new(
-        {
-            cardnumber => 'bobby',
-            surname    => 'Bloggs',
-            firstname  => 'Bobby',
-        }
-    );
-    $staff->categorycode($categorycode);
-    $staff->branchcode($branchcode);
-    $staff->store;
-
-    t::lib::Mocks::mock_userenv(
-        {
-            branchcode     => $branchcode,
-            borrowernumber => $borrower->borrowernumber
-        }
-    );
-
-    my $account = Koha::Account->new( { patron_id => $borrower->id } );
+    my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
 
     my $debit1 = Koha::Account::Line->new(
         {
-            borrowernumber    => $borrower->borrowernumber,
+            borrowernumber    => $patron->borrowernumber,
             amount            => 10,
             amountoutstanding => 10,
             interface         => 'commandline',
@@ -1142,7 +1114,7 @@ subtest "cancel() tests" => sub {
     )->store();
     my $debit2 = Koha::Account::Line->new(
         {
-            borrowernumber    => $borrower->borrowernumber,
+            borrowernumber    => $patron->borrowernumber,
             amount            => 20,
             amountoutstanding => 20,
             interface         => 'commandline',
@@ -1165,7 +1137,7 @@ subtest "cancel() tests" => sub {
         15, 'Second fee has amount outstanding of 15' );
     throws_ok {
         $credit->cancel(
-            { staff_id => $staff->borrowernumber, branch => $branchcode } );
+            { staff_id => $staff->borrowernumber, branch => $library->branchcode } );
     }
     'Koha::Exceptions::Account::IsNotDebit',
       '->cancel() can only be used with debits';
@@ -1176,20 +1148,20 @@ subtest "cancel() tests" => sub {
     'Koha::Exceptions::MissingParameter',
       "->cancel() requires the `branch` parameter is passed";
     throws_ok {
-        $debit1->reduce( { branch => $branchcode } );
+        $debit1->reduce( { branch => $library->branchcode } );
     }
     'Koha::Exceptions::MissingParameter',
       "->cancel() requires the `staff_id` parameter is passed";
 
     throws_ok {
         $debit2->cancel(
-            { staff_id => $staff->borrowernumber, branch => $branchcode } );
+            { staff_id => $staff->borrowernumber, branch => $library->branchcode } );
     }
     'Koha::Exceptions::Account',
       '->cancel() can only be used with debits that have not been offset';
 
     my $cancellation = $debit1->cancel(
-        { staff_id => $staff->borrowernumber, branch => $branchcode } );
+        { staff_id => $staff->borrowernumber, branch => $library->branchcode } );
     is( ref($cancellation), 'Koha::Account::Line',
         'Cancel returns an account line' );
     is(
