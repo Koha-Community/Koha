@@ -391,10 +391,10 @@ sub _set_message_transport_types {
     $self->_validate_message_transport_types({ message_transport_types => $types });
     foreach my $type (@$types) {
         unless (exists $self->{'_message_transport_types'}->{$type}) {
-            my $transport = Koha::Patron::Message::Transports->find({
+            my $transport = Koha::Patron::Message::Transports->search({
                 message_attribute_id => $self->message_attribute_id,
                 message_transport_type => $type
-            });
+            })->next;
             unless ($transport) {
                 Koha::Exceptions::Patron::Message::Preference::NoTransportType->throw(
                     error => 'No transport configured for '.$self->message_name.
