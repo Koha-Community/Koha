@@ -371,10 +371,13 @@
                                                     [% END %]
 
                                                     [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                                         [% IF ( OPACURLOpenInNewWindow ) %]
-                                                            <a class="custom_cover_image" href="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" target="_blank" rel="noreferrer"><img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" /></a>
-                                                        [% ELSE %]
-                                                            <a class="custom_cover_image" href="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" /></a>
+                                                        [% SET custom_cover_image_url = SEARCH_RESULT.biblio_object.custom_cover_image_url %]
+                                                        [% IF custom_cover_image_url %]
+                                                            [% IF ( OPACURLOpenInNewWindow ) %]
+                                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" target="_blank" rel="noreferrer"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
+                                                            [% ELSE %]
+                                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
+                                                            [% END %]
                                                         [% END %]
                                                     [% END %]
 

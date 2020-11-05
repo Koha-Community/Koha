@@ -756,14 +756,17 @@ sub custom_cover_image_url {
     my $url = C4::Context->preference('CustomCoverImagesURL');
     if ( $url =~ m|{isbn}| ) {
         my $isbn = $self->biblioitem->isbn;
+        return unless $isbn;
         $url =~ s|{isbn}|$isbn|g;
     }
     if ( $url =~ m|{normalized_isbn}| ) {
         my $normalized_isbn = C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
+        return unless $normalized_isbn;
         $url =~ s|{normalized_isbn}|$normalized_isbn|g;
     }
     if ( $url =~ m|{issn}| ) {
         my $issn = $self->biblioitem->issn;
+        return unless $issn;
         $url =~ s|{issn}|$issn|g;
     }
 
@@ -773,6 +776,7 @@ sub custom_cover_image_url {
         my $subfield = $+{subfield};
         my $marc_record = $self->metadata->record;
         my $value = $marc_record->subfield($field, $subfield);
+        return unless $value;
         $url =~ s|$re|$value|;
     }
 

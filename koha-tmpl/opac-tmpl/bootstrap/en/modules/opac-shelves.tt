@@ -453,16 +453,19 @@
                                                             [% END %]
 
                                                             [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                                                [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
-                                                                    <a class="custom_cover_image" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
-                                                                [% ELSE %]
-                                                                    [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
-                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                [% SET custom_cover_image_url = itemsloo.biblio_object.custom_cover_image_url %]
+                                                                [% IF custom_cover_image_url %]
+                                                                    [% IF ( itemsloo.BiblioDefaultViewmarc ) %]
+                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
                                                                     [% ELSE %]
-                                                                        <a class="custom_cover_image" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                        [% IF ( itemsloo.BiblioDefaultViewisbd ) %]
+                                                                            <a class="custom_cover_image" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                        [% ELSE %]
+                                                                            <a class="custom_cover_image" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber |url %]">
+                                                                        [% END %]
                                                                     [% END %]
+                                                                    <img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
                                                                 [% END %]
-                                                                <img alt="Cover image" src="[% itemsloo.biblio_object.custom_cover_image_url | url %]" /></a>
                                                             [% END %]
 
                                                         </div>

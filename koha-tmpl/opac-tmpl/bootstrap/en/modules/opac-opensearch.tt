@@ -66,7 +66,10 @@
 [% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id | uri %]" /></a>[% END %][% END %]
 
 [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-    <img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" />
+    [% SET custom_cover_image_url = SEARCH_RESULT.biblio_object.custom_cover_image_url %]
+    [% IF custom_cover_image_url %]
+        <img alt="Cover image" src="[% custom_cover_image_url | url %]" />
+    [% END %]
 [% END %]
 
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author | html %]. [% END %]
