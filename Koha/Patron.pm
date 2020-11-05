@@ -577,7 +577,7 @@ sub merge_with {
                 $results->{merged}->{ $patron_id }->{updated}->{$r} = $rs->count();
                 $rs->update({ $field => $self->id });
                 if ( $r eq 'BorrowerDebarment' ) {
-                    Koha::Patron::Debarments::_UpdateBorrowerDebarmentFlags($self->id);
+                    Koha::Patron::Debarments::UpdateBorrowerDebarmentFlags($self->id);
                 }
             }
 
