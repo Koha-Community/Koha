@@ -10,372 +10,405 @@
 [% INCLUDE 'datatables.inc' %]
 [% Asset.js("js/pages/batchMod.js") | $raw %]
 <script>
-//<![CDATA[
+    // Prepare array of all column headers, incrementing each index by
+    // two to accommodate control and title columns
+    var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
+    for( x=0; x<allColumns.length; x++ ){
+        allColumns[x] = Number(allColumns[x]) + 2;
+    }
 
-// Prepare array of all column headers, incrementing each index by
-// two to accommodate control and title columns
-var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
-for( x=0; x<allColumns.length; x++ ){
-  allColumns[x] = Number(allColumns[x]) + 2;
-}
-$(document).ready(function(){
-
-  $("input[name='disable_input']").click(function() {
-      var row = $(this).attr("id");
-      row = row.replace("row","hint");
-      var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
-      var regex_link = $(this).parent().find("[name='field_regex']");
-      if ($(this).is(":checked")) {
-          $(todisable).prop('disabled', true);
-          $("#"+row).html(_("This subfield will be deleted"));
-          $(regex_link).hide();
-      } else {
-          $(todisable).prop('disabled', false);
-          $("#"+row).html("");
-          $(regex_link).show();
-      }
-  });
-    $("#mainformsubmit").on("click",function(){
-        return submitBackgroundJob(this.form);
+    $(document).ready(function(){
+        $("input[name='disable_input']").click(function() {
+            var row = $(this).attr("id");
+            row = row.replace("row","hint");
+            var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
+            var regex_link = $(this).parent().find("[name='field_regex']");
+            if ($(this).is(":checked")) {
+                $(todisable).prop('disabled', true);
+                $("#"+row).html(_("This subfield will be deleted"));
+                $(regex_link).hide();
+            } else {
+                $(todisable).prop('disabled', false);
+                $("#"+row).html("");
+                $(regex_link).show();
+            }
+        });
+        $("#mainformsubmit").on("click",function(){
+            return submitBackgroundJob(this.form);
+        });
+        $('a[name="field_regex"]').click(function() {
+            var id = $(this).attr('id');
+            var editor = $(this).parent().find("[name='field_value']");
+            var regex = $(this).parent().find("[name='regex_fields']");
+            var disable_input = $(this).parent().find("[name='disable_input']");
+            if ($(this).html() == 'RegEx') {
+                $(editor).hide();
+                $(regex).show();
+                $(this).html('Text');
+                $(disable_input).prop('disabled', true);
+            } else {
+                $(editor).show();
+                $(regex).hide();
+                $(this).html('RegEx');
+                $(disable_input).prop('disabled', false);
+            }
+            return false;
+        });
     });
-    $('a[name="field_regex"]').click(function() {
-        var id = $(this).attr('id');
-        var editor = $(this).parent().find("[name='field_value']");
-        var regex = $(this).parent().find("[name='regex_fields']");
-        var disable_input = $(this).parent().find("[name='disable_input']");
-        if ($(this).html() == 'RegEx') {
-            $(editor).hide();
-            $(regex).show();
-            $(this).html('Text');
-            $(disable_input).prop('disabled', true);
-        } else {
-            $(editor).show();
-            $(regex).hide();
-            $(this).html('RegEx');
-            $(disable_input).prop('disabled', false);
-        }
-        return false;
-    });
-});
-//]]>
 </script>
-<!--[if IE]>
-<style>#selections { display: none; }</style>
-<![endif]-->
 <style>input[type=checkbox]{ margin : 0 .5em; }</style>
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% Asset.css("css/humanmsg.css") | $raw %]
 [% INCLUDE 'select2.inc' %]
-
 </head>
+
 <body id="tools_batchMod-edit" class="tools">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs">
-  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-  <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-  <a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a>
-</div>
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a>
+    </div>
 
-<div class="main container-fluid">
+    <div class="main container-fluid">
+
+        [% IF ( show ) %]
+            <h1>Batch item modification</h1>
+        [% ELSE %]
+            <h1>Batch item modification results</h1>
+            <div class="dialog message">
+                [% IF (modified_items) %]
+                    [% modified_items | html %] item(s) modified (with [% modified_fields | html %] field(s) modified).
+                [% ELSE %]
+                    No items modified.
+                [% END %]
+                <fieldset class="action">
+                    [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
+                        [% IF searchid %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]">Return to the record</a>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
+                        [% END %]
+                    [% ELSIF src %]
+                        <a href="[% src | url %]">Return to where you were</a>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a>
+                    [% END %]
+              </fieldset>
+            </div>
+        [% END %]
+
+        [% IF ( barcode_not_unique ) %]
+            <div class="dialog alert">
+                <strong>Error saving item</strong>: Barcode must be unique.
+            </div>
+        [% END %]
+        [% IF ( no_next_barcode ) %]
+            <div class="dialog alert">
+                <strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.
+            </div>
+        [% END %]
+
+        [% IF ( notfoundbarcodes.size ) %]
+            <div class="dialog alert">
+                <p>Warning, the following barcodes were not found:</p>
+            </div>
+
+            <table style="margin:auto;">
+                <thead>
+                    <tr><th>Barcodes not found</th></tr>
+                </thead>
+                <tbody>
+                    [% FOREACH notfoundbarcode IN notfoundbarcodes %]
+                        <tr><td>[% notfoundbarcode |html %]</td></td>
+                    [% END %]
+                </tbody>
+            </table>
+
+            [% IF ( item_loop ) %]
+                [% UNLESS ( too_many_items_display ) %]
+                    <h4>The following barcodes were found: </h4>
+                [% END %]
+            [% END %]
+        [% END %] <!-- /notfoundbarcodes -->
+
+        [% IF ( notfounditemnumbers.size ) %]
+            <div class="dialog alert">
+                <p>Warning, the following itemnumbers were not found:</p>
+            </div>
+
+            <table style="margin:auto;">
+                <thead>
+                    <tr><th>Itemnumbers not found</th></tr>
+                </thead>
+                <tbody>
+                    [% FOREACH notfounditemnumber IN notfounditemnumbers %]
+                        <tr><td>[% notfounditemnumber |html %]</td></td>
+                    [% END %]
+                </tbody>
+            </table>
+            [% IF ( item_loop ) %]
+                [% UNLESS ( too_many_items_display ) %]
+                    <h4>The following itemnumbers were found: </h4>
+                [% END %]
+            [% END %]
+        [% END %] <!-- /notfounditemnumbers -->
+
+
+        <form name="f" action="batchMod.pl" method="post">
+            <input type="hidden" name="op" value="[% op | html %]" />
+            <input type="hidden" name="searchid" value="[% searchid | html %]" />
+            <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+            <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+            <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+            <input type="hidden" name="src" id="src" value="[% src | html %]" />
+            [% IF biblionumber %]
+                <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
+            [% END %]
+
+            [% IF ( item_loop ) %]
+                [% IF show %]
+                    <div id="toolbar">
+                        <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
+                    </div>
+                [% END %]
+
+                <div id="cataloguing_additem_itemlist">
+
+                    <p id="selections">
+                        <strong>Show/hide columns:</strong>
+                        <span class="selected">
+                            <input type="checkbox" checked="checked" id="showall" />
+                            <label for="showall">Show all columns</label>
+                        </span>
+                        <span>
+                            <input type="checkbox" id="hideall" />
+                            <label for="hideall">Hide all columns</label>
+                        </span>
+
+                        [% FOREACH item_header_loo IN item_header_loop %]
+                            <span class="selected">
+                                <input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" />
+                                <label for="checkheader[% loop.count | html %]">[% item_header_loo.header_value | html %]</label>
+                            </span>
+                        [% END %]
+                    </p>
+
+                    <table id="itemst">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th class="anti-the">Title</th>
+                                <th class="holds_count" title="Item holds / Total holds">Holds</th>
+                                [% FOREACH item_header_loo IN item_header_loop %]
+                                    <th> [% item_header_loo.header_value | html %] </th>
+                                [% END %]
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH item_loo IN item_loop %]
+                                <tr>
+                                    [% IF show %]
+                                        [% IF item_loo.nomod %]
+                                            <td class="error">Cannot edit</td>
+                                        [% ELSE %]
+                                            <td>
+                                                <input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" data-is-onloan="[% item_loo.onloan | html %]" />
+                                            </td>
+                                        [% END %]
+                                    [% ELSE %]
+                                        <td>&nbsp;</td>
+                                    [% END %]
+                                    <td>
+                                        <label for="row[% item_loo.itemnumber | html %]">
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">
+                                                [% item_loo.title | html %]
+                                            </a>
+                                            [% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]
+                                        </label>
+                                    </td>
+                                    <td class="holds_count">
+                                        [% IF item_loo.holds %]
+                                            [% IF item_loo.item_holds %]
+                                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this item: [% item_loo.item_holds | html %] / Total holds on this record: [% item_loo.holds | html -%]" >
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this item / Total holds on this record: [% item_loo.holds | html -%]" >
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% IF item_loo.holds %]
+                                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this record: [% item_loo.holds | html -%]" >
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this record" >
+                                            [% END %]
+                                        [% END %]
+                                        [% IF item_loo.holds %]
+                                            [% item_loo.item_holds | html %]/[% item_loo.holds | html %]
+                                        [% ELSE %]
+                                            [% item_loo.holds | html %]
+                                        [% END %]
+                                        </a>
+                                    </td>
+                                    [% FOREACH item_valu IN item_loo.item_value %]
+                                        <td>
+                                            [% item_valu.field | html %]
+                                        </td>
+                                    [% END %]
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                </div>
+            [% END %]<!-- /item_loop -->
+
+            [% IF ( simple_items_display || job_completed ) %]
+                [% IF ( too_many_items_display ) %]
+                    <p>Too many items ([% too_many_items_display | html %]): You have edited more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
+                [% ELSE %]
+                    <p>The following items were modified:</p>
+                    <ul>
+                        [% FOREACH simple_items_displa IN simple_items_display %]
+                            <li>
+                                [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | uri %]&amp;itemnumber=[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
+                            </li>
+                        [% END %]
+                    </ul>
+                [% END %]
+            [% END %]<!-- /simple_items_display -->
 
             [% IF ( show ) %]
-              <h1>Batch item modification</h1>
-            [% ELSE %]
-              <h1>Batch item modification results</h1>
-              <div class="dialog message">
-                [% IF (modified_items) %]
-                  [% modified_items | html %] item(s) modified (with [% modified_fields | html %] field(s) modified).
-                [% ELSE %]
-                  No items modified.
-                [% END %]
-              <fieldset class="action">
-                  [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
-                      [% IF searchid %]
-                          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]">Return to the record</a>
-                      [% ELSE %]
-                          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
-                      [% END %]
-                  [% ELSIF src %]
-                      <a href="[% src | url %]">Return to where you were</a>
-                  [% ELSE %]
-                      <a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a>
-                  [% END %]
-              </fieldset>
-              </div>
-            [% END %]
-[% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
-[% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
 
-    [% IF ( notfoundbarcodes.size ) %]
-        <div class="dialog alert"><p>Warning, the following barcodes were not found:</p></div>
-        <table style="margin:auto;">
-            <thead>
-                <tr><th>Barcodes not found</th></tr>
-            </thead>
-            <tbody>
-                [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-                    <tr><td>[% notfoundbarcode |html %]</td></td>
-                [% END %]
-            </tbody>
-        </table>
-        [% IF ( item_loop ) %]
-            [% UNLESS ( too_many_items_display ) %]
-                <h4>The following barcodes were found: </h4>
-            [% END %]
-        [% END %]
-    [% END %] <!-- /notfoundbarcodes -->
-    [% IF ( notfounditemnumbers.size ) %]
-        <div class="dialog alert"><p>Warning, the following itemnumbers were not found:</p></div>
-        <table style="margin:auto;">
-            <thead>
-                <tr><th>Itemnumbers not found</th></tr>
-            </thead>
-            <tbody>
-                [% FOREACH notfounditemnumber IN notfounditemnumbers %]
-                    <tr><td>[% notfounditemnumber |html %]</td></td>
-                [% END %]
-            </tbody>
-        </table>
-        [% IF ( item_loop ) %]
-            [% UNLESS ( too_many_items_display ) %]
-                <h4>The following itemnumbers were found: </h4>
-            [% END %]
-        [% END %]
-    [% END %] <!-- /notfounditemnumbers -->
-
-
-<form name="f" action="batchMod.pl" method="post">
-     <input type="hidden" name="op" value="[% op | html %]" />
-     <input type="hidden" name="searchid" value="[% searchid | html %]" />
-     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-     <input type="hidden" name="runinbackground" id="runinbackground" value="" />
-     <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-     <input type="hidden" name="src" id="src" value="[% src | html %]" />
-     [% IF biblionumber %]
-        <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber | html %]" />
-     [% END %]
-
-[% IF ( item_loop ) %]
-  [% IF show %]
-    <div id="toolbar">
-      <a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-remove"></i> Clear all</a> | <a id="clearonloanbutton" href="#">Clear on loan</a>
-    </div>
-  [% END %]
-<div id="cataloguing_additem_itemlist">
-
-<p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span> 
-        [% FOREACH item_header_loo IN item_header_loop %]
-        <span class="selected"><input id="checkheader[% loop.count | html %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count | html %]">[% item_header_loo.header_value | html %]</label> </span>
-        [% END %]
-</p>
-        <table id="itemst">
-      <thead>
-    <tr>
-        <th>&nbsp;</th>
-        <th class="anti-the">Title</th>
-        <th class="holds_count" title="Item holds / Total holds">Holds</th>
-        [% FOREACH item_header_loo IN item_header_loop %]
-        <th> [% item_header_loo.header_value | html %] </th>
-        [% END %] 
-    </tr>
-      </thead>
-      <tbody>
-            [% FOREACH item_loo IN item_loop %]
-              <tr>
-                [% IF show %]
-                  [% IF item_loo.nomod %]
-                    <td class="error">Cannot edit</td>
-                  [% ELSE %]
-                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" data-is-onloan="[% item_loo.onloan | html %]" /></td>
-                  [% END %]
-                [% ELSE %]
-                  <td>&nbsp;</td>
-                [% END %]
-                <td>
-                    <label for="row[% item_loo.itemnumber | html %]">
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">
-                            [% item_loo.title | html %]
-                        </a>
-                        [% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]
-                    </label>
-                </td>
-                <td class="holds_count">
-                    [% IF item_loo.holds %]
-                        [% IF item_loo.item_holds %]
-                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this item: [% item_loo.item_holds | html %] / Total holds on this record: [% item_loo.holds | html -%]" >
-                        [% ELSE %]
-                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this item / Total holds on this record: [% item_loo.holds | html -%]" >
-                        [% END %]
-                    [% ELSE %]
-                        [% IF item_loo.holds %]
-                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this record: [% item_loo.holds | html -%]" >
-                        [% ELSE %]
-                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this record" >
-                        [% END %]
+                [% IF ( too_many_items_process ) %]
+                    <p>Too many items ([% too_many_items_process | html %]): You are not allowed to edit more than [% Koha.Preference('MaxItemsToProcessForBatchMod') | html %] items in a batch.</p>
+                [% ELSIF ( too_many_items_display ) %]
+                    <p>Too many items ([% too_many_items_display | html %]): You are editing more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
+                    [% FOREACH itemnumber IN itemnumbers_array %]
+                        <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                     [% END %]
-                                [% IF item_loo.holds %]
-                                    [% item_loo.item_holds | html %]/[% item_loo.holds | html %]
-                                [% ELSE %]
-                                    [% item_loo.holds | html %]
+                [% END %]<!-- /too_many_items -->
+
+                [% UNLESS (too_many_items_process) %]
+                    <div id="cataloguing_additem_newitem">
+                        <h2>Edit items</h2>
+                        <div class="hint">Checking the box right next to the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
+                        <fieldset class="rows">
+                            <ol>
+                                [% FOREACH ite IN item %]
+                                    <li>
+                                        <div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
+                                            [% SET mv = ite.marc_value %]
+                                            [% IF ( ite.mandatory ) %]
+                                                <label class="required" for="[%- mv.id | html -%]">
+                                            [% ELSE %]
+                                                <label for="[%- mv.id | html -%]">
+                                            [% END %]
+                                                [% ite.subfield | html %] - [% ite.marc_lib | $raw %]
+                                            </label>
+
+                                            [% IF ( mv.type == 'select' ) -%]
+                                                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor select2">
+                                                    [%- FOREACH aval IN mv.values %]
+                                                        [% ite.subfield | html %] -
+                                                        [% IF aval == mv.default %]
+                                                            <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
+                                                        [% ELSE %]
+                                                            <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
+                                                        [% END %]
+                                                    [%- END -%]
+                                                </select>
+                                            [% ELSIF ( mv.type == 'text1' ) %]
+                                                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
+                                                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | uri -%]&index=[%- mv.id | uri -%]','[%- mv.id | uri -%]'); return false;" title="Tag editor">...</a>
+                                            [% ELSIF ( mv.type == 'text2' ) %]
+                                                <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
+                                                [% IF mv.noclick %]
+                                                    <a href="#" class="buttonDot disabled" title="No popup">...</a>
+                                                [% ELSE %]
+                                                    <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot" title="Tag editor">...</a>
+                                                [% END %]
+                                                [% mv.javascript | $raw %]
+                                            [% ELSIF ( mv.type == 'text' ) %]
+                                                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
+                                            [% ELSIF ( mv.type == 'hidden' ) %]
+                                                <input type="hidden" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
+                                            [% ELSIF ( mv.type == 'textarea' ) %]
+                                                <textarea tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value | html -%]"</textarea>
+                                            [%- END -%]
+
+                                            <span name="regex_fields" style="display: none;">
+                                                s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
+                                                <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
+                                                <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
+                                            </span>
+
+                                            [% UNLESS ( ite.mandatory ) %]
+                                                <input type="checkbox" id="row[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]" title="Check to delete subfield [% ite.subfield | html %]" name="disable_input" value="[% ite.subfield | html %]" />
+                                            [% ELSE %]
+                                                <span class="required">Required</span>
+                                            [% END %]
+
+                                            [% IF (mv.type == 'text' || mv.type == 'textarea' ) %]
+                                                <a href="#" name="field_regex" id="[% ite.id | html %]" >RegEx</a>
+                                            [% END %]
+
+                                            <input type="hidden" name="tag" value="[% ite.tag | html %]" />
+                                            <input type="hidden" name="subfield" value="[% ite.subfield | html %]" />
+                                            <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
+                                            [% IF ( ite.repeatable ) %]
+                                                <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
+                                                    <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                                                </a>
+                                            [% END %]
+                                            <span class="hint" id="hint[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]"></span>
+                                        </div>
+                                    </li>
                                 [% END %]
-                            </a>
-                </td>
-                [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
-        [% END %] </tr>
-            [% END %]
-      </tbody>
-        </table>
-</div>
-[% END %]<!-- /item_loop -->
+                            </ol>
+                        </fieldset>
 
-[% IF ( simple_items_display || job_completed ) %]
-    [% IF ( too_many_items_display ) %]
-        <p>Too many items ([% too_many_items_display | html %]): You have edited more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
-    [% ELSE %]
-        <p>The following items were modified:</p>
-        <ul>
-        [% FOREACH simple_items_displa IN simple_items_display %]
-      <li>
-          [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | uri %]&amp;itemnumber=[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
-      </li>
-        [% END %]
-        </ul>
-    [% END %]
-[% END %]<!-- /simple_items_display -->
+                        <fieldset class="rows">
+                            <legend>Other attributes</legend>
+                            <ol>
+                                <li>
+                                    <div class="subfield_line">
+                                        <label for="exclude_from_local_holds_priority">Exclude from local holds priority:</label>
+                                        <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority" class="input_marceditor select2" style="width: 50px">
+                                            <option selected></option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </li>
+                            </ol>
+                        </fieldset>
 
-[% IF ( show ) %]
-
-[% IF ( too_many_items_process ) %]
-    <p>Too many items ([% too_many_items_process | html %]): You are not allowed to edit more than [% Koha.Preference('MaxItemsToProcessForBatchMod') | html %] items in a batch.</p>
-[% ELSIF ( too_many_items_display ) %]
-    <p>Too many items ([% too_many_items_display | html %]): You are editing more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
-    [% FOREACH itemnumber IN itemnumbers_array %]
-  <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
-    [% END %]
-[% END %]<!-- /too_many_items -->
-
-[% UNLESS (too_many_items_process) %]
-<div id="cataloguing_additem_newitem">
-        <h2>Edit items</h2>
-        <div class="hint">Checking the box right next to the subfield label will disable the entry and delete the subfield on all selected items. Leave fields blank to make no change.</div>
-  <fieldset class="rows">
-  <ol>
-        [% FOREACH ite IN item %]
-          <li>
-            <div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
-              [% SET mv = ite.marc_value %]
-              [% IF ( ite.mandatory ) %]
-                <label class="required" for="[%- mv.id | html -%]">
-              [% ELSE %]
-                <label for="[%- mv.id | html -%]">
-              [% END %]
-                [% ite.subfield | html %] - [% ite.marc_lib | $raw %]
-              </label>
-
-              [% IF ( mv.type == 'select' ) -%]
-                <select name="[%- mv.name | html -%]" id="[%- mv.id | html -%]" size="1" tabindex="1" class="input_marceditor select2">
-                  [%- FOREACH aval IN mv.values %]
-              [% ite.subfield | html %] -
-                    [% IF aval == mv.default %]
-                      <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
-                    [% ELSE %]
-                      <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
-                    [% END %]
-                  [%- END -%]
-                </select>
-              [% ELSIF ( mv.type == 'text1' ) %]
-                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | uri -%]&index=[%- mv.id | uri -%]','[%- mv.id | uri -%]'); return false;" title="Tag editor">...</a>
-              [% ELSIF ( mv.type == 'text2' ) %]
-                <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                [% IF mv.noclick %]
-                  <a href="#" class="buttonDot disabled" title="No popup">...</a>
+                        <fieldset class="action">
+                            <div id="jobpanel">
+                                <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+                                <div id="jobfailed"></div>
+                            </div>
+                            <input type="submit" id="mainformsubmit" value="Save" />
+                            <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel">Cancel</a>
+                        </fieldset>
+                    </div>
                 [% ELSE %]
-                  <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot" title="Tag editor">...</a>
+                    <p><a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a></p>
                 [% END %]
-                [% mv.javascript | $raw %]
-              [% ELSIF ( mv.type == 'text' ) %]
-                <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-              [% ELSIF ( mv.type == 'hidden' ) %]
-                <input type="hidden" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-              [% ELSIF ( mv.type == 'textarea' ) %]
-                <textarea tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value | html -%]"</textarea>
-              [%- END -%]
-
-              <span name="regex_fields" style="display: none;">
-                  s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
-                  <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
-                  <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
-              </span>
-
-              [% UNLESS ( ite.mandatory ) %]
-                <input type="checkbox" id="row[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]" title="Check to delete subfield [% ite.subfield | html %]" name="disable_input" value="[% ite.subfield | html %]" />
-              [% ELSE %]
-                <span class="required">Required</span>
-              [% END %]
-
-              [% IF (mv.type == 'text' || mv.type == 'textarea' ) %]
-                  <a href="#" name="field_regex" id="[% ite.id | html %]" >RegEx</a>
-              [% END %]
-
-              <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
-              <input type="hidden" name="subfield"       value="[% ite.subfield | html %]" />
-              <input type="hidden" name="mandatory"       value="[% ite.mandatory | html %]" />
-              [% IF ( ite.repeatable ) %]
-                <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
-                  <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
-                </a>
-              [% END %]
-              <span class="hint" id="hint[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]"></span>
-            </div>
-          </li>
-        [% END %]
-    </ol>
-    </fieldset>
-    <fieldset class="rows">
-      <legend>Other attributes</legend>
-      <ol>
-        <li>
-          <div class="subfield_line">
-          <label for="exclude_from_local_holds_priority">Exclude from local holds priority:</label>
-            <select id="exclude_from_local_holds_priority" name="exclude_from_local_holds_priority" class="input_marceditor select2" style="width: 50px">
-                <option selected></option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-            </select>
-          </div>
-        </li>
-      </ol>
-    </fieldset>
-    <fieldset class="action">    
-   <div id="jobpanel">
-       <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-       <div id="jobfailed"></div>
-   </div>
-   <input type="submit" id="mainformsubmit" value="Save" />
-         <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel">Cancel</a>
-    </fieldset>
-</div>
-[% ELSE %]
-    <p><a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a></p>
-[% END %]
-[% ELSE %] <!-- // show -->
-<fieldset class="action">
-[% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
-    [% IF searchid %]
-        <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
-    [% ELSE %]
-        <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
-    [% END %]
-[% ELSIF src %]
-   <a class="btn btn-default" href="[% src | url %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
-[% ELSE %]
-   <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square-o"></i> Return to batch item modification</a>
-[% END %]
-</fieldset>
-
-[% END %]
-
+            [% ELSE %] <!-- // show -->
+                <fieldset class="action">
+                    [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
+                        [% IF searchid %]
+                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&searchid=[% searchid | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+                        [% ELSE %]
+                            <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+                        [% END %]
+                    [% ELSIF src %]
+                        <a class="btn btn-default" href="[% src | url %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
+                    [% ELSE %]
+                        <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square-o"></i> Return to batch item modification</a>
+                    [% END %]
+                </fieldset>
+            [% END %]
+        </form>
 [% INCLUDE 'intranet-bottom.inc' %]
