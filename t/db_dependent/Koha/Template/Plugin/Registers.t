@@ -66,9 +66,11 @@ subtest 'session_register_name' => sub {
 
 subtest 'all() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
 
     my $count = Koha::Cash::Registers->search({ archived => 0 })->count;
     my $max_register = Koha::Cash::Registers->search( {},
@@ -110,8 +112,8 @@ subtest 'all() tests' => sub {
         {
             class => 'Koha::Cash::Registers',
             value => {
-                branch => $library2->branchcode,
-                archived       => 0
+                branch   => $library2->branchcode,
+                archived => 0
             }
         }
     );
@@ -176,6 +178,10 @@ subtest 'all() tests' => sub {
 "Register is selected $selected (userenv: brancode, filters: current_branch)"
         );
     }
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+    $result = $plugin->all();
+    is( $result, undef, "Return undef when UseCashRegisters is disabled" );
 
     $schema->storage->txn_rollback;
 };
