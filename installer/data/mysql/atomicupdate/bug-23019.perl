@@ -4,9 +4,9 @@ if( CheckVersion( $DBversion ) ) {
   # $dbh->do( "ALTER TABLE biblio ADD COLUMN badtaste int" );
 
   # or perform some test and warn
-  if( !TableExists( 'import_batches_profile' ) ) {
+  if( !TableExists( 'import_batch_profiles' ) ) {
     $dbh->do(q{
-      CREATE TABLE `import_batches_profile` ( -- profile for batches of marc records to be imported
+      CREATE TABLE `import_batch_profiles` ( -- profile for batches of marc records to be imported
         `id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
         `name` varchar(100) NOT NULL, -- name of this profile
         `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
@@ -20,7 +20,7 @@ if( CheckVersion( $DBversion ) ) {
         `format` varchar(50) default NULL, -- marc format
         `comments` LONGTEXT, -- any comments added when the file was uploaded
         PRIMARY KEY (`id`),
-        UNIQUE KEY `u_import_batches_profile__name` (`name`)
+        UNIQUE KEY `u_import_batch_profiles__name` (`name`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     });
   }
@@ -31,10 +31,10 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do(q{
-      ALTER TABLE import_batches ADD CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `import_batches_profile` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
+      ALTER TABLE import_batches ADD CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `import_batch_profiles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
     });
   }
 
   # Always end with this (adjust the bug info)
-  NewVersion( $DBversion, 23019, "Add import_batches_profile table and profile_id column in import_batches");
+  NewVersion( $DBversion, 23019, "Add import_batch_profiles table and profile_id column in import_batches");
 }

@@ -702,11 +702,11 @@ CREATE TABLE `export_format` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Used for CSV export';
 
 --
--- Table structure for table `import_batches_profile`
+-- Table structure for table `import_batch_profiles`
 --
 
-DROP TABLE IF EXISTS `import_batches_profile`;
-CREATE TABLE `import_batches_profile` ( -- profile for batches of marc records to be imported
+DROP TABLE IF EXISTS `import_batch_profiles`;
+CREATE TABLE `import_batch_profiles` ( -- profile for batches of marc records to be imported
   `id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
   `name` varchar(100) NOT NULL, -- name of this profile
   `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
@@ -720,7 +720,7 @@ CREATE TABLE `import_batches_profile` ( -- profile for batches of marc records t
   `format` varchar(50) default NULL, -- marc format
   `comments` LONGTEXT, -- any comments added when the file was uploaded
   PRIMARY KEY (`id`),
-  UNIQUE KEY `u_import_batches_profile__name` (`name`)
+  UNIQUE KEY `u_import_batch_profiles__name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -748,7 +748,7 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`),
   CONSTRAINT `import_batches_ibfk_1` FOREIGN KEY (`profile_id`)
-  REFERENCES `import_batches_profile` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
+  REFERENCES `import_batch_profiles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
