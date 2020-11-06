@@ -389,6 +389,12 @@
                         }
                     }
                     [% END %]
+                },
+                invalidHandler: function(event, validator) {
+                    // reset beenSubmitted for prevenDoubleFormSubmit
+                    event.target.beenSubmitted = false;
+                    // remove class added by preventDoubleFormSubmit
+                    $("body, form input[type='submit'], form button[type='submit'], form a").removeClass('waiting');
                 }
             });
         });
