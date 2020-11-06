@@ -37,7 +37,7 @@ Koha::ImportBatchProfiles - Koha ImportBatchProfiles Object class
 =cut
 
 sub _type {
-    return 'ImportBatchesProfile';
+    return 'ImportBatchProfile';
 }
 
 =head3 object_class

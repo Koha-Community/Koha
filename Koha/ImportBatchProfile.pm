@@ -48,7 +48,7 @@ sub to_api_mapping {
 =cut
 
 sub _type {
-    return 'ImportBatchesProfile';
+    return 'ImportBatchProfile';
 }
 
 1;

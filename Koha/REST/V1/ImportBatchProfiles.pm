@@ -91,7 +91,7 @@ sub edit {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $profile_id = $c->validation->param('profile_id');
+        my $profile_id = $c->validation->param('import_batch_profile_id');
         my $profile = Koha::ImportBatchProfiles->find( $profile_id );
         unless ($profile) {
             return $c->render( status  => 404,
@@ -121,7 +121,7 @@ Method that handles deleting a Koha::ImportBatchProfile object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $profile_id = $c->validation->param('profile_id');
+    my $profile_id = $c->validation->param('import_batch_profile_id');
     my $profile = Koha::ImportBatchProfiles->find( $profile_id );
 
     unless ($profile) {

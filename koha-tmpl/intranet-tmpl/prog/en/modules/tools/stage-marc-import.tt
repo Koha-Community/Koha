@@ -362,7 +362,7 @@
                     return getProfiles(profile.profile_id);
                 })
                 .catch(function(error) {
-                    alert(_("An error occurred")+"\n\n"+error);
+                    alert(_("An error occurred")+"\n\n"+((error.responseJSON && error.responseJSON.error) || error.responseText || error.statusText));
                 })
             });
 
@@ -386,7 +386,7 @@
                     return getProfiles();
                 })
                 .catch(function(error) {
-                    alert(_("An error occurred")+"\n\n"+error);
+                    alert(_("An error occurred")+"\n\n"+((error.responseJSON && error.responseJSON.error) || error.responseText || error.statusText));
                 })
             });
         });
@@ -460,7 +460,7 @@
                         opt.prop('selected', true);
                     }
                     opt.attr("value", profile.profile_id);
-                    opt.html(profile.name);
+                    opt.text(profile.name);
                     opt.data("profile", profile);
                 });
             })

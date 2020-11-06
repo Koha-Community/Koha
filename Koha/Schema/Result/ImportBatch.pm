@@ -246,13 +246,13 @@ __PACKAGE__->has_many(
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::ImportBatchesProfile>
+Related object: L<Koha::Schema::Result::ImportBatchProfile>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "profile",
-  "Koha::Schema::Result::ImportBatchesProfile",
+  "Koha::Schema::Result::ImportBatchProfile",
   { id => "profile_id" },
   {
     is_deferrable => 1,
@@ -263,8 +263,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-03 15:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jGfBdM8ht823HaxSr2c9Wg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-06 13:52:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nnGJ0Nvgiz123+ic7v0GqQ
 
 =head2 koha_object_class
 

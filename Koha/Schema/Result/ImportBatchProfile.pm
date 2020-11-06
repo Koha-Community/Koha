@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::ImportBatchesProfile;
+package Koha::Schema::Result::ImportBatchProfile;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::ImportBatchesProfile
+Koha::Schema::Result::ImportBatchProfile
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<import_batches_profile>
+=head1 TABLE: C<import_batch_profiles>
 
 =cut
 
-__PACKAGE__->table("import_batches_profile");
+__PACKAGE__->table("import_batch_profiles");
 
 =head1 ACCESSORS
 
@@ -132,6 +132,20 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<u_import_batch_profiles__name>
+
+=over 4
+
+=item * L</name>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("u_import_batch_profiles__name", ["name"]);
+
 =head1 RELATIONS
 
 =head2 import_batches
@@ -150,8 +164,11 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-06-03 15:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BWFz5yLEEP6ANuAWKAMCeg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-06 13:52:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kThbQZTT2c0fuWAGgvoDLQ
+
+
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->add_columns(
   '+parse_items' => { is_boolean => 1 },
