@@ -66,7 +66,7 @@ subtest 'session_register_name' => sub {
 
 subtest 'all() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -176,6 +176,22 @@ subtest 'all() tests' => sub {
         my $selected = ( $register->{id} == $register2->id ) ? 1 : 0;
         is( $register->{selected}, $selected,
 "Register is selected $selected (userenv: brancode, filters: current_branch)"
+        );
+    }
+
+    $result = $plugin->all( { filters => { current_branch => 1 }, selected => $register1->id } );
+    is( ref($result), 'ARRAY',
+"Return arrayref (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
+    );
+    is(
+        scalar( @{$result} ),
+        2,
+"Array contains 2 branch registers (userenv: branchcode + register_id, filters: current_branch, selected: register 1)"
+    );
+    for my $register ( @{$result} ) {
+        my $selected = ( $register->{id} == $register1->id ) ? 1 : 0;
+        is( $register->{selected}, $selected,
+"Register is selected $selected (userenv: brancode, filters: current_branch, selected: register 1)"
         );
     }
 
