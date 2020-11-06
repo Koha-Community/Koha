@@ -23260,6 +23260,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23091, "Update refund rules");
 }
 
+$DBversion = '20.06.00.063';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{INSERT IGNORE INTO circulation_rules (branchcode, categorycode, itemtype, rule_name, rule_value) VALUES (NULL, NULL, NULL, 'decreaseloanholds', NULL) });
+
+    NewVersion( $DBversion, 14866, "Add decreaseloanholds circulation rule" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
