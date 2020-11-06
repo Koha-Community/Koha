@@ -312,10 +312,34 @@ sub fix_query {
 
     my $query = $args->{query};
     my $biblioitem_fields = {
-        'biblio.isbn'      => 'biblio.biblioitem.isbn',
-        'biblio.ean'       => 'biblio.biblioitem.ean',
-        'biblio.publisher' => 'biblio.biblioitem.publisher',
-        'biblio.publication_year' => 'biblio.biblioitem.publication_year'
+        'biblio.age_restriction'     => 'biblio.biblioitem.age_restriction',
+        'biblio.cn_class'            => 'biblio.biblioitem.cn_class',
+        'biblio.cn_item'             => 'biblio.biblioitem.cn_item',
+        'biblio.cn_sort'             => 'biblio.biblioitem.cn_sort',
+        'biblio.cn_source'           => 'biblio.biblioitem.cn_source',
+        'biblio.cn_suffix'           => 'biblio.biblioitem.cn_suffix',
+        'biblio.collection_issn'     => 'biblio.biblioitem.collection_issn',
+        'biblio.collection_title'    => 'biblio.biblioitem.collection_title',
+        'biblio.collection_volume'   => 'biblio.biblioitem.collection_volume',
+        'biblio.ean'                 => 'biblio.biblioitem.ean',
+        'biblio.edition_statement'   => 'biblio.biblioitem.edition_statement',
+        'biblio.illustrations'       => 'biblio.biblioitem.illustrations',
+        'biblio.isbn'                => 'biblio.biblioitem.isbn',
+        'biblio.issn'                => 'biblio.biblioitem.issn',
+        'biblio.item_type'           => 'biblio.biblioitem.item_type',
+        'biblio.lc_control_number'   => 'biblio.biblioitem.lc_control_number',
+        'biblio.material_size'       => 'biblio.biblioitem.material_size',
+        'biblio.notes'               => 'biblio.biblioitem.notes',
+        'biblio.number'              => 'biblio.biblioitem.number',
+        'biblio.pages'               => 'biblio.biblioitem.pages',
+        'biblio.publication_place'   => 'biblio.biblioitem.publication_place',
+        'biblio.publication_year'    => 'biblio.biblioitem.publication_year',
+        'biblio.publisher'           => 'biblio.biblioitem.publisher',
+        'biblio.serial_total_issues' => 'biblio.biblioitem.serial_total_issues'
+        'biblio.url'                 => 'biblio.biblioitem.url',
+        'biblio.volume'              => 'biblio.biblioitem.volume',
+        'biblio.volume_date'         => 'biblio.biblioitem.volume_date',
+        'biblio.volume_description'  => 'biblio.biblioitem.volume_description',
     };
 
     if ( ref($query) eq 'HASH' ) {
