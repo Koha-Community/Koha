@@ -23252,6 +23252,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24412, "Attach waiting reserve to desk" );
 }
 
+$DBversion = '20.06.00.062';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE circulation_rules SET rule_name = 'lostreturn' WHERE rule_name = 'refund'" );
+    $dbh->do( "UPDATE circulation_rules SET rule_value = 'refund' WHERE rule_name = 'lostreturn' AND rule_value = 1" );
+
+    NewVersion( $DBversion, 23091, "Update refund rules");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
