@@ -1,69 +1,17 @@
 [% USE raw %]
 [% USE Asset %]
+[% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Search engine configuration (Elasticsearch)</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
-<script>
-    function clean_line( line ) {
-        $(line).find('input[type="text"]').val("");
-        $(line).find('select').find('option:first').attr("selected", "selected");
-    }
-
-    function clone_line( line ) {
-        var new_line = $(line).clone();
-        $(new_line).removeClass("nodrag nodrop");
-        $(new_line).find('td:last-child>a').removeClass("add").addClass("delete").html(_("Delete"));
-        $(new_line).find('[data-id]').each( function() {
-            $(this).attr({ name: $(this).attr('data-id') }).removeAttr('data-id');
-        } );
-        $(new_line).find("select").each( function() {
-            var attr = $(this).attr('name');
-            var val = $(line).find('[data-id="' + attr + '"]').val();
-            $(this).find('option[value="' + val + '"]').attr("selected", "selected");
-        } );
-        return new_line;
-    }
-
-    $(document).ready(function() {
-        $("#tabs").tabs();
-        $('.delete').click(function() {
-            $(this).parents('tr').remove();
-        });
-
-        $("table.mappings").tableDnD( {
-            onDragClass: "dragClass",
-        } );
-        $('.add').click(function() {
-            var table = $(this).closest('table');
-            var index_name   = $(table).attr('data-index_name');
-            var line = $(this).closest("tr");
-            var marc_field = $(line).find('input[data-id="mapping_marc_field"]').val();
-            if ( marc_field.length > 0 ) {
-                var new_line = clone_line( line );
-                new_line.appendTo($('table[data-index_name="'+index_name+'"]>tbody'));
-                $('.delete').click(function() {
-                    $(this).parents('tr').remove();
-                });
-                clean_line(line);
-
-                $(table).tableDnD( {
-                    onDragClass: "dragClass",
-                } );
-            }
-        });
-        $("#facet_biblios > table").tableDnD( {
-            onDragClass: "dragClass",
-        } );
-    });
-</script>
 <style>
 a.add, a.delete {
     cursor: pointer;
 }
 </style>
 </head>
+
 <body id="admin_searchengine_mappings" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -462,5 +410,10 @@ a.add, a.delete {
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
+    [% Asset.js("js/elasticsearch-mappings.js") | $raw %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
