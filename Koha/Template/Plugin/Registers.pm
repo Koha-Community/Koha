@@ -84,8 +84,10 @@ Returns a list of all cash registers available that adhere to the passed filters
 sub all {
     my ( $self, $params ) = @_;
 
+    return unless C4::Context->preference('UseCashRegisters');
+
     my $filters = $params->{filters} // {};
-    my $where;
+    my $where = { archived => 0 };
     $where->{branch} = C4::Context->userenv->{'branch'}
       if ( $filters->{current_branch} && C4::Context->userenv );
     my $registers = Koha::Cash::Registers->search($where)->unblessed();
