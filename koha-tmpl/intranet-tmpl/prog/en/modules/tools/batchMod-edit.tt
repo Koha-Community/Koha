@@ -1,65 +1,13 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
-[% Asset.js("js/background-job-progressbar.js") | $raw %]
-[% Asset.js("js/cataloging.js") | $raw %]
-[% INCLUDE 'datatables.inc' %]
-[% Asset.js("js/pages/batchMod.js") | $raw %]
-<script>
-    // Prepare array of all column headers, incrementing each index by
-    // two to accommodate control and title columns
-    var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
-    for( x=0; x<allColumns.length; x++ ){
-        allColumns[x] = Number(allColumns[x]) + 2;
-    }
-
-    $(document).ready(function(){
-        $("input[name='disable_input']").click(function() {
-            var row = $(this).attr("id");
-            row = row.replace("row","hint");
-            var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
-            var regex_link = $(this).parent().find("[name='field_regex']");
-            if ($(this).is(":checked")) {
-                $(todisable).prop('disabled', true);
-                $("#"+row).html(_("This subfield will be deleted"));
-                $(regex_link).hide();
-            } else {
-                $(todisable).prop('disabled', false);
-                $("#"+row).html("");
-                $(regex_link).show();
-            }
-        });
-        $("#mainformsubmit").on("click",function(){
-            return submitBackgroundJob(this.form);
-        });
-        $('a[name="field_regex"]').click(function() {
-            var id = $(this).attr('id');
-            var editor = $(this).parent().find("[name='field_value']");
-            var regex = $(this).parent().find("[name='regex_fields']");
-            var disable_input = $(this).parent().find("[name='disable_input']");
-            if ($(this).html() == 'RegEx') {
-                $(editor).hide();
-                $(regex).show();
-                $(this).html('Text');
-                $(disable_input).prop('disabled', true);
-            } else {
-                $(editor).show();
-                $(regex).hide();
-                $(this).html('RegEx');
-                $(disable_input).prop('disabled', false);
-            }
-            return false;
-        });
-    });
-</script>
 <style>input[type=checkbox]{ margin : 0 .5em; }</style>
 [% Asset.css("css/addbiblio.css") | $raw %]
 [% Asset.css("css/humanmsg.css") | $raw %]
-[% INCLUDE 'select2.inc' %]
 </head>
 
 <body id="tools_batchMod-edit" class="tools">
@@ -327,7 +275,6 @@
                                                 [% ELSE %]
                                                     <a href="#" id="buttonDot_[% mv.id | html %]" class="buttonDot" title="Tag editor">...</a>
                                                 [% END %]
-                                                [% mv.javascript | $raw %]
                                             [% ELSIF ( mv.type == 'text' ) %]
                                                 <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
                                             [% ELSIF ( mv.type == 'hidden' ) %]
@@ -411,4 +358,73 @@
                 </fieldset> <!-- /.action -->
             [% END #/IF show %]
         </form>
+
+    [% MACRO jsinclude BLOCK %]
+        [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+        [% Asset.js("js/background-job-progressbar.js") | $raw %]
+        [% Asset.js("js/cataloging.js") | $raw %]
+        [% INCLUDE 'datatables.inc' %]
+        [% Asset.js("js/pages/batchMod.js") | $raw %]
+        [% INCLUDE 'select2.inc' %]
+        <script>
+            // Prepare array of all column headers, incrementing each index by
+            // two to accommodate control and title columns
+            var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
+            for( x=0; x<allColumns.length; x++ ){
+                allColumns[x] = Number(allColumns[x]) + 2;
+            }
+
+            $(document).ready(function(){
+                $("input[name='disable_input']").click(function() {
+                    var row = $(this).attr("id");
+                    row = row.replace("row","hint");
+                    var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
+                    var regex_link = $(this).parent().find("[name='field_regex']");
+                    if ($(this).is(":checked")) {
+                        $(todisable).prop('disabled', true);
+                        $("#"+row).html(_("This subfield will be deleted"));
+                        $(regex_link).hide();
+                    } else {
+                        $(todisable).prop('disabled', false);
+                        $("#"+row).html("");
+                        $(regex_link).show();
+                    }
+                });
+                $("#mainformsubmit").on("click",function(){
+                    return submitBackgroundJob(this.form);
+                });
+                $('a[name="field_regex"]').click(function() {
+                    var id = $(this).attr('id');
+                    var editor = $(this).parent().find("[name='field_value']");
+                    var regex = $(this).parent().find("[name='regex_fields']");
+                    var disable_input = $(this).parent().find("[name='disable_input']");
+                    if ($(this).html() == 'RegEx') {
+                        $(editor).hide();
+                        $(regex).show();
+                        $(this).html('Text');
+                        $(disable_input).prop('disabled', true);
+                    } else {
+                        $(editor).show();
+                        $(regex).hide();
+                        $(this).html('RegEx');
+                        $(disable_input).prop('disabled', false);
+                    }
+                    return false;
+                });
+            });
+        </script>
+        [% IF ( show ) %]
+            [%- # Loop over fields which may have plugin JavaScript -%]
+            [%- UNLESS (too_many_items_process) -%]
+                [%- FOREACH ite IN item -%]
+                    [% SET mv = ite.marc_value %]
+                    [%- IF ( mv.type == 'text2' ) -%]
+                        <!-- subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %] -->
+                        [% mv.javascript | $raw %]
+                    [%- END -%]
+                [%- END -%]
+            [%- END -%]
+        [%- END -%]
+    [% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
