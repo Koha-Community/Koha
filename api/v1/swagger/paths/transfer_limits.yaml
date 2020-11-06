@@ -3,6 +3,7 @@
   get:
     x-mojo-to: TransferLimits#list
     operationId: listTransferLimits
+    description: "This resource returns a list of existing transfer limits."
     tags:
     - transfer
     parameters:
@@ -56,6 +57,7 @@
   post:
     x-mojo-to: TransferLimits#add
     operationId: addTransferLimit
+    description: "This resource accepts a new transfer limit and creates it if it does not already exist."
     tags:
     - transfer
     parameters:
@@ -103,6 +105,7 @@
   delete:
     x-mojo-to: TransferLimits#delete
     operationId: deleteTransferLimit
+    description: "This resource deletes a transfer limit for the given limit id"
     tags:
     - transfer
     parameters:
@@ -141,6 +144,39 @@
   post:
     x-mojo-to: TransferLimits#batch_add
     operationId: batchAddTransferLimits
+    description: "This resource batch creates new transfer limits based on the given data.
+
+    For example, if the paramters `to_library_id: 'BranchA'` and `item_type: 'BOOK'` are passed in
+    new transfer limits for `BOOK`s will be created, with one transfer limit each for all the
+    branches defined in Koha. Given 4 branches, 3 limits would be created:
+
+
+    * to_library_id: 'BranchA', from_library_id: 'BranchB', item_type: 'BOOK'
+
+    * to_library_id: 'BranchA', from_library_id: 'BranchC', item_type: 'BOOK'
+
+    * to_library_id: 'BranchA', from_library_id: 'BranchD', item_type: 'BOOK'
+
+
+    The body of the query would look like
+    ```
+    {
+        'to_library_id': 'BranchA',
+        'item_type': 'BOOK'
+
+    }
+    ```
+
+
+    As another example, imagine we have an itemtype that is never supposed to be transferred to another library.
+    If we call that itemtype `LOCAL_ONLY` we would need to just pass `item_type: 'LOCAL_ONLY'`, which would create transfer
+    limits for all libraries, meaning those items would never be allowed to transfer to another
+    library. The body of the query would look like
+    ```
+    {
+        'item_type': 'LOCAL_ONLY'
+    }
+    ```"
     tags:
     - transfer
     parameters:
@@ -193,6 +229,8 @@
   delete:
     x-mojo-to: TransferLimits#batch_delete
     operationId: batchDeleteTransferLimits
+    description: 'This endpoint works just like [the POST version](#op-post-transfer_limits-batch), except it deletes transfer in batch
+      rather than creating them.'
     tags:
     - transfer
     parameters:
