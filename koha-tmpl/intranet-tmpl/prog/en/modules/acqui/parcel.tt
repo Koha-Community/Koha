@@ -118,6 +118,24 @@
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
+                <tr>
+                    <th><div class="input-group input-group-sm"><input id="basket_name_column_search" type="text" class="form-control column-filter" data-search-fields='["basket.name"]'></div></th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["basket.basket_group.name"]'></div></th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.order_id"]'></div></th>
+                    <th class="hidden">&nbsp;</th>
+                    <th class="hidden">&nbsp;</th>
+                    <th class="hidden">&nbsp;</th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.internal_note","me.vendor_note","biblio.title","biblio.author","biblio.isbn","biblio.publisher","biblio.publication_year","biblio.copyright_date","biblio.suggestions.suggester.surname","biblio.suggestions.suggester.firstname"]'></div></th>
+                    <th>&nbsp;</th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.replacement_price"]'></div></th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.quantity"]'></div></th>
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.ecost"]'></div></th>
+                    <th>&nbsp;</th>
+                    <!--th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["order_cost"]'></div></th-->
+                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["fund.name"]'></div></th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
             </thead>
         </table>
     </div>
@@ -371,25 +389,70 @@
     <script>
         dt_overwrite_html_sorting_localeCompare();
         var sticky_filters = [% sticky_filters | html %];
+        var columns_filter = {};
 
-        function query_from_filters( base_query, params ) {
+        function query_from_filters( base_query ) {
 
             var query_and = [];
 
-            if ( params.basket_name != "" ) {
-                query_and.push( { "basket.name": { "like": '%'+params.basket_name+'%' } } );
+            var summary      = $("#summaryfilter").val();
+            var basket_group = $("#basketgroupnamefilter").val();
+            var basket_name  = $("#basketfilter").val();
+            var order_id     = $("#orderfilter").val();
+            var ean          = $("#eanfilter").val();
+
+            // ean == undefined if the HTML doens't have it
+            ean = (ean === undefined) ? '' : ean;
+
+            if ( basket_name != "" ) {
+                query_and.push( { "basket.name": { "like": '%'+basket_name+'%' } } );
             }
-            if (params.basket_group != "") {
-                query_and.push( { "basket.basket_group.name": { "like": '%'+params.basket_group+'%' } } );
+            if (basket_group != "") {
+                query_and.push( { "basket.basket_group.name": { "like": '%'+basket_group+'%' } } );
             }
-            if (params.summary != "") {
-                query_and.push( { "-or": [{"biblio.title":  { "like": '%'+params.summary+'%' } },
-                            {"biblio.author": { "like": '%'+params.summary+'%' } },
-                            {"biblio.isbn":   { "like": '%'+params.summary+'%' } } ] } );
+            if (summary != "") {
+                query_and.push( { "-or": [{"biblio.title":  { "like": '%'+summary+'%' } },
+                            {"biblio.author": { "like": '%'+summary+'%' } },
+                            {"biblio.isbn":   { "like": '%'+summary+'%' } } ] } );
             }
-            if (params.ean != "") {
-                query_and.push( { "biblio.ean": params.ean } );
+            if (ean != "") {
+                query_and.push( { "biblio.ean": ean } );
             }
+
+            $(".column-filter").each(function () {
+                var search_fields = $(this).data('search-fields');
+                var value = this.value;
+
+                if ( value != '' &&
+                     value != undefined ) { // skip if empty
+
+                    var columns_filters = [];
+
+                    search_fields.forEach( function (item) {
+                        if ( item === "me.order_id" ||
+                             item === "me.replacement_price" ||
+                             item === "me.quantity" ||
+                             item === "me.ecost" ) {
+                            // For numbers, we do 'starts with'
+                            var object = {};
+                            object[item] = { "like": value+'%' };
+                            columns_filters.push( object );
+                        }
+                        else {
+                            var object = {};
+                            object[item] = { "like": '%'+value+'%' };
+                            columns_filters.push( object );
+                        }
+                    });
+
+                    if ( columns_filters.length > 1 ) {
+                        query_and.push( { "-or": columns_filters } );
+                    }
+                    else if ( columns_filters.length > 0 ) {
+                        query_and.push( columns_filters[0] );
+                    }
+                }
+            });
 
             var query_params = [];
 
@@ -398,8 +461,8 @@
                 query_params.push('q=' + encodeURIComponent(JSON.stringify({ "-and": query_and })));
             }
 
-            if ( params.order_id != "" ) {
-                query_params.push("order_id="+params.order_id);
+            if ( order_id != "" ) {
+                query_params.push("order_id="+order_id);
             }
 
             return query_params;
@@ -435,24 +498,8 @@
                 }));
             }
 
-            var base_query = { "basket.vendor_id": [% booksellerid | html %]  };
-
-            var summary      = $("#summaryfilter").val();
-            var basket_name  = $("#basketfilter").val();
-            var basket_group = $("#basketgroupnamefilter").val();
-            var order_id     = $("#orderfilter").val();
-            var ean          = $("#eanfilter").val();
-
-            var query_params = query_from_filters(
-                base_query,
-                {
-                    "summary": summary,
-                    "basket_name": basket_name,
-                    "basket_group": basket_group,
-                    "order_id": order_id,
-                    "ean": (ean === undefined) ? '' : ean // ean == undefined if the DOM doens't have it
-                }
-            );
+            var base_query   = { "basket.vendor_id": [% booksellerid | html %]  };
+            var query_params = query_from_filters( base_query );
 
             var THE_query = query_params.join("&");
 
@@ -473,6 +520,8 @@
                     "items"
                 ],
                 "stateSave": true, // remember state on page reload
+                "orderCellsTop": true, // tell the datatable sorting is done on the top row
+                "fixedHeader": true,
                 'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "drawCallback": function (settings) {
                     $(".previewData").on("click", function(e){
@@ -740,32 +789,33 @@
                 ]
             });
 
+            // column filter events handling
+            $(".column-filter").each(function () {
+                $(this).on( 'keyup change', function () {
+                    // recalculate the query
+                    var query_params = query_from_filters( base_query );
+                    // refresh the datatable as appropriate
+                    if ( query_params.length > 0 ) {
+                        pending_orders_table.api().ajax.url( pending_orders_url + '&' + query_params.join("&") );
+                    }
+                    else {
+                        pending_orders_table.api().ajax.url( pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query)) );
+                    }
+                    pending_orders_table.api().ajax.reload( null, false );
+                });
+            });
+
             $("#filterform").on("submit", function(e) {
                 e.preventDefault();
 
-                var summary      = $("#summaryfilter").val();
-                var basket_name  = $("#basketfilter").val();
-                var basket_group = $("#basketgroupnamefilter").val();
-                var order_id     = $("#orderfilter").val();
-                var ean          = $("#eanfilter").val();
-
                 // Save the filters in the cookie
-                $.cookie("filter_parcel_summary", summary);
-                $.cookie("filter_parcel_basketname", basket_name);
-                $.cookie("filter_parcel_orderno", basket_group);
-                $.cookie("filter_parcel_basketgroupname", order_id);
-                $.cookie("filter_parcel_ean", ean);
+                $.cookie("filter_parcel_summary", $("#summaryfilter").val());
+                $.cookie("filter_parcel_basketname", $("#basketfilter").val());
+                $.cookie("filter_parcel_orderno", $("#orderfilter").val());
+                $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
+                $.cookie("filter_parcel_ean", $("#eanfilter").val());
 
-                var query_params = query_from_filters(
-                    base_query,
-                    {
-                        "summary": summary,
-                        "basket_name": basket_name,
-                        "basket_group": basket_group,
-                        "order_id": order_id,
-                        "ean": (ean === undefined) ? '' : ean // ean == undefined if the HTML doens't have it
-                    }
-                );
+                var query_params = query_from_filters( base_query );
 
                 if ( query_params.length > 0 ) {
                     pending_orders_table.api().ajax.url( pending_orders_url + '&' + query_params.join("&") );

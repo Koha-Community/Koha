@@ -312,8 +312,10 @@ sub fix_query {
 
     my $query = $args->{query};
     my $biblioitem_fields = {
-        'biblio.isbn' => 'biblio.biblioitem.isbn',
-        'biblio.ean'  => 'biblio.biblioitem.ean'
+        'biblio.isbn'      => 'biblio.biblioitem.isbn',
+        'biblio.ean'       => 'biblio.biblioitem.ean',
+        'biblio.publisher' => 'biblio.biblioitem.publisher',
+        'biblio.publication_year' => 'biblio.biblioitem.publication_year'
     };
 
     if ( ref($query) eq 'HASH' ) {
