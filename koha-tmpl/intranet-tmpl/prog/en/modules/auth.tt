@@ -97,7 +97,7 @@
         </p>
     [% END %]
 
-    [% IF Koha.Preference('UseCashRegisters') %]
+    [% IF Koha.Preference('UseCashRegisters') && Registers.all().size %]
     <p>
         <label for="register_id">Cash register:</label>
         <select name="register_id" id="register_id" class="input" tabindex="4">
