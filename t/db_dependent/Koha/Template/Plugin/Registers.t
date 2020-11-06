@@ -70,6 +70,11 @@ subtest 'all() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $count = Koha::Cash::Registers->search({ archived => 0 })->count;
+    my $max_register = Koha::Cash::Registers->search( {},
+        { order_by => { '-desc' => 'id' }, rows => 1 } )->single;
+    my $max_id = $max_register ? $max_register->id : 0;
+
     my $library1 = $builder->build_object(
         {
             class => 'Koha::Libraries'
@@ -80,7 +85,8 @@ subtest 'all() tests' => sub {
             class => 'Koha::Cash::Registers',
             value => {
                 branch         => $library1->branchcode,
-                branch_default => 0
+                branch_default => 0,
+                archived       => 0
             }
         }
     );
@@ -89,7 +95,8 @@ subtest 'all() tests' => sub {
             class => 'Koha::Cash::Registers',
             value => {
                 branch         => $library1->branchcode,
-                branch_default => 1
+                branch_default => 1,
+                archived       => 0
             }
         }
     );
@@ -103,7 +110,8 @@ subtest 'all() tests' => sub {
         {
             class => 'Koha::Cash::Registers',
             value => {
-                branch => $library2->branchcode
+                branch => $library2->branchcode,
+                archived       => 0
             }
         }
     );
@@ -114,8 +122,9 @@ subtest 'all() tests' => sub {
     my $result = $plugin->all;
     is( ref($result), 'ARRAY', "Return arrayref (no userenv, no filters)" );
     is( scalar( @{$result} ),
-        3, "Array contains all 3 registers (no userenv, no filters)" );
+        3 + $count, "Array contains all test registers (no userenv, no filters)" );
     for my $register ( @{$result} ) {
+        next if $register->{id} <= $max_id;
         is( $register->{selected}, 0, "Register is not selected (no userenv)" );
     }
 
@@ -128,8 +137,9 @@ subtest 'all() tests' => sub {
     is( ref($result), 'ARRAY',
         "Return arrayref (userenv: branchcode, no filters)" );
     is( scalar( @{$result} ),
-        3, "Array contains all 3 registers (userenv: branchcode, no filters)" );
+        3 + $count, "Array contains all test registers (userenv: branchcode, no filters)" );
     for my $register ( @{$result} ) {
+        next if $register->{id} <= $max_id;
         is( $register->{selected}, 0,
             "Register is not selected (userenv: branchcode, no filters)" );
     }
