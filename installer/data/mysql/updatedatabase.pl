@@ -23235,6 +23235,23 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25334, "Add generic 'phone' message transport type");
 }
 
+$DBversion = '20.06.00.061';
+if( CheckVersion( $DBversion ) ) {
+    if ( !column_exists( 'reserves', 'desk_id' ) ) {
+        $dbh->do(q{
+             ALTER TABLE reserves ADD COLUMN desk_id INT(11) DEFAULT NULL AFTER branchcode,
+             ADD KEY desk_id (`desk_id`),
+             ADD CONSTRAINT `reserves_ibfk_6` FOREIGN KEY (`desk_id`) REFERENCES `desks` (`desk_id`) ON DELETE SET NULL ON UPDATE CASCADE ;
+        });
+        $dbh->do(q{
+             ALTER TABLE old_reserves ADD COLUMN desk_id INT(11) DEFAULT NULL AFTER branchcode,
+             ADD KEY `old_desk_id` (`desk_id`);
+        });
+    }
+
+    NewVersion( $DBversion, 24412, "Attach waiting reserve to desk" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
