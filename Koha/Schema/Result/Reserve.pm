@@ -56,6 +56,12 @@ __PACKAGE__->table("reserves");
   is_nullable: 1
   size: 10
 
+=head2 desk_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 notificationdate
 
   data_type: 'date'
@@ -183,6 +189,8 @@ __PACKAGE__->add_columns(
   },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "desk_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "notificationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "reminderdate",
@@ -312,6 +320,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 desk
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Desk>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "desk",
+  "Koha::Schema::Result::Desk",
+  { desk_id => "desk_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -353,8 +381,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-31 14:16:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:goRy3ZQWpGNmicok5Av37Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-11-06 11:00:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ue2kNBP+lq8+9NthPiYrrw
 
 __PACKAGE__->belongs_to(
   "item",

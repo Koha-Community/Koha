@@ -83,9 +83,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 reserves
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-10-02 13:43:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IklOycKlChqv9Tftm8rjqA
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Reserve>
+
+=cut
+
+__PACKAGE__->has_many(
+  "reserves",
+  "Koha::Schema::Result::Reserve",
+  { "foreign.desk_id" => "self.desk_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-11-06 11:00:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Weoxj3CBeajLEzx9DBX1ag
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
