@@ -96,9 +96,9 @@
                     [% ELSE %]
                         <a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a>
                     [% END %]
-              </fieldset>
-            </div>
-        [% END %]
+                </fieldset>
+            </div> <!-- /.dialog.message -->
+        [% END # /IF show %]
 
         [% IF ( barcode_not_unique ) %]
             <div class="dialog alert">
@@ -132,7 +132,7 @@
                     <h4>The following barcodes were found: </h4>
                 [% END %]
             [% END %]
-        [% END %] <!-- /notfoundbarcodes -->
+        [% END # /IF notfoundbarcodes.size %]
 
         [% IF ( notfounditemnumbers.size ) %]
             <div class="dialog alert">
@@ -154,7 +154,7 @@
                     <h4>The following itemnumbers were found: </h4>
                 [% END %]
             [% END %]
-        [% END %] <!-- /notfounditemnumbers -->
+        [% END # /IF notfounditemnumbers.size %]
 
 
         <form name="f" action="batchMod.pl" method="post">
@@ -194,7 +194,7 @@
                                 <label for="checkheader[% loop.count | html %]">[% item_header_loo.header_value | html %]</label>
                             </span>
                         [% END %]
-                    </p>
+                    </p> <!-- /#selections -->
 
                     <table id="itemst">
                         <thead>
@@ -242,7 +242,7 @@
                                             [% ELSE %]
                                                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this record" >
                                             [% END %]
-                                        [% END %]
+                                        [% END # /IF item_loo.holds %]
                                         [% IF item_loo.holds %]
                                             [% item_loo.item_holds | html %]/[% item_loo.holds | html %]
                                         [% ELSE %]
@@ -256,11 +256,11 @@
                                         </td>
                                     [% END %]
                                 </tr>
-                            [% END %]
+                            [% END # /FOREACH item_loo %]
                         </tbody>
-                    </table>
-                </div>
-            [% END %]<!-- /item_loop -->
+                    </table> <!-- /#itemst -->
+                </div> <!-- /#cataloguing_additem_itemlist -->
+            [% END # /IF item_loop %]
 
             [% IF ( simple_items_display || job_completed ) %]
                 [% IF ( too_many_items_display ) %]
@@ -274,8 +274,8 @@
                             </li>
                         [% END %]
                     </ul>
-                [% END %]
-            [% END %]<!-- /simple_items_display -->
+                [% END # /IF too_many_items_display %]
+            [% END # /IF simple_items_display %]
 
             [% IF ( show ) %]
 
@@ -286,7 +286,7 @@
                     [% FOREACH itemnumber IN itemnumbers_array %]
                         <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                     [% END %]
-                [% END %]<!-- /too_many_items -->
+                [% END # /IF too_many_items_process %]
 
                 [% UNLESS (too_many_items_process) %]
                     <div id="cataloguing_additem_newitem">
@@ -334,7 +334,7 @@
                                                 <input type="hidden" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
                                             [% ELSIF ( mv.type == 'textarea' ) %]
                                                 <textarea tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255">[%- mv.value | html -%]"</textarea>
-                                            [%- END -%]
+                                            [%- END # /IF mv.type == ... -%]
 
                                             <span name="regex_fields" style="display: none;">
                                                 s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
@@ -361,9 +361,9 @@
                                                 </a>
                                             [% END %]
                                             <span class="hint" id="hint[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]"></span>
-                                        </div>
+                                        </div> <!-- /.subfield_line -->
                                     </li>
-                                [% END %]
+                                [% END # /FOREACH ite %]
                             </ol>
                         </fieldset>
 
@@ -391,11 +391,11 @@
                             <input type="submit" id="mainformsubmit" value="Save" />
                             <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel">Cancel</a>
                         </fieldset>
-                    </div>
+                    </div> <!-- /#cataloguing_additem_newitem -->
                 [% ELSE %]
                     <p><a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a></p>
-                [% END %]
-            [% ELSE %] <!-- // show -->
+                [% END # /UNLESS too_many_items_process %]
+            [% ELSE # IF show %]
                 <fieldset class="action">
                     [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
                         [% IF searchid %]
@@ -408,7 +408,7 @@
                     [% ELSE %]
                         <a class="btn btn-default" href="/cgi-bin/koha/tools/batchMod.pl"><i class="fa fa-check-square-o"></i> Return to batch item modification</a>
                     [% END %]
-                </fieldset>
-            [% END %]
+                </fieldset> <!-- /.action -->
+            [% END #/IF show %]
         </form>
 [% INCLUDE 'intranet-bottom.inc' %]
