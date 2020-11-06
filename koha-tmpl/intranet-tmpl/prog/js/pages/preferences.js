@@ -225,6 +225,7 @@ $( document ).ready( function () {
 
     $(".modalselect").on("click", function(){
         var datasource = $(this).data("source");
+        var exclusions = $(this).data("exclusions").split('|');
         var pref_name = this.id.replace(/pref_/, '');
         var pref_value = this.value;
         var prefs = pref_value.split("|");
@@ -238,7 +239,13 @@ $( document ).ready( function () {
                 } else {
                     checked = "";
                 }
-                items.push('<label><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + ' name="pref" value="' + val + '" /> ' + key + '</label>');
+                if( exclusions.indexOf( val ) >= 0 ){
+                    disabled = ' disabled="disabled" ';
+                    checked  = "";
+                } else {
+                    disabled = "";
+                }
+                items.push('<label><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + val + '" /> ' + key + '</label>');
             });
             $("<div/>", {
                 "class": "columns-2",

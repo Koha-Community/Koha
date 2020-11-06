@@ -112,7 +112,7 @@
                         [% END %]
                     </select>
                     [% ELSIF ( CHUNK.type_modalselect ) %]
-                        <input type="text" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="modalselect preference preference-[% CHUNK.type | html %]" data-source="[% CHUNK.source | html %]" readonly="readonly" value="[% CHUNK.value | html %]"/>
+                        <input type="text" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="modalselect preference preference-[% CHUNK.type | html %]" data-source="[% CHUNK.source | html %]" data-exclusions="[% CHUNK.exclusions | html %]" readonly="readonly" value="[% CHUNK.value | html %]"/>
                     [% ELSIF ( CHUNK.type_multiple ) %]
                     <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
                         [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value | html %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value | html %]">[% END %][% CHOICE.text | html %]</option>[% END %]
