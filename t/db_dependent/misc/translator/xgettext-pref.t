@@ -12,7 +12,7 @@ my $tempdir = tempdir(CLEANUP => 1);
 
 write_file("$tempdir/files", "$Bin/sample.pref");
 
-my $xgettext_cmd = "$Bin/../../../misc/translator/xgettext-pref "
+my $xgettext_cmd = "$Bin/../../../../misc/translator/xgettext-pref "
     . "-o $tempdir/Koha.pot -f $tempdir/files";
 
 system($xgettext_cmd);

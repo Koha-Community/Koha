@@ -12,7 +12,7 @@ my $tempdir = tempdir(CLEANUP => 1);
 
 write_file("$tempdir/files", "$Bin/sample.tt");
 
-my $xgettext_cmd = "$Bin/../../../misc/translator/xgettext-tt2 --from-code=UTF-8 "
+my $xgettext_cmd = "$Bin/../../../../misc/translator/xgettext-tt2 --from-code=UTF-8 "
     . "-o $tempdir/Koha.pot -f $tempdir/files";
 
 system($xgettext_cmd);

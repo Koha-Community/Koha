@@ -12,7 +12,7 @@ my $tempdir = tempdir(CLEANUP => 1);
 
 write_file("$tempdir/files", "$Bin/sample.yml");
 
-my $xgettext_cmd = "$Bin/../../../misc/translator/xgettext-installer "
+my $xgettext_cmd = "$Bin/../../../../misc/translator/xgettext-installer "
     . "-o $tempdir/Koha.pot -f $tempdir/files";
 
 system($xgettext_cmd);
