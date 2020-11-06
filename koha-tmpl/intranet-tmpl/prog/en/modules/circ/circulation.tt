@@ -512,7 +512,7 @@
 
                         [% IF patron %]
 
-                            [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
+                            [% IF patron.privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
                                 <div class="dialog alert">
                                     <strong>Error:</strong> This patron has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or incorrect.
                                 </div>

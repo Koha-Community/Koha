@@ -293,13 +293,13 @@
                 <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff interface and the OPAC will be broken.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronOPACPrivacy %]
-                    <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong class="error">Error</strong> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number or checkins for these patrons will fail.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronAnonSuggestions %]
                     <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist %]
-                    <tr><th scope="row"><strong>Warning</strong> </th><td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                    <tr><th scope="row"><strong class="error">Error</strong> </th><td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number or checkins for these patrons will fail.</td></tr>
                 [% END %]
                 [% IF warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist %]
                     <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>

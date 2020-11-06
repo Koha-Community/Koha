@@ -2072,7 +2072,7 @@ sub AddReturn {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item->unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
-                carp "The checkin for the following issue failed, Please go to the about page, section 'data corrupted' to know how to fix this problem ($@)" . Dumper( $issue->unblessed );
+                carp "The checkin for the following issue failed, Please go to the about page and check all messages on the 'System information' to see if there are configuration / data issues ($@)" . Dumper( $issue->unblessed );
 
                 my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
                 $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
