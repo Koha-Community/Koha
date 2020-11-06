@@ -121,7 +121,7 @@ for my $file (@files) {
                         # discard non strings
                         next if ( $line =~ /^(\s|%s|-|[[:punct:]]|\(|\))*$/ or length($line) < 2 );
                         if ( not $pot->{$line} ) {
-                            my $msg = new Locale::PO(
+                            my $msg = Locale::PO->new(
                                 -msgid  => $line,
                                 -msgstr => '',
                                 -reference => "$file:$table_name:$tablec:row:$rowc:mul:$mulc"
@@ -130,7 +130,7 @@ for my $file (@files) {
                         }
                     }
                 } elsif (defined $row->{$field} && length($row->{$field}) > 1 && !$pot->{ $row->{$field} }) {
-                    my $msg = new Locale::PO(
+                    my $msg = Locale::PO->new(
                         -msgid     => $row->{$field},
                         -msgstr    => '',
                         -reference => "$file:$table_name:$tablec:row:$rowc"
@@ -145,7 +145,7 @@ for my $file (@files) {
     for my $description ( @{ $yaml->{'description'} } ) {
         $desccount++;
         if ( length($description) > 1 and not $pot->{$description} ) {
-            my $msg = new Locale::PO(
+            my $msg = Locale::PO->new(
                 -msgid     => $description,
                 -msgstr    => '',
                 -reference => "$file:description:$desccount"
