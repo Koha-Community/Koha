@@ -24,11 +24,6 @@
 [% END %]
 
 [% BLOCK options_for_registers %]
-    [% IF register_required %]
-    <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
-    [% ELSE %]
-    <option id="noregister" selected="selected" value="">-- None --</option>
-    [% END %]
     [% FOREACH r IN registers %]
         [% IF r.branch == Branches.GetLoggedInBranchcode %]
             [% IF r.selected %]

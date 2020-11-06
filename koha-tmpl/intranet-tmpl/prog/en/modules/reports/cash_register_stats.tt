@@ -104,6 +104,7 @@
                 <li>
                     <label for="registerid">Cash register: </label>
                     <select name="registerid" id="registerid">
+                        <option id="noregister" selected="selected" value="">-- All --</option>
                         [% PROCESS options_for_registers registers => Registers.all( selected => registerid ) %]
                     </select>
                 </li>

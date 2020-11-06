@@ -155,7 +155,8 @@
     <li>
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
-            [% PROCESS options_for_registers register_required => 1 %]
+            <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+            [% PROCESS options_for_registers %]
         </select>
     </li>
     [% END %]
@@ -285,7 +286,8 @@
     <li>
         <label for="cash_register">Cash register: </label>
         <select name="cash_register" id="cash_register">
-            [% PROCESS options_for_registers register_required => 1 %]
+            <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+            [% PROCESS options_for_registers %]
         </select>
     </li>
     [% END %]

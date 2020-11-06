@@ -106,6 +106,7 @@ Updated:<ul>
         <li>
             <label for="register_id">Choose cash register:</label>
             <select name="register_id" id="register_id">
+                <option id="noregister" selected="selected" value="">-- None --</option>
                 [% PROCESS options_for_registers registers => Registers.all() %]
             </select>
         </li>

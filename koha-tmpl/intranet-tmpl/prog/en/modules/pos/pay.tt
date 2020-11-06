@@ -129,7 +129,8 @@
                             <li>
                                 <label for="registerid">Cash register: </label>
                                 <select name="registerid" id="registerid">
-                                    [% PROCESS options_for_registers register_required => 1 %]
+                                    <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                    [% PROCESS options_for_registers %]
                                 </select>
                             </li>
                         </ol>

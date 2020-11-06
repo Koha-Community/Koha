@@ -185,7 +185,8 @@
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="payout_registerid">
-                                        [% PROCESS options_for_registers register_required => 1 %]
+                                        <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                        [% PROCESS options_for_registers %]
                                     </select>
                                 </li>
                                 [% END %]
@@ -251,7 +252,8 @@
                                 <li>
                                     <label for="registerid">Cash register: </label>
                                     <select name="registerid" id="refund_registerid">
-                                        [% PROCESS options_for_registers register_required => 1 %]
+                                        <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
+                                        [% PROCESS options_for_registers %]
                                     </select>
                                 </li>
                                 [% END %]
