@@ -39,6 +39,8 @@ is_deeply(
         'branch'        => undef,
         'desk_id'       => undef,
         'desk_name'     => undef,
+        'register_id'   => undef,
+        'register_name' => undef,
     },
     "Context userenv set correctly with -cron"
 );
