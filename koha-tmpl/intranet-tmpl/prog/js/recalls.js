@@ -77,7 +77,7 @@ $(document).ready(function() {
                     if(data.success == 0) {
                         message = __("The recall waiting status may have already been reverted. Please refresh the page.");
                     } else {
-                        message = __("Status updated");
+                        message = __("Waiting status reverted");
                     }
                     $self.parent().parent().parent().parent().html(message);
                 });

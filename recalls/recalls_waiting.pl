@@ -25,7 +25,7 @@ use Koha::BiblioFrameworks;
 use Koha::DateUtils;
 use Koha::Patrons;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "recalls/recalls_waiting.tt",

@@ -183,7 +183,7 @@ sub move_recall {
 
     if ( $message eq 'no action provided' and $item and $item->biblionumber and $borrowernumber ) {
         # move_recall was not called to revert or cancel, but was called to fulfill
-        my $recall = Koha::Recalls->find({ borrowernumber => $borrowernumber, biblionumber => $item->biblionumber, itemnumber => [ $item->itemnumber, undef ], old => undef });
+        my $recall = Koha::Recalls->search({ borrowernumber => $borrowernumber, biblionumber => $item->biblionumber, itemnumber => [ $item->itemnumber, undef ], old => undef }, { order_by => { -asc => 'recalldate' } })->next;
         if ( $recall ) {
             $recall->set_finished;
             $message = 'fulfilled';

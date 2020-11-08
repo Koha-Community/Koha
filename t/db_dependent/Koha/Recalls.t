@@ -43,7 +43,7 @@ my $item1 = $builder->build_sample_item();
 my $biblio1 = $item1->biblio;
 my $branch1 = $item1->holdingbranch;
 my $itemtype1 = $item1->effective_itemtype;
-my $item2 = $builder->build_sample_item();
+my $item2 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
 my $biblio2 = $item1->biblio;
 my $branch2 = $item1->holdingbranch;
 my $itemtype2 = $item1->effective_itemtype;
@@ -168,7 +168,7 @@ ok( $recall->cancelled, "Recall cancelled with move_recall" );
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
-$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, itemnumber => $item2->itemnumber, borrowernumber => $patron1->borrowernumber });
+$message = Koha::Recalls->move_recall({ recall_id => $recall->recall_id, item => $item2, borrowernumber => $patron1->borrowernumber });
 $recall = Koha::Recalls->find( $recall->recall_id );
 ok( $recall->finished, "Recall fulfilled with move_recall" );
 

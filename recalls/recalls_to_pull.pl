@@ -22,7 +22,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
       template_name   => "recalls/recalls_to_pull.tt",
