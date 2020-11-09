@@ -75,13 +75,13 @@
 
                             <li>
                                 <label for="name" class="required">Name: </label>
-                                <input type="text" name="name" id="name" size="80" value="[% cash_register.name | html %]" class="required" />
+                                <input type="text" name="name" id="name" size="24" maxlength="24" value="[% cash_register.name | html %]" class="required" />
                                 <span class="required">Required</span>
                             </li>
 
                             <li>
                                 <label for="description">Description: </label>
-                                <input type="text" name="description" id="description" value="[% cash_register.description | html %]"/>
+                                <input type="text" name="description" id="description" size="24" value="[% cash_register.description | html %]"/>
                             </li>
                             <li>
                                 <label for="branch">Library: </label>
@@ -96,7 +96,7 @@
 
                             <li>
                                 <label for="starting_float">Initial float: </label>
-                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" value="[% cash_register.starting_float | $Price on_editing => 1  %]" />
+                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" size="24" value="[% cash_register.starting_float | $Price on_editing => 1  %]" />
                             </li>
                         </ol>
                    </fieldset>
