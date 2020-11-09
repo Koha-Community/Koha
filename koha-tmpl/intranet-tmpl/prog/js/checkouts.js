@@ -954,9 +954,23 @@ $(document).ready(function() {
                 "bAutoWidth": false,
                 "sDom": "rt",
                 "aaSorting": [],
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': ['NoSort'] },
+                    { "sType": "anti-the", "aTargets": ["anti-the"] },
+                ],
                 "aoColumns": [
                     {
                         "mDataProp": "id",
+                        "bVisible": false,
+                    },
+                    {
+                        "mDataProp": function (oObj) {
+                            if (oObj.resolution) {
+                                return "is_resolved";
+                            } else {
+                                return "is_unresolved";
+                            }
+                        },
                         "bVisible": false,
                     },
                     {
@@ -1068,8 +1082,39 @@ $(document).ready(function() {
                         fnCallback(json)
                     } );
                 },
+                "search": { "search": "is_unresolved" },
+                "footerCallback": function (row, data, start, end, display) {
+                    var api = this.api();
+                    // Total over all pages
+                    var colData = api.column(1).data();
+                    var is_unresolved = 0;
+                    var is_resolved = 0;
+                    colData.each(function( index, value ){
+                        if( index == "is_unresolved" ){ is_unresolved++; }
+                        if (index == "is_resolved") { is_resolved++; }
+                    });
+                    // Update footer
+                    $("#return-claims-controls").html( showClaimFilter( is_unresolved, is_resolved ) )
+                }
             });
         }
+    }
+
+    function showClaimFilter( is_unresolved, is_resolved ){
+        var showAll, showUnresolved;
+        var total = Number( is_unresolved ) + Number( is_resolved );
+        if( total > 0 ){
+            showAll = __nx("Show 1 claim", "Show all {count} claims", total, { count: total });
+        } else {
+            showAll = "";
+        }
+        if( is_unresolved > 0 ){
+            showUnresolved = __nx("Show 1 unresolved claim", "Show {count} unresolved claims", is_unresolved, { count: is_unresolved })
+        } else {
+            showUnresolved = "";
+        }
+        $("#show_all_claims").html( showAll );
+        $("#show_unresolved_claims").html( showUnresolved );
     }
 
     $('body').on('click', '.return-claim-tools-editnotes', function() {
@@ -1180,6 +1225,20 @@ $(document).ready(function() {
             contentType: "json"
         });
 
+    });
+
+    $("#show_all_claims").on("click", function(e){
+        e.preventDefault();
+        $(".ctrl_link").removeClass("disabled");
+        $(this).addClass("disabled");
+        $("#return-claims-table").DataTable().search("").draw();
+    });
+
+    $("#show_unresolved_claims").on("click", function (e) {
+        e.preventDefault();
+        $(".ctrl_link").removeClass("disabled");
+        $(this).addClass("disabled");
+        $("#return-claims-table").DataTable().search("is_unresolved").draw();
     });
 
  });
