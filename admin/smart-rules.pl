@@ -97,6 +97,7 @@ if ($op eq 'delete') {
                 hardduedate                      => undef,
                 hardduedatecompare               => undef,
                 renewalsallowed                  => undef,
+                unseen_renewals_allowed          => undef,
                 renewalperiod                    => undef,
                 norenewalbefore                  => undef,
                 auto_renew                       => undef,
