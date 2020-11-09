@@ -265,7 +265,7 @@ sub GetImportBatch {
     my ($batch_id) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT b.*, p.name as profile FROM import_batches b LEFT JOIN import_batches_profile p ON p.id = b.profile_id WHERE import_batch_id = ?");
+    my $sth = $dbh->prepare_cached("SELECT b.*, p.name as profile FROM import_batches b LEFT JOIN import_batch_profiles p ON p.id = b.profile_id WHERE import_batch_id = ?");
     $sth->bind_param(1, $batch_id);
     $sth->execute();
     my $result = $sth->fetchrow_hashref;
@@ -1024,7 +1024,7 @@ sub GetImportBatchRangeDesc {
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT b.*, p.name as profile FROM import_batches b
-                                    LEFT JOIN import_batches_profile p
+                                    LEFT JOIN import_batch_profiles p
                                     ON b.profile_id = p.id
                                     WHERE b.batch_type IN ('batch', 'webservice')
                                     ORDER BY b.import_batch_id DESC";
