@@ -32,7 +32,7 @@ $(document).ready(function () {
     });
 
     $("table.mappings").tableDnD({
-        onDragClass: "dragClass",
+        onDragClass: "dragClass highlighted-row",
     });
     $('.add').click(function () {
         var table = $(this).closest('table');
@@ -48,11 +48,11 @@ $(document).ready(function () {
             clean_line(line);
 
             $(table).tableDnD({
-                onDragClass: "dragClass",
+                onDragClass: "dragClass highlighted-row",
             });
         }
     });
     $("#facet_biblios > table").tableDnD({
-        onDragClass: "dragClass",
+        onDragClass: "dragClass highlighted-row",
     });
 });
