@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
@@ -634,6 +634,28 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( @$notes, 2, 'No more notes' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'adopt_items_from_biblio() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+
+    $biblio2->adopt_items_from_biblio($biblio1);
+
+    $item1->discard_changes;
+    $item2->discard_changes;
+
+    is($item1->biblionumber, $biblio2->biblionumber, "Item 1 moved");
+    is($item2->biblionumber, $biblio2->biblionumber, "Item 2 moved");
 
     $schema->storage->txn_rollback;
 };

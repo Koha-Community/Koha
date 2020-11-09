@@ -817,8 +817,49 @@ subtest 'get_transfers' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'move_to_biblio() tests' => sub {
+subtest 'Tests for relationship between item and item_orders via aqorders_item' => sub {
+    plan tests => 2;
 
+    my $biblio = $builder->build_sample_biblio();
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $aq_budget = $builder->build({
+        source => 'Aqbudget',
+        value  => {
+            budget_notes => 'test',
+        },
+    });
+
+    my $order_note = 'Order for ' . $item->itemnumber;
+
+    my $aq_order1 = $builder->build_object({
+        class => 'Koha::Acquisition::Orders',
+        value  => {
+            biblionumber => $biblio->biblionumber,
+            budget_id => $aq_budget->{budget_id},
+            order_internalnote => $order_note,
+        },
+    });
+    my $aq_order2 = $builder->build_object({
+        class => 'Koha::Acquisition::Orders',
+        value  => {
+            biblionumber => $biblio->biblionumber,
+            budget_id => $aq_budget->{budget_id},
+        },
+    });
+    my $aq_order_item1 = $builder->build({
+        source => 'AqordersItem',
+        value  => {
+            ordernumber => $aq_order1->ordernumber,
+            itemnumber => $item->itemnumber,
+        },
+    });
+
+    my $orders = $item->item_orders;
+    is ($orders->count, 1, 'One order found by item with the relationship');
+    is ($orders->next->order_internalnote, $order_note, 'Correct order found by item with the relationship');
+};
+
+subtest 'move_to_biblio() tests' => sub {
     plan tests => 16;
 
     $schema->storage->txn_begin;
