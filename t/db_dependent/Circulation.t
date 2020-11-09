@@ -125,7 +125,7 @@ $dbh->do('DELETE FROM borrowers');
 # Disable recording of the staff who checked out an item until we're ready for it
 t::lib::Mocks::mock_preference('RecordStaffUserOnCheckout', 0);
 
-my $module = new Test::MockModule('C4::Context');
+my $module = Test::MockModule->new('C4::Context');
 
 my $library = $builder->build({
     source => 'Branch',
