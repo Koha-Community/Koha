@@ -4610,20 +4610,19 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
 
     $module->mock( 'userenv', sub { { branch => $library->{id} } } );
 
-    my $library =
-      $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => { categorycode => $patron_category->{categorycode} }
         }
-    )->store;
+    );
     my $issuer = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => { categorycode => $patron_category->{categorycode} }
         }
-    )->store;
+    );
     my $item = $builder->build_sample_item(
         {
             library  => $library->{branchcode}
@@ -4632,11 +4631,10 @@ subtest 'AddIssue records staff who checked out item if appropriate' => sub  {
 
     $module->mock( 'userenv', sub { { branch => $library->id, number => $issuer->{borrowernumber} } } );
 
-    my $dt_from     = dt_from_string();
-    my $dt_to       = dt_from_string()->add( days => 7 );
+    my $dt_from = dt_from_string();
+    my $dt_to   = dt_from_string()->add( days => 7 );
 
-    my $issue =
-      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
 
     is( $issue->issuer, undef, "Staff who checked out the item not recorded when RecordStaffUserOnCheckout turned off" );
 

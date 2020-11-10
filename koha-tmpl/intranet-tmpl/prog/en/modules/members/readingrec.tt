@@ -98,7 +98,7 @@
           </td>
           <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
           [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
-          <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
+          <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer_id | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
           [% END %]
           <td>
             [% IF issue.date_due %]

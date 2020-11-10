@@ -133,24 +133,24 @@ subtest 'issuer' => sub {
     my $item = $builder->build_sample_item;
     my $checkout = Koha::Checkout->new({
         borrowernumber => $patron->borrowernumber,
-        issuer         => $issuer->borrowernumber,
+        issuer_id      => $issuer->borrowernumber,
         itemnumber     => $item->itemnumber,
         branchcode     => $library->{branchcode},
     })->store;
 
-    my $i = $checkout->issued_by;
+    my $i = $checkout->issuer;
     is( ref($i), 'Koha::Patron',
-        'Koha::Checkout->issued_by should return a Koha::Patron' );
+        'Koha::Checkout->issuer should return a Koha::Patron' );
     is( $i->borrowernumber, $issuer->borrowernumber,
-        'Koha::Checkout->issued_by should return the correct patron' );
+        'Koha::Checkout->issuer should return the correct patron' );
 
     # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
     C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $checkout->itemnumber );
     $i->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
-    is( $old_issue->issuer, undef,
-        'Koha::Checkout->issuer should return undef if the patron record has been deleted'
+    is( $old_issue->issuer_id, undef,
+        'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
     );
 
 };

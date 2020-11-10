@@ -1527,7 +1527,7 @@ sub AddIssue {
                 my $userenv = C4::Context->userenv();
                 my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : undef;
                 if ($usernumber) {
-                    $issue_attributes->{issuer} = $usernumber;
+                    $issue_attributes->{issuer_id} = $usernumber;
                 }
             }
 
@@ -1545,6 +1545,7 @@ sub AddIssue {
                     }
                 )->store;
             }
+            $issue->discard_changes;
             if ( $item_object->location && $item_object->location eq 'CART'
                 && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.

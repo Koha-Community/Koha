@@ -74,6 +74,21 @@ sub patron {
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
 
+=head3 issuer
+
+my $issuer = $checkout->issuer
+
+Return the patron by whom the checkout was done
+
+=cut
+
+sub issuer {
+    my ( $self ) = @_;
+    my $issuer_rs = $self->_result->issuer;
+    return unless $issuer_rs;
+    return Koha::Patron->_new_from_dbic( $issuer_rs );
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Old::Checkout object
