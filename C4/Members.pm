@@ -276,7 +276,7 @@ sub GetAllIssues {
 'SELECT issues.*, items.*, biblio.*, biblioitems.*, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
   FROM issues
   LEFT JOIN items on items.itemnumber=issues.itemnumber
-  LEFT JOIN borrowers on borrowers.borrowernumber=issues.issuer
+  LEFT JOIN borrowers on borrowers.borrowernumber=issues.issuer_id
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
   WHERE issues.borrowernumber=?
@@ -284,7 +284,7 @@ sub GetAllIssues {
   SELECT old_issues.*, items.*, biblio.*, biblioitems.*, old_issues.timestamp as issuestimestamp, old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp,borrowers.firstname,borrowers.surname
   FROM old_issues
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
-  LEFT JOIN borrowers on borrowers.borrowernumber=old_issues.issuer
+  LEFT JOIN borrowers on borrowers.borrowernumber=old_issues.issuer_id
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
   WHERE old_issues.borrowernumber=? AND old_issues.itemnumber IS NOT NULL
