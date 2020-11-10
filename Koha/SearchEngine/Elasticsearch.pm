@@ -24,6 +24,7 @@ use C4::Context;
 use Koha::Database;
 use Koha::Exceptions::Config;
 use Koha::Exceptions::Elasticsearch;
+use Koha::Filter::MARC::EmbedSeeFromHeadings;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 use Koha::Caches;
@@ -640,6 +641,54 @@ sub marc_records_to_documents {
                 }
             }
         }
+
+        if (C4::Context->preference('IncludeSeeFromInSearches') and $self->index eq 'biblios') {
+            foreach my $field (Koha::Filter::MARC::EmbedSeeFromHeadings->new->fields($record)) {
+                my $data_field_rules = $data_fields_rules->{$field->tag()};
+                if ($data_field_rules) {
+                    my $subfields_mappings = $data_field_rules->{subfields};
+                    my $wildcard_mappings = $subfields_mappings->{'*'};
+                    foreach my $subfield ($field->subfields()) {
+                        my ($code, $data) = @{$subfield};
+                        my @mappings;
+                        push @mappings, @{ $subfields_mappings->{$code} } if $subfields_mappings->{$code};
+                        push @mappings, @$wildcard_mappings if $wildcard_mappings;
+                        # Do not include "see from" into these kind of fields
+                        @mappings = grep { $_->[0] !~ /__(sort|facet|suggestion)$/ } @mappings;
+                        if (@mappings) {
+                            $self->_process_mappings(\@mappings, $data, $record_document, {
+                                    data_source => 'subfield',
+                                    code => $code,
+                                    field => $field
+                                }
+                            );
+                        }
+                    }
+
+                    my $subfields_join_mappings = $data_field_rules->{subfields_join};
+                    if ($subfields_join_mappings) {
+                        foreach my $subfields_group (keys %{$subfields_join_mappings}) {
+                            my $data_field = $field->clone;
+                            # remove empty subfields, otherwise they are printed as a space
+                            $data_field->delete_subfield(match => qr/^$/);
+                            my $data = $data_field->as_string( $subfields_group );
+                            if ($data) {
+                                my @mappings = @{ $subfields_join_mappings->{$subfields_group} };
+                                # Do not include "see from" into these kind of fields
+                                @mappings = grep { $_->[0] !~ /__(sort|facet|suggestion)$/ } @mappings;
+                                $self->_process_mappings(\@mappings, $data, $record_document, {
+                                        data_source => 'subfields_group',
+                                        codes => $subfields_group,
+                                        field => $field
+                                    }
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         foreach my $field (keys %{$rules->{defaults}}) {
             unless (defined $record_document->{$field}) {
                 $record_document->{$field} = $rules->{defaults}->{$field};
