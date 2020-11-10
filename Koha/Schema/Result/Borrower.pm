@@ -1157,6 +1157,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 issues_issuers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Issue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "issues_issuers",
+  "Koha::Schema::Result::Issue",
+  { "foreign.issuer_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 items_last_borrowers
 
 Type: has_many
@@ -1229,6 +1244,21 @@ __PACKAGE__->has_many(
   "old_issues",
   "Koha::Schema::Result::OldIssue",
   { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 old_issues_issuers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OldIssue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "old_issues_issuers",
+  "Koha::Schema::Result::OldIssue",
+  { "foreign.issuer_id" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -1683,8 +1713,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-10-08 14:17:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kzx7ildKCEFF6YDr6MRCrw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-09 19:12:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kp53XFs7tFIpzNSqm/WY8w
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

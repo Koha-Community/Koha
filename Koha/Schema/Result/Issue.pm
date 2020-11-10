@@ -35,6 +35,12 @@ __PACKAGE__->table("issues");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 issuer_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 itemnumber
 
   data_type: 'integer'
@@ -124,6 +130,8 @@ __PACKAGE__->add_columns(
   "issue_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "borrowernumber",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "issuer_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
@@ -228,6 +236,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 issuer
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "issuer",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "issuer_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -264,8 +292,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-31 12:18:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QVmFa5b0Pe5OhUI92n9kzQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-09 19:12:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z0qpsT632VLwejUFjIO/ag
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
