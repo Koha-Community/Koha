@@ -118,9 +118,14 @@
                                             [% IF ( resultsloo.onloancount ) %] Checked out ([% resultsloo.onloancount | html %]),<br /> [% END %]
                                             [% IF ( resultsloo.withdrawncount ) %] Withdrawn ([% resultsloo.withdrawncount | html %]),<br /> [% END %]
                                             [% IF ( resultsloo.itemlostcount ) %] Lost ([% resultsloo.itemlostcount | html %])<br />[% END %]
-                                            [% IF ( resultsloo.orderedcount ) %] On order ([% resultsloo.orderedcount | html %])<br/>[% END %]
-                                            [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount | html %])[% END %]
                                             [% IF ( resultsloo.onholdcount ) %] Waiting on hold ([% resultsloo.onholdcount | html %])[% END %]
+                                        </span>
+                                        <span class="notforloan">
+                                            [% IF ( resultsloo.other_items_loop ) %]
+                                                [% FOREACH items_loo IN resultsloo.other_items_loop %]
+                                                    [% IF ( items_loo.notforloan ) %][% items_loo.notforloan | html %] ([% items_loo.count | html %])<br />[% END %]
+                                                [% END %]
+                                            [% END %]
                                         </span>
                                     </td>
                                     <td>
