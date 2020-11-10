@@ -291,9 +291,10 @@ Returns the related Koha::Patron object for this hold
 sub patron {
     my ($self) = @_;
 
-    $self->{_patron} ||= Koha::Patrons->find( $self->borrowernumber() );
+    my $patron_rs = $self->_result->patron;
+    return unless $patron_rs;
 
-    return $self->{_patron};
+    return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
 =head3 item

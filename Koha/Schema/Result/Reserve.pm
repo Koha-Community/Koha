@@ -364,6 +364,13 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->belongs_to(
+  "patron",
+  "Koha::Schema::Result::Borrower",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 __PACKAGE__->add_columns(
     '+item_level_hold' => { is_boolean => 1 },
     '+lowestPriority'  => { is_boolean => 1 },
