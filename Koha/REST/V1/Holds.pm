@@ -406,7 +406,7 @@ sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
     my $hold_id = $c->validation->param('hold_id');
-    my $hold = Koha::Holds->find($hold_id);
+    my $hold = Koha::Holds->find( $hold_id, { prefetch => [ 'patron' ] } );
 
     unless ($hold) {
         return $c->render(
@@ -416,11 +416,17 @@ sub pickup_locations {
     }
 
     return try {
-        my $pickup_locations = $hold->itemnumber ?
-        $hold->item->pickup_locations({ patron => $hold->patron }) : $hold->biblio->pickup_locations({ patron => $hold->patron });
-        warn Data::Dumper::Dumper( $pickup_locations );
+        my @pickup_locations =
+            $hold->itemnumber
+          ? @{ $hold->item->pickup_locations( { patron => $hold->patron } ) }
+          : @{ $hold->biblio->pickup_locations( { patron => $hold->patron } ) };
 
-        return $c->render( status => 200, openapi => $pickup_locations );
+        @pickup_locations = map { $_->to_api } @pickup_locations;
+
+        return $c->render(
+            status  => 200,
+            openapi => \@pickup_locations
+        );
     }
     catch {
         $c->unhandled_exception($_);
