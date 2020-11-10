@@ -43,7 +43,10 @@
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
-      }
+      },
+      "x-koha-embed": [
+        "issuer"
+      ]
     }
   },
   "/checkouts/{checkout_id}": {
@@ -73,7 +76,10 @@
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
-      }
+      },
+      "x-koha-embed": [
+        "issuer"
+      ]
     }
   },
   "/checkouts/{checkout_id}/renewal": {
