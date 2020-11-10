@@ -615,7 +615,13 @@
       "produces": ["application/json"],
       "responses": {
         "200": {
-          "description": "Hold pickup location"
+          "description": "Hold pickup location",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/library"
+            }
+          }
         },
         "400": {
           "description": "Missing or wrong parameters",
