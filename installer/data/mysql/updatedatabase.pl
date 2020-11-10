@@ -23282,6 +23282,26 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 24603, "Add CANCELLATION credit_type_code" );
 }
 
+$DBversion = '20.06.00.065';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'issues', 'issuer' ) ) {
+        $dbh->do( q| ALTER TABLE issues ADD issuer_id INT(11) DEFAULT NULL AFTER borrowernumber | );
+    }
+    if (!foreign_key_exists( 'issues', 'issues_ibfk_borrowers_borrowernumber' )) {
+        $dbh->do( q| ALTER TABLE issues ADD CONSTRAINT `issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE | );
+    }
+    if( !column_exists( 'old_issues', 'issuer' ) ) {
+        $dbh->do( q| ALTER TABLE old_issues ADD issuer_id INT(11) DEFAULT NULL AFTER borrowernumber | );
+    }
+    if (!foreign_key_exists( 'old_issues', 'old_issues_ibfk_borrowers_borrowernumber' )) {
+        $dbh->do( q| ALTER TABLE old_issues ADD CONSTRAINT `old_issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE | );
+    }
+
+    $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('RecordStaffUserOnCheckout', '0', 'If enabled, when an item is checked out, the user who checked out the item is recorded', '', 'YesNo'); | );
+
+    NewVersion( $DBversion, 23916, [ "Add new [old_]issues.issuer DB fields", "Add new syspref RecordStaffUserOnCheckout" ] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
