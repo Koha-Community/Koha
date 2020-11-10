@@ -119,12 +119,16 @@ if($op eq 'delete_confirm'){
     }
 }elsif($op eq 'delete_confirmed'){
     if($query->param('delitems') eq "Yes"){
+        my @itemnumbers;
         foreach my $serialid (@serialsid){
-            my @itemnumbers = Koha::Serial::Items->search({serialid => $serialid})->get_column('itemnumber');
-            foreach my $itemnumber (@itemnumbers){
-                my $delcheck = C4::Items::DelItemCheck($biblionumber, $itemnumber);
-                $template->param(error_delitem => 1) if $delcheck != 1;
-            }
+            my @ids = Koha::Serial::Items->search({serialid => $serialid})->get_column('itemnumber');
+            push(@itemnumbers, @ids);
+        }
+        my $items = Koha::Items->search({ itemnumber => \@itemnumbers });
+        while ( my $item = $items->next ) {
+            my $error = $item->safe_delete;
+            $template->param(error_delitem => 1)
+                if $error eq '1';
         }
     }
     for my $serialid (@serialsid){
