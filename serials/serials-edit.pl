@@ -267,7 +267,8 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     my $subscriptioninfos = GetSubscription($subscriptionids[$i]);
 
                     # Changing the status to "available" and the itemtype according to the previousitemtype db field
-                    $serialitem->set(
+                    my $item = Koha::Items->find($itemnumber);
+                    $item->set(
                         {
                             notforloan => 0,
                             itype => $subscriptioninfos->{'previousitemtype'}
