@@ -295,4 +295,34 @@ $(document).ready(function() {
         });
     });
 
+    $(".pickup_location_dropdown").on( "click",function(){
+        var this_dropdown = $(this);
+        if(this_dropdown.data('loaded')===1){ return true};
+        var hold_id = $(this).data('hold_id');
+        $(".loading_"+hold_id).show();
+        var preselected = $(this).data('selected');
+        var api_url = '/api/v1/holds/'+hold_id+'/pickup_locations';
+        $.ajax({
+            method: "GET",
+            url: api_url,
+            success: function( data ){
+                var dropdown = "";
+                $.each(data, function(index,library) {
+                    if( preselected == library.branchcode ){
+                        selected = ' selected="selected" ';
+                    } else { selected = ""; }
+                    dropdown += '<option value="'+library.branchcode+'"'+selected+'>'+library.branchname+'</option>';
+                });
+                this_dropdown.html( dropdown);
+                this_dropdown.data("loaded",1);
+                $(".loading_"+hold_id).hide();
+            },
+            error: function( jqXHR, textStatus, errorThrown) {
+                alert('There was an error:'+textStatus+" "+errorThrown);
+                $(".loading_"+hold_id).hide();
+            },
+        });
+    });
+
+
 });

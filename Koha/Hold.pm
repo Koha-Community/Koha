@@ -282,6 +282,20 @@ sub biblio {
     return $self->{_biblio};
 }
 
+=head3 patron
+
+Returns the related Koha::Patron object for this hold
+
+=cut
+
+sub patron {
+    my ($self) = @_;
+
+    $self->{_patron} ||= Koha::Patrons->find( $self->borrowernumber() );
+
+    return $self->{_patron};
+}
+
 =head3 item
 
 Returns the related Koha::Item object for this Hold

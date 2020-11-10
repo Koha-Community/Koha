@@ -130,9 +130,11 @@
                     [% IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 %]
                         [% Branches.GetName(hold.branchcode) | html %] <input type="hidden" name="pickup" value="[% hold.branchcode | html %]" />
                     [% ELSE %]
-                        <select name="pickup">
-                            [% PROCESS options_for_libraries libraries => Branches.pickup_locations( { search_params => { item => hold.itemnumber, biblio => hold.biblionumber, patron => hold.patron }, selected => hold.branchcode }) %]
+                        <select class="pickup_location_dropdown" data-selected="[% hold.branchcode | html %]" data-hold_id="[% hold.reserve_id | html %]" name="pickup">
+                            <option selected="selected" value="[% hold.branchcode | html %]">[% Branches.GetName(hold.branchcode) | html %]</option>
+                            <option value="" disabled="disabled" class="loading">Loading...</option>
                         </select>
+                        <img class="loading_[% hold.reserve_id %]" src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" style="display:none;"/>
                     [% END %]
                 [% END %]
             </td>

@@ -603,5 +603,62 @@
         }
       }
     }
+  },
+  "/holds/{hold_id}/pickup_locations": {
+    "get": {
+      "x-mojo-to": "Holds#pickup_locations",
+      "operationId": "getHoldPickupLocations",
+      "tags": ["holds"],
+      "parameters": [{
+          "$ref": "../parameters.json#/hold_id_pp"
+        }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Hold pickup location"
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold pickup location list not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    }
   }
 }

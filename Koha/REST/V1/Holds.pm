@@ -393,4 +393,36 @@ sub update_priority {
     };
 }
 
+=head3 pickup_locations
+
+Method that returns the possible pickup_locations for a given hold
+used for building the dropdown selector
+
+=cut
+
+sub pickup_locations {
+    my $c = shift->openapi->valid_input or return;
+
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold = Koha::Holds->find($hold_id);
+
+    unless ($hold) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Hold not found" }
+        );
+    }
+
+    return try {
+        my $pickup_locations = $hold->itemnumber ?
+        $hold->item->pickup_locations({ patron => $hold->patron }) : $hold->biblio->pickup_locations({ patron => $hold->patron });
+        warn Data::Dumper::Dumper( $pickup_locations );
+
+        return $c->render( status => 200, openapi => $pickup_locations );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
