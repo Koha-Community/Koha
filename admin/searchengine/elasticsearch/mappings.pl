@@ -22,6 +22,7 @@ use List::Util qw( first );
 use C4::Koha;
 use C4::Output;
 use C4::Auth;
+use C4::Log;
 
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchMarcMaps;
@@ -168,6 +169,9 @@ if ( $op eq 'edit' ) {
         $schema->storage->txn_rollback;
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };
+
+        C4::Log::logaction( 'SEARCHENGINE', 'EDIT_MAPPINGS', undef, q{} );
+
         $schema->storage->txn_commit;
 
         Koha::SearchEngine::Elasticsearch->clear_search_fields_cache();
@@ -178,6 +182,7 @@ if ( $op eq 'edit' ) {
 elsif( $op eq 'reset_confirmed' ) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     push @messages, { type => 'message', code => 'success_on_reset' };
+    C4::Log::logaction( 'SEARCHENGINE', 'RESET_MAPPINGS', undef, q{} );
 }
 elsif( $op eq 'reset_confirm' ) {
     $template->param( reset_confirm => 1 );
