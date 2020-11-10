@@ -199,7 +199,11 @@
                           <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" disabled />
                         [% END %]
                       [% ELSE %]
-                    <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" />
+                        [% IF serial.checked %]
+                          <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" checked />
+                        [% ELSE %]
+                          <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" />
+                        [% END %]
                       [% END %]
                     [% END %]
                   [% END %]
