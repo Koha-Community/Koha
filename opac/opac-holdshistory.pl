@@ -24,6 +24,8 @@ use C4::Auth;
 use C4::Output;
 
 use Koha::Patrons;
+use Koha::Holds;
+use Koha::Old::Holds;
 
 my $query = CGI->new;
 my @all_holds;
@@ -42,10 +44,26 @@ my ( $template, $patron_id, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->find( $patron_id );
+my $patron = Koha::Patrons->find($patron_id);
 
-my $holds = $patron->holds;
-my $old_holds = $patron->old_holds;
+my $sort = $query->param('sort');
+$sort = 'reservedate' unless $sort;
+
+my $unlimit = $query->param('unlimit');
+my $ops = {
+    prefetch => ['biblio', 'item'],
+    order_by => $sort
+};
+
+$ops->{rows} = 50 unless $unlimit;
+
+my $holds = Koha::Holds->search({
+    borrowernumber => $patron_id
+}, $ops);
+
+my $old_holds = Koha::Old::Holds->search({
+    borrowernumber => $patron_id
+}, $ops);
 
 while (my $hold = $holds->next) {
     push @all_holds, $hold;
@@ -55,18 +73,12 @@ while (my $hold = $old_holds->next) {
     push @all_holds, $hold;
 }
 
-my $sort = $query->param('sort');
-
-$sort = 'reservedate' unless $sort;
-
 if($sort eq 'reservedate') {
     @all_holds = sort {$b->$sort cmp $a->$sort} @all_holds;
 } else {
     my ($obj, $col) = split /\./, $sort;
-    @all_holds = sort {$a->$obj->$col cmp $b->$obj->$col} @all_holds;
+    @all_holds = sort { ( $a->$obj && $a->$obj->$col || '' ) cmp ( $b->$obj && $b->$obj->$col || '' ) } @all_holds;
 }
-
-my $unlimit = $query->param('unlimit');
 
 unless($unlimit) {
     @all_holds = splice(@all_holds, 0, 50);

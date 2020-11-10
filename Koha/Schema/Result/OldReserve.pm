@@ -324,6 +324,30 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-11-06 11:00:40
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7weIpuc0RpZ/MxFn94E8dg
 
+__PACKAGE__->belongs_to(
+  "item",
+  "Koha::Schema::Result::Item",
+  { itemnumber => "itemnumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "biblio",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 __PACKAGE__->add_columns(
     '+item_level_hold' => { is_boolean => 1 },
     '+lowestPriority'  => { is_boolean => 1 },
