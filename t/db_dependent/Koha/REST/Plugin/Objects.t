@@ -84,8 +84,6 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 
-my $t = Test::Mojo->new;
-
 my $schema  = Koha::Database->new()->schema();
 my $builder = t::lib::TestBuilder->new;
 
@@ -119,6 +117,7 @@ subtest 'objects.search helper' => sub {
         }
     });
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/cities?name=manuel&_per_page=1&_page=1')
         ->status_is(200)
         ->header_like( 'Link' => qr/<http:\/\/.*[\?&]_page=2.*>; rel="next",/ )
@@ -219,6 +218,7 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'A', city_country => 'Argentina' } });
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'B', city_country => 'Argentina' } });
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/cities?_order_by=%2Bname&_order_by=+country')
       ->status_is(200)
       ->json_has('/0')
@@ -249,6 +249,7 @@ subtest 'objects.search helper, encoding' => sub {
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'A', city_country => 'Argentina' } });
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'B', city_country => '❤Argentina❤' } });
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/cities?q={"country": "❤Argentina❤"}')
       ->status_is(200)
       ->json_has('/0')
@@ -266,6 +267,7 @@ subtest 'objects.search helper, embed' => sub {
 
     my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/orders?order_id=' . $order->ordernumber)
       ->json_is('/0',$order->to_api({ embed => ( { fund => {} } ) }));
 
@@ -290,6 +292,7 @@ subtest 'objects.search helper, with path parameters and _match' => sub {
         }
     );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/patrons/1/holds?_match=exact')
       ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=exact');
 
@@ -319,6 +322,7 @@ subtest 'object.search helper with query parameter' => sub {
     my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/biblios' => json => {"suggestions.suggester.patron_id" => $patron1->borrowernumber })
       ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
 
@@ -342,6 +346,7 @@ subtest 'object.search helper with q parameter' => sub {
     my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/biblios?q={"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}')
       ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
 
@@ -365,6 +370,7 @@ subtest 'object.search helper with x-koha-query header' => sub {
     my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/biblios' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'})
       ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
 
@@ -388,6 +394,7 @@ subtest 'object.search helper with all query methods' => sub {
     my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
     my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron1->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron1->cardnumber})
       ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
 
@@ -410,6 +417,7 @@ subtest 'object.search helper order by embedded columns' => sub {
     my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
     my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
 
+    my $t = Test::Mojo->new;
     $t->get_ok('/biblios?_order_by=-suggestions.suggester.firstname' => json => [{"me.biblio_id" => $biblio1->biblionumber}, {"me.biblio_id" => $biblio2->biblionumber}])
       ->json_is('/biblios/0/biblio_id' => $biblio2->biblionumber, 'Biblio 2 should be first')
       ->json_is('/biblios/1/biblio_id' => $biblio1->biblionumber, 'Biblio 1 should be second');
