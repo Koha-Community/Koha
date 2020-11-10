@@ -119,6 +119,7 @@ if it is an order from an existing suggestion : the id of this suggestion.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use JSON qw ( to_json );
 use C4::Auth;           # get_template_and_user
 use C4::Acquisition;    # ModOrder
 use C4::Suggestions;    # ModStatus
@@ -129,6 +130,7 @@ use C4::Output;
 use C4::Log qw(logaction);
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
+use Koha::Acquisition::Baskets;
 use C4::Barcodes;
 
 ### "-------------------- addorder.pl ----------"
@@ -362,10 +364,12 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
 }
 
 if (C4::Context->preference("AcqLog") && $basketno) {
+    my $modified = Koha::Acquisition::Baskets->find( $basketno );
     logaction(
         'ACQUISITIONS',
         'MODIFY_BASKET',
-        $basketno
+        $basketno,
+        to_json($modified->unblessed)
     );
 }
 

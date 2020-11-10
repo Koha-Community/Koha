@@ -45,6 +45,7 @@ use C4::Koha;
 
 use MARC::Field;
 use MARC::Record;
+use JSON qw(to_json);
 
 use Time::localtime;
 
@@ -207,7 +208,13 @@ sub NewBasket {
 
     # Log the basket creation
     if (C4::Context->preference("AcqLog")) {
-        logaction('ACQUISITIONS', 'ADD_BASKET', $basket);
+        my $created = Koha::Acquisition::Baskets->find( $basket );
+        logaction(
+            'ACQUISITIONS',
+            'ADD_BASKET',
+            $basket,
+            to_json($created->unblessed)
+        );
     }
 
     return $basket;
@@ -235,10 +242,12 @@ sub ReopenBasket {
 
     # Log the basket reopening
     if (C4::Context->preference("AcqLog")) {
+        my $reopened = Koha::Acquisition::Baskets->find( $basketno );
         logaction(
             'ACQUISITIONS',
             'REOPEN_BASKET',
-            $basketno
+            $basketno,
+            to_json($reopened->unblessed)
         );
     }
     return;
@@ -518,10 +527,14 @@ sub ModBasket {
 
     # Log the basket update
     if (C4::Context->preference("AcqLog")) {
+        my $modified = Koha::Acquisition::Baskets->find(
+            $basketinfo->{basketno}
+        );
         logaction(
             'ACQUISITIONS',
             'MODIFY_BASKET',
-            $basketinfo->{'basketno'}
+            $basketinfo->{basketno},
+            to_json($modified->unblessed)
         );
     }
 
@@ -585,10 +598,14 @@ sub ModBasketHeader {
 
     # Log the basket update
     if (C4::Context->preference("AcqLog")) {
+        my $modified = Koha::Acquisition::Baskets->find(
+            $basketno
+        );
         logaction(
             'ACQUISITIONS',
             'MODIFY_BASKET_HEADER',
-            $basketno
+            $basketno,
+            to_json($modified->unblessed)
         );
     }
 
@@ -778,7 +795,11 @@ sub ModBasketUsers {
         logaction(
             'ACQUISITIONS',
             'MODIFY_BASKET_USERS',
-            $basketno
+            $basketno,
+            to_json({
+                basketno    => $basketno,
+                basketusers => @basketusers_ids
+            })
         );
     }
 

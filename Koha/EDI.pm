@@ -622,8 +622,19 @@ sub process_quote {
                 }
             );
             Koha::Acquisition::Baskets->find($b)->close;
+            # Log the approval
+            if (C4::Context->preference("AcqLog")) {
+                my $approved = Koha::Acquisition::Baskets->find( $b );
+                logaction(
+                    'ACQUISITIONS',
+                    'APPROVE_BASKET',
+                    $b,
+                    to_json($approved->unblessed)
+                );
+            }
         }
     }
+
 
     return;
 }
