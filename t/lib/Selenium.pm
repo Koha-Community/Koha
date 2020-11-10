@@ -218,7 +218,7 @@ sub click_when_visible {
     my $clicked;
     $self->remove_error_handler;
     while ( not $clicked ) {
-        eval { $elt->click };
+        eval { $self->driver->find_element($xpath_selector)->click };
         $clicked = !$@;
         $self->driver->pause(1000) unless $clicked;
     }
