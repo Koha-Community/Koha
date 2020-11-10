@@ -58,22 +58,31 @@ sub filter {
     if (ref $record eq 'ARRAY') {
         my @recarray;
         foreach my $thisrec (@$record) {
-            push @recarray, _processrecord($thisrec);
+            push @recarray, $self->_processrecord($thisrec);
         }
         $newrecord = \@recarray;
     } elsif (ref $record eq 'MARC::Record') {
-        $newrecord = _processrecord($record);
+        $newrecord = $self->_processrecord($record);
     }
 
     return $newrecord;
 }
 
 sub _processrecord {
-    my $record = shift;
+    my ($self, $record) = @_;
+
+    $record->append_fields($self->fields($record));
+
+    return $record;
+}
+
+sub fields {
+    my ($self, $record) = @_;
 
     my ($item_tag) = GetMarcFromKohaField( "items.itemnumber" );
     $item_tag ||= '';
 
+    my @newfields;
     foreach my $field ( $record->fields() ) {
         next if $field->is_control_field();
         next if $field->tag() eq $item_tag;
@@ -85,7 +94,6 @@ sub _processrecord {
         next unless $authority;
         my $auth_marc = $authority->record;
         my @seefrom = $auth_marc->field('4..');
-        my @newfields;
         foreach my $authfield (@seefrom) {
             my $tag = substr($field->tag(), 0, 1) . substr($authfield->tag(), 1, 2);
             next if MARC::Field->is_controlfield_tag($tag);
@@ -100,9 +108,9 @@ sub _processrecord {
             $newfield->delete_subfield( code => '9' );
             push @newfields, $newfield if (scalar($newfield->subfields()) > 0);
         }
-        $record->append_fields(@newfields);
     }
-    return $record;
+
+    return @newfields;
 }
 
 1;

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -28,6 +28,8 @@ use Test::MockModule;
 use MARC::Record;
 use Try::Tiny;
 use List::Util qw( any );
+
+use C4::AuthoritiesMarc;
 
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Search;
@@ -848,6 +850,80 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () authori
         "Third record heading should contain the subfield"
     );
 
+};
+
+subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents with IncludeSeeFromInSearches' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('IncludeSeeFromInSearches', '1');
+
+    my $builder = t::lib::TestBuilder->new;
+    my $auth_type = $builder->build_object({
+        class => 'Koha::Authority::Types',
+        value => {
+            auth_tag_to_report => '150'
+        }
+    });
+    my $authority_record = MARC::Record->new();
+    $authority_record->append_fields(
+        MARC::Field->new(150, '', '', a => 'Foo'),
+        MARC::Field->new(450, '', '', a => 'Bar'),
+    );
+    my $authid = AddAuthority($authority_record, undef, $auth_type->authtypecode);
+
+    my @mappings = (
+        {
+            name => 'subject',
+            type => 'string',
+            facet => 1,
+            suggestible => 1,
+            sort => undef,
+            searchable => 1,
+            marc_type => 'marc21',
+            marc_field => '650a',
+        }
+    );
+
+    my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+    $se->mock('_foreach_mapping', sub {
+        my ($self, $sub) = @_;
+
+        foreach my $map (@mappings) {
+            $sub->(
+                $map->{name},
+                $map->{type},
+                $map->{facet},
+                $map->{suggestible},
+                $map->{sort},
+                $map->{searchable},
+                $map->{marc_type},
+                $map->{marc_field}
+            );
+        }
+    });
+
+    my $see = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
+
+    my $marc_record_1 = MARC::Record->new();
+    $marc_record_1->leader('     cam  22      a 4500');
+    $marc_record_1->append_fields(
+        MARC::Field->new('001', '123'),
+        MARC::Field->new('245', '', '', a => 'Title'),
+        MARC::Field->new('650', '', '', a => 'Foo', 9 => $authid),
+        MARC::Field->new('999', '', '', c => '1234567'),
+    );
+
+    # sort_fields will call this and use the actual db values unless we call it first
+    $see->get_elasticsearch_mappings();
+
+    my $docs = $see->marc_records_to_documents([$marc_record_1]);
+
+    is_deeply($docs->[0]->{subject}, ['Foo', 'Bar'], 'subject should include "See from"');
+    is_deeply($docs->[0]->{subject__facet}, ['Foo'], 'subject__facet should not include "See from"');
+    is_deeply($docs->[0]->{subject__suggestion}, [{ input => 'Foo' }], 'subject__suggestion should not include "See from"');
+    is_deeply($docs->[0]->{subject__sort}, ['Foo'], 'subject__sort should not include "See from"');
 };
 
 $schema->storage->txn_rollback;
