@@ -67,7 +67,7 @@
       },
       "x-koha-authorization": {
         "permissions": {
-          "catalogue": "1"
+          "tools": "stage_marc_import"
         }
       }
     },
@@ -182,12 +182,12 @@
       },
       "x-koha-authorization": {
         "permissions": {
-          "catalogue": "1"
+          "tools": "stage_marc_import"
         }
       }
     }
   },
-  "/import_batch_profiles/{profile_id}": {
+  "/import_batch_profiles/{import_batch_profile_id}": {
     "put": {
       "x-mojo-to": "ImportBatchProfiles#edit",
       "operationId": "editImportBatchProfiles",
@@ -196,7 +196,7 @@
       ],
       "parameters": [
         {
-          "$ref": "../parameters.json#/profile_id_pp"
+          "$ref": "../parameters.json#/import_batch_profile_id_pp"
         },
         {
           "name": "body",
@@ -302,7 +302,7 @@
       },
       "x-koha-authorization": {
         "permissions": {
-          "catalogue": "1"
+          "tools": "stage_marc_import"
         }
       }
     },
@@ -311,7 +311,7 @@
       "operationId": "deleteImportBatchProfiles",
       "tags": ["ImportBatchProfiles"],
       "parameters": [{
-          "$ref": "../parameters.json#/profile_id_pp"
+          "$ref": "../parameters.json#/import_batch_profile_id_pp"
         }
       ],
       "produces": ["application/json"],
