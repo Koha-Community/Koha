@@ -892,7 +892,7 @@
                     </fieldset>
                [% END %]
 
-                [% IF ( Koha.Preference('ExtendedPatronAttributes') && patron_attribute_classes.size && action != 'new' ) %]
+                [% IF ( Koha.Preference('ExtendedPatronAttributes') && patron_attribute_classes.size && ! ( action == 'new' && Koha.Preference('PatronSelfRegistrationVerifyByEmail') ) ) %]
                     [% FOREACH pa_class IN patron_attribute_classes %]
                         [% IF pa_class.class %]
                             <fieldset id="aai_[% pa_loo.class | html %]" class="rows patron-attributes">

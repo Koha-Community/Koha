@@ -116,7 +116,7 @@
           [% ELSE %]
             <input type="checkbox" id="opac_editable" name="opac_editable" />
           [% END %]
-            <span>Check to allow patrons to edit this attribute from their details page in the OPAC. (Requires above, does not work during <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=PatronSelfRegistration" target="_blank">self-registration</a>.)</span>
+            <span>Check to allow patrons to edit this attribute from their details page in the OPAC. (Requires above, does not work during <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=PatronSelfRegistration" target="_blank">self-registration</a> if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=PatronSelfRegistrationVerifyByEmail" target="_blank">PatronSelfRegistrationVerifyByEmail</a> if set.)</span>
        </li>
        <li><label for="staff_searchable">Searchable: </label>
           [% IF attribute_type AND attribute_type.staff_searchable %]
