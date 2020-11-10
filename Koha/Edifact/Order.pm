@@ -104,6 +104,10 @@ sub encode {
     $self->{transmission} .= $self->user_data_message_segments();
 
     $self->{transmission} .= $self->trailing_service_segments();
+
+    # Guard against CR LF etc being added in data from DB
+    $self->{transmission}=~s/[\r\n\t]//g;
+
     return $self->{transmission};
 }
 
@@ -406,7 +410,9 @@ sub order_line {
     my $ol_fields = { budget_code => $budget->{budget_code}, };
     if ( $orderline->order_vendornote ) {
         $ol_fields->{servicing_instruction} = $orderline->order_vendornote;
+        chomp $ol_fields->{servicing_instruction};
     }
+
     my $item_fields = [];
     for my $item (@items) {
         push @{$item_fields},
