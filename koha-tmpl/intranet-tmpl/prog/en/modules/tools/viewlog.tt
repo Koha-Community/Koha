@@ -94,6 +94,8 @@
 
 [%        CASE 'REPORTS'      %]Reports[% UNLESS Koha.Preference('ReportsLog') %] <i class="fa fa-warning" title="Log not enabled"></i>[% END %]
 
+[%        CASE 'SEARCHENGINE' %]Search engine
+
 [%        CASE %][% module | html %]
 [%    END %]
 [% END %]
@@ -117,6 +119,8 @@
 [%        CASE 'STATUS_CHANGE'  %]Change ILL request status
 [%        CASE 'PATRON_NOTICE'  %]ILL notice sent to patron
 [%        CASE 'Run'    %]Run
+[%        CASE 'EDIT_MAPPINGS' %]Edit mappings
+[%        CASE 'RESET_MAPPINGS' %]Reset mappings
 [%        CASE %][% action | html %]
 [%    END %]
 [% END %]
@@ -168,7 +172,7 @@
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS', 'SEARCHENGINE' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
@@ -190,7 +194,7 @@
                                         <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value=""> All</label>
                                     [% END %]
 
-                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'Run' ] %]
+                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'Run' 'EDIT_MAPPINGS' 'RESET_MAPPINGS' ] %]
                                         [% IF actions.grep(actx).size %]
                                             <label for="action[% actx| replace('\s+', '_') | html %]" class="viewlog"><input type="checkbox" id="action[% actx | replace('\s+', '_') | html %]" name="actions" value="[% actx | html %]" checked="checked"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% ELSE %]
