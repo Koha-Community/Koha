@@ -23267,6 +23267,21 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 14866, "Add decreaseloanholds circulation rule" );
 }
 
+$DBversion = '20.06.00.064';
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(q{
+        INSERT IGNORE INTO account_credit_types (code, description, can_be_added_manually, is_system)
+        VALUES ('CANCELLATION', 'Cancelled charge', 0, 1)
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ('CANCELLATION');
+    });
+
+    NewVersion( $DBversion, 24603, "Add CANCELLATION credit_type_code" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
