@@ -86,6 +86,11 @@ __PACKAGE__->table("branches");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 branchillemail
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 branchreplyto
 
   data_type: 'longtext'
@@ -166,6 +171,8 @@ __PACKAGE__->add_columns(
   "branchfax",
   { data_type => "longtext", is_nullable => 1 },
   "branchemail",
+  { data_type => "longtext", is_nullable => 1 },
+  "branchillemail",
   { data_type => "longtext", is_nullable => 1 },
   "branchreplyto",
   { data_type => "longtext", is_nullable => 1 },
@@ -834,8 +841,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-08-23 20:02:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OB75ORKajzt+l0w9mRFX1Q
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-11 14:23:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pOqM3Rfe/H4J+m1XxVfaUQ
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
