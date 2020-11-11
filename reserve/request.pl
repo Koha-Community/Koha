@@ -577,7 +577,7 @@ foreach my $biblionumber (@biblionumbers) {
                         $item->{pickup_locations_code} = 'all';
                     } else {
                         my $arr_locations = Koha::Items->find($itemnumber)
-                                    ->pickup_locations( { patron => $patron } );
+                                    ->pickup_locations( { patron => $patron } )->as_list();
 
                         $item->{pickup_locations} = join( ', ',
                             map { $_->unblessed->{branchname} } @$arr_locations);

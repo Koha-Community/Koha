@@ -160,7 +160,7 @@ sub get_hold_libraries {
     @hold_libraries =
       grep { !$seen{ $_->id }++ } @hold_libraries;
 
-    return @hold_libraries;
+    return Koha::Libraries->search({ branchcode => { '-in' => [ keys %seen ] } });
 }
 
 =head3 validate_hold_sibling

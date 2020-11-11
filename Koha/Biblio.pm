@@ -220,7 +220,7 @@ sub pickup_locations {
 
     my @pickup_locations;
     foreach my $item_of_bib ($self->items->as_list) {
-        push @pickup_locations, @{ $item_of_bib->pickup_locations( {patron => $patron} ) };
+        push @pickup_locations, @{ $item_of_bib->pickup_locations( {patron => $patron} )->as_list() };
     }
 
     my %seen;
