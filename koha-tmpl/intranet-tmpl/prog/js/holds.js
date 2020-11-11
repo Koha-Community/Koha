@@ -315,12 +315,12 @@ $(document).ready(function() {
             success: function( data ){
                 var dropdown = "";
                 $.each(data, function(index,library) {
-                    if( preselected == library.branchcode ){
+                    if( preselected == library.library_id ){
                         selected = ' selected="selected" ';
                     } else { selected = ""; }
-                    dropdown += '<option value="'+library.branchcode+'"'+selected+'>'+library.branchname+'</option>';
+                    dropdown += '<option value="'+library.library_id+'"'+selected+'>'+library.name+'</option>';
                 });
-                this_dropdown.html( dropdown);
+                this_dropdown.html(dropdown);
                 this_dropdown.data("loaded",1);
                 $(".loading_"+hold_id).hide();
             },
