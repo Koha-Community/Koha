@@ -599,11 +599,17 @@ sub pickup_locations {
     ) unless C4::Context->preference('UseBranchTransferLimits');
 
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
-    my $limiter = $limittype eq 'itemtype' ? $self->effective_itemtype : $self->ccode;
+    my ($ccode, $itype) = (undef, undef);
+    if( $limittype eq 'ccode' ){
+        $ccode = $self->ccode;
+    } else {
+        $itype = $self->itype;
+    }
     my $limits = Koha::Item::Transfer::Limits->search(
         {
             fromBranch => $self->holdingbranch,
-            $limittype => $limiter
+            ccode      => $ccode,
+            itemtype   => $itype,
         },
         { columns => ['toBranch'] }
     );

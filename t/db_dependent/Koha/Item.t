@@ -178,7 +178,7 @@ subtest 'pickup_locations' => sub {
         {
             homebranch    => $library1->branchcode,
             holdingbranch => $library2->branchcode,
-            barcode       => '1',
+            copynumber    => 1,
             ccode         => 'Gollum'
         }
     )->store;
@@ -187,7 +187,7 @@ subtest 'pickup_locations' => sub {
         {
             homebranch    => $library3->branchcode,
             holdingbranch => $library4->branchcode,
-            barcode       => '3',
+            copynumber    => 3,
             itype         => $item1->itype,
         }
     )->store;
@@ -208,7 +208,7 @@ subtest 'pickup_locations' => sub {
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
     my $all_count = Koha::Libraries->search({ pickup_location => 1})->count();
-    plan tests => ($all_count +1) * 7 + 31 + 60;
+    plan tests => ($all_count +1) * 7 + 31 + 61;
 
     my $results = {
         "1-1-1-any"           => $all_count,
@@ -295,13 +295,13 @@ subtest 'pickup_locations' => sub {
         }
         ok(
             scalar(@pl) == $results->{
-                    $item->barcode . '-'
+                    $item->copynumber . '-'
                   . $patron->firstname . '-'
                   . $ha . '-'
                   . $hfp
             },
             'item'
-              . $item->barcode
+              . $item->copynumber
               . ', patron'
               . $patron->firstname
               . ', holdallowed: '
@@ -310,7 +310,7 @@ subtest 'pickup_locations' => sub {
               . $hfp
               . ' should return '
               . $results->{
-                    $item->barcode . '-'
+                    $item->copynumber . '-'
                   . $patron->firstname . '-'
                   . $ha . '-'
                   . $hfp
@@ -334,6 +334,15 @@ subtest 'pickup_locations' => sub {
     }
 
     # Now test that branchtransferlimits will further filter the pickup locations
+
+    my $item_no_ccode = $builder->build_sample_item(
+        {
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library2->branchcode,
+            itype         => $item1->itype,
+        }
+    )->store;
+
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
     Koha::CirculationRules->set_rules(
@@ -380,6 +389,9 @@ subtest 'pickup_locations' => sub {
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
     $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, $all_count, "With no transfer limits of type ccode we get back the libraries that are pickup locations");
+
+    $pickup_locations = $item_no_ccode->pickup_locations( { patron => $patron1 } )->as_list;
+    is( scalar @$pickup_locations, $all_count, "With no transfer limits of type ccode and an item with no ccode we get back the libraries that are pickup locations");
 
     $builder->build_object(
         {
