@@ -99,14 +99,13 @@ if (defined C4::Context->preference('SCOAllowCheckin')) {
 }
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $seen, $newissues) = (
+my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
     $query->param("confirmed")  || '',
-    $query->param("seen")       || 0,
     $query->param("newissues")  || '',
 );
 
@@ -269,7 +268,7 @@ if ( $patron && ( $op eq 'renew' ) ) {
     my ($status,$renewerror) = CanBookBeRenewed( $borrower->{borrowernumber}, $item->itemnumber );
     if ($status) {
         #warn "renewing";
-        AddRenewal( $borrower->{borrowernumber}, $item->itemnumber, undef, undef, undef, undef, $seen );
+        AddRenewal( $borrower->{borrowernumber}, $item->itemnumber, undef, undef, undef, undef, 1 );
         push @newissueslist, $barcode;
         $template->param( renewed => 1 );
     }
