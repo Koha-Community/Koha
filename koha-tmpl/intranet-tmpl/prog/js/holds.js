@@ -301,7 +301,7 @@ $(document).ready(function() {
         var hold_id = $(this).data('hold_id');
         $(".loading_"+hold_id).show();
         var preselected = $(this).data('selected');
-        var api_url = '/api/v1/holds/'+hold_id+'/pickup_locations';
+        var api_url = '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations';
         $.ajax({
             method: "GET",
             url: api_url,
@@ -311,7 +311,7 @@ $(document).ready(function() {
                     if( preselected == library.library_id ){
                         selected = ' selected="selected" ';
                     } else { selected = ""; }
-                    dropdown += '<option value="'+library.library_id+'"'+selected+'>'+library.name+'</option>';
+                    dropdown += '<option value="' + library.library_id.escapeHtml() + '"' + selected + '>' + library.name.escapeHtml() + '</option>';
                 });
                 this_dropdown.html(dropdown);
                 this_dropdown.data("loaded",1);
