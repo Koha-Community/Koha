@@ -137,7 +137,8 @@ subtest 'pickup_locations() tests' => sub {
     $item_class->mock(
         'pickup_locations',
         sub {
-            return [$library_1];
+            return Koha::Libraries->search(
+                { branchcode => $library_1->branchcode } );
         }
     );
 
