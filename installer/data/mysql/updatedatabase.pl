@@ -23340,6 +23340,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22818, "Add ILL notices" );
 }
 
+$DBversion = '20.06.00.067';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('OPACHoldsHistory','0','','If ON, enables display of Patron Holds History in OPAC','YesNo')
+    });
+
+    NewVersion( $DBversion, 20936, "Add new system preference OPACHoldsHistory");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
