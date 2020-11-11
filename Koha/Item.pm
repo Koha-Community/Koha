@@ -553,67 +553,6 @@ sub can_be_transferred {
 
 }
 
-=head3 _can_pickup_locations
-
-$item->_can_pickup_locations({ to => $to_libraries, from => $from_library })
-Checks if an item can be transferred to given libraries.
-
-This feature is controlled by two system preferences:
-UseBranchTransferLimits to enable / disable the feature
-BranchTransferLimitsType to use either an itemnumber or ccode as an identifier
-                         for setting the limitations
-
-Takes HASHref that can have the following parameters:
-    MANDATORY PARAMETERS:
-    $to   : Array of Koha::Libraries
-    OPTIONAL PARAMETERS:
-    $from : Koha::Library  # if not given, item holdingbranch
-                           # will be used instead
-
-Returns arry of Koha::Libraries that item can be transferred to $to_library and
-are pickup_locations
-
-If checking only one library please use $item->can_be_transferred.
-
-=cut
-
-sub _can_pickup_locations {
-    my ($self, $params ) = @_;
-
-    my $to   = $params->{to};
-    my $from = $params->{from};
-    $from = defined $from ? $from->branchcode : $self->holdingbranch;
-
-    my @pickup_locations;
-    my @destination_codes;
-    foreach my $lib (@$to){
-        next unless $lib->pickup_location;
-        push @destination_codes, $lib->branchcode;
-        push @pickup_locations, $lib;
-    }
-
-    return \@pickup_locations unless C4::Context->preference('UseBranchTransferLimits');
-
-    my $limittype = C4::Context->preference('BranchTransferLimitsType');
-    my $limiter = $limittype eq 'itemtype' ? $self->effective_itemtype : $self->ccode;
-
-    my $limits = Koha::Item::Transfer::Limits->search({
-                fromBranch => $from,
-                $limittype => $limiter
-            });
-    my @limits = $limits->get_column('toBranch');
-    return \@pickup_locations unless @limits;
-
-    my @can_transfer = Koha::Libraries->search({
-        pickup_location => 1,
-        branchcode => {
-            -in => \@destination_codes,
-            -not_in => \@limits,
-        }
-    });
-    return \@can_transfer;
-}
-
 =head3 pickup_locations
 
 $pickup_locations = $item->pickup_locations( {patron => $patron } )
@@ -633,36 +572,53 @@ sub pickup_locations {
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
-    my @libs;
     if(defined $patron) {
-        return \@libs if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        return \@libs if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
+        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
+        return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
     }
 
+    my $pickup_libraries = Koha::Libraries->search();
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
-        @libs  = $self->home_branch->get_hold_libraries;
-        push @libs, $self->home_branch unless scalar(@libs) > 0;
+        $pickup_libraries = $self->home_branch->get_hold_libraries;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup') {
         my $plib = Koha::Libraries->find({ branchcode => $patron->branchcode});
-        @libs  = $plib->get_hold_libraries;
-        push @libs, $self->home_branch unless scalar(@libs) > 0;
+        $pickup_libraries = $plib->get_hold_libraries;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'homebranch') {
-        push @libs, $self->home_branch;
+        $pickup_libraries = Koha::Libraries->search({ branchcode => $self->homebranch });
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {
-        push @libs, $self->holding_branch;
-    } else {
-        @libs = Koha::Libraries->search({
+        $pickup_libraries = Koha::Libraries->search({ branchcode => $self->holdingbranch });
+    };
+
+    return $pickup_libraries->search(
+        {
             pickup_location => 1
-        }, {
+        },
+        {
             order_by => ['branchname']
-        })->as_list;
-    }
+        }
+    ) unless C4::Context->preference('UseBranchTransferLimits');
 
-    my $pickup_locations = $self->_can_pickup_locations({
-        to => \@libs
-    });
+    my $limittype = C4::Context->preference('BranchTransferLimitsType');
+    my $limiter = $limittype eq 'itemtype' ? $self->effective_itemtype : $self->ccode;
+    my $limits = Koha::Item::Transfer::Limits->search(
+        {
+            fromBranch => $self->holdingbranch,
+            $limittype => $limiter
+        },
+        { columns => ['toBranch'] }
+    );
 
-    return $pickup_locations;
+    return $pickup_libraries->search(
+        {
+            pickup_location => 1,
+            branchcode      => {
+                '-not_in' => $limits->_resultset->as_query
+            }
+        },
+        {
+            order_by => ['branchname']
+        }
+    );
 }
 
 =head3 article_request_type
