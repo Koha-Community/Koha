@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 7;
 
 use C4::Biblio;
 use C4::Circulation;
@@ -156,7 +156,7 @@ subtest "as_marc_field() tests" => sub {
 };
 
 subtest 'pickup_locations' => sub {
-    plan tests => 114;
+    plan tests => 119;
 
     $schema->storage->txn_begin;
 
@@ -192,12 +192,14 @@ subtest 'pickup_locations' => sub {
     my $group2_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
     my $group2_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
 
+    my $itemtype = $builder->build_object( { class => 'Koha::ItemTypes', value => { itemtype => 'test' } } );
     my $item1 = $builder->build_sample_item(
         {
             homebranch    => $library1->branchcode,
             holdingbranch => $library2->branchcode,
             barcode       => '1',
             itype         => 'test',
+            ccode         => 'Gollum'
         }
     )->store;
 
@@ -214,65 +216,65 @@ subtest 'pickup_locations' => sub {
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
     my $results = {
-        "1-1-1-any" => 3,
-        "1-1-1-holdgroup" => 2,
-        "1-1-1-patrongroup" => 2,
-        "1-1-1-homebranch" => 1,
+        "1-1-1-any"           => 3,
+        "1-1-1-holdgroup"     => 2,
+        "1-1-1-patrongroup"   => 2,
+        "1-1-1-homebranch"    => 1,
         "1-1-1-holdingbranch" => 1,
-        "1-1-2-any" => 3,
-        "1-1-2-holdgroup" => 2,
-        "1-1-2-patrongroup" => 2,
-        "1-1-2-homebranch" => 1,
+        "1-1-2-any"           => 3,
+        "1-1-2-holdgroup"     => 2,
+        "1-1-2-patrongroup"   => 2,
+        "1-1-2-homebranch"    => 1,
         "1-1-2-holdingbranch" => 1,
-        "1-1-3-any" => 3,
-        "1-1-3-holdgroup" => 2,
-        "1-1-3-patrongroup" => 2,
-        "1-1-3-homebranch" => 1,
+        "1-1-3-any"           => 3,
+        "1-1-3-holdgroup"     => 2,
+        "1-1-3-patrongroup"   => 2,
+        "1-1-3-homebranch"    => 1,
         "1-1-3-holdingbranch" => 1,
-        "1-4-1-any" => 0,
-        "1-4-1-holdgroup" => 0,
-        "1-4-1-patrongroup" => 0,
-        "1-4-1-homebranch" => 0,
+        "1-4-1-any"           => 0,
+        "1-4-1-holdgroup"     => 0,
+        "1-4-1-patrongroup"   => 0,
+        "1-4-1-homebranch"    => 0,
         "1-4-1-holdingbranch" => 0,
-        "1-4-2-any" => 3,
-        "1-4-2-holdgroup" => 2,
-        "1-4-2-patrongroup" => 1,
-        "1-4-2-homebranch" => 1,
+        "1-4-2-any"           => 3,
+        "1-4-2-holdgroup"     => 2,
+        "1-4-2-patrongroup"   => 1,
+        "1-4-2-homebranch"    => 1,
         "1-4-2-holdingbranch" => 1,
-        "1-4-3-any" => 0,
-        "1-4-3-holdgroup" => 0,
-        "1-4-3-patrongroup" => 0,
-        "1-4-3-homebranch" => 0,
+        "1-4-3-any"           => 0,
+        "1-4-3-holdgroup"     => 0,
+        "1-4-3-patrongroup"   => 0,
+        "1-4-3-homebranch"    => 0,
         "1-4-3-holdingbranch" => 0,
-        "3-1-1-any" => 0,
-        "3-1-1-holdgroup" => 0,
-        "3-1-1-patrongroup" => 0,
-        "3-1-1-homebranch" => 0,
+        "3-1-1-any"           => 0,
+        "3-1-1-holdgroup"     => 0,
+        "3-1-1-patrongroup"   => 0,
+        "3-1-1-homebranch"    => 0,
         "3-1-1-holdingbranch" => 0,
-        "3-1-2-any" => 3,
-        "3-1-2-holdgroup" => 1,
-        "3-1-2-patrongroup" => 2,
-        "3-1-2-homebranch" => 0,
+        "3-1-2-any"           => 3,
+        "3-1-2-holdgroup"     => 1,
+        "3-1-2-patrongroup"   => 2,
+        "3-1-2-homebranch"    => 0,
         "3-1-2-holdingbranch" => 1,
-        "3-1-3-any" => 0,
-        "3-1-3-holdgroup" => 0,
-        "3-1-3-patrongroup" => 0,
-        "3-1-3-homebranch" => 0,
+        "3-1-3-any"           => 0,
+        "3-1-3-holdgroup"     => 0,
+        "3-1-3-patrongroup"   => 0,
+        "3-1-3-homebranch"    => 0,
         "3-1-3-holdingbranch" => 0,
-        "3-4-1-any" => 0,
-        "3-4-1-holdgroup" => 0,
-        "3-4-1-patrongroup" => 0,
-        "3-4-1-homebranch" => 0,
+        "3-4-1-any"           => 0,
+        "3-4-1-holdgroup"     => 0,
+        "3-4-1-patrongroup"   => 0,
+        "3-4-1-homebranch"    => 0,
         "3-4-1-holdingbranch" => 0,
-        "3-4-2-any" => 3,
-        "3-4-2-holdgroup" => 1,
-        "3-4-2-patrongroup" => 1,
-        "3-4-2-homebranch" => 0,
+        "3-4-2-any"           => 3,
+        "3-4-2-holdgroup"     => 1,
+        "3-4-2-patrongroup"   => 1,
+        "3-4-2-homebranch"    => 0,
         "3-4-2-holdingbranch" => 1,
-        "3-4-3-any" => 3,
-        "3-4-3-holdgroup" => 1,
-        "3-4-3-patrongroup" => 1,
-        "3-4-3-homebranch" => 0,
+        "3-4-3-any"           => 3,
+        "3-4-3-holdgroup"     => 1,
+        "3-4-3-patrongroup"   => 1,
+        "3-4-3-homebranch"    => 0,
         "3-4-3-holdingbranch" => 1
     };
 
@@ -318,7 +320,7 @@ subtest 'pickup_locations' => sub {
                   . $ha . '-'
                   . $hfp
               }
-              . ' but returns '
+              . ' and returns '
               . scalar(@pl)
         );
 
@@ -336,91 +338,87 @@ subtest 'pickup_locations' => sub {
         }
     }
 
-    $schema->storage->txn_rollback;
-};
-
-subtest '_can_pickup_locations' => sub {
-    plan tests =>8;
-
-    $schema->storage->txn_begin;
-
-    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 0);
-
-    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
-    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
-    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, } } );
-    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
-
-    my $item = $builder->build_sample_item({
-        homebranch => $library1->branchcode,
-        holdingbranch => $library1->branchcode,
-        ccode => "Gollum"
-    });
-
-    my @to = ( $library1, $library2, $library3, $library4 );
-
-    my $pickup_locations = $item->_can_pickup_locations({ to => \@to });
-    is( scalar @$pickup_locations, 3, "With no transfer limits we get back the libraries that are pickup locations");
-
+    # Now test that branchtransferlimits will further filter the pickup locations
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
-    $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
-        toBranch => $library2->branchcode,
-        fromBranch => $library1->branchcode,
-        itemtype => $item->itype,
-        ccode => undef,
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => $item1->itype,
+            rules      => {
+                holdallowed             => 1,
+                hold_fulfillment_policy => 1,
+                returnbranch            => 'any'
+            }
         }
-    });
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Item::Transfer::Limits',
+            value => {
+                toBranch   => $library1->branchcode,
+                fromBranch => $library2->branchcode,
+                itemtype   => $item1->itype,
+                ccode      => undef,
+            }
+        }
+    );
 
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
+    my $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, 2, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
-    $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
-        toBranch => $library4->branchcode,
-        fromBranch => $library1->branchcode,
-        itemtype => $item->itype,
-        ccode => undef,
+    $builder->build_object(
+        {
+            class => 'Koha::Item::Transfer::Limits',
+            value => {
+                toBranch   => $library4->branchcode,
+                fromBranch => $library2->branchcode,
+                itemtype   => $item1->itype,
+                ccode      => undef,
+            }
         }
-    });
+    );
 
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
+    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, 1, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
 
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
+    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, 3, "With no transfer limits of type ccode we get back the libraries that are pickup locations");
 
-    $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
-        toBranch => $library2->branchcode,
-        fromBranch => $library1->branchcode,
-        itemtype => undef,
-        ccode => $item->ccode,
+    $builder->build_object(
+        {
+            class => 'Koha::Item::Transfer::Limits',
+            value => {
+                toBranch   => $library2->branchcode,
+                fromBranch => $library2->branchcode,
+                itemtype   => undef,
+                ccode      => $item1->ccode,
+            }
         }
-    });
+    );
 
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
+    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, 2, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
-    $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
-        toBranch => $library4->branchcode,
-        fromBranch => $library1->branchcode,
-        itemtype => undef,
-        ccode => $item->ccode,
+    $builder->build_object(
+        {
+            class => 'Koha::Item::Transfer::Limits',
+            value => {
+                toBranch   => $library4->branchcode,
+                fromBranch => $library2->branchcode,
+                itemtype   => undef,
+                ccode      => $item1->ccode,
+            }
         }
-    });
+    );
 
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
+    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
     is( scalar @$pickup_locations, 1, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
-
-
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to, from => $library2 });
-    is( scalar @$pickup_locations, 3, "With transfer limits enabled but not applying because of 'from' we get back the libraries that are pickup locations");
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 0);
 
-    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
-    is( scalar @$pickup_locations, 3, "With transfer limits disabled we get back the libraries that are pickup locations");
-
+    $schema->storage->txn_rollback;
 };
 
 subtest 'deletion' => sub {
