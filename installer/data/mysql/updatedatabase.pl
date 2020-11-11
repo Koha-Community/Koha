@@ -10635,11 +10635,14 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.009";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        UPDATE aqorders SET orderstatus='cancelled'
-        WHERE (datecancellationprinted IS NOT NULL OR
-               datecancellationprinted<>'0000-00-00');
-    |);
+    eval {
+        local $dbh->{PrintError} = 0;
+        $dbh->do(q|
+            UPDATE aqorders SET orderstatus='cancelled'
+            WHERE (datecancellationprinted IS NOT NULL OR
+                   datecancellationprinted<>'0000-00-00');
+        |);
+    };
     print "Upgrade to $DBversion done (Bug 13993: Correct orderstatus for transferred orders)\n";
     SetVersion($DBversion);
 }
@@ -10870,18 +10873,22 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.023";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00'
-    });
-    $dbh->do(q{
-        UPDATE borrowers SET dateexpiry=NULL where dateexpiry='0000-00-00'
-    });
-    $dbh->do(q{
-        UPDATE borrowers SET dateofbirth=NULL where dateofbirth='0000-00-00'
-    });
-    $dbh->do(q{
-        UPDATE borrowers SET dateenrolled=NULL where dateenrolled='0000-00-00'
-    });
+    eval {
+        local $dbh->{PrintError} = 0;
+        $dbh->do(q{
+            UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00'
+        });
+        $dbh->do(q{
+            UPDATE borrowers SET dateexpiry=NULL where dateexpiry='0000-00-00'
+        });
+        $dbh->do(q{
+            UPDATE borrowers SET dateofbirth=NULL where dateofbirth='0000-00-00'
+        });
+        $dbh->do(q{
+            UPDATE borrowers SET dateenrolled=NULL where dateenrolled='0000-00-00'
+        });
+    };
+
     print "Upgrade to $DBversion done (Bug 14717: Prevent 0000-00-00 dates in patron data)\n";
     SetVersion($DBversion);
 }
@@ -17629,15 +17636,18 @@ $DBversion = '18.12.00.024';
 if ( CheckVersion($DBversion) ) {
 
     # Fixup any pre-existing bad suggestedby, manageddate, accepteddate dates
-    $dbh->do(
-        "UPDATE suggestions SET suggesteddate = '1970-01-01' WHERE suggesteddate = '0000-00-00';"    
-    );
-    $dbh->do(
-        "UPDATE suggestions SET manageddate = '1970-01-01' WHERE manageddate = '0000-00-00';"    
-    );
-    $dbh->do(
-        "UPDATE suggestions SET accepteddate = '1970-01-01' WHERE accepteddate = '0000-00-00';"    
-    );
+    eval {
+        local $dbh->{PrintError} = 0;
+        $dbh->do(
+            "UPDATE suggestions SET suggesteddate = '1970-01-01' WHERE suggesteddate = '0000-00-00';"
+        );
+        $dbh->do(
+            "UPDATE suggestions SET manageddate = '1970-01-01' WHERE manageddate = '0000-00-00';"
+        );
+        $dbh->do(
+            "UPDATE suggestions SET accepteddate = '1970-01-01' WHERE accepteddate = '0000-00-00';"
+        );
+    };
 
     # Add constraint for suggestedby
     unless ( foreign_key_exists( 'suggestions', 'suggestions_ibfk_suggestedby' ) )
@@ -21685,32 +21695,26 @@ $DBversion = '19.12.00.076';
 if( CheckVersion( $DBversion ) ) {
     my @warnings;
 
-    $dbh->do(q|
-        UPDATE
-          serial
-        SET
-          planneddate = NULL
-        WHERE
-          planneddate = '0000-00-00'
-    |);
+    eval {
+        local $dbh->{PrintError} = 0;
+        $dbh->do(q|
+            UPDATE serial
+            SET planneddate = NULL
+            WHERE planneddate = '0000-00-00'
+        |);
 
-    $dbh->do(q|
-        UPDATE
-          serial
-        SET
-          publisheddate = NULL
-        WHERE
-          publisheddate = '0000-00-00'
-    |);
+        $dbh->do(q|
+            UPDATE serial
+            SET publisheddate = NULL
+            WHERE publisheddate = '0000-00-00'
+        |);
 
-    $dbh->do(q|
-        UPDATE
-          serial
-        SET
-          claimdate = NULL
-        WHERE
-          claimdate = '0000-00-00'
-    |);
+        $dbh->do(q|
+            UPDATE serial
+            SET claimdate = NULL
+            WHERE claimdate = '0000-00-00'
+        |);
+    };
 
     $dbh->do(q|
         ALTER TABLE serial
