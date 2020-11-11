@@ -23386,6 +23386,25 @@ if( CheckVersion( $DBversion ) ) {
   NewVersion( $DBversion, 23019, "Add import_batch_profiles table and profile_id column in import_batches" );
 }
 
+$DBversion = '20.06.00.069';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+        INSERT IGNORE INTO circulation_rules (rule_name, rule_value)
+        VALUES ('unseen_renewals_allowed', '')
+    | );
+
+    if( !column_exists( 'issues', 'unseen_renewals' ) ) {
+        $dbh->do( q| ALTER TABLE issues ADD unseen_renewals TINYINT(4) DEFAULT 0 NOT NULL AFTER renewals | );
+    }
+    if( !column_exists( 'old_issues', 'unseen_renewals' ) ) {
+        $dbh->do( q| ALTER TABLE old_issues ADD unseen_renewals TINYINT(4) DEFAULT 0 NOT NULL AFTER renewals | );
+    }
+
+    $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('UnseenRenewals', '0', 'If enabled, a renewal can be recorded as "unseen" by the library and count against the borrowers unseen renewals limit', '', 'YesNo'); | );
+
+    NewVersion( $DBversion, 24083, ["Add circulation_rules 'unseen_renewals_allowed'", "Add issues.unseen_renewals & old_issues.unseen_renewals)", "Add new system preference UnseenRenewals"] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
