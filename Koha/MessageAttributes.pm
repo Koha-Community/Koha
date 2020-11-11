@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use base qw(Koha::Objects);
+use Koha::MessageAttribute;
 
 =head1 NAME
 

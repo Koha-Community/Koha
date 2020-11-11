@@ -30,7 +30,6 @@ use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::MessageAttributes;
-use Koha::MessageAttribute;
 use Koha::Notice::Templates;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
