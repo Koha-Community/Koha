@@ -188,6 +188,7 @@ if ($slice_count > 1) {
     }
     # Fudge the commit count a bit to spread out the Elasticsearch commits
     $commit *= 1 + 0.10 * $slice_index;
+    $commit = int( $commit );
     _log(1, "Processing slice @{[$slice_index + 1]} of $slice_count\n");
     $iterator_options{slice} = { index => $slice_index, count => $slice_count };
 }
