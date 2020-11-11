@@ -117,7 +117,7 @@ sub pickup_locations {
         if ($item) {
             $item = Koha::Items->find($item)
               unless ref($item) eq 'Koha::Item';
-            @libraries = @{ $item->pickup_locations( { patron => $patron } ) }
+            @libraries = $item->pickup_locations( { patron => $patron } )
               if defined $item;
         }
         elsif ($biblio) {
