@@ -339,7 +339,7 @@ subtest 'pickup_locations' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest '_can_pickup_at' => sub {
+subtest '_can_pickup_locations' => sub {
     plan tests =>8;
 
     $schema->storage->txn_begin;
@@ -359,7 +359,7 @@ subtest '_can_pickup_at' => sub {
 
     my @to = ( $library1, $library2, $library3, $library4 );
 
-    my $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    my $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 3, "With no transfer limits we get back the libraries that are pickup locations");
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
@@ -372,7 +372,7 @@ subtest '_can_pickup_at' => sub {
         }
     });
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 2, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
     $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
@@ -383,11 +383,11 @@ subtest '_can_pickup_at' => sub {
         }
     });
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 1, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
 
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 3, "With no transfer limits of type ccode we get back the libraries that are pickup locations");
 
     $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
@@ -398,7 +398,7 @@ subtest '_can_pickup_at' => sub {
         }
     });
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 2, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
     $builder->build_object( { class => 'Koha::Item::Transfer::Limits', value => {
@@ -409,16 +409,16 @@ subtest '_can_pickup_at' => sub {
         }
     });
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 1, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
 
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to, from => $library2 });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to, from => $library2 });
     is( scalar @$pickup_locations, 3, "With transfer limits enabled but not applying because of 'from' we get back the libraries that are pickup locations");
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 0);
 
-    $pickup_locations = $item->_can_pickup_at({ to => \@to });
+    $pickup_locations = $item->_can_pickup_locations({ to => \@to });
     is( scalar @$pickup_locations, 3, "With transfer limits disabled we get back the libraries that are pickup locations");
 
 };

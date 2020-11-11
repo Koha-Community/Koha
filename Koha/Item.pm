@@ -553,9 +553,9 @@ sub can_be_transferred {
 
 }
 
-=head3 _can_pickup_at
+=head3 _can_pickup_locations
 
-$item->_can_pickup_at({ to => $to_libraries, from => $from_library })
+$item->_can_pickup_locations({ to => $to_libraries, from => $from_library })
 Checks if an item can be transferred to given libraries.
 
 This feature is controlled by two system preferences:
@@ -577,7 +577,7 @@ If checking only one library please use $item->can_be_transferred.
 
 =cut
 
-sub _can_pickup_at {
+sub _can_pickup_locations {
     my ($self, $params ) = @_;
 
     my $to   = $params->{to};
@@ -658,7 +658,7 @@ sub pickup_locations {
         })->as_list;
     }
 
-    my $pickup_locations = $self->_can_pickup_at({
+    my $pickup_locations = $self->_can_pickup_locations({
         to => \@libs
     });
 
