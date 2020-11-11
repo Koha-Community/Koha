@@ -302,7 +302,7 @@ $(document).ready(function() {
         });
     });
 
-    $(".pickup_location_dropdown").on( "click",function(){
+    $(".pickup_location_dropdown").on( "focus",function(){
         var this_dropdown = $(this);
         if(this_dropdown.data('loaded')===1){ return true};
         var hold_id = $(this).data('hold_id');
