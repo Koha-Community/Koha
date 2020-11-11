@@ -136,7 +136,7 @@
                             <option selected="selected" value="[% hold.branchcode | html %]">[% Branches.GetName(hold.branchcode) | html %]</option>
                             <option value="" disabled="disabled" class="loading">Loading...</option>
                         </select>
-                        <img class="loading_[% hold.reserve_id %]" src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" style="display:none;"/>
+                        <img class="loading_[% hold.reserve_id | html %]" src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" style="display:none;"/>
                     [% END %]
                 [% END %]
             </td>
