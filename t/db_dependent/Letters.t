@@ -18,11 +18,13 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 73;
+use Test::More tests => 77;
 use Test::MockModule;
 use Test::Warn;
 
 use MARC::Record;
+
+use utf8;
 
 my ( $email_object, $sendmail_params );
 
@@ -31,6 +33,8 @@ $email_sender_module->mock(
     'send_or_die',
     sub {
         ( $email_object, $sendmail_params ) = @_;
+        my $str = $email_object->email->as_string;
+        unlike $str, qr/I =C3=A2=C2=99=C2=A5 Koha=/, "Content is not double encoded";
         warn "Fake send_or_die";
     }
 );
@@ -110,8 +114,8 @@ is( $message_id, undef, 'EnqueueLetter without the letter argument returns undef
 
 delete $my_message->{message_transport_type};
 $my_message->{letter} = {
-    content      => 'a message',
-    title        => 'message title',
+    content      => 'I ♥ Koha',
+    title        => '啤酒 is great',
     metadata     => 'metadata',
     code         => 'TEST_MESSAGE',
     content_type => 'text/plain',
@@ -534,7 +538,7 @@ is($email_object->email->header('To'), 'robert.tables@mail.com', "mailto address
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
 
 subtest 'SendAlerts - claimissue' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     use C4::Serials;
 
@@ -749,7 +753,7 @@ subtest 'TranslateNotices' => sub {
 
 subtest 'SendQueuedMessages' => sub {
 
-    plan tests => 9;
+    plan tests => 12;
 
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
