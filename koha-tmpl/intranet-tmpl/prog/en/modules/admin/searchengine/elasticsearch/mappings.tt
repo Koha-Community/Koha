@@ -169,13 +169,14 @@ a.add, a.delete {
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th>Aliases</th>
                     <th>Label</th>
                     <th>Type</th>
                     <th colspan="2">Searchable</th>
                     <th>Weight</th>
                   </tr>
                   <tr>
-                    <th colspan=3>&nbsp;</th>
+                    <th colspan=4>&nbsp;</th>
                     <th>Staff interface</th>
                     <th>OPAC</th>
                     <th>&nbsp;</th>
@@ -190,6 +191,9 @@ a.add, a.delete {
                         [% ELSE %]
                             <input type="text" name="search_field_name" value="[% search_field.name | html %]" />
                         [% END %]
+                      </td>
+                      <td>
+                          [% search_field.aliases.join(',') | html %]
                       </td>
                       <td>
                         [% IF search_field.mandatory %]

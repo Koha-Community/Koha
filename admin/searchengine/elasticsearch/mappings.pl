@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Log;
 
 use Koha::SearchEngine::Elasticsearch;
+use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::SearchMarcMaps;
 use Koha::SearchFields;
 use Koha::Caches;
@@ -77,6 +78,14 @@ my $update_mappings = sub {
         };
     }
 };
+
+my $search_fields_aliases = {};
+while ( my ( $key, $value ) = each(%{Koha::SearchEngine::Elasticsearch::QueryBuilder->get_index_field_convert}) ) {
+    my $field_aliases = $search_fields_aliases->{$value};
+    $field_aliases = [] unless $field_aliases;
+    push @$field_aliases, $key;
+    $search_fields_aliases->{$value} = $field_aliases;
+}
 
 if ( $op eq 'edit' ) {
 
@@ -265,6 +274,7 @@ my @all_search_fields;
 while ( my $search_field = $search_fields->next ) {
     my $search_field_unblessed = $search_field->unblessed;
     $search_field_unblessed->{mapped_biblios} = 1 if $search_field->is_mapped_biblios;
+    $search_field_unblessed->{aliases} = $search_fields_aliases->{$search_field_unblessed->{name}};
     push @all_search_fields, $search_field_unblessed;
 }
 
