@@ -263,6 +263,7 @@ subtest '->is_paged and ->pager tests' => sub {
     $schema->storage->txn_begin;
 
     # Delete existing patrons
+    t::lib::Mocks::mock_preference('AnonymousPatron', '');
     Koha::Checkouts->delete;
     Koha::Patrons->delete;
     # Create 10 patrons

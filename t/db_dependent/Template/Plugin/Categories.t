@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 4;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -30,24 +30,18 @@ use Koha::Template::Plugin::Categories;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-# Delete all categories
-Koha::Checkouts->search->delete;
-Koha::Patrons->search->delete;
-Koha::Patron::Categories->search->delete;
-
 my $builder = t::lib::TestBuilder->new;
 
-is( Koha::Template::Plugin::Categories->new->all->count,
-    0, '->all returns 0 results if no categories defined' );
+my $nb_categories = Koha::Patron::Categories->count;
 
 # Create sample categories
 my $category_1 = $builder->build( { source => 'Category' } );
 my @categories = Koha::Template::Plugin::Categories->new->all;
-is( scalar(@categories), 1, '->all returns all defined categories' );
+is( scalar(@categories), 1 + $nb_categories, '->all returns all defined categories' );
 
 my $category_2 = $builder->build( { source => 'Category' } );
 @categories = Koha::Template::Plugin::Categories->new->all;
-is( scalar(@categories), 2, '->all returns all defined categories' );
+is( scalar(@categories), 2 + $nb_categories, '->all returns all defined categories' );
 
 is( Koha::Template::Plugin::Categories->GetName(
         $category_1->{categorycode}

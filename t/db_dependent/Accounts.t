@@ -55,10 +55,6 @@ my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 my $library = $builder->build( { source => 'Branch' } );
 
-$dbh->do(q|DELETE FROM accountlines|);
-$dbh->do(q|DELETE FROM issues|);
-$dbh->do(q|DELETE FROM borrowers|);
-
 my $branchcode = $library->{branchcode};
 
 my $context = Test::MockModule->new('C4::Context');
@@ -1104,23 +1100,9 @@ subtest "Payment notice tests" => sub {
 
     plan tests => 8;
 
-    Koha::Account::Lines->delete();
-    Koha::Patrons->delete();
     Koha::Notice::Messages->delete();
-    # Create a borrower
-    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
-    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
-
-    my $borrower = Koha::Patron->new(
-        {
-            cardnumber   => 'chelseahall',
-            surname      => 'Hall',
-            firstname    => 'Chelsea',
-            email        => 'chelsea@example.com',
-            categorycode => $categorycode,
-            branchcode   => $branchcode,
-        }
-    )->store();
+    # Create a patron
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
     my $context = Test::MockModule->new('C4::Context');
@@ -1130,11 +1112,11 @@ subtest "Payment notice tests" => sub {
             branch     => $manager->branchcode,
         };
     });
-    my $account = Koha::Account->new({ patron_id => $borrower->id });
+    my $account = Koha::Account->new({ patron_id => $patron->borrowernumber });
 
     my $line = Koha::Account::Line->new(
         {
-            borrowernumber    => $borrower->borrowernumber,
+            borrowernumber    => $patron->borrowernumber,
             amountoutstanding => 27,
             interface         => 'commandline',
             debit_type_code   => 'LOST'
