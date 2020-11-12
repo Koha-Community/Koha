@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 35;
+use Test::More tests => 40;
+use Koha::EDI;
 
 BEGIN { use_ok('Koha::Edifact') }
 
@@ -52,6 +53,8 @@ my $test_line = $lin->[-1];
 is( $test_line->line_item_number, 18, 'correct line number returned' );
 is( $test_line->item_number_id, '9780273761006', 'correct ean returned' );
 is( $test_line->quantity, 1, 'quantity returned' );
+is( $test_line->price_info, 114.97, 'price returned' );
+is( $test_line->price_info_inclusive, undef, 'discounted price undefined as expected' );
 
 my $test_title = 'International business [electronic resource]';
 my $marcrec    = $test_line->marc_record;
@@ -120,3 +123,13 @@ is( $y, 'ANF', 'Collection code returned' );
 
 $y = $ol->girfield( 'stock_category', 4 );
 is( $y, 'RS', 'Copy stock category returned' );
+
+# test internal routines for prices
+my $dp =  Koha::EDI::_discounted_price(33.0, 9);
+is( $dp, 6.03, 'Discount calculated' );
+
+$dp =  Koha::EDI::_discounted_price(0.0, 9);
+is( $dp, 9.0, 'Discount calculated with discount = 0' );
+
+$dp =  Koha::EDI::_discounted_price(0.0, 9, 8.0);
+is( $dp, 8.0, 'Discount overriden by incoming calculated value');

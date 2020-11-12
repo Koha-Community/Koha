@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 19;
+use Test::More tests => 26;
+use Koha::EDI;
 
 BEGIN { use_ok('Koha::Edifact') }
 
@@ -70,6 +71,29 @@ my $lineprice = $lines->[7]->price_net;
 
 is( $lineprice, 4.55, 'correct net line price returned' );
 
+$lineprice = $lines->[7]->price_gross;
+
+is( $lineprice, 7.99, 'correct gross line price returned' );
+
 my $tax = $lines->[7]->tax;
 
 is( $tax, 0, 'correct tax amount returned' );
+
+my $tax_rate = $lines->[7]->tax_rate;
+
+is( $tax_rate->{rate}, 0.0, 'correct tax rate returned' );
+
+my $tax_on_charge = $lines->[7]->amt_taxoncharge;
+
+is( $tax_on_charge, 0, 'correct tax on charge value returned' );
+
+my $qty_invoiced = $lines->[7]->quantity_invoiced;
+
+is( $qty_invoiced, 1, 'quantity_invoiced returns correct value' );
+
+my ($lt, $excl) = Koha::EDI::_get_invoiced_price($lines->[7], 1);
+is( $lt, 4.55, 'invoiced price calculated');
+is($excl, 4.55, 'Price excluding tax returned correctly');
+
+($lt, $excl) = Koha::EDI::_get_invoiced_price($lines->[7], 2);
+is( $lt, 4.55 / 2, 'invoiced pricei calculated for copies > 1');
