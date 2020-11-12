@@ -64,6 +64,9 @@ sub _parse_lines {
             push @item_description, $s;
         }
         elsif ( $s->tag eq 'QTY' ) {
+            if ( $s->elem( 0, 0 ) eq '47' ) {
+                $d->{quantity_invoiced} = $s->elem( 0, 1 );
+            }
             $d->{quantity} = $s->elem( 0, 1 );
         }
         elsif ( $s->tag eq 'DTM' ) {
@@ -377,6 +380,11 @@ sub monetary_amount {
 sub quantity {
     my $self = shift;
     return $self->{quantity};
+}
+
+sub quantity_invoiced {
+    my $self = shift;
+    return $self->{quantity_invoiced};
 }
 
 sub price {
@@ -716,6 +724,22 @@ sub moa_amt {
     }
     return;
 }
+sub moa_multiple_amt {
+    my ( $self, $qualifier ) = @_;
+    # return a repeatable MOA field
+    my $amt   = 0;
+    my $found = 0;
+    foreach my $s ( @{ $self->{segs} } ) {
+        if ( $s->tag eq 'MOA' && $s->elem( 0, 0 ) eq $qualifier ) {
+            $amt += $s->elem( 0, 1 );
+            $found = 1;
+        }
+    }
+    if ($found) {
+        return $amt;
+    }
+    return;
+}
 
 sub amt_discount {
     my $self = shift;
@@ -744,16 +768,32 @@ sub amt_lineitem {
     my $self = shift;
     return $self->moa_amt('203');
 }
+sub amt_taxoncharge {
+    my $self = shift;
+    return $self->moa_multiple_amt('124');
+}
 
 sub pri_price {
     my ( $self, $price_qualifier ) = @_;
+            # In practice qualifier is AAE in the quote and AAA & AAB in invoices
+            # but the following are defined
+            # AAA calculation price net (unit price excl tax but incl any allowances or charges)
+            # AAB calculation price gross (unit price excl all taxes, allowances and charges )
+            # AAE information price (incl tax but excl allowances or charges )
+            # AAF information price (including all taxes, allowances or charges)
     foreach my $s ( @{ $self->{segs} } ) {
         if ( $s->tag eq 'PRI' && $s->elem( 0, 0 ) eq $price_qualifier ) {
-            return {
-                price          => $s->elem( 0, 1 ),
-                type           => $s->elem( 0, 2 ),
-                type_qualifier => $s->elem( 0, 3 ),
+            # in practice not all 3 fields may be present
+            # so use a temp variable to avoid runtime warnings
+            my $p = {
+                price          => undef,
+                type           => undef,
+                type_qualifier => undef,
             };
+            $p->{price}          = $s->elem( 0, 1 );
+            $p->{type}           = $s->elem( 0, 2 );
+            $p->{type_qualifier} = $s->elem( 0, 3 );
+            return $p;
         }
     }
     return;
@@ -792,7 +832,7 @@ sub price_info {
 # information price incl tax,allowances, charges
 sub price_info_inclusive {
     my $self = shift;
-    my $p    = $self->pri_price('AAE');
+    my $p    = $self->pri_price('AAF');
     if ( defined $p ) {
         return $p->{price};
     }
@@ -802,6 +842,30 @@ sub price_info_inclusive {
 sub tax {
     my $self = shift;
     return $self->moa_amt('124');
+}
+
+sub tax_rate {
+    my $self = shift;
+    my $tr = {};
+    foreach my $s ( @{ $self->{segs} } ) {
+        if ( $s->tag eq 'TAX' && $s->elem( 0, 0 ) == 7 ) {
+            $tr->{type} = $s->elem( 1, 0 ); # VAT, GST or IMP
+            $tr->{rate} = $s->elem( 4, 3 ); # percentage
+            # category values may be:
+            # E = exempt from tax
+            # G = export item, tax not charged
+            # H = higher rate
+            # L = lower rate
+            # S = standard rate
+            # Z = zero-rated
+            $tr->{category} = $s->elem( 5, 0 );
+            if (!defined $tr->{rate} && $tr->{category} eq 'Z') {
+                $tr->{rate} = 0;
+            }
+            return $tr;
+        }
+    }
+    return;
 }
 
 sub availability_date {
