@@ -518,14 +518,14 @@ sub BiblioAutoLink {
     my $linker = $linker_module->new(
         { 'options' => C4::Context->preference("LinkerOptions") } );
     my ( $headings_changed, $results ) =
-      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, C4::Context->preference("CatalogModuleRelink") || '', $verbose );
+      LinkBibHeadingsToAuthorities( $linker, $record, $frameworkcode, C4::Context->preference("CatalogModuleRelink") || '', undef, $verbose );
     # By default we probably don't want to relink things when cataloging
     return $headings_changed, $results;
 }
 
 =head2 LinkBibHeadingsToAuthorities
 
-  my $num_headings_changed, %results = LinkBibHeadingsToAuthorities($linker, $marc, $frameworkcode, [$allowrelink, $verbose]);
+  my $num_headings_changed, %results = LinkBibHeadingsToAuthorities($linker, $marc, $frameworkcode, [$allowrelink, $tagtolink,  $verbose]);
 
 Links bib headings to authority records by checking
 each authority-controlled field in the C<MARC::Record>
