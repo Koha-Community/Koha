@@ -98,6 +98,11 @@ sub item_barcode_transform {
     Koha::Exceptions::Exception->throw("item_barcode_transform called with parameter: $barcode");
 }
 
+sub patron_barcode_transform {
+    my ( $self, $barcode ) = @_;
+    Koha::Exceptions::Exception->throw("patron_barcode_transform called with parameter: $barcode");
+}
+
 sub configure {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::configure";

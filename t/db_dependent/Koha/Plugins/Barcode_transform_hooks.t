@@ -42,7 +42,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest '() hook tests' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -52,6 +52,11 @@ subtest '() hook tests' => sub {
     my $plugin = Koha::Plugin::Test->new->enable;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $cardnumber = $patron->cardnumber;
+
+    warning_like { $patron->store(); }
+        qr/patron_barcode_transform called with parameter: $cardnumber/,
+        'Koha::Patron::store calls the patron_barcode_transform hook';
 
     t::lib::Mocks::mock_userenv(
         {
