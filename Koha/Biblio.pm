@@ -207,32 +207,31 @@ sub can_be_transferred {
 
     my $pickup_locations = $biblio->pickup_locations( {patron => $patron } );
 
-Returns an I<arrayref> of possible pickup locations for this biblio's items,
+Returns a Koha::Libraries set of possible pickup locations for this biblio's items,
 according to patron's home library (if patron is defined and holds are allowed
 only from hold groups) and if item can be transferred to each pickup location.
 
 =cut
 
 sub pickup_locations {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $patron = $params->{patron};
 
     my @pickup_locations;
-    foreach my $item_of_bib ($self->items->as_list) {
-        push @pickup_locations, @{ $item_of_bib->pickup_locations( {patron => $patron} )->as_list() };
+    foreach my $item_of_bib ( $self->items->as_list ) {
+        push @pickup_locations,
+          $item_of_bib->pickup_locations( { patron => $patron } )
+          ->_resultset->get_column('branchcode')->all;
     }
 
-    my %seen;
-    @pickup_locations =
-      grep { !$seen{ $_->branchcode }++ } @pickup_locations;
-
-    return \@pickup_locations;
+    return Koha::Libraries->search(
+        { branchcode => { '-in' => \@pickup_locations } } );
 }
 
 =head3 hidden_in_opac
 
-my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
+    my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
 
 Returns true if the biblio matches the hidding criteria defined in $rules.
 Returns false otherwise.
