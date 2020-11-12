@@ -185,19 +185,12 @@ subtest 'is_serial() tests' => sub {
 };
 
 subtest 'pickup_locations' => sub {
-    plan tests => 29;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
-    my $dbh = C4::Context->dbh;
-
-    # Cleanup database
-    Koha::Holds->search->delete;
-    Koha::Patrons->search->delete;
-    Koha::Items->search->delete;
-    Koha::Libraries->search->delete;
+    my $nb_libraries = Koha::Libraries->count;
     Koha::CirculationRules->search->delete;
-    $dbh->do('DELETE FROM issues');
     Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
@@ -221,6 +214,8 @@ subtest 'pickup_locations' => sub {
     my $library6 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
     my $library7 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
     my $library8 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0 } } );
+
+    our @branchcodes = map { $_->branchcode } ($library1, $library2, $library3, $library4, $library5, $library6, $library7, $library8);
 
     Koha::CirculationRules->set_rules(
         {
@@ -373,11 +368,11 @@ subtest 'pickup_locations' => sub {
     my $patron8 = $builder->build_object( { class => 'Koha::Patrons', value => { firstname=>'8', branchcode => $library8->branchcode } } );
 
     my $results = {
-        "ItemHomeLibrary-1-1" => 6,
+        "ItemHomeLibrary-1-1" => 6  + $nb_libraries,
         "ItemHomeLibrary-1-8" => 1,
         "ItemHomeLibrary-2-1" => 2,
         "ItemHomeLibrary-2-8" => 0,
-        "PatronLibrary-1-1" => 6,
+        "PatronLibrary-1-1" => 6 + $nb_libraries,
         "PatronLibrary-1-8" => 3,
         "PatronLibrary-2-1" => 0,
         "PatronLibrary-2-8" => 3,
@@ -390,6 +385,9 @@ subtest 'pickup_locations' => sub {
         my @pl = @{ $biblio->pickup_locations( { patron => $patron} ) };
 
         foreach my $pickup_location (@pl) {
+            next
+              unless grep { $pickup_location eq $_ } @branchcodes;
+
             is( ref($pickup_location), 'Koha::Library', 'Object type is correct' );
         }
 
