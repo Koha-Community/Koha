@@ -23388,10 +23388,19 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '20.06.00.069';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( q|
-        INSERT IGNORE INTO circulation_rules (rule_name, rule_value)
-        VALUES ('unseen_renewals_allowed', '')
-    | );
+    my ($count) = $dbh->selectrow_array(
+        q|
+            SELECT COUNT(*)
+            FROM circulation_rules
+            WHERE rule_name = 'unseen_renewals_allowed'
+        |
+    );
+    if ($count == 0) {
+        $dbh->do( q|
+            INSERT INTO circulation_rules (rule_name, rule_value)
+            VALUES ('unseen_renewals_allowed', '')
+        | );
+    }
 
     if( !column_exists( 'issues', 'unseen_renewals' ) ) {
         $dbh->do( q| ALTER TABLE issues ADD unseen_renewals TINYINT(4) DEFAULT 0 NOT NULL AFTER renewals | );
