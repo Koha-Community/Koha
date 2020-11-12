@@ -200,6 +200,7 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/all
   ->json_is({
         allows_renewal   => Mojo::JSON->true,
         max_renewals     => 1,
+        unseen_renewals  => 0,
         current_renewals => 0,
         error            => undef
     });
@@ -219,6 +220,7 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/all
   ->json_is({
         allows_renewal   => Mojo::JSON->false,
         max_renewals     => 1,
+        unseen_renewals  => 0,
         current_renewals => 1,
         error            => 'too_many'
     });
