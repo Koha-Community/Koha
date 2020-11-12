@@ -50,6 +50,111 @@ use C4::Context;
 use Koha::Exceptions;
 use Koha::Caches;
 
+our %index_field_convert = (
+    'kw' => '',
+    'ab' => 'abstract',
+    'au' => 'author',
+    'lcn' => 'local-classification',
+    'callnum' => 'local-classification',
+    'record-type' => 'rtype',
+    'mc-rtype' => 'rtype',
+    'mus' => 'rtype',
+    'lc-card' => 'lc-card-number',
+    'sn' => 'local-number',
+    'biblionumber' => 'local-number',
+    'yr' => 'date-of-publication',
+    'pubdate' => 'date-of-publication',
+    'acqdate' => 'date-of-acquisition',
+    'date/time-last-modified' => 'date-time-last-modified',
+    'dtlm' => 'date-time-last-modified',
+    'diss' => 'dissertation-information',
+    'nb' => 'isbn',
+    'ns' => 'issn',
+    'music-number' => 'identifier-publisher-for-music',
+    'number-music-publisher' => 'identifier-publisher-for-music',
+    'music' => 'identifier-publisher-for-music',
+    'ident' => 'identifier-standard',
+    'cpn' => 'corporate-name',
+    'cfn' => 'conference-name',
+    'pn' => 'personal-name',
+    'pb' => 'publisher',
+    'pv' => 'provider',
+    'nt' => 'note',
+    'notes' => 'note',
+    'rcn' => 'record-control-number',
+    'su' => 'subject',
+    'su-to' => 'subject',
+    #'su-geo' => 'subject',
+    'su-ut' => 'subject',
+    'ti' => 'title',
+    'se' => 'title-series',
+    'ut' => 'title-uniform',
+    'an' => 'koha-auth-number',
+    'authority-number' => 'koha-auth-number',
+    'at' => 'authtype',
+    'he' => 'heading',
+    'rank' => 'relevance',
+    'phr' => 'st-phrase',
+    'wrdl' => 'st-word-list',
+    'rt' => 'right-truncation',
+    'rtrn' => 'right-truncation',
+    'ltrn' => 'left-truncation',
+    'rltrn' => 'left-and-right',
+    'mc-itemtype' => 'itemtype',
+    'mc-ccode' => 'ccode',
+    'branch' => 'homebranch',
+    'mc-loc' => 'location',
+    'loc' => 'location',
+    'stocknumber' => 'number-local-acquisition',
+    'inv' => 'number-local-acquisition',
+    'bc' => 'barcode',
+    'mc-itype' => 'itype',
+    'aub' => 'author-personal-bibliography',
+    'auo' => 'author-in-order',
+    'ff8-22' => 'ta',
+    'aud' => 'ta',
+    'audience' => 'ta',
+    'frequency-code' => 'ff8-18',
+    'illustration-code' => 'ff8-18-21',
+    'regularity-code' => 'ff8-19',
+    'type-of-serial' => 'ff8-21',
+    'format' => 'ff8-23',
+    'conference-code' => 'ff8-29',
+    'festschrift-indicator' => 'ff8-30',
+    'index-indicator' => 'ff8-31',
+    'fiction' => 'lf',
+    'fic' => 'lf',
+    'literature-code' => 'lf',
+    'biography' => 'bio',
+    'ff8-34' => 'bio',
+    'biography-code' => 'bio',
+    'l-format' => 'ff7-01-02',
+    'lex' => 'lexile-number',
+    'hi' => 'host-item-number',
+    'itu' => 'index-term-uncontrolled',
+    'itg' => 'index-term-genre',
+);
+my $field_name_pattern = '[\w\-]+';
+my $multi_field_pattern = "(?:\\.$field_name_pattern)*";
+
+=head2 get_index_field_convert
+
+    my @index_params = Koha::SearchEngine::Elasticsearch::QueryBuilder->get_index_field_convert();
+
+Converts zebra-style search index notation into elasticsearch-style.
+
+C<@indexes> is an array of index names, as presented to L<build_query_compat>,
+and it returns something that can be sent to L<build_query>.
+
+B<TODO>: this will pull from the elasticsearch mappings table to figure out
+types.
+
+=cut
+
+sub get_index_field_convert() {
+    return \%index_field_convert;
+}
+
 =head2 build_query
 
     my $simple_query = $builder->build_query("hello", %options)
@@ -607,107 +712,6 @@ sub _convert_sort_fields {
         }
     } @sort_by;
 }
-
-=head2 _convert_index_fields
-
-    my @index_params = $self->_convert_index_fields(@indexes);
-
-Converts zebra-style search index notation into elasticsearch-style.
-
-C<@indexes> is an array of index names, as presented to L<build_query_compat>,
-and it returns something that can be sent to L<build_query>.
-
-B<TODO>: this will pull from the elasticsearch mappings table to figure out
-types.
-
-=cut
-
-our %index_field_convert = (
-    'kw' => '',
-    'ab' => 'abstract',
-    'au' => 'author',
-    'lcn' => 'local-classification',
-    'callnum' => 'local-classification',
-    'record-type' => 'rtype',
-    'mc-rtype' => 'rtype',
-    'mus' => 'rtype',
-    'lc-card' => 'lc-card-number',
-    'sn' => 'local-number',
-    'biblionumber' => 'local-number',
-    'yr' => 'date-of-publication',
-    'pubdate' => 'date-of-publication',
-    'acqdate' => 'date-of-acquisition',
-    'date/time-last-modified' => 'date-time-last-modified',
-    'dtlm' => 'date-time-last-modified',
-    'diss' => 'dissertation-information',
-    'nb' => 'isbn',
-    'ns' => 'issn',
-    'music-number' => 'identifier-publisher-for-music',
-    'number-music-publisher' => 'identifier-publisher-for-music',
-    'music' => 'identifier-publisher-for-music',
-    'ident' => 'identifier-standard',
-    'cpn' => 'corporate-name',
-    'cfn' => 'conference-name',
-    'pn' => 'personal-name',
-    'pb' => 'publisher',
-    'pv' => 'provider',
-    'nt' => 'note',
-    'notes' => 'note',
-    'rcn' => 'record-control-number',
-    'su' => 'subject',
-    'su-to' => 'subject',
-    #'su-geo' => 'subject',
-    'su-ut' => 'subject',
-    'ti' => 'title',
-    'se' => 'title-series',
-    'ut' => 'title-uniform',
-    'an' => 'koha-auth-number',
-    'authority-number' => 'koha-auth-number',
-    'at' => 'authtype',
-    'he' => 'heading',
-    'rank' => 'relevance',
-    'phr' => 'st-phrase',
-    'wrdl' => 'st-word-list',
-    'rt' => 'right-truncation',
-    'rtrn' => 'right-truncation',
-    'ltrn' => 'left-truncation',
-    'rltrn' => 'left-and-right',
-    'mc-itemtype' => 'itemtype',
-    'mc-ccode' => 'ccode',
-    'branch' => 'homebranch',
-    'mc-loc' => 'location',
-    'loc' => 'location',
-    'stocknumber' => 'number-local-acquisition',
-    'inv' => 'number-local-acquisition',
-    'bc' => 'barcode',
-    'mc-itype' => 'itype',
-    'aub' => 'author-personal-bibliography',
-    'auo' => 'author-in-order',
-    'ff8-22' => 'ta',
-    'aud' => 'ta',
-    'audience' => 'ta',
-    'frequency-code' => 'ff8-18',
-    'illustration-code' => 'ff8-18-21',
-    'regularity-code' => 'ff8-19',
-    'type-of-serial' => 'ff8-21',
-    'format' => 'ff8-23',
-    'conference-code' => 'ff8-29',
-    'festschrift-indicator' => 'ff8-30',
-    'index-indicator' => 'ff8-31',
-    'fiction' => 'lf',
-    'fic' => 'lf',
-    'literature-code' => 'lf',
-    'biography' => 'bio',
-    'ff8-34' => 'bio',
-    'biography-code' => 'bio',
-    'l-format' => 'ff7-01-02',
-    'lex' => 'lexile-number',
-    'hi' => 'host-item-number',
-    'itu' => 'index-term-uncontrolled',
-    'itg' => 'index-term-genre',
-);
-my $field_name_pattern = '[\w\-]+';
-my $multi_field_pattern = "(?:\\.$field_name_pattern)*";
 
 sub _convert_index_fields {
     my ( $self, @indexes ) = @_;
