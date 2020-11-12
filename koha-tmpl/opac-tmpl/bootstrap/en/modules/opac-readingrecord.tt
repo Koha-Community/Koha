@@ -50,7 +50,8 @@
                         You have never borrowed anything from this library.
                     [% ELSE %]
                         <div id="opac-user-readingrec">
-                            <div class="resultscontrol resort">
+
+                            <div class="resultscontrol resort js-hide">
                                 <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">
                                     [% UNLESS ( limit ) %]<input type="hidden" name="limit" value="full" />[% END %]
                                     <select name="order" id="order">
@@ -74,7 +75,7 @@
 
                             [% IF Koha.Preference( 'OnSiteCheckouts' ) == 1 %]
                             <div id="tabs" class="toptabs">
-                                <ul>
+                                <ul class="js-show">
                                     <li id="tab_all"><a href="#tabs-container">All</a></li>
                                     <li id="tab_checkout"><a href="#tabs-container">Checkouts</a></li>
                                     <li id="tab_onsite_checkout"><a href="#tabs-container">On-site checkouts</a></li>
@@ -209,13 +210,21 @@
         });
 
         var table = $("#readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
+            "dom": '<"top"<"table_entries"i><"table_controls"fB>>t',
+            "sorting": [[ 1, "asc" ]],
+            "autoWidth": false,
+
             "columnDefs": [
                 { "targets": [ "nosort" ],"sortable": false,"searchable": false },
                 { "type": "anti-the", "targets" : [ "anti-the" ] },
                 { "type": "title-string", "targets" : [ "title-string" ] }
-            ]
+            ],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": _("Search")
+            }
         }));
+
         var tabs = $("#tabs").tabs({
             activate: function(e, ui) {
                 var id = $(ui.newTab).attr("id");
