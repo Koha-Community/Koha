@@ -201,12 +201,12 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_young=>1})->next->borrowernumber, $child1->borrowernumber );
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_young=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category because too young');
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,2,'Guarantee was removed when made adult');
-    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2})->update_category_to({category=>$a_categorycode_2}),2,'Two child patrons updated to adult category');
-    is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,2,'Guarantees were not removed when made adult which can be guarantee');
 
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_old=>1})->next->borrowernumber, $child3->borrowernumber );
     is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_old=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category because too old');
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,1,'Guarantee was removed when made adult');
+    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2})->update_category_to({category=>$a_categorycode_2}),1,'Two child patrons updated to adult category');
+    is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,1,'Guarantees were not removed when made adult which can be guarantee');
 
     is( Koha::Patrons->find($inst->borrowernumber)->guarantee_relationships->guarantees->count,1,'Guarantor has 1 guarantees');
     is( Koha::Patrons->search_patrons_to_update_category({from=>$p_categorycode})->update_category_to({category=>$a_categorycode}),1,'One professional patron updated to adult category');
