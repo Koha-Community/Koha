@@ -80,8 +80,7 @@ LEFT JOIN aqbooksellers ON
 WHERE
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
-    (datecancellationprinted IS NULL OR
-        datecancellationprinted='0000-00-00') AND
+    datecancellationprinted IS NULL AND
     datereceived IS NOT NULL
     GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
              tleft,
