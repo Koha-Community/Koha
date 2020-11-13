@@ -101,7 +101,6 @@ sub update_index {
 
     my $documents = $self->marc_records_to_documents($records);
     my @body;
-
     for (my $i = 0; $i < scalar @$biblionums; $i++) {
         my $id = $biblionums->[$i];
         my $document = $documents->[$i];
@@ -302,7 +301,9 @@ sub index_records {
     $records = [$records] if ref $records ne 'ARRAY' && defined $records;
     if ( $op eq 'specialUpdate' ) {
         my $index_record_numbers;
-        unless ($records) {
+        if ($records){
+            $index_record_numbers = $record_numbers;
+        } else {
             foreach my $record_number ( @$record_numbers ){
                 my $record = _get_record( $record_number, $server );
                 if( $record ){
