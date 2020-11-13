@@ -382,7 +382,7 @@ subtest 'pickup_locations' => sub {
         my ( $cbranch, $biblio, $patron, $results ) = @_;
         t::lib::Mocks::mock_preference('ReservesControlBranch', $cbranch);
 
-        my @pl = @{ $biblio->pickup_locations( { patron => $patron} ) };
+        my @pl = $biblio->pickup_locations( { patron => $patron } );
 
         foreach my $pickup_location (@pl) {
             next
