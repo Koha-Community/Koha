@@ -39,13 +39,17 @@ $scriptname
 
 This script dumps your Koha instance data for backup or migration.
 
+The schema only option can be used to compare your existing database schema
+to the expected Koha structure.
+
 Usage:
 $scriptname [--quiet|-q] [--exclude-indexes] instancename1 [instancename2...]
 $scriptname -h|--help
 
-    --exclude-indexes     Include Zebra indexes on the backup.
+    --schema-only         Dump only the database schema
+    --exclude-indexes     Include Zebra indexes on the backup
     --quiet|-q            Make the script avoid printing to STDOUT
-                          (useful for calling from another scripts).
+                          (useful for calling from another scripts)
     --help|-h             Display this help message
     --without-db-name     Do not include database name
 
@@ -69,46 +73,61 @@ dump_instance()
     backupdir="$( xmlstarlet sel -t -v 'yazgfs/config/backupdir' $kohaconfig || true )"
     [ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
     dbdump="$backupdir/$name-$date.sql.gz"
-    [ "$quiet" = "no" ] && echo "* DB to $dbdump"
-    dbflag="--databases"
     [ "$without_db_name" = "yes" ] && dbflag=""
-    mysqldump $dbflag --host="$mysqlhost" \
-        --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
-        gzip > "$dbdump"
-    chown "root:$name-koha" "$dbdump"
-    chmod g+r "$dbdump"
+    if [ "$schema_only" = "yes" ]
+    then
+        schemadump="$backupdir/$name-schema-$date.sql"
+        [ "$quiet" = "no" ] && echo "* schema to $schemadump"
+        mysqldump $dbflag -d --host="$mysqlhost" \
+            --user="$mysqluser" --password="$mysqlpass" "$mysqldb" > "$schemadump"
+        chown "root:$name-koha" "$dbdump"
+        chmod g+r "$dbdump"
+    else
+        [ "$quiet" = "no" ] && echo "* DB to $dbdump"
+        mysqldump $dbflag --host="$mysqlhost" \
+            --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
+            gzip > "$dbdump"
+        chown "root:$name-koha" "$dbdump"
+        chmod g+r "$dbdump"
 
-    instancefile="$name.conf"
+        instancefile="$name.conf"
 
-    # Dump configs, logs, etc.
-    metadump="$backupdir/$name-$date.tar.gz"
-    [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
+        # Dump configs, logs, etc.
+        metadump="$backupdir/$name-$date.tar.gz"
+        [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
 
-    if [ "$exclude_indexes" = "yes" ]; then
-        excludes="--exclude=var/lib/koha/$name/biblios \
-                  --exclude=var/lib/koha/$name/authorities"
+        if [ "$exclude_indexes" = "yes" ]; then
+            excludes="--exclude=var/lib/koha/$name/biblios \
+                      --exclude=var/lib/koha/$name/authorities"
+        fi
+
+        tar -czf "$metadump" -C / $excludes \
+            "etc/koha/sites/$name" \
+            "etc/apache2/sites-available/$instancefile" \
+            "etc/apache2/sites-enabled/$instancefile" \
+            "var/lib/koha/$name" \
+            "var/log/koha/$name"
+
+        chown "root:$name-koha" "$metadump"
+        chmod g+r "$metadump"
+
+        [ "$quiet" = "no" ] && echo "Done."
+
     fi
-
-    tar -czf "$metadump" -C / $excludes \
-        "etc/koha/sites/$name" \
-        "etc/apache2/sites-available/$instancefile" \
-        "etc/apache2/sites-enabled/$instancefile" \
-        "var/lib/koha/$name" \
-        "var/log/koha/$name"
-    chown "root:$name-koha" "$metadump"
-    chmod g+r "$metadump"
-
-    [ "$quiet" = "no" ] && echo "Done."
 }
 
 # Default values
 quiet="no"
 exclude_indexes="no"
 without_db_name="no"
+schema_only="no"
 
 while [ $# -gt 0 ]; do
 
     case "$1" in
+        --schema-only)
+            schema_only="yes"
+            shift ;;
         --exclude-indexes)
             exclude_indexes="yes"
             shift ;;
