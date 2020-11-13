@@ -312,12 +312,22 @@ sub process_invoice {
 
             foreach my $line ( @{$lines} ) {
                 my $ordernumber = $line->ordernumber;
+                if (!$ordernumber ) {
+                   $logger->trace( "Skipping invoice line, no associated ordernumber" );
+                   next;
+                }
+
                 $logger->trace( "Receipting order:$ordernumber Qty: ",
                     $line->quantity );
 
                 my $order = $schema->resultset('Aqorder')->find($ordernumber);
+                if ($order->biblionumber->biblionumber) {
+                    my $b = $order->biblionumber->biblionumber;
+                    my $id = $line->item_number_id;
+                    $logger->trace("Updating bib:$b id:$id");
+                }
 
-      # ModReceiveOrder does not validate that $ordernumber exists validate here
+                # ModReceiveOrder does not validate that $ordernumber exists validate here
                 if ($order) {
 
                     # check suggestions
