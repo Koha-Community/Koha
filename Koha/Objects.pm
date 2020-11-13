@@ -377,6 +377,7 @@ sub empty {
         class  => $self
     ) unless ref $self;
 
+    $self = $self->search(\'0 = 1');
     $self->_resultset()->set_cache([]);
 
     return $self;
