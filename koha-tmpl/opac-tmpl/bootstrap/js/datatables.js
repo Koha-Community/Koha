@@ -21,16 +21,7 @@ var dataTablesDefaults = {
         "loadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
         "processing"       : window.MSG_DT_PROCESSING || "Processing...",
         "search"           : window.MSG_DT_SEARCH || "Search:",
-        "zeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found",
-        buttons: {
-            "copyTitle"     : window.MSG_DT_COPY_TO_CLIPBOARD || "Copy to clipboard",
-            "copyKeys"      : window.MSG_DT_COPY_KEYS || "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.",
-            "copySuccess": {
-                _: window.MSG_DT_COPIED_ROWS || "Copied %d rows to clipboard",
-                1: window.MSG_DT_COPIED_ONE_ROW || "Copied one row to clipboard",
-            },
-            "print": __("Print")
-        }
+        "zeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
     },
     // "sorting": [$(" - select row position of th -")],
     "dom": 't',
