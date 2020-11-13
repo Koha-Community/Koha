@@ -243,7 +243,7 @@ sub checkin {
             siplog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item not checked out");
         }
     } elsif ( $circ->ok ) {
-        $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{borrowernumber} ) );
+        $circ->patron( $patron = C4::SIP::ILS::Patron->new( { borrowernumber => $item->{borrowernumber} } ) );
         delete $item->{borrowernumber};
         delete $item->{due_date};
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
