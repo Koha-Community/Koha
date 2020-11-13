@@ -68,6 +68,8 @@
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
                     <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% count | html %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a></li>
+                [% ELSIF ( biblio.subscriptions.count ) %]
+                    <li class="disabled"><a id="deletebiblio" data-toggle="tooltip" data-placement="left" title="[% biblio.subscriptions.count | html %] subscription(s) are attached to this record. You must delete all subscriptions before deleting this record." href="#">Delete record</a></li>
                 [% ELSE %]
                     <li><a id="deletebiblio" data-order-manage="[% CAN_user_acquisition_order_manage | html %]" href="#">Delete record</a></li>
                 [% END %]
