@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 65;
+use Test::More tests => 66;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1188,6 +1188,33 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
                                        $item->itemnumber)->{status},
        'OK',
        'Patron can place hold on an item loaned to itself');
+};
+
+subtest 'MergeHolds' => sub {
+
+    plan tests => 1;
+
+    my $biblio_1  = $builder->build_sample_biblio();
+    my $biblio_2  = $builder->build_sample_biblio();
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itype   = $builder->build_object(
+        { class => "Koha::ItemTypes", value => { notforloan => 0 } } );
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_1->biblionumber,
+            itype        => $itype->itemtype,
+            library      => $library->branchcode
+        }
+    );
+    my $patron_1 = $builder->build_object( { class => "Koha::Patrons" } );
+
+    # Place a hold on $biblio_1
+    my $priority = 1;
+    place_item_hold( $patron_1, $item_1, $library, $priority );
+
+    # Move and make sure hold is now on $biblio_2
+    C4::Reserves::MergeHolds($dbh, $biblio_2->biblionumber, $biblio_1->biblionumber);
+    is( $biblio_2->holds->count, 1, 'Hold has been transferred' );
 };
 
 sub count_hold_print_messages {
