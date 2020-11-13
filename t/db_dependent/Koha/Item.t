@@ -88,7 +88,7 @@ subtest 'has_pending_hold() tests' => sub {
 
 subtest "as_marc_field() tests" => sub {
 
-    my $mss = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
+    my $mss = C4::Biblio::GetMarcSubfieldStructure( '' );
 
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
@@ -139,7 +139,7 @@ subtest "as_marc_field() tests" => sub {
         }
     )->store;
 
-    $mss = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 0 } );
+    $mss = C4::Biblio::GetMarcSubfieldStructure( '' );
     my @unlinked_subfields;
     push @unlinked_subfields, X => 'Something weird';
     $item->more_subfields_xml( C4::Items::_get_unlinked_subfields_xml( \@unlinked_subfields ) )->store;
