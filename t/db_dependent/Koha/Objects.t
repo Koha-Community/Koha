@@ -1204,17 +1204,21 @@ subtest 'prefetch_whitelist() tests' => sub {
 
 subtest 'empty() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
-    # Add a patron, we need more than 0
-    $builder->build_object({ class => 'Koha::Patrons' });
-    ok( Koha::Patrons->count > 0, 'There is more than one Koha::Patron on the resultset' );
+    # Add a patron, we need at least 1
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    ok( Koha::Patrons->count > 0, 'There is at least one Koha::Patron on the resultset' );
 
     my $empty = Koha::Patrons->new->empty;
     is( ref($empty), 'Koha::Patrons', '->empty returns a Koha::Patrons iterator' );
     is( $empty->count, 0, 'The empty resultset is, well, empty :-D' );
+
+    my $new_rs = $empty->search({ borrowernumber => $patron->borrowernumber });
+
+    is( $new_rs->count, 0, 'Further chaining an empty resultset, returns an empty resultset' );
 
     throws_ok
         { Koha::Patrons->empty; }
