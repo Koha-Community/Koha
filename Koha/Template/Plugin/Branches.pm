@@ -123,13 +123,13 @@ sub pickup_locations {
         elsif ($biblio) {
             $biblio = Koha::Biblios->find($biblio)
               unless ref($biblio) eq 'Koha::Biblio';
-            @libraries = @{ $biblio->pickup_locations( { patron => $patron } ) }
+            @libraries = $biblio->pickup_locations( { patron => $patron } )
               if defined $biblio;
         }
     }
 
     @libraries = Koha::Libraries->search( { pickup_location => 1 },
-        { order_by => ['branchname'] } )->as_list
+        { order_by => ['branchname'] } )
       unless @libraries;
 
     @libraries = map { $_->unblessed } @libraries;

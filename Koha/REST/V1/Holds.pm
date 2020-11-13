@@ -419,7 +419,7 @@ sub pickup_locations {
         my @pickup_locations =
             $hold->itemnumber
           ? @{ $hold->item->pickup_locations( { patron => $hold->patron } )->as_list() }
-          : @{ $hold->biblio->pickup_locations( { patron => $hold->patron } ) };
+          : @{ $hold->biblio->pickup_locations( { patron => $hold->patron } )->as_list() };
 
         @pickup_locations = map { $_->to_api } @pickup_locations;
 
