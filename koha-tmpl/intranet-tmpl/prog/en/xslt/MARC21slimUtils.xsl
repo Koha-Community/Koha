@@ -581,6 +581,7 @@
     <xsl:template name="showComponentParts">
         <!-- Component part records: Displaying title and author of component part records -->
         <xsl:if test="marc:componentPartRecords">
+            <xsl:variable name="ComponentPartQuery" select="marc:variables/marc:variable[@name='ComponentPartQuery']" />
             <div class="results_summary componentPartRecordsContainer">
                 <h5>Component part records</h5>
                 <ol class="componentParts">
@@ -640,6 +641,11 @@
                         </li>
                     </xsl:for-each>
                 </ol>
+                <xsl:choose>
+                    <xsl:when test="count(marc:componentPartRecords/marc:record) = 300">
+                        <p>Only 300 results are shown: <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($ComponentPartQuery, true())"/></xsl:attribute>show all component parts</a></p>
+                     </xsl:when>
+                </xsl:choose>
             </div>
         </xsl:if>
     </xsl:template>

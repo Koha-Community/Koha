@@ -43,6 +43,7 @@ use Koha::Suggestions;
 use Koha::Subscriptions;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::Util::Search;
 
 =head1 NAME
 
@@ -488,31 +489,16 @@ this object (MARC21 773$w points to this)
 =cut
 
 sub components {
-    my ($self) = @_;
+    my ($self, $max_results) = @_;
 
     return if (C4::Context->preference('marcflavour') ne 'MARC21');
 
-    my $marc = C4::Biblio::GetMarcBiblio({ biblionumber => $self->id });
-    my $pf001 = $marc->field('001') || undef;
-    my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+    my $searchstr = Koha::Util::Search::get_component_part_query($self->id);
 
-    if (defined($pf001)) {
-        my $pf003 = $marc->field('003') || undef;
-        my $searchstr;
-
-        if (!defined($pf003)) {
-            # search for 773$w='Host001'
-            $searchstr = "rcn='".$pf001->data()."'";
-        } else {
-            # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
-            $searchstr = "(rcn='".$pf001->data()."' AND cni='".$pf003->data()."')";
-            $searchstr .= " OR rcn='".$pf003->data()." ".$pf001->data()."'";
-        }
-
-        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, undef );
+    if (defined($searchstr)) {
+        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+        my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, $max_results );
         $self->{_components} = $results if ( defined($results) && scalar(@$results) );
-    } else {
-        warn "Record $self->id has no 001";
     }
 
     return $self->{_components} || ();
