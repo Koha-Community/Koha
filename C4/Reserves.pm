@@ -1993,13 +1993,13 @@ sub MergeHolds {
         # don't reorder those already waiting
 
         $sth = $dbh->prepare(
-"SELECT * FROM reserves WHERE biblionumber = ? AND (found <> ? AND found <> ? OR found is NULL) ORDER BY reservedate ASC"
+"SELECT * FROM reserves WHERE biblionumber = ? AND (found NOT IN ('W', 'T', 'P') OR found is NULL) ORDER BY reservedate ASC"
         );
         my $upd_sth = $dbh->prepare(
 "UPDATE reserves SET priority = ? WHERE biblionumber = ? AND borrowernumber = ?
         AND reservedate = ? AND (itemnumber = ? or itemnumber is NULL) "
         );
-        $sth->execute( $to_biblio, 'W', 'T', 'P' );
+        $sth->execute( $to_biblio );
         my $priority = 1;
         while ( my $reserve = $sth->fetchrow_hashref() ) {
             $upd_sth->execute(
