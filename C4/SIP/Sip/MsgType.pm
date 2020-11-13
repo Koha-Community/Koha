@@ -1676,7 +1676,7 @@ sub patron_status_string {
         denied( $patron->hold_ok ),
         boolspace( $patron->card_lost ),
         boolspace( $patron->too_many_charged ),
-        $server->{account}->{disable_too_many_overdue} ? q{ } : boolspace( $patron->too_many_overdue ),
+        $server->{account}->{overdues_block_checkout} ? boolspace( $patron->too_many_overdue ) : q{ },
         boolspace( $patron->too_many_renewal ),
         boolspace( $patron->too_many_claim_return ),
         boolspace( $patron->too_many_lost ),
