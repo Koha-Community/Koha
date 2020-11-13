@@ -156,6 +156,7 @@ subtest "as_marc_field() tests" => sub {
 };
 
 subtest 'pickup_locations' => sub {
+    plan tests => 66;
 
     $schema->storage->txn_begin;
 
@@ -173,6 +174,10 @@ subtest 'pickup_locations' => sub {
     my $group2_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
     my $group2_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
 
+    our @branchcodes = (
+        $library1->branchcode, $library2->branchcode,
+        $library3->branchcode, $library4->branchcode
+    );
 
     my $item1 = $builder->build_sample_item(
         {
@@ -208,7 +213,6 @@ subtest 'pickup_locations' => sub {
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
     my $all_count = Koha::Libraries->search({ pickup_location => 1})->count();
-    plan tests => ($all_count +1) * 7 + 31 + 61;
 
     my $results = {
         "1-1-1-any"           => $all_count,
@@ -291,6 +295,8 @@ subtest 'pickup_locations' => sub {
         my $ha_value=$ha==3?'holdgroup':($ha==2?'any':'homebranch');
 
         foreach my $pickup_location (@pl) {
+            next
+                unless grep { $pickup_location eq $_ } @branchcodes;
             is( ref($pickup_location), 'Koha::Library', 'Object type is correct' );
         }
         ok(
