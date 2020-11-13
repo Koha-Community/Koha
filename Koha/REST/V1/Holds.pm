@@ -445,6 +445,8 @@ sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
     my $hold_id = $c->validation->param('hold_id');
+    # FIXME: We should really skip the path params in $c->objects->search
+    delete $c->validation->output->{hold_id};
     my $hold = Koha::Holds->find( $hold_id, { prefetch => [ 'patron' ] } );
 
     unless ($hold) {
@@ -455,16 +457,20 @@ sub pickup_locations {
     }
 
     return try {
-        my @pickup_locations =
-            $hold->itemnumber
-          ? @{ $hold->item->pickup_locations( { patron => $hold->patron } )->as_list() }
-          : @{ $hold->biblio->pickup_locations( { patron => $hold->patron } )->as_list() };
+        my $ps_set;
 
-        @pickup_locations = map { $_->to_api } @pickup_locations;
+        if ( $hold->itemnumber ) {
+            $ps_set = $hold->item->pickup_locations( { patron => $hold->patron } );
+        }
+        else {
+            $ps_set = $hold->biblio->pickup_locations( { patron => $hold->patron } );
+        }
+
+        my $pickup_locations = $c->objects->search( $ps_set );
 
         return $c->render(
             status  => 200,
-            openapi => \@pickup_locations
+            openapi => $pickup_locations
         );
     }
     catch {

@@ -619,9 +619,32 @@
       "x-mojo-to": "Holds#pickup_locations",
       "operationId": "getHoldPickupLocations",
       "tags": ["holds"],
-      "parameters": [{
+      "parameters": [
+        {
           "$ref": "../parameters.json#/hold_id_pp"
-        }],
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
       "produces": ["application/json"],
       "responses": {
         "200": {
