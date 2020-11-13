@@ -38,8 +38,21 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-    my $patron = Koha::Patrons->find( { cardnumber => $patron_id } )
-      || Koha::Patrons->find( { userid => $patron_id } );
+
+    my $patron;
+    if ( ref $patron_id eq "HASH" ) {
+        if ( $patron_id->{borrowernumber} ) {
+            $patron = Koha::Patrons->find( $patron_id->{borrowernumber} );
+        } elsif ( $patron_id->{cardnumber} ) {
+            $patron = Koha::Patrons->find( { cardnumber => $patron_id->{cardnumber} } );
+        } elsif ( $patron_id->{userid} ) {
+            $patron = Koha::Patrons->find( { userid => $patron_id->{userid} } );
+        }
+    } else {
+        $patron = Koha::Patrons->find( { cardnumber => $patron_id } )
+            || Koha::Patrons->find( { userid => $patron_id } );
+    }
+
     $debug and warn "new Patron: " . Dumper($patron->unblessed) if $patron;
     unless ($patron) {
         siplog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
