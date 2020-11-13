@@ -23323,14 +23323,14 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do( q| INSERT IGNORE INTO letter(module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES ('ill', 'ILL_PARTNER_REQ', '', 'ILL request to partners', 0, "Interlibrary loan request to partners", "Dear Sir/Madam,\n\nWe would like to request an interlibrary loan for a title matching the following description:\n\n[% ill_full_metadata %]\n\nPlease let us know if you are able to supply this to us.\n\nKind Regards\n\n[% branch.branchname %]\n[% branch.branchaddress1 %]\n[% branch.branchaddress2 %]\n[% branch.branchaddress3 %]\n[% branch.branchcity %]\n[% branch.branchstate %]\n[% branch.branchzip %]\n[% branch.branchphone %]\n[% branch.branchillemail %]\n[% branch.branchemail %]", 'sms', 'default'); | );
     # Add patron messaging preferences
     $dbh->do( q| INSERT IGNORE INTO message_attributes (message_name, takes_days) VALUES ('Ill_ready', 0); | );
-    my $ready_id = $dbh->last_insert_id(undef, undef, 'message_attributes');
+    my $ready_id = $dbh->last_insert_id(undef, undef, 'message_attributes', undef);
     if (defined $ready_id) {
         $dbh->do( qq(INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES ($ready_id, 'email', 0, 'ill', 'ILL_PICKUP_READY');) );
         $dbh->do( qq(INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES ($ready_id, 'sms', 0, 'ill', 'ILL_PICKUP_READY');) );
         $dbh->do( qq(INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES ($ready_id, 'phone', 0, 'ill', 'ILL_PICKUP_READY');) );
     }
     $dbh->do( q| INSERT IGNORE INTO message_attributes (message_name, takes_days) VALUES ('Ill_unavailable', 0); | );
-    my $unavail_id = $dbh->last_insert_id(undef, undef, 'message_attributes');
+    my $unavail_id = $dbh->last_insert_id(undef, undef, 'message_attributes', undef);
     if (defined $unavail_id) {
         $dbh->do( qq(INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES ($unavail_id, 'email', 0, 'ill', 'ILL_REQUEST_UNAVAIL');) );
         $dbh->do( qq(INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES ($unavail_id, 'sms', 0, 'ill', 'ILL_REQUEST_UNAVAIL');) );
