@@ -292,8 +292,6 @@ sub patron {
     my ($self) = @_;
 
     my $patron_rs = $self->_result->patron;
-    return unless $patron_rs;
-
     return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
