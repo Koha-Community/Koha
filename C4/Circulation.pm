@@ -2741,8 +2741,6 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 sub CanBookBeRenewed {
     my ( $borrowernumber, $itemnumber, $override_limit, $cron ) = @_;
 
-    my $dbh    = C4::Context->dbh;
-    my $renews = 1;
     my $auto_renew = "no";
 
     my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
