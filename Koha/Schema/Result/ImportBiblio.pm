@@ -48,27 +48,23 @@ __PACKAGE__->table("import_biblios");
 
 =head2 title
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 128
 
 =head2 author
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 80
 
 =head2 isbn
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 30
 
 =head2 issn
 
-  data_type: 'varchar'
+  data_type: 'longtext'
   is_nullable: 1
-  size: 9
 
 =head2 has_items
 
@@ -88,13 +84,13 @@ __PACKAGE__->add_columns(
   "original_source",
   { data_type => "varchar", is_nullable => 1, size => 25 },
   "title",
-  { data_type => "varchar", is_nullable => 1, size => 128 },
+  { data_type => "longtext", is_nullable => 1 },
   "author",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  { data_type => "longtext", is_nullable => 1 },
   "isbn",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "longtext", is_nullable => 1 },
   "issn",
-  { data_type => "varchar", is_nullable => 1, size => 9 },
+  { data_type => "longtext", is_nullable => 1 },
   "has_items",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -117,8 +113,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6dQmL78YztbxS9qXHciPTQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-16 19:12:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ub6mJ39DybgJI36BPvWYjg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
