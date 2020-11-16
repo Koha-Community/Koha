@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
+use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -668,6 +669,111 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
       ->json_is( { error => 'Hold cannot be placed. Reason: tooManyReserves' } );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pickup_locations() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'A' } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'B' } });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries', value => { marcorgcode => 'C' } });
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { userid => 'tomasito', flags => 1 }
+        }
+    );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    my $item_class = Test::MockModule->new('Koha::Item');
+    $item_class->mock(
+        'pickup_locations',
+        sub {
+            my ( $self, $params ) = @_;
+            my $mock_patron = $params->{patron};
+            is( $mock_patron->borrowernumber,
+                $patron->borrowernumber, 'Patron passed correctly' );
+            return Koha::Libraries->search(
+                {
+                    branchcode => {
+                        '-in' => [
+                            $library_1->branchcode,
+                            $library_2->branchcode
+                        ]
+                    }
+                },
+                {   # we make sure no surprises in the order of the result
+                    order_by => { '-asc' => 'marcorgcode' }
+                }
+            );
+        }
+    );
+
+    my $biblio_class = Test::MockModule->new('Koha::Biblio');
+    $biblio_class->mock(
+        'pickup_locations',
+        sub {
+            my ( $self, $params ) = @_;
+            my $mock_patron = $params->{patron};
+            is( $mock_patron->borrowernumber,
+                $patron->borrowernumber, 'Patron passed correctly' );
+            return Koha::Libraries->search(
+                {
+                    branchcode => {
+                        '-in' => [
+                            $library_2->branchcode,
+                            $library_3->branchcode
+                        ]
+                    }
+                },
+                {   # we make sure no surprises in the order of the result
+                    order_by => { '-asc' => 'marcorgcode' }
+                }
+            );
+        }
+    );
+
+    my $item = $builder->build_sample_item;
+
+    # biblio-level hold
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                itemnumber     => undef,
+                biblionumber   => $item->biblionumber,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+    # item-level hold
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                itemnumber     => $item->itemnumber,
+                biblionumber   => $item->biblionumber,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+
+    $t->get_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_1->id
+          . "/pickup_locations" )
+      ->json_is( [ $library_2->to_api, $library_3->to_api ] );
+
+    $t->get_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_2->id
+          . "/pickup_locations" )
+      ->json_is( [ $library_1->to_api, $library_2->to_api ] );
 
     $schema->storage->txn_rollback;
 };
