@@ -429,19 +429,28 @@
             if (val) {
                 $('#loading_limits').show();
 
-                $.getJSON(url, function(data) {
-                    $(".limit-checkboxes").attr("disabled", false);
-                    $(".limit-checkboxes").attr("checked", true);
-                    $(".limit-checkboxes").data('limit_id', null);
+                $.ajax({
+                    dataType: "json",
+                    url: url,
+                    success: function(data) {
+                        $(".limit-checkboxes").attr("disabled", false);
+                        $(".limit-checkboxes").attr("checked", true);
+                        $(".limit-checkboxes").data('limit_id', null);
 
-                    for (var i = 0; i < data.length; i++) {
-                        let limit = data[i];
-                        let checkbox = $(`#limit-${limit.from_library_id}-${limit.to_library_id}`);
-                        checkbox.attr('checked', false);
-                        checkbox.data('limit_id', limit.limit_id);
+                        for (var i = 0; i < data.length; i++) {
+                            let limit = data[i];
+                            let checkbox = $(`#limit-${limit.from_library_id}-${limit.to_library_id}`);
+                            checkbox.attr('checked', false);
+                            checkbox.data('limit_id', limit.limit_id);
+                        }
+                    },
+                    complete: function() {
+                        $('#loading_limits').hide();
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMessage = xhr.status + ': ' + xhr.statusText
+                        alert('Error - ' + errorMessage);
                     }
-
-                    $('#loading_limits').hide();
                 });
             }
         }
