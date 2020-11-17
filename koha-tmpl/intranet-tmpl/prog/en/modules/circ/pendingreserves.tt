@@ -141,11 +141,7 @@
         <td>
             <ul>
             [% FOREACH type IN reserve.value.itemtypes %]
-                [% IF Koha.Preference('item-level_itypes') %]
-                    <li>[% ItemTypes.GetDescription( type ) | html %]</li>
-                [% ELSE %]
-                    <li>[% ItemTypes.GetDescription( type ) | html %]</li>
-                [% END %]
+                <li>[% ItemTypes.GetDescription( type ) | html %]</li>
             [% END %]
             </ul>
         </td>

@@ -195,23 +195,17 @@ my @biblionumbers = uniq $distinct_holds->get_column('biblionumber');
 my $reserves;
 foreach my $bibnum ( @biblionumbers ){
 
-    my @items = Koha::Items->search({ biblionumber => $bibnum });
-    foreach my $i ( @items ){
-        if ( $i->checkout ){
-            next;
-        }
-    }
-
     my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
-    my @issues = map { $_->itemnumber } Koha::Checkouts->search({}, { columns => [ 'itemnumber' ], collapse => 1 });
+    my @checkouts = map { $_->itemnumber } Koha::Checkouts->search({}, { columns => [ 'itemnumber' ], collapse => 1 });
+    my @waiting_holds = map { $_->itemnumber } Koha::Holds->search({'found' => 'W'}, { columns => [ 'itemnumber' ], collapse => 1 });
 
-    @items = Koha::Items->search(
+    my @items = Koha::Items->search(
         {
             biblionumber => $bibnum,
             itemlost     => 0,
             withdrawn    => 0,
             notforloan   => 0,
-            itemnumber   => { -not_in => [ @branchtransfers, @issues ] },
+            itemnumber   => { -not_in => [ @branchtransfers, @checkouts, @waiting_holds ] },
         }
     );
 
@@ -233,7 +227,7 @@ foreach my $bibnum ( @biblionumbers ){
     $reserves->{$bibnum}->{locations} = [ uniq map { defined $_->location ? $_->location : () } @items ];
 
     # get available callnumbers for each biblio
-    $reserves->{$bibnum}->{locations} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @items ];
+    $reserves->{$bibnum}->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @items ];
 
     # get available enumchrons for each biblio
     $reserves->{$bibnum}->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @items ];
