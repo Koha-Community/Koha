@@ -679,7 +679,7 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -788,6 +788,13 @@ subtest 'pickup_locations() tests' => sub {
           . $hold_2->id
           . "/pickup_locations" )
       ->json_is( [ $library_1->to_api, $library_2->to_api ] );
+
+    # filtering works!
+    $t->get_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_2->id
+          . '/pickup_locations?q={"marc_org_code": { "-like": "A%" }}' )
+      ->json_is( [ $library_1->to_api ] );
+
 
     $schema->storage->txn_rollback;
 };
