@@ -355,6 +355,7 @@ sub CanBookBeReserved{
   should not check if there are too many holds as we only csre about reservability
 
 @RETURNS { status => OK },              if the Item can be reserved.
+         { status => onShelfHoldsNotAllowed },  if onShelfHoldsAllowed parameter and item availability combination doesn't allow holds.
          { status => ageRestricted },   if the Item is age restricted for this borrower.
          { status => damaged },         if the Item is damaged.
          { status => cannotReserveFromOtherBranches }, if syspref 'canreservefromotherbranches' is OK.
@@ -374,6 +375,10 @@ sub CanItemBeReserved {
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
     my $allowedreserves  = 0; # Total number of holds allowed across all records, default to none
+    my $holds_per_record = 1; # Total number of holds allowed for this one given record
+    my $holds_per_day;        # Default to unlimited
+    my $on_shelf_holds = 0;   # Default to "if any unavailable"
+    my $context = $params->{context} // '';
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
@@ -445,16 +450,21 @@ sub CanItemBeReserved {
         categorycode => $borrower->{'categorycode'},
         itemtype     => $item->effective_itemtype,
         branchcode   => $branchcode,
-        rules        => ['holds_per_record','holds_per_day']
+        rules        => ['holds_per_record','holds_per_day','onshelfholds']
     });
-    my $holds_per_record = $rights->{holds_per_record} // 1;
-    my $holds_per_day    = $rights->{holds_per_day};
+    $holds_per_record = $rights->{holds_per_record} // 1;
+    $holds_per_day    = $rights->{holds_per_day};
+    $on_shelf_holds   = $rights->{onshelfholds};
 
     my $search_params = {
         borrowernumber => $borrowernumber,
         biblionumber   => $item->biblionumber,
     };
     $search_params->{found} = undef if $params->{ignore_found_holds};
+
+    # Check for item on shelves and OnShelfHoldsAllowed
+    return { status => 'onShelfHoldsNotAllowed' }
+    unless IsAvailableForItemLevelRequest($item, $patron, $pickup_branchcode,1);
 
     my $holds = Koha::Holds->search($search_params);
     if (   defined $holds_per_record && $holds_per_record ne '' ){
