@@ -261,18 +261,16 @@ subtest '->is_paged and ->pager tests' => sub {
 
     $schema->storage->txn_begin;
 
-    # Delete existing patrons
-    t::lib::Mocks::mock_preference('AnonymousPatron', '');
-    Koha::Checkouts->delete;
-    Koha::Patrons->delete;
-    # Create 10 patrons
+    # Count existing patrons
+    my $nb_patrons = Koha::Patrons->search()->count;
+    # Create 10 more patrons
     foreach (1..10) {
         $builder->build_object({ class => 'Koha::Patrons' });
     }
 
     # Non-paginated search
     my $patrons = Koha::Patrons->search();
-    is( $patrons->count, 10, 'Search returns all patrons' );
+    is( $patrons->count, $nb_patrons + 10, 'Search returns all patrons' );
     ok( !$patrons->is_paged, 'Search is not paged' );
 
     # Paginated search
