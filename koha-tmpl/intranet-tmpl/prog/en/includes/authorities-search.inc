@@ -4,7 +4,7 @@
 <div id="header_search" class="residentsearch">
     <div id="mainmain_heading" class="residentsearch">
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
-        <label class="tip" for="authtype_main_heading_a">Enter main heading ($a only):</label>
+        <label class="tip" for="value_mainentry">Enter main heading ($a only):</label>
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode" id="authtype_main_heading_a">
@@ -60,7 +60,7 @@
     </div>
     <div id="main_heading" class="residentsearch">
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
-        <label class="tip" for="authtype_main_heading">Enter main heading:</label>
+        <label class="tip" for="value_mainheading">Enter main heading:</label>
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode" id="authtype_main_heading">
@@ -116,7 +116,7 @@
     </div>
     <div id="matchheading_search" class="residentsearch">
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
-        <label class="tip" for="authtype_all_headings">Enter any heading:</label>
+        <label class="tip" for="value_matchheading">Enter any heading:</label>
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode" id="authtype_all_headings">
@@ -170,7 +170,7 @@
     </div>
     <div id="entire_record" class="residentsearch">
     <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
-        <label class="tip" for="authtype_entire_record">Enter any authority field:</label>
+        <label class="tip" for="value_anywhere">Enter any authority field:</label>
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode" id="authtype_entire_record">
