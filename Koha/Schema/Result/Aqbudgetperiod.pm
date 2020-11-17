@@ -110,9 +110,26 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("budget_period_id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M13qdhmXgKilais2IFkXFw
+=head2 aqbudgets
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Aqbudget>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqbudgets",
+  "Koha::Schema::Result::Aqbudget",
+  { "foreign.budget_period_id" => "self.budget_period_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-17 12:22:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZGB3UE086op5QfScg9l2TQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
