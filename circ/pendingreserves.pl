@@ -191,11 +191,12 @@ my $distinct_holds = Koha::Holds->search(
 );
 my @biblionumbers = uniq $distinct_holds->get_column('biblionumber');
 
+my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
+my @waiting_holds = map { $_->itemnumber } Koha::Holds->search({'found' => 'W'}, { columns => [ 'itemnumber' ], collapse => 1 });
+
 # make final reserves hash and fill with info
 my $reserves;
 foreach my $bibnum ( @biblionumbers ){
-    my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
-    my @waiting_holds = map { $_->itemnumber } Koha::Holds->search({'found' => 'W'}, { columns => [ 'itemnumber' ], collapse => 1 });
 
     my @items = Koha::Items->search(
         {
