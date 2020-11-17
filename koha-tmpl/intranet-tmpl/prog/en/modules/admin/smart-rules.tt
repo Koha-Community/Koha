@@ -379,11 +379,11 @@
                     <td><input type="text" name="issuelength" id="issuelength" size="3" /> </td>
                     <td>
                         <select name="daysmode" id="daysmode">
-                            <option value="">Default</option>
-                            <option value="Calendar">Calendar</option>
-                            <option value="Datedue">Datedue</option>
-                            <option value="Days">Days</option>
-                            <option value="Dayweek">Dayweek</option>
+                            <option value="" title="Use the system preference 'useDaysMode' as a default value">Default</option>
+                            <option value="Calendar" title="Use the calendar to skip days the library is closed">Skip closed days</option>
+                            <option value="Datedue" title="Use the calendar to push the due date to the next open day">Next open day</option>
+                            <option value="Days" title="Ignore the calendar">Ignore the calendar</option>
+                            <option value="Dayweek" title="Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise">Same week day</option>
                         </select>
                     </td>
                     <td>
