@@ -17809,8 +17809,10 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     # Rename accountlines_ibfk_2 to accountlines_ibfk_items
-    if ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_2' ) && !foreign_key_exists( 'accountlines', 'accountlines_ibfk_items' ) ) {
+    if ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_2' ) ) {
         $dbh->do("ALTER TABLE accountlines DROP FOREIGN KEY accountlines_ibfk_2");
+    }
+    unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_items' ) ) {
         $dbh->do("ALTER TABLE accountlines ADD CONSTRAINT `accountlines_ibfk_items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE CASCADE");
     }
 
