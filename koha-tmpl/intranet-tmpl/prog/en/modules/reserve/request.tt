@@ -19,6 +19,9 @@
 </head>
 
 <body id="circ_request" class="catalog">
+<script>
+    var select2Width = "100%";
+</script>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
@@ -985,7 +988,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
-    [% Asset.js("js/holds.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         var Sticky;
         var biblionumber = "[% biblionumber | $raw %]";
@@ -1150,6 +1153,38 @@
                 });
             [% END %]
 
+            $(".pickup_location_dropdown").each( function () {
+                var this_dropdown = $(this);
+                var hold_id = $(this).data('hold_id');
+
+                this_dropdown.select2({
+                    ajax: {
+                        url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
+                        allowClear: false,
+                        delay: 300, // wait 300 milliseconds before triggering the request
+                        dataType: 'json',
+                        data: function (params) {
+                            var search_term = (params.term === undefined) ? '' : params.term;
+                            var query = {
+                                "q": JSON.stringify({"name":{"-like":search_term+'%'}})
+                            };
+                            return query;
+                        },
+                        processResults: function (data) {
+                            var results = [];
+                            data.forEach( function ( library ) {
+                                results.push(
+                                    {
+                                        "id": library.library_id.escapeHtml(),
+                                        "text": library.name.escapeHtml()
+                                    }
+                                );
+                            });
+                            return { "results": results };
+                        }
+                    }
+                });
+            });
         });
 
         function check() {
