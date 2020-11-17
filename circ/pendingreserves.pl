@@ -187,32 +187,40 @@ if ( C4::Context->preference('IndependentBranches') ){
 # get all distinct unfulfilled reserves
 my $distinct_holds = Koha::Holds->search(
     { %where },
-    { join => 'itembib', alias => 'reserve' }
+    { join => 'itembib', alias => 'reserve', columns => [ 'biblionumber' ] }
 );
 my @biblionumbers = uniq $distinct_holds->get_column('biblionumber');
 
 my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
 my @waiting_holds = map { $_->itemnumber } Koha::Holds->search({'found' => 'W'}, { columns => [ 'itemnumber' ], collapse => 1 });
 
+my @all_items = Koha::Items->search(
+    {
+        biblionumber => { in => \@biblionumbers },
+        itemlost     => 0,
+        withdrawn    => 0,
+        notforloan   => 0,
+        onloan       => undef,
+        itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
+    }
+);
+
+my $all_items;
+foreach my $item ( @all_items ) {
+    push @{$all_items->{$item->biblionumber}}, $item;
+}
+
+
 # make final reserves hash and fill with info
 my $reserves;
 foreach my $bibnum ( @biblionumbers ){
 
-    my @items = Koha::Items->search(
-        {
-            biblionumber => $bibnum,
-            itemlost     => 0,
-            withdrawn    => 0,
-            notforloan   => 0,
-            onloan       => undef,
-            itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
-        }
-    );
+    my $items = $all_items->{$bibnum};
 
     # get available item types for each biblio
     my @res_itemtypes;
     if ( C4::Context->preference('item-level_itypes') ){
-        @res_itemtypes = uniq map { defined $_->itype ? $_->itype : () } @items;
+        @res_itemtypes = uniq map { defined $_->itype ? $_->itype : () } @$items;
     } else {
         @res_itemtypes = Koha::Biblioitems->search(
             { biblionumber => $bibnum, itemtype => { '!=', undef }  },
@@ -224,25 +232,25 @@ foreach my $bibnum ( @biblionumbers ){
     $reserves->{$bibnum}->{itemtypes} = \@res_itemtypes;
 
     # get available locations for each biblio
-    $reserves->{$bibnum}->{locations} = [ uniq map { defined $_->location ? $_->location : () } @items ];
+    $reserves->{$bibnum}->{locations} = [ uniq map { defined $_->location ? $_->location : () } @$items ];
 
     # get available callnumbers for each biblio
-    $reserves->{$bibnum}->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @items ];
+    $reserves->{$bibnum}->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @$items ];
 
     # get available enumchrons for each biblio
-    $reserves->{$bibnum}->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @items ];
+    $reserves->{$bibnum}->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @$items ];
 
     # get available copynumbers for each biblio
-    $reserves->{$bibnum}->{copynumbers} = [ uniq map { defined $_->copynumber ? $_->copynumber : () } @items ];
+    $reserves->{$bibnum}->{copynumbers} = [ uniq map { defined $_->copynumber ? $_->copynumber : () } @$items ];
 
     # get available barcodes for each biblio
-    $reserves->{$bibnum}->{barcodes} = [ uniq map { defined $_->barcode ? $_->barcode : () } @items ];
+    $reserves->{$bibnum}->{barcodes} = [ uniq map { defined $_->barcode ? $_->barcode : () } @$items ];
 
     # get available holding branches for each biblio
-    $reserves->{$bibnum}->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @items ];
+    $reserves->{$bibnum}->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @$items ];
 
     # items available
-    my $items_count = scalar @items;
+    my $items_count = scalar @$items;
     $reserves->{$bibnum}->{items_count} = $items_count;
 
     # patrons with holds
