@@ -481,6 +481,18 @@ $(document).ready(function() {
         jQuery.removeCookie("search_path_code", { path: '/'});
     [% END %]
     $('#advsearch form').submit(function() {
+        $('[name^="limit"]').each(function(){
+            if( $(this).val() == '' ){
+                $(this).prop("disabled","disabled");
+            }
+        });
+        $(".search-term-row").each(function(){
+            if( $(this).find('input[name="q"]').val() == "" ){
+                $(this).find('input[name="q"]').prop("disabled","disabled");
+                $(this).find('select[name="op"]').prop("disabled","disabled");
+                $(this).find('select[name="idx"]').prop("disabled","disabled");
+            }
+        });
         form_serialized = $(this).serialize();
         jQuery.cookie("form_serialized", form_serialized,{ path: '/'});
         form_serialized_limits = [
