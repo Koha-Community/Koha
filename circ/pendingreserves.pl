@@ -222,10 +222,11 @@ my $patrons_count = {
     }
 };
 
-# make final reserves hash and fill with info
-my $reserves;
+# make final holds_info array and fill with info
+my @holds_info;
 foreach my $bibnum ( @biblionumbers ){
 
+    my $hold_info;
     my $items = $all_items->{$bibnum};
 
     # get available item types for each biblio
@@ -240,39 +241,38 @@ foreach my $bibnum ( @biblionumbers ){
             }
         )->get_column('itemtype');
     }
-    $reserves->{$bibnum}->{itemtypes} = \@res_itemtypes;
+    $hold_info->{itemtypes} = \@res_itemtypes;
 
     # get available locations for each biblio
-    $reserves->{$bibnum}->{locations} = [ uniq map { defined $_->location ? $_->location : () } @$items ];
+    $hold_info->{locations} = [ uniq map { defined $_->location ? $_->location : () } @$items ];
 
     # get available callnumbers for each biblio
-    $reserves->{$bibnum}->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @$items ];
+    $hold_info->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @$items ];
 
     # get available enumchrons for each biblio
-    $reserves->{$bibnum}->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @$items ];
+    $hold_info->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @$items ];
 
     # get available copynumbers for each biblio
-    $reserves->{$bibnum}->{copynumbers} = [ uniq map { defined $_->copynumber ? $_->copynumber : () } @$items ];
+    $hold_info->{copynumbers} = [ uniq map { defined $_->copynumber ? $_->copynumber : () } @$items ];
 
     # get available barcodes for each biblio
-    $reserves->{$bibnum}->{barcodes} = [ uniq map { defined $_->barcode ? $_->barcode : () } @$items ];
+    $hold_info->{barcodes} = [ uniq map { defined $_->barcode ? $_->barcode : () } @$items ];
 
     # get available holding branches for each biblio
-    $reserves->{$bibnum}->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @$items ];
+    $hold_info->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @$items ];
 
     # items available
     my $items_count = scalar @$items;
-    $reserves->{$bibnum}->{items_count} = $items_count;
+    $hold_info->{items_count} = $items_count;
 
     # patrons with holds
     $hold_info->{patrons_count} = $patrons_count->{$bibnum};
 
     my $pull_count = $items_count <= $patrons_count->{$bibnum} ? $items_count : $patrons_count->{$bibnum};
     if ( $pull_count == 0 ) {
-        delete($reserves->{$bibnum});
         next;
     }
-    $reserves->{$bibnum}->{pull_count} = $pull_count;
+    $hold_info->{pull_count} = $pull_count;
 
     # get other relevant information
     my $res_info = Koha::Holds->search(
@@ -282,17 +282,19 @@ foreach my $bibnum ( @biblionumbers ){
           alias => 'reserve'
         }
     )->next; # get first item in results
-    $reserves->{$bibnum}->{borrower} = $res_info->borrower;
-    $reserves->{$bibnum}->{item} = $res_info->item;
-    $reserves->{$bibnum}->{biblio} = $res_info->biblio;
-    $reserves->{$bibnum}->{reserve} = $res_info;
+    $hold_info->{patron} = $res_info->patron;
+    $hold_info->{item}   = $res_info->item;
+    $hold_info->{biblio} = $res_info->biblio;
+    $hold_info->{hold}   = $res_info;
+
+    push @holds_info, $hold_info;
 }
 
 $template->param(
     todaysdate          => $today,
     from                => $startdate,
     to                  => $enddate,
-    reserves            => $reserves,
+    holds_info          => \@holds_info,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     HoldsToPullStartDate => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL,
     HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds') || 0,

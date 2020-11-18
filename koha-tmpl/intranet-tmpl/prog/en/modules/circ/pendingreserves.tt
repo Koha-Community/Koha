@@ -47,7 +47,7 @@
 <h3>Reported on [% todaysdate | $KohaDates %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
 <div id="searchresults">
-    [% IF ( reserves ) %]
+    [% IF holds_info %]
     <table id="holdst">
     <thead>
         <tr>
@@ -68,20 +68,24 @@
         </tr>
     </thead>
     <tbody>
-        [% FOREACH reserve IN reserves %]
+        [% FOREACH hold_info IN holds_info %]
         <tr>
-        [% IF ( reserve.value.borrower ) %]
-            <td><p><strong>[% reserve.value.pull_count | html %]</strong></p></td>
-            <td>[% reserve.value.items_count | html %]</td>
-            <td>[% reserve.value.patrons_count | html %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserve.value.borrower.borrowernumber | uri %]">[% reserve.value.borrower.firstname | html %] [% reserve.value.borrower.surname | html %]</a></td>
+        [% SET patron = hold_info.patron %]
+        [% SET item = hold_info.item %]
+        [% SET hold = hold_info.hold %]
+        [% IF patron %]
+            [% SET biblio = hold_info.biblio %]
+            <td><p><strong>[% hold_info.pull_count | html %]</strong></p></td>
+            <td>[% hold_info.items_count | html %]</td>
+            <td>[% hold_info.patrons_count | html %]</td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a></td>
             <td>
                 <p>
-                    [% INCLUDE 'biblio-title.inc' biblio=reserve.value.biblio link = 1 %]
+                    [% INCLUDE 'biblio-title.inc' biblio=biblio link = 1 %]
                 </p>
-                [% IF ( reserve.value.biblio.author ) %]<p> by [% reserve.value.biblio.author | html %]</p>[% END %]
-                [% IF ( reserve.value.biblio.biblioitem.editionstatement ) %]<p>[% reserve.value.biblio.biblioitem.editionstatement | html %]</p>[% END %]
-                [% IF ( reserve.value.biblio.biblioitem.publicationyear ) %]<p>[% reserve.value.biblio.biblioitem.publicationyear | html %]</p>[% END %]
+                [% IF ( biblio.author ) %]<p> by [% biblio.author | html %]</p>[% END %]
+                [% IF ( biblio.biblioitem.editionstatement ) %]<p>[% biblio.biblioitem.editionstatement | html %]</p>[% END %]
+                [% IF ( biblio.biblioitem.publicationyear ) %]<p>[% biblio.biblioitem.publicationyear | html %]</p>[% END %]
             </td>
         [% ELSE %]
             <td>"</td>
@@ -91,24 +95,24 @@
             <td>"</td>
         [% END %]
         <td>
-            [% IF ( reserve.value.holdingbranches.size ) %]
+            [% IF ( hold_info.holdingbranches.size ) %]
             <ul>
-                [% FOREACH holdingbranch IN reserve.value.holdingbranches %]
+                [% FOREACH holdingbranch IN hold_info.holdingbranches %]
                     <li>[% Branches.GetName ( holdingbranch ) | html %]</li>
                 [% END %]
             </ul>
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.barcodes.size ) %]
-                [% SET barcode = reserve.value.barcodes.first %]
-                [% IF ( reserve.value.itemnumber ) %]Only [% barcode | html %][% ELSE %][% barcode | html %] or any available.[% END %]
+            [% IF ( hold_info.barcodes.size ) %]
+                [% SET barcode = hold_info.barcodes.first %]
+                [% IF ( hold_info.itemnumber ) %]Only [% barcode | html %][% ELSE %][% barcode | html %] or any available.[% END %]
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.callnumbers.size ) %]
+            [% IF ( hold_info.callnumbers.size ) %]
                 <ul>
-                    [% FOREACH callnumber IN reserve.value.callnumbers %]
+                    [% FOREACH callnumber IN hold_info.callnumbers %]
                         <li>
                             [% callnumber | html %]
                         </li>
@@ -117,9 +121,9 @@
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.copynumbers.size ) %]
+            [% IF ( hold_info.copynumbers.size ) %]
                 <ul>
-                    [% FOREACH copyno IN reserve.value.copynumbers %]
+                    [% FOREACH copyno IN hold_info.copynumbers %]
                         <li>
                             [% copyno | html %]
                         </li>
@@ -128,9 +132,9 @@
             [% END %]
         </td>
         <td>
-            [% IF ( reserve.value.enumchrons.size ) %]
+            [% IF ( hold_info.enumchrons.size ) %]
                 <ul>
-                    [% FOREACH enumchron IN reserve.value.enumchrons %]
+                    [% FOREACH enumchron IN hold_info.enumchrons %]
                         <li>
                             [% enumchron | html %]
                         </li>
@@ -140,25 +144,25 @@
         </td>
         <td>
             <ul>
-            [% FOREACH type IN reserve.value.itemtypes %]
+            [% FOREACH type IN hold_info.itemtypes %]
                 <li>[% ItemTypes.GetDescription( type ) | html %]</li>
             [% END %]
             </ul>
         </td>
         <td>
             <ul>
-            [% FOREACH loc IN reserve.value.locations %]
+            [% FOREACH loc IN hold_info.locations %]
                 <li>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => loc ) | html %]</li>
             [% END %]
             </ul>
         </td>
         <td>
-            <span title="[% reserve.value.reserve.reservedate | html %]">[% reserve.value.reserve.reservedate | $KohaDates %] in [% Branches.GetName ( reserve.value.reserve.branchcode ) | html %]</span>
+            <span title="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %] in [% Branches.GetName ( hold.branchcode ) | html %]</span>
         </td>
         <td>
             <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
                 <input type="hidden" name="op" value="cancel_reserve" />
-                <input type="hidden" name="reserve_id" value="[% reserve.value.reserve.reserve_id | html %]" />
+                <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
 
                 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                 [% IF hold_cancellation %]
@@ -173,17 +177,17 @@
                     </div>
                 [% END %]
 
-                [% IF reserve.value.item.holdingbranch != reserve.value.item.homebranch %]
-                    <input class="btn btn-default" type="submit" value="Cancel hold and return to : [% Branches.GetName( reserve.value.item.homebranch ) | html %]" />
+                [% IF item.holdingbranch != item.homebranch %]
+                    <input class="btn btn-default" type="submit" value="Cancel hold and return to : [% Branches.GetName( item.homebranch ) | html %]" />
                 [% ELSE %]
                     <input class="btn btn-default" type="submit" value="Cancel hold" />
                 [% END %]
             </form>
 
         [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
-            [% IF reserve.value.reserve.itemnumber %]
+            [% IF hold.itemnumber %]
                 <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
-                    <input type="hidden" name="reserve_id" value="[% reserve.value.reserve.reserve_id | html %]" />
+                    <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                     [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
                         <input type="hidden" name="op" value="mark_as_lost" />
                         <input type="submit" value="Mark item as lost" />
