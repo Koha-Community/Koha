@@ -156,6 +156,7 @@ unless ( $enddate ) {
 # building query parameters
 my %where = (
     'reserve.found' => undef,
+    'reserve.priority' => 1,
     'reserve.suspend' => 0,
     'itembib.itemlost' => 0,
     'itembib.withdrawn' => 0,
@@ -222,6 +223,29 @@ my $patrons_count = {
     }
 };
 
+my $holds_biblios_map = {
+    map { $_->{biblionumber} => $_->{reserve_id} } @{ Koha::Holds->search(
+            {%where},
+            {
+                join    => ['itembib', 'biblio'],
+                alias   => 'reserve',
+                select  => ['reserve.biblionumber', 'reserve.reserve_id'],
+            }
+        )->unblessed
+    }
+};
+
+my $all_holds = {
+    map { $_->biblionumber => $_ } @{ Koha::Holds->search(
+            { reserve_id => [ values %$holds_biblios_map ]},
+            {
+                prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
+                alias    => 'reserve',
+            }
+        )->as_list
+    }
+};
+
 # make final holds_info array and fill with info
 my @holds_info;
 foreach my $bibnum ( @biblionumbers ){
@@ -275,13 +299,7 @@ foreach my $bibnum ( @biblionumbers ){
     $hold_info->{pull_count} = $pull_count;
 
     # get other relevant information
-    my $res_info = Koha::Holds->search(
-        { 'reserve.biblionumber' => $bibnum, %where },
-        { prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
-          order_by => 'priority',
-          alias => 'reserve'
-        }
-    )->next; # get first item in results
+    my $res_info = $all_holds->{$bibnum};
     $hold_info->{patron} = $res_info->patron;
     $hold_info->{item}   = $res_info->item;
     $hold_info->{biblio} = $res_info->biblio;
