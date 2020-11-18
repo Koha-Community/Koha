@@ -279,7 +279,23 @@ sub load_db_schema {
     my $self = shift;
 
     my $datadir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}";
+
+    # Disable checks before load
+    $self->{'dbh'}->do(q{SET NAMES utf8mb4});
+    $self->{'dbh'}->do(q{SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0});
+    $self->{'dbh'}->do(q{SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0});
+    $self->{'dbh'}->do(q{SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'});
+    $self->{'dbh'}->do(q{SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0});
+
+    # Load kohastructure
     my $error = $self->load_sql("$datadir/kohastructure.sql");
+
+    # Re-enable checks after load
+    $self->{'dbh'}->do(q{SET SQL_MODE=@OLD_SQL_MODE});
+    $self->{'dbh'}->do(q{SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS});
+    $self->{'dbh'}->do(q{SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS});
+    $self->{'dbh'}->do(q{SET SQL_NOTES=@OLD_SQL_NOTES});
+
     return $error;
 
 }
