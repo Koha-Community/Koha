@@ -256,7 +256,7 @@ foreach my $bibnum ( @biblionumbers ){
     # patrons with holds
     my $patrons_count = Koha::Holds->search(
         { biblionumber => $bibnum },
-        { select => [ { distinct => 'borrowernumber' } ] }
+        { distinct => 1, columns => qw(me.borrowernumber) }
     )->count;
     $reserves->{$bibnum}->{patrons_count} = $patrons_count;
 
