@@ -4,7 +4,7 @@ if( CheckVersion( $DBversion ) ) {
         SELECT d.borrowernumber, GROUP_CONCAT(comment SEPARATOR '\n') AS comment
         FROM borrower_debarments d
         LEFT JOIN borrowers b ON b.borrowernumber=d.borrowernumber
-        WHERE b.debarredcomment IS NULL AND ( expiration > CURRENT_DATE() OR expiration IS NULL )
+        WHERE ( b.debarredcomment IS NULL OR b.debarredcomment = "" ) AND ( expiration > CURRENT_DATE() OR expiration IS NULL )
         GROUP BY d.borrowernumber
     |, { Slice => {} });
 
