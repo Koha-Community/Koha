@@ -4,6 +4,8 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE KohaNews %]
+[% SET opacsuggestion = KohaNews.get( location => "OpacSuggestioninstructions", lang => lang, library => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
@@ -47,11 +49,14 @@
                                     <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
                                     <h2 class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h2>
                             [% ELSE %]
-                            <h1>Enter a new purchase suggestion</h1>
+                            [% IF ( opacsuggestion ) %]
+                                [% PROCESS koha_news_block news => opacsuggestion %]
+                            [% ELSE %]
+                                <h1>Enter a new purchase suggestion</h1>
 
-                            <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
-                            <p>Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
-
+                                <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
+                                <p>Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
+                            [% END %]
                             [% FOR m IN messages %]
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]

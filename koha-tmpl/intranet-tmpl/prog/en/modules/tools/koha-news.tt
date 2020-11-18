@@ -403,7 +403,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
     [% END %]
     [% FOREACH lang_lis IN lang_list %]
         <optgroup label="[% lang_lis.language | html %]">
-            [% FOREACH location IN [ '', 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions'] %]
+            [% FOREACH location IN [ '', 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacSuggestionInstructions'] %]
                 [% IF ( location == '' ) %]
                     [% SET location_lang = lang_lis.language %]
                     [% location = BLOCK %]OPAC news[% END %]
