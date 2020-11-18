@@ -282,7 +282,7 @@ HERE
     };
 
     subtest 'set message_transport_types' => sub {
-        plan tests => 12;
+        plan tests => 18;
 
         $schema->storage->txn_begin;
 
@@ -339,9 +339,15 @@ HERE
         });
         is($stored_transports->count, 2, 'Two transports selected');
 
-        # Test email and smsalertnumber validation
+        # Test contact information validation
         eval { Koha::Patron::Message::Transport::Types->new({
                 message_transport_type => 'email'
+            })->store };
+        eval { Koha::Patron::Message::Transport::Types->new({
+                message_transport_type => 'itiva'
+            })->store };
+        eval { Koha::Patron::Message::Transport::Types->new({
+                message_transport_type => 'phone'
             })->store };
         eval { Koha::Patron::Message::Transport::Types->new({
                 message_transport_type => 'sms'
@@ -353,16 +359,47 @@ HERE
         })->store;
         Koha::Patron::Message::Transport->new({
             message_attribute_id   => $preference->message_attribute_id,
+            message_transport_type => 'itiva',
+            is_digest              => 1
+        })->store;
+        Koha::Patron::Message::Transport->new({
+            message_attribute_id   => $preference->message_attribute_id,
+            message_transport_type => 'phone',
+            is_digest              => 1
+        })->store;
+        Koha::Patron::Message::Transport->new({
+            message_attribute_id   => $preference->message_attribute_id,
             message_transport_type => 'sms',
             is_digest              => 1
         })->store;
-        $patron->set({ email => '', smsalertnumber => '' })->store;
+        t::lib::Mocks::mock_preference('TalkingTechItivaPhoneNotification', 0);
+        $patron->set({ email => '', phone => '', smsalertnumber => '' })->store;
         eval {
             $preference->message_transport_types('email')->store;
         };
         is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired',
             'Adding a message preference with invalid message_transport_type'
             .' => Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired');
+        is ($@->message_name, $preference->message_name, 'The previous exception '
+            .' tells us it which message name it was.');
+        is ($@->borrowernumber, $patron->borrowernumber, 'The previous exception '
+            .' tells us which patron it was.');
+        eval {
+            $preference->message_transport_types('itiva')->store;
+        };
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired');
+        is ($@->message_name, $preference->message_name, 'The previous exception '
+            .' tells us it which message name it was.');
+        is ($@->borrowernumber, $patron->borrowernumber, 'The previous exception '
+            .' tells us which patron it was.');
+        eval {
+            $preference->message_transport_types('phone')->store;
+        };
+        is (ref $@, 'Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired');
         is ($@->message_name, $preference->message_name, 'The previous exception '
             .' tells us it which message name it was.');
         is ($@->borrowernumber, $patron->borrowernumber, 'The previous exception '

@@ -416,6 +416,27 @@ sub _set_message_transport_types {
                         );
                     }
                 }
+                elsif ($type eq 'itiva') {
+                    if (!C4::Context->preference('TalkingTechItivaPhoneNotification')) {
+                        Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired->throw(
+                            error => 'System preference TalkingTechItivaPhoneNotification disabled'.
+                                     'cannot use itiva as message transport',
+                            message_name => $self->message_name,
+                            borrowernumber => $self->borrowernumber,
+                        );
+                    }
+                }
+                elsif ($type eq 'phone') {
+                    if ( !$patron->phone ) {
+                        Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired->throw(
+                            error => 'Patron has not set phone number'.
+                                     'cannot use phone as message transport',
+                            message_name => $self->message_name,
+                            borrowernumber => $self->borrowernumber,
+                        );
+                    }
+
+                }
                 elsif ($type eq 'sms') {
                     if ( !$patron->smsalertnumber ){
                         Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired->throw(

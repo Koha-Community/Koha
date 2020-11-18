@@ -57,9 +57,19 @@ use Exception::Class (
         description => "Transport type not available for this message.",
         fields => ['message_name', 'transport_type']
     },
+    'Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired' => {
+        isa => 'Koha::Exceptions::Patron::Message::Preference',
+        description => "Patron has no phone number, cannot use phone transport type.",
+        fields => ['message_name', 'borrowernumber' ]
+    },
     'Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired' => {
         isa => 'Koha::Exceptions::Patron::Message::Preference',
         description => "Patron has no SMS number, cannot use sms transport type.",
+        fields => ['message_name', 'borrowernumber' ]
+    },
+    'Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired' => {
+        isa => 'Koha::Exceptions::Patron::Message::Preference',
+        description => "System preference TalkingTechItivaPhoneNotification is disabled, cannot use itiva transport type.",
         fields => ['message_name', 'borrowernumber' ]
     },
 );
