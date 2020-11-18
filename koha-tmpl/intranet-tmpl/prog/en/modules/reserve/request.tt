@@ -1158,9 +1158,9 @@
                 var hold_id = $(this).data('hold_id');
 
                 this_dropdown.select2({
+                    allowClear: false,
                     ajax: {
                         url: '/api/v1/holds/' + encodeURIComponent(hold_id) + '/pickup_locations',
-                        allowClear: false,
                         delay: 300, // wait 300 milliseconds before triggering the request
                         dataType: 'json',
                         data: function (params) {
