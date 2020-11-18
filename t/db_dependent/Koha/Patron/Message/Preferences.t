@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -373,7 +373,7 @@ HERE
             is_digest              => 1
         })->store;
         t::lib::Mocks::mock_preference('TalkingTechItivaPhoneNotification', 0);
-        $patron->set({ email => '', phone => '', smsalertnumber => '' })->store;
+        $patron->set({ email => '', emailpro => '', B_email => '', phone => '', smsalertnumber => '' })->store;
         eval {
             $preference->message_transport_types('email')->store;
         };
@@ -469,6 +469,84 @@ subtest 'Test Koha::Patron::Message::Preference->message_name' => sub {
         message_name => $attribute->message_name,
     })->next;
     is($message_name_pref->message_name, $attribute->message_name, "Found preference with message_name");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test Koha::Patron::Message::Preference->mtt_deliverable' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $patron      = $builder->build_object({ class => 'Koha::Patrons' });
+    my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
+        patron => $patron
+    });
+
+    # Test email and smsalertnumber validation
+    eval { Koha::Patron::Message::Transport::Types->new({
+            message_transport_type => 'email'
+        })->store };
+    eval { Koha::Patron::Message::Transport::Types->new({
+            message_transport_type => 'sms'
+        })->store };
+    eval { Koha::Patron::Message::Transport::Types->new({
+            message_transport_type => 'phone'
+        })->store };
+    eval { Koha::Patron::Message::Transport::Types->new({
+            message_transport_type => 'itiva'
+        })->store };
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $preference->message_attribute_id,
+        message_transport_type => 'email',
+        is_digest              => 1
+    })->store;
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $preference->message_attribute_id,
+        message_transport_type => 'sms',
+        is_digest              => 1
+    })->store;
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $preference->message_attribute_id,
+        message_transport_type => 'phone',
+        is_digest              => 1
+    })->store;
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $preference->message_attribute_id,
+        message_transport_type => 'itiva',
+        is_digest              => 1
+    })->store;
+    $patron->set({
+        email => 'nobody@koha-community.org',
+        emailpro => 'nobody@koha-community.org',
+        B_email => 'nobody@koha-community.org',
+        smsalertnumber => '123',
+        phone => '123',
+    })->store;
+    t::lib::Mocks::mock_preference('TalkingTechItivaPhoneNotification', 1);
+
+    is($preference->mtt_deliverable('email'), 1, 'mtt_deliverable - email');
+    is($preference->mtt_deliverable('itiva'), 1, 'mtt_deliverable - itiva');
+    is($preference->mtt_deliverable('phone'), 1, 'mtt_deliverable - phone');
+    is($preference->mtt_deliverable('sms'), 1, 'mtt_deliverable - sms');
+
+    $patron->set({email => '',})->store;
+    is($preference->mtt_deliverable('email'), 1, 'mtt_deliverable - emailpro');
+
+    $patron->set({emailpro => '',})->store;
+    is($preference->mtt_deliverable('email'), 1, 'mtt_deliverable - B_email');
+
+    $patron->set({B_email => '',})->store;
+    is($preference->mtt_deliverable('email'), 0, 'mtt_deliverable - email false');
+
+    t::lib::Mocks::mock_preference('TalkingTechItivaPhoneNotification', 0);
+    is($preference->mtt_deliverable('itiva'), 0, 'mtt_deliverable - itiva false');
+
+    $patron->set({phone => '',})->store;
+    is($preference->mtt_deliverable('phone'), 0, 'mtt_deliverable - phone false');
+
+    $patron->set({smsalertnumber => '',})->store;
+    is($preference->mtt_deliverable('sms'), 0, 'mtt_deliverable - smsalertnumber false');
 
     $schema->storage->txn_rollback;
 };

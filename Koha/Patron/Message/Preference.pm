@@ -228,6 +228,34 @@ sub message_transport_types {
     }
 }
 
+=head3 mtt_deliverable
+
+$preference->mtt_deliverable('sms'[, $borrowernumer]);
+
+Returns true if given message transport type can be used to deliver message to
+patron.
+
+By default, uses the borrowernumber bound to C<$preference>, but this may be
+overridden by providing optional C<$borrowernumber> parameter.
+
+=cut
+
+sub mtt_deliverable {
+    my ( $self, $mtt, $borrowernumber ) = @_;
+
+    $borrowernumber //= $self->borrowernumber;
+
+    return 0 unless ($borrowernumber);
+
+    my $patron = Koha::Patrons->find($self->borrowernumber);
+
+    return (( $mtt eq 'email' and $patron->notice_email_address ) # No email address
+         or ( $mtt eq 'sms'   and $patron->smsalertnumber ) # No SMS number
+         or ( $mtt eq 'itiva' and C4::Context->preference('TalkingTechItivaPhoneNotification') ) # Notice is handled by TalkingTech_itiva_outbound.pl
+         or ( $mtt eq 'phone' and $patron->phone )) # No phone number to call
+    ? 1 : 0;
+}
+
 =head3 set
 
 $preference->set({
@@ -404,48 +432,31 @@ sub _set_message_transport_types {
                 );
             }
             if (defined $self->borrowernumber) {
-                my $patron = Koha::Patrons->find($self->borrowernumber);
-                if ($type eq 'email') {
-                    if ( !$patron->email )
-                    {
-                        Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired->throw(
-                            error => 'Patron has not set email address, '.
-                                     'cannot use email as message transport',
-                            message_name => $self->message_name,
-                            borrowernumber => $self->borrowernumber,
-                        );
-                    }
-                }
-                elsif ($type eq 'itiva') {
-                    if (!C4::Context->preference('TalkingTechItivaPhoneNotification')) {
-                        Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired->throw(
-                            error => 'System preference TalkingTechItivaPhoneNotification disabled'.
-                                     'cannot use itiva as message transport',
-                            message_name => $self->message_name,
-                            borrowernumber => $self->borrowernumber,
-                        );
-                    }
-                }
-                elsif ($type eq 'phone') {
-                    if ( !$patron->phone ) {
-                        Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired->throw(
-                            error => 'Patron has not set phone number'.
-                                     'cannot use phone as message transport',
-                            message_name => $self->message_name,
-                            borrowernumber => $self->borrowernumber,
-                        );
-                    }
-
-                }
-                elsif ($type eq 'sms') {
-                    if ( !$patron->smsalertnumber ){
-                        Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired->throw(
-                            error => 'Patron has not set SMS number'.
-                                     'cannot use sms as message transport',
-                            message_name => $self->message_name,
-                            borrowernumber => $self->borrowernumber,
-                        );
-                    }
+                if ( ! $self->mtt_deliverable($type) ) {
+                    Koha::Exceptions::Patron::Message::Preference::EmailAddressRequired->throw(
+                        error => 'Patron has not set email address, '.
+                                  'cannot use email as message transport',
+                        message_name => $self->message_name,
+                        borrowernumber => $self->borrowernumber,
+                    ) if $type eq 'email';
+                    Koha::Exceptions::Patron::Message::Preference::TalkingTechItivaPhoneNotificationRequired->throw(
+                        error => 'System preference TalkingTechItivaPhoneNotification disabled'.
+                                 'cannot use itiva as message transport',
+                        message_name => $self->message_name,
+                        borrowernumber => $self->borrowernumber,
+                    ) if $type eq 'itiva';
+                    Koha::Exceptions::Patron::Message::Preference::PhoneNumberRequired->throw(
+                        error => 'Patron has not set phone number'.
+                                 'cannot use phone as message transport',
+                        message_name => $self->message_name,
+                        borrowernumber => $self->borrowernumber,
+                    ) if $type eq 'phone';
+                    Koha::Exceptions::Patron::Message::Preference::SMSNumberRequired->throw(
+                        error => 'Patron has not set SMS number'.
+                                 'cannot use sms as message transport',
+                        message_name => $self->message_name,
+                        borrowernumber => $self->borrowernumber,
+                    ) if $type eq 'sms';
                 }
             }
             $self->{'_message_transport_types'}->{$type}
