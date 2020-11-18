@@ -90,7 +90,7 @@
                             [% IF credit.debit %]
                             <tr>
                                 <td>[% accountline.accountlines_id | html %]</td>
-                                <td>{ "type": "credit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
+                                <td>{ "type": "credit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
                                 <td>
                                     [%- PROCESS account_type_description account=credit.debit -%]
@@ -114,7 +114,7 @@
                             [% IF debit.credit %]
                             <tr>
                                 <td>[% accountline.accountlines_id | html %]</td>
-                                <td>{ "type": "debit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
+                                <td>{ "type": "debit", "identifier": "[%- accountline.credit_number | html -%]", "description": "[%- PROCESS account_type_description account=accountline -%] ([% AuthorisedValues.GetByCode( 'PAYMENT_TYPE', accountline.payment_type ) | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
                                 <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
                                 <td>
