@@ -209,7 +209,9 @@ if( !defined $LockFH ) {
                     # the lockfile)
 };
 
+my $start_time = time();
 if ( $verbose_logging ) {
+    my $pretty_time = POSIX::strftime("%H:%M:%S",localtime($start_time));
     print "Zebra configuration information\n";
     print "================================\n";
     print "Zebra biblio directory      = $biblioserverdir\n";
@@ -219,6 +221,7 @@ if ( $verbose_logging ) {
     print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
     print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
     print "================================\n";
+    print "Job started: $pretty_time\n";
 }
 
 my $tester = XML::LibXML->new();
@@ -267,6 +270,8 @@ if ($daemon_mode) {
 
 
 if ( $verbose_logging ) {
+    print "====================\n";
+    print "Indexing complete: ". pretty_time() . "\n";
     print "====================\n";
     print "CLEANING\n";
     print "====================\n";
@@ -362,7 +367,7 @@ sub index_records {
     } else {
         if ( $verbose_logging ) {
             print "====================\n";
-            print "exporting $record_type\n";
+            print "exporting $record_type " . pretty_time() . "\n";
             print "====================\n";
         }
         mkdir "$directory" unless (-d $directory);
@@ -403,7 +408,7 @@ sub index_records {
     } else {
         if ( $verbose_logging ) {
             print "====================\n";
-            print "REINDEXING zebra\n";
+            print "REINDEXING zebra " . pretty_time() . "\n";
             print "====================\n";
         }
         my $record_fmt = 'marcxml';
@@ -556,7 +561,7 @@ sub export_marc_records_from_sth {
             }
         }
     }
-    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
+    print "\nRecords exported: $num_exported " . pretty_time() . "\n" if ( $verbose_logging );
     print {$fh} $marcxml_close;
 
     close $fh;
@@ -593,7 +598,7 @@ sub export_marc_records_from_list {
             }
         }
     }
-    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
+    print "\nRecords exported: $num_exported " . pretty_time() . "\n" if ( $verbose_logging );
 
     print {$fh} $marcxml_close;
 
@@ -632,7 +637,7 @@ sub generate_deleted_marc_records {
 
         $records_deleted->{$record_number} = 1;
     }
-    print "\nRecords exported: $i\n" if ( $verbose_logging );
+    print "\nRecords exported: $i " . pretty_time() . "\n" if ( $verbose_logging );
 
     print {$fh} $marcxml_close;
 
@@ -824,6 +829,26 @@ sub _create_lockfile { #returns undef on failure
     }
     return if !open my $fh, q{>}, $dir.'/'.LOCK_FILENAME;
     return ( $fh, $dir.'/'.LOCK_FILENAME );
+}
+
+sub pretty_time {
+    use integer;
+    my $now = time;
+    my $elapsed = $now - $start_time;
+    local $_ = $elapsed;
+    my ( $d, $h, $m, $s );
+    $s = $_ % 60;
+    $_ /= 60;
+    $m = $_ % 60;
+    $_ /= 60;
+    $h = $_ % 24;
+    $_ /= 24;
+    $d = $_;
+
+    my $now_pretty = POSIX::strftime("%H:%M:%S",localtime($now));
+    my $elapsed_pretty = $d ? "[$d:$h:$m:$s]" : $h ? "[$h:$m:$s]" : $m ? "[$m:$s]" : "[$s]";
+
+    return "$now_pretty $elapsed_pretty";
 }
 
 sub print_usage {
