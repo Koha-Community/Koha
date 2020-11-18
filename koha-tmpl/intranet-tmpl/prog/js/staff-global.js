@@ -131,8 +131,13 @@ $.fn.selectTabByID = function (tabID) {
     /* Search results browsing */
     /* forms with action leading to search */
     $("form[action*='search.pl']").submit(function(){
+        $('[name^="limit"]').each(function(){
+            if( $(this).val() == '' ){
+                $(this).prop("disabled","disabled");
+            }
+        });
         var disabledPrior = false;
-        $(".search_set").each(function(){
+        $(".search-term-row").each(function(){
             if( disabledPrior ){
                 $(this).find('select[name="op"]').prop("disabled","disabled");
                 disabledPrior = false;
