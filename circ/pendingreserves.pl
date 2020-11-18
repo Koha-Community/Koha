@@ -209,6 +209,18 @@ foreach my $item ( @all_items ) {
     push @{$all_items->{$item->biblionumber}}, $item;
 }
 
+# patrons count per biblio
+my $patrons_count = {
+    map { $_->{biblionumber} => $_->{patrons_count} } @{ Koha::Holds->search(
+            {},
+            {
+                select   => [ 'biblionumber', { count => { distinct => 'borrowernumber' } } ],
+                as       => [qw( biblionumber patrons_count )],
+                group_by => [qw( biblionumber )]
+            },
+        )->unblessed
+    }
+};
 
 # make final reserves hash and fill with info
 my $reserves;
@@ -253,13 +265,9 @@ foreach my $bibnum ( @biblionumbers ){
     $reserves->{$bibnum}->{items_count} = $items_count;
 
     # patrons with holds
-    my $patrons_count = Koha::Holds->search(
-        { biblionumber => $bibnum },
-        { distinct => 1, columns => qw(me.borrowernumber) }
-    )->count;
-    $reserves->{$bibnum}->{patrons_count} = $patrons_count;
+    $hold_info->{patrons_count} = $patrons_count->{$bibnum};
 
-    my $pull_count = $items_count <= $patrons_count ? $items_count : $patrons_count;
+    my $pull_count = $items_count <= $patrons_count->{$bibnum} ? $items_count : $patrons_count->{$bibnum};
     if ( $pull_count == 0 ) {
         delete($reserves->{$bibnum});
         next;
