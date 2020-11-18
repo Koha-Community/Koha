@@ -869,14 +869,18 @@
                                 <input type="hidden" name="recordtype" value="biblio" />
                                 <input type="hidden" name="op" value="list" />
                                 [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% cells.cell | html %][% END %][% END %][% END %]</textarea>
+                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
+                                    [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
+                                </textarea>
                             </form>
 
                             <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion">
                                 <input type="hidden" name="recordtype" value="biblio" />
                                 <input type="hidden" name="op" value="list" />
                                 [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% cells.cell | html %][% END %][% END %][% END %]</textarea>
+                                <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
+                                    [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
+                                </textarea>
                             </form>
 
                             <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification">
@@ -927,9 +931,21 @@
                             <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
                                 <input type="hidden" name="op" value="show" />
                                 [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-                                <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %][% SET batch_cardnumbers = 1 %][% cells.cell | html %][% END %][% END %][% END %]</textarea>
+                                <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">
+                                    [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %][% IF cardnumbers %][% SET batch_cardnumbers = 1 %][% cardnumbers | html %][% END -%]
+                                </textarea>
                             </form>
 
+                            [% BLOCK batch_list %]
+                                    [%- FOREACH result IN results %]
+                                        [%- FOREACH cells IN result.cells %]
+                                            [%- place = loop.index %]
+                                            [%- IF header_row.$place.cell == $batch_type || header_types.item(header_row.$place.cell) == $batch_type %]
+[%# We must not add whitespace to the cardnumbers %][% cells.cell | html %]
+                                            [%- END %]
+                                        [%- END %]
+                                    [%- END -%]
+                            [% END %]
                             [% IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                                 <p>
                                     <div class="btn-group">
