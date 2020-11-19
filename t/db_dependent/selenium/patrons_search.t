@@ -134,6 +134,8 @@ subtest 'Search patrons' => sub {
     push @cleanup, $library;
     push @cleanup, $patron_category;
     C4::Context->set_preference('DefaultPatronSearchFields',$default_patron_search_fields);
+
+    $driver->quit();
 };
 
 END {
