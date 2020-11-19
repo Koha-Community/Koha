@@ -294,6 +294,8 @@ sub DelLetter {
 sub SendAlerts {
     my ( $type, $externalid, $letter_code ) = @_;
     my $dbh = C4::Context->dbh;
+    my $error;
+
     if ( $type eq 'issue' ) {
 
         # prepare the letter...
@@ -357,13 +359,19 @@ sub SendAlerts {
                 $mail->text_body( $letter->{content} );
             }
 
-            try {
+            my $success = try {
                 $mail->send_or_die({ transport => $library->smtp_server->transport });
             }
             catch {
+                # We expect ref($_) eq 'Email::Sender::Failure'
+                $error = $_->message;
+
                 carp "$_";
-                return { error => "$_" };
+                return;
             };
+
+            return { error => $error }
+                unless $success;
         }
     }
     elsif ( $type eq 'claimacquisition' or $type eq 'claimissues' or $type eq 'orderacquisition' ) {
@@ -511,13 +519,19 @@ sub SendAlerts {
             $mail->text_body( "" . $letter->{content} );
         }
 
-        try {
+        my $success = try {
             $mail->send_or_die({ transport => $library->smtp_server->transport });
         }
         catch {
+            # We expect ref($_) eq 'Email::Sender::Failure'
+            $error = $_->message;
+
             carp "$_";
-            return { error => "$_" };
+            return;
         };
+
+        return { error => $error }
+            unless $success;
 
         logaction(
             "ACQUISITION",
@@ -547,7 +561,8 @@ sub SendAlerts {
             want_librarian => 1,
         ) or return;
         return { error => "no_email" } unless $externalid->{'emailaddr'};
-        try {
+
+        my $success = try {
 
             # FIXME: This 'default' behaviour should be moved to Koha::Email
             my $mail = Koha::Email->create(
@@ -570,9 +585,15 @@ sub SendAlerts {
             $mail->send_or_die({ transport => $library->smtp_server->transport });
         }
         catch {
+            # We expect ref($_) eq 'Email::Sender::Failure'
+            $error = $_->message;
+
             carp "$_";
-            return { error => "$_" };
+            return;
         };
+
+        return { error => $error }
+            unless $success;
     }
 
     # If we come here, return an OK status
