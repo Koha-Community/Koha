@@ -52,6 +52,7 @@ sub new {
     );
     bless $self, $class;
     $self->add_error_handler;
+    $self->driver->set_implicit_wait_timeout(5000);
     return $self;
 }
 
@@ -67,6 +68,7 @@ sub add_error_handler {
             }
             print STDERR "\n";
             $self->capture( $driver );
+            $driver->quit();
             croak $selenium_error;
         }
     );
@@ -97,8 +99,8 @@ sub auth {
 
     $self->driver->get($mainpage);
     $self->fill_form( { userid => $login, password => $password } );
-    my $login_button = $self->driver->find_element('//input[@id="submit"]');
-    $login_button->submit();
+    my $login_button = $self->driver->find_element('//input[@id="submit-button"]');
+    $login_button->click();
 }
 
 sub opac_auth {
@@ -131,7 +133,7 @@ sub submit_form {
     my ( $self ) = @_;
 
     my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
-    $self->click_when_visible( $default_submit_selector );
+    $self->driver->find_element($default_submit_selector)->click
 }
 
 sub click {
@@ -163,13 +165,12 @@ sub click {
     if ( exists $params->{id} ) {
         $xpath_selector .= '//*[@id="'.$params->{id}.'"]';
     }
-    $self->click_when_visible( $xpath_selector );
+    $self->driver->find_element($xpath_selector)->click
 }
 
 sub wait_for_element_visible {
     my ( $self, $xpath_selector ) = @_;
 
-    $self->driver->set_implicit_wait_timeout(20000);
     my ($visible, $elt);
     $self->remove_error_handler;
     while ( not $visible ) {

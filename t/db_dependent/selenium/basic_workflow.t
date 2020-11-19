@@ -35,6 +35,7 @@
 use Modern::Perl;
 
 use Time::HiRes qw(gettimeofday);
+use POSIX qw(strftime);
 use C4::Context;
 use C4::Biblio qw( AddBiblio ); # We shouldn't use it
 
@@ -166,10 +167,9 @@ SKIP: {
         $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
         like( $driver->get_title(), qr(test biblio \d+ by test author), );
         my $form = $driver->find_element('//form[@name="f"]');
-        my $inputs = $driver->find_child_elements($form, '//input[@type="text"]');
+        # select the text inputs that don't have display:none
+        my $inputs = $driver->find_child_elements($form, '/.//*[not(self::node()[contains(@style,"display:none")])]/*[@type="text"]');
         for my $input ( @$inputs ) {
-            next if $input->is_hidden();
-
             my $id = $input->get_attribute('id');
             next unless $id =~ m|^tag_952_subfield|;
 
@@ -186,6 +186,16 @@ SKIP: {
             ) {
                 # It's a varchar(10)
                 $v = 't_value_x';
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_w| # replacementpricedate
+            ) {
+                $v = strftime("%Y-%m-%d", localtime);
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_d| # dateaccessioned
+            ) {
+                next; # The input has been prefilled with %Y-%m-%d already
             }
             else {
                 $v = 't_value_bib' . $biblionumber;

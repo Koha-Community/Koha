@@ -59,10 +59,12 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
     $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
     my $elt = $driver->find_element('//span[@class="loggedinusername"]');
-    is( $elt->get_attribute('data-branchcode'), $patron->library->branchcode,
+    is( $elt->get_attribute('data-branchcode', 1), $patron->library->branchcode,
         "Since bug 20921 span.loggedinusername should contain data-branchcode"
+        # No idea why we need the second param of get_attribute(). As
+        # data-branchcode is still there after page finished loading.
     );
-    is( $elt->get_attribute('data-borrowernumber'), $patron->borrowernumber,
+    is( $elt->get_attribute('data-borrowernumber', 1), $patron->borrowernumber,
 "Since bug 20921 span.loggedinusername should contain data-borrowernumber"
     );
     push @cleanup, $patron, $patron->category, $patron->library;
@@ -175,15 +177,15 @@ subtest 'Display circulation table correctly' => sub {
 
     my @thead_th = $driver->find_elements('//table[@id="issues-table"]/thead/tr/th');
     my $thead_length = 0;
-    $thead_length += $_->get_attribute('colspan') || 0 for @thead_th;
+    $thead_length += $_->get_attribute('colspan', 1) || 0 for @thead_th;
 
     my @tfoot_td = $driver->find_elements('//table[@id="issues-table"]/tfoot/tr/td');
     my $tfoot_length = 0;
-    $tfoot_length += $_->get_attribute('colspan') || 0 for @tfoot_td;
+    $tfoot_length += $_->get_attribute('colspan', 1) || 0 for @tfoot_td;
 
     my @tbody_td = $driver->find_elements('//table[@id="issues-table"]/tbody/tr/td');
     my $tbody_length = 0;
-    $tbody_length += $_->get_attribute('colspan') || 0 for @tbody_td;
+    $tbody_length += $_->get_attribute('colspan', 1) || 0 for @tbody_td;
 
     is( $thead_length == $tfoot_length && $tfoot_length == $tbody_length,
         1, "Checkouts table must be correctly aligned" )
@@ -238,6 +240,8 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     like( $second_page->get_attribute('href'), qr{category=2%22%3E%3Cscript%3Ealert%28%27booh%21%27%29%3C%2Fscript%3E}, 'The second page should display the variables and attributes correctly URI escaped' );
 
     push @cleanup, $patron, $patron->category, $patron->library;
+
+    $driver->quit();
 };
 
 END {

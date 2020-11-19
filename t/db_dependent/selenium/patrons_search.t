@@ -114,6 +114,8 @@ subtest 'Search patrons' => sub {
     push @cleanup, $_ for @patrons;
     push @cleanup, $library;
     push @cleanup, $patron_category;
+
+    $driver->quit();
 };
 
 END {
