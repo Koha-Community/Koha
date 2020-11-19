@@ -123,12 +123,10 @@ elsif ( $op eq 'edit_save' ) {
         my $password   = $input->param('smtp_password') || undef;
         my $debug      = ( scalar $input->param('smtp_debug_mode') ) ? 1 : 0;
 
-        $password = undef
-            if defined $password and $password eq '****';
-
         try {
             $smtp_server->password( $password )
-                if $password;
+                if defined $password and $password ne '****'
+                    or not defined $password;
 
             $smtp_server->set(
                 {
@@ -138,7 +136,6 @@ elsif ( $op eq 'edit_save' ) {
                     timeout   => $timeout,
                     ssl_mode  => $ssl_mode,
                     user_name => $user_name,
-                    password  => $password,
                     debug     => $debug
                 }
             )->store;
