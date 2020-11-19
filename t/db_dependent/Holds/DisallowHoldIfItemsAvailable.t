@@ -8,7 +8,7 @@ use C4::Items;
 use Koha::Items;
 use Koha::CirculationRules;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -391,6 +391,39 @@ subtest 'Check holds availability with different item types' => sub {
     $is = IsAvailableForItemLevelRequest( $item5, $patron1 );
     # Note: read IsAvailableForItemLevelRequest sub description about CanItemBeReserved/CanBookBeReserved:
     is( $is, 1, "Item5 can be requested to hold, 2 items, Item4 checked out, Item5 restricted" );
+};
+
+subtest 'Check item checkout availability with ordered item' => sub {
+    plan tests => 1;
+
+    my $biblio2       = $builder->build_sample_biblio( { itemtype => $itemtype } );
+    my $biblionumber1 = $biblio2->biblionumber;
+    my $item1 = $builder->build_sample_item(
+        {   biblionumber  => $biblionumber1,
+            itype         => $itemtype2,
+            homebranch    => $library_A,
+            holdingbranch => $library_A,
+            notforloan    => -1
+        }
+    );
+
+    $dbh->do("DELETE FROM circulation_rules");
+    Koha::CirculationRules->set_rules(
+        {   categorycode => undef,
+            itemtype     => $itemtype2,
+            branchcode   => undef,
+            rules        => {
+                issuelength      => 7,
+                lengthunit       => 8,
+                reservesallowed  => 99,
+                holds_per_record => 99,
+                onshelfholds     => 2,
+            }
+        }
+    );
+
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    is( $is, 0, "Ordered item cannot be checked out" );
 };
 
 # Cleanup
