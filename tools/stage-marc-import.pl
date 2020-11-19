@@ -126,11 +126,6 @@ if ($completedJobID) {
             # Otherwise, the AJAX request to this script won't return properly
             close STDOUT;
             close STDERR;
-            my $logdir = C4::Context->config('logdir');
-            if ($logdir && -d $logdir){
-                my $logfile = sprintf("%s/%s",$logdir,'background-jobs.log');
-                open(STDERR, '>>', $logfile);
-            }
         } else {
             # fork failed, so exit immediately
             warn "fork failed while attempting to run tools/stage-marc-import.pl as a background job: $!";
