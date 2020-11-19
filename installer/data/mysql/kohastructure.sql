@@ -110,12 +110,12 @@ CREATE TABLE `authorised_value_categories` (
 
 DROP TABLE IF EXISTS `authorised_values`;
 CREATE TABLE `authorised_values` ( -- stores values for authorized values categories and values
-  `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
-  `category` varchar(32) NOT NULL default '', -- key used to identify the authorized value category
-  `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
-  `lib` varchar(200) default NULL, -- authorized value description as printed in the staff interface
-  `lib_opac` varchar(200) default NULL, -- authorized value description as printed in the OPAC
-  `imageurl` varchar(200) default NULL, -- authorized value URL
+  `id` int(11) NOT NULL auto_increment COMMENT "unique key, used to identify the authorized value",
+  `category` varchar(32) NOT NULL default '' COMMENT "key used to identify the authorized value category",
+  `authorised_value` varchar(80) NOT NULL default '' COMMENT "code use to identify the authorized value",
+  `lib` varchar(200) default NULL COMMENT "authorized value description as printed in the staff interface",
+  `lib_opac` varchar(200) default NULL COMMENT "authorized value description as printed in the OPAC",
+  `imageurl` varchar(200) default NULL COMMENT "authorized value URL",
   PRIMARY KEY  (`id`),
   KEY `name` (`category`),
   KEY `lib` (`lib` (191)),
@@ -130,22 +130,22 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
 
 DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` ( -- table that stores bibliographic information
-  `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
-  `frameworkcode` varchar(4) NOT NULL default '', -- foreign key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
-  `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
-  `medium` LONGTEXT, -- medium from the MARC record (245$h in MARC21)
-  `subtitle` LONGTEXT, -- remainder of the title from the MARC record (245$b in MARC21)
-  `part_number` LONGTEXT, -- part number from the MARC record (245$n in MARC21)
-  `part_name` LONGTEXT, -- part name from the MARC record (245$p in MARC21)
-  `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
-  `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
-  `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial
+  `biblionumber` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned to each bibliographic record",
+  `frameworkcode` varchar(4) NOT NULL default '' COMMENT "foreign key from the biblio_framework table to identify which framework was used in cataloging this record",
+  `author` LONGTEXT COMMENT "statement of responsibility from MARC record (100$a in MARC21)",
+  `title` LONGTEXT COMMENT "title (without the subtitle) from the MARC record (245$a in MARC21)",
+  `medium` LONGTEXT COMMENT "medium from the MARC record (245$h in MARC21)",
+  `subtitle` LONGTEXT COMMENT "remainder of the title from the MARC record (245$b in MARC21)",
+  `part_number` LONGTEXT COMMENT "part number from the MARC record (245$n in MARC21)",
+  `part_name` LONGTEXT COMMENT "part name from the MARC record (245$p in MARC21)",
+  `unititle` LONGTEXT COMMENT "uniform title (without the subtitle) from the MARC record (240$a in MARC21)",
+  `notes` LONGTEXT COMMENT "values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)",
+  `serial` tinyint(1) default NULL COMMENT "Boolean indicating whether biblio is for a serial",
   `seriestitle` LONGTEXT,
-  `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
-  `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` LONGTEXT, -- summary from the MARC record (520$a in MARC21)
+  `copyrightdate` smallint(6) default NULL COMMENT "publication or copyright date from the MARC record",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time this record was last touched",
+  `datecreated` DATE NOT NULL COMMENT "the date this record was added to Koha",
+  `abstract` LONGTEXT COMMENT "summary from the MARC record (520$a in MARC21)",
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -156,8 +156,8 @@ CREATE TABLE `biblio` ( -- table that stores bibliographic information
 
 DROP TABLE IF EXISTS `biblio_framework`;
 CREATE TABLE `biblio_framework` ( -- information about MARC frameworks
-  `frameworkcode` varchar(4) NOT NULL default '', -- the unique code assigned to the framework
-  `frameworktext` varchar(255) NOT NULL default '', -- the description/name given to the framework
+  `frameworkcode` varchar(4) NOT NULL default '' COMMENT "the unique code assigned to the framework",
+  `frameworktext` varchar(255) NOT NULL default '' COMMENT "the description/name given to the framework",
   PRIMARY KEY  (`frameworkcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -167,37 +167,37 @@ CREATE TABLE `biblio_framework` ( -- information about MARC frameworks
 
 DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` ( -- information related to bibliographic records in Koha
-  `biblioitemnumber` int(11) NOT NULL auto_increment, -- primary key, unique identifier assigned by Koha
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
+  `biblioitemnumber` int(11) NOT NULL auto_increment COMMENT "primary key, unique identifier assigned by Koha",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key linking this table to the biblio table",
   `volume` LONGTEXT,
   `number` LONGTEXT,
-  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
-  `isbn` LONGTEXT, -- ISBN (MARC21 020$a)
-  `issn` LONGTEXT, -- ISSN (MARC21 022$a)
+  `itemtype` varchar(10) default NULL COMMENT "biblio level item type (MARC21 942$c)",
+  `isbn` LONGTEXT COMMENT "ISBN (MARC21 020$a)",
+  `issn` LONGTEXT COMMENT "ISSN (MARC21 022$a)",
   `ean` LONGTEXT default NULL,
   `publicationyear` MEDIUMTEXT,
-  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
+  `publishercode` varchar(255) default NULL COMMENT "publisher (MARC21 260$b)",
   `volumedate` date default NULL,
-  `volumedesc` MEDIUMTEXT, -- volume information (MARC21 362$a)
+  `volumedesc` MEDIUMTEXT COMMENT "volume information (MARC21 362$a)",
   `collectiontitle` LONGTEXT default NULL,
   `collectionissn` MEDIUMTEXT default NULL,
   `collectionvolume` LONGTEXT default NULL,
   `editionstatement` MEDIUMTEXT default NULL,
   `editionresponsibility` MEDIUMTEXT default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
-  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
+  `illus` varchar(255) default NULL COMMENT "illustrations (MARC21 300$b)",
+  `pages` varchar(255) default NULL COMMENT "number of pages (MARC21 300$c)",
   `notes` LONGTEXT,
-  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
-  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
-  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `url` MEDIUMTEXT default NULL, -- url (MARC21 856$u)
-  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
+  `size` varchar(255) default NULL COMMENT "material size (MARC21 300$c)",
+  `place` varchar(255) default NULL COMMENT "publication place (MARC21 260$a)",
+  `lccn` varchar(25) default NULL COMMENT "library of congress control number (MARC21 010$a)",
+  `url` MEDIUMTEXT default NULL COMMENT "url (MARC21 856$u)",
+  `cn_source` varchar(10) default NULL COMMENT "classification source (MARC21 942$2)",
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
-  `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
+  `cn_sort` varchar(255) default NULL COMMENT "normalized version of the call number used for sorting",
+  `agerestriction` varchar(255) default NULL COMMENT "target audience/age restriction from the bib record (MARC21 521$a)",
   `totalissues` int(10),
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
@@ -217,19 +217,19 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
 
 DROP TABLE IF EXISTS `borrower_attribute_types`;
 CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron fields known as extended patron attributes
-  `code` varchar(10) NOT NULL, -- unique key used to identify each custom field
-  `description` varchar(255) NOT NULL, -- description for each custom field
-  `repeatable` tinyint(1) NOT NULL default 0, -- defines whether one patron/borrower can have multiple values for this custom field  (1 for yes, 0 for no)
-  `unique_id` tinyint(1) NOT NULL default 0, -- defines if this value needs to be unique (1 for yes, 0 for no)
-  `opac_display` tinyint(1) NOT NULL default 0, -- defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)
-  `opac_editable` tinyint(1) NOT NULL default 0, -- defines if this field is editable by patrons on their account in the OPAC (1 for yes, 0 for no)
-  `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff interface (1 for yes, 0 for no)
-  `authorised_value_category` varchar(32) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
-  `display_checkout` tinyint(1) NOT NULL default 0,-- defines if this field displays in checkout screens
-  `category_code` VARCHAR(10) NULL DEFAULT NULL,-- defines a category for an attribute_type
-  `class` VARCHAR(255) NOT NULL DEFAULT '',-- defines a class for an attribute_type
-  `keep_for_pseudonymization` tinyint(1) NOT NULL default 0, -- defines if this field is copied to anonymized_borrower_attributes (1 for yes, 0 for no)
-  `mandatory` tinyint(1) NOT NULL DEFAULT 0, -- defines if the attribute is mandatory or not
+  `code` varchar(10) NOT NULL COMMENT "unique key used to identify each custom field",
+  `description` varchar(255) NOT NULL COMMENT "description for each custom field",
+  `repeatable` tinyint(1) NOT NULL default 0 COMMENT "defines whether one patron/borrower can have multiple values for this custom field  (1 for yes, 0 for no)",
+  `unique_id` tinyint(1) NOT NULL default 0 COMMENT "defines if this value needs to be unique (1 for yes, 0 for no)",
+  `opac_display` tinyint(1) NOT NULL default 0 COMMENT "defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)",
+  `opac_editable` tinyint(1) NOT NULL default 0 COMMENT "defines if this field is editable by patrons on their account in the OPAC (1 for yes, 0 for no)",
+  `staff_searchable` tinyint(1) NOT NULL default 0 COMMENT "defines if this field is searchable via the patron search in the staff interface (1 for yes, 0 for no)",
+  `authorised_value_category` varchar(32) default NULL COMMENT "foreign key from authorised_values that links this custom field to an authorized value category",
+  `display_checkout` tinyint(1) NOT NULL default 0 COMMENT "defines if this field displays in checkout screens",
+  `category_code` VARCHAR(10) NULL DEFAULT NULL COMMENT "defines a category for an attribute_type",
+  `class` VARCHAR(255) NOT NULL DEFAULT '' COMMENT "defines a class for an attribute_type",
+  `keep_for_pseudonymization` tinyint(1) NOT NULL default 0 COMMENT "defines if this field is copied to anonymized_borrower_attributes (1 for yes, 0 for no)",
+  `mandatory` tinyint(1) NOT NULL DEFAULT 0 COMMENT "defines if the attribute is mandatory or not",
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -240,9 +240,9 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
 
 DROP TABLE IF EXISTS `borrower_password_recovery`;
 CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information about password recovery attempts
-  `borrowernumber` int(11) NOT NULL, -- the user asking a password recovery
-  `uuid` varchar(128) NOT NULL, -- a unique string to identify a password recovery attempt
-  `valid_until` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- a time limit on the password recovery attempt
+  `borrowernumber` int(11) NOT NULL COMMENT "the user asking a password recovery",
+  `uuid` varchar(128) NOT NULL COMMENT "a unique string to identify a password recovery attempt",
+  `valid_until` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "a time limit on the password recovery attempt",
   PRIMARY KEY (`borrowernumber`),
   KEY borrowernumber (borrowernumber)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -253,29 +253,29 @@ CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information a
 
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` ( -- information about your libraries or branches are stored here
-  `branchcode` varchar(10) NOT NULL default '', -- a unique key assigned to each branch
-  `branchname` LONGTEXT NOT NULL, -- the name of your library or branch
-  `branchaddress1` LONGTEXT, -- the first address line of for your library or branch
-  `branchaddress2` LONGTEXT, -- the second address line of for your library or branch
-  `branchaddress3` LONGTEXT, -- the third address line of for your library or branch
-  `branchzip` varchar(25) default NULL, -- the zip or postal code for your library or branch
-  `branchcity` LONGTEXT, -- the city or province for your library or branch
-  `branchstate` LONGTEXT, -- the state for your library or branch
-  `branchcountry` MEDIUMTEXT, -- the county for your library or branch
-  `branchphone` LONGTEXT, -- the primary phone for your library or branch
-  `branchfax` LONGTEXT, -- the fax number for your library or branch
-  `branchemail` LONGTEXT, -- the primary email address for your library or branch
-  `branchillemail` LONGTEXT, -- the ILL staff email address for your library or branch
-  `branchreplyto` LONGTEXT, -- the email to be used as a Reply-To
-  `branchreturnpath` LONGTEXT, -- the email to be used as Return-Path
-  `branchurl` LONGTEXT, -- the URL for your library or branch's website
-  `issuing` tinyint(4) default NULL, -- unused in Koha
-  `branchip` varchar(15) default NULL, -- the IP address for your library or branch
-  `branchnotes` LONGTEXT, -- notes related to your library or branch
-  opac_info MEDIUMTEXT, -- HTML that displays in OPAC
-  `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
-  `marcorgcode` VARCHAR(16) default NULL, -- MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode
-  `pickup_location` tinyint(1) NOT NULL default 1, -- the ability to act as a pickup location
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "a unique key assigned to each branch",
+  `branchname` LONGTEXT NOT NULL COMMENT "the name of your library or branch",
+  `branchaddress1` LONGTEXT COMMENT "the first address line of for your library or branch",
+  `branchaddress2` LONGTEXT COMMENT "the second address line of for your library or branch",
+  `branchaddress3` LONGTEXT COMMENT "the third address line of for your library or branch",
+  `branchzip` varchar(25) default NULL COMMENT "the zip or postal code for your library or branch",
+  `branchcity` LONGTEXT COMMENT "the city or province for your library or branch",
+  `branchstate` LONGTEXT COMMENT "the state for your library or branch",
+  `branchcountry` MEDIUMTEXT COMMENT "the county for your library or branch",
+  `branchphone` LONGTEXT COMMENT "the primary phone for your library or branch",
+  `branchfax` LONGTEXT COMMENT "the fax number for your library or branch",
+  `branchemail` LONGTEXT COMMENT "the primary email address for your library or branch",
+  `branchillemail` LONGTEXT COMMENT "the ILL staff email address for your library or branch",
+  `branchreplyto` LONGTEXT COMMENT "the email to be used as a Reply-To",
+  `branchreturnpath` LONGTEXT COMMENT "the email to be used as Return-Path",
+  `branchurl` LONGTEXT COMMENT "the URL for your library or branch's website",
+  `issuing` tinyint(4) default NULL COMMENT "unused in Koha",
+  `branchip` varchar(15) default NULL COMMENT "the IP address for your library or branch",
+  `branchnotes` LONGTEXT COMMENT "notes related to your library or branch",
+  opac_info MEDIUMTEXT COMMENT "HTML that displays in OPAC",
+  `geolocation` VARCHAR(255) default NULL COMMENT "geolocation of your library",
+  `marcorgcode` VARCHAR(16) default NULL COMMENT "MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode",
+  `pickup_location` tinyint(1) NOT NULL default 1 COMMENT "the ability to act as a pickup location",
   PRIMARY KEY (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -309,28 +309,28 @@ CREATE TABLE `browser` (
 
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` ( -- this table shows information related to Koha patron categories
-  `categorycode` varchar(10) NOT NULL default '', -- unique primary key used to idenfity the patron category
-  `description` LONGTEXT, -- description of the patron category
-  `enrolmentperiod` smallint(6) default NULL, -- number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)
-  `enrolmentperioddate` DATE NULL DEFAULT NULL, -- date the patron is enrolled until (will be NULL if enrolmentperiod is set)
-  `upperagelimit` smallint(6) default NULL, -- age limit for the patron
-  `dateofbirthrequired` tinyint(1) default NULL, -- the minimum age required for the patron category
-  `finetype` varchar(30) default NULL, -- unused in Koha
+  `categorycode` varchar(10) NOT NULL default '' COMMENT "unique primary key used to idenfity the patron category",
+  `description` LONGTEXT COMMENT "description of the patron category",
+  `enrolmentperiod` smallint(6) default NULL COMMENT "number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)",
+  `enrolmentperioddate` DATE NULL DEFAULT NULL COMMENT "date the patron is enrolled until (will be NULL if enrolmentperiod is set)",
+  `upperagelimit` smallint(6) default NULL COMMENT "age limit for the patron",
+  `dateofbirthrequired` tinyint(1) default NULL COMMENT "the minimum age required for the patron category",
+  `finetype` varchar(30) default NULL COMMENT "unused in Koha",
   `bulk` tinyint(1) default NULL,
-  `enrolmentfee` decimal(28,6) default NULL, -- enrollment fee for the patron
-  `overduenoticerequired` tinyint(1) default NULL, -- are overdue notices sent to this patron category (1 for yes, 0 for no)
-  `issuelimit` smallint(6) default NULL, -- unused in Koha
-  `reservefee` decimal(28,6) default NULL, -- cost to place holds
-  `hidelostitems` tinyint(1) NOT NULL default '0', -- are lost items shown to this category (1 for yes, 0 for no)
-  `category_type` varchar(1) NOT NULL default 'A', -- type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
-  `BlockExpiredPatronOpacActions` tinyint(1) NOT NULL default '-1', -- wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions
-  `default_privacy` ENUM( 'default', 'never', 'forever' ) NOT NULL DEFAULT 'default', -- Default privacy setting for this patron category
-  `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.
-  `reset_password` TINYINT(1) NULL DEFAULT NULL, -- if patrons of this category can do the password reset flow,
-  `change_password` TINYINT(1) NULL DEFAULT NULL, -- if patrons of this category can change their passwords in the OAPC
-  `min_password_length` smallint(6) NULL DEFAULT NULL, -- set minimum password length for patrons in this category
-  `require_strong_password` TINYINT(1) NULL DEFAULT NULL, -- set required password strength for patrons in this category
-  `exclude_from_local_holds_priority` tinyint(1) default NULL, -- Exclude patrons of this category from local holds priority
+  `enrolmentfee` decimal(28,6) default NULL COMMENT "enrollment fee for the patron",
+  `overduenoticerequired` tinyint(1) default NULL COMMENT "are overdue notices sent to this patron category (1 for yes, 0 for no)",
+  `issuelimit` smallint(6) default NULL COMMENT "unused in Koha",
+  `reservefee` decimal(28,6) default NULL COMMENT "cost to place holds",
+  `hidelostitems` tinyint(1) NOT NULL default '0' COMMENT "are lost items shown to this category (1 for yes, 0 for no)",
+  `category_type` varchar(1) NOT NULL default 'A' COMMENT "type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)",
+  `BlockExpiredPatronOpacActions` tinyint(1) NOT NULL default '-1' COMMENT "wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions",
+  `default_privacy` ENUM( 'default', 'never', 'forever' ) NOT NULL DEFAULT 'default' COMMENT "Default privacy setting for this patron category",
+  `checkprevcheckout` varchar(7) NOT NULL default 'inherit' COMMENT "produce a warning for this patron category if this item has previously been checked out to this patron if 'yes', not if 'no', defer to syspref setting if 'inherit'.",
+  `reset_password` TINYINT(1) NULL DEFAULT NULL COMMENT "if patrons of this category can do the password reset flow,",
+  `change_password` TINYINT(1) NULL DEFAULT NULL COMMENT "if patrons of this category can change their passwords in the OAPC",
+  `min_password_length` smallint(6) NULL DEFAULT NULL COMMENT "set minimum password length for patrons in this category",
+  `require_strong_password` TINYINT(1) NULL DEFAULT NULL COMMENT "set required password strength for patrons in this category",
+  `exclude_from_local_holds_priority` tinyint(1) default NULL COMMENT "Exclude patrons of this category from local holds priority",
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -343,7 +343,7 @@ CREATE TABLE collections (
   colId integer(11) NOT NULL auto_increment,
   colTitle varchar(100) NOT NULL DEFAULT '',
   colDesc MEDIUMTEXT NOT NULL,
-  colBranchcode varchar(10) DEFAULT NULL, -- 'branchcode for branch where item should be held.'
+  colBranchcode varchar(10) DEFAULT NULL COMMENT "'branchcode for branch where item should be held.'",
   PRIMARY KEY (colId)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -371,11 +371,11 @@ CREATE TABLE collections_tracking (
 
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choose when adding/editing a patron/borrower
-  `cityid` int(11) NOT NULL auto_increment, -- unique identifier added by Koha
-  `city_name` varchar(100) NOT NULL default '', -- name of the city
-  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the state/province
-  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the country
-  `city_zipcode` varchar(20) default NULL, -- zip or postal code
+  `cityid` int(11) NOT NULL auto_increment COMMENT "unique identifier added by Koha",
+  `city_name` varchar(100) NOT NULL default '' COMMENT "name of the city",
+  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL COMMENT "name of the state/province",
+  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL COMMENT "name of the country",
+  `city_zipcode` varchar(20) default NULL COMMENT "zip or postal code",
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -385,9 +385,9 @@ CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choo
 
 DROP TABLE IF EXISTS desks;
 CREATE TABLE desks ( -- desks available in a library
-  desk_id int(11) NOT NULL auto_increment, -- unique identifier
-  desk_name varchar(100) NOT NULL default '', -- name of the desk
-  branchcode varchar(10) NOT NULL,       -- library the desk is located at
+  desk_id int(11) NOT NULL auto_increment COMMENT "unique identifier",
+  desk_name varchar(100) NOT NULL default '' COMMENT "name of the desk",
+  branchcode varchar(10) NOT NULL COMMENT "library the desk is located at",
   PRIMARY KEY  (desk_id),
   KEY `fk_desks_branchcode` (branchcode),
   CONSTRAINT `fk_desks_branchcode` FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
@@ -462,22 +462,22 @@ CREATE TABLE `currency` (
 
 DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records that have been deleted
-  `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
-  `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
-  `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
-  `medium` LONGTEXT, -- medium from the MARC record (245$h in MARC21)
-  `subtitle` LONGTEXT, -- remainder of the title from the MARC record (245$b in MARC21)
-  `part_number` LONGTEXT, -- part number from the MARC record (245$n in MARC21)
-  `part_name` LONGTEXT, -- part name from the MARC record (245$p in MARC21)
-  `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
-  `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
-  `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial
+  `biblionumber` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned to each bibliographic record",
+  `frameworkcode` varchar(4) NOT NULL default '' COMMENT "foriegn key from the biblio_framework table to identify which framework was used in cataloging this record",
+  `author` LONGTEXT COMMENT "statement of responsibility from MARC record (100$a in MARC21)",
+  `title` LONGTEXT COMMENT "title (without the subtitle) from the MARC record (245$a in MARC21)",
+  `medium` LONGTEXT COMMENT "medium from the MARC record (245$h in MARC21)",
+  `subtitle` LONGTEXT COMMENT "remainder of the title from the MARC record (245$b in MARC21)",
+  `part_number` LONGTEXT COMMENT "part number from the MARC record (245$n in MARC21)",
+  `part_name` LONGTEXT COMMENT "part name from the MARC record (245$p in MARC21)",
+  `unititle` LONGTEXT COMMENT "uniform title (without the subtitle) from the MARC record (240$a in MARC21)",
+  `notes` LONGTEXT COMMENT "values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)",
+  `serial` tinyint(1) default NULL COMMENT "Boolean indicating whether biblio is for a serial",
   `seriestitle` LONGTEXT,
-  `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
-  `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` LONGTEXT, -- summary from the MARC record (520$a in MARC21)
+  `copyrightdate` smallint(6) default NULL COMMENT "publication or copyright date from the MARC record",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time this record was last touched",
+  `datecreated` DATE NOT NULL COMMENT "the date this record was added to Koha",
+  `abstract` LONGTEXT COMMENT "summary from the MARC record (520$a in MARC21)",
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -488,37 +488,37 @@ CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
 CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records that have been deleted
-  `biblioitemnumber` int(11) NOT NULL default 0, -- primary key, unique identifier assigned by Koha
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
+  `biblioitemnumber` int(11) NOT NULL default 0 COMMENT "primary key, unique identifier assigned by Koha",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key linking this table to the biblio table",
   `volume` LONGTEXT,
   `number` LONGTEXT,
-  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
-  `isbn` LONGTEXT default NULL, -- ISBN (MARC21 020$a)
-  `issn` LONGTEXT default NULL, -- ISSN (MARC21 022$a)
+  `itemtype` varchar(10) default NULL COMMENT "biblio level item type (MARC21 942$c)",
+  `isbn` LONGTEXT default NULL COMMENT "ISBN (MARC21 020$a)",
+  `issn` LONGTEXT default NULL COMMENT "ISSN (MARC21 022$a)",
   `ean` LONGTEXT default NULL,
   `publicationyear` MEDIUMTEXT,
-  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
+  `publishercode` varchar(255) default NULL COMMENT "publisher (MARC21 260$b)",
   `volumedate` date default NULL,
-  `volumedesc` MEDIUMTEXT, -- volume information (MARC21 362$a)
+  `volumedesc` MEDIUMTEXT COMMENT "volume information (MARC21 362$a)",
   `collectiontitle` LONGTEXT default NULL,
   `collectionissn` MEDIUMTEXT default NULL,
   `collectionvolume` LONGTEXT default NULL,
   `editionstatement` MEDIUMTEXT default NULL,
   `editionresponsibility` MEDIUMTEXT default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
-  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
+  `illus` varchar(255) default NULL COMMENT "illustrations (MARC21 300$b)",
+  `pages` varchar(255) default NULL COMMENT "number of pages (MARC21 300$c)",
   `notes` LONGTEXT,
-  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
-  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
-  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `url` MEDIUMTEXT default NULL, -- url (MARC21 856$u)
-  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
+  `size` varchar(255) default NULL COMMENT "material size (MARC21 300$c)",
+  `place` varchar(255) default NULL COMMENT "publication place (MARC21 260$a)",
+  `lccn` varchar(25) default NULL COMMENT "library of congress control number (MARC21 010$a)",
+  `url` MEDIUMTEXT default NULL COMMENT "url (MARC21 856$u)",
+  `cn_source` varchar(10) default NULL COMMENT "classification source (MARC21 942$2)",
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
-  `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
-  `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
+  `cn_sort` varchar(255) default NULL COMMENT "normalized version of the call number used for sorting",
+  `agerestriction` varchar(255) default NULL COMMENT "target audience/age restriction from the bib record (MARC21 521$a)",
   `totalissues` int(10),
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
@@ -536,82 +536,82 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
 
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
-  `borrowernumber` int(11) NOT NULL default 0, -- primary key, Koha assigned ID number for patrons/borrowers
-  `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` LONGTEXT, -- patron/borrower's last name (surname)
-  `firstname` MEDIUMTEXT, -- patron/borrower's first name
-  `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` LONGTEXT, -- any other names associated with the patron/borrower
-  `initials` MEDIUMTEXT, -- initials for your patron/borrower
-  `streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's primary address
-  `streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
-  `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
-  `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
-  `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
-  `zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's primary address
-  `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
-  `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
-  `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
-  `mobile` TINYTEXT default NULL, -- the other phone number for your patron/borrower's primary address
-  `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
-  `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
-  `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
-  `B_streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's alternate address
-  `B_streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
-  `B_address` MEDIUMTEXT default NULL, -- the first address line for your patron/borrower's alternate address
-  `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
-  `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
-  `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
-  `B_zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's alternate address
-  `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
-  `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
-  `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
-  `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
-  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
-  `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
-  `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
-  `date_renewed` date default NULL, -- date the patron/borrower's card was last renewed
-  `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
-  `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
-  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of patron
-  `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
-  `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
-  `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
-  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff interface
-  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
-  `sex` varchar(1) default NULL, -- patron/borrower's gender
-  `password` varchar(60) default NULL, -- patron/borrower's encrypted password
-  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff interface log in
-  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff interface
-  `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
-  `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `altcontactfirstname` MEDIUMTEXT default NULL, -- first name of alternate contact for the patron/borrower
-  `altcontactsurname` MEDIUMTEXT default NULL, -- surname or last name of the alternate contact for the patron/borrower
-  `altcontactaddress1` MEDIUMTEXT default NULL, -- the first address line for the alternate contact for the patron/borrower
-  `altcontactaddress2` MEDIUMTEXT default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` MEDIUMTEXT default NULL, -- the city for the alternate contact for the patron/borrower
-  `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
-  `altcontactzipcode` MEDIUMTEXT default NULL, -- the zipcode for the alternate contact for the patron/borrower
-  `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
-  `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
-  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
-  `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
-  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their checkout history  KEY `borrowernumber` (`borrowernumber`),
-  `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's fines
-  `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
-  `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.
-  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
-  `lastseen` datetime default NULL, -- last time a patron has been seen (connected at the OPAC or staff interface)
-  `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
-  `login_attempts` int(4) NOT NULL default 0, -- number of failed login attemps
-  `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
-  `anonymized` TINYINT(1) NOT NULL DEFAULT 0, -- flag for data anonymization
-  `autorenew_checkouts` TINYINT(1) NOT NULL DEFAULT 1, -- flag for allowing auto-renewal
+  `borrowernumber` int(11) NOT NULL default 0 COMMENT "primary key, Koha assigned ID number for patrons/borrowers",
+  `cardnumber` varchar(32) default NULL COMMENT "unique key, library assigned ID number for patrons/borrowers",
+  `surname` LONGTEXT COMMENT "patron/borrower's last name (surname)",
+  `firstname` MEDIUMTEXT COMMENT "patron/borrower's first name",
+  `title` LONGTEXT COMMENT "patron/borrower's title, for example: Mr. or Mrs.",
+  `othernames` LONGTEXT COMMENT "any other names associated with the patron/borrower",
+  `initials` MEDIUMTEXT COMMENT "initials for your patron/borrower",
+  `streetnumber` TINYTEXT default NULL COMMENT "the house number for your patron/borrower's primary address",
+  `streettype` TINYTEXT default NULL COMMENT "the street type (Rd., Blvd, etc) for your patron/borrower's primary address",
+  `address` LONGTEXT COMMENT "the first address line for your patron/borrower's primary address",
+  `address2` MEDIUMTEXT COMMENT "the second address line for your patron/borrower's primary address",
+  `city` LONGTEXT COMMENT "the city or town for your patron/borrower's primary address",
+  `state` MEDIUMTEXT default NULL COMMENT "the state or province for your patron/borrower's primary address",
+  `zipcode` TINYTEXT default NULL COMMENT "the zip or postal code for your patron/borrower's primary address",
+  `country` MEDIUMTEXT COMMENT "the country for your patron/borrower's primary address",
+  `email` LONGTEXT COMMENT "the primary email address for your patron/borrower's primary address",
+  `phone` MEDIUMTEXT COMMENT "the primary phone number for your patron/borrower's primary address",
+  `mobile` TINYTEXT default NULL COMMENT "the other phone number for your patron/borrower's primary address",
+  `fax` LONGTEXT COMMENT "the fax number for your patron/borrower's primary address",
+  `emailpro` MEDIUMTEXT COMMENT "the secondary email addres for your patron/borrower's primary address",
+  `phonepro` MEDIUMTEXT COMMENT "the secondary phone number for your patron/borrower's primary address",
+  `B_streetnumber` TINYTEXT default NULL COMMENT "the house number for your patron/borrower's alternate address",
+  `B_streettype` TINYTEXT default NULL COMMENT "the street type (Rd., Blvd, etc) for your patron/borrower's alternate address",
+  `B_address` MEDIUMTEXT default NULL COMMENT "the first address line for your patron/borrower's alternate address",
+  `B_address2` MEDIUMTEXT default NULL COMMENT "the second address line for your patron/borrower's alternate address",
+  `B_city` LONGTEXT COMMENT "the city or town for your patron/borrower's alternate address",
+  `B_state` MEDIUMTEXT default NULL COMMENT "the state for your patron/borrower's alternate address",
+  `B_zipcode` TINYTEXT default NULL COMMENT "the zip or postal code for your patron/borrower's alternate address",
+  `B_country` MEDIUMTEXT COMMENT "the country for your patron/borrower's alternate address",
+  `B_email` MEDIUMTEXT COMMENT "the patron/borrower's alternate email address",
+  `B_phone` LONGTEXT COMMENT "the patron/borrower's alternate phone number",
+  `dateofbirth` date default NULL COMMENT "the patron/borrower's date of birth (YYYY-MM-DD)",
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "foreign key from the branches table, includes the code of the patron/borrower's home branch",
+  `categorycode` varchar(10) NOT NULL default '' COMMENT "foreign key from the categories table, includes the code of the patron category",
+  `dateenrolled` date default NULL COMMENT "date the patron was added to Koha (YYYY-MM-DD)",
+  `dateexpiry` date default NULL COMMENT "date the patron/borrower's card is set to expire (YYYY-MM-DD)",
+  `date_renewed` date default NULL COMMENT "date the patron/borrower's card was last renewed",
+  `gonenoaddress` tinyint(1) default NULL COMMENT "set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address",
+  `lost` tinyint(1) default NULL COMMENT "set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card",
+  `debarred` date default NULL COMMENT "until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)",
+  `debarredcomment` VARCHAR(255) DEFAULT NULL COMMENT "comment on the stop of patron",
+  `contactname` LONGTEXT COMMENT "used for children and profesionals to include surname or last name of guarantor or organization name",
+  `contactfirstname` MEDIUMTEXT COMMENT "used for children to include first name of guarantor",
+  `contacttitle` MEDIUMTEXT COMMENT "used for children to include title (Mr., Mrs., etc) of guarantor",
+  `borrowernotes` LONGTEXT COMMENT "a note on the patron/borrower's account that is only visible in the staff interface",
+  `relationship` varchar(100) default NULL COMMENT "used for children to include the relationship to their guarantor",
+  `sex` varchar(1) default NULL COMMENT "patron/borrower's gender",
+  `password` varchar(60) default NULL COMMENT "patron/borrower's encrypted password",
+  `flags` int(11) default NULL COMMENT "will include a number associated with the staff member's permissions",
+  `userid` varchar(75) default NULL COMMENT "patron/borrower's opac and/or staff interface log in",
+  `opacnote` LONGTEXT COMMENT "a note on the patron/borrower's account that is visible in the OPAC and staff interface",
+  `contactnote` varchar(255) default NULL COMMENT "a note related to the patron/borrower's alternate address",
+  `sort1` varchar(80) default NULL COMMENT "a field that can be used for any information unique to the library",
+  `sort2` varchar(80) default NULL COMMENT "a field that can be used for any information unique to the library",
+  `altcontactfirstname` MEDIUMTEXT default NULL COMMENT "first name of alternate contact for the patron/borrower",
+  `altcontactsurname` MEDIUMTEXT default NULL COMMENT "surname or last name of the alternate contact for the patron/borrower",
+  `altcontactaddress1` MEDIUMTEXT default NULL COMMENT "the first address line for the alternate contact for the patron/borrower",
+  `altcontactaddress2` MEDIUMTEXT default NULL COMMENT "the second address line for the alternate contact for the patron/borrower",
+  `altcontactaddress3` MEDIUMTEXT default NULL COMMENT "the city for the alternate contact for the patron/borrower",
+  `altcontactstate` MEDIUMTEXT default NULL COMMENT "the state for the alternate contact for the patron/borrower",
+  `altcontactzipcode` MEDIUMTEXT default NULL COMMENT "the zipcode for the alternate contact for the patron/borrower",
+  `altcontactcountry` MEDIUMTEXT default NULL COMMENT "the country for the alternate contact for the patron/borrower",
+  `altcontactphone` MEDIUMTEXT default NULL COMMENT "the phone number for the alternate contact for the patron/borrower",
+  `smsalertnumber` varchar(50) default NULL COMMENT "the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)",
+  `sms_provider_id` int(11) DEFAULT NULL COMMENT "the provider of the mobile phone number defined in smsalertnumber",
+  `privacy` integer(11) DEFAULT '1' NOT NULL COMMENT "patron/borrower's privacy settings related to their checkout history  KEY `borrowernumber` (`borrowernumber`),",
+  `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0' COMMENT "controls if relatives can see this patron's fines",
+  `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0' COMMENT "controls if relatives can see this patron's checkouts",
+  `checkprevcheckout` varchar(7) NOT NULL default 'inherit' COMMENT "produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.",
+  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "time of last change could be useful for synchronization with external systems (among others)",
+  `lastseen` datetime default NULL COMMENT "last time a patron has been seen (connected at the OPAC or staff interface)",
+  `lang` varchar(25) NOT NULL default 'default' COMMENT "lang to use to send notices to this patron",
+  `login_attempts` int(4) NOT NULL default 0 COMMENT "number of failed login attemps",
+  `overdrive_auth_token` MEDIUMTEXT default NULL COMMENT "persist OverDrive auth token",
+  `anonymized` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "flag for data anonymization",
+  `autorenew_checkouts` TINYINT(1) NOT NULL DEFAULT 1 COMMENT "flag for allowing auto-renewal",
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
@@ -623,51 +623,51 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
 
 DROP TABLE IF EXISTS `deleteditems`;
 CREATE TABLE `deleteditems` (
-  `itemnumber` int(11) NOT NULL default 0, -- primary key and unique identifier added by Koha
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
-  `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
-  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
-  `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
-  `booksellerid` LONGTEXT default NULL, -- where the item was purchased (MARC21 952$e)
-  `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
-  `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
-  `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
-  `replacementpricedate` date default NULL, -- the date the price is effective from (MARC21 952$w)
-  `datelastborrowed` date default NULL, -- the date the item was last checked out
-  `datelastseen` date default NULL, -- the date the item was last see (usually the last time the barcode was scanned or inventory was done)
+  `itemnumber` int(11) NOT NULL default 0 COMMENT "primary key and unique identifier added by Koha",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key from biblio table used to link this item to the right bib record",
+  `biblioitemnumber` int(11) NOT NULL default 0 COMMENT "foreign key from the biblioitems table to link to item to additional information",
+  `barcode` varchar(20) default NULL COMMENT "item barcode (MARC21 952$p)",
+  `dateaccessioned` date default NULL COMMENT "date the item was acquired or added to Koha (MARC21 952$d)",
+  `booksellerid` LONGTEXT default NULL COMMENT "where the item was purchased (MARC21 952$e)",
+  `homebranch` varchar(10) default NULL COMMENT "foreign key from the branches table for the library that owns this item (MARC21 952$a)",
+  `price` decimal(8,2) default NULL COMMENT "purchase price (MARC21 952$g)",
+  `replacementprice` decimal(8,2) default NULL COMMENT "cost the library charges to replace the item if it has been marked lost (MARC21 952$v)",
+  `replacementpricedate` date default NULL COMMENT "the date the price is effective from (MARC21 952$w)",
+  `datelastborrowed` date default NULL COMMENT "the date the item was last checked out",
+  `datelastseen` date default NULL COMMENT "the date the item was last see (usually the last time the barcode was scanned or inventory was done)",
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
-  `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
-  `damaged_on` datetime DEFAULT NULL, -- the date and time an item was last marked as damaged, NULL if not damaged
-  `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
-  `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
-  `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
-  `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
-  `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
-  `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
-  `issues` smallint(6) default 0, -- number of times this item has been checked out
-  `renewals` smallint(6) default NULL, -- number of times this item has been renewed
-  `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
-  `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
-  `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
-  `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
-  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
-  `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
-  `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and due date for checked out)
-  `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
-  `cn_sort` varchar(255) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
-  `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
-  `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
-  `uri` MEDIUMTEXT default NULL, -- URL for the item (MARC21 952$u)
-  `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
-  `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
-  `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
-  `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
-  `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
-  `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
-  `exclude_from_local_holds_priority` tinyint(1) default NULL, -- Exclude this item from local holds priority
+  `notforloan` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining why this item is not for loan (MARC21 952$7)",
+  `damaged` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as damaged (MARC21 952$4)",
+  `damaged_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as damaged, NULL if not damaged",
+  `itemlost` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as lost (MARC21 952$1)",
+  `itemlost_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as lost, NULL if not lost",
+  `withdrawn` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as withdrawn (MARC21 952$0)",
+  `withdrawn_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as withdrawn, NULL if not withdrawn",
+  `itemcallnumber` varchar(255) default NULL COMMENT "call number for this item (MARC21 952$o)",
+  `coded_location_qualifier` varchar(10) default NULL COMMENT "coded location qualifier(MARC21 952$f)",
+  `issues` smallint(6) default 0 COMMENT "number of times this item has been checked out",
+  `renewals` smallint(6) default NULL COMMENT "number of times this item has been renewed",
+  `reserves` smallint(6) default NULL COMMENT "number of times this item has been placed on hold/reserved",
+  `restricted` tinyint(1) default NULL COMMENT "authorized value defining use restrictions for this item (MARC21 952$5)",
+  `itemnotes` LONGTEXT COMMENT "public notes on this item (MARC21 952$z)",
+  `itemnotes_nonpublic` LONGTEXT default NULL COMMENT "non-public notes on this item (MARC21 952$x)",
+  `holdingbranch` varchar(10) default NULL COMMENT "foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time this item was last altered",
+  `location` varchar(80) default NULL COMMENT "authorized value for the shelving location for this item (MARC21 952$c)",
+  `permanent_location` varchar(80) default NULL COMMENT "linked to the CART and PROC temporary locations feature, stores the permanent shelving location",
+  `onloan` date default NULL COMMENT "defines if item is checked out (NULL for not checked out, and due date for checked out)",
+  `cn_source` varchar(10) default NULL COMMENT "classification source used on this item (MARC21 952$2)",
+  `cn_sort` varchar(255) default NULL COMMENT "normalized form of the call number (MARC21 952$o) used for sorting",
+  `ccode` varchar(80) default NULL COMMENT "authorized value for the collection code associated with this item (MARC21 952$8)",
+  `materials` MEDIUMTEXT default NULL COMMENT "materials specified (MARC21 952$3)",
+  `uri` MEDIUMTEXT default NULL COMMENT "URL for the item (MARC21 952$u)",
+  `itype` varchar(10) default NULL COMMENT "foreign key from the itemtypes table defining the type for this item (MARC21 952$y)",
+  `more_subfields_xml` LONGTEXT default NULL COMMENT "additional 952 subfields in XML format",
+  `enumchron` MEDIUMTEXT default NULL COMMENT "serial enumeration/chronology for the item (MARC21 952$h)",
+  `copynumber` varchar(32) default NULL COMMENT "copy number (MARC21 952$t)",
+  `stocknumber` varchar(32) default NULL COMMENT "inventory number (MARC21 952$i)",
+  `new_status` VARCHAR(32) DEFAULT NULL COMMENT "'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.",
+  `exclude_from_local_holds_priority` tinyint(1) default NULL COMMENT "Exclude this item from local holds priority",
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitemstocknumberidx` (`stocknumber`),
@@ -707,18 +707,18 @@ CREATE TABLE `export_format` (
 
 DROP TABLE IF EXISTS `import_batch_profiles`;
 CREATE TABLE `import_batch_profiles` ( -- profile for batches of marc records to be imported
-  `id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
-  `name` varchar(100) NOT NULL, -- name of this profile
-  `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
-  `template_id` int(11) default NULL, -- the id of the marc modification template
-  `overlay_action` varchar(50) default NULL, -- how to handle duplicate records
-  `nomatch_action` varchar(50) default NULL, -- how to handle records where no match is found
-  `item_action` varchar(50) default NULL, -- what to do with item records
-  `parse_items` tinyint(1) default NULL, -- should items be parsed
-  `record_type` varchar(50) default NULL, -- type of record in the batch
-  `encoding` varchar(50) default NULL, -- file encoding
-  `format` varchar(50) default NULL, -- marc format
-  `comments` LONGTEXT, -- any comments added when the file was uploaded
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier and primary key",
+  `name` varchar(100) NOT NULL COMMENT "name of this profile",
+  `matcher_id` int(11) default NULL COMMENT "the id of the match rule used (matchpoints.matcher_id)",
+  `template_id` int(11) default NULL COMMENT "the id of the marc modification template",
+  `overlay_action` varchar(50) default NULL COMMENT "how to handle duplicate records",
+  `nomatch_action` varchar(50) default NULL COMMENT "how to handle records where no match is found",
+  `item_action` varchar(50) default NULL COMMENT "what to do with item records",
+  `parse_items` tinyint(1) default NULL COMMENT "should items be parsed",
+  `record_type` varchar(50) default NULL COMMENT "type of record in the batch",
+  `encoding` varchar(50) default NULL COMMENT "file encoding",
+  `format` varchar(50) default NULL COMMENT "marc format",
+  `comments` LONGTEXT COMMENT "any comments added when the file was uploaded",
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_import_batch_profiles__name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -729,21 +729,21 @@ CREATE TABLE `import_batch_profiles` ( -- profile for batches of marc records to
 
 DROP TABLE IF EXISTS `import_batches`;
 CREATE TABLE `import_batches` ( -- information about batches of marc records that have been imported
-  `import_batch_id` int(11) NOT NULL auto_increment, -- unique identifier and primary key
-  `matcher_id` int(11) default NULL, -- the id of the match rule used (matchpoints.matcher_id)
+  `import_batch_id` int(11) NOT NULL auto_increment COMMENT "unique identifier and primary key",
+  `matcher_id` int(11) default NULL COMMENT "the id of the match rule used (matchpoints.matcher_id)",
   `template_id` int(11) default NULL,
   `branchcode` varchar(10) default NULL,
-  `num_records` int(11) NOT NULL default 0, -- number of records in the file
-  `num_items` int(11) NOT NULL default 0, -- number of items in the file
-  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- date and time the file was uploaded
-  `overlay_action` enum('replace', 'create_new', 'use_template', 'ignore') NOT NULL default 'create_new', -- how to handle duplicate records
-  `nomatch_action` enum('create_new', 'ignore') NOT NULL default 'create_new', -- how to handle records where no match is found
-  `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore', 'replace') NOT NULL default 'always_add', -- what to do with item records
-  `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging', -- the status of the imported file
-  `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch', -- where this batch has come from
-  `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio', -- type of record in the batch
-  `file_name` varchar(100), -- the name of the file uploaded
-  `comments` LONGTEXT, -- any comments added when the file was uploaded
+  `num_records` int(11) NOT NULL default 0 COMMENT "number of records in the file",
+  `num_items` int(11) NOT NULL default 0 COMMENT "number of items in the file",
+  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT "date and time the file was uploaded",
+  `overlay_action` enum('replace', 'create_new', 'use_template', 'ignore') NOT NULL default 'create_new' COMMENT "how to handle duplicate records",
+  `nomatch_action` enum('create_new', 'ignore') NOT NULL default 'create_new' COMMENT "how to handle records where no match is found",
+  `item_action` enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore', 'replace') NOT NULL default 'always_add' COMMENT "what to do with item records",
+  `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging' COMMENT "the status of the imported file",
+  `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch' COMMENT "where this batch has come from",
+  `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio' COMMENT "type of record in the batch",
+  `file_name` varchar(100) COMMENT "the name of the file uploaded",
+  `comments` LONGTEXT COMMENT "any comments added when the file was uploaded",
   `profile_id` int(11) default NULL,
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`),
@@ -784,9 +784,9 @@ CREATE TABLE `import_records` (
 --
 DROP TABLE IF EXISTS `import_record_matches`;
 CREATE TABLE `import_record_matches` ( -- matches found when importing a batch of records
-  `import_record_id` int(11) NOT NULL, -- the id given to the imported bib record (import_records.import_record_id)
-  `candidate_match_id` int(11) NOT NULL, -- the biblio the imported record matches (biblio.biblionumber)
-  `score` int(11) NOT NULL default 0, -- the match score
+  `import_record_id` int(11) NOT NULL COMMENT "the id given to the imported bib record (import_records.import_record_id)",
+  `candidate_match_id` int(11) NOT NULL COMMENT "the biblio the imported record matches (biblio.biblionumber)",
+  `score` int(11) NOT NULL default 0 COMMENT "the match score",
   CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   KEY `record_score` (`import_record_id`, `score`)
@@ -856,51 +856,51 @@ CREATE TABLE `import_items` (
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` ( -- holdings/item information
-  `itemnumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier added by Koha
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
-  `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
-  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
-  `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
-  `booksellerid` LONGTEXT default NULL, -- where the item was purchased (MARC21 952$e)
-  `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
-  `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
-  `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
-  `replacementpricedate` date default NULL, -- the date the price is effective from (MARC21 952$w)
-  `datelastborrowed` date default NULL, -- the date the item was last checked out/issued
-  `datelastseen` date default NULL, -- the date the item was last see (usually the last time the barcode was scanned or inventory was done)
+  `itemnumber` int(11) NOT NULL auto_increment COMMENT "primary key and unique identifier added by Koha",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key from biblio table used to link this item to the right bib record",
+  `biblioitemnumber` int(11) NOT NULL default 0 COMMENT "foreign key from the biblioitems table to link to item to additional information",
+  `barcode` varchar(20) default NULL COMMENT "item barcode (MARC21 952$p)",
+  `dateaccessioned` date default NULL COMMENT "date the item was acquired or added to Koha (MARC21 952$d)",
+  `booksellerid` LONGTEXT default NULL COMMENT "where the item was purchased (MARC21 952$e)",
+  `homebranch` varchar(10) default NULL COMMENT "foreign key from the branches table for the library that owns this item (MARC21 952$a)",
+  `price` decimal(8,2) default NULL COMMENT "purchase price (MARC21 952$g)",
+  `replacementprice` decimal(8,2) default NULL COMMENT "cost the library charges to replace the item if it has been marked lost (MARC21 952$v)",
+  `replacementpricedate` date default NULL COMMENT "the date the price is effective from (MARC21 952$w)",
+  `datelastborrowed` date default NULL COMMENT "the date the item was last checked out/issued",
+  `datelastseen` date default NULL COMMENT "the date the item was last see (usually the last time the barcode was scanned or inventory was done)",
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
-  `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
-  `damaged_on` datetime DEFAULT NULL, -- the date and time an item was last marked as damaged, NULL if not damaged
-  `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
-  `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
-  `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
-  `withdrawn_on` datetime DEFAULT NULL, -- the date and time an item was last marked as withdrawn, NULL if not withdrawn
-  `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
-  `coded_location_qualifier` varchar(10) default NULL, -- coded location qualifier(MARC21 952$f)
-  `issues` smallint(6) default 0, -- number of times this item has been checked out/issued
-  `renewals` smallint(6) default NULL, -- number of times this item has been renewed
-  `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
-  `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
-  `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
-  `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
-  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
-  `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
-  `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and due date for checked out)
-  `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
-  `cn_sort` varchar(255) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
-  `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
-  `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
-  `uri` MEDIUMTEXT default NULL, -- URL for the item (MARC21 952$u)
-  `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
-  `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
-  `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
-  `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
-  `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
-  `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
-  `exclude_from_local_holds_priority` tinyint(1) default NULL, -- Exclude this item from local holds priority
+  `notforloan` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining why this item is not for loan (MARC21 952$7)",
+  `damaged` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as damaged (MARC21 952$4)",
+  `damaged_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as damaged, NULL if not damaged",
+  `itemlost` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as lost (MARC21 952$1)",
+  `itemlost_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as lost, NULL if not lost",
+  `withdrawn` tinyint(1) NOT NULL default 0 COMMENT "authorized value defining this item as withdrawn (MARC21 952$0)",
+  `withdrawn_on` datetime DEFAULT NULL COMMENT "the date and time an item was last marked as withdrawn, NULL if not withdrawn",
+  `itemcallnumber` varchar(255) default NULL COMMENT "call number for this item (MARC21 952$o)",
+  `coded_location_qualifier` varchar(10) default NULL COMMENT "coded location qualifier(MARC21 952$f)",
+  `issues` smallint(6) default 0 COMMENT "number of times this item has been checked out/issued",
+  `renewals` smallint(6) default NULL COMMENT "number of times this item has been renewed",
+  `reserves` smallint(6) default NULL COMMENT "number of times this item has been placed on hold/reserved",
+  `restricted` tinyint(1) default NULL COMMENT "authorized value defining use restrictions for this item (MARC21 952$5)",
+  `itemnotes` LONGTEXT COMMENT "public notes on this item (MARC21 952$z)",
+  `itemnotes_nonpublic` LONGTEXT default NULL COMMENT "non-public notes on this item (MARC21 952$x)",
+  `holdingbranch` varchar(10) default NULL COMMENT "foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time this item was last altered",
+  `location` varchar(80) default NULL COMMENT "authorized value for the shelving location for this item (MARC21 952$c)",
+  `permanent_location` varchar(80) default NULL COMMENT "linked to the CART and PROC temporary locations feature, stores the permanent shelving location",
+  `onloan` date default NULL COMMENT "defines if item is checked out (NULL for not checked out, and due date for checked out)",
+  `cn_source` varchar(10) default NULL COMMENT "classification source used on this item (MARC21 952$2)",
+  `cn_sort` varchar(255) default NULL COMMENT "normalized form of the call number (MARC21 952$o) used for sorting",
+  `ccode` varchar(80) default NULL COMMENT "authorized value for the collection code associated with this item (MARC21 952$8)",
+  `materials` MEDIUMTEXT default NULL COMMENT "materials specified (MARC21 952$3)",
+  `uri` MEDIUMTEXT default NULL COMMENT "URL for the item (MARC21 952$u)",
+  `itype` varchar(10) default NULL COMMENT "foreign key from the itemtypes table defining the type for this item (MARC21 952$y)",
+  `more_subfields_xml` LONGTEXT default NULL COMMENT "additional 952 subfields in XML format",
+  `enumchron` MEDIUMTEXT default NULL COMMENT "serial enumeration/chronology for the item (MARC21 952$h)",
+  `copynumber` varchar(32) default NULL COMMENT "copy number (MARC21 952$t)",
+  `stocknumber` varchar(32) default NULL COMMENT "inventory number (MARC21 952$i)",
+  `new_status` VARCHAR(32) DEFAULT NULL COMMENT "'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.",
+  `exclude_from_local_holds_priority` tinyint(1) default NULL COMMENT "Exclude this item from local holds priority",
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itemstocknumberidx` (`stocknumber`),
@@ -925,24 +925,24 @@ CREATE TABLE `items` ( -- holdings/item information
 
 DROP TABLE IF EXISTS `itemtypes`;
 CREATE TABLE `itemtypes` ( -- defines the item types
-  itemtype varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
-  parent_type varchar(10) NULL default NULL, -- unique key, a code associated with the item type
-  description LONGTEXT, -- a plain text explanation of the item type
-  rentalcharge decimal(28,6) default NULL, -- the amount charged when this item is checked out/issued
-  rentalcharge_daily decimal(28,6) default NULL, -- the amount charged for each day between checkout date and due date
-  rentalcharge_daily_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the daily rental fee is calculated directly or using finesCalendar
-  rentalcharge_hourly decimal(28,6) default NULL, -- the amount charged for each hour between checkout date and due date
-  rentalcharge_hourly_calendar tinyint(1) NOT NULL DEFAULT 1, -- controls if the hourly rental fee is calculated directly or using finesCalendar
-  defaultreplacecost decimal(28,6) default NULL, -- default replacement cost
-  processfee decimal(28,6) default NULL, -- default text be recorded in the column note when the processing fee is applied
-  notforloan smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
-  imageurl varchar(200) default NULL, -- URL for the item type icon
-  summary MEDIUMTEXT, -- information from the summary field, may include HTML
-  checkinmsg VARCHAR(255), -- message that is displayed when an item with the given item type is checked in
-  checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL, -- type (CSS class) for the checkinmsg, can be "alert" or "message"
-  sip_media_type VARCHAR(3) DEFAULT NULL, -- SIP2 protocol media type for this itemtype
-  hideinopac tinyint(1) NOT NULL DEFAULT 0, -- Hide the item type from the search options in OPAC
-  searchcategory varchar(80) default NULL, -- Group this item type with others with the same value on OPAC search options
+  itemtype varchar(10) NOT NULL default '' COMMENT "unique key, a code associated with the item type",
+  parent_type varchar(10) NULL default NULL COMMENT "unique key, a code associated with the item type",
+  description LONGTEXT COMMENT "a plain text explanation of the item type",
+  rentalcharge decimal(28,6) default NULL COMMENT "the amount charged when this item is checked out/issued",
+  rentalcharge_daily decimal(28,6) default NULL COMMENT "the amount charged for each day between checkout date and due date",
+  rentalcharge_daily_calendar tinyint(1) NOT NULL DEFAULT 1 COMMENT "controls if the daily rental fee is calculated directly or using finesCalendar",
+  rentalcharge_hourly decimal(28,6) default NULL COMMENT "the amount charged for each hour between checkout date and due date",
+  rentalcharge_hourly_calendar tinyint(1) NOT NULL DEFAULT 1 COMMENT "controls if the hourly rental fee is calculated directly or using finesCalendar",
+  defaultreplacecost decimal(28,6) default NULL COMMENT "default replacement cost",
+  processfee decimal(28,6) default NULL COMMENT "default text be recorded in the column note when the processing fee is applied",
+  notforloan smallint(6) default NULL COMMENT "1 if the item is not for loan, 0 if the item is available for loan",
+  imageurl varchar(200) default NULL COMMENT "URL for the item type icon",
+  summary MEDIUMTEXT COMMENT "information from the summary field, may include HTML",
+  checkinmsg VARCHAR(255) COMMENT "message that is displayed when an item with the given item type is checked in",
+  checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL COMMENT "type (CSS class) for the checkinmsg, can be "alert" or "message"",
+  sip_media_type VARCHAR(3) DEFAULT NULL COMMENT "SIP2 protocol media type for this itemtype",
+  hideinopac tinyint(1) NOT NULL DEFAULT 0 COMMENT "Hide the item type from the search options in OPAC",
+  searchcategory varchar(80) default NULL COMMENT "Group this item type with others with the same value on OPAC search options",
   PRIMARY KEY  (`itemtype`),
   CONSTRAINT itemtypes_ibfk_1 FOREIGN KEY (parent_type) REFERENCES itemtypes(itemtype) ON UPDATE CASCADE ON DELETE CASCADE,
   UNIQUE KEY `itemtype` (`itemtype`)
@@ -954,15 +954,15 @@ CREATE TABLE `itemtypes` ( -- defines the item types
 
 DROP TABLE IF EXISTS `branchtransfers`;
 CREATE TABLE `branchtransfers` ( -- information for items that are in transit between branches
-  `branchtransfer_id` int(12) NOT NULL auto_increment, -- primary key
-  `itemnumber` int(11) NOT NULL default 0, -- the itemnumber that it is in transit (items.itemnumber)
-  `daterequested` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date the transfer was requested
-  `datesent` datetime default NULL, -- the date the transfer was initialized
-  `frombranch` varchar(10) NOT NULL default '', -- the branch the transfer is coming from
-  `datearrived` datetime default NULL, -- the date the transfer arrived at its destination
-  `tobranch` varchar(10) NOT NULL default '', -- the branch the transfer was going to
-  `comments` LONGTEXT, -- any comments related to the transfer
-  `reason` ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve'), -- what triggered the transfer
+  `branchtransfer_id` int(12) NOT NULL auto_increment COMMENT "primary key",
+  `itemnumber` int(11) NOT NULL default 0 COMMENT "the itemnumber that it is in transit (items.itemnumber)",
+  `daterequested` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT "the date the transfer was requested",
+  `datesent` datetime default NULL COMMENT "the date the transfer was initialized",
+  `frombranch` varchar(10) NOT NULL default '' COMMENT "the branch the transfer is coming from",
+  `datearrived` datetime default NULL COMMENT "the date the transfer arrived at its destination",
+  `tobranch` varchar(10) NOT NULL default '' COMMENT "the branch the transfer was going to",
+  `comments` LONGTEXT COMMENT "any comments related to the transfer",
+  `reason` ENUM('Manual', 'StockrotationAdvance', 'StockrotationRepatriation', 'ReturnToHome', 'ReturnToHolding', 'RotatingCollection', 'Reserve', 'LostReserve', 'CancelReserve') COMMENT "what triggered the transfer",
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
@@ -1193,11 +1193,11 @@ CREATE TABLE `matchchecks` (
 
 DROP TABLE IF EXISTS `need_merge_authorities`;
 CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records still to be merged by merge_authority cron job
-  `id` int NOT NULL auto_increment PRIMARY KEY, -- unique id
-  `authid` bigint NOT NULL, -- reference to original authority record
-  `authid_new` bigint, -- reference to optional new authority record
-  `reportxml` MEDIUMTEXT, -- xml showing original reporting tag
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time last modified
+  `id` int NOT NULL auto_increment PRIMARY KEY COMMENT "unique id",
+  `authid` bigint NOT NULL COMMENT "reference to original authority record",
+  `authid_new` bigint COMMENT "reference to optional new authority record",
+  `reportxml` MEDIUMTEXT COMMENT "xml showing original reporting tag",
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "date and time last modified",
   `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1=done, 2=in progress)
 -- Note: authid and authid_new should NOT be FOREIGN keys !
 -- authid may have been deleted; authid_new may be zero
@@ -1260,18 +1260,18 @@ CREATE TABLE `oai_sets_biblios` (
 
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` ( -- overdue notice status and triggers
-  `overduerules_id` int(11) NOT NULL AUTO_INCREMENT, -- unique identifier for the overduerules
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
-  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table to define which patron category this rule is for
-  `delay1` int(4) default NULL, -- number of days after the item is overdue that the first notice is sent
-  `letter1` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the first notice
-  `debarred1` varchar(1) default 0, -- is the patron restricted when the first notice is sent (1 for yes, 0 for no)
-  `delay2` int(4) default NULL, -- number of days after the item is overdue that the second notice is sent
-  `debarred2` varchar(1) default 0, -- is the patron restricted when the second notice is sent (1 for yes, 0 for no)
-  `letter2` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the second notice
-  `delay3` int(4) default NULL, -- number of days after the item is overdue that the third notice is sent
-  `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
-  `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
+  `overduerules_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique identifier for the overduerules",
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)",
+  `categorycode` varchar(10) NOT NULL default '' COMMENT "foreign key from the categories table to define which patron category this rule is for",
+  `delay1` int(4) default NULL COMMENT "number of days after the item is overdue that the first notice is sent",
+  `letter1` varchar(20) default NULL COMMENT "foreign key from the letter table to define which notice should be sent as the first notice",
+  `debarred1` varchar(1) default 0 COMMENT "is the patron restricted when the first notice is sent (1 for yes, 0 for no)",
+  `delay2` int(4) default NULL COMMENT "number of days after the item is overdue that the second notice is sent",
+  `debarred2` varchar(1) default 0 COMMENT "is the patron restricted when the second notice is sent (1 for yes, 0 for no)",
+  `letter2` varchar(20) default NULL COMMENT "foreign key from the letter table to define which notice should be sent as the second notice",
+  `delay3` int(4) default NULL COMMENT "number of days after the item is overdue that the third notice is sent",
+  `letter3` varchar(20) default NULL COMMENT "foreign key from the letter table to define which notice should be sent as the third notice",
+  `debarred3` int(1) default 0 COMMENT "is the patron restricted when the third notice is sent (1 for yes, 0 for no)",
   PRIMARY KEY  (`overduerules_id`),
   UNIQUE KEY `overduerules_branch_cat` (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1320,13 +1320,13 @@ CREATE TABLE `printers_profile` (
 
 DROP TABLE IF EXISTS `repeatable_holidays`;
 CREATE TABLE `repeatable_holidays` ( -- information for the days the library is closed
-  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `branchcode` varchar(10) NOT NULL, -- foreign key from the branches table, defines which branch this closing is for
-  `weekday` smallint(6) default NULL, -- day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on
-  `day` smallint(6) default NULL, -- day of the month this closing is on
-  `month` smallint(6) default NULL, -- month this closing is in
-  `title` varchar(50) NOT NULL default '', -- title of this closing
-  `description` MEDIUMTEXT NOT NULL, -- description for this closing
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `branchcode` varchar(10) NOT NULL COMMENT "foreign key from the branches table, defines which branch this closing is for",
+  `weekday` smallint(6) default NULL COMMENT "day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on",
+  `day` smallint(6) default NULL COMMENT "day of the month this closing is on",
+  `month` smallint(6) default NULL COMMENT "month this closing is in",
+  `title` varchar(50) NOT NULL default '' COMMENT "title of this closing",
+  `description` MEDIUMTEXT NOT NULL COMMENT "description for this closing",
   PRIMARY KEY  (`id`),
   CONSTRAINT `repeatable_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1337,13 +1337,13 @@ CREATE TABLE `repeatable_holidays` ( -- information for the days the library is 
 
 DROP TABLE IF EXISTS `reports_dictionary`;
 CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for use in reports
-   `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-   `name` varchar(255) default NULL, -- name for this definition
-   `description` MEDIUMTEXT, -- description for this definition
-   `date_created` datetime default NULL, -- date and time this definition was created
-   `date_modified` datetime default NULL, -- date and time this definition was last modified
-   `saved_sql` MEDIUMTEXT, -- SQL snippet for us in reports
-   report_area varchar(6) DEFAULT NULL, -- Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)
+   `id` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+   `name` varchar(255) default NULL COMMENT "name for this definition",
+   `description` MEDIUMTEXT COMMENT "description for this definition",
+   `date_created` datetime default NULL COMMENT "date and time this definition was created",
+   `date_modified` datetime default NULL COMMENT "date and time this definition was last modified",
+   `saved_sql` MEDIUMTEXT COMMENT "SQL snippet for us in reports",
+   report_area varchar(6) DEFAULT NULL COMMENT "Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)",
    PRIMARY KEY  (id),
    KEY dictionary_area_idx (report_area)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1354,15 +1354,15 @@ CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for
 
 DROP TABLE IF EXISTS `saved_sql`;
 CREATE TABLE saved_sql ( -- saved sql reports
-   `id` int(11) NOT NULL auto_increment, -- unique id and primary key assigned by Koha
-   `borrowernumber` int(11) default NULL, -- the staff member who created this report (borrowers.borrowernumber)
-   `date_created` datetime default NULL, -- the date this report was created
-   `last_modified` datetime default NULL, -- the date this report was last edited
-   `savedsql` MEDIUMTEXT, -- the SQL for this report
+   `id` int(11) NOT NULL auto_increment COMMENT "unique id and primary key assigned by Koha",
+   `borrowernumber` int(11) default NULL COMMENT "the staff member who created this report (borrowers.borrowernumber)",
+   `date_created` datetime default NULL COMMENT "the date this report was created",
+   `last_modified` datetime default NULL COMMENT "the date this report was last edited",
+   `savedsql` MEDIUMTEXT COMMENT "the SQL for this report",
    `last_run` datetime default NULL,
-   `report_name` varchar(255) NOT NULL default '', -- the name of this report
-   `type` varchar(255) default NULL, -- always 1 for tabular
-   `notes` MEDIUMTEXT, -- the notes or description given to this report
+   `report_name` varchar(255) NOT NULL default '' COMMENT "the name of this report",
+   `type` varchar(255) default NULL COMMENT "always 1 for tabular",
+   `notes` MEDIUMTEXT COMMENT "the notes or description given to this report",
    `cache_expiry` int NOT NULL default 300,
    `public` tinyint(1) NOT NULL default FALSE,
     report_area varchar(6) default NULL,
@@ -1413,14 +1413,14 @@ CREATE TABLE `search_field` (
 
 DROP TABLE IF EXISTS `search_history`;
 CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
-  `id` int(11) NOT NULL auto_increment, -- search history id
-  `userid` int(11) NOT NULL, -- the patron who performed the search (borrowers.borrowernumber)
-  `sessionid` varchar(32) NOT NULL, -- a system generated session id
-  `query_desc` varchar(255) NOT NULL, -- the search that was performed
-  `query_cgi` MEDIUMTEXT NOT NULL, -- the string to append to the search url to rerun the search
-  `type` varchar(16) NOT NULL DEFAULT 'biblio', -- search type, must be 'biblio' or 'authority'
-  `total` int(11) NOT NULL, -- the total of results found
-  `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
+  `id` int(11) NOT NULL auto_increment COMMENT "search history id",
+  `userid` int(11) NOT NULL COMMENT "the patron who performed the search (borrowers.borrowernumber)",
+  `sessionid` varchar(32) NOT NULL COMMENT "a system generated session id",
+  `query_desc` varchar(255) NOT NULL COMMENT "the search that was performed",
+  `query_cgi` MEDIUMTEXT NOT NULL COMMENT "the string to append to the search url to rerun the search",
+  `type` varchar(16) NOT NULL DEFAULT 'biblio' COMMENT "search type, must be 'biblio' or 'authority'",
+  `total` int(11) NOT NULL COMMENT "the total of results found",
+  `time` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT "the date and time the search was run",
   KEY `userid` (`userid`),
   KEY `sessionid` (`sessionid`),
   PRIMARY KEY (`id`)
@@ -1488,82 +1488,82 @@ CREATE TABLE `sms_providers` (
 
 DROP TABLE IF EXISTS `borrowers`;
 CREATE TABLE `borrowers` ( -- this table includes information about your patrons/borrowers/members
-  `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
-  `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` LONGTEXT, -- patron/borrower's last name (surname)
-  `firstname` MEDIUMTEXT, -- patron/borrower's first name
-  `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` LONGTEXT, -- any other names associated with the patron/borrower
-  `initials` MEDIUMTEXT, -- initials for your patron/borrower
-  `streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's primary address
-  `streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
-  `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
-  `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
-  `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
-  `zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's primary address
-  `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
-  `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
-  `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
-  `mobile` TINYTEXT default NULL, -- the other phone number for your patron/borrower's primary address
-  `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
-  `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
-  `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
-  `B_streetnumber` TINYTEXT default NULL, -- the house number for your patron/borrower's alternate address
-  `B_streettype` TINYTEXT default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
-  `B_address` MEDIUMTEXT default NULL, -- the first address line for your patron/borrower's alternate address
-  `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
-  `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
-  `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
-  `B_zipcode` TINYTEXT default NULL, -- the zip or postal code for your patron/borrower's alternate address
-  `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
-  `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
-  `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
-  `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
-  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
-  `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
-  `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
-  `date_renewed` date default NULL, -- date the patron/borrower's card was last renewed
-  `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
-  `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
-  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of the patron
-  `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
-  `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
-  `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
-  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff interface
-  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
-  `sex` varchar(1) default NULL, -- patron/borrower's gender
-  `password` varchar(60) default NULL, -- patron/borrower's Bcrypt encrypted password
-  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
-  `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff interface log in
-  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff interface
-  `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
-  `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
-  `altcontactfirstname` MEDIUMTEXT  default NULL, -- first name of alternate contact for the patron/borrower
-  `altcontactsurname` MEDIUMTEXT default NULL, -- surname or last name of the alternate contact for the patron/borrower
-  `altcontactaddress1` MEDIUMTEXT default NULL, -- the first address line for the alternate contact for the patron/borrower
-  `altcontactaddress2` MEDIUMTEXT default NULL, -- the second address line for the alternate contact for the patron/borrower
-  `altcontactaddress3` MEDIUMTEXT default NULL, -- the city for the alternate contact for the patron/borrower
-  `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
-  `altcontactzipcode` MEDIUMTEXT default NULL, -- the zipcode for the alternate contact for the patron/borrower
-  `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
-  `altcontactphone` MEDIUMTEXT default NULL, -- the phone number for the alternate contact for the patron/borrower
-  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
-  `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
-  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their checkout history
-  `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's fines
-  `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
-  `checkprevcheckout` varchar(7) NOT NULL default 'inherit', -- produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.
-  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
-  `lastseen` datetime default NULL, -- last time a patron has been seen (connected at the OPAC or staff interface)
-  `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
-  `login_attempts` int(4) NOT NULL default 0, -- number of failed login attemps
-  `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
-  `anonymized` TINYINT(1) NOT NULL DEFAULT 0, -- flag for data anonymization
-  `autorenew_checkouts` TINYINT(1) NOT NULL DEFAULT 1, -- flag for allowing auto-renewal
+  `borrowernumber` int(11) NOT NULL auto_increment COMMENT "primary key, Koha assigned ID number for patrons/borrowers",
+  `cardnumber` varchar(32) default NULL COMMENT "unique key, library assigned ID number for patrons/borrowers",
+  `surname` LONGTEXT COMMENT "patron/borrower's last name (surname)",
+  `firstname` MEDIUMTEXT COMMENT "patron/borrower's first name",
+  `title` LONGTEXT COMMENT "patron/borrower's title, for example: Mr. or Mrs.",
+  `othernames` LONGTEXT COMMENT "any other names associated with the patron/borrower",
+  `initials` MEDIUMTEXT COMMENT "initials for your patron/borrower",
+  `streetnumber` TINYTEXT default NULL COMMENT "the house number for your patron/borrower's primary address",
+  `streettype` TINYTEXT default NULL COMMENT "the street type (Rd., Blvd, etc) for your patron/borrower's primary address",
+  `address` LONGTEXT COMMENT "the first address line for your patron/borrower's primary address",
+  `address2` MEDIUMTEXT COMMENT "the second address line for your patron/borrower's primary address",
+  `city` LONGTEXT COMMENT "the city or town for your patron/borrower's primary address",
+  `state` MEDIUMTEXT default NULL COMMENT "the state or province for your patron/borrower's primary address",
+  `zipcode` TINYTEXT default NULL COMMENT "the zip or postal code for your patron/borrower's primary address",
+  `country` MEDIUMTEXT COMMENT "the country for your patron/borrower's primary address",
+  `email` LONGTEXT COMMENT "the primary email address for your patron/borrower's primary address",
+  `phone` MEDIUMTEXT COMMENT "the primary phone number for your patron/borrower's primary address",
+  `mobile` TINYTEXT default NULL COMMENT "the other phone number for your patron/borrower's primary address",
+  `fax` LONGTEXT COMMENT "the fax number for your patron/borrower's primary address",
+  `emailpro` MEDIUMTEXT COMMENT "the secondary email addres for your patron/borrower's primary address",
+  `phonepro` MEDIUMTEXT COMMENT "the secondary phone number for your patron/borrower's primary address",
+  `B_streetnumber` TINYTEXT default NULL COMMENT "the house number for your patron/borrower's alternate address",
+  `B_streettype` TINYTEXT default NULL COMMENT "the street type (Rd., Blvd, etc) for your patron/borrower's alternate address",
+  `B_address` MEDIUMTEXT default NULL COMMENT "the first address line for your patron/borrower's alternate address",
+  `B_address2` MEDIUMTEXT default NULL COMMENT "the second address line for your patron/borrower's alternate address",
+  `B_city` LONGTEXT COMMENT "the city or town for your patron/borrower's alternate address",
+  `B_state` MEDIUMTEXT default NULL COMMENT "the state for your patron/borrower's alternate address",
+  `B_zipcode` TINYTEXT default NULL COMMENT "the zip or postal code for your patron/borrower's alternate address",
+  `B_country` MEDIUMTEXT COMMENT "the country for your patron/borrower's alternate address",
+  `B_email` MEDIUMTEXT COMMENT "the patron/borrower's alternate email address",
+  `B_phone` LONGTEXT COMMENT "the patron/borrower's alternate phone number",
+  `dateofbirth` date default NULL COMMENT "the patron/borrower's date of birth (YYYY-MM-DD)",
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "foreign key from the branches table, includes the code of the patron/borrower's home branch",
+  `categorycode` varchar(10) NOT NULL default '' COMMENT "foreign key from the categories table, includes the code of the patron category",
+  `dateenrolled` date default NULL COMMENT "date the patron was added to Koha (YYYY-MM-DD)",
+  `dateexpiry` date default NULL COMMENT "date the patron/borrower's card is set to expire (YYYY-MM-DD)",
+  `date_renewed` date default NULL COMMENT "date the patron/borrower's card was last renewed",
+  `gonenoaddress` tinyint(1) default NULL COMMENT "set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address",
+  `lost` tinyint(1) default NULL COMMENT "set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card",
+  `debarred` date default NULL COMMENT "until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)",
+  `debarredcomment` VARCHAR(255) DEFAULT NULL COMMENT "comment on the stop of the patron",
+  `contactname` LONGTEXT COMMENT "used for children and profesionals to include surname or last name of guarantor or organization name",
+  `contactfirstname` MEDIUMTEXT COMMENT "used for children to include first name of guarantor",
+  `contacttitle` MEDIUMTEXT COMMENT "used for children to include title (Mr., Mrs., etc) of guarantor",
+  `borrowernotes` LONGTEXT COMMENT "a note on the patron/borrower's account that is only visible in the staff interface",
+  `relationship` varchar(100) default NULL COMMENT "used for children to include the relationship to their guarantor",
+  `sex` varchar(1) default NULL COMMENT "patron/borrower's gender",
+  `password` varchar(60) default NULL COMMENT "patron/borrower's Bcrypt encrypted password",
+  `flags` int(11) default NULL COMMENT "will include a number associated with the staff member's permissions",
+  `userid` varchar(75) default NULL COMMENT "patron/borrower's opac and/or staff interface log in",
+  `opacnote` LONGTEXT COMMENT "a note on the patron/borrower's account that is visible in the OPAC and staff interface",
+  `contactnote` varchar(255) default NULL COMMENT "a note related to the patron/borrower's alternate address",
+  `sort1` varchar(80) default NULL COMMENT "a field that can be used for any information unique to the library",
+  `sort2` varchar(80) default NULL COMMENT "a field that can be used for any information unique to the library",
+  `altcontactfirstname` MEDIUMTEXT  default NULL COMMENT "first name of alternate contact for the patron/borrower",
+  `altcontactsurname` MEDIUMTEXT default NULL COMMENT "surname or last name of the alternate contact for the patron/borrower",
+  `altcontactaddress1` MEDIUMTEXT default NULL COMMENT "the first address line for the alternate contact for the patron/borrower",
+  `altcontactaddress2` MEDIUMTEXT default NULL COMMENT "the second address line for the alternate contact for the patron/borrower",
+  `altcontactaddress3` MEDIUMTEXT default NULL COMMENT "the city for the alternate contact for the patron/borrower",
+  `altcontactstate` MEDIUMTEXT default NULL COMMENT "the state for the alternate contact for the patron/borrower",
+  `altcontactzipcode` MEDIUMTEXT default NULL COMMENT "the zipcode for the alternate contact for the patron/borrower",
+  `altcontactcountry` MEDIUMTEXT default NULL COMMENT "the country for the alternate contact for the patron/borrower",
+  `altcontactphone` MEDIUMTEXT default NULL COMMENT "the phone number for the alternate contact for the patron/borrower",
+  `smsalertnumber` varchar(50) default NULL COMMENT "the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)",
+  `sms_provider_id` int(11) DEFAULT NULL COMMENT "the provider of the mobile phone number defined in smsalertnumber",
+  `privacy` integer(11) DEFAULT '1' NOT NULL COMMENT "patron/borrower's privacy settings related to their checkout history",
+  `privacy_guarantor_fines` tinyint(1) NOT NULL DEFAULT '0' COMMENT "controls if relatives can see this patron's fines",
+  `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0' COMMENT "controls if relatives can see this patron's checkouts",
+  `checkprevcheckout` varchar(7) NOT NULL default 'inherit' COMMENT "produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'.",
+  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "time of last change could be useful for synchronization with external systems (among others)",
+  `lastseen` datetime default NULL COMMENT "last time a patron has been seen (connected at the OPAC or staff interface)",
+  `lang` varchar(25) NOT NULL default 'default' COMMENT "lang to use to send notices to this patron",
+  `login_attempts` int(4) NOT NULL default 0 COMMENT "number of failed login attemps",
+  `overdrive_auth_token` MEDIUMTEXT default NULL COMMENT "persist OverDrive auth token",
+  `anonymized` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "flag for data anonymization",
+  `autorenew_checkouts` TINYINT(1) NOT NULL DEFAULT 1 COMMENT "flag for allowing auto-renewal",
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
@@ -1584,10 +1584,10 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
 
 DROP TABLE IF EXISTS `borrower_attributes`;
 CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as extended patron attributes linked to patrons/borrowers
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Row id field
-  `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines which patron/borrower has this attribute
-  `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
-  `attribute` varchar(255) default NULL, -- custom patron field value
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "Row id field",
+  `borrowernumber` int(11) NOT NULL COMMENT "foreign key from the borrowers table, defines which patron/borrower has this attribute",
+  `code` varchar(10) NOT NULL COMMENT "foreign key from the borrower_attribute_types table, defines which custom field this value was entered for",
+  `attribute` varchar(255) default NULL COMMENT "custom patron field value",
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute` (191)),
   CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -1602,14 +1602,14 @@ CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as 
 
 DROP TABLE IF EXISTS `borrower_debarments`;
 CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
-  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT, -- unique key for the restriction
-  borrowernumber int(11) NOT NULL, -- foreign key for borrowers.borrowernumber for patron who is restricted
-  expiration date DEFAULT NULL, -- expiration date of the restriction
-  `type` enum('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL', -- type of restriction
-  `comment` MEDIUMTEXT, -- comments about the restriction
-  manager_id int(11) DEFAULT NULL, -- foreign key for borrowers.borrowernumber for the librarian managing the restriction
-  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date the restriction was added
-  updated timestamp NULL DEFAULT NULL, -- date the restriction was updated
+  borrower_debarment_id int(11) NOT NULL AUTO_INCREMENT COMMENT "unique key for the restriction",
+  borrowernumber int(11) NOT NULL COMMENT "foreign key for borrowers.borrowernumber for patron who is restricted",
+  expiration date DEFAULT NULL COMMENT "expiration date of the restriction",
+  `type` enum('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL' COMMENT "type of restriction",
+  `comment` MEDIUMTEXT COMMENT "comments about the restriction",
+  manager_id int(11) DEFAULT NULL COMMENT "foreign key for borrowers.borrowernumber for the librarian managing the restriction",
+  created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "date the restriction was added",
+  updated timestamp NULL DEFAULT NULL COMMENT "date the restriction was updated",
   PRIMARY KEY (borrower_debarment_id),
   KEY borrowernumber (borrowernumber),
   CONSTRAINT `borrower_debarments_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -1622,11 +1622,11 @@ CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
 
 DROP TABLE IF EXISTS `api_keys`;
 CREATE TABLE `api_keys` (
-    `client_id`   VARCHAR(191) NOT NULL,           -- API client ID
-    `secret`      VARCHAR(191) NOT NULL,           -- API client secret used for API authentication
-    `description` VARCHAR(255) NOT NULL,           -- API client description
-    `patron_id`   INT(11) NOT NULL,                -- Foreign key to the borrowers table
-    `active`      TINYINT(1) DEFAULT 1 NOT NULL,   -- 0 means this API key is revoked
+    `client_id`   VARCHAR(191) NOT NULL COMMENT "API client ID",
+    `secret`      VARCHAR(191) NOT NULL COMMENT "API client secret used for API authentication",
+    `description` VARCHAR(255) NOT NULL COMMENT "API client description",
+    `patron_id`   INT(11) NOT NULL COMMENT "Foreign key to the borrowers table",
+    `active`      TINYINT(1) DEFAULT 1 NOT NULL COMMENT "0 means this API key is revoked",
     PRIMARY KEY `client_id` (`client_id`),
     UNIQUE KEY `secret` (`secret`),
     KEY `patron_id` (`patron_id`),
@@ -1642,24 +1642,24 @@ CREATE TABLE `api_keys` (
 
 DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` ( -- information related to check outs or issues
-  `issue_id` int(11) NOT NULL AUTO_INCREMENT, -- primary key for issues table
-  `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
-  `issuer_id` INT(11) NULL DEFAULT NULL, -- foreign key, linking this to the borrowers table for the user who checked out this item
-  `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
-  `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
-  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
-  `returndate` datetime default NULL, -- date the item was returned, will be NULL until moved to old_issues
-  `lastreneweddate` datetime default NULL, -- date the item was last renewed
-  `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
-  `unseen_renewals` tinyint(4) NOT NULL default 0, -- lists the number of consecutive times the item was renewed without being seen
-  `auto_renew` tinyint(1) default FALSE, -- automatic renewal
-  `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
-  `issuedate` datetime default NULL, -- date the item was checked out or issued
-  `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
-  `note` LONGTEXT default NULL, -- issue note text
-  `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
-  `noteseen` int(1) default NULL, -- describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null
+  `issue_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "primary key for issues table",
+  `borrowernumber` int(11) COMMENT "foreign key, linking this to the borrowers table for the patron this item was checked out to",
+  `issuer_id` INT(11) NULL DEFAULT NULL COMMENT "foreign key, linking this to the borrowers table for the user who checked out this item",
+  `itemnumber` int(11) COMMENT "foreign key, linking this to the items table for the item that was checked out",
+  `date_due` datetime default NULL COMMENT "datetime the item is due (yyyy-mm-dd hh:mm::ss)",
+  `branchcode` varchar(10) default NULL COMMENT "foreign key, linking to the branches table for the location the item was checked out",
+  `returndate` datetime default NULL COMMENT "date the item was returned, will be NULL until moved to old_issues",
+  `lastreneweddate` datetime default NULL COMMENT "date the item was last renewed",
+  `renewals` tinyint(4) NOT NULL default 0 COMMENT "lists the number of times the item was renewed",
+  `unseen_renewals` tinyint(4) NOT NULL default 0 COMMENT "lists the number of consecutive times the item was renewed without being seen",
+  `auto_renew` tinyint(1) default FALSE COMMENT "automatic renewal",
+  `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT "automatic renewal error",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this record was last touched",
+  `issuedate` datetime default NULL COMMENT "date the item was checked out or issued",
+  `onsite_checkout` int(1) NOT NULL default 0 COMMENT "in house use flag",
+  `note` LONGTEXT default NULL COMMENT "issue note text",
+  `notedate` datetime default NULL COMMENT "datetime of issue note (yyyy-mm-dd hh:mm::ss)",
+  `noteseen` int(1) default NULL COMMENT "describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null",
   PRIMARY KEY (`issue_id`),
   UNIQUE KEY `itemnumber` (`itemnumber`),
   KEY `issuesborridx` (`borrowernumber`),
@@ -1677,24 +1677,24 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
 
 DROP TABLE IF EXISTS `old_issues`;
 CREATE TABLE `old_issues` ( -- lists items that were checked out and have been returned
-  `issue_id` int(11) NOT NULL, -- primary key for issues table
-  `borrowernumber` int(11) default NULL, -- foreign key, linking this to the borrowers table for the patron this item was checked out to
-  `issuer_id` INT(11) NULL DEFAULT NULL, -- foreign key, linking this to the borrowers table for the user who checked out this item
-  `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
-  `date_due` datetime default NULL, -- date the item is due (yyyy-mm-dd)
-  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
-  `returndate` datetime default NULL, -- date the item was returned
-  `lastreneweddate` datetime default NULL, -- date the item was last renewed
-  `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
-  `unseen_renewals` tinyint(4) NOT NULL default 0, -- lists the number of consecutive times the item was renewed without being seen
-  `auto_renew` tinyint(1) default FALSE, -- automatic renewal
-  `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
-  `issuedate` datetime default NULL, -- date the item was checked out or issued
-  `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
-  `note` LONGTEXT default NULL, -- issue note text
-  `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
-  `noteseen` int(1) default NULL, -- describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null
+  `issue_id` int(11) NOT NULL COMMENT "primary key for issues table",
+  `borrowernumber` int(11) default NULL COMMENT "foreign key, linking this to the borrowers table for the patron this item was checked out to",
+  `issuer_id` INT(11) NULL DEFAULT NULL COMMENT "foreign key, linking this to the borrowers table for the user who checked out this item",
+  `itemnumber` int(11) default NULL COMMENT "foreign key, linking this to the items table for the item that was checked out",
+  `date_due` datetime default NULL COMMENT "date the item is due (yyyy-mm-dd)",
+  `branchcode` varchar(10) default NULL COMMENT "foreign key, linking to the branches table for the location the item was checked out",
+  `returndate` datetime default NULL COMMENT "date the item was returned",
+  `lastreneweddate` datetime default NULL COMMENT "date the item was last renewed",
+  `renewals` tinyint(4) NOT NULL default 0 COMMENT "lists the number of times the item was renewed",
+  `unseen_renewals` tinyint(4) NOT NULL default 0 COMMENT "lists the number of consecutive times the item was renewed without being seen",
+  `auto_renew` tinyint(1) default FALSE COMMENT "automatic renewal",
+  `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT "automatic renewal error",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this record was last touched",
+  `issuedate` datetime default NULL COMMENT "date the item was checked out or issued",
+  `onsite_checkout` int(1) NOT NULL default 0 COMMENT "in house use flag",
+  `note` LONGTEXT default NULL COMMENT "issue note text",
+  `notedate` datetime default NULL COMMENT "datetime of issue note (yyyy-mm-dd hh:mm::ss)",
+  `noteseen` int(1) default NULL COMMENT "describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null",
   PRIMARY KEY (`issue_id`),
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
@@ -1755,16 +1755,16 @@ CREATE TABLE `creator_batches` (
 
 DROP TABLE IF EXISTS `opac_news`;
 CREATE TABLE `opac_news` ( -- data from the news tool
-  `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
-  `branchcode` varchar(10) default NULL, -- branch code users to create branch specific news, NULL is every branch.
-  `title` varchar(250) NOT NULL default '', -- title of the news article
-  `content` MEDIUMTEXT NOT NULL, -- the body of your news article
-  `lang` varchar(50) NOT NULL default '', -- location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
-  `published_on` date DEFAULT NULL, -- publication date
-  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- last modification
-  `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
-  `number` int(11) default NULL, -- the order in which this article appears in that specific location
-  `borrowernumber` int(11) default NULL, -- The user who created the news article
+  `idnew` int(10) unsigned NOT NULL auto_increment COMMENT "unique identifier for the news article",
+  `branchcode` varchar(10) default NULL COMMENT "branch code users to create branch specific news, NULL is every branch.",
+  `title` varchar(250) NOT NULL default '' COMMENT "title of the news article",
+  `content` MEDIUMTEXT NOT NULL COMMENT "the body of your news article",
+  `lang` varchar(50) NOT NULL default '' COMMENT "location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)",
+  `published_on` date DEFAULT NULL COMMENT "publication date",
+  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "last modification",
+  `expirationdate` date default NULL COMMENT "date the article is set to expire or no longer be visible",
+  `number` int(11) default NULL COMMENT "the order in which this article appears in that specific location",
+  `borrowernumber` int(11) default NULL COMMENT "The user who created the news article",
   PRIMARY KEY  (`idnew`),
   CONSTRAINT `borrowernumber_fk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT opac_news_branchcode_ibfk FOREIGN KEY (branchcode) REFERENCES branches (branchcode)
@@ -1777,9 +1777,9 @@ CREATE TABLE `opac_news` ( -- data from the news tool
 
 DROP TABLE IF EXISTS `patronimage`;
 CREATE TABLE `patronimage` ( -- information related to patron images
-  `borrowernumber` int(11) NOT NULL, -- the borrowernumber of the patron this image is attached to (borrowers.borrowernumber)
-  `mimetype` varchar(15) NOT NULL, -- the format of the image (png, jpg, etc)
-  `imagefile` mediumblob NOT NULL, -- the image
+  `borrowernumber` int(11) NOT NULL COMMENT "the borrowernumber of the patron this image is attached to (borrowers.borrowernumber)",
+  `mimetype` varchar(15) NOT NULL COMMENT "the format of the image (png, jpg, etc)",
+  `imagefile` mediumblob NOT NULL COMMENT "the image",
   PRIMARY KEY  (`borrowernumber`),
   CONSTRAINT `patronimage_fk1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1790,29 +1790,29 @@ CREATE TABLE `patronimage` ( -- information related to patron images
 
 DROP TABLE IF EXISTS `reserves`;
 CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
-  `reserve_id` int(11) NOT NULL auto_increment, -- primary key
-  `borrowernumber` int(11) NOT NULL default 0, -- foreign key from the borrowers table defining which patron this hold is for
-  `reservedate` date default NULL, -- the date the hold was placed
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key from the biblio table defining which bib record this hold is on
-  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
-  `desk_id` int(11) default NULL, -- foreign key from the desks table defining which desk the patron should pick this hold up at
-  `notificationdate` date default NULL, -- currently unused
-  `reminderdate` date default NULL, -- currently unused
-  `cancellationdate` date default NULL, -- the date this hold was cancelled
-  `cancellation_reason` varchar(80) default NULL, -- optional authorised value CANCELLATION_REASON
-  `reservenotes` LONGTEXT, -- notes related to this hold
-  `priority` smallint(6) NOT NULL DEFAULT 1, -- where in the queue the patron sits
-  `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
-  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
-  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
-  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
+  `reserve_id` int(11) NOT NULL auto_increment COMMENT "primary key",
+  `borrowernumber` int(11) NOT NULL default 0 COMMENT "foreign key from the borrowers table defining which patron this hold is for",
+  `reservedate` date default NULL COMMENT "the date the hold was placed",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key from the biblio table defining which bib record this hold is on",
+  `branchcode` varchar(10) default NULL COMMENT "foreign key from the branches table defining which branch the patron wishes to pick this hold up at",
+  `desk_id` int(11) default NULL COMMENT "foreign key from the desks table defining which desk the patron should pick this hold up at",
+  `notificationdate` date default NULL COMMENT "currently unused",
+  `reminderdate` date default NULL COMMENT "currently unused",
+  `cancellationdate` date default NULL COMMENT "the date this hold was cancelled",
+  `cancellation_reason` varchar(80) default NULL COMMENT "optional authorised value CANCELLATION_REASON",
+  `reservenotes` LONGTEXT COMMENT "notes related to this hold",
+  `priority` smallint(6) NOT NULL DEFAULT 1 COMMENT "where in the queue the patron sits",
+  `found` varchar(1) default NULL COMMENT "a one letter code defining what the status is of the hold is after it has been confirmed",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this hold was last updated",
+  `itemnumber` int(11) default NULL COMMENT "foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with",
+  `waitingdate` date default NULL COMMENT "the date the item was marked as waiting for the patron at the library",
+  `expirationdate` DATE DEFAULT NULL COMMENT "the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)",
   `lowestPriority` tinyint(1) NOT NULL DEFAULT 0,
   `suspend` tinyint(1) NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
-  `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
-  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0, -- Is the hpld placed at item level
-  `non_priority` tinyint(1) NOT NULL DEFAULT 0, -- Is this a non priority hold
+  `itemtype` VARCHAR(10) NULL DEFAULT NULL COMMENT "If record level hold, the optional itemtype of the item the patron is requesting",
+  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0 COMMENT "Is the hpld placed at item level",
+  `non_priority` tinyint(1) NOT NULL DEFAULT 0 COMMENT "Is this a non priority hold",
   PRIMARY KEY (`reserve_id`),
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
@@ -1835,29 +1835,29 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
 
 DROP TABLE IF EXISTS `old_reserves`;
 CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have been completed (either filled or cancelled)
-  `reserve_id` int(11) NOT NULL, -- primary key
-  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron this hold is for
-  `reservedate` date default NULL, -- the date the hold was places
-  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bib record this hold is on
-  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
-  `desk_id` int(11) default NULL, -- foreign key from the desks table defining which desk the patron should pick this hold up at
-  `notificationdate` date default NULL, -- currently unused
-  `reminderdate` date default NULL, -- currently unused
-  `cancellationdate` date default NULL, -- the date this hold was cancelled
-  `cancellation_reason` varchar(80) default NULL, -- optional authorised value CANCELLATION_REASON
-  `reservenotes` LONGTEXT, -- notes related to this hold
-  `priority` smallint(6) NOT NULL DEFAULT 1, -- where in the queue the patron sits
-  `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
-  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
-  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
-  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
-  `lowestPriority` tinyint(1) NOT NULL DEFAULT 0, -- has this hold been pinned to the lowest priority in the holds queue (1 for yes, 0 for no)
-  `suspend` tinyint(1) NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
-  `suspend_until` DATETIME NULL DEFAULT NULL, -- the date this hold is suspended until (NULL for infinitely)
-  `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
-  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0, -- Is the hpld placed at item level
-  `non_priority` tinyint(1) NOT NULL DEFAULT 0, -- Is this a non priority hold
+  `reserve_id` int(11) NOT NULL COMMENT "primary key",
+  `borrowernumber` int(11) default NULL COMMENT "foreign key from the borrowers table defining which patron this hold is for",
+  `reservedate` date default NULL COMMENT "the date the hold was places",
+  `biblionumber` int(11) default NULL COMMENT "foreign key from the biblio table defining which bib record this hold is on",
+  `branchcode` varchar(10) default NULL COMMENT "foreign key from the branches table defining which branch the patron wishes to pick this hold up at",
+  `desk_id` int(11) default NULL COMMENT "foreign key from the desks table defining which desk the patron should pick this hold up at",
+  `notificationdate` date default NULL COMMENT "currently unused",
+  `reminderdate` date default NULL COMMENT "currently unused",
+  `cancellationdate` date default NULL COMMENT "the date this hold was cancelled",
+  `cancellation_reason` varchar(80) default NULL COMMENT "optional authorised value CANCELLATION_REASON",
+  `reservenotes` LONGTEXT COMMENT "notes related to this hold",
+  `priority` smallint(6) NOT NULL DEFAULT 1 COMMENT "where in the queue the patron sits",
+  `found` varchar(1) default NULL COMMENT "a one letter code defining what the status is of the hold is after it has been confirmed",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this hold was last updated",
+  `itemnumber` int(11) default NULL COMMENT "foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with",
+  `waitingdate` date default NULL COMMENT "the date the item was marked as waiting for the patron at the library",
+  `expirationdate` DATE DEFAULT NULL COMMENT "the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)",
+  `lowestPriority` tinyint(1) NOT NULL DEFAULT 0 COMMENT "has this hold been pinned to the lowest priority in the holds queue (1 for yes, 0 for no)",
+  `suspend` tinyint(1) NOT NULL DEFAULT 0 COMMENT "in this hold suspended (1 for yes, 0 for no)",
+  `suspend_until` DATETIME NULL DEFAULT NULL COMMENT "the date this hold is suspended until (NULL for infinitely)",
+  `itemtype` VARCHAR(10) NULL DEFAULT NULL COMMENT "If record level hold, the optional itemtype of the item the patron is requesting",
+  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0 COMMENT "Is the hpld placed at item level",
+  `non_priority` tinyint(1) NOT NULL DEFAULT 0 COMMENT "Is this a non priority hold",
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
@@ -1880,12 +1880,12 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
 
 DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` ( -- patron opac comments
-  `reviewid` int(11) NOT NULL auto_increment, -- unique identifier for this comment
-  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron left this comment
-  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bibliographic record this comment is for
-  `review` MEDIUMTEXT, -- the body of the comment
-  `approved` tinyint(4) default 0, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
-  `datereviewed` datetime default NULL, -- the date the comment was left
+  `reviewid` int(11) NOT NULL auto_increment COMMENT "unique identifier for this comment",
+  `borrowernumber` int(11) default NULL COMMENT "foreign key from the borrowers table defining which patron left this comment",
+  `biblionumber` int(11) default NULL COMMENT "foreign key from the biblio table defining which bibliographic record this comment is for",
+  `review` MEDIUMTEXT COMMENT "the body of the comment",
+  `approved` tinyint(4) default 0 COMMENT "whether this comment has been approved by a librarian (1 for yes, 0 for no)",
+  `datereviewed` datetime default NULL COMMENT "the date the comment was left",
   PRIMARY KEY  (`reviewid`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1897,14 +1897,14 @@ CREATE TABLE `reviews` ( -- patron opac comments
 
 DROP TABLE IF EXISTS `special_holidays`;
 CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
-  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `branchcode` varchar(10) NOT NULL, -- foreign key from the branches table, defines which branch this closing is for
-  `day` smallint(6) NOT NULL default 0, -- day of the month this closing is on
-  `month` smallint(6) NOT NULL default 0, -- month this closing is in
-  `year` smallint(6) NOT NULL default 0, -- year this closing is in
-  `isexception` smallint(1) NOT NULL default 1, -- is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
-  `title` varchar(50) NOT NULL default '', -- title for this closing
-  `description` MEDIUMTEXT NOT NULL, -- description of this closing
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `branchcode` varchar(10) NOT NULL COMMENT "foreign key from the branches table, defines which branch this closing is for",
+  `day` smallint(6) NOT NULL default 0 COMMENT "day of the month this closing is on",
+  `month` smallint(6) NOT NULL default 0 COMMENT "month this closing is in",
+  `year` smallint(6) NOT NULL default 0 COMMENT "year this closing is in",
+  `isexception` smallint(1) NOT NULL default 1 COMMENT "is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)",
+  `title` varchar(50) NOT NULL default '' COMMENT "title for this closing",
+  `description` MEDIUMTEXT NOT NULL COMMENT "description of this closing",
   PRIMARY KEY  (`id`),
   CONSTRAINT `special_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1915,16 +1915,16 @@ CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
 
 DROP TABLE IF EXISTS `statistics`;
 CREATE TABLE `statistics` ( -- information related to transactions (circulation and fines) in Koha
-  `datetime` datetime default NULL, -- date and time of the transaction
-  `branch` varchar(10) default NULL, -- foreign key, branch where the transaction occurred
-  `value` double(16,4) default NULL, -- monetary value associated with the transaction
-  `type` varchar(16) default NULL, -- transaction type (localuse, issue, return, renew, writeoff, payment)
-  `other` LONGTEXT, -- used by SIP
-  `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
-  `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
-  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
-  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
-  `ccode` varchar(80) default NULL, -- foreign key from the items table, links transaction to a specific collection code
+  `datetime` datetime default NULL COMMENT "date and time of the transaction",
+  `branch` varchar(10) default NULL COMMENT "foreign key, branch where the transaction occurred",
+  `value` double(16,4) default NULL COMMENT "monetary value associated with the transaction",
+  `type` varchar(16) default NULL COMMENT "transaction type (localuse, issue, return, renew, writeoff, payment)",
+  `other` LONGTEXT COMMENT "used by SIP",
+  `itemnumber` int(11) default NULL COMMENT "foreign key from the items table, links transaction to a specific item",
+  `itemtype` varchar(10) default NULL COMMENT "foreign key from the itemtypes table, links transaction to a specific item type",
+  `location` varchar(80) default NULL COMMENT "authorized value for the shelving location for this item (MARC21 952$c)",
+  `borrowernumber` int(11) default NULL COMMENT "foreign key from the borrowers table, links transaction to a specific borrower",
+  `ccode` varchar(80) default NULL COMMENT "foreign key from the items table, links transaction to a specific collection code",
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `type_idx` (`type`),
@@ -1976,10 +1976,10 @@ CREATE TABLE `pseudonymized_transactions` (
 
 DROP TABLE IF EXISTS pseudonymized_borrower_attributes;
 CREATE TABLE pseudonymized_borrower_attributes ( -- association table between pseudonymized_transactions and borrower_attributes
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Row id field
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "Row id field",
   `transaction_id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
-  `attribute` varchar(255) default NULL, -- custom patron field value
+  `code` varchar(10) NOT NULL COMMENT "foreign key from the borrower_attribute_types table, defines which custom field this value was entered for",
+  `attribute` varchar(255) default NULL COMMENT "custom patron field value",
   CONSTRAINT `pseudonymized_borrower_attributes_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `pseudonymized_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `anonymized_borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2037,46 +2037,46 @@ CREATE TABLE subscription_numberpatterns (
 
 DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` ( -- information related to the subscription
-  `biblionumber` int(11) NOT NULL, -- foreign key for biblio.biblionumber that this subscription is attached to
-  `subscriptionid` int(11) NOT NULL auto_increment, -- unique key for this subscription
-  `librarian` varchar(100) default '', -- the librarian's username from borrowers.userid
-  `startdate` date default NULL, -- start date for this subscription
-  `aqbooksellerid` int(11) default 0, -- foreign key for aqbooksellers.id to link to the vendor
+  `biblionumber` int(11) NOT NULL COMMENT "foreign key for biblio.biblionumber that this subscription is attached to",
+  `subscriptionid` int(11) NOT NULL auto_increment COMMENT "unique key for this subscription",
+  `librarian` varchar(100) default '' COMMENT "the librarian's username from borrowers.userid",
+  `startdate` date default NULL COMMENT "start date for this subscription",
+  `aqbooksellerid` int(11) default 0 COMMENT "foreign key for aqbooksellers.id to link to the vendor",
   `cost` int(11) default 0,
   `aqbudgetid` int(11) default 0,
-  `weeklength` int(11) default 0, -- subscription length in weeks (will not be filled in if monthlength or numberlength is set)
-  `monthlength` int(11) default 0, -- subscription length in weeks (will not be filled in if weeklength or numberlength is set)
-  `numberlength` int(11) default 0, -- subscription length in weeks (will not be filled in if monthlength or weeklength is set)
-  `periodicity` integer default null, -- frequency type links to subscription_frequencies.id
+  `weeklength` int(11) default 0 COMMENT "subscription length in weeks (will not be filled in if monthlength or numberlength is set)",
+  `monthlength` int(11) default 0 COMMENT "subscription length in weeks (will not be filled in if weeklength or numberlength is set)",
+  `numberlength` int(11) default 0 COMMENT "subscription length in weeks (will not be filled in if monthlength or weeklength is set)",
+  `periodicity` integer default null COMMENT "frequency type links to subscription_frequencies.id",
   countissuesperunit INTEGER NOT NULL DEFAULT 1,
-  `notes` LONGTEXT, -- notes
-  `status` varchar(100) NOT NULL default '',  -- status of this subscription
+  `notes` LONGTEXT COMMENT "notes",
+  `status` varchar(100) NOT NULL default '' COMMENT "status of this subscription",
   `lastvalue1` int(11) default NULL,
   `innerloop1` int(11) default 0,
   `lastvalue2` int(11) default NULL,
   `innerloop2` int(11) default 0,
   `lastvalue3` int(11) default NULL,
   `innerloop3` int(11) default 0,
-  `firstacquidate` date default NULL, -- first issue received date
-  `manualhistory` tinyint(1) NOT NULL default 0, -- yes or no to managing the history manually
-  `irregularity` MEDIUMTEXT, -- any irregularities in the subscription
+  `firstacquidate` date default NULL COMMENT "first issue received date",
+  `manualhistory` tinyint(1) NOT NULL default 0 COMMENT "yes or no to managing the history manually",
+  `irregularity` MEDIUMTEXT COMMENT "any irregularities in the subscription",
   skip_serialseq tinyint(1) NOT NULL DEFAULT 0,
   `letter` varchar(20) default NULL,
-  `numberpattern` integer default null, -- the numbering pattern used links to subscription_numberpatterns.id
-  locale VARCHAR(80) DEFAULT NULL, -- for foreign language subscriptions to display months, seasons, etc correctly
+  `numberpattern` integer default null COMMENT "the numbering pattern used links to subscription_numberpatterns.id",
+  locale VARCHAR(80) DEFAULT NULL COMMENT "for foreign language subscriptions to display months, seasons, etc correctly",
   `distributedto` MEDIUMTEXT,
   `internalnotes` LONGTEXT,
-  `callnumber` MEDIUMTEXT, -- default call number
-  `location` varchar(80) NULL default '', -- default shelving location (items.location)
-  `branchcode` varchar(10) NOT NULL default '', -- default branches (items.homebranch)
+  `callnumber` MEDIUMTEXT COMMENT "default call number",
+  `location` varchar(80) NULL default '' COMMENT "default shelving location (items.location)",
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "default branches (items.homebranch)",
   `lastbranch` varchar(10),
-  `serialsadditems` tinyint(1) NOT NULL default '0', -- does receiving this serial create an item record
-  `staffdisplaycount` VARCHAR(10) NULL, -- how many issues to show to the staff
-  `opacdisplaycount` VARCHAR(10) NULL, -- how many issues to show to the public
-  `graceperiod` int(11) NOT NULL default '0', -- grace period in days
-  `enddate` date default NULL, -- subscription end date
-  `closed` TINYINT(1) NOT NULL DEFAULT 0, -- yes / no if the subscription is closed
-  `reneweddate` date default NULL, -- date of last renewal for the subscription
+  `serialsadditems` tinyint(1) NOT NULL default '0' COMMENT "does receiving this serial create an item record",
+  `staffdisplaycount` VARCHAR(10) NULL COMMENT "how many issues to show to the staff",
+  `opacdisplaycount` VARCHAR(10) NULL COMMENT "how many issues to show to the public",
+  `graceperiod` int(11) NOT NULL default '0' COMMENT "grace period in days",
+  `enddate` date default NULL COMMENT "subscription end date",
+  `closed` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "yes / no if the subscription is closed",
+  `reneweddate` date default NULL COMMENT "date of last renewal for the subscription",
   `itemtype` VARCHAR( 10 ) NULL,
   `previousitemtype` VARCHAR( 10 ) NULL,
   `mana_id` int(11) NULL DEFAULT NULL,
@@ -2092,21 +2092,21 @@ CREATE TABLE `subscription` ( -- information related to the subscription
 
 DROP TABLE IF EXISTS `serial`;
 CREATE TABLE `serial` ( -- issues related to subscriptions
-  `serialid` int(11) NOT NULL auto_increment, -- unique key for the issue
-  `biblionumber` int(11) NOT NULL, -- foreign key for the biblio.biblionumber that this issue is attached to
-  `subscriptionid` int(11) NOT NULL, -- foreign key to the subscription.subscriptionid that this issue is part of
-  `serialseq` varchar(100) NOT NULL default '', -- issue information (volume, number, etc)
-  `serialseq_x` varchar( 100 ) NULL DEFAULT NULL, -- first part of issue information
-  `serialseq_y` varchar( 100 ) NULL DEFAULT NULL, -- second part of issue information
-  `serialseq_z` varchar( 100 ) NULL DEFAULT NULL, -- third part of issue information
-  `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
-  `planneddate` date default NULL, -- date expected
-  `notes` MEDIUMTEXT, -- notes
-  `publisheddate` date default NULL, -- date published
-  publisheddatetext varchar(100) default NULL, -- date published (descriptive)
-  `claimdate` date default NULL, -- date claimed
-  claims_count int(11) default 0, -- number of claims made related to this issue
-  `routingnotes` MEDIUMTEXT, -- notes from the routing list
+  `serialid` int(11) NOT NULL auto_increment COMMENT "unique key for the issue",
+  `biblionumber` int(11) NOT NULL COMMENT "foreign key for the biblio.biblionumber that this issue is attached to",
+  `subscriptionid` int(11) NOT NULL COMMENT "foreign key to the subscription.subscriptionid that this issue is part of",
+  `serialseq` varchar(100) NOT NULL default '' COMMENT "issue information (volume, number, etc)",
+  `serialseq_x` varchar( 100 ) NULL DEFAULT NULL COMMENT "first part of issue information",
+  `serialseq_y` varchar( 100 ) NULL DEFAULT NULL COMMENT "second part of issue information",
+  `serialseq_z` varchar( 100 ) NULL DEFAULT NULL COMMENT "third part of issue information",
+  `status` tinyint(4) NOT NULL default 0 COMMENT "status code for this issue (see manual for full descriptions)",
+  `planneddate` date default NULL COMMENT "date expected",
+  `notes` MEDIUMTEXT COMMENT "notes",
+  `publisheddate` date default NULL COMMENT "date published",
+  publisheddatetext varchar(100) default NULL COMMENT "date published (descriptive)",
+  `claimdate` date default NULL COMMENT "date claimed",
+  claims_count int(11) default 0 COMMENT "number of claims made related to this issue",
+  `routingnotes` MEDIUMTEXT COMMENT "notes from the routing list",
   PRIMARY KEY (`serialid`),
   CONSTRAINT serial_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT serial_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2137,10 +2137,10 @@ CREATE TABLE `subscriptionhistory` (
 
 DROP TABLE IF EXISTS `subscriptionroutinglist`;
 CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing lists attached to subscriptions
-  `routingid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines with patron is on the routing list
-  `ranking` int(11) default NULL, -- where the patron stands in line to receive the serial
-  `subscriptionid` int(11) NOT NULL, -- foreign key from the subscription table, defines which subscription this routing list is for
+  `routingid` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `borrowernumber` int(11) NOT NULL COMMENT "foreign key from the borrowers table, defines with patron is on the routing list",
+  `ranking` int(11) default NULL COMMENT "where the patron stands in line to receive the serial",
+  `subscriptionid` int(11) NOT NULL COMMENT "foreign key from the subscription table, defines which subscription this routing list is for",
   PRIMARY KEY  (`routingid`),
   UNIQUE (`subscriptionid`, `borrowernumber`),
   CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -2155,11 +2155,11 @@ CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing l
 
 DROP TABLE IF EXISTS `systempreferences`;
 CREATE TABLE `systempreferences` ( -- global system preferences
-  `variable` varchar(50) NOT NULL default '', -- system preference name
-  `value` MEDIUMTEXT, -- system preference values
-  `options` LONGTEXT, -- options for multiple choice system preferences
-  `explanation` MEDIUMTEXT, -- descriptive text for the system preference
-  `type` varchar(20) default NULL, -- type of question this preference asks (multiple choice, plain text, yes or no, etc)
+  `variable` varchar(50) NOT NULL default '' COMMENT "system preference name",
+  `value` MEDIUMTEXT COMMENT "system preference values",
+  `options` LONGTEXT COMMENT "options for multiple choice system preferences",
+  `explanation` MEDIUMTEXT COMMENT "descriptive text for the system preference",
+  `type` varchar(20) default NULL COMMENT "type of question this preference asks (multiple choice, plain text, yes or no, etc)",
   PRIMARY KEY  (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2180,12 +2180,12 @@ CREATE TABLE `tags` (
 
 DROP TABLE IF EXISTS `tags_all`;
 CREATE TABLE `tags_all` ( -- all of the tags
-  `tag_id`         int(11) NOT NULL auto_increment, -- unique id and primary key
-  `borrowernumber` int(11) DEFAULT NULL, -- the patron who added the tag (borrowers.borrowernumber)
-  `biblionumber`   int(11) NOT NULL, -- the bib record this tag was left on (biblio.biblionumber)
-  `term`      varchar(191) NOT NULL COLLATE utf8mb4_bin, -- the tag
-  `language`       int(4) default NULL, -- the language the tag was left in
-  `date_created` datetime  NOT NULL, -- the date the tag was added
+  `tag_id`         int(11) NOT NULL auto_increment COMMENT "unique id and primary key",
+  `borrowernumber` int(11) DEFAULT NULL COMMENT "the patron who added the tag (borrowers.borrowernumber)",
+  `biblionumber`   int(11) NOT NULL COMMENT "the bib record this tag was left on (biblio.biblionumber)",
+  `term`      varchar(191) NOT NULL COLLATE utf8mb4_bin COMMENT "the tag",
+  `language`       int(4) default NULL COMMENT "the language the tag was left in",
+  `date_created` datetime  NOT NULL COMMENT "the date the tag was added",
   PRIMARY KEY  (`tag_id`),
   KEY `tags_borrowers_fk_1` (`borrowernumber`),
   KEY `tags_biblionumber_fk_1` (`biblionumber`),
@@ -2201,11 +2201,11 @@ CREATE TABLE `tags_all` ( -- all of the tags
 
 DROP TABLE IF EXISTS `tags_approval`;
 CREATE TABLE `tags_approval` ( -- approved tags
-  `term`   varchar(191) NOT NULL COLLATE utf8mb4_bin, -- the tag
-  `approved`     int(1) NOT NULL default '0', -- whether the tag is approved or not (1=yes, 0=pending, -1=rejected)
-  `date_approved` datetime       default NULL, -- the date this tag was approved
-  `approved_by` int(11)          default NULL, -- the librarian who approved the tag (borrowers.borrowernumber)
-  `weight_total` int(9) NOT NULL default '1', -- the total number of times this tag was used
+  `term`   varchar(191) NOT NULL COLLATE utf8mb4_bin COMMENT "the tag",
+  `approved`     int(1) NOT NULL default '0' COMMENT "whether the tag is approved or not (1=yes, 0=pending, -1=rejected)",
+  `date_approved` datetime       default NULL COMMENT "the date this tag was approved",
+  `approved_by` int(11)          default NULL COMMENT "the librarian who approved the tag (borrowers.borrowernumber)",
+  `weight_total` int(9) NOT NULL default '1' COMMENT "the total number of times this tag was used",
   PRIMARY KEY  (`term`),
   KEY `tags_approval_borrowers_fk_1` (`approved_by`),
   CONSTRAINT `tags_approval_borrowers_fk_1` FOREIGN KEY (`approved_by`)
@@ -2218,9 +2218,9 @@ CREATE TABLE `tags_approval` ( -- approved tags
 
 DROP TABLE IF EXISTS `tags_index`;
 CREATE TABLE `tags_index` ( -- a weighted list of all tags and where they are used
-  `term`    varchar(191) NOT NULL COLLATE utf8mb4_bin, -- the tag
-  `biblionumber` int(11) NOT NULL, -- the bib record this tag was used on (biblio.biblionumber)
-  `weight`        int(9) NOT NULL default '1', -- the number of times this term was used on this bib record
+  `term`    varchar(191) NOT NULL COLLATE utf8mb4_bin COMMENT "the tag",
+  `biblionumber` int(11) NOT NULL COMMENT "the bib record this tag was used on (biblio.biblionumber)",
+  `weight`        int(9) NOT NULL default '1' COMMENT "the number of times this term was used on this bib record",
   PRIMARY KEY  (`term`,`biblionumber`),
   KEY `tags_index_biblionumber_fk_1` (`biblionumber`),
   CONSTRAINT `tags_index_term_fk_1` FOREIGN KEY (`term`)
@@ -2248,15 +2248,15 @@ CREATE TABLE `userflags` (
 
 DROP TABLE IF EXISTS `virtualshelves`;
 CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
-  `shelfnumber` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `shelfname` varchar(255) default NULL, -- name of the list
-  `owner` int default NULL, -- foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)
-  `category` varchar(1) default NULL, -- type of list (private [1], public [2])
-  `sortfield` varchar(16) default 'title', -- the field this list is sorted on
-  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
-  `created_on` datetime NOT NULL, -- creation time
-  `allow_change_from_owner` tinyint(1) default 1, -- can owner change contents?
-  `allow_change_from_others` tinyint(1) default 0, -- can others change contents?
+  `shelfnumber` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `shelfname` varchar(255) default NULL COMMENT "name of the list",
+  `owner` int default NULL COMMENT "foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)",
+  `category` varchar(1) default NULL COMMENT "type of list (private [1], public [2])",
+  `sortfield` varchar(16) default 'title' COMMENT "the field this list is sorted on",
+  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time the list was last modified",
+  `created_on` datetime NOT NULL COMMENT "creation time",
+  `allow_change_from_owner` tinyint(1) default 1 COMMENT "can owner change contents?",
+  `allow_change_from_others` tinyint(1) default 0 COMMENT "can others change contents?",
   PRIMARY KEY  (`shelfnumber`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in Members.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2267,11 +2267,11 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
 
 DROP TABLE IF EXISTS `virtualshelfcontents`;
 CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list (or virtual shelf)
-  `shelfnumber` int(11) NOT NULL default 0, -- foreign key linking to the virtualshelves table, defines the list that this record has been added to
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking to the biblio table, defines the bib record that has been added to the list
+  `shelfnumber` int(11) NOT NULL default 0 COMMENT "foreign key linking to the virtualshelves table, defines the list that this record has been added to",
+  `biblionumber` int(11) NOT NULL default 0 COMMENT "foreign key linking to the biblio table, defines the bib record that has been added to the list",
   `flags` int(11) default NULL,
-  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time this bib record was added to the list
-  `borrowernumber` int, -- borrower number that created this list entry (only the first one is saved: no need for use in/as key)
+  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "date and time this bib record was added to the list",
+  `borrowernumber` int COMMENT "borrower number that created this list entry (only the first one is saved: no need for use in/as key)",
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -2285,11 +2285,11 @@ CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list 
 
 DROP TABLE IF EXISTS `virtualshelfshares`;
 CREATE TABLE `virtualshelfshares` ( -- shared private lists
-  `id` int AUTO_INCREMENT PRIMARY KEY,  -- unique key
-  `shelfnumber` int NOT NULL,  -- foreign key for virtualshelves
-  `borrowernumber` int,  -- borrower that accepted access to this list
-  `invitekey` varchar(10), -- temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
-  `sharedate` datetime,  -- date of invitation or acceptance of invitation
+  `id` int AUTO_INCREMENT PRIMARY KEY COMMENT "unique key",
+  `shelfnumber` int NOT NULL COMMENT "foreign key for virtualshelves",
+  `borrowernumber` int COMMENT "borrower that accepted access to this list",
+  `invitekey` varchar(10) COMMENT "temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet",
+  `sharedate` datetime COMMENT "date of invitation or acceptance of invitation",
   CONSTRAINT `virtualshelfshares_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `virtualshelfshares_ibfk_2` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in Members.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2300,24 +2300,24 @@ CREATE TABLE `virtualshelfshares` ( -- shared private lists
 
 DROP TABLE IF EXISTS `z3950servers`;
 CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets used in cataloging
-  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `host` varchar(255) default NULL, -- target's host name
-  `port` int(11) default NULL, -- port number used to connect to target
-  `db` varchar(255) default NULL, -- target's database name
-  `userid` varchar(255) default NULL, -- username needed to log in to target
-  `password` varchar(255) default NULL, -- password needed to log in to target
-  `servername` LONGTEXT NOT NULL, -- name given to the target by the library
-  `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
-  `rank` int(11) default NULL, -- where this target appears in the list of targets
-  `syntax` varchar(80) default NULL, -- marc format provided by this target
-  `timeout` int(11) NOT NULL DEFAULT '0', -- number of seconds before Koha stops trying to access this server
-  `servertype` enum('zed','sru') NOT NULL default 'zed', -- zed means z39.50 server
-  `encoding` MEDIUMTEXT default NULL, -- characters encoding provided by this target
-  `recordtype` enum('authority','biblio') NOT NULL default 'biblio', -- server contains bibliographic or authority records
-  `sru_options` varchar(255) default NULL, -- options like sru=get, sru_version=1.1; will be passed to the server via ZOOM
-  `sru_fields` LONGTEXT default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
-  `add_xslt` LONGTEXT default NULL, -- zero or more paths to XSLT files to be processed on the search results
-  `attributes` VARCHAR(255) default NULL, -- additional attributes passed to PQF queries
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `host` varchar(255) default NULL COMMENT "target's host name",
+  `port` int(11) default NULL COMMENT "port number used to connect to target",
+  `db` varchar(255) default NULL COMMENT "target's database name",
+  `userid` varchar(255) default NULL COMMENT "username needed to log in to target",
+  `password` varchar(255) default NULL COMMENT "password needed to log in to target",
+  `servername` LONGTEXT NOT NULL COMMENT "name given to the target by the library",
+  `checked` smallint(6) default NULL COMMENT "whether this target is checked by default  (1 for yes, 0 for no)",
+  `rank` int(11) default NULL COMMENT "where this target appears in the list of targets",
+  `syntax` varchar(80) default NULL COMMENT "marc format provided by this target",
+  `timeout` int(11) NOT NULL DEFAULT '0' COMMENT "number of seconds before Koha stops trying to access this server",
+  `servertype` enum('zed','sru') NOT NULL default 'zed' COMMENT "zed means z39.50 server",
+  `encoding` MEDIUMTEXT default NULL COMMENT "characters encoding provided by this target",
+  `recordtype` enum('authority','biblio') NOT NULL default 'biblio' COMMENT "server contains bibliographic or authority records",
+  `sru_options` varchar(255) default NULL COMMENT "options like sru=get, sru_version=1.1; will be passed to the server via ZOOM",
+  `sru_fields` LONGTEXT default NULL COMMENT "contains the mapping between the Z3950 search fields and the specific SRU server indexes",
+  `add_xslt` LONGTEXT default NULL COMMENT "zero or more paths to XSLT files to be processed on the search results",
+  `attributes` VARCHAR(255) default NULL COMMENT "additional attributes passed to PQF queries",
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2346,8 +2346,8 @@ CREATE TABLE `zebraqueue` (
 DROP TABLE IF EXISTS language_subtag_registry;
 CREATE TABLE language_subtag_registry (
         subtag varchar(25),
-        type varchar(25), -- language-script-region-variant-extension-privateuse
-        description varchar(25), -- only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
+        type varchar(25) COMMENT "language-script-region-variant-extension-privateuse",
+        description varchar(25) COMMENT "only one of the possible descriptions for ease of reference, see language_descriptions for the complete list",
         added date,
         id int(11) NOT NULL auto_increment,
         PRIMARY KEY  (`id`),
@@ -2393,8 +2393,8 @@ CREATE TABLE language_descriptions (
 
 DROP TABLE IF EXISTS language_script_bidi;
 CREATE TABLE language_script_bidi (
-        rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
-        bidi varchar(3), -- rtl ltr
+        rfc4646_subtag varchar(25) COMMENT "script subtag, Arab, Hebr, etc.",
+        bidi varchar(3) COMMENT "rtl ltr",
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2522,16 +2522,16 @@ CREATE TABLE `message_queue` (
 
 DROP TABLE IF EXISTS `letter`;
 CREATE TABLE `letter` ( -- table for all notice templates in Koha
-  `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice or slip
-  `code` varchar(20) NOT NULL default '', -- unique identifier for this notice or slip
-  `branchcode` varchar(10) NOT NULL default '', -- the branch this notice or slip is used at (branches.branchcode)
-  `name` varchar(100) NOT NULL default '', -- plain text name for this notice or slip
-  `is_html` tinyint(1) default 0, -- does this notice or slip use HTML (1 for yes, 0 for no)
-  `title` varchar(200) NOT NULL default '', -- subject line of the notice
-  `content` MEDIUMTEXT, -- body text for the notice or slip
-  `message_transport_type` varchar(20) NOT NULL DEFAULT 'email', -- transport type for this notice
-  `lang` varchar(25) NOT NULL DEFAULT 'default', -- lang of the notice
-  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- last modification
+  `module` varchar(20) NOT NULL default '' COMMENT "Koha module that triggers this notice or slip",
+  `code` varchar(20) NOT NULL default '' COMMENT "unique identifier for this notice or slip",
+  `branchcode` varchar(10) NOT NULL default '' COMMENT "the branch this notice or slip is used at (branches.branchcode)",
+  `name` varchar(100) NOT NULL default '' COMMENT "plain text name for this notice or slip",
+  `is_html` tinyint(1) default 0 COMMENT "does this notice or slip use HTML (1 for yes, 0 for no)",
+  `title` varchar(200) NOT NULL default '' COMMENT "subject line of the notice",
+  `content` MEDIUMTEXT COMMENT "body text for the notice or slip",
+  `message_transport_type` varchar(20) NOT NULL DEFAULT 'email' COMMENT "transport type for this notice",
+  `lang` varchar(25) NOT NULL DEFAULT 'default' COMMENT "lang of the notice",
+  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "last modification",
   PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`, `lang`),
   CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`)
   REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2590,13 +2590,13 @@ CREATE TABLE `message_transports` (
 
 DROP TABLE IF EXISTS `borrower_files`;
 CREATE TABLE IF NOT EXISTS `borrower_files` ( -- files attached to the patron/borrower record
-  `file_id` int(11) NOT NULL AUTO_INCREMENT, -- unique key
-  `borrowernumber` int(11) NOT NULL, -- foreign key linking to the patron via the borrowernumber
-  `file_name` varchar(255) NOT NULL, -- file name
-  `file_type` varchar(255) NOT NULL, -- type of file
-  `file_description` varchar(255) DEFAULT NULL, -- description given to the file
-  `file_content` longblob NOT NULL, -- the file
-  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- date and time the file was added
+  `file_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique key",
+  `borrowernumber` int(11) NOT NULL COMMENT "foreign key linking to the patron via the borrowernumber",
+  `file_name` varchar(255) NOT NULL COMMENT "file name",
+  `file_type` varchar(255) NOT NULL COMMENT "type of file",
+  `file_description` varchar(255) DEFAULT NULL COMMENT "description given to the file",
+  `file_content` longblob NOT NULL COMMENT "the file",
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "date and time the file was added",
   PRIMARY KEY (`file_id`),
   KEY `borrowernumber` (`borrowernumber`),
   CONSTRAINT borrower_files_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2671,13 +2671,13 @@ CREATE TABLE `item_circulation_alert_preferences` (
 --
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` ( -- circulation messages left via the patron's check out screen
-  `message_id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `borrowernumber` int(11) NOT NULL, -- foreign key linking this message to the borrowers table
-  `branchcode` varchar(10) default NULL, -- foreign key linking the message to the branches table
-  `message_type` varchar(1) NOT NULL, -- whether the message is for the librarians (L) or the patron (B)
-  `message` MEDIUMTEXT NOT NULL, -- the text of the message
-  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
-  `manager_id` int(11) default NULL, -- creator of message
+  `message_id` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+  `borrowernumber` int(11) NOT NULL COMMENT "foreign key linking this message to the borrowers table",
+  `branchcode` varchar(10) default NULL COMMENT "foreign key linking the message to the branches table",
+  `message_type` varchar(1) NOT NULL COMMENT "whether the message is for the librarians (L) or the patron (B)",
+  `message` MEDIUMTEXT NOT NULL COMMENT "the text of the message",
+  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "the date and time the message was written",
+  `manager_id` int(11) default NULL COMMENT "creator of message",
   PRIMARY KEY (`message_id`),
   CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL,
   CONSTRAINT `messages_borrowernumber` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2689,13 +2689,13 @@ CREATE TABLE `messages` ( -- circulation messages left via the patron's check ou
 
 DROP TABLE IF EXISTS `cash_registers`;
 CREATE TABLE `cash_registers` (
-  `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register
-  `name` varchar(24) NOT NULL, -- the user friendly identifier for each account register
-  `description` longtext NOT NULL, -- the user friendly description for each account register
-  `branch` varchar(10) NOT NULL, -- the foreign key the library this account register belongs
-  `branch_default` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote that this till is the branch default
-  `starting_float` decimal(28, 6), -- the starting float this account register should be assigned
-  `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier for each account register",
+  `name` varchar(24) NOT NULL COMMENT "the user friendly identifier for each account register",
+  `description` longtext NOT NULL COMMENT "the user friendly description for each account register",
+  `branch` varchar(10) NOT NULL COMMENT "the foreign key the library this account register belongs",
+  `branch_default` tinyint(1) NOT NULL DEFAULT 0 COMMENT "boolean flag to denote that this till is the branch default",
+  `starting_float` decimal(28, 6) COMMENT "the starting float this account register should be assigned",
+  `archived` tinyint(1) NOT NULL DEFAULT 0 COMMENT "boolean flag to denote if this till is archived or not",
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`branch`),
   CONSTRAINT cash_registers_branch FOREIGN KEY (branch) REFERENCES branches (branchcode) ON UPDATE CASCADE ON DELETE CASCADE
@@ -2712,7 +2712,7 @@ CREATE TABLE `account_credit_types` (
   `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
   `credit_number_enabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Is autogeneration of credit number enabled for this credit type",
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
-  `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not
+  `archived` tinyint(1) NOT NULL DEFAULT 0 COMMENT "boolean flag to denote if this till is archived or not",
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2736,11 +2736,11 @@ DROP TABLE IF EXISTS `account_debit_types`;
 CREATE TABLE `account_debit_types` (
   `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
-  `can_be_invoiced` tinyint(1) NOT NULL DEFAULT 1, -- boolean flag to denote if this debit type is available for manual invoicing
-  `can_be_sold` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this debit type is available at point of sale
+  `can_be_invoiced` tinyint(1) NOT NULL DEFAULT 1 COMMENT "boolean flag to denote if this debit type is available for manual invoicing",
+  `can_be_sold` tinyint(1) NOT NULL DEFAULT 0 COMMENT "boolean flag to denote if this debit type is available at point of sale",
   `default_amount` decimal(28,6) DEFAULT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
-  `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not
+  `archived` tinyint(1) NOT NULL DEFAULT 0 COMMENT "boolean flag to denote if this till is archived or not",
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2773,14 +2773,14 @@ CREATE TABLE `accountlines` (
   `debit_type_code` varchar(80) default NULL,
   `credit_number` varchar(20) NULL DEFAULT NULL COMMENT 'autogenerated number for credits',
   `status` varchar(16) default NULL,
-  `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
+  `payment_type` varchar(80) default NULL COMMENT "optional authorised value PAYMENT_TYPE",
   `amountoutstanding` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `note` MEDIUMTEXT NULL default NULL,
   `manager_id` int(11) NULL DEFAULT NULL,
   `register_id` int(11) NULL DEFAULT NULL,
   `interface` VARCHAR(16) NOT NULL,
-  `branchcode` VARCHAR( 10 ) NULL DEFAULT NULL, -- the branchcode of the library where a payment was made, a manual invoice created, etc.
+  `branchcode` VARCHAR( 10 ) NULL DEFAULT NULL COMMENT "the branchcode of the library where a payment was made, a manual invoice created, etc.",
   PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
@@ -2804,7 +2804,7 @@ CREATE TABLE `accountlines` (
 
 DROP TABLE IF EXISTS `account_offset_types`;
 CREATE TABLE `account_offset_types` (
-  `type` varchar(16) NOT NULL, -- The type of offset this is
+  `type` varchar(16) NOT NULL COMMENT "The type of offset this is",
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2814,11 +2814,11 @@ CREATE TABLE `account_offset_types` (
 
 DROP TABLE IF EXISTS `account_offsets`;
 CREATE TABLE `account_offsets` (
-  `id` int(11) NOT NULL auto_increment, -- unique identifier for each offset
-  `credit_id` int(11) NULL DEFAULT NULL, -- The id of the accountline the increased the patron's balance
-  `debit_id` int(11) NULL DEFAULT NULL, -- The id of the accountline that decreased the patron's balance
-  `type` varchar(16) NOT NULL, -- The type of offset this is
-  `amount` decimal(26,6) NOT NULL, -- The amount of the change
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier for each offset",
+  `credit_id` int(11) NULL DEFAULT NULL COMMENT "The id of the accountline the increased the patron's balance",
+  `debit_id` int(11) NULL DEFAULT NULL COMMENT "The id of the accountline that decreased the patron's balance",
+  `type` varchar(16) NOT NULL COMMENT "The type of offset this is",
+  `amount` decimal(26,6) NOT NULL COMMENT "The amount of the change",
   `created_on` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `account_offsets_ibfk_p` FOREIGN KEY (`credit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -2832,11 +2832,11 @@ CREATE TABLE `account_offsets` (
 
 DROP TABLE IF EXISTS `cash_register_actions`;
 CREATE TABLE `cash_register_actions` (
-  `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register action
-  `code` varchar(24) NOT NULL, -- action code denoting the type of action recorded (enum),
-  `register_id` int(11) NOT NULL, -- id of cash_register this action belongs to,
-  `manager_id` int(11) NOT NULL, -- staff member performing the action
-  `amount` decimal(28,6) DEFAULT NULL, -- amount recorded in action (signed)
+  `id` int(11) NOT NULL auto_increment COMMENT "unique identifier for each account register action",
+  `code` varchar(24) NOT NULL COMMENT "action code denoting the type of action recorded (enum),",
+  `register_id` int(11) NOT NULL COMMENT "id of cash_register this action belongs to,",
+  `manager_id` int(11) NOT NULL COMMENT "staff member performing the action",
+  `amount` decimal(28,6) DEFAULT NULL COMMENT "amount recorded in action (signed)",
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `cash_register_actions_manager` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -2849,14 +2849,14 @@ CREATE TABLE `cash_register_actions` (
 
 DROP TABLE IF EXISTS `action_logs`;
 CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the logs be turned on)
-  `action_id` int(11) NOT NULL auto_increment, -- unique identifier for each action
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the action took place
-  `user` int(11) NOT NULL default 0, -- the staff member who performed the action (borrowers.borrowernumber)
-  `module` MEDIUMTEXT, -- the module this action was taken against
-  `action` MEDIUMTEXT, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
-  `object` int(11) default NULL, -- the object that the action was taken against (could be a borrowernumber, itemnumber, etc)
-  `info` MEDIUMTEXT, -- information about the action (usually includes SQL statement)
-  `interface` VARCHAR(30) DEFAULT NULL, -- the context this action was taken in
+  `action_id` int(11) NOT NULL auto_increment COMMENT "unique identifier for each action",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT "the date and time the action took place",
+  `user` int(11) NOT NULL default 0 COMMENT "the staff member who performed the action (borrowers.borrowernumber)",
+  `module` MEDIUMTEXT COMMENT "the module this action was taken against",
+  `action` MEDIUMTEXT COMMENT "the action (includes things like DELETED, ADDED, MODIFY, etc)",
+  `object` int(11) default NULL COMMENT "the object that the action was taken against (could be a borrowernumber, itemnumber, etc)",
+  `info` MEDIUMTEXT COMMENT "information about the action (usually includes SQL statement)",
+  `interface` VARCHAR(30) DEFAULT NULL COMMENT "the context this action was taken in",
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
@@ -2889,27 +2889,27 @@ CREATE TABLE `alert` (
 
 DROP TABLE IF EXISTS `aqbooksellers`;
 CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquisitions
-  `id` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha
-  `name` LONGTEXT NOT NULL, -- vendor name
-  `address1` LONGTEXT, -- first line of vendor physical address
-  `address2` LONGTEXT, -- second line of vendor physical address
-  `address3` LONGTEXT, -- third line of vendor physical address
-  `address4` LONGTEXT, -- fourth line of vendor physical address
-  `phone` varchar(30) default NULL, -- vendor phone number
-  `accountnumber` LONGTEXT, -- vendor account number
-  `notes` LONGTEXT, -- order notes
-  `postal` LONGTEXT, -- vendor postal address (all lines)
-  `url` varchar(255) default NULL, -- vendor web address
-  `active` tinyint(4) default NULL, -- is this vendor active (1 for yes, 0 for no)
-  `listprice` varchar(10) default NULL, -- currency code for list prices
-  `invoiceprice` varchar(10) default NULL, -- currency code for invoice prices
-  `gstreg` tinyint(4) default NULL, -- is your library charged tax (1 for yes, 0 for no)
-  `listincgst` tinyint(4) default NULL, -- is tax included in list prices (1 for yes, 0 for no)
-  `invoiceincgst` tinyint(4) default NULL, -- is tax included in invoice prices (1 for yes, 0 for no)
-  `tax_rate` decimal(6,4) default NULL, -- the tax rate the library is charged
-  `discount` float(6,4) default NULL, -- discount offered on all items ordered from this vendor
-  `fax` varchar(50) default NULL, -- vendor fax number
-  deliverytime int(11) default NULL, -- vendor delivery time
+  `id` int(11) NOT NULL auto_increment COMMENT "primary key and unique identifier assigned by Koha",
+  `name` LONGTEXT NOT NULL COMMENT "vendor name",
+  `address1` LONGTEXT COMMENT "first line of vendor physical address",
+  `address2` LONGTEXT COMMENT "second line of vendor physical address",
+  `address3` LONGTEXT COMMENT "third line of vendor physical address",
+  `address4` LONGTEXT COMMENT "fourth line of vendor physical address",
+  `phone` varchar(30) default NULL COMMENT "vendor phone number",
+  `accountnumber` LONGTEXT COMMENT "vendor account number",
+  `notes` LONGTEXT COMMENT "order notes",
+  `postal` LONGTEXT COMMENT "vendor postal address (all lines)",
+  `url` varchar(255) default NULL COMMENT "vendor web address",
+  `active` tinyint(4) default NULL COMMENT "is this vendor active (1 for yes, 0 for no)",
+  `listprice` varchar(10) default NULL COMMENT "currency code for list prices",
+  `invoiceprice` varchar(10) default NULL COMMENT "currency code for invoice prices",
+  `gstreg` tinyint(4) default NULL COMMENT "is your library charged tax (1 for yes, 0 for no)",
+  `listincgst` tinyint(4) default NULL COMMENT "is tax included in list prices (1 for yes, 0 for no)",
+  `invoiceincgst` tinyint(4) default NULL COMMENT "is tax included in invoice prices (1 for yes, 0 for no)",
+  `tax_rate` decimal(6,4) default NULL COMMENT "the tax rate the library is charged",
+  `discount` float(6,4) default NULL COMMENT "discount offered on all items ordered from this vendor",
+  `fax` varchar(50) default NULL COMMENT "vendor fax number",
+  deliverytime int(11) default NULL COMMENT "vendor delivery time",
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
@@ -2943,15 +2943,15 @@ CREATE TABLE `aqbasketgroups` (
 
 DROP TABLE IF EXISTS `aqbudgetperiods`;
 CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
-  `budget_period_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
-  `budget_period_startdate` date NOT NULL, -- date when the budget starts
-  `budget_period_enddate` date NOT NULL, -- date when the budget ends
-  `budget_period_active` tinyint(1) default '0', -- whether this budget is active or not (1 for yes, 0 for no)
-  `budget_period_description` LONGTEXT, -- description assigned to this budget
-  `budget_period_total` decimal(28,6), -- total amount available in this budget
-  `budget_period_locked` tinyint(1) default NULL, -- whether this budget is locked or not (1 for yes, 0 for no)
-  `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
-  `sort2_authcat` varchar(10) default NULL, -- second statistical category for this budget
+  `budget_period_id` int(11) NOT NULL auto_increment COMMENT "primary key and unique number assigned by Koha",
+  `budget_period_startdate` date NOT NULL COMMENT "date when the budget starts",
+  `budget_period_enddate` date NOT NULL COMMENT "date when the budget ends",
+  `budget_period_active` tinyint(1) default '0' COMMENT "whether this budget is active or not (1 for yes, 0 for no)",
+  `budget_period_description` LONGTEXT COMMENT "description assigned to this budget",
+  `budget_period_total` decimal(28,6) COMMENT "total amount available in this budget",
+  `budget_period_locked` tinyint(1) default NULL COMMENT "whether this budget is locked or not (1 for yes, 0 for no)",
+  `sort1_authcat` varchar(10) default NULL COMMENT "statistical category for this budget",
+  `sort2_authcat` varchar(10) default NULL COMMENT "second statistical category for this budget",
   PRIMARY KEY  (`budget_period_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2961,21 +2961,21 @@ CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
 
 DROP TABLE IF EXISTS `aqbudgets`;
 CREATE TABLE `aqbudgets` ( -- information related to Funds
-  `budget_id` int(11) NOT NULL auto_increment, -- primary key and unique number assigned to each fund by Koha
-  `budget_parent_id` int(11) default NULL, -- if this fund is a child of another this will include the parent id (aqbudgets.budget_id)
-  `budget_code` varchar(30) default NULL, -- code assigned to the fund by the user
-  `budget_name` varchar(80) default NULL, -- name assigned to the fund by the user
-  `budget_branchcode` varchar(10) default NULL, -- branch that this fund belongs to (branches.branchcode)
-  `budget_amount` decimal(28,6) NULL default '0.00', -- total amount for this fund
-  `budget_encumb` decimal(28,6) NULL default '0.00', -- budget warning at percentage
-  `budget_expend` decimal(28,6) NULL default '0.00', -- budget warning at amount
-  `budget_notes` LONGTEXT, -- notes related to this fund
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this fund was last touched (created or modified)
-  `budget_period_id` int(11) default NULL, -- id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
-  `sort1_authcat` varchar(80) default NULL, -- statistical category for this fund
-  `sort2_authcat` varchar(80) default NULL, -- second statistical category for this fund
-  `budget_owner_id` int(11) default NULL, -- borrowernumber of the person who owns this fund (borrowers.borrowernumber)
-  `budget_permission` int(1) default '0', -- level of permission for this fund (used only by the owner, only by the library, or anyone)
+  `budget_id` int(11) NOT NULL auto_increment COMMENT "primary key and unique number assigned to each fund by Koha",
+  `budget_parent_id` int(11) default NULL COMMENT "if this fund is a child of another this will include the parent id (aqbudgets.budget_id)",
+  `budget_code` varchar(30) default NULL COMMENT "code assigned to the fund by the user",
+  `budget_name` varchar(80) default NULL COMMENT "name assigned to the fund by the user",
+  `budget_branchcode` varchar(10) default NULL COMMENT "branch that this fund belongs to (branches.branchcode)",
+  `budget_amount` decimal(28,6) NULL default '0.00' COMMENT "total amount for this fund",
+  `budget_encumb` decimal(28,6) NULL default '0.00' COMMENT "budget warning at percentage",
+  `budget_expend` decimal(28,6) NULL default '0.00' COMMENT "budget warning at amount",
+  `budget_notes` LONGTEXT COMMENT "notes related to this fund",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time this fund was last touched (created or modified)",
+  `budget_period_id` int(11) default NULL COMMENT "id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)",
+  `sort1_authcat` varchar(80) default NULL COMMENT "statistical category for this fund",
+  `sort2_authcat` varchar(80) default NULL COMMENT "second statistical category for this fund",
+  `budget_owner_id` int(11) default NULL COMMENT "borrowernumber of the person who owns this fund (borrowers.borrowernumber)",
+  `budget_permission` int(1) default '0' COMMENT "level of permission for this fund (used only by the owner, only by the library, or anyone)",
   PRIMARY KEY  (`budget_id`),
   KEY `budget_parent_id` (`budget_parent_id`),
   KEY `budget_code` (`budget_code`),
@@ -3026,19 +3026,19 @@ CREATE TABLE `aqbudgets_planning` (
 
 DROP TABLE IF EXISTS aqcontacts;
 CREATE TABLE aqcontacts (
-  id int(11) NOT NULL auto_increment, -- primary key and unique number assigned by Koha
-  name varchar(100) default NULL, -- name of contact at vendor
-  position varchar(100) default NULL, -- contact person's position
-  phone varchar(100) default NULL, -- contact's phone number
-  altphone varchar(100) default NULL, -- contact's alternate phone number
-  fax varchar(100) default NULL,  -- contact's fax number
-  email varchar(100) default NULL, -- contact's email address
-  notes LONGTEXT, -- notes related to the contact
-  orderacquisition tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive acquisition orders
-  claimacquisition tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
-  claimissues tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive serial claims
-  acqprimary tinyint(1) NOT NULL DEFAULT 0, -- is this the primary contact for acquisitions messages
-  serialsprimary tinyint(1) NOT NULL DEFAULT 0, -- is this the primary contact for serials messages
+  id int(11) NOT NULL auto_increment COMMENT "primary key and unique number assigned by Koha",
+  name varchar(100) default NULL COMMENT "name of contact at vendor",
+  position varchar(100) default NULL COMMENT "contact person's position",
+  phone varchar(100) default NULL COMMENT "contact's phone number",
+  altphone varchar(100) default NULL COMMENT "contact's alternate phone number",
+  fax varchar(100) default NULL COMMENT "contact's fax number",
+  email varchar(100) default NULL COMMENT "contact's email address",
+  notes LONGTEXT COMMENT "notes related to the contact",
+  orderacquisition tinyint(1) NOT NULL DEFAULT 0 COMMENT "should this contact receive acquisition orders",
+  claimacquisition tinyint(1) NOT NULL DEFAULT 0 COMMENT "should this contact receive acquisitions claims",
+  claimissues tinyint(1) NOT NULL DEFAULT 0 COMMENT "should this contact receive serial claims",
+  acqprimary tinyint(1) NOT NULL DEFAULT 0 COMMENT "is this the primary contact for acquisitions messages",
+  serialsprimary tinyint(1) NOT NULL DEFAULT 0 COMMENT "is this the primary contact for serials messages",
   booksellerid int(11) not NULL,
   PRIMARY KEY  (id),
   CONSTRAINT booksellerid_aqcontacts_fk FOREIGN KEY (booksellerid)
@@ -3068,22 +3068,22 @@ CREATE TABLE `aqcontract` (
 
 DROP TABLE IF EXISTS `aqbasket`;
 CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
-  `basketno` int(11) NOT NULL auto_increment, -- primary key, Koha defined number
-  `basketname` varchar(50) default NULL, -- name given to the basket at creation
-  `note` LONGTEXT, -- the internal note added at basket creation
-  `booksellernote` LONGTEXT, -- the vendor note added at basket creation
-  `contractnumber` int(11), -- links this basket to the aqcontract table (aqcontract.contractnumber)
-  `creationdate` date default NULL, -- the date the basket was created
-  `closedate` date default NULL, -- the date the basket was closed
-  `booksellerid` int(11) NOT NULL default 1, -- the Koha assigned ID for the vendor (aqbooksellers.id)
-  `authorisedby` varchar(10) default NULL, -- the borrowernumber of the person who created the basket
-  `booksellerinvoicenumber` LONGTEXT, -- appears to always be NULL
-  `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
-  `deliveryplace` varchar(10) default NULL, -- basket delivery place
-  `billingplace` varchar(10) default NULL, -- basket billing place
-  branch varchar(10) default NULL, -- basket branch
-  is_standing TINYINT(1) NOT NULL DEFAULT 0, -- orders in this basket are standing
-  create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL, -- when items should be created for orders in this basket
+  `basketno` int(11) NOT NULL auto_increment COMMENT "primary key, Koha defined number",
+  `basketname` varchar(50) default NULL COMMENT "name given to the basket at creation",
+  `note` LONGTEXT COMMENT "the internal note added at basket creation",
+  `booksellernote` LONGTEXT COMMENT "the vendor note added at basket creation",
+  `contractnumber` int(11) COMMENT "links this basket to the aqcontract table (aqcontract.contractnumber)",
+  `creationdate` date default NULL COMMENT "the date the basket was created",
+  `closedate` date default NULL COMMENT "the date the basket was closed",
+  `booksellerid` int(11) NOT NULL default 1 COMMENT "the Koha assigned ID for the vendor (aqbooksellers.id)",
+  `authorisedby` varchar(10) default NULL COMMENT "the borrowernumber of the person who created the basket",
+  `booksellerinvoicenumber` LONGTEXT COMMENT "appears to always be NULL",
+  `basketgroupid` int(11) COMMENT "links this basket to its group (aqbasketgroups.id)",
+  `deliveryplace` varchar(10) default NULL COMMENT "basket delivery place",
+  `billingplace` varchar(10) default NULL COMMENT "basket billing place",
+  branch varchar(10) default NULL COMMENT "basket branch",
+  is_standing TINYINT(1) NOT NULL DEFAULT 0 COMMENT "orders in this basket are standing",
+  create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL COMMENT "when items should be created for orders in this basket",
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),
@@ -3114,40 +3114,40 @@ CREATE TABLE aqbasketusers (
 
 DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` ( -- purchase suggestions
-  `suggestionid` int(8) NOT NULL auto_increment, -- unique identifier assigned automatically by Koha
-  `suggestedby` int(11) DEFAULT NULL, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
-  `suggesteddate` date NOT NULL, -- date the suggestion was submitted
-  `managedby` int(11) default NULL, -- borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
-  `manageddate` date default NULL, -- date the suggestion was updated
-   acceptedby INT(11) default NULL, -- borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table
-   accepteddate date default NULL, -- date the suggestion was marked as accepted
-   rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
-   rejecteddate date default NULL, -- date the suggestion was marked as rejected
-   lastmodificationby INT(11) default NULL, -- borrowernumber for the librarian who edit the suggestion for the last time
-   lastmodificationdate date default NULL, -- date of the last modification
-  `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, REJECTED, ORDERED, AVAILABLE or a value from the SUGGEST_STATUS authorised value category)
-  `archived` TINYINT(1) NOT NULL DEFAULT 0, -- is the suggestion archived?
-  `note` LONGTEXT, -- note entered on the suggestion
-  `author` varchar(80) default NULL, -- author of the suggested item
-  `title` varchar(255) default NULL, -- title of the suggested item
-  `copyrightdate` smallint(6) default NULL, -- copyright date of the suggested item
-  `publishercode` varchar(255) default NULL, -- publisher of the suggested item
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,  -- date and time the suggestion was updated
+  `suggestionid` int(8) NOT NULL auto_increment COMMENT "unique identifier assigned automatically by Koha",
+  `suggestedby` int(11) DEFAULT NULL COMMENT "borrowernumber for the person making the suggestion, foreign key linking to the borrowers table",
+  `suggesteddate` date NOT NULL COMMENT "date the suggestion was submitted",
+  `managedby` int(11) default NULL COMMENT "borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table",
+  `manageddate` date default NULL COMMENT "date the suggestion was updated",
+   acceptedby INT(11) default NULL COMMENT "borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table",
+   accepteddate date default NULL COMMENT "date the suggestion was marked as accepted",
+   rejectedby INT(11) default NULL COMMENT "borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table",
+   rejecteddate date default NULL COMMENT "date the suggestion was marked as rejected",
+   lastmodificationby INT(11) default NULL COMMENT "borrowernumber for the librarian who edit the suggestion for the last time",
+   lastmodificationdate date default NULL COMMENT "date of the last modification",
+  `STATUS` varchar(10) NOT NULL default '' COMMENT "suggestion status (ASKED, CHECKED, ACCEPTED, REJECTED, ORDERED, AVAILABLE or a value from the SUGGEST_STATUS authorised value category)",
+  `archived` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "is the suggestion archived?",
+  `note` LONGTEXT COMMENT "note entered on the suggestion",
+  `author` varchar(80) default NULL COMMENT "author of the suggested item",
+  `title` varchar(255) default NULL COMMENT "title of the suggested item",
+  `copyrightdate` smallint(6) default NULL COMMENT "copyright date of the suggested item",
+  `publishercode` varchar(255) default NULL COMMENT "publisher of the suggested item",
+  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "date and time the suggestion was updated",
   `volumedesc` varchar(255) default NULL,
   `publicationyear` smallint(6) default 0,
-  `place` varchar(255) default NULL, -- publication place of the suggested item
-  `isbn` varchar(30) default NULL, -- isbn of the suggested item
-  `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
-  `reason` MEDIUMTEXT, -- reason for accepting or rejecting the suggestion
-  `patronreason` MEDIUMTEXT, -- reason for making the suggestion
-   budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
-   branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
-   collectiontitle MEDIUMTEXT default NULL, -- collection name for the suggested item
-   itemtype VARCHAR(30) default NULL, -- suggested item type
-   quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
-   currency VARCHAR(10) default NULL, -- suggested currency for the suggested price
-   price DECIMAL(28,6) default NULL, -- suggested price
-   total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
+  `place` varchar(255) default NULL COMMENT "publication place of the suggested item",
+  `isbn` varchar(30) default NULL COMMENT "isbn of the suggested item",
+  `biblionumber` int(11) default NULL COMMENT "foreign key linking the suggestion to the biblio table after the suggestion has been ordered",
+  `reason` MEDIUMTEXT COMMENT "reason for accepting or rejecting the suggestion",
+  `patronreason` MEDIUMTEXT COMMENT "reason for making the suggestion",
+   budgetid INT(11) COMMENT "foreign key linking the suggested budget to the aqbudgets table",
+   branchcode VARCHAR(10) default NULL COMMENT "foreign key linking the suggested branch to the branches table",
+   collectiontitle MEDIUMTEXT default NULL COMMENT "collection name for the suggested item",
+   itemtype VARCHAR(30) default NULL COMMENT "suggested item type",
+   quantity SMALLINT(6) default NULL COMMENT "suggested quantity to be purchased",
+   currency VARCHAR(10) default NULL COMMENT "suggested currency for the suggested price",
+   price DECIMAL(28,6) default NULL COMMENT "suggested price",
+   total DECIMAL(28,6) default NULL COMMENT "suggested total cost (price*quantity updated for currency)",
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`),
@@ -3230,15 +3230,15 @@ CREATE TABLE IF NOT EXISTS edifact_messages (
 
 DROP TABLE IF EXISTS aqinvoices;
 CREATE TABLE aqinvoices (
-  invoiceid int(11) NOT NULL AUTO_INCREMENT,    -- ID of the invoice, primary key
-  invoicenumber LONGTEXT NOT NULL,    -- Name of invoice
-  booksellerid int(11) NOT NULL,    -- foreign key to aqbooksellers
-  shipmentdate date default NULL,   -- date of shipment
-  billingdate date default NULL,    -- date of billing
-  closedate date default NULL,  -- invoice close date, NULL means the invoice is open
-  shipmentcost decimal(28,6) default NULL,  -- shipment cost
-  shipmentcost_budgetid int(11) default NULL,   -- foreign key to aqbudgets, link the shipment cost to a budget
-  message_id int(11) default NULL, -- foreign key to edifact invoice message
+  invoiceid int(11) NOT NULL AUTO_INCREMENT COMMENT "ID of the invoice, primary key",
+  invoicenumber LONGTEXT NOT NULL COMMENT "Name of invoice",
+  booksellerid int(11) NOT NULL COMMENT "foreign key to aqbooksellers",
+  shipmentdate date default NULL COMMENT "date of shipment",
+  billingdate date default NULL COMMENT "date of billing",
+  closedate date default NULL COMMENT "invoice close date, NULL means the invoice is open",
+  shipmentcost decimal(28,6) default NULL COMMENT "shipment cost",
+  shipmentcost_budgetid int(11) default NULL COMMENT "foreign key to aqbudgets, link the shipment cost to a budget",
+  message_id int(11) default NULL COMMENT "foreign key to edifact invoice message",
   PRIMARY KEY (invoiceid),
   CONSTRAINT aqinvoices_fk_aqbooksellerid FOREIGN KEY (booksellerid) REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT edifact_msg_fk FOREIGN KEY ( message_id ) REFERENCES edifact_messages ( id ) ON DELETE SET NULL,
@@ -3251,14 +3251,14 @@ CREATE TABLE aqinvoices (
 
 DROP TABLE IF EXISTS aqinvoice_adjustments;
 CREATE TABLE aqinvoice_adjustments (
-    adjustment_id int(11) NOT NULL AUTO_INCREMENT, -- primary key for adjustments
-    invoiceid int(11) NOT NULL, -- foreign key to link an adjustment to an invoice
-    adjustment decimal(28,6), -- amount of adjustment
-    reason varchar(80) default NULL, -- reason for adjustment defined by authorised values in ADJ_REASON category
-    note mediumtext default NULL, -- text to explain adjustment
-    budget_id int(11) default NULL, -- optional link to budget to apply adjustment to
-    encumber_open smallint(1) NOT NULL default 1, -- whether or not to encumber the funds when invoice is still open, 1 = yes, 0 = no
-    timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- timestamp  of last adjustment to adjustment
+    adjustment_id int(11) NOT NULL AUTO_INCREMENT COMMENT "primary key for adjustments",
+    invoiceid int(11) NOT NULL COMMENT "foreign key to link an adjustment to an invoice",
+    adjustment decimal(28,6) COMMENT "amount of adjustment",
+    reason varchar(80) default NULL COMMENT "reason for adjustment defined by authorised values in ADJ_REASON category",
+    note mediumtext default NULL COMMENT "text to explain adjustment",
+    budget_id int(11) default NULL COMMENT "optional link to budget to apply adjustment to",
+    encumber_open smallint(1) NOT NULL default 1 COMMENT "whether or not to encumber the funds when invoice is still open, 1 = yes, 0 = no",
+    timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "timestamp  of last adjustment to adjustment",
     PRIMARY KEY (adjustment_id),
     CONSTRAINT aqinvoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT aqinvoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
@@ -3270,55 +3270,55 @@ CREATE TABLE aqinvoice_adjustments (
 
 DROP TABLE IF EXISTS `aqorders`;
 CREATE TABLE `aqorders` ( -- information related to the basket line items
-  `ordernumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha to each line
-  `biblionumber` int(11) default NULL, -- links the order to the biblio being ordered (biblio.biblionumber)
-  `entrydate` date default NULL, -- the date the bib was added to the basket
-  `quantity` smallint(6) default NULL, -- the quantity ordered
-  `currency` varchar(10) default NULL, -- the currency used for the purchase
-  `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
-  `datereceived` date default NULL, -- the date this order was received
-  invoiceid int(11) default NULL, -- id of invoice
-  `freight` decimal(28,6) DEFAULT NULL, -- shipping costs (not used)
-  `unitprice` decimal(28,6) DEFAULT NULL, -- the actual cost entered when receiving this line item
-  `unitprice_tax_excluded` decimal(28,6) default NULL, -- the unit price excluding tax (on receiving)
-  `unitprice_tax_included` decimal(28,6) default NULL, -- the unit price including tax (on receiving)
-  `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
-  `created_by` int(11) NULL DEFAULT NULL, -- the borrowernumber of order line's creator
-  `datecancellationprinted` date default NULL, -- the date the line item was deleted
-  `cancellationreason` MEDIUMTEXT default NULL, -- reason of cancellation
-  `order_internalnote` LONGTEXT, -- notes related to this order line, made for staff
-  `order_vendornote` LONGTEXT, -- notes related to this order line, made for vendor
-  `purchaseordernumber` LONGTEXT, -- not used? always NULL
-  `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
-  `rrp` decimal(13,2) DEFAULT NULL, -- the retail cost for this line item
-  `replacementprice` decimal(28,6) DEFAULT NULL, -- the replacement cost for this line item
-  `rrp_tax_excluded` decimal(28,6) default NULL, -- the replacement cost excluding tax
-  `rrp_tax_included` decimal(28,6) default NULL, -- the replacement cost including tax
-  `ecost` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
-  `ecost_tax_excluded` decimal(28,6) default NULL, -- the estimated cost excluding tax
-  `ecost_tax_included` decimal(28,6) default NULL, -- the estimated cost including tax
-  `tax_rate_bak` decimal(6,4) DEFAULT NULL, -- the tax rate for this line item (%)
-  `tax_rate_on_ordering` decimal(6,4) DEFAULT NULL, -- the tax rate on ordering for this line item (%)
-  `tax_rate_on_receiving` decimal(6,4) DEFAULT NULL, -- the tax rate on receiving for this line item (%)
-  `tax_value_bak` decimal(28,6) default NULL, -- the tax value for this line item
-  `tax_value_on_ordering` decimal(28,6) DEFAULT NULL, -- the tax value on ordering for this line item
-  `tax_value_on_receiving` decimal(28,6) DEFAULT NULL, -- the tax value on receiving for this line item
-  `discount` float(6,4) default NULL, -- the discount for this line item (%)
-  `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
-  `budgetdate` date default NULL, -- not used? always NULL
-  `sort1` varchar(80) default NULL, -- statistical field
-  `sort2` varchar(80) default NULL, -- second statistical field
+  `ordernumber` int(11) NOT NULL auto_increment COMMENT "primary key and unique identifier assigned by Koha to each line",
+  `biblionumber` int(11) default NULL COMMENT "links the order to the biblio being ordered (biblio.biblionumber)",
+  `entrydate` date default NULL COMMENT "the date the bib was added to the basket",
+  `quantity` smallint(6) default NULL COMMENT "the quantity ordered",
+  `currency` varchar(10) default NULL COMMENT "the currency used for the purchase",
+  `listprice` decimal(28,6) default NULL COMMENT "the vendor price for this line item",
+  `datereceived` date default NULL COMMENT "the date this order was received",
+  invoiceid int(11) default NULL COMMENT "id of invoice",
+  `freight` decimal(28,6) DEFAULT NULL COMMENT "shipping costs (not used)",
+  `unitprice` decimal(28,6) DEFAULT NULL COMMENT "the actual cost entered when receiving this line item",
+  `unitprice_tax_excluded` decimal(28,6) default NULL COMMENT "the unit price excluding tax (on receiving)",
+  `unitprice_tax_included` decimal(28,6) default NULL COMMENT "the unit price including tax (on receiving)",
+  `quantityreceived` smallint(6) NOT NULL default 0 COMMENT "the quantity that have been received so far",
+  `created_by` int(11) NULL DEFAULT NULL COMMENT "the borrowernumber of order line's creator",
+  `datecancellationprinted` date default NULL COMMENT "the date the line item was deleted",
+  `cancellationreason` MEDIUMTEXT default NULL COMMENT "reason of cancellation",
+  `order_internalnote` LONGTEXT COMMENT "notes related to this order line, made for staff",
+  `order_vendornote` LONGTEXT COMMENT "notes related to this order line, made for vendor",
+  `purchaseordernumber` LONGTEXT COMMENT "not used? always NULL",
+  `basketno` int(11) default NULL COMMENT "links this order line to a specific basket (aqbasket.basketno)",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this order line was last modified",
+  `rrp` decimal(13,2) DEFAULT NULL COMMENT "the retail cost for this line item",
+  `replacementprice` decimal(28,6) DEFAULT NULL COMMENT "the replacement cost for this line item",
+  `rrp_tax_excluded` decimal(28,6) default NULL COMMENT "the replacement cost excluding tax",
+  `rrp_tax_included` decimal(28,6) default NULL COMMENT "the replacement cost including tax",
+  `ecost` decimal(13,2) DEFAULT NULL COMMENT "the replacement cost for this line item",
+  `ecost_tax_excluded` decimal(28,6) default NULL COMMENT "the estimated cost excluding tax",
+  `ecost_tax_included` decimal(28,6) default NULL COMMENT "the estimated cost including tax",
+  `tax_rate_bak` decimal(6,4) DEFAULT NULL COMMENT "the tax rate for this line item (%)",
+  `tax_rate_on_ordering` decimal(6,4) DEFAULT NULL COMMENT "the tax rate on ordering for this line item (%)",
+  `tax_rate_on_receiving` decimal(6,4) DEFAULT NULL COMMENT "the tax rate on receiving for this line item (%)",
+  `tax_value_bak` decimal(28,6) default NULL COMMENT "the tax value for this line item",
+  `tax_value_on_ordering` decimal(28,6) DEFAULT NULL COMMENT "the tax value on ordering for this line item",
+  `tax_value_on_receiving` decimal(28,6) DEFAULT NULL COMMENT "the tax value on receiving for this line item",
+  `discount` float(6,4) default NULL COMMENT "the discount for this line item (%)",
+  `budget_id` int(11) NOT NULL COMMENT "the fund this order goes against (aqbudgets.budget_id)",
+  `budgetdate` date default NULL COMMENT "not used? always NULL",
+  `sort1` varchar(80) default NULL COMMENT "statistical field",
+  `sort2` varchar(80) default NULL COMMENT "second statistical field",
   `sort1_authcat` varchar(10) default NULL,
   `sort2_authcat` varchar(10) default NULL,
-  `uncertainprice` tinyint(1), -- was this price uncertain (1 for yes, 0 for no)
-  `subscriptionid` int(11) default NULL, -- links this order line to a subscription (subscription.subscriptionid)
-  parent_ordernumber int(11) default NULL, -- ordernumber of parent order line, or same as ordernumber if no parent
-  `orderstatus` varchar(16) default 'new', -- the current status for this line item. Can be 'new', 'ordered', 'partial', 'complete' or 'cancelled'
-  line_item_id varchar(35) default NULL, -- Supplier's article id for Edifact orderline
-  suppliers_reference_number varchar(35) default NULL, -- Suppliers unique edifact quote ref
-  suppliers_reference_qualifier varchar(3) default NULL, -- Type of number above usually 'QLI'
-  `suppliers_report` MEDIUMTEXT COLLATE utf8mb4_unicode_ci, -- reports received from suppliers
+  `uncertainprice` tinyint(1) COMMENT "was this price uncertain (1 for yes, 0 for no)",
+  `subscriptionid` int(11) default NULL COMMENT "links this order line to a subscription (subscription.subscriptionid)",
+  parent_ordernumber int(11) default NULL COMMENT "ordernumber of parent order line, or same as ordernumber if no parent",
+  `orderstatus` varchar(16) default 'new' COMMENT "the current status for this line item. Can be 'new', 'ordered', 'partial', 'complete' or 'cancelled'",
+  line_item_id varchar(35) default NULL COMMENT "Supplier's article id for Edifact orderline",
+  suppliers_reference_number varchar(35) default NULL COMMENT "Suppliers unique edifact quote ref",
+  suppliers_reference_qualifier varchar(3) default NULL COMMENT "Type of number above usually 'QLI'",
+  `suppliers_report` MEDIUMTEXT COLLATE utf8mb4_unicode_ci COMMENT "reports received from suppliers",
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
@@ -3340,8 +3340,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
 
 DROP TABLE IF EXISTS `aqorder_users`;
 CREATE TABLE aqorder_users ( -- Mapping orders to patrons for notification sending
-    ordernumber int(11) NOT NULL, -- the order this patrons receive notifications from (aqorders.ordernumber)
-    borrowernumber int(11) NOT NULL, -- the borrowernumber for the patron receiving notifications for this order (borrowers.borrowernumber)
+    ordernumber int(11) NOT NULL COMMENT "the order this patrons receive notifications from (aqorders.ordernumber)",
+    borrowernumber int(11) NOT NULL COMMENT "the borrowernumber for the patron receiving notifications for this order (borrowers.borrowernumber)",
     PRIMARY KEY (ordernumber, borrowernumber),
     CONSTRAINT aqorder_users_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT aqorder_users_ibfk_2 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3353,9 +3353,9 @@ CREATE TABLE aqorder_users ( -- Mapping orders to patrons for notification sendi
 
 DROP TABLE IF EXISTS `aqorders_items`;
 CREATE TABLE `aqorders_items` ( -- information on items entered in the acquisitions process
-  `ordernumber` int(11) NOT NULL, -- the order this item is attached to (aqorders.ordernumber)
-  `itemnumber` int(11) NOT NULL, -- the item number for this item (items.itemnumber)
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order item was last touched
+  `ordernumber` int(11) NOT NULL COMMENT "the order this item is attached to (aqorders.ordernumber)",
+  `itemnumber` int(11) NOT NULL COMMENT "the item number for this item (items.itemnumber)",
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT "the date and time this order item was last touched",
   PRIMARY KEY  (`itemnumber`),
   KEY `ordernumber` (`ordernumber`),
   CONSTRAINT aqorders_items_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3382,9 +3382,9 @@ CREATE TABLE aqorders_transfers (
 
 DROP TABLE IF EXISTS aqorders_claims;
 CREATE TABLE aqorders_claims (
-    id int(11) AUTO_INCREMENT, -- ID of the claims
-    ordernumber INT(11) NOT NULL, -- order linked to this claim
-    claimed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Date of the claims
+    id int(11) AUTO_INCREMENT COMMENT "ID of the claims",
+    ordernumber INT(11) NOT NULL COMMENT "order linked to this claim",
+    claimed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "Date of the claims",
     PRIMARY KEY (id),
     CONSTRAINT aqorders_claims_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
@@ -3411,13 +3411,13 @@ CREATE TABLE transport_cost (
 DROP TABLE IF EXISTS `cover_images`;
 
 CREATE TABLE `cover_images` ( -- local cover images
- `imagenumber` int(11) NOT NULL AUTO_INCREMENT, -- unique identifier for the image
- `biblionumber` int(11) DEFAULT NULL, -- foreign key from biblio table to link to biblionumber
- `itemnumber` int(11) DEFAULT NULL, -- foreign key from item table to link to itemnumber
- `mimetype` varchar(15) NOT NULL, -- image type
- `imagefile` mediumblob NOT NULL, -- image file contents
- `thumbnail` mediumblob NOT NULL, -- thumbnail file contents
- `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- image creation/update time
+ `imagenumber` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique identifier for the image",
+ `biblionumber` int(11) DEFAULT NULL COMMENT "foreign key from biblio table to link to biblionumber",
+ `itemnumber` int(11) DEFAULT NULL COMMENT "foreign key from item table to link to itemnumber",
+ `mimetype` varchar(15) NOT NULL COMMENT "image type",
+ `imagefile` mediumblob NOT NULL COMMENT "image file contents",
+ `thumbnail` mediumblob NOT NULL COMMENT "thumbnail file contents",
+ `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "image creation/update time",
  PRIMARY KEY (`imagenumber`),
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
  CONSTRAINT `bibliocoverimage_fk2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3445,9 +3445,9 @@ CREATE TABLE IF NOT EXISTS `social_data` (
 
 DROP TABLE IF EXISTS ratings;
 CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
-    borrowernumber int(11) NOT NULL, -- the borrowernumber of the patron who left this rating (borrowers.borrowernumber)
-    biblionumber int(11) NOT NULL, -- the biblio this rating is for (biblio.biblionumber)
-    rating_value tinyint(1) NOT NULL, -- the rating, from 1 to 5
+    borrowernumber int(11) NOT NULL COMMENT "the borrowernumber of the patron who left this rating (borrowers.borrowernumber)",
+    biblionumber int(11) NOT NULL COMMENT "the biblio this rating is for (biblio.biblionumber)",
+    rating_value tinyint(1) NOT NULL COMMENT "the rating, from 1 to 5",
     timestamp timestamp NOT NULL default CURRENT_TIMESTAMP,
     PRIMARY KEY  (borrowernumber,biblionumber),
     CONSTRAINT ratings_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -3460,10 +3460,10 @@ CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
 
 DROP TABLE IF EXISTS quotes;
 CREATE TABLE `quotes` ( -- data for the quote of the day feature
-  `id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the quote
-  `source` MEDIUMTEXT DEFAULT NULL, -- source/credit for the quote
-  `text` LONGTEXT NOT NULL, -- text of the quote
-  `timestamp` datetime NULL, -- date and time that the quote last appeared in the opac
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique id for the quote",
+  `source` MEDIUMTEXT DEFAULT NULL COMMENT "source/credit for the quote",
+  `text` LONGTEXT NOT NULL COMMENT "text of the quote",
+  `timestamp` datetime NULL COMMENT "date and time that the quote last appeared in the opac",
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -3578,7 +3578,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `smsalertnumber` varchar(50) DEFAULT NULL,
   `privacy` int(11) DEFAULT NULL,
   `extended_attributes` MEDIUMTEXT DEFAULT NULL,
-  `gdpr_proc_consent` datetime, -- data processing consent
+  `gdpr_proc_consent` datetime COMMENT "data processing consent",
   PRIMARY KEY (`verification_token` (191),`borrowernumber`),
   KEY `verification_token` (`verification_token` (191)),
   KEY `borrowernumber` (`borrowernumber`)
@@ -3610,12 +3610,12 @@ CREATE TABLE uploaded_files (
 
 DROP TABLE IF EXISTS linktracker;
 CREATE TABLE linktracker (
-   id int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
-   biblionumber int(11) DEFAULT NULL, -- biblionumber of the record the link is from
-   itemnumber int(11) DEFAULT NULL, -- itemnumber if applicable that the link was from
-   borrowernumber int(11) DEFAULT NULL, -- borrowernumber who clicked the link
-   url MEDIUMTEXT, -- the link itself
-   timeclicked datetime DEFAULT NULL, -- the date and time the link was clicked
+   id int(11) NOT NULL AUTO_INCREMENT COMMENT "primary key identifier",
+   biblionumber int(11) DEFAULT NULL COMMENT "biblionumber of the record the link is from",
+   itemnumber int(11) DEFAULT NULL COMMENT "itemnumber if applicable that the link was from",
+   borrowernumber int(11) DEFAULT NULL COMMENT "borrowernumber who clicked the link",
+   url MEDIUMTEXT COMMENT "the link itself",
+   timeclicked datetime DEFAULT NULL COMMENT "the date and time the link was clicked",
    PRIMARY KEY (id),
    KEY bibidx (biblionumber),
    KEY itemidx (itemnumber),
@@ -3642,7 +3642,7 @@ DROP TABLE IF EXISTS patron_consent;
 CREATE TABLE patron_consent (
   id int AUTO_INCREMENT,
   borrowernumber int NOT NULL,
-  type enum('GDPR_PROCESSING' ), -- allows for future extension
+  type enum('GDPR_PROCESSING' ) COMMENT "allows for future extension",
   given_on datetime,
   refused_on datetime,
   PRIMARY KEY (id),
@@ -3666,9 +3666,9 @@ CREATE TABLE plugin_methods (
 
 DROP TABLE IF EXISTS patron_lists;
 CREATE TABLE patron_lists (
-  patron_list_id int(11) NOT NULL AUTO_INCREMENT, -- unique identifier
-  name varchar(255) CHARACTER SET utf8mb4 NOT NULL,  -- the list's name
-  owner int(11) NOT NULL,                         -- borrowernumber of the list creator
+  patron_list_id int(11) NOT NULL AUTO_INCREMENT COMMENT "unique identifier",
+  name varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT "the list's name",
+  owner int(11) NOT NULL COMMENT "borrowernumber of the list creator",
   shared tinyint(1) default 0,
   PRIMARY KEY (patron_list_id),
   KEY owner (owner)
@@ -3686,9 +3686,9 @@ ALTER TABLE `patron_lists`
 
 DROP TABLE IF EXISTS patron_list_patrons;
 CREATE TABLE patron_list_patrons (
-  patron_list_patron_id int(11) NOT NULL AUTO_INCREMENT, -- unique identifier
-  patron_list_id int(11) NOT NULL,                       -- the list this entry is part of
-  borrowernumber int(11) NOT NULL,                       -- the borrower that is part of this list
+  patron_list_patron_id int(11) NOT NULL AUTO_INCREMENT COMMENT "unique identifier",
+  patron_list_id int(11) NOT NULL COMMENT "the list this entry is part of",
+  borrowernumber int(11) NOT NULL COMMENT "the borrower that is part of this list",
   PRIMARY KEY (patron_list_patron_id),
   KEY patron_list_id (patron_list_id),
   KEY borrowernumber (borrowernumber)
@@ -3745,14 +3745,14 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
 --
 
 CREATE TABLE IF NOT EXISTS `misc_files` ( -- miscellaneous files attached to records from various tables
-  `file_id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the file record
-  `table_tag` varchar(255) NOT NULL, -- usually table name, or arbitrary unique tag
-  `record_id` int(11) NOT NULL, -- record id from the table this file is associated to
-  `file_name` varchar(255) NOT NULL, -- file name
-  `file_type` varchar(255) NOT NULL, -- MIME type of the file
-  `file_description` varchar(255) DEFAULT NULL, -- description given to the file
-  `file_content` longblob NOT NULL, -- file content
-  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- date and time the file was added
+  `file_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique id for the file record",
+  `table_tag` varchar(255) NOT NULL COMMENT "usually table name, or arbitrary unique tag",
+  `record_id` int(11) NOT NULL COMMENT "record id from the table this file is associated to",
+  `file_name` varchar(255) NOT NULL COMMENT "file name",
+  `file_type` varchar(255) NOT NULL COMMENT "MIME type of the file",
+  `file_description` varchar(255) DEFAULT NULL COMMENT "description given to the file",
+  `file_content` longblob NOT NULL COMMENT "file content",
+  `date_uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "date and time the file was added",
   PRIMARY KEY (`file_id`),
   KEY `table_tag` (`table_tag`),
   KEY `record_id` (`record_id`)
@@ -3824,12 +3824,12 @@ CREATE TABLE discharges (
 
 DROP TABLE IF EXISTS additional_fields;
 CREATE TABLE `additional_fields` (
-  `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
-  `tablename` varchar(255) NOT NULL DEFAULT '', -- tablename of the new field
-  `name` varchar(255) NOT NULL DEFAULT '', -- name of the field
-  `authorised_value_category` varchar(16) NOT NULL DEFAULT '', -- is an authorised value category
-  `marcfield` varchar(16) NOT NULL DEFAULT '', -- contains the marc field to copied into the record
-  `searchable` tinyint(1) NOT NULL DEFAULT '0', -- is the field searchable?
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT "primary key identifier",
+  `tablename` varchar(255) NOT NULL DEFAULT '' COMMENT "tablename of the new field",
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT "name of the field",
+  `authorised_value_category` varchar(16) NOT NULL DEFAULT '' COMMENT "is an authorised value category",
+  `marcfield` varchar(16) NOT NULL DEFAULT '' COMMENT "contains the marc field to copied into the record",
+  `searchable` tinyint(1) NOT NULL DEFAULT '0' COMMENT "is the field searchable?",
   PRIMARY KEY (`id`),
   UNIQUE KEY `fields_uniq` (`tablename` (191),`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3841,10 +3841,10 @@ CREATE TABLE `additional_fields` (
 
 DROP TABLE IF EXISTS additional_field_values;
 CREATE TABLE `additional_field_values` (
-  `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
-  `field_id` int(11) NOT NULL, -- foreign key references additional_fields(id)
-  `record_id` int(11) NOT NULL, -- record_id
-  `value` varchar(255) NOT NULL DEFAULT '', -- value for this field
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT "primary key identifier",
+  `field_id` int(11) NOT NULL COMMENT "foreign key references additional_fields(id)",
+  `record_id` int(11) NOT NULL COMMENT "record_id",
+  `value` varchar(255) NOT NULL DEFAULT '' COMMENT "value for this field",
   PRIMARY KEY (`id`),
   UNIQUE KEY `field_record` (`field_id`,`record_id`),
   CONSTRAINT `afv_fk` FOREIGN KEY (`field_id`) REFERENCES `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -3859,7 +3859,7 @@ CREATE TABLE `localization` (
       localization_id int(11) NOT NULL AUTO_INCREMENT,
       entity varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
       code varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-      lang varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL, -- could be a foreign key
+      lang varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT "could be a foreign key",
       translation MEDIUMTEXT COLLATE utf8mb4_unicode_ci,
       PRIMARY KEY (localization_id),
       UNIQUE KEY `entity_code_lang` (`entity`,`code`,`lang`)
@@ -3902,16 +3902,16 @@ CREATE TABLE IF NOT EXISTS edifact_ean (
 
 DROP TABLE IF EXISTS courses;
 CREATE TABLE `courses` (
-  `course_id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the course
-  `department` varchar(80) DEFAULT NULL, -- the authorised value for the DEPARTMENT
-  `course_number` varchar(255) DEFAULT NULL, -- the "course number" assigned to a course
-  `section` varchar(255) DEFAULT NULL, -- the 'section' of a course
-  `course_name` varchar(255) DEFAULT NULL, -- the name of the course
-  `term` varchar(80) DEFAULT NULL, -- the authorised value for the TERM
-  `staff_note` LONGTEXT, -- the text of the staff only note
-  `public_note` LONGTEXT, -- the text of the public / opac note
-  `students_count` varchar(20) DEFAULT NULL, -- how many students will be taking this course/section
-  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- determines whether the course is active
+  `course_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "unique id for the course",
+  `department` varchar(80) DEFAULT NULL COMMENT "the authorised value for the DEPARTMENT",
+  `course_number` varchar(255) DEFAULT NULL COMMENT "the "course number" assigned to a course",
+  `section` varchar(255) DEFAULT NULL COMMENT "the 'section' of a course",
+  `course_name` varchar(255) DEFAULT NULL COMMENT "the name of the course",
+  `term` varchar(80) DEFAULT NULL COMMENT "the authorised value for the TERM",
+  `staff_note` LONGTEXT COMMENT "the text of the staff only note",
+  `public_note` LONGTEXT COMMENT "the text of the public / opac note",
+  `students_count` varchar(20) DEFAULT NULL COMMENT "how many students will be taking this course/section",
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'yes' COMMENT "determines whether the course is active",
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3926,8 +3926,8 @@ CREATE TABLE `courses` (
 
 DROP TABLE IF EXISTS course_instructors;
 CREATE TABLE `course_instructors` (
-  `course_id` int(11) NOT NULL, -- foreign key to link to courses.course_id
-  `borrowernumber` int(11) NOT NULL, -- foreign key to link to borrowers.borrowernumber for instructor information
+  `course_id` int(11) NOT NULL COMMENT "foreign key to link to courses.course_id",
+  `borrowernumber` int(11) NOT NULL COMMENT "foreign key to link to borrowers.borrowernumber for instructor information",
   PRIMARY KEY (`course_id`,`borrowernumber`),
   KEY `borrowernumber` (`borrowernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3949,24 +3949,24 @@ ALTER TABLE `course_instructors`
 
 DROP TABLE IF EXISTS course_items;
 CREATE TABLE `course_items` (
-  `ci_id` int(11) NOT NULL AUTO_INCREMENT, -- course item id
-  `itemnumber` int(11) NOT NULL, -- items.itemnumber for the item on reserve
-  `itype` varchar(10) DEFAULT NULL, -- new itemtype for the item to have while on reserve (optional)
-  `itype_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
-  `itype_storage` varchar(10) DEFAULT NULL, -- a place to store the itype when item is on course reserve
-  `ccode` varchar(80) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
-  `ccode_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if ccode should be changed while on course reserve
-  `ccode_storage` varchar(80) DEFAULT NULL, -- a place to store the ccode when item is on course reserve
-  `homebranch` varchar(10) DEFAULT NULL, -- new home branch for the item to have while on reserve (optional)
-  `homebranch_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if homebranch should be changed while on course reserve
-  `homebranch_storage` varchar(10) DEFAULT NULL, -- a place to store the homebranch when item is on course reserve
-  `holdingbranch` varchar(10) DEFAULT NULL, -- new holding branch for the item to have while on reserve (optional)
-  `holdingbranch_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
-  `holdingbranch_storage` varchar(10) DEFAULT NULL, -- a place to store the holdingbranch when item is on course reserve
-  `location` varchar(80) DEFAULT NULL, -- new shelving location for the item to have while on reseve (optional)
-  `location_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
-  `location_storage` varchar(80) DEFAULT NULL, -- a place to store the location when the item is on course reserve
-  `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
+  `ci_id` int(11) NOT NULL AUTO_INCREMENT COMMENT "course item id",
+  `itemnumber` int(11) NOT NULL COMMENT "items.itemnumber for the item on reserve",
+  `itype` varchar(10) DEFAULT NULL COMMENT "new itemtype for the item to have while on reserve (optional)",
+  `itype_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT "indicates if itype should be changed while on course reserve",
+  `itype_storage` varchar(10) DEFAULT NULL COMMENT "a place to store the itype when item is on course reserve",
+  `ccode` varchar(80) DEFAULT NULL COMMENT "new category code for the item to have while on reserve (optional)",
+  `ccode_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT "indicates if ccode should be changed while on course reserve",
+  `ccode_storage` varchar(80) DEFAULT NULL COMMENT "a place to store the ccode when item is on course reserve",
+  `homebranch` varchar(10) DEFAULT NULL COMMENT "new home branch for the item to have while on reserve (optional)",
+  `homebranch_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT "indicates if homebranch should be changed while on course reserve",
+  `homebranch_storage` varchar(10) DEFAULT NULL COMMENT "a place to store the homebranch when item is on course reserve",
+  `holdingbranch` varchar(10) DEFAULT NULL COMMENT "new holding branch for the item to have while on reserve (optional)",
+  `holdingbranch_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT "indicates if itype should be changed while on course reserve",
+  `holdingbranch_storage` varchar(10) DEFAULT NULL COMMENT "a place to store the holdingbranch when item is on course reserve",
+  `location` varchar(80) DEFAULT NULL COMMENT "new shelving location for the item to have while on reseve (optional)",
+  `location_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT "indicates if itype should be changed while on course reserve",
+  `location_storage` varchar(80) DEFAULT NULL COMMENT "a place to store the location when the item is on course reserve",
+  `enabled` enum('yes','no') NOT NULL DEFAULT 'no' COMMENT "if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'",
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`ci_id`),
    UNIQUE KEY `itemnumber` (`itemnumber`),
@@ -3992,10 +3992,10 @@ ALTER TABLE `course_items`
 DROP TABLE IF EXISTS course_reserves;
 CREATE TABLE `course_reserves` (
   `cr_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) NOT NULL, -- foreign key to link to courses.course_id
-  `ci_id` int(11) NOT NULL, -- foreign key to link to courses_items.ci_id
-  `staff_note` LONGTEXT, -- staff only note
-  `public_note` LONGTEXT, -- public, OPAC visible note
+  `course_id` int(11) NOT NULL COMMENT "foreign key to link to courses.course_id",
+  `ci_id` int(11) NOT NULL COMMENT "foreign key to link to courses_items.ci_id",
+  `staff_note` LONGTEXT COMMENT "staff only note",
+  `public_note` LONGTEXT COMMENT "public, OPAC visible note",
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`cr_id`),
    UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
@@ -4039,14 +4039,14 @@ CREATE TABLE `hold_fill_targets` (
 
 DROP TABLE IF EXISTS `housebound_profile`;
 CREATE TABLE `housebound_profile` (
-  `borrowernumber` int(11) NOT NULL, -- Number of the borrower associated with this profile.
-  `day` MEDIUMTEXT NOT NULL,  -- The preferred day of the week for delivery.
-  `frequency` MEDIUMTEXT NOT NULL, -- The Authorised_Value definining the pattern for delivery.
-  `fav_itemtypes` MEDIUMTEXT default NULL, -- Free text describing preferred itemtypes.
-  `fav_subjects` MEDIUMTEXT default NULL, -- Free text describing preferred subjects.
-  `fav_authors` MEDIUMTEXT default NULL, -- Free text describing preferred authors.
-  `referral` MEDIUMTEXT default NULL, -- Free text indicating how the borrower was added to the service.
-  `notes` MEDIUMTEXT default NULL, -- Free text for additional notes.
+  `borrowernumber` int(11) NOT NULL COMMENT "Number of the borrower associated with this profile.",
+  `day` MEDIUMTEXT NOT NULL COMMENT "The preferred day of the week for delivery.",
+  `frequency` MEDIUMTEXT NOT NULL COMMENT "The Authorised_Value definining the pattern for delivery.",
+  `fav_itemtypes` MEDIUMTEXT default NULL COMMENT "Free text describing preferred itemtypes.",
+  `fav_subjects` MEDIUMTEXT default NULL COMMENT "Free text describing preferred subjects.",
+  `fav_authors` MEDIUMTEXT default NULL COMMENT "Free text describing preferred authors.",
+  `referral` MEDIUMTEXT default NULL COMMENT "Free text indicating how the borrower was added to the service.",
+  `notes` MEDIUMTEXT default NULL COMMENT "Free text for additional notes.",
   PRIMARY KEY  (`borrowernumber`),
   CONSTRAINT `housebound_profile_bnfk`
     FOREIGN KEY (`borrowernumber`)
@@ -4060,12 +4060,12 @@ CREATE TABLE `housebound_profile` (
 
 DROP TABLE IF EXISTS `housebound_visit`;
 CREATE TABLE `housebound_visit` (
-  `id` int(11) NOT NULL auto_increment, -- ID of the visit.
-  `borrowernumber` int(11) NOT NULL, -- Number of the borrower, & the profile, linked to this visit.
-  `appointment_date` date default NULL, -- Date of visit.
-  `day_segment` varchar(10),  -- Rough time frame: 'morning', 'afternoon' 'evening'
-  `chooser_brwnumber` int(11) default NULL, -- Number of the borrower to choose items  for delivery.
-  `deliverer_brwnumber` int(11) default NULL, -- Number of the borrower to deliver items.
+  `id` int(11) NOT NULL auto_increment COMMENT "ID of the visit.",
+  `borrowernumber` int(11) NOT NULL COMMENT "Number of the borrower, & the profile, linked to this visit.",
+  `appointment_date` date default NULL COMMENT "Date of visit.",
+  `day_segment` varchar(10) COMMENT "Rough time frame: 'morning', 'afternoon' 'evening'",
+  `chooser_brwnumber` int(11) default NULL COMMENT "Number of the borrower to choose items  for delivery.",
+  `deliverer_brwnumber` int(11) default NULL COMMENT "Number of the borrower to deliver items.",
   PRIMARY KEY  (`id`),
   CONSTRAINT `houseboundvisit_bnfk`
     FOREIGN KEY (`borrowernumber`)
@@ -4087,9 +4087,9 @@ CREATE TABLE `housebound_visit` (
 
 DROP TABLE IF EXISTS `housebound_role`;
 CREATE TABLE IF NOT EXISTS `housebound_role` (
-  `borrowernumber_id` int(11) NOT NULL, -- borrowernumber link
-  `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound chooser volunteer
-  `housebound_deliverer` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound deliverer volunteer
+  `borrowernumber_id` int(11) NOT NULL COMMENT "borrowernumber link",
+  `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0 COMMENT "set to 1 to indicate this patron is a housebound chooser volunteer",
+  `housebound_deliverer` tinyint(1) NOT NULL DEFAULT 0 COMMENT "set to 1 to indicate this patron is a housebound deliverer volunteer",
   PRIMARY KEY (`borrowernumber_id`),
   CONSTRAINT `houseboundrole_bnfk`
     FOREIGN KEY (`borrowernumber_id`)
@@ -4118,7 +4118,7 @@ CREATE TABLE `article_requests` (
   `patron_notes` MEDIUMTEXT,
   `status` enum('PENDING','PROCESSING','COMPLETED','CANCELED') NOT NULL DEFAULT 'PENDING',
   `notes` MEDIUMTEXT,
-  `created_on` timestamp NULL DEFAULT NULL, -- Be careful with two timestamps in one table not allowing NULL
+  `created_on` timestamp NULL DEFAULT NULL COMMENT "Be careful with two timestamps in one table not allowing NULL",
   `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `borrowernumber` (`borrowernumber`),
@@ -4213,10 +4213,10 @@ CREATE TABLE IF NOT EXISTS clubs (
 
 CREATE TABLE IF NOT EXISTS club_holds (
     id        INT(11) NOT NULL AUTO_INCREMENT,
-    club_id   INT(11) NOT NULL, -- id for the club the hold was generated for
-    biblio_id INT(11) NOT NULL, -- id for the bibliographic record the hold has been placed against
-    item_id   INT(11) NULL DEFAULT NULL, -- If item-level, the id for the item the hold has been placed agains
-    date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Timestamp for the placed hold
+    club_id   INT(11) NOT NULL COMMENT "id for the club the hold was generated for",
+    biblio_id INT(11) NOT NULL COMMENT "id for the bibliographic record the hold has been placed against",
+    item_id   INT(11) NULL DEFAULT NULL COMMENT "If item-level, the id for the item the hold has been placed agains",
+    date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "Timestamp for the placed hold",
     PRIMARY KEY (id),
     -- KEY club_id (club_id),
     CONSTRAINT clubs_holds_ibfk_1 FOREIGN KEY (club_id)   REFERENCES clubs  (id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -4352,25 +4352,25 @@ CREATE TABLE `borrower_relationships` (
 
 DROP TABLE IF EXISTS `illrequests`;
 CREATE TABLE illrequests (
-    illrequest_id serial PRIMARY KEY,           -- ILL request number
-    borrowernumber integer DEFAULT NULL,        -- Patron associated with request
-    biblio_id integer DEFAULT NULL,             -- Potential bib linked to request
-    branchcode varchar(50) NOT NULL,            -- The branch associated with the request
-    status varchar(50) DEFAULT NULL,            -- Current Koha status of request
-    status_alias varchar(80) DEFAULT NULL,      -- Foreign key to relevant authorised_values.authorised_value
-    placed date DEFAULT NULL,                   -- Date the request was placed
-    replied date DEFAULT NULL,                  -- Last API response
+    illrequest_id serial PRIMARY KEY COMMENT "ILL request number",
+    borrowernumber integer DEFAULT NULL COMMENT "Patron associated with request",
+    biblio_id integer DEFAULT NULL COMMENT "Potential bib linked to request",
+    branchcode varchar(50) NOT NULL COMMENT "The branch associated with the request",
+    status varchar(50) DEFAULT NULL COMMENT "Current Koha status of request",
+    status_alias varchar(80) DEFAULT NULL COMMENT "Foreign key to relevant authorised_values.authorised_value",
+    placed date DEFAULT NULL COMMENT "Date the request was placed",
+    replied date DEFAULT NULL COMMENT "Last API response",
     updated timestamp DEFAULT CURRENT_TIMESTAMP -- Last modification to request
       ON UPDATE CURRENT_TIMESTAMP,
-    completed date DEFAULT NULL,                -- Date the request was completed
-    medium varchar(30) DEFAULT NULL,            -- The Koha request type
-    accessurl varchar(500) DEFAULT NULL,        -- Potential URL for accessing item
-    cost varchar(20) DEFAULT NULL,              -- Quotes cost of request
-    price_paid varchar(20) DEFAULT NULL,              -- Final cost of request
-    notesopac MEDIUMTEXT DEFAULT NULL,                -- Patron notes attached to request
-    notesstaff MEDIUMTEXT DEFAULT NULL,               -- Staff notes attached to request
-    orderid varchar(50) DEFAULT NULL,           -- Backend id attached to request
-    backend varchar(20) DEFAULT NULL,           -- The backend used to create request
+    completed date DEFAULT NULL COMMENT "Date the request was completed",
+    medium varchar(30) DEFAULT NULL COMMENT "The Koha request type",
+    accessurl varchar(500) DEFAULT NULL COMMENT "Potential URL for accessing item",
+    cost varchar(20) DEFAULT NULL COMMENT "Quotes cost of request",
+    price_paid varchar(20) DEFAULT NULL COMMENT "Final cost of request",
+    notesopac MEDIUMTEXT DEFAULT NULL COMMENT "Patron notes attached to request",
+    notesstaff MEDIUMTEXT DEFAULT NULL COMMENT "Staff notes attached to request",
+    orderid varchar(50) DEFAULT NULL COMMENT "Backend id attached to request",
+    backend varchar(20) DEFAULT NULL COMMENT "The backend used to create request",
     CONSTRAINT `illrequests_bnfk`
       FOREIGN KEY (`borrowernumber`)
       REFERENCES `borrowers` (`borrowernumber`)
@@ -4391,10 +4391,10 @@ CREATE TABLE illrequests (
 
 DROP TABLE IF EXISTS `illrequestattributes`;
 CREATE TABLE illrequestattributes (
-    illrequest_id bigint(20) unsigned NOT NULL, -- ILL request number
-    type varchar(200) NOT NULL,                 -- API ILL property name
-    value MEDIUMTEXT NOT NULL,                  -- API ILL property value
-    readonly tinyint(1) NOT NULL DEFAULT 1,     -- Is this attribute read only
+    illrequest_id bigint(20) unsigned NOT NULL COMMENT "ILL request number",
+    type varchar(200) NOT NULL COMMENT "API ILL property name",
+    value MEDIUMTEXT NOT NULL COMMENT "API ILL property value",
+    readonly tinyint(1) NOT NULL DEFAULT 1 COMMENT "Is this attribute read only",
     PRIMARY KEY  (`illrequest_id`, `type` (191)),
     CONSTRAINT `illrequestattributes_ifk`
       FOREIGN KEY (illrequest_id)
@@ -4408,17 +4408,17 @@ CREATE TABLE illrequestattributes (
 
 DROP TABLE IF EXISTS `library_groups`;
 CREATE TABLE library_groups (
-    id INT(11) NOT NULL auto_increment,    -- unique id for each group
-    parent_id INT(11) NULL DEFAULT NULL,   -- if this is a child group, the id of the parent group
-    branchcode VARCHAR(10) NULL DEFAULT NULL, -- The branchcode of a branch belonging to the parent group
-    title VARCHAR(100) NULL DEFAULT NULL,     -- Short description of the goup
-    description MEDIUMTEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
-    ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0, -- Turn on the feature "Hide patron's info" for this group
-    ft_search_groups_opac tinyint(1) NOT NULL DEFAULT 0, -- Use this group for staff side search groups
-    ft_search_groups_staff tinyint(1) NOT NULL DEFAULT 0, -- Use this group for opac side search groups
-    ft_local_hold_group tinyint(1) NOT NULL DEFAULT 0, -- Use this group to identify libraries as pick up location for holds
-    created_on TIMESTAMP NULL,             -- Date and time of creation
-    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
+    id INT(11) NOT NULL auto_increment COMMENT "unique id for each group",
+    parent_id INT(11) NULL DEFAULT NULL COMMENT "if this is a child group, the id of the parent group",
+    branchcode VARCHAR(10) NULL DEFAULT NULL COMMENT "The branchcode of a branch belonging to the parent group",
+    title VARCHAR(100) NULL DEFAULT NULL COMMENT "Short description of the goup",
+    description MEDIUMTEXT NULL DEFAULT NULL COMMENT "Longer explanation of the group, if necessary",
+    ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0 COMMENT "Turn on the feature "Hide patron's info" for this group",
+    ft_search_groups_opac tinyint(1) NOT NULL DEFAULT 0 COMMENT "Use this group for staff side search groups",
+    ft_search_groups_staff tinyint(1) NOT NULL DEFAULT 0 COMMENT "Use this group for opac side search groups",
+    ft_local_hold_group tinyint(1) NOT NULL DEFAULT 0 COMMENT "Use this group to identify libraries as pick up location for holds",
+    created_on TIMESTAMP NULL COMMENT "Date and time of creation",
+    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Date and time of last",
     PRIMARY KEY id ( id ),
     FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -4432,9 +4432,9 @@ CREATE TABLE library_groups (
 
 DROP TABLE IF EXISTS `oauth_access_tokens`;
 CREATE TABLE `oauth_access_tokens` (
-    `access_token` VARCHAR(191) NOT NULL, -- generarated access token
-    `client_id`    VARCHAR(191) NOT NULL, -- the client id the access token belongs to
-    `expires`      INT NOT NULL,          -- expiration time in seconds
+    `access_token` VARCHAR(191) NOT NULL COMMENT "generarated access token",
+    `client_id`    VARCHAR(191) NOT NULL COMMENT "the client id the access token belongs to",
+    `expires`      INT NOT NULL COMMENT "expiration time in seconds",
     PRIMARY KEY (`access_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -4444,11 +4444,11 @@ CREATE TABLE `oauth_access_tokens` (
 
 DROP TABLE IF EXISTS `illcomments`;
 CREATE TABLE illcomments (
-    illcomment_id int(11) NOT NULL AUTO_INCREMENT, -- Unique ID of the comment
-    illrequest_id bigint(20) unsigned NOT NULL,    -- ILL request number
-    borrowernumber integer DEFAULT NULL,           -- Link to the user who made the comment (could be librarian, patron or ILL partner library)
-    comment text DEFAULT NULL,                     -- The text of the comment
-    timestamp timestamp DEFAULT CURRENT_TIMESTAMP, -- Date and time when the comment was made
+    illcomment_id int(11) NOT NULL AUTO_INCREMENT COMMENT "Unique ID of the comment",
+    illrequest_id bigint(20) unsigned NOT NULL COMMENT "ILL request number",
+    borrowernumber integer DEFAULT NULL COMMENT "Link to the user who made the comment (could be librarian, patron or ILL partner library)",
+    comment text DEFAULT NULL COMMENT "The text of the comment",
+    timestamp timestamp DEFAULT CURRENT_TIMESTAMP COMMENT "Date and time when the comment was made",
     PRIMARY KEY  ( illcomment_id ),
     CONSTRAINT illcomments_bnfk
       FOREIGN KEY ( borrowernumber )
@@ -4486,11 +4486,11 @@ CREATE TABLE `circulation_rules` (
 
 DROP TABLE IF EXISTS stockrotationrotas;
 CREATE TABLE stockrotationrotas (
-    rota_id int(11) auto_increment,         -- Stockrotation rota ID
-    title varchar(100) NOT NULL,            -- Title for this rota
-    description text NOT NULL,              -- Description for this rota
-    cyclical tinyint(1) NOT NULL default 0, -- Should items on this rota keep cycling?
-    active tinyint(1) NOT NULL default 0,   -- Is this rota currently active?
+    rota_id int(11) auto_increment COMMENT "Stockrotation rota ID",
+    title varchar(100) NOT NULL COMMENT "Title for this rota",
+    description text NOT NULL COMMENT "Description for this rota",
+    cyclical tinyint(1) NOT NULL default 0 COMMENT "Should items on this rota keep cycling?",
+    active tinyint(1) NOT NULL default 0 COMMENT "Is this rota currently active?",
     PRIMARY KEY (`rota_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -4500,11 +4500,11 @@ CREATE TABLE stockrotationrotas (
 
 DROP TABLE IF EXISTS stockrotationstages;
 CREATE TABLE stockrotationstages (
-    stage_id int(11) auto_increment,     -- Unique stage ID
-    position int(11) NOT NULL,           -- The position of this stage within its rota
-    rota_id int(11) NOT NULL,            -- The rota this stage belongs to
-    branchcode_id varchar(10) NOT NULL,  -- Branch this stage relates to
-    duration int(11) NOT NULL default 4, -- The number of days items shoud occupy this stage
+    stage_id int(11) auto_increment COMMENT "Unique stage ID",
+    position int(11) NOT NULL COMMENT "The position of this stage within its rota",
+    rota_id int(11) NOT NULL COMMENT "The rota this stage belongs to",
+    branchcode_id varchar(10) NOT NULL COMMENT "Branch this stage relates to",
+    duration int(11) NOT NULL default 4 COMMENT "The number of days items shoud occupy this stage",
     PRIMARY KEY (`stage_id`),
     CONSTRAINT `stockrotationstages_rifk`
       FOREIGN KEY (`rota_id`)
@@ -4522,10 +4522,10 @@ CREATE TABLE stockrotationstages (
 
 DROP TABLE IF EXISTS stockrotationitems;
 CREATE TABLE stockrotationitems (
-    itemnumber_id int(11) NOT NULL,         -- Itemnumber to link to a stage & rota
-    stage_id int(11) NOT NULL,              -- stage ID to link the item to
-    indemand tinyint(1) NOT NULL default 0, -- Should this item be skipped for rotation?
-    fresh tinyint(1) NOT NULL default 0,    -- Flag showing item is only just added to rota
+    itemnumber_id int(11) NOT NULL COMMENT "Itemnumber to link to a stage & rota",
+    stage_id int(11) NOT NULL COMMENT "stage ID to link the item to",
+    indemand tinyint(1) NOT NULL default 0 COMMENT "Should this item be skipped for rotation?",
+    fresh tinyint(1) NOT NULL default 0 COMMENT "Flag showing item is only just added to rota",
     PRIMARY KEY (itemnumber_id),
     CONSTRAINT `stockrotationitems_iifk`
       FOREIGN KEY (`itemnumber_id`)
@@ -4566,18 +4566,18 @@ CREATE TABLE itemtypes_branches( -- association table between authorised_values 
 
 DROP TABLE IF EXISTS `return_claims`;
 CREATE TABLE return_claims (
-    id int(11) auto_increment,                             -- Unique ID of the return claim
-    itemnumber int(11) NOT NULL,                           -- ID of the item
-    issue_id int(11) NULL DEFAULT NULL,                    -- ID of the checkout that triggered the claim
-    borrowernumber int(11) NOT NULL,                       -- ID of the patron
-    notes MEDIUMTEXT DEFAULT NULL,                         -- Notes about the claim
-    created_on TIMESTAMP NULL,                             -- Time and date the claim was created
-    created_by int(11) NULL DEFAULT NULL,                  -- ID of the staff member that registered the claim
-    updated_on TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP, -- Time and date of the latest change on the claim (notes)
-    updated_by int(11) NULL DEFAULT NULL,                  -- ID of the staff member that updated the claim
-    resolution  varchar(80) NULL DEFAULT NULL,             -- Resolution code (RETURN_CLAIM_RESOLUTION AVs)
-    resolved_on TIMESTAMP NULL DEFAULT NULL,               -- Time and date the claim was resolved
-    resolved_by int(11) NULL DEFAULT NULL,                 -- ID of the staff member that resolved the claim
+    id int(11) auto_increment COMMENT "Unique ID of the return claim",
+    itemnumber int(11) NOT NULL COMMENT "ID of the item",
+    issue_id int(11) NULL DEFAULT NULL COMMENT "ID of the checkout that triggered the claim",
+    borrowernumber int(11) NOT NULL COMMENT "ID of the patron",
+    notes MEDIUMTEXT DEFAULT NULL COMMENT "Notes about the claim",
+    created_on TIMESTAMP NULL COMMENT "Time and date the claim was created",
+    created_by int(11) NULL DEFAULT NULL COMMENT "ID of the staff member that registered the claim",
+    updated_on TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP COMMENT "Time and date of the latest change on the claim (notes)",
+    updated_by int(11) NULL DEFAULT NULL COMMENT "ID of the staff member that updated the claim",
+    resolution  varchar(80) NULL DEFAULT NULL COMMENT "Resolution code (RETURN_CLAIM_RESOLUTION AVs)",
+    resolved_on TIMESTAMP NULL DEFAULT NULL COMMENT "Time and date the claim was resolved",
+    resolved_by int(11) NULL DEFAULT NULL COMMENT "ID of the staff member that resolved the claim",
     PRIMARY KEY (`id`),
     KEY `itemnumber` (`itemnumber`),
     CONSTRAINT UNIQUE `issue_id` ( issue_id ),
@@ -4595,16 +4595,16 @@ CREATE TABLE return_claims (
 
 DROP TABLE IF EXISTS `problem_reports`;
 CREATE TABLE `problem_reports` (
-    `reportid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-    `title` varchar(40) NOT NULL default '', -- report subject line
-    `content` varchar(255) NOT NULL default '', -- report message content
-    `borrowernumber` int(11) NOT NULL default 0, -- the user who created the problem report
-    `branchcode` varchar(10) NOT NULL default '', -- borrower's branch
-    `username` varchar(75) default NULL, -- OPAC username
-    `problempage` TEXT default NULL, -- page the user triggered the problem report form from
-    `recipient` enum('admin','library') NOT NULL default 'library', -- the 'to-address' of the problem report
-    `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- timestamp of report submission
-    `status` varchar(6) NOT NULL default 'New', -- status of the report. New, Viewed, Closed
+    `reportid` int(11) NOT NULL auto_increment COMMENT "unique identifier assigned by Koha",
+    `title` varchar(40) NOT NULL default '' COMMENT "report subject line",
+    `content` varchar(255) NOT NULL default '' COMMENT "report message content",
+    `borrowernumber` int(11) NOT NULL default 0 COMMENT "the user who created the problem report",
+    `branchcode` varchar(10) NOT NULL default '' COMMENT "borrower's branch",
+    `username` varchar(75) default NULL COMMENT "OPAC username",
+    `problempage` TEXT default NULL COMMENT "page the user triggered the problem report form from",
+    `recipient` enum('admin','library') NOT NULL default 'library' COMMENT "the 'to-address' of the problem report",
+    `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT "timestamp of report submission",
+    `status` varchar(6) NOT NULL default 'New' COMMENT "status of the report. New, Viewed, Closed",
     PRIMARY KEY (`reportid`),
     CONSTRAINT `problem_reports_ibfk1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `problem_reports_ibfk2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -4616,11 +4616,11 @@ CREATE TABLE `problem_reports` (
 
 DROP TABLE IF EXISTS advanced_editor_macros;
 CREATE TABLE advanced_editor_macros (
-    id INT(11) NOT NULL AUTO_INCREMENT,     -- Unique ID of the macro
-    name varchar(80) NOT NULL,              -- Name of the macro
-    macro longtext NULL,                    -- The macro code itself
-    borrowernumber INT(11) default NULL,    -- ID of the borrower who created this macro
-    shared TINYINT(1) default 0,            -- Bit to define if shared or private macro
+    id INT(11) NOT NULL AUTO_INCREMENT COMMENT "Unique ID of the macro",
+    name varchar(80) NOT NULL COMMENT "Name of the macro",
+    macro longtext NULL COMMENT "The macro code itself",
+    borrowernumber INT(11) default NULL COMMENT "ID of the borrower who created this macro",
+    shared TINYINT(1) default 0 COMMENT "Bit to define if shared or private macro",
     PRIMARY KEY (id),
     CONSTRAINT borrower_macro_fk FOREIGN KEY ( borrowernumber ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
