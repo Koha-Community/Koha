@@ -177,10 +177,9 @@ SKIP: {
         $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
         like( $driver->get_title(), qr(test biblio \d+ by test author), );
         my $form = $driver->find_element('//form[@name="f"]');
-        my $inputs = $driver->find_child_elements($form, '//input[@type="text"]');
+        # select the text inputs that don't have display:none
+        my $inputs = $driver->find_child_elements($form, '/.//*[not(self::node()[contains(@style,"display:none")])]/*[@type="text"]');
         for my $input ( @$inputs ) {
-            next if $input->is_hidden();
-
             my $id = $input->get_attribute('id');
             next unless $id =~ m|^tag_952_subfield|;
 
@@ -206,7 +205,7 @@ SKIP: {
             elsif (
                 $id =~ m|^tag_952_subfield_d| # dateaccessioned
             ) {
-                $v = ""; # The input has been prefilled with %Y-%m-%d already
+                next; # The input has been prefilled with %Y-%m-%d already
             }
             else {
                 $v = 't_value_bib' . $biblionumber;
