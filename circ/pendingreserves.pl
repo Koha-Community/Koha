@@ -252,6 +252,11 @@ foreach my $bibnum ( @biblionumbers ){
 
     my $hold_info;
     my $items = $all_items->{$bibnum};
+    my $items_count = defined $items ? scalar @$items : 0;
+    my $pull_count = $items_count <= $patrons_count->{$bibnum} ? $items_count : $patrons_count->{$bibnum};
+    if ( $pull_count == 0 ) {
+        next;
+    }
 
     # get available item types for each biblio
     my @res_itemtypes;
@@ -286,16 +291,12 @@ foreach my $bibnum ( @biblionumbers ){
     $hold_info->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @$items ];
 
     # items available
-    my $items_count = scalar @$items;
     $hold_info->{items_count} = $items_count;
 
     # patrons with holds
     $hold_info->{patrons_count} = $patrons_count->{$bibnum};
 
-    my $pull_count = $items_count <= $patrons_count->{$bibnum} ? $items_count : $patrons_count->{$bibnum};
-    if ( $pull_count == 0 ) {
-        next;
-    }
+    # number of items to pull
     $hold_info->{pull_count} = $pull_count;
 
     # get other relevant information
