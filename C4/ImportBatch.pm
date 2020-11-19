@@ -773,6 +773,10 @@ sub BatchCommitItems {
             $updsth->execute();
             $num_items_errored++;
         } else {
+            # Remove the itemnumber if it exists, we want to create a new item
+            my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
+            $item_marc->field($itemtag)->delete_subfield( code => $itemsubfield );
+
             my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber );
             if( $itemnumber ) {
                 $updsth->bind_param( 1, 'imported' );
