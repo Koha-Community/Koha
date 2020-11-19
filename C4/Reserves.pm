@@ -1373,7 +1373,7 @@ sub ItemsAnyAvailableAndNotRestricted {
         # we can return (end the loop) when first one found:
         return 1
             unless $i->itemlost
-            || $i->notforloan > 0
+            || $i->notforloan
             || $i->withdrawn
             || $i->onloan
             || IsItemOnHoldAndFound( $i->id )
