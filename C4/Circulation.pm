@@ -3349,12 +3349,17 @@ sub GetIssuingCharges {
     if ( my $item_data = $sth->fetchrow_hashref ) {
         $item_type = $item_data->{itemtype};
         $charge    = $item_data->{rentalcharge};
+        # FIXME This should follow CircControl
         my $branch = C4::Context::mybranch();
         my $patron = Koha::Patrons->find( $borrowernumber );
-        my $discount = _get_discount_from_rule($patron->categorycode, $branch, $item_type);
+        my $discount = Koha::CirculationRules->get_effective_rule({
+            categorycode => $patron->categorycode,
+            branchcode   => $branch,
+            itemtype     => $item_type,
+            rule_name    => 'rentaldiscount'
+        });
         if ($discount) {
-            # We may have multiple rules so get the most specific
-            $charge = ( $charge * ( 100 - $discount ) ) / 100;
+            $charge = ( $charge * ( 100 - $discount->rule_value ) ) / 100;
         }
         if ($charge) {
             $charge = sprintf '%.2f', $charge; # ensure no fractions of a penny returned
@@ -3362,49 +3367,6 @@ sub GetIssuingCharges {
     }
 
     return ( $charge, $item_type );
-}
-
-# Select most appropriate discount rule from those returned
-sub _get_discount_from_rule {
-    my ($categorycode, $branchcode, $itemtype) = @_;
-
-    # Set search precedences
-    my @params = (
-        {
-            branchcode   => $branchcode,
-            itemtype     => $itemtype,
-            categorycode => $categorycode,
-        },
-        {
-            branchcode   => undef,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        },
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => undef,
-        },
-        {
-            branchcode   => undef,
-            categorycode => $categorycode,
-            itemtype     => undef,
-        },
-    );
-
-    foreach my $params (@params) {
-        my $rule = Koha::CirculationRules->search(
-            {
-                rule_name => 'rentaldiscount',
-                %$params,
-            }
-        )->next();
-
-        return $rule->rule_value if $rule;
-    }
-
-    # none of the above
-    return 0;
 }
 
 =head2 AddIssuingCharge

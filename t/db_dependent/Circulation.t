@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 51;
+use Test::More tests => 52;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -281,6 +281,51 @@ Koha::CirculationRules->set_rules(
         }
     }
 );
+
+subtest "GetIssuingCharges tests" => sub {
+    plan tests => 4;
+    my $branch_discount = $builder->build_object({ class => 'Koha::Libraries' });
+    my $branch_no_discount = $builder->build_object({ class => 'Koha::Libraries' });
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => $branch_discount->branchcode,
+            itemtype     => undef,
+            rule_name    => 'rentaldiscount',
+            rule_value   => 15
+        }
+    );
+    my $itype_charge = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            rentalcharge => 10
+        }
+    });
+    my $itype_no_charge = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            rentalcharge => 0
+        }
+    });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item_1 = $builder->build_sample_item({ itype => $itype_charge->itemtype });
+    my $item_2 = $builder->build_sample_item({ itype => $itype_no_charge->itemtype });
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branch_no_discount->branchcode });
+    # For now the sub always uses the env branch, this should follow CircControl instead
+    my ($charge, $itemtype) = GetIssuingCharges( $item_1->itemnumber, $patron->borrowernumber);
+    is( $charge + 0, 10.00, "Charge fetched correctly when no discount exists");
+    ($charge, $itemtype) = GetIssuingCharges( $item_2->itemnumber, $patron->borrowernumber);
+    is( $charge + 0, 0.00, "Charge fetched correctly when no discount exists and no charge");
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branch_discount->branchcode });
+    # For now the sub always uses the env branch, this should follow CircControl instead
+    ($charge, $itemtype) = GetIssuingCharges( $item_1->itemnumber, $patron->borrowernumber);
+    is( $charge + 0, 8.50, "Charge fetched correctly when discount exists");
+    ($charge, $itemtype) = GetIssuingCharges( $item_2->itemnumber, $patron->borrowernumber);
+    is( $charge + 0, 0.00, "Charge fetched correctly when discount exists and no charge");
+
+};
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
