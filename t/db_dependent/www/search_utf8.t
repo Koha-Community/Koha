@@ -256,14 +256,6 @@ sub test_search{
     $agent->field('q', $search_key);
     $agent->click();
     my $intra_text = $agent->text() ;
-    my $diag = sub {
-        my $pref = 'XSLTResultsDisplay';
-        my $xslt_file = C4::Context->preference('marcflavour') . 'slim2intranetResults.xsl';
-        my $xslt_filepath = C4::XSLT::_get_best_default_xslt_filename( C4::Context->config('intrahtdocs'), C4::Context->preference("template"), 'en', $xslt_file );
-        return sprintf( "===DIAG===\n%s is %s\n%s %s\n==========", $pref, C4::Context->preference($pref), $xslt_filepath, ( -f $xslt_filepath ? 'exists' : 'does not exist' ));
-    };
-
-#    like( $intra_text, qr|Publication details: $publisher|, ) or diag($diag->());
 
     $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
     $agent->form_number(5);
@@ -272,7 +264,6 @@ sub test_search{
     $agent->click();
     $intra_text = $agent->text();
 
-#    like( $intra_text, qr|Publication details: $publisher|, );
     my $expected_base = q|search.pl\?advsearch=1&idx=kw&q=| . uri_escape_utf8( $publisher );
     $agent->base_like(qr|$expected_base|, );
 
@@ -286,7 +277,6 @@ sub test_search{
     $agent->field( 'idx',   '' );
     $agent->click( );
     my $opac_text = $agent->text() ;
-#    like( $opac_text, qr|Publication details: $publisher|, );
 
     $agent->get_ok( "$opac" , "got opac");
     $agent->form_name('searchform');
@@ -295,7 +285,6 @@ sub test_search{
     $agent->click();
     $opac_text = $agent->text();
 
-#    like( $opac_text, qr|Publication details: $publisher|, );
     $expected_base = q|opac-search.pl\?(idx=&)?q=| . uri_escape_utf8( $publisher );
     $agent->base_like(qr|$expected_base|, );
     # Test added on BZ 14909 in addition to making the empty idx= optional
