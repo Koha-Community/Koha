@@ -36,10 +36,13 @@ my $csv_profile_id = $query->param('csv_profile');
 my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
 die "There is no valid csv profile given" unless $csv_profile;
 
+my $delimiter = $csv_profile->csv_separator;
+$delimiter = "\t" if $delimiter eq "\\t";
+
 my $csv = Text::CSV_XS->new({
     'quote_char'  => '"',
     'escape_char' => '"',
-    'sep_char'    => $csv_profile->csv_separator,
+    'sep_char'    => $delimiter,
     'binary'      => 1
 });
 
