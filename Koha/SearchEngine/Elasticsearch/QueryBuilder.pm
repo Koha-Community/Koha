@@ -100,6 +100,7 @@ sub build_query {
             fields           => $fields,
             lenient          => JSON::true,
             analyze_wildcard => JSON::true,
+            type             => 'cross_fields',
         }
     };
 
