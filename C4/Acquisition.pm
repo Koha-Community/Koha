@@ -276,7 +276,9 @@ sub GetBasketAsCSV {
         my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
         Koha::Exceptions::ObjectNotFound->throw( 'There is no valid csv profile given') unless $csv_profile;
 
-        my $csv = Text::CSV_XS->new({'quote_char'=>'"','escape_char'=>'"','sep_char'=>$csv_profile->csv_separator,'binary'=>1});
+        my $delimiter = $csv_profile->csv_separator;
+        $delimiter = "\t" if $delimiter eq "\\t";
+        my $csv = Text::CSV_XS->new({'quote_char'=>'"','escape_char'=>'"','sep_char'=>$delimiter,'binary'=>1});
         my $csv_profile_content = $csv_profile->content;
         my ( @headers, @fields );
         while ( $csv_profile_content =~ /
