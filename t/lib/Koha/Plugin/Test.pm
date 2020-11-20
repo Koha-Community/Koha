@@ -100,6 +100,7 @@ sub item_barcode_transform {
 
 sub patron_barcode_transform {
     my ( $self, $barcode ) = @_;
+    $barcode //= '';
     Koha::Exceptions::Exception->throw("patron_barcode_transform called with parameter: $barcode");
 }
 

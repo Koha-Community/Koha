@@ -112,7 +112,7 @@ Autogenerate next cardnumber from highest value found in database
 sub fixup_cardnumber {
     my ( $self ) = @_;
 
-    my ( $max ) = Koha::Plugins->call( 'patron_barcode_transform', $self ) || undef;
+    my ( $max ) = Koha::Plugins->call( 'patron_barcode_transform', $self->cardnumber ) || undef;
 
     $max ||= Koha::Patrons->search({
         cardnumber => {-regexp => '^-?[0-9]+$'}

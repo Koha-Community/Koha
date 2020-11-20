@@ -42,7 +42,7 @@ t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest '() hook tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -51,12 +51,27 @@ subtest '() hook tests' => sub {
 
     my $plugin = Koha::Plugin::Test->new->enable;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $cardnumber = $patron->cardnumber;
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { cardnumber => undef } } );
 
+    t::lib::Mocks::mock_preference( 'autoMemberNum', 1 );
+    warnings_like { $patron->store(); }
+    [
+        qr/patron_barcode_transform called with parameter: /,
+        qr/patron_barcode_transform called with parameter: /
+    ],
+    'Koha::Patron::store calls the patron_barcode_transform hook twice when autoMemberNum is enabled and cardnumber is undefined';
+
+    $patron->cardnumber('TEST');
     warning_like { $patron->store(); }
-        qr/patron_barcode_transform called with parameter: $cardnumber/,
-        'Koha::Patron::store calls the patron_barcode_transform hook';
+        qr/patron_barcode_transform called with parameter: TEST/,
+        'Koha::Patron::store calls the patron_barcode_transform hook once when autoMemberNum is enabled and cardnumber is set';
+
+    t::lib::Mocks::mock_preference( 'autoMemberNum', 0 );
+    $patron->cardnumber(undef);
+    warning_like { $patron->store(); }
+        qr/patron_barcode_transform called with parameter: /,
+        'Koha::Patron::store calls the patron_barcode_transform hook once when autoMemberNum is disabled and cardnumber is undefined';
 
     t::lib::Mocks::mock_userenv(
         {
