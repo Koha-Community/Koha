@@ -588,8 +588,10 @@ $(document).ready(function() {
 
                         if ( oObj.return_claim_id ) {
                           content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
-                        } else {
+                        } else if ( ClaimReturnedLostValue ) {
                           content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
+                        } else {
+                          content = '<a class="btn btn-default btn-xs" disabled="disabled" title="Claim returned is disabled"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                         }
                         return content;
                     }
