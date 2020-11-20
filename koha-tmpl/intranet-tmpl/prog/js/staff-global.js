@@ -345,6 +345,16 @@ function resetSearchContext() {
 
 function saveOrClearSimpleSearchParams() {
     // Simple masthead search - pass value for display on details page
-    localStorage.setItem('cat_search_pulldown_selection', $("#cat-search-block select.advsearch").val() );
-    localStorage.setItem('searchbox_value', $("#cat-search-block #search-form").val() );
+    if( $("#cat-search-block select.advsearch").length ){
+        pulldown_selection = $("#cat-search-block select.advsearch").val();
+    } else {
+        pulldown_selection ="";
+    }
+    if( $("#cat-search-block #search-form").length ){
+        searchbox_value = $("#cat-search-block #search-form").val();
+    } else {
+        searchbox_value ="";
+    }
+    localStorage.setItem('cat_search_pulldown_selection', pulldown_selection );
+    localStorage.setItem('searchbox_value', searchbox_value );
 }
