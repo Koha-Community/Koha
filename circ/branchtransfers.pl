@@ -77,7 +77,7 @@ my $hold_transferred;
 my $hold_processed;
 my $reqmessage;
 my $cancelled;
-my $setwaiting;
+my $settransit;
 
 my $request        = $query->param('request')        || '';
 my $borrowernumber = $query->param('borrowernumber') ||  0;
@@ -98,21 +98,20 @@ if ( $request eq "KillWaiting" ) {
         $reqmessage  = 1;
     } # FIXME else?
 }
-elsif ( $request eq "SetWaiting" ) {
+elsif ( $request eq "SetTransit" ) {
     my $item = $query->param('itemnumber');
-    ModReserveAffect( $item, $borrowernumber );
+    my $reserve_id = $query->param('reserve_id');
+    ModReserveAffect( $item, $borrowernumber, 1, $reserve_id );
     $ignoreRs    = 1;
-    $setwaiting  = 1;
+    $settransit  = 1;
     $reqmessage  = 1;
 }
 elsif ( $request eq 'KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
-    my $holds = Koha::Holds->search({
-        biblionumber   => $biblionumber,
-        borrowernumber => $borrowernumber
-    });
-    if ( $holds->count ) {
-        $holds->next->cancel;
+    my $reserve_id = $query->param('reserve_id');
+    my $hold = Koha::Holds->find({ reserve_id => $reserve_id });
+    if ( $hold ) {
+        $hold->cancel;
         $cancelled   = 1;
         $reqmessage  = 1;
     } # FIXME else?
@@ -170,20 +169,24 @@ my $biblionumber;
 
 #####################
 
-if ($found) {
-    my $res = $messages->{'ResFound'};
-    $itemnumber = $res->{'itemnumber'};
-    $borrowernumber = $res->{'borrowernumber'};
+my $hold;
+if ($found){
+    $hold = Koha::Holds->find(
+        { reserve_id => $found->{reserve_id} },
+        { prefetch => ['item','patron'] }
+    );
+    $itemnumber = $found->{'itemnumber'};
+    $borrowernumber = $found->{'borrowernumber'};
 
-    if ( $res->{'ResFound'} eq "Waiting" ) {
+    if ( $found->{'ResFound'} eq "Waiting" ) {
         $waiting = 1;
-    } elsif ( $res->{'ResFound'} eq "Transferred" ) {
+    } elsif ( $found->{'ResFound'} eq "Transferred" ) {
         $hold_transferred = 1;
-    } elsif ( $res->{'ResFound'} eq "Processing" ) {
+    } elsif ( $found->{'ResFound'} eq "Processing" ) {
         $hold_processed = 1;
-    } elsif ( $res->{'ResFound'} eq "Reserved" ) {
+    } elsif ( $found->{'ResFound'} eq "Reserved" ) {
         $reserved  = 1;
-        $biblionumber = $res->{'biblionumber'};
+        $biblionumber = $found->{'biblionumber'};
     }
 }
 
@@ -221,6 +224,7 @@ foreach my $code ( keys %$messages ) {
 
 $template->param(
     found                   => $found,
+    hold                    => $hold,
     reserved                => $reserved,
     waiting                 => $waiting,
     transferred             => $hold_transferred,
@@ -232,7 +236,7 @@ $template->param(
     tobranchcd              => $tobranchcd,
     reqmessage              => $reqmessage,
     cancelled               => $cancelled,
-    setwaiting              => $setwaiting,
+    settransit              => $settransit,
     trsfitemloop            => \@trsfitemloop,
     errmsgloop              => \@errmsgloop,
     PatronAutoComplete    => C4::Context->preference("PatronAutoComplete"),
