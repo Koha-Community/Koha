@@ -29,14 +29,6 @@ use CGI;
 
 my $input = new CGI;
 
-my ( $auth_status, $sessionID ) =
-  check_cookie_auth( $input->cookie('CGISESSID'),
-    { serials => 'create_subscription' } );
-
-if ( $auth_status ne "ok" ) {
-    exit 0;
-}
-
 my $templatename;
 if ($input->param( "resource" ) eq 'report') {
     $templatename = "mana/mana-report-search-result.tt";
