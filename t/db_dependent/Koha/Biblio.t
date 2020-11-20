@@ -189,7 +189,6 @@ subtest 'pickup_locations' => sub {
 
     $schema->storage->txn_begin;
 
-    my $nb_libraries = Koha::Libraries->count;
     Koha::CirculationRules->search->delete;
     Koha::CirculationRules->set_rules(
         {
@@ -368,11 +367,11 @@ subtest 'pickup_locations' => sub {
     my $patron8 = $builder->build_object( { class => 'Koha::Patrons', value => { firstname=>'8', branchcode => $library8->branchcode } } );
 
     my $results = {
-        "ItemHomeLibrary-1-1" => 6  + $nb_libraries,
+        "ItemHomeLibrary-1-1" => 6,
         "ItemHomeLibrary-1-8" => 1,
         "ItemHomeLibrary-2-1" => 2,
         "ItemHomeLibrary-2-8" => 0,
-        "PatronLibrary-1-1" => 6 + $nb_libraries,
+        "PatronLibrary-1-1" => 6,
         "PatronLibrary-1-8" => 3,
         "PatronLibrary-2-1" => 0,
         "PatronLibrary-2-8" => 3,
@@ -382,14 +381,10 @@ subtest 'pickup_locations' => sub {
         my ( $cbranch, $biblio, $patron, $results ) = @_;
         t::lib::Mocks::mock_preference('ReservesControlBranch', $cbranch);
 
-        my @pl = $biblio->pickup_locations( { patron => $patron } );
-
-        foreach my $pickup_location (@pl) {
-            next
-              unless grep { $pickup_location eq $_ } @branchcodes;
-
-            is( ref($pickup_location), 'Koha::Library', 'Object type is correct' );
-        }
+        my @pl = map {
+            my $pickup_location = $_;
+            grep { $pickup_location->branchcode eq $_ } @branchcodes
+        } $biblio->pickup_locations( { patron => $patron } )->as_list;
 
         ok(
             scalar(@pl) == $results->{ $cbranch . '-'

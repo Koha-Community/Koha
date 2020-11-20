@@ -212,20 +212,18 @@ subtest 'pickup_locations' => sub {
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode, firstname => '1' } } );
     my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
-    my $all_count = Koha::Libraries->search({ pickup_location => 1})->count();
-
     my $results = {
-        "1-1-1-any"           => $all_count,
+        "1-1-1-any"           => 3,
         "1-1-1-holdgroup"     => 2,
         "1-1-1-patrongroup"   => 2,
         "1-1-1-homebranch"    => 1,
         "1-1-1-holdingbranch" => 1,
-        "1-1-2-any"           => $all_count,
+        "1-1-2-any"           => 3,
         "1-1-2-holdgroup"     => 2,
         "1-1-2-patrongroup"   => 2,
         "1-1-2-homebranch"    => 1,
         "1-1-2-holdingbranch" => 1,
-        "1-1-3-any"           => $all_count,
+        "1-1-3-any"           => 3,
         "1-1-3-holdgroup"     => 2,
         "1-1-3-patrongroup"   => 2,
         "1-1-3-homebranch"    => 1,
@@ -235,7 +233,7 @@ subtest 'pickup_locations' => sub {
         "1-4-1-patrongroup"   => 0,
         "1-4-1-homebranch"    => 0,
         "1-4-1-holdingbranch" => 0,
-        "1-4-2-any"           => $all_count,
+        "1-4-2-any"           => 3,
         "1-4-2-holdgroup"     => 2,
         "1-4-2-patrongroup"   => 1,
         "1-4-2-homebranch"    => 1,
@@ -250,7 +248,7 @@ subtest 'pickup_locations' => sub {
         "3-1-1-patrongroup"   => 0,
         "3-1-1-homebranch"    => 0,
         "3-1-1-holdingbranch" => 0,
-        "3-1-2-any"           => $all_count,
+        "3-1-2-any"           => 3,
         "3-1-2-holdgroup"     => 1,
         "3-1-2-patrongroup"   => 2,
         "3-1-2-homebranch"    => 0,
@@ -265,12 +263,12 @@ subtest 'pickup_locations' => sub {
         "3-4-1-patrongroup"   => 0,
         "3-4-1-homebranch"    => 0,
         "3-4-1-holdingbranch" => 0,
-        "3-4-2-any"           => $all_count,
+        "3-4-2-any"           => 3,
         "3-4-2-holdgroup"     => 1,
         "3-4-2-patrongroup"   => 1,
         "3-4-2-homebranch"    => 0,
         "3-4-2-holdingbranch" => 1,
-        "3-4-3-any"           => $all_count,
+        "3-4-3-any"           => 3,
         "3-4-3-holdgroup"     => 1,
         "3-4-3-patrongroup"   => 1,
         "3-4-3-homebranch"    => 0,
@@ -291,14 +289,13 @@ subtest 'pickup_locations' => sub {
                 }
             }
         );
-        my @pl = $item->pickup_locations( { patron => $patron} )->as_list;
         my $ha_value=$ha==3?'holdgroup':($ha==2?'any':'homebranch');
 
-        foreach my $pickup_location (@pl) {
-            next
-                unless grep { $pickup_location eq $_ } @branchcodes;
-            is( ref($pickup_location), 'Koha::Library', 'Object type is correct' );
-        }
+        my @pl = map {
+            my $pickup_location = $_;
+            grep { $pickup_location->branchcode eq $_ } @branchcodes
+        } $item->pickup_locations( { patron => $patron } )->as_list;
+
         ok(
             scalar(@pl) == $results->{
                     $item->copynumber . '-'
@@ -374,8 +371,12 @@ subtest 'pickup_locations' => sub {
         }
     );
 
-    my $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count - 1, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
+    my @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item1->pickup_locations( { patron => $patron1 } )->as_list;
+
+    is( scalar @pickup_locations, 3 - 1, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
     $builder->build_object(
         {
@@ -389,15 +390,25 @@ subtest 'pickup_locations' => sub {
         }
     );
 
-    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count - 2, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item1->pickup_locations( { patron => $patron1 } )->as_list;
+
+    is( scalar @pickup_locations, 3 - 2, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
 
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
-    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count, "With no transfer limits of type ccode we get back the libraries that are pickup locations");
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item1->pickup_locations( { patron => $patron1 } )->as_list;
+    is( scalar @pickup_locations, 3, "With no transfer limits of type ccode we get back the libraries that are pickup locations");
 
-    $pickup_locations = $item_no_ccode->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count, "With no transfer limits of type ccode and an item with no ccode we get back the libraries that are pickup locations");
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item_no_ccode->pickup_locations( { patron => $patron1 } )->as_list;
+    is( scalar @pickup_locations, 3, "With no transfer limits of type ccode and an item with no ccode we get back the libraries that are pickup locations");
 
     $builder->build_object(
         {
@@ -411,8 +422,11 @@ subtest 'pickup_locations' => sub {
         }
     );
 
-    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count - 1, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item1->pickup_locations( { patron => $patron1 } )->as_list;
+    is( scalar @pickup_locations, 3 - 1, "With a transfer limits we get back the libraries that are pickup locations minus 1 limited library");
 
     $builder->build_object(
         {
@@ -426,8 +440,11 @@ subtest 'pickup_locations' => sub {
         }
     );
 
-    $pickup_locations = $item1->pickup_locations( { patron => $patron1 } )->as_list;
-    is( scalar @$pickup_locations, $all_count - 2, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item1->pickup_locations( { patron => $patron1 } )->as_list;
+    is( scalar @pickup_locations, 3 - 2, "With 2 transfer limits we get back the libraries that are pickup locations minus 2 limited libraries");
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 0);
 
