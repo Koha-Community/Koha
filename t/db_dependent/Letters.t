@@ -18,9 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 77;
+use Test::More tests => 83;
 use Test::MockModule;
 use Test::Warn;
+
+use Email::Sender::Failure;
 
 use MARC::Record;
 
@@ -461,10 +463,22 @@ t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 warning_like {
     $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ) }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked sendmail routine (orderacquisition)";
+    "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
 is($err, 1, "Successfully sent order.");
 is($email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent order");
 is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Order notice text constructed successfully');
+
+my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+$mocked_koha_email->mock( 'send_or_die', sub {
+    Email::Sender::Failure->throw('something went wrong');
+});
+
+warning_like {
+    $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ); }
+    qr{something went wrong},
+    'Warning is printed';
+
+is($err->{error}, 'something went wrong', "Send exception, error message returned");
 
 $dbh->do(q{DELETE FROM letter WHERE code = 'TESTACQORDER';});
 warning_like {
@@ -478,11 +492,23 @@ is($err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined.");
 warning_like {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked sendmail routine";
+    "SendAlerts is using the mocked send_or_die routine";
 
 is($err, 1, "Successfully sent claim");
 is($email_object->email->header('To'), 'testemail@mydomain.com', "mailto correct in sent claim");
 is($email_object->email->body, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Claim notice text constructed successfully');
+
+my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+$mocked_koha_email->mock( 'send_or_die', sub {
+    Email::Sender::Failure->throw('something went wrong');
+});
+
+warning_like {
+    $err = SendAlerts( 'claimacquisition', [ $ordernumber ] , 'TESTACQCLAIM' ); }
+    qr{something went wrong},
+    'Warning is printed';
+
+is($err->{error}, 'something went wrong', "Send exception, error message returned");
 }
 
 {
@@ -520,7 +546,7 @@ my $err2;
 warning_like {
 $err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked sendmail routine";
+    "SendAlerts is using the mocked send_or_die routine";
 
 is($err2, 1, "Successfully sent serial notification");
 is($email_object->email->header('To'), 'john.smith@test.de', "mailto correct in sent serial notification");
@@ -532,13 +558,26 @@ my $err3;
 warning_like {
 $err3 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
     qr|Fake send_or_die|,
-    "SendAlerts is using the mocked sendmail routine";
+    "SendAlerts is using the mocked send_or_die routine";
 is($email_object->email->header('To'), 'robert.tables@mail.com', "mailto address overwritten by SendAllMailsTo preference");
+
+my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+$mocked_koha_email->mock( 'send_or_die', sub {
+    Email::Sender::Failure->throw('something went wrong');
+});
+
+warning_like {
+    $err = SendAlerts( 'issue', $serial->{serialid} , 'RLIST' ); }
+    qr{something went wrong},
+    'Warning is printed';
+
+is($err->{error}, 'something went wrong', "Send exception, error message returned");
+
 }
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
 
 subtest 'SendAlerts - claimissue' => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     use C4::Serials;
 
@@ -605,7 +644,7 @@ subtest 'SendAlerts - claimissue' => sub {
     warning_like {
         $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ) }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked sendmail routine (claimissues)";
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
     is( $err, 1, "Successfully sent claim" );
     is( $email_object->email->header('To'),
         'testemail@mydomain.com', "mailto correct in sent claim" );
@@ -614,6 +653,18 @@ subtest 'SendAlerts - claimissue' => sub {
         "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy",
         'Serial claim letter for 1 issue constructed successfully'
     );
+
+    my $mocked_koha_email = Test::MockModule->new('Koha::Email');
+    $mocked_koha_email->mock( 'send_or_die', sub {
+            Email::Sender::Failure->throw('something went wrong');
+    });
+
+    warning_like {
+        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ); }
+        qr{something went wrong},
+        'Warning is printed';
+
+    is($err->{error}, 'something went wrong', "Send exception, error message returned");
     }
 
     {
@@ -625,7 +676,7 @@ subtest 'SendAlerts - claimissue' => sub {
 
     warning_like { $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' ); }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked sendmail routine (claimissues)";
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
     is(
         $email_object->email->body,
@@ -773,7 +824,7 @@ subtest 'SendQueuedMessages' => sub {
 
     warning_like { C4::Letters::SendQueuedMessages(); }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked sendmail routine (claimissues)";
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
     my $message = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
@@ -794,7 +845,7 @@ subtest 'SendQueuedMessages' => sub {
     $message_id = C4::Letters::EnqueueLetter($my_message);
     warning_like { C4::Letters::SendQueuedMessages(); }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked sendmail routine (claimissues)";
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
     $message = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
@@ -819,7 +870,7 @@ subtest 'SendQueuedMessages' => sub {
 
     warning_like { C4::Letters::SendQueuedMessages(); }
         qr|Fake send_or_die|,
-        "SendAlerts is using the mocked sendmail routine (claimissues)";
+        "SendAlerts is using the mocked send_or_die routine (claimissues)";
 
     my $sms_message_address = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
