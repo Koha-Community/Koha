@@ -132,4 +132,4 @@ $dp =  Koha::EDI::_discounted_price(0.0, 9);
 is( $dp, 9.0, 'Discount calculated with discount = 0' );
 
 $dp =  Koha::EDI::_discounted_price(0.0, 9, 8.0);
-is( $dp, 8.0, 'Discount overriden by incoming calculated value');
+is( $dp, 8.0, 'Discount overridden by incoming calculated value');
