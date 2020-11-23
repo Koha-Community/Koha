@@ -178,10 +178,10 @@ sub validate_hold_sibling {
 
     foreach (@hold_libraries) {
         my $hold_library = $_;
-        my $is_valid = 1;
+        my $is_valid = 0;
         foreach my $key (keys %$params) {
-            unless($hold_library->$key eq $params->{$key}) {
-                $is_valid=0;
+            if ($hold_library->$key eq $params->{$key}) {
+                $is_valid=1;
                 last;
             }
         }
