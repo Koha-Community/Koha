@@ -243,23 +243,9 @@ sub validate_hold_sibling {
 
     return 1 if $params->{branchcode} eq $self->id;
 
+    my $branchcode = $params->{branchcode};
     my @hold_libraries = $self->get_hold_libraries;
-
-    foreach (@hold_libraries) {
-        my $hold_library = $_;
-        my $is_valid = 0;
-        foreach my $key (keys %$params) {
-            if ($hold_library->$key eq $params->{$key}) {
-                $is_valid=1;
-                last;
-            }
-        }
-        if($is_valid) {
-            #Found one library that meets all search parameters
-            return 1;
-        }
-    }
-    return 0;
+    return grep {$_->branchcode eq $branchcode} @hold_libraries;
 }
 
 =head2 Internal methods

@@ -566,10 +566,10 @@ sub CanItemBeReserved {
         unless ($item->can_be_transferred({ to => $destination })) {
             return { status => 'cannotBeTransferred' };
         }
-        unless ($branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
+        if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup' && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
             return { status => 'pickupNotInHoldGroup' };
         }
-        unless ($branchitemrule->{hold_fulfillment_policy} ne 'patrongroup' || Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
+        if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
             return { status => 'pickupNotInHoldGroup' };
         }
     }
