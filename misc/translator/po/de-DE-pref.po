@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2020-10-21 13:39+0000\n"
+"PO-Revision-Date: 2020-11-22 00:52+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1603287541.179749\n"
+"X-POOTLE-MTIME: 1606006377.519015\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -43,7 +43,9 @@ msgstr "ein Guthaben auf dem Benutzerkonto, wenn neue Gebühren eingetragen werd
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale#  the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)"
-msgstr "die Kassenfunktion um anonyme Transaktionen mit dem Gebührensystem zu verbuchen. (Erfordert UseCashRegisters)"
+msgstr ""
+"die Verkaufsfunktion um anonyme Transaktionen mit dem Gebührensystem zu "
+"verbuchen. (Erfordert UseCashRegisters)"
 
 # Accounting > Features
 msgid "accounting.pref#EnablePointOfSale# Disable"
@@ -2438,12 +2440,16 @@ msgid "cataloguing.pref#item-level_itypes# specific item"
 msgstr "einzelnen Exemplars"
 
 # Cataloging > Record structure
+msgid "cataloguing.pref#itemcallnumber# Examples for MARC21: Dewey: 082ab,092ab; LOC: 050ab,090ab; from the Koha record: 942hi. Examples for UNIMARC: Dewey: 676a; LOC: 680ab."
+msgstr "Beispiele für MARC21: Dewey: 082ab,092ab; LOC: 050ab,090ab; aus dem Koha-Titel: 942hi. Beispiele für UNIMARC: Dewey: 676a; LOC: 680ab."
+
+# Cataloging > Record structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfields"
 msgstr "Ordne die MARC-Unterfelder"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. List multiple comma-separated fields to check them sequentially. Each field can include multiple subfields. The order of the subfields in the record will be preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then the 092$a and 092$b. Examples (for MARC21 records): Dewey: 082ab,092ab; LOC: 050ab,090ab; from the item record: 952hi."
-msgstr "der Exemplarsignatur zu. Geben Sie mehrere Felder getrennt mit Komma ein in der Reihenfolge ein, in der Sie geprüft werden sollen. Jedes Feld kann mehrere Unterfelder enthalten. Die Reihenfolge der Unterfelder im Datensatz wird übernommen. Zum Beispiel: '082ab,092ab' verwendet zuerst 082$a und 082$b, dann 092$a and 092$b. Beispiel für MARC21: Dewey: 082ab,092ab; LOC: 050ab,090ab; aus dem Exemplarsatz: 952hi."
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. List multiple comma-separated fields to check them sequentially. Each field can include multiple subfields. The order of the subfields in the record will be preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then the 092$a and 092$b."
+msgstr "der Exemplarsignatur zu. Geben Sie mehrere Felder getrennt mit Komma ein in der Reihenfolge ein, in der Sie geprüft werden sollen. Jedes Feld kann mehrere Unterfelder enthalten. Die Reihenfolge der Unterfelder im Datensatz wird übernommen. Zum Beispiel: '082ab,092ab' verwendet zuerst 082$a und 082$b, dann 092$a and 092$b."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -2979,9 +2985,7 @@ msgstr "Erlaube nicht,"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
-msgstr ""
-"Hinweis: Der hier angegebene Benutzer kann sich nicht länger im OPAC "
-"anmelden."
+msgstr "Hinweis: Der hier angegebene Benutzer kann sich nicht länger im OPAC anmelden."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
@@ -3357,9 +3361,7 @@ msgstr "dass Vormerkungen automatisch ablaufen, wenn diese nicht innerhalb der i
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
-msgstr ""
-"Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für "
-"nicht abgeholte Vormerkungen eine Gebühr ein Höhe von"
+msgstr "Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für nicht abgeholte Vormerkungen eine Gebühr ein Höhe von"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3940,12 +3942,7 @@ msgstr "Drucke bis zu"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr ""
-"Exemplarzeilen in gedruckten Mahnschreiben. Wenn die Anzahl der angemahnten "
-"Exemplare größer als Anzahl der Zeilen ist, endet die Benachrichtigung mit "
-"einem Hinweis, dass Benutzerkonto auf die vollständige Liste der Exemplare "
-"zu prüfen. Bei 0 werden alle überfälligen Exemplare unabhängig von der "
-"Gesamtzahl gedruckt."
+msgstr "Exemplarzeilen in gedruckten Mahnschreiben. Wenn die Anzahl der angemahnten Exemplare größer als Anzahl der Zeilen ist, endet die Benachrichtigung mit einem Hinweis, dass Benutzerkonto auf die vollständige Liste der Exemplare zu prüfen. Bei 0 werden alle überfälligen Exemplare unabhängig von der Gesamtzahl gedruckt."
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -5494,8 +5491,8 @@ msgid "enhanced_content.pref#OpenLibrarySearch# search results from Open Library
 msgstr "von Suchresultaten von OpenLibrary im OPAC."
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set <a href=\"/cgi-bin/koha/admin/overdrive.pl\">here</a>)."
-msgstr "(wird verwendet, wenn der individuelle authname für die Bibliothek <a href=\"/cgi-bin/koha/admin/overdrive.pl\">hier</a> nicht konfiguriert wurde.)"
+msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/overdrive.pl\">OverDrive library authnames table</a>)."
+msgstr "(wird verwendet, wenn der individuelle <a href=\"/cgi-bin/koha/admin/overdrive.pl\">authname der Bibliothek</a> nicht konfiguriert wurde)."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive Authname"
@@ -6263,7 +6260,7 @@ msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Don't allow"
 msgstr "Erlaube nicht"
 
 # OPAC > Privacy
-msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor\"."
+msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor."
 msgstr "den Benutzern die eigenen Datenschutzoptionen bezüglich der Anzeige von Ausleihen gegenüber ihren Bürgen zu bearbeiten."
 
 # OPAC > Privacy
@@ -6275,8 +6272,8 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "Erlaube nicht"
 
 # OPAC > Privacy
-msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor\"."
-msgstr ", dass Benutzer die Einstellungen für die Anzeige von Gebühren für den Bürgen selbst festlegen."
+msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor."
+msgstr "den Benutzern die eigenen Datenschutzoptionen bezüglich der Anzeige von Gebühren gegenüber ihren Bürgen zu bearbeiten."
 
 # OPAC > Policy
 msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# Allow"
@@ -6308,7 +6305,9 @@ msgstr "Verwende die Benutzernummer"
 
 # OPAC > Privacy
 msgid "opac.pref#AnonymousPatron# as the Anonymous Patron (for anonymous suggestions and reading history)"
-msgstr "als anonymen Benutzer (für anonyme Anschaffungsvorschläge und Lesehistorien)"
+msgstr ""
+"als anonymen Benutzer (für anonyme Anschaffungsvorschläge und "
+"Ausleihhistorien)"
 
 # OPAC > Appearance
 msgid "opac.pref#BiblioDefaultView# By default, show bib records"
@@ -6656,7 +6655,9 @@ msgstr "Erlaube nicht,"
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for their reading history.  This requires opacreadinghistory and AnonymousPatron"
-msgstr "dass Benutzer ihre eigenen Datenschutzeinstellungen für die Lesehistorie festlegen. Dieser Parameter erfordert opacreadinghistory und AnonymousPatron."
+msgstr ""
+"dass Benutzer ihre eigenen Datenschutzeinstellungen für die Ausleihhistorie "
+"festlegen. Dieser Parameter erfordert opacreadinghistory und AnonymousPatron."
 
 # OPAC > Features
 msgid "opac.pref#OPACReportProblem# <br/>"
@@ -8668,7 +8669,9 @@ msgstr "Erlaube nicht,"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout and hold history (reading history is still stored, regardless of staff being allowed access or not)."
-msgstr "dass Bibliotheksmitarbeiter die Ausleihe- und Vormerkungshistorie anzeigen. (Die Lesehistorie wird unabhängig von dieser Einstellung dennoch gespeichert)."
+msgstr ""
+"dass Bibliotheksmitarbeiter die Ausleihe- und Vormerkhistorie anzeigen. (Die "
+"Ausleihhistorie wird unabhängig von dieser Einstellung dennoch gespeichert)."
 
 # Patrons > Security
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
@@ -9760,9 +9763,7 @@ msgstr "."
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr ""
-"Verwende als voreingestellten Editor für das Bearbeiten von "
-"Nachrichteneinträgen"
+msgstr "Verwende als voreingestellten Editor für das Bearbeiten von Nachrichteneinträgen"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"

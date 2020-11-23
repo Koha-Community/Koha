@@ -2,9 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2020-09-22 11:12+0000\n"
-"Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community.org>\n"
+"PO-Revision-Date: 2020-11-23 14:06+0000\n"
+"Last-Translator: Tomás Cohen Arazi <tomascohen@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1600773130.776779\n"
+"X-POOTLE-MTIME: 1606140372.937064\n"
 "X-Pootle-Path: /es/20.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2436,13 +2437,22 @@ msgstr "registro bibliográfico"
 msgid "cataloguing.pref#item-level_itypes# specific item"
 msgstr "ítem específico"
 
+msgid "cataloguing.pref#itemcallnumber# Examples for MARC21: Dewey: 082ab,092ab; LOC: 050ab,090ab; from the Koha record: 942hi. Examples for UNIMARC: Dewey: 676a; LOC: 680ab."
+msgstr ""
+"cataloguing.pref#itemcallnumber# Ejemplos para MARC21: Dewey: 082ab,092ab; "
+"LOC: 050ab,090ab; del registro en Koha: 942hi. Ejemplos para UNIMARC: Dewey: "
+"676a; LOC: 680ab."
+
 # Cataloging > Record structure
 msgid "cataloguing.pref#itemcallnumber# Map the MARC subfields"
 msgstr "Asignar los subcampos MARC"
 
 # Cataloging > Record structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. List multiple comma-separated fields to check them sequentially. Each field can include multiple subfields. The order of the subfields in the record will be preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then the 092$a and 092$b. Examples (for MARC21 records): Dewey: 082ab,092ab; LOC: 050ab,090ab; from the item record: 952hi."
-msgstr "a la signatura de un ítem. Liste campos separados por coma para verificar en secuencia. El orden de los subcampos en el registro será preservada. Por ejemplo '082ab,092ab' buscará en 082$a y 082$b, luego en 092$a y 092$b. Ejemplos (para registros MARC21): Dewey: 082ab,092ab; LOC: 050ab,090ab; desde el registro del ítem: 952hi."
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. List multiple comma-separated fields to check them sequentially. Each field can include multiple subfields. The order of the subfields in the record will be preserved. For example: '082ab,092ab' will look in the 082$a and 082$b, then the 092$a and 092$b."
+msgstr ""
+"a la signatura de un ítem. Liste campos separados por coma para verificarlos "
+"en secuencia. El orden de los subcampos en el registro será preservado. Por "
+"ejemplo '082ab,092ab' buscará en 082$a y 082$b, luego en 092$a y 092$b."
 
 # Cataloging > Record structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -2526,7 +2536,7 @@ msgstr "Préstamos interbibliotecarios"
 
 # Circulation > Return claims
 msgid "circulation.pref Return claims"
-msgstr "Reclamos de devolución"
+msgstr "Declaraciones de devolución"
 
 # Circulation > Self check-in module
 msgid "circulation.pref Self check-in module"
@@ -2978,7 +2988,7 @@ msgstr "No permitir"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be unable to log into the OPAC."
-msgstr ""
+msgstr "circulacion.pref#AutoPrestamoPermitido# Nota: Cualquier usuario entrado aquí no podrá entrar en el OPAC."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
@@ -3174,7 +3184,7 @@ msgstr "."
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims returned\","
-msgstr "Cuando marque un préstamo como \"reclamo devuelto\""
+msgstr "Cuando marque un préstamo como \"declarado devuelto\""
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedChargeFee# ask if a lost fee should be charged"
@@ -3194,15 +3204,17 @@ msgstr "Utilice el valor autorizado LOST"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
-msgstr "para representar reclamos de devolución"
+msgstr "para representar declaraciones de devolución"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
-msgstr "Advierta a los bibliotecarios que el usuario tiene excesivos reclamos de devolución si ha reclamado mas de"
+msgstr ""
+"Advierta a los bibliotecarios que el usuario tiene excesivas declaraciones "
+"de devolución si ha declarado mas de"
 
 # Circulation > Return claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
-msgstr "ejemplares."
+msgstr "ítems."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -3354,7 +3366,7 @@ msgstr "que las reservas caduquen automáticamente si no han sido seleccionadas 
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of"
-msgstr ""
+msgstr "circulación.pref#ExpireReservesMaxPickUpDelayCharge# Si usa ExpireReservesMaxPickUpDelay, cobrar al usuario quien permite que su reserva se expire una tarifa de"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3895,7 +3907,7 @@ msgstr "No bloquear"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockCirc# when checking out to a patron that has overdues outstanding."
-msgstr ""
+msgstr "circulación.pref#OverduesBlockCirc# cuando haga prestamos al usuario que tenga cargos sin pagar."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -3935,7 +3947,7 @@ msgstr "Incluir hasta"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the patron to check their online account for a full list of overdue items. Set to 0 to include all overdue items in the notice, no matter how many there are."
-msgstr ""
+msgstr "circulación.pref#PrintNoticesMaxLines# líneas de ejemplares en un aviso de retraso impreso. Si el número de ejemplares es mayor a este número, el aviso finalizará con una advertencia pidiendo al usuario que revise su cuenta en línea para una lista completa de los ejemplares retrasados. Poner en 0 para incluir todos los ejemplares retrasados en el aviso, no importando la cantidad que sean."
 
 # Circulation > Fines policy
 msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
@@ -5484,8 +5496,8 @@ msgid "enhanced_content.pref#OpenLibrarySearch# search results from Open Library
 msgstr "resultados de Open Library en el OPAC."
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set <a href=\"/cgi-bin/koha/admin/overdrive.pl\">here</a>)."
-msgstr "(se utilizará como alternativa si no se establece <a href=\"/cgi-bin/koha/admin/overdrive.pl\">aquí</a> una sede individual authname)."
+msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set in the <a href=\"/cgi-bin/koha/admin/overdrive.pl\">OverDrive library authnames table</a>)."
+msgstr ""
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive Authname"
@@ -6253,8 +6265,8 @@ msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Don't allow"
 msgstr "No permitir"
 
 # OPAC > Privacy
-msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor\"."
-msgstr "a usuarios elegir su propia configuración de privacidad al mostrar los préstamos del usuario al usuario responsable\"."
+msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor."
+msgstr ""
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
@@ -6265,8 +6277,8 @@ msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
 msgstr "No permitir"
 
 # OPAC > Privacy
-msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor\"."
-msgstr "a usuarios elegir sus propias configuraciones de privacidad para mostrar sus multas a su garante."
+msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor."
+msgstr ""
 
 # OPAC > Policy
 msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# Allow"
@@ -9746,11 +9758,11 @@ msgstr "Solamente intranet"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# ."
-msgstr ""
+msgstr "herramienta.pref#NewToolEditor#."
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# By default edit news items with"
-msgstr ""
+msgstr "herramienta.pref#NewToolEditor# Por predeterminación editar los nuevos ejemplares con"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# a WYSIWYG editor (TinyMCE)"
@@ -10027,4 +10039,3 @@ msgstr "Solo devolver"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "filas del reporte solicitado a través del web service de reportes."
-

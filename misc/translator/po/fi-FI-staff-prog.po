@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2020-10-20 22:35-0300\n"
-"PO-Revision-Date: 2020-10-26 06:46+0000\n"
-"Last-Translator: AnneliÖ <anneli.osterman@ouka.fi>\n"
+"POT-Creation-Date: 2020-11-18 20:38-0300\n"
+"PO-Revision-Date: 2020-11-04 10:04+0000\n"
+"Last-Translator: Anneli Österman <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1603694784.479582\n"
+"X-POOTLE-MTIME: 1604484299.466138\n"
 "X-Pootle-Path: /fi/20.05/fi-FI-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -843,9 +843,9 @@ msgstr "%s %s %s %s Tyhjä %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:804
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Not checked out %s "
-msgstr "%s%s %s %sEi lainassa%s "
+msgstr "%s %s %s %s Ei lainassa %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -868,7 +868,7 @@ msgstr "%s%s %s %sEi lainassa%s "
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:154
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -877,7 +877,6 @@ msgstr ""
 "%s %s %s %s jos %s %s paitsi jos %s %s%s$%s%s %s on olemassa %s %s ei ole "
 "olemassa %s %s on yhtä kuin %s %s ei ole yhtäkuin %s %s RegEx m/%s "
 
-#. For the first occurrence,
 #. %1$s:  USE raw 
 #. %2$s:  USE To 
 #. %3$s:  USE Branches 
@@ -891,7 +890,6 @@ msgstr ""
 #. %11$s:  data.dateofbirth | $KohaDates 
 #. %12$s:  INCLUDE escape_address data=data 
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:1
-#: intranet-tmpl/prog/en/modules/suggestion/tables/suggester_search.tt:1
 #, c-format
 msgid ""
 "%s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
@@ -1476,9 +1474,9 @@ msgid ""
 "%s %s %sORDER DATE%sESTIMATED DELIVERY DATE%sVENDOR%sINFORMATION%sTOTAL COST"
 "%sBASKET%sCLAIMS COUNT%sCLAIMED DATE%sINTERNAL NOTE%sVENDOR NOTE%sISBN%s "
 msgstr ""
-"%s %s %sTILAUSPVM%sARVIOITU SAAPUMISPVM%sTOIMITTAJA%sTIEDOT%sHINTA "
-"YHT.%sTILAUSKORI%sREKLAMOITU%sREKLAMOINTIPVM%sSISÄINEN HUOMAUTUS%"
-"sTOIMITTAJAN HUOMAUTUS%sISBN%s "
+"%s %s %sTILAUSPVM%sARVIOITU SAAPUMISPVM%sTOIMITTAJA%sTIEDOT%sHINTA YHT."
+"%sTILAUSKORI%sREKLAMOITU%sREKLAMOINTIPVM%sSISÄINEN HUOMAUTUS%sTOIMITTAJAN "
+"HUOMAUTUS%sISBN%s "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -2659,14 +2657,14 @@ msgstr ""
 #. %4$s:  CASE 'LibrisSpellcheck' 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s Suggest authorities which are relevant to the term the user searched "
 "for. %s Suggest that patrons expand their searches to include broader/"
 "narrower/related terms. %s Use the LIBRIS spellcheck API. %s "
 msgstr ""
 "%s %s Ehdota hakuun relevantteja auktoriteetteja. %s Ehdota hakuun laajempia/"
-"suppeampia termejä. %s "
+"suppeampia/liittyviä termejä. %s Käytä LIBRIS oikeinkirjoitus-APIa. %s "
 
 #. %1$s:  END 
 #. %2$s:  IF message.code == 'biblio_not_exists' 
@@ -2736,7 +2734,7 @@ msgstr ""
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'already_exists' 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:515
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:517
 #, c-format
 msgid ""
 "%s %s The suggestion has not been added. A suggestion with this title "
@@ -3001,7 +2999,7 @@ msgstr "%s %s - %s %s "
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:147
 #, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr "%s %s kenttään %s%s$%s%s %s käyttäen RegEx-lausetta s"
@@ -3120,7 +3118,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  IF ( suggestion.isbn ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:589
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:591
 #, c-format
 msgid "%s %s; ISBN:"
 msgstr "%s %s; ISBN:"
@@ -3155,13 +3153,13 @@ msgstr ""
 #. %13$s:  f | html 
 #. %14$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:424
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sAuthors %sItem Types %sLocations %sPlaces %sSeries %sTopics "
 "%sCollections %sHolding libraries %sHome libraries %sLanguage %s%s %s "
 msgstr ""
-"%s %s Aineistolaji %s Kokoelmakoodi %s Hyllypaikka %s Kotikirjasto %s "
-"Nykyinen paikka %s %s %s "
+"%s %sTekijät %sAineistolajit %sHyllypaikat %sPaikat %sSarjat %sAiheet "
+"%sKokoelmakoodit %sSijaintikirjastot %sKotikirjastot %sKielet %s%s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( errornoitem ) 
@@ -3265,9 +3263,9 @@ msgstr "%s %sNidettä%sNide%s myöhässä, eräpäivä %s%s "
 #. %3$s:  CASE 'library' 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/problem-reports.tt:83
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sKoha administrator %sA librarian %s "
-msgstr "%s %s kirjastorajoitusta %s %s kirjastorajoitus %s "
+msgstr "%s %sKohan ylläpitäjä %s Virkailija %s "
 
 #. %1$s:  SWITCH report.status 
 #. %2$s:  CASE 'New' 
@@ -3337,9 +3335,9 @@ msgstr "%s %s%s, %s saatavilla:%s, Ei yhtään saatavilla%s %s "
 #. %7$s:  END 
 #. %8$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sOrder baskets%s %s %s %sSubscriptions%s %s "
-msgstr "%s %s %s %s %s %s %s Yhteensä%s %s "
+msgstr "%s %sTilauskorit%s %s %s %sLehtitilaukset%s %s "
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
 #. %2$s:  IF (suggestion.suggestiontypelabel == "Pending") 
@@ -3359,7 +3357,7 @@ msgstr "%s %s %s %s %s %s %s Yhteensä%s %s "
 #. %16$s:  END 
 #. %17$s:  END 
 #. %18$s:  suggestion.suggestions_loop.size | html 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:532
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:534
 #, c-format
 msgid ""
 "%s %sPending %sAccepted %sChecked %sRejected %sAvailable %sOrdered %sStatus "
@@ -3457,9 +3455,9 @@ msgstr ""
 #. %5$s:  ELSIF op == 'add_form' 
 #. %6$s:  IF field 
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sThere are no additional fields defined for this table.%s %s %s %s "
-msgstr "%s Ei määritettyä arvoa kohteelle %s %s %s %s "
+msgstr "%s %sTälle taululle ei ole määritetty lisäkenttiä.%s %s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF flagloo.yes 
@@ -3542,15 +3540,15 @@ msgstr ""
 #. %12$s:  END 
 #. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s &rsaquo; %sModify classification source%sAdd classification source%s %s "
 "&rsaquo; %sModify filing rule%sAdd filing rule%s %s &rsaquo; %sModify "
 "splitting rule%sAdd splitting rule%s %s "
 msgstr ""
 "%s &rsaquo; %sMuokkaa luokitusjärjestelmää%sLisää luokitusjärjestelmä%s %s "
-"%s &rsaquo; %sMuokkaa luokitusopasta%sLisää luokitusopas%s %s %s &rsaquo; "
-"Vahvista luokitusjärjestelmän poisto "
+"&rsaquo; %sMuokkaa luokitusopasta%sLisää luokitusopas%s %s &rsaquo; "
+"%sMuokkaa katkaisusääntöä%sLisää katkaisusääntö %s %s "
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF credit_type.code 
@@ -3558,9 +3556,9 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "%s &rsaquo; %sModify credit type%sNew credit type%s %s "
-msgstr "&rsaquo; Muokkaa aineistolajia '%s'%s "
+msgstr "%s &rsaquo; %sMuokkaa hyvitystyyppiä%sLuo uusi hyvitystyyppi%s %s "
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF framework 
@@ -3643,9 +3641,9 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "%s &rsaquo; %sModify%sNew%s debit type %s "
-msgstr "&rsaquo; Muokkaa aineistolajia '%s'%s "
+msgstr "%s &rsaquo; %sMuokkaa%sUusi%s veloitustyyppi %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -3770,82 +3768,81 @@ msgstr "&rsaquo; Muokkaa tiliä %s &rsaquo; "
 #. %2$s:  item.barcode | html 
 #. %3$s:  soonestrenewdate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ) cannot be renewed before %s. "
-msgstr "%s %s ( %s ) ei voida uusia ennen kuin %s. "
+msgstr "%s ( %s ) ei voida uusia ennen kuin %s. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #. %3$s:  borrower.firstname | html 
 #. %4$s:  borrower.surname | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ) has been renewed the maximum number of times by %s %s ( "
-msgstr "%s %s ( %s ) teoksen uusintakerrat ovat täynnä. Käyttäjä: %s %s ( "
+msgstr "%s ( %s ) teoksen uusintakerrat ovat täynnä. Käyttäjä: %s %s ( "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #. %3$s:  latestautorenewdate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "anymore since %s. "
 msgstr ""
-"%s %s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia enää, koska "
-"%s. "
+"%s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia enää %s lähtien. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "because the patron's account is expired"
 msgstr ""
-"%s %s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia, koska "
-"asiakkaan kirjastokortti on vanhentunut "
+"%s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia, koska asiakkaan "
+"kirjastokortti on vanhentunut"
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #. %3$s:  soonestrenewdate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "before %s. "
 msgstr ""
-"%s %s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia ennen kuin %s. "
+"%s ( %s ) teoksen uusinta on ajastettu eikä sitä voi uusia ennen kuin %s. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ) has been scheduled for automatic renewal. "
-msgstr "%s %s ( %s ) teoksen uusinta on ajastettu. "
+msgstr "%s ( %s ) teoksen uusinta on ajastettu. "
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=result.item.biblio 
 #. %2$s:  result.item.barcode | html 
 #. %3$s:  INCLUDE 'renew_strings.inc' error=result.info 
 #: intranet-tmpl/prog/en/includes/renew_results.inc:8
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ): Not renewed - %s"
-msgstr "%s %s ( %s ) ei voida uusia ennen kuin %s. "
+msgstr "%s ( %s ): Ei uusittu - %s"
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=result.item.biblio 
 #. %2$s:  result.item.barcode | html 
 #. %3$s:  result.info | html 
 #: intranet-tmpl/prog/en/includes/renew_results.inc:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ): Renewed - due %s"
-msgstr "%s %s ( %s ) ei voida uusia ennen kuin %s. "
+msgstr "%s ( %s ): Uusittu - eräpäivä %s"
 
 #. %1$s:  INCLUDE 'biblio-title.inc' biblio=item.biblio 
 #. %2$s:  item.barcode | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "%s ( %s ): This item is on hold for another patron."
-msgstr "Tämä aineisto varattu toiselle asiakkaalle."
+msgstr "%s ( %s ): Tämä nide on varattu toiselle asiakkaalle."
 
 #. %1$s:  p.metadata.name | html 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:136
@@ -3900,9 +3897,9 @@ msgstr "%s (%s). Erääntyy %s"
 #. %1$s:  item.itemnumber.biblio.title | html 
 #. %2$s:  item.itemnumber.barcode | html 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Barcode: %s)"
-msgstr "Viivakoodi: %s"
+msgstr "%s (Viivakoodi: %s)"
 
 #. %1$s:  item_on_other.biblio.title | html 
 #. %2$s:  item_on_other.stockrotationitem.stage.rota.title | html 
@@ -3921,9 +3918,9 @@ msgstr "%s (suljettu)"
 
 #. %1$s:  class_source.description | html 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid "%s (default)"
-msgstr "%s %s (oletus)"
+msgstr "%s (oletus)"
 
 #. %1$s:  r.budget.budget_name | html 
 #. %2$s:  r.budget.budget_id | html 
@@ -4006,9 +4003,8 @@ msgstr "%s (saap.)%s %s %s%s / %s%s %s "
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:257
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:729
-#, fuzzy
 msgid "%s - Click to Expand this Tag"
-msgstr "Valitse aukaistaksesi tämä kenttä"
+msgstr "%s - Valitse aukaistaksesi tämän kentän"
 
 #. %1$s:  report.total_success | html 
 #. %2$s:  report.total_records | html 
@@ -4019,9 +4015,9 @@ msgstr "%s / %s tietueen muokkaus onnistui. Joitain virheitä esiintyi. "
 
 #. %1$s:  booksellerphone | html 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "%s / Fax: "
-msgstr "%s / Faksi: %s"
+msgstr "%s / Faksi: "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4095,12 +4091,13 @@ msgstr ""
 #. %5$s:  HTML5MediaSet.typeblock | html 
 #. %6$s:  HTML5MediaParent | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:827
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by "
 "your browser.] "
 msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s selaimesi ei tue tagia.] "
+"%s <%s controls preload=none> <%s src=\"%s\"%s /> [%s selaimesi ei tue "
+"tagia.] "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -4266,7 +4263,7 @@ msgstr ""
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s An error occurs when generating the PDF file. Please contact the "
 "administrator to resolve this problem. %s "
@@ -4338,9 +4335,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:238
-#, fuzzy, c-format
+#, c-format
 msgid "%s Checked out %s Available %s "
-msgstr "Lainattu %s kertaa"
+msgstr "%s Lainattu %s Saatavana %s "
 
 #. %1$s:  IF ( resultsloo.onloancount ) 
 #. %2$s:  resultsloo.onloancount | html 
@@ -4428,7 +4425,7 @@ msgid "%s Contact note: "
 msgstr "%s Yhteystieto: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:176
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:177
 #, c-format
 msgid "%s Country:"
 msgstr "%s Maa:"
@@ -4464,9 +4461,9 @@ msgstr "%s Luo uusi kerho-pohja %s "
 #. %4$s:  tablename | html 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "%s Currency %s Items Editor %s Table id: %s %s "
-msgstr "%s Rahayksikkö %s Niteiden muokkaus %s (id=%s) "
+msgstr "%s Rahayksikkö %s Niteiden muokkaus %s Taulun id: %s %s "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:330
@@ -4532,14 +4529,15 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:128
+#, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
 "Copy %s %s Copy and replace %s %s %s 1st %s %s field %s%s$%s%s %s with value "
 msgstr ""
-"%s Poista %s %s Päivitä %s %s Siirrä %s %s Kopioi %s %s Kopioi ja korvaa %s "
-"%s %s 1. %s %s kenttä %s%s$%s%s %s arvolla "
+"%s Poista %s %s Lisää uusi %s %s Päivitä olemassa olevaa tai lisää uusi %s "
+"%s Siirrä %s %s Kopioi %s %s Kopioi ja korvaa %s %s %s 1. %s %s kenttä %s%s$"
+"%s%s %s arvolla "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4577,11 +4575,13 @@ msgstr "%s Käytössä "
 #. %1$s:  IF ( label_batch_msg == "error" ) 
 #. %2$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:49
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Error attempting to create label batch. Please ask your system "
 "administrator to check the log for more details. %s Label "
-msgstr "Tapahtui virhe: %s Ota yhteyttä järjestelmän ylläpitäjään. "
+msgstr ""
+"%s Tarraerää luotaessa tapahtui virhe. Ota yhteys järjestelmän ylläpitäjään "
+"ja pyydä tarkistamaan tarkemmat tiedot lokilta. %s Tarra "
 
 #. %1$s:  IF ( error ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:151
@@ -4811,9 +4811,9 @@ msgstr "%s Viimeisin %s Alkaa merkeillä %s "
 #. %1$s:  END 
 #. %2$s:  Koha.Preference('numSearchResults') | html 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:291
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library default: %s "
-msgstr "Kirjaston tunnus: "
+msgstr "%s Kirjaston oletus: %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4826,9 +4826,9 @@ msgstr "%s Omat listasi %s %s &rsaquo; %s "
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/includes/header.inc:101
-#, fuzzy, c-format
+#, c-format
 msgid "%s Location: "
-msgstr "Sijainti:"
+msgstr "%s Sijainti:"
 
 #. %1$s:  ELSIF problem.key == 'not_scanned' 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:235
@@ -4954,7 +4954,7 @@ msgstr "%s Ei aktiivista budjettia %s "
 #. %2$s:  END 
 #. %3$s:  END 
 #. %4$s:  IF biblio.article_requests_current && !patron 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:213
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:212
 #, c-format
 msgid "%s No article requests can be made for this record. %s %s %s "
 msgstr "%s Tähän tietueeseen ei pysty tekemään artikkelipyyntöjä. %s %s %s "
@@ -4997,9 +4997,9 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:335
-#, fuzzy, c-format
+#, c-format
 msgid "%s No group "
-msgstr "Ei tilausryhmää"
+msgstr "%s Ei tilausryhmää "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:518
@@ -5079,9 +5079,9 @@ msgstr "%s Ei tuloksia %s "
 #. %2$s:  END 
 #. %3$s:  IF ( biblio.medium ) 
 #: intranet-tmpl/prog/en/includes/biblio-title.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s No title %s %s "
-msgstr "%s %s - %s %s "
+msgstr "%s Ei nimekettä %s %s "
 
 #. %1$s:  IF failureMessage == "NO_TITLE" 
 #. %2$s:  ELSIF failureMessage == "DUPLICATE_TITLE" 
@@ -5208,9 +5208,9 @@ msgstr "%s Muu puhelin: "
 #. %2$s:  END 
 #. %3$s:  IF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid 
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "%s Outstanding order %s %s "
-msgstr "%sEi käsittelyä odottavia tilauksia.%s "
+msgstr "%s Avoin tilaus %s %s "
 
 # mahdoton kääntää tällä kontekstitiedolla. sori
 #. %1$s:  END 
@@ -5266,19 +5266,18 @@ msgstr "%s Asiakkaalla ei ole artikkelipyyntöjä. %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:150
-#, fuzzy, c-format
+#, c-format
 msgid "%s Patron's card expired on %s. %s Patron's card has expired. %s "
-msgstr "Asiakkaan kortti on vanhentunut. %sAsiakkaan kortti vanhentui %s%s "
+msgstr ""
+"%s Asiakkaan kortti vanhentui %s. %s Asiakkaan kortti on vanhentunut. %s "
 
 #. %1$s:  IF type == 'credit' 
 #. %2$s:  ELSIF type == 'debit' 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:159
-#, fuzzy, c-format
+#, c-format
 msgid "%s Payment not found %s Fee not found %s "
-msgstr ""
-"%s %s kadonneeksi merkittyä nidettä löytynyt %s Ei löydettyjä kadonneita "
-"niteitä %s "
+msgstr "%s Maksusuoritusta ei löydy %s Maksua ei löydy %s "
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
@@ -5291,14 +5290,14 @@ msgstr ""
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  IF ( suggestions_loo.reason ) 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:617
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:619
+#, c-format
 msgid ""
 "%s Pending %s Accepted %s Ordered %s Rejected %s Checked %s Available %s %s "
 "%s Status unknown %s %s "
 msgstr ""
-"%s Odottaa %s Hyväksytty %s Tilattu %s Hylätty %s Tarkistettu %s %s %s "
-"Tuntematon tila %s %s "
+"%s Odottaa %s Hyväksytty %s Tilattu %s Hylätty %s Tarkistettu %s Saatavilla "
+"%s %s %s Tuntematon tila %s %s "
 
 #. For the first occurrence,
 #. %1$s:  IF ar.status == 'PENDING' 
@@ -5307,13 +5306,13 @@ msgstr ""
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:69
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:259
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:258
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s Odottaa %s Käsittelee %s Valmis %s Peruutettu %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:191
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:192
 #, c-format
 msgid "%s Phone:"
 msgstr "%s Puh:"
@@ -5371,9 +5370,9 @@ msgstr "%s Tullut asiakkaaksi: "
 #. %1$s:  relatives_issues_count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:713
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:855
-#, fuzzy, c-format
+#, c-format
 msgid "%s Relatives' checkouts"
-msgstr "Perheen lainat"
+msgstr "%s Perheen lainat"
 
 #. %1$s:  IF item.stockrotationitem.indemand 
 #. %2$s:  ELSE 
@@ -5529,7 +5528,7 @@ msgid "%s Sort 2: "
 msgstr "%s Lajittelusääntö 2: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:161
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:162
 #, c-format
 msgid "%s State:"
 msgstr "%s Osavaltio:"
@@ -6434,14 +6433,6 @@ msgstr "%s keskeytys voimassa %s %s asti"
 msgid "%s on loan:"
 msgstr "%s lainassa:"
 
-#. For the first occurrence,
-#. %1$s:  IF cities.count 
-#: intranet-tmpl/prog/en/includes/member-main-address-style.inc:141
-#: intranet-tmpl/prog/en/includes/member-alt-address-style.inc:150
-#, fuzzy, c-format
-msgid "%s or choose "
-msgstr "%stai valitse "
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/catalog-strings.inc:2
 msgid ""
@@ -6763,7 +6754,7 @@ msgstr "%s | Nimitila: %s"
 #. %3$s:  Branches.GetName( managedby_patron.branchcode ) | html 
 #. %4$s:  managedby_patron.category.description | html 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:423
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:425
 #, fuzzy, c-format
 msgid "%s | Previously was %s %s (%s) %s "
 msgstr "%s %s Varauksia (%s) %s %s %s %s | "
@@ -6828,7 +6819,7 @@ msgstr "%s%s : %sMyöhässä olevat tilaukset"
 #. %1$s:  END 
 #. %2$s:  IF ( suggestion.place ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:590
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:592
 #, c-format
 msgid "%s%s in "
 msgstr "%s%s toimipisteessä "
@@ -7071,7 +7062,7 @@ msgstr "(%s), %s / %s %s %s [%s] %s Varaus tehty %s. "
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:93
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:585
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:587
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s / %s%s"
@@ -7083,7 +7074,7 @@ msgstr "%s%s / %s%s"
 #. %4$s:  END 
 #. %5$s:  IF ( suggestion.publicationyear ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:590
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:592
 #, c-format
 msgid "%s%s; Published by %s %s%s in "
 msgstr "%s%s; Julkaissut %s %s%s vuonna "
@@ -7101,7 +7092,7 @@ msgstr "%s%sMuokkaa "
 #. %3$s:  END 
 #. %4$s:  IF ( suggestion.volumedesc ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:731
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:587
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:589
 #, c-format
 msgid "%s&copy; %s %s %s; Volume:"
 msgstr "%s&copy; %s %s %s; Vsk:"
@@ -8087,12 +8078,6 @@ msgstr "%si - Viittauksen ohjefraasi osakentässä $i"
 msgid "%sn - Not applicable"
 msgstr "%sn - Soveltumaton"
 
-#. %1$s:  IF cities.count 
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:135
-#, c-format
-msgid "%sor choose "
-msgstr "%stai valitse "
-
 #. %1$s:  PROCESS selectoptionopen value='r' 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:153
 #, c-format
@@ -8399,7 +8384,7 @@ msgstr "&rsaquo; %s%sVahvista%s%sValmis%s"
 #. %1$s:  template_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:37
 #, c-format
 msgid "&rsaquo; %s %s MARC modification templates %s "
 msgstr "&rsaquo; %s %s MARC-muokkauksen pohjat %s "
@@ -10059,7 +10044,7 @@ msgstr "' ~%%] %s %s [%%~ action_block = action_block _ ' "
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr "' ~%%] [%%~ action_block = action_block _ '"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:332
 #, fuzzy, c-format
 msgid "') | html %%]"
 msgstr "') |html %%]"
@@ -10528,7 +10513,7 @@ msgid "(use * to do a fuzzy search) "
 msgstr "(käytä *-merkkiä sumeaan hakuun) "
 
 #. %1$s:  CASE 'biblio_exists' 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:518
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:520
 #, fuzzy, c-format
 msgid ") %s A similar document already exists: "
 msgstr "Aineistolaji on jo olemassa."
@@ -10711,19 +10696,19 @@ msgstr "- Valitse varattava nide"
 msgid "-- All --"
 msgstr "-- Kaikki --"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:300
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:302
 #, c-format
 msgid "-- Choose -- "
 msgstr "-- Valitse -- "
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:59
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:364
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:703
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:366
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:705
 #, c-format
 msgid "-- Choose a reason -- "
 msgstr "-- Valitse syy -- "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:664
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:666
 #, c-format
 msgid "-- Choose a status --"
 msgstr "-- Valitse tila --"
@@ -10740,7 +10725,7 @@ msgid "-- Choose one -- "
 msgstr "-- Valitse yksi -- "
 
 # mahdoton kääntää tällä kontekstitiedolla. sori
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:295
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:307
 #, c-format
 msgid "-- None --"
 msgstr "- Ei mitään -"
@@ -10761,15 +10746,24 @@ msgstr "-- valitse --"
 msgid ". Check out anyway?"
 msgstr ". Lainaa siitä huolimatta?"
 
-#. For the first occurrence,
 #. %1$s:  CASE 
 #. %2$s:  m.code | html 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:266
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:520
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:522
 #, c-format
 msgid ""
 ". Click on \"Confirm your suggestion\" to ignore this message. %s %s %s "
+msgstr ""
+
+#. %1$s:   CASE 'manager_not_enough_permissions' 
+#. %2$s:  CASE 
+#. %3$s:  m.code | html 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:266
+#, c-format
+msgid ""
+". Click on \"Confirm your suggestion\" to ignore this message. %s The "
+"manager you selected does not have sufficient permissions. %s %s %s "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:88
@@ -10906,7 +10900,7 @@ msgstr "0; url=/cgi-bin/koha/installer/onboarding.pl?step=3"
 msgid "1/2"
 msgstr "1/2"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
 #, c-format
 msgid "1st"
 msgstr "1."
@@ -10992,7 +10986,7 @@ msgid "<< Delete"
 msgstr "<< Poista"
 
 #. INPUT type=checkbox name=notify
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:436
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:438
 msgid ""
 "A NOTIFY_MANAGER notice will be generated and send to the manager if a valid "
 "email address is defined. This can be checked if a new manager has been "
@@ -11007,7 +11001,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "A control field cannot be used with a regular field."
 msgstr "Kontrollikenttää ei voi käyttää peruskentän kanssa."
 
@@ -11146,19 +11140,19 @@ msgstr "Tiivistelmät, lyhennelmät"
 msgid "Academic"
 msgstr "Akateeminen"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:329
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:331
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:673
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:333
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:675
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:839
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:677
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:841
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:843
 #, c-format
 msgid "Accepted"
 msgstr "Hyväksytty"
 
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:32
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:795
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:797
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:799
 #, c-format
 msgid "Accepted by"
 msgstr "Hyväksyjä"
@@ -11168,18 +11162,18 @@ msgstr "Hyväksyjä"
 msgid "Accepted by the library"
 msgstr "Hyväksyjä"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:894
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:896
 #, c-format
 msgid "Accepted by:"
 msgstr "Hyväksyjä:"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:898
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:900
 #, c-format
 msgid "Accepted date from:"
 msgstr "Hyväksytty (pvm):"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:195
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:396
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:398
 #, c-format
 msgid "Accepted on:"
 msgstr "Hyväksytty:"
@@ -11375,8 +11369,8 @@ msgid "Acquisition details"
 msgstr "Hankintatiedot"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:217
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:441
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:911
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:443
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:913
 #, c-format
 msgid "Acquisition information"
 msgstr "Hankintatiedot"
@@ -11459,7 +11453,7 @@ msgstr "Hankintatilastot "
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:336
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:232
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:100
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:59
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:313
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:352
@@ -11467,7 +11461,7 @@ msgstr "Hankintatilastot "
 #: intranet-tmpl/prog/en/modules/admin/desks.tt:140
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:71
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:34
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:388
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:48
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:81
 #, c-format
@@ -11507,7 +11501,7 @@ msgstr "Toiminto, jos ei osumaa: "
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:269
 #: intranet-tmpl/prog/en/modules/tools/problem-reports.tt:71
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:146
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:64
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:82
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
@@ -11582,7 +11576,7 @@ msgstr "Toiminnot"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:78
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:14
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:151
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:164
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:181
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:154
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:410
@@ -11597,7 +11591,7 @@ msgstr "Toiminnot"
 msgid "Actions "
 msgstr "Toiminnot "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:83
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #, c-format
 msgid "Actions for "
 msgstr "Toiminnot "
@@ -11759,7 +11753,7 @@ msgstr "Lisää viesti kohteelle:"
 msgid "Add a new OAI set"
 msgstr "Lisää uusi OAI-joukko"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:182
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #, c-format
 msgid "Add a new action"
 msgstr "Lisää uusi toiminto"
@@ -11818,7 +11812,7 @@ msgid "Add a substitution"
 msgstr "Lisää korvaaja"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:272
 msgid "Add action"
 msgstr "Lisää toiminto"
 
@@ -12079,7 +12073,7 @@ msgstr "Muokkaa tietuetta käyttäen tätä pohjaa: "
 msgid "Add multiple copies of this item"
 msgstr "Lisää useita kopioita niteestä"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:187
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
 #, fuzzy, c-format
 msgid "Add new"
 msgstr "Lisää kohteeseen "
@@ -12114,7 +12108,7 @@ msgstr "Lisää uusi kenttä "
 msgid "Add new group"
 msgstr "Lisää uusi ryhmä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:133
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:134
 #, c-format
 msgid "Add new holiday"
 msgstr "Lisää kiinniolopäivä"
@@ -12902,8 +12896,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:175
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:177
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:372
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:44
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:35
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:250
@@ -13752,14 +13746,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:184
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:192
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:200
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:444
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:454
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:830
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:872
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:883
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:894
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:914
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:926
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:446
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:456
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:832
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:874
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:885
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:896
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:916
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:928
 #, c-format
 msgid "Any"
 msgstr "Mikä tahansa"
@@ -13798,7 +13792,7 @@ msgstr "Mikä tahansa sisältö"
 msgid "Any format"
 msgstr "Mikä tahansa materiaali"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:201
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:200
 #, c-format
 msgid "Any item "
 msgstr "Mikä tahansa nide "
@@ -13959,7 +13953,7 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:158
 #: intranet-tmpl/prog/en/modules/admin/credit_types.tt:157
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:182
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:646
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:648
 #, fuzzy, c-format
 msgid "Archive"
 msgstr "Arkistoitu"
@@ -13972,7 +13966,7 @@ msgid "Archived"
 msgstr "Arkistoitu"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:591
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:593
 #, fuzzy, c-format
 msgid "Archived%s "
 msgstr "Arkistoitu"
@@ -14012,7 +14006,7 @@ msgid "Are you sure you want to cancel your changes?"
 msgstr "Haluatko varmasti peruuttaa tekemäsi muutokset?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:307
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 msgid ""
 "Are you sure you want to change the pickup library from %s to %s for this "
 "request?"
@@ -14147,7 +14141,7 @@ msgid "Are you sure you want to delete the selected search history entry?"
 msgstr "Haluatko varmasti poistaa hakuhistoriastasi valitut kohdat?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1019
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Haluatko varmasti poistaa nämä hankintaehdotukset?"
 
@@ -14348,8 +14342,8 @@ msgstr "Haluatko varmasti poistaa tämän tilauksen ilmestymistiheyden?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1008
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1019
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1031
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
 msgid "Are you sure you want to delete this suggestion?"
 msgstr "Haluatko varmasti poistaa tämän ehdotuksen?"
 
@@ -14492,7 +14486,7 @@ msgid ""
 msgstr "Haluatko varmasti peruuttaa erän tuonnin tietokantaan?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:202
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:217
 msgid "Are you sure you want to uninstall the plugin %s?"
 msgstr "Haluatko varmasti poistaa tämän liitännäisen %s?"
 
@@ -14523,12 +14517,12 @@ msgid "Are you sure you wish to delete this request?"
 msgstr "Haluatko varmasti poistaa tämän pyynnön?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "Are you sure you wish to delete this template action?"
 msgstr "Haluatko varmasti poistaa tämän pohjan?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "Are you sure you wish to delete this template?"
 msgstr "Haluatko varmasti poistaa tämän pohjan?"
 
@@ -14769,7 +14763,7 @@ msgstr "Auktorisointi"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:785
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:229
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:228
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:108
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:68
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:227
@@ -14860,12 +14854,12 @@ msgstr "Tekijät: %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:102
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:162
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:267
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:101
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:100
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:182
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1254
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:76
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:810
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:812
 #, c-format
 msgid "Author:"
 msgstr "Tekijä:"
@@ -15394,7 +15388,7 @@ msgstr "Maalis"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:786
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:157
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:64
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:140
@@ -15982,19 +15976,19 @@ msgid "Be sure to provide email addresses for these patrons."
 msgstr "Tällä asiakkaalla ei ole tilastoja."
 
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Because the \"UseTransportCostMatrix\" system preference is currently not "
-"enabled, the transport cost matrix is not being used. Go "
+"enabled, the transport cost matrix is not being used. "
 msgstr ""
 "Koska \"UseTransportCostMatrix\" -järjestelmäasetus ei ole päällä, ei "
 "kuljetusten painomatriisi ole käytössä. Napsauta "
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Because the 'ExtendedPatronAttributes` system preference is currently not "
-"enabled, extended patron attributes cannot be given to patron records. Go "
+"enabled, extended patron attributes cannot be given to patron records. "
 msgstr ""
 "Koska 'ExtendedPatronAttributes' -järjestelmäasetus ei ole päällä, ei "
 "asiakkaille voi antaa lisämääreitä. Katso "
@@ -16104,8 +16098,8 @@ msgid "Bibliographic data to print"
 msgstr "Tulostettava bibliografinen tieto"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:62
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:808
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:283
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:810
 #, c-format
 msgid "Bibliographic information"
 msgstr "Aineiston tiedot"
@@ -16346,7 +16340,7 @@ msgstr "Palautuslaatikkotila"
 msgid "Book drop mode. "
 msgstr "Palautuslaatikkotila"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:912
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:914
 #, c-format
 msgid "Book fund:"
 msgstr "Kirjatili:"
@@ -16427,7 +16421,7 @@ msgid "Borrowernumber: %s"
 msgstr "Asiakkaan ID: %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "Both subfield values should be filled or empty."
 msgstr "Kummankin osakentän arvon tulee olla täytetty tai tyhjä."
 
@@ -16668,7 +16662,7 @@ msgstr "Poista lista"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:80
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:172
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:388
 #, c-format
 msgid "By"
 msgstr " "
@@ -16889,7 +16883,7 @@ msgstr "Laskettu %s. Aikavälillä %s - %s"
 msgid "Calendar"
 msgstr "Kalenteri"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:206
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:207
 #, c-format
 msgid "Calendar information"
 msgstr "Kalenteri"
@@ -16945,7 +16939,7 @@ msgstr "Luokka"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:790
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:214
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:63
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:34
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:72
@@ -17193,8 +17187,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:195
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:39
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:68
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:123
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:193
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:124
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:194
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:132
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:84
@@ -17214,8 +17208,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:221
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:309
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:390
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:273
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:226
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:228
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:106
@@ -17331,8 +17325,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:319
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:59
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:105
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:157
@@ -17360,10 +17354,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:103
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:146
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:107
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:381
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:492
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:500
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:712
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:383
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:494
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:502
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:714
 #: intranet-tmpl/prog/en/modules/pos/register.tt:241
 #: intranet-tmpl/prog/en/modules/pos/register.tt:291
 #: intranet-tmpl/prog/en/modules/pos/registers.tt:144
@@ -17401,7 +17395,7 @@ msgid "Cancel and return to order"
 msgstr "Peruuta ja palaa tilaukseen"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:283
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:282
 msgid "Cancel article request"
 msgstr "Poista artikkelipyyntö"
 
@@ -18302,7 +18296,7 @@ msgstr "mikä tahansa kirjasto "
 msgid "Change messaging preferences to default for this category?"
 msgstr "Vaihda viestiasetukset oletusasetukseksi tälle ryhmälle?"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:98
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:87
 #, c-format
 msgid "Change order"
@@ -18325,7 +18319,7 @@ msgstr "Muuta huomautusta tilauksen toimittajalle (tilausnro %s)"
 msgid "Change password"
 msgstr "Vaihda salasana"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:658
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:660
 #, fuzzy, c-format
 msgid "Change selected suggestions"
 msgstr "Tilauksen uusinta"
@@ -18399,14 +18393,14 @@ msgid "Changes saved."
 msgstr "Muutokset tallennettu."
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:14
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:234
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:233
 #, c-format
 msgid "Chapters"
 msgstr "Lukua"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:167
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:126
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:125
 #, c-format
 msgid "Chapters:"
 msgstr "Lukua:"
@@ -18487,7 +18481,7 @@ msgstr "Lainaus"
 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:54
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:25
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:560
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:562
 #, c-format
 msgid "Check all"
 msgstr "Valitse kaikki"
@@ -18727,12 +18721,12 @@ msgstr "Palautuspvm alkaen"
 msgid "Check-in date from:"
 msgstr "Palautuspvm alkaen:"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:335
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:337
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:679
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:339
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:681
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:845
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:683
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:847
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:849
 #, c-format
 msgid "Checked"
 msgstr "Tarkistettu"
@@ -19716,7 +19710,7 @@ msgstr "Tyhjennä käytetyt auktoriteetit"
 msgid "Click ID to select/deselect quote"
 msgstr "Klikkaa tunnusnumeroa valitaksesi tai poistaaksesi sitaatin valinta"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:233
 #, c-format
 msgid "Click Save to finish."
 msgstr "Klikkaa Tallenna."
@@ -19849,7 +19843,7 @@ msgstr ""
 "Klikkaa ylläolevaa 'Tallenna sitaatit' -nappia tallentaaksesi kaikki "
 "sitaatit."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
 #, c-format
 msgid "Click the date to add or edit a holiday."
 msgstr "Klikkaa päivää lisätäksesi tai muokataksesi kiinnioloaikaa."
@@ -19995,8 +19989,8 @@ msgstr "Sääntöjen kopiointi epäonnistui."
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:253
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:430
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:260
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:28
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:398
@@ -20276,8 +20270,8 @@ msgid "Collection title"
 msgstr "Kokoelman nimi:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:106
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:292
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:814
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:294
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:816
 #, c-format
 msgid "Collection title:"
 msgstr "Kokoelman nimi:"
@@ -20560,7 +20554,7 @@ msgstr "Ehdot"
 msgid "Configuration OK, you don't have errors in your MARC parameters table"
 msgstr "Määrittelyt ovat oikein, ei virheitä MARC-määrittelyissä"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:169
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:182
 #, c-format
 msgid "Configure"
 msgstr "Määrittely"
@@ -20728,8 +20722,8 @@ msgid "Confirm this payment?"
 msgstr "Sulje tämä valikko"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:488
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:496
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:490
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:498
 #, fuzzy
 msgid "Confirm your suggestion"
 msgstr "Lähetä ehdotuksesi"
@@ -21076,7 +21070,7 @@ msgid "Converted version"
 msgstr "Perl-versio: "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:226
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:457
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:459
 #, c-format
 msgid "Copies:"
 msgstr "Kpl:"
@@ -21085,20 +21079,20 @@ msgstr "Kpl:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:219
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:220
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:190
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
 #, c-format
 msgid "Copy"
 msgstr "Kopioi"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:191
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:200
 #, c-format
 msgid "Copy and replace"
 msgstr "Kopioi ja korvaa"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:116
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:117
 #, fuzzy, c-format
 msgid "Copy changes to all libraries"
 msgstr "Kopioi kaikkiin kirjastoihin"
@@ -21129,7 +21123,7 @@ msgstr "Poista tämä osakenttä"
 msgid "Copy existing value"
 msgstr "Korvaa olemassa olevat kansikuvat"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:212
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
 #, c-format
 msgid "Copy holidays to:"
 msgstr "Kopioi kiinniolopäivät kirjastolle:"
@@ -21171,7 +21165,7 @@ msgstr "Kopioi kirjastoon %s"
 msgid "Copy to %s"
 msgstr "Kopioi kirjastoon %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:187
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:188
 #, c-format
 msgid "Copy to all libraries"
 msgstr "Kopioi kaikkiin kirjastoihin"
@@ -21192,8 +21186,8 @@ msgid "Copyright &copy; 2012-2016 "
 msgstr "Copyright &copy; 2008 "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:82
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:288
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:813
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:290
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:815
 #, c-format
 msgid "Copyright date:"
 msgstr "Vuosi:"
@@ -21530,7 +21524,7 @@ msgstr "Luo uusi tietue tuomalla uusi (kopio)tietue."
 msgid "Create a new subscription "
 msgstr "Luo uusi lehtitilaus"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:279
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:291
 #, c-format
 msgid "Create a new template"
 msgstr "Luo uusi pohja"
@@ -21863,7 +21857,7 @@ msgstr "Rahayksikkö = %s"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:367
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:229
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:461
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:463
 #, c-format
 msgid "Currency:"
 msgstr "Rahayksikkö:"
@@ -21874,7 +21868,7 @@ msgstr "Rahayksikkö:"
 msgid "Currency: "
 msgstr "Rahayksikkö: "
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:222
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:221
 #, c-format
 msgid "Current article requests"
 msgstr "Nykyiset artikkelipyynnöt"
@@ -22064,7 +22058,7 @@ msgstr ""
 msgid "DBMS auto increment fix"
 msgstr "DBMS autoincrement -korjaus"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:125
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:138
 #, c-format
 msgid "DISABLED"
 msgstr ""
@@ -22257,8 +22251,8 @@ msgstr "Tietokanta: "
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:12
 #: intranet-tmpl/prog/en/includes/ill-availability-table.inc:10
 #: intranet-tmpl/prog/en/modules/tags/review.tt:85
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:250
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:321
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:322
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:229
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
@@ -22278,7 +22272,7 @@ msgstr "Tietokanta: "
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:114
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:219
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:232
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:231
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:195
@@ -22286,7 +22280,7 @@ msgstr "Tietokanta: "
 #: intranet-tmpl/prog/en/modules/about.tt:791
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:33
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:172
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:388
 #, c-format
 msgid "Date"
 msgstr "Pvm"
@@ -22499,7 +22493,7 @@ msgstr "Pvm/Aika"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:165
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:270
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:116
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:179
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1249
 #, c-format
@@ -22542,7 +22536,7 @@ msgstr "Päivämäärät eivät voi olla tyhjiä"
 msgid "Day"
 msgstr "Päivä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:272
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:273
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:119
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:107
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:129
@@ -22550,7 +22544,7 @@ msgstr "Päivä"
 msgid "Day of week"
 msgstr "Viikonpäivä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:296
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:297
 #, c-format
 msgid "Day/month"
 msgstr "Päivä/Kuukausi"
@@ -22985,9 +22979,9 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:283
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:340
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:199
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:74
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:169
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:186
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:82
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:177
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:63
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:407
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:97
@@ -23075,8 +23069,8 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:88
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:83
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:58
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:748
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:646
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:750
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:29
 #, c-format
 msgid "Delete"
@@ -23372,7 +23366,7 @@ msgstr "Poista "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:189
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:354
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:745
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:747
 #, c-format
 msgid "Delete selected"
 msgstr "Poista valitut"
@@ -23422,17 +23416,17 @@ msgstr "Poista lehtitilaus"
 msgid "Delete table"
 msgstr "Poista kaikki"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:107
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:108
 #, c-format
 msgid "Delete the exceptions on a range"
 msgstr "Poista poikkeukset aikaväliltä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:103
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:104
 #, c-format
 msgid "Delete the repeated holidays on a range"
 msgstr "Poista toistuvat kiinniolot aikavälillä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:99
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:100
 #, c-format
 msgid "Delete the single holidays on a range"
 msgstr "Poista yksittäiset kiinniolot aikavälillä"
@@ -23461,18 +23455,18 @@ msgid "Delete this category"
 msgstr "Poista tämä kategoria"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Delete this exception."
 msgstr "Poista tämä poikkeus."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:96
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:97
 #, c-format
 msgid "Delete this holiday"
 msgstr "Poista tämä päivä"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Delete this holiday."
 msgstr "Poista tämä päivä."
 
@@ -23658,13 +23652,13 @@ msgstr "Osasto"
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:6
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:30
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:252
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:301
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:323
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:253
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:275
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:302
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:324
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:264
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:64
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
@@ -23749,9 +23743,9 @@ msgid "Description of charges"
 msgstr "Maksun kuvaus"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:158
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:264
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
 #: intranet-tmpl/prog/en/modules/members/files.tt:72
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:57
@@ -24049,7 +24043,7 @@ msgstr "Henkilö- tai yhteisöhakemistot"
 msgid "Directory is not writeable"
 msgstr "Kansioon ei voi kirjoittaa"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:175
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:188
 #, fuzzy, c-format
 msgid "Disable"
 msgstr "Poista käytöstä "
@@ -24311,7 +24305,7 @@ msgid "Document properties"
 msgstr "Tyyppi:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:112
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:293
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:295
 #, c-format
 msgid "Document type:"
 msgstr "Tyyppi:"
@@ -24608,7 +24602,7 @@ msgstr "Eräpäivä %s"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:17
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:81
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:98
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:335
@@ -24621,7 +24615,7 @@ msgstr "Kopioi"
 msgid "Duplicate "
 msgstr "Kopioi "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #, c-format
 msgid "Duplicate a template:"
 msgstr "Kopioi malli"
@@ -24769,7 +24763,7 @@ msgstr "EDIFACT-sanomat"
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:123
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:136
 #, c-format
 msgid "ENABLED"
 msgstr ""
@@ -24802,6 +24796,11 @@ msgstr "Tuntematon virhe"
 msgid "ERROR:"
 msgstr "Virhe:"
 
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:123
+#, fuzzy, c-format
+msgid "ERRORS"
+msgstr "Virhe:"
+
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:127
 #, c-format
 msgid "EUC-KR"
@@ -24832,7 +24831,7 @@ msgstr "Varauspvm ja noutopaikka"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:168
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:282
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:196
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:174
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:79
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
@@ -24894,7 +24893,7 @@ msgstr "Varauspvm ja noutopaikka"
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:45
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:87
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:57
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:642
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:28
 #, c-format
 msgid "Edit"
@@ -24955,11 +24954,11 @@ msgid "Edit SQL report"
 msgstr "Muokkaa SQL-raporttia"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "Edit action %s"
 msgstr "Muokkaa toimintoa %s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:80
 #, c-format
 msgid "Edit actions"
 msgstr "Muokkaa toimintoja"
@@ -25149,7 +25148,7 @@ msgid "Edit printer profile"
 msgstr "Muokkaa tulostimen profiilia"
 
 #. %1$s:  suggestionid | html 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:276
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:278
 #, c-format
 msgid "Edit purchase suggestion #%s"
 msgstr "Muokkaa hankintaehdotusta #%s"
@@ -25254,7 +25253,7 @@ msgid "Edit tag"
 msgstr "Muokkaa hälytystä"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:57
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:111
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:112
 #, c-format
 msgid "Edit this holiday"
 msgstr "Muokkaa kiinniolopäivää"
@@ -25424,7 +25423,7 @@ msgstr "Tyhjennä ja sulje"
 msgid "Empty option"
 msgstr "[Enemmän vaihtoehtoja]"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:177
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:190
 #, fuzzy, c-format
 msgid "Enable"
 msgstr "Aktivoitu"
@@ -25630,7 +25629,7 @@ msgstr "Tai syötä lista tietuenumeroista"
 msgid "Enter a new comment (max 35 characters)"
 msgstr "Syötä vähintään %n merkkiä"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:279
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "Tee uusi hankintaehdotus"
@@ -25649,7 +25648,7 @@ msgstr ""
 "Syötä kuvaus, jota käytetään oletuskuvauksen sijaan hakutuloksissa. "
 "Esimerkiksi verkkosivusto-aineistotyypille: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:230
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
 #, c-format
 msgid "Enter a title and description for the holiday."
 msgstr "Syötä otsikko ja kuvaus kiinniololle."
@@ -25847,7 +25846,7 @@ msgstr "Lisäyspvm"
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:93
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:111
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #, c-format
 msgid "Enumeration"
 msgstr "Numerointi"
@@ -25896,6 +25895,12 @@ msgstr "Viivakoodeja ei löytynyt"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:89
 msgid "Error downloading the file"
 msgstr "Virhe ladattaessa tiedostoa"
+
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:126
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:128
+#, fuzzy, c-format
+msgid "Error found whilst attempting to load plugin"
+msgstr "Kuvan lataamisessa tapahtui virhe. "
 
 #. %1$s:  ( errZebraConnection ) | html 
 #: intranet-tmpl/prog/en/modules/about.tt:114
@@ -26005,7 +26010,7 @@ msgstr ""
 msgid "Error: _(No form element found."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:50
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:58
 #, c-format
 msgid "Error: no field value specified."
 msgstr "Virhe: kentän arvoa ei määritelty."
@@ -26097,7 +26102,7 @@ msgstr "Ilta "
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:95
 #, c-format
 msgid "Every"
@@ -26155,11 +26160,11 @@ msgid "Excel"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Exception: %s"
 msgstr "Poikkeus: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:247
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:248
 #, c-format
 msgid "Exceptions"
 msgstr "Poikkeukset"
@@ -26310,12 +26315,12 @@ msgstr "Selite: "
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:98
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:250
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:251
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:253
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:235
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:155
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:115
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:261
@@ -26340,7 +26345,7 @@ msgid "Export "
 msgstr "Vie "
 
 #. %1$s:  loo.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:225
 #, c-format
 msgid "Export %s framework"
 msgstr "Vie luettelointipohja %s"
@@ -26419,7 +26424,7 @@ msgstr "Tietojen vienti"
 msgid "Export database"
 msgstr "Vie tietokanta"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:155
 #, c-format
 msgid "Export default framework"
 msgstr "Vie oletusluettelointipohja"
@@ -26516,14 +26521,14 @@ msgstr "Tallenna tämä tilausryhmä CSV-muodossa"
 msgid "Export to CSV file: "
 msgstr "Vie CSV-tiedostoon: "
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:160
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:230
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:161
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:231
 #, c-format
 msgid "Export to CSV spreadsheet"
 msgstr "Vie CSV-taulukkona"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:161
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:231
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:162
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:232
 #, c-format
 msgid "Export to OpenDocument spreadsheet format"
 msgstr "Vie OpenDocument-taulukkolaskentamuodossa"
@@ -26543,6 +26548,11 @@ msgstr "Viedään Dublin Core -muotoon..."
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 msgid "Extended Latin"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
+#, fuzzy, c-format
+msgid "ExtendedPatronAttributes"
+msgstr "Asiakasmääreet"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:99
 #, c-format
@@ -27156,7 +27166,7 @@ msgstr "Filmografiat"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:239
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:191
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:192
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:81
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
@@ -27178,7 +27188,7 @@ msgstr "Viivakoodi"
 msgid "Filter by library"
 msgstr "FileSaver library"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:805
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:807
 #, c-format
 msgid "Filter by: "
 msgstr "Suodata: "
@@ -27825,7 +27835,7 @@ msgid "Friday"
 msgstr "Perjantai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Fridays"
 msgstr "Perjantai"
 
@@ -27921,7 +27931,7 @@ msgid "From call number:"
 msgstr "Niteen luokasta:"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:65
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:141
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:142
 #, c-format
 msgid "From date:"
 msgstr "Päivästä:"
@@ -28019,7 +28029,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:52
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:37
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:201
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:573
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:575
 #, c-format
 msgid "Fund"
 msgstr "Tili"
@@ -28097,7 +28107,7 @@ msgstr "Yhteensä"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:223
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:452
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:454
 #, c-format
 msgid "Fund:"
 msgstr "Tili:"
@@ -28258,7 +28268,7 @@ msgstr "Luo poikkeus tälle toistetulle kiinniololle."
 msgid "Generate discharge"
 msgstr "Luo seuraava"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:92
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:93
 #, c-format
 msgid "Generate exceptions on a range of dates."
 msgstr "Luo poikkeukset aikavälille."
@@ -28322,10 +28332,10 @@ msgstr "Glyphicons Free"
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:164
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:441
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:61
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:800
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:814
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:906
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:934
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:802
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:816
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:908
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:936
 msgid "Go"
 msgstr "OK"
 
@@ -28376,6 +28386,12 @@ msgstr "Siirry kuittisivulle"
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:13
 msgid "Go to record detail page"
 msgstr "Siirry nimeketietojen sivulle"
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
+#: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
+#, fuzzy, c-format
+msgid "Go to the "
+msgstr "Siirry sivulle : "
 
 #. IMG
 #: intranet-tmpl/prog/en/includes/holds_table.inc:88
@@ -28942,7 +28958,7 @@ msgstr ""
 msgid "Hint:"
 msgstr "Vinkki:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:226
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:227
 #, c-format
 msgid "Hints"
 msgstr "Vinkit"
@@ -29301,45 +29317,45 @@ msgstr "Odottavia varauksia: %s"
 msgid "Holds:"
 msgstr "Varauksia:"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:240
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:241
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 #, c-format
 msgid "Holiday exception"
 msgstr "Poikkeus"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:161
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:162
 #, c-format
 msgid "Holiday only on this day"
 msgstr "Kiinni vain tänä päivänä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:166
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:167
 #, c-format
 msgid "Holiday repeated every same day of the week"
 msgstr "Kiinni joka viikko tänä päivänä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:171
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:172
 #, c-format
 msgid "Holiday repeated yearly on the same date"
 msgstr "Kiinni joka vuosi samana päivänä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:238
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:239
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 #, c-format
 msgid "Holiday repeating weekly"
 msgstr "Toistuu viikottain"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:239
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:240
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 #, c-format
 msgid "Holiday repeating yearly"
 msgstr "Toistuu vuosittain"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:176
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:177
 #, c-format
 msgid "Holidays on a range"
 msgstr "Kiinni aikavälillä"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:181
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:182
 #, c-format
 msgid "Holidays repeated yearly on a range"
 msgstr "Kiinni aikavälillä joka vuosi"
@@ -29389,7 +29405,7 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:33
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:82
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:18
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:34
 #: intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:19
@@ -29642,7 +29658,7 @@ msgstr "Kotikirjasto"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:110
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:787
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:242
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:124
@@ -29948,7 +29964,7 @@ msgid "ISBN / EAN / ISSN:"
 msgstr "ISBN / EAN / ISSN:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:88
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:291
 #, c-format
 msgid "ISBN or ISSN or other standard number:"
 msgstr "ISBN, ISSN tai muu tunnistenumero:"
@@ -29967,7 +29983,7 @@ msgstr "ISBN/EAN/ISSN: %s"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:41
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:105
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:148
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:811
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:813
 #, c-format
 msgid "ISBN:"
 msgstr "ISBN:"
@@ -30150,7 +30166,7 @@ msgstr ""
 "arvoa ei voi antaa toiselle asiakkaalle. Tätä asetusta ei voi muuttaa "
 "tallennuksen jälkeen."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:118
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:119
 #, fuzzy, c-format
 msgid ""
 "If checked, changes for this holiday will be copied to all libraries. If the "
@@ -30202,7 +30218,7 @@ msgstr ""
 "tyhjäksi, tätä aineistolajia voi varata, ellei \"ei lainata\"-valinta ole "
 "voimassa.) "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:189
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:190
 #, c-format
 msgid ""
 "If checked, this holiday will be copied to all libraries. If the holiday "
@@ -30278,7 +30294,7 @@ msgstr ""
 "voivat muokata kerhon pohjaa."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "If the field is a control field, the subfield should be empty"
 msgstr "Jos kenttä on kontrollikenttä, osakentän tulee olla tyhjä"
 
@@ -30686,15 +30702,15 @@ msgstr "Kuvat kohteelle "
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:163
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:189
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:216
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:259
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:260
 #, c-format
 msgid "Import"
 msgstr "Tuo"
 
 #. %1$s:  loo.frameworkcode | html 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:249
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
 #, fuzzy, c-format
 msgid ""
 "Import %s framework structure (fields and subfields) from a spreadsheet file "
@@ -30714,7 +30730,7 @@ msgstr "Tuo ISO2709 tai MARCXML -tietue"
 msgid "Import batch deleted successfully"
 msgstr "Tuontierä poistettu"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:180
 #, fuzzy, c-format
 msgid ""
 "Import default framework structure (fields and subfields) from a spreadsheet "
@@ -30794,9 +30810,9 @@ msgid "Important: "
 msgstr "Tärkeä: "
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:19
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Importantl: Item types are what you apply circulation rules to. Circulation "
+"Important: Item types are what you apply circulation rules to. Circulation "
 "rules govern how your institution will lend its items: Checkout length, "
 "renewal policy, hold policy, etc. For example a circulation rule applied to "
 "the DVD item type may enforce a payment of $1.00 for checking out any DVD."
@@ -30903,12 +30919,12 @@ msgid "Include all rows (ignore pagination):"
 msgstr ""
 
 #. INPUT type=checkbox name=filter_archived
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:821
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:823
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:825
 msgid "Include archived suggestions in the search"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:819
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:821
 #, fuzzy, c-format
 msgid "Include archived:"
 msgstr "Sisällytä tilatut:"
@@ -31323,7 +31339,7 @@ msgstr "Sisäinen hakuvirhe"
 msgid "Internationalization and localization"
 msgstr "Kansainvälisyys ja paikallistaminen"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:253
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:254
 #, c-format
 msgid "Into an application"
 msgstr "Tiedostomuoto"
@@ -31625,7 +31641,7 @@ msgstr "Onko tämä kopio tästä: "
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:11
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:13
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:502
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:231
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #, c-format
 msgid "Issue"
 msgstr "Numero"
@@ -31681,7 +31697,7 @@ msgstr "Pyydä tiettyä aineistolajia:"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:25
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:164
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:111
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:110
 #, c-format
 msgid "Issue:"
 msgstr "Numero:"
@@ -31750,7 +31766,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:376
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:174
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:284
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:235
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #: intranet-tmpl/prog/en/modules/pos/pay.tt:77
 #, c-format
@@ -32136,7 +32152,7 @@ msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:793
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:108
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:157
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:156
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:90
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:416
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:807
@@ -32153,8 +32169,8 @@ msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:133
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:167
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:114
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:785
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:787
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:789
 #, c-format
 msgid "Item type"
 msgstr "Aineistolaji"
@@ -32543,7 +32559,7 @@ msgstr ""
 msgid "Keep current (%s - %s)"
 msgstr "Säilytä nykyinen (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:430
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:432
 #, fuzzy, c-format
 msgid "Keep existing manager"
 msgstr "Korvaa olemassa olevat kansikuvat"
@@ -32554,7 +32570,7 @@ msgstr "Korvaa olemassa olevat kansikuvat"
 msgid "Keep issue number"
 msgstr "Säilytä numerointi"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:234
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:235
 #, c-format
 msgid "Key"
 msgstr "Selitteet"
@@ -35705,7 +35721,7 @@ msgstr "Inventaarion päivämäärä:"
 msgid "Last location"
 msgstr "Viimeisin paikka"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:570
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:572
 #, fuzzy, c-format
 msgid "Last modification by"
 msgstr "Viimeisin paikka"
@@ -35715,13 +35731,13 @@ msgstr "Viimeisin paikka"
 msgid "Last modification by - on"
 msgstr "Muutosloki"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:571
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:573
 #, fuzzy, c-format
 msgid "Last modification on"
 msgstr "Viimeisin paikka"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:205
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:402
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:404
 #, fuzzy, c-format
 msgid "Last modification on:"
 msgstr "Viimeisin paikka"
@@ -36054,9 +36070,9 @@ msgstr "Kirjastot"
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:79
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:146
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:140
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:572
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:780
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:574
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:782
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:784
 #, c-format
 msgid "Library"
 msgstr "Kirjasto"
@@ -36217,7 +36233,7 @@ msgstr "Kirjastotiedot"
 
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:31
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:61
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:136
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:137
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:257
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:263
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:196
@@ -36240,8 +36256,8 @@ msgstr "Kirjastotiedot"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:281
 #: intranet-tmpl/prog/en/modules/auth.tt:76
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:220
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:442
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:924
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:444
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:926
 #, c-format
 msgid "Library:"
 msgstr "Kirjasto:"
@@ -36679,6 +36695,7 @@ msgstr "Laina-aika: "
 msgid "Local Use"
 msgstr "Paikalliset tiedot"
 
+#. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:42
 msgid "Local catalog"
@@ -37105,13 +37122,13 @@ msgid "MARC frameworks: %s"
 msgstr "MARC-luettelointipohjat: %s"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:217
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:37
 #, c-format
 msgid "MARC modification templates"
 msgstr "MARC-muokkauksen pohjat"
 
 #. %1$s:  template_id | html 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:58
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:66
 #, c-format
 msgid "MARC modification templates %s"
 msgstr "MARC-muokkauksen pohjat %s"
@@ -37300,7 +37317,7 @@ msgstr "Pääkirjasto"
 msgid "Make a payment"
 msgstr "Maksa"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:183
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:184
 #, c-format
 msgid ""
 "Make a single holiday on a range repeated yearly. For example, selecting "
@@ -37308,7 +37325,7 @@ msgid ""
 "10 a holiday, and will affect August 1-10 in other years."
 msgstr "Kirjasto on kiinni valitulla aikavälillä, samat päivät joka vuosi."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:178
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:179
 #, c-format
 msgid ""
 "Make a single holiday on a range. For example, selecting August 1, 2012 and "
@@ -37316,7 +37333,7 @@ msgid ""
 "will not affect August 1-10 in other years."
 msgstr "Kirjasto on kiinni valitulla aikavälillä."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:163
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:164
 #, c-format
 msgid ""
 "Make a single holiday. For example, selecting August 1, 2012 will make it a "
@@ -37346,7 +37363,7 @@ msgstr "%s %s (oletus)"
 msgid "Make payment"
 msgstr "Maksa"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:168
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:169
 #, c-format
 msgid ""
 "Make this weekday a holiday, every week. For example, if your library is "
@@ -37897,9 +37914,9 @@ msgid "Manage vendors "
 msgstr "Hallinnoi toimittajia"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:41
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:568
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:790
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:570
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:792
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:794
 #, c-format
 msgid "Managed by"
 msgstr "Käsittelijä"
@@ -37912,7 +37929,7 @@ msgstr "Käsittelijä"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:225
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:48
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:185
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:883
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:885
 #, c-format
 msgid "Managed by:"
 msgstr "Käsittelijä:"
@@ -37924,12 +37941,12 @@ msgid "Managed in tab: "
 msgstr "Näytetään välilehdellä: "
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:42
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:569
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:571
 #, fuzzy, c-format
 msgid "Managed on"
 msgstr "Käsittele "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:415
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:417
 #, fuzzy, c-format
 msgid "Managed on:"
 msgstr "Käsittele "
@@ -37945,7 +37962,7 @@ msgid ""
 "Managed staged MARC records, including completing and reversing imports "
 msgstr "Hallinnoi välivarastoituja MARC-tietueita"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:887
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:889
 #, c-format
 msgid "Management date from:"
 msgstr "Käsittelypvm:"
@@ -38097,7 +38114,7 @@ msgstr "Merkitse havaituksi ja jatka >>"
 msgid "Mark seen and quit"
 msgstr "Merkitse havaituksi ja lopeta"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:662
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:664
 #, c-format
 msgid "Mark selected as: "
 msgstr "Merkitse valitut: "
@@ -38400,7 +38417,7 @@ msgid "Merge patron records"
 msgstr "Päivitä asiakastiedoja"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:91
+#: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:89
 #, fuzzy
 msgid "Merge patrons"
 msgstr "Poista asiakkaita"
@@ -38921,7 +38938,7 @@ msgid "Monday"
 msgstr "Maanantai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Mondays"
 msgstr "Maanantai"
 
@@ -38939,7 +38956,7 @@ msgstr "Maanantai"
 msgid "Month"
 msgstr "Kuukausi"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:298
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:299
 #, c-format
 msgid "Month/day"
 msgstr "Kuukausi/päivä"
@@ -39006,28 +39023,28 @@ msgstr "Aamu "
 msgid "Most-circulated items"
 msgstr "Eniten lainattu aineisto"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:189
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:198
 #, c-format
 msgid "Move"
 msgstr "Siirry"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:114
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:122
 msgid "Move action down"
 msgstr "Siirrä toimintoa alaspäin"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:110
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:118
 msgid "Move action to bottom"
 msgstr "Siirrä toiminto alimmaksi"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:106
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:114
 msgid "Move action to top"
 msgstr "Siirrä toiminto ylimmäksi"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:110
 msgid "Move action up"
 msgstr "Siirrä toimintoa ylöspäin"
 
@@ -39337,7 +39354,7 @@ msgstr "Nimi:"
 #: intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:297
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:286
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
 #: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:77
@@ -39521,7 +39538,7 @@ msgstr ""
 msgid "New account "
 msgstr "Uusi tili "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:52
 #, c-format
 msgid "New action"
 msgstr "Uusi toiminto"
@@ -39834,7 +39851,7 @@ msgid "New preference"
 msgstr "Uusi asetus"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:32
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:508
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:510
 #, c-format
 msgid "New purchase suggestion"
 msgstr "Uusi hankintaehdotus"
@@ -39915,7 +39932,7 @@ msgstr "Uusi lehtitilaus"
 msgid "New tag"
 msgstr "Uusi kenttä"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:42
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:50
 #, c-format
 msgid "New template"
 msgstr "Uusi pohja"
@@ -40424,7 +40441,7 @@ msgstr "Tiliä ei löydy"
 msgid "No fund selected."
 msgstr "Ei valittuja tilauksia"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:178
 #, c-format
 msgid "No funds to display for this search criteria"
 msgstr "Ei tilejä näillä hakuehdoilla"
@@ -40864,7 +40881,7 @@ msgstr "Ei hakutuloksia."
 msgid "No results match your search %sfor "
 msgstr "Hakutuloksia ei löytynyt %shaulla "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:755
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:757
 #, c-format
 msgid "No results."
 msgstr "Ei hakutuloksia."
@@ -40889,7 +40906,7 @@ msgstr "Haullasi ei löytynyt yhtään tallennettua raporttia. "
 msgid "No serials selected"
 msgstr "Ei valittuja tilauksia"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:320
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:322
 #, fuzzy, c-format
 msgid "No status"
 msgstr "Ei tilamääritystä"
@@ -41121,8 +41138,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:128
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:66
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:77
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:916
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:918
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:920
 #, c-format
 msgid "None"
 msgstr "Ei mitään"
@@ -41181,7 +41198,7 @@ msgid "Normal"
 msgstr "Perustiedot"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Normal day"
 msgstr "Normaalipäivä"
 
@@ -41581,7 +41598,7 @@ msgstr "Huomautukset"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1119
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1186
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:125
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:311
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:313
 #, c-format
 msgid "Notes:"
 msgstr "Muuta:"
@@ -41663,7 +41680,7 @@ msgstr "Ilmoitukset ja kuitit"
 msgid "Notification date"
 msgstr "Ilmoituspvm"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:435
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:437
 #, fuzzy, c-format
 msgid "Notify manager:"
 msgstr "Dokumentaatio-tiimi:"
@@ -42755,12 +42772,12 @@ msgstr "Tilauksen summa (%s) ylittää käytettävissä olevan määrärahan (%s
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:95
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:347
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:349
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:691
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:351
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:693
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:857
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:695
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:859
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:861
 #, c-format
 msgid "Ordered"
 msgstr "Tilattu"
@@ -42873,7 +42890,7 @@ msgstr "Yhteisö #:"
 msgid "Organization name: "
 msgstr "Yhteisön nimi: "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:772
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:774
 #, c-format
 msgid "Organize by: "
 msgstr "Järjestä: "
@@ -42971,8 +42988,8 @@ msgid "Other phone: "
 msgstr "Muu puhelin: "
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:372
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:707
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:374
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:709
 #, c-format
 msgid "Others..."
 msgstr "Muut..."
@@ -43014,7 +43031,7 @@ msgstr "Tulostusmuoto "
 msgid "Output format:"
 msgstr "Tulostusmuoto:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:253
 #, c-format
 msgid "Output to a file named: "
 msgstr "Tulostustiedosto: "
@@ -43209,14 +43226,14 @@ msgstr "Kenttä: %s"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:13
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:16
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:233
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:232
 #, c-format
 msgid "Pages"
 msgstr "Sivut"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:166
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:271
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:121
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:120
 #, c-format
 msgid "Pages:"
 msgstr "Sivut:"
@@ -43473,7 +43490,7 @@ msgstr "Patentit"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:218
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:39
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:227
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:226
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:69
 #, c-format
@@ -43956,14 +43973,14 @@ msgstr "Asiakasta ei löytynyt:"
 msgid "Patron note"
 msgstr "Asiakkaan huomautus"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:235
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:234
 #, c-format
 msgid "Patron notes"
 msgstr "Asiakkaan huomautus"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:168
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:273
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:131
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:130
 #, c-format
 msgid "Patron notes:"
 msgstr "Asiakkaan huomautukset:"
@@ -44223,6 +44240,11 @@ msgstr "Asiakas:"
 msgid "Patron: "
 msgstr "Asiakas: "
 
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:119
+#, c-format
+msgid "PatronSelfRegistrationVerifyByEmail"
+msgstr ""
+
 #. %1$s:  patronlistname | html 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:37
 #, c-format
@@ -44457,12 +44479,12 @@ msgstr "Erämuokkaa asiakkaita "
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:111
 #: intranet-tmpl/prog/en/modules/tags/review.tt:165
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:323
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:325
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:667
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:327
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:669
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:833
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:671
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:835
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:837
 #, c-format
 msgid "Pending"
 msgstr "Odottaa"
@@ -44724,7 +44746,7 @@ msgstr "Noutopaikka:"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:14
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:17
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:238
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:162
 #, c-format
 msgid "Pickup library"
@@ -44740,7 +44762,7 @@ msgstr "Noutokirjasto on jokin toinen. "
 msgid "Pickup library is different. "
 msgstr "Noutokirjasto on jokin toinen. "
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:136
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:135
 #, c-format
 msgid "Pickup library:"
 msgstr "Noutokirjasto:"
@@ -44858,7 +44880,7 @@ msgid "Place of publication"
 msgstr "Julkaisupaikka"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:211
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:210
 msgid "Place request"
 msgstr "Tee pyyntö"
 
@@ -44873,7 +44895,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:148
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:269
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:47
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:226
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:225
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:94
 #, c-format
 msgid "Placed on"
@@ -45195,7 +45217,7 @@ msgstr "Syötä sähköpostiosoite oikeassa muodossa."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:2
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:283
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:284
 msgid "Please enter a valid number."
 msgstr "Syötä numero."
 
@@ -45431,7 +45453,7 @@ msgid "Please select a date range to display transactions for: "
 msgstr "Valitse ainakin yksi poistettava asiakas."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1019
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
 #, fuzzy
 msgid "Please select a manager to assign to the selected suggestions"
 msgstr "Valitse ainakin yksi ehdotus poistettavaksi"
@@ -45524,7 +45546,7 @@ msgid "Please select at least one record to process"
 msgstr "Valitse ainakin yksi tietue käsiteltäväksi"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1019
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:1042
 #, fuzzy
 msgid "Please select at least one suggestion"
 msgstr "Valitse ainakin yksi ehdotus poistettavaksi"
@@ -45962,7 +45984,7 @@ msgid "Price paid:"
 msgstr "Hinta:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:232
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:477
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:479
 #, c-format
 msgid "Price:"
 msgstr "Hinta:"
@@ -46487,7 +46509,7 @@ msgid "Publication date: "
 msgstr "Julkaisupvm: "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:100
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:291
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:293
 #, c-format
 msgid "Publication place:"
 msgstr "Julkaisupaikka:"
@@ -46624,8 +46646,8 @@ msgstr "Julkaisijan numero:"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:96
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:273
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:94
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:290
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:812
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:292
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:814
 #, c-format
 msgid "Publisher:"
 msgstr "Julkaisija:"
@@ -46874,7 +46896,7 @@ msgstr "RT"
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:99
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:53
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:62
@@ -46910,18 +46932,18 @@ msgstr "Raakahaku: "
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:106
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:362
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:364
 #, c-format
 msgid "Reason"
 msgstr "Syy"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:307
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 msgid "Reason for cancellation:"
 msgstr "Poiston syy:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:117
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:298
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:300
 #, c-format
 msgid "Reason for suggestion: "
 msgstr "Ehdotuksen syy: "
@@ -47241,8 +47263,8 @@ msgid "Refund payments to patrons "
 msgstr "Palaa asiakastietoihin"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:321
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:221
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:255
 #, c-format
 msgid "RegEx"
 msgstr "RegEx"
@@ -47312,12 +47334,12 @@ msgstr "Hylkää"
 #: intranet-tmpl/prog/en/modules/tags/review.tt:103
 #: intranet-tmpl/prog/en/modules/tags/review.tt:123
 #: intranet-tmpl/prog/en/modules/tags/review.tt:162
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:341
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:343
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:685
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:345
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:687
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:851
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:689
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:853
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:855
 #, c-format
 msgid "Rejected"
 msgstr "Hylätty"
@@ -48166,10 +48188,10 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:91
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:106
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:121
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:150
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:165
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:180
-#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:195
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:151
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:166
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:181
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:196
 #: intranet-tmpl/prog/en/includes/member-main-address-style.inc:67
 #: intranet-tmpl/prog/en/includes/member-main-address-style.inc:82
 #: intranet-tmpl/prog/en/includes/member-main-address-style.inc:97
@@ -48212,7 +48234,7 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:211
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:298
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:303
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:299
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:699
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:863
@@ -48368,7 +48390,7 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:285
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:287
 #: intranet-tmpl/prog/en/modules/pos/register.tt:269
 #, c-format
 msgid "Required"
@@ -49072,7 +49094,7 @@ msgstr "Suorita ja muokkaa makroja"
 msgid "Run macro"
 msgstr "Suorita makro"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:157
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:170
 #, c-format
 msgid "Run report"
 msgstr "Aja raportti"
@@ -49092,7 +49114,7 @@ msgstr "Aja raportteja"
 msgid "Run the report"
 msgstr "Aja raportti"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:163
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:176
 #, c-format
 msgid "Run tool"
 msgstr "Käynnistä työkalu"
@@ -49250,7 +49272,7 @@ msgid "Saturday"
 msgstr "Lauantai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Saturdays"
 msgstr "Lauantai"
 
@@ -49262,8 +49284,8 @@ msgstr "Lauantai"
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:186
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:60
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:36
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:122
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:192
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:123
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:193
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:312
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:222
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:343
@@ -49333,7 +49355,7 @@ msgstr "Lauantai"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:146
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:456
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:157
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:158
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:173
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:93
@@ -49351,7 +49373,7 @@ msgstr "Lauantai"
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:176
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:102
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:146
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:490
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:492
 #, c-format
 msgid "Save"
 msgstr "Tallenna"
@@ -49909,7 +49931,7 @@ msgstr "Hae tileistä:"
 msgid "Search history"
 msgstr "Hakuhistoria"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:228
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr "Hae kalenterista päivä, jonka haluat asettaa kiinniolopäiväksi."
@@ -50341,7 +50363,6 @@ msgstr "software.coop, United Kingdom"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1929
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:120
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
-#: intranet-tmpl/prog/en/modules/suggestion/tables/suggester_search.tt:21
 #, c-format
 msgid "Select"
 msgstr "Valitse"
@@ -50623,7 +50644,7 @@ msgstr "Valitse tallennusmuoto: "
 msgid "Select files: "
 msgstr "Valitse tiedostot: "
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:153
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:152
 #, c-format
 msgid "Select item:"
 msgstr "Valitse nide:"
@@ -50638,8 +50659,8 @@ msgstr "Valitse tiedosto tuotavaksi lainaajat-tauluun."
 msgid "Select local databases"
 msgstr "Valitse paikalliset tietokannat"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:428
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:734
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:430
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:736
 #, fuzzy, c-format
 msgid "Select manager"
 msgstr "Valitse omistaja"
@@ -50697,7 +50718,7 @@ msgid ""
 "this patron record and the remaining patron records will be deleted."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:202
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:203
 #, c-format
 msgid "Select planning type:"
 msgstr "Suunnittelutyyppi:"
@@ -51289,7 +51310,7 @@ msgstr "Aseta viimeiseksi varaukseksi"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1477
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:393
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:395
 #, c-format
 msgid "Set to patron"
 msgstr "Hae takaaja"
@@ -51605,7 +51626,7 @@ msgstr "Näytä SQL-koodi"
 msgid "Show active baskets only"
 msgstr "Vain aktiiviset tilauskorit"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:228
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:229
 #, c-format
 msgid "Show active funds only"
 msgstr "Vain aktiiviset tilit"
@@ -51615,7 +51636,7 @@ msgstr "Vain aktiiviset tilit"
 msgid "Show active vendors only"
 msgstr "Näytä vain aktiiviset toimittajat"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:238
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:239
 #, c-format
 msgid "Show actual/estimated values"
 msgstr "Näytä oikeat/arvioidut hinnat"
@@ -51833,7 +51854,7 @@ msgstr "Tietueiden yhdistämissäännöt"
 msgid "Show more"
 msgstr "Näytä enemmän"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:219
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:220
 #, c-format
 msgid "Show my funds only"
 msgstr "Näytä vain omat tilit"
@@ -51917,7 +51938,7 @@ msgid "Since"
 msgstr "Alkaen"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Single holiday: %s"
 msgstr "Yksittäinen kiinniolopäivä: %s"
 
@@ -52293,7 +52314,7 @@ msgstr "Määritä päivämäärä, jolloin varauksia jatketaan %s: "
 msgid "Specify due date %s: "
 msgstr "Määrittele eräpäivä %s: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:231
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:232
 #, c-format
 msgid "Specify how the holiday should repeat."
 msgstr "Määrittele, kuinka kiinniolo toistuu."
@@ -52762,11 +52783,11 @@ msgstr "Tilastovelho"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:400
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:72
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:574
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:775
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:576
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:777
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:779
 #, c-format
 msgid "Status"
 msgstr "Tila"
@@ -52790,8 +52811,8 @@ msgstr "Viimeksi muutettu:"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:130
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:134
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:318
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:827
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:320
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:829
 #, c-format
 msgid "Status:"
 msgstr "Tila:"
@@ -53186,7 +53207,7 @@ msgstr "Asiasanat:"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:111
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:161
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:227
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:317
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:372
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:232
@@ -53220,8 +53241,8 @@ msgstr "Asiasanat:"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:85
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:86
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:242
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:266
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:267
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:115
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:59
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:93
@@ -53243,15 +53264,15 @@ msgstr "Asiasanat:"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:66
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:220
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:284
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:718
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:727
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:739
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:720
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:729
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:741
 #, c-format
 msgid "Submit"
 msgstr "OK"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:498
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:500
 msgid "Submit your suggestion"
 msgstr "Lähetä ehdotuksesi"
 
@@ -53515,7 +53536,7 @@ msgid "Successfully saved configuration"
 msgstr "Asetukset tallennettu"
 
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:31
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:566
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:568
 #, c-format
 msgid "Suggested by"
 msgstr "Ehdottanut"
@@ -53525,7 +53546,7 @@ msgstr "Ehdottanut"
 msgid "Suggested by - on"
 msgstr "Ehdottanut: "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:872
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:874
 #, c-format
 msgid "Suggested by:"
 msgstr "Ehdottanut:"
@@ -53548,13 +53569,13 @@ msgstr "Ehdottanut: "
 msgid "Suggested by: %s%s, %s %s ("
 msgstr "Ehdottaja: %s%s, %s %s ("
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:876
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:878
 #, c-format
 msgid "Suggested date from:"
 msgstr "Ehdotuspäivä:"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:43
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:567
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:569
 #, fuzzy, c-format
 msgid "Suggested on"
 msgstr "Ehdottanut"
@@ -53568,7 +53589,7 @@ msgstr "Altis"
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:242
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:565
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:567
 #, c-format
 msgid "Suggestion"
 msgstr "Ehdotus"
@@ -53583,13 +53604,13 @@ msgstr "Ehdotus"
 msgid "Suggestion details"
 msgstr "Tilauksen tiedot"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:816
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:818
 #, c-format
 msgid "Suggestion information"
 msgstr "Ehdotuksen tiedot"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:131
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:314
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:316
 #, c-format
 msgid "Suggestion management"
 msgstr "Ehdotuksen hallinta"
@@ -53608,7 +53629,7 @@ msgid "Suggestions"
 msgstr "Hankintaehdotukset"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:34
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:511
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:513
 #, c-format
 msgid "Suggestions management"
 msgstr "Hankintaehdotusten hallinta"
@@ -53686,7 +53707,7 @@ msgid "Sunday"
 msgstr "Sunnuntai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Sundays"
 msgstr "Sunnuntai"
 
@@ -54231,7 +54252,7 @@ msgstr "Tekniset raportit"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:2
 #: intranet-tmpl/prog/en/includes/clubs-table.inc:5
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
 #, c-format
 msgid "Template"
 msgstr "Pohja"
@@ -54453,7 +54474,7 @@ msgstr "Teksti: "
 msgid "Textarea"
 msgstr "Tekstikenttä"
 
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:175
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:176
 #, c-format
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr "Tätä budjettia ei ole olemassa. Valitse budjetti, jotta voit jatkaa."
@@ -54762,25 +54783,25 @@ msgstr ""
 "Sarake 'Koha-kenttä' näyttää, että osakenttä on linkitetty Koha-kenttään."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #, fuzzy
 msgid "The conditional comparison operator should be filled."
 msgstr "Kohde täytyy olla täytetty."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #, fuzzy
 msgid "The conditional field should be filled."
 msgstr "Lähdekentän pitäisi olla täytetty."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #, fuzzy
 msgid "The conditional regular expression should be filled."
 msgstr "Kohde täytyy olla täytetty."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 #, fuzzy
 msgid "The conditional value should be filled."
 msgstr "Kohde täytyy olla täytetty."
@@ -54850,7 +54871,7 @@ msgid "The database returned an error while saving %s %s. "
 msgstr "Tietokannassa tapahtui virhe, kun %s %s yritettiin poistaa. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "The destination should be filled."
 msgstr "Kohde täytyy olla täytetty."
 
@@ -55505,12 +55526,12 @@ msgid "The secondary email is invalid."
 msgstr "Toissijainen sähköpostiosoite on virheellinen."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "The source field should be filled."
 msgstr "Lähdekentän pitäisi olla täytetty."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "The source subfield should be filled for update."
 msgstr "Lähdeosakentän tulisi olla täytetty päivitystä varten."
 
@@ -55700,12 +55721,12 @@ msgstr "Kokoelmatietoja ei ole määritelty."
 msgid "There are no contracts with this vendor. %s "
 msgstr "Tälle toimittajalle ei ole sopimuksia. %s "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:176
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:184
 #, c-format
 msgid "There are no defined actions for this template."
 msgstr "Tälle pohjalle ei ole määritelty toimintoja."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:282
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr "Määrittele ensin pohjat."
@@ -56698,7 +56719,7 @@ msgstr "Tämä poistaa %skaikki%svalitut%s niteet."
 msgid "This will delete the Mana KB token from Koha. Do you want to continue?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:109
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:110
 #, c-format
 msgid ""
 "This will delete the exceptions inside a given range. Be careful about your "
@@ -56707,7 +56728,7 @@ msgstr ""
 "Tämä poistaa poikkeukset valitulta ajanjaksolta. Käytä aikarajausta varoen, "
 "jos valitset liian ison aikavälin, saatat hidastaa Kohaa."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:105
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:106
 #, c-format
 msgid ""
 "This will delete the repeated holidays rules only. The repeatable holidays "
@@ -56716,7 +56737,7 @@ msgstr ""
 "Tämä poistaa vain toistettujen kiinniolopäivien sääntöjä. Toistetut "
 "kiinniolopäivät poistetaan, mutta ei niiden poikkeuksia."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:101
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:102
 #, c-format
 msgid ""
 "This will delete the single holidays rules only. The repeatable holidays and "
@@ -56725,7 +56746,7 @@ msgstr ""
 "Tämä poistaa vain yksittäisten kiinniolopäivien sääntöjä. Toistettuja "
 "kiinniolopäiviä ja niiden poikkeuksia ei poisteta."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:98
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:99
 #, c-format
 msgid ""
 "This will delete this holiday rule. If it is a repeatable holiday, this "
@@ -56743,7 +56764,7 @@ msgid ""
 "and delete them from the browser. Proceed?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:113
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:114
 #, c-format
 msgid ""
 "This will save changes to the holiday's title and description. If the "
@@ -56754,7 +56775,7 @@ msgstr ""
 "toistettu kiinniolopäivä, muutokset vaikuttavat kaikkiin toistettuihin "
 "päiviin."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:173
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:174
 #, c-format
 msgid ""
 "This will take this day and month as a reference to make it a holiday. "
@@ -56788,7 +56809,7 @@ msgid "Thursday"
 msgstr "Torstai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Thursdays"
 msgstr "Torstai"
 
@@ -56868,10 +56889,10 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:29
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:251
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:273
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:300
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:322
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:252
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:274
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:301
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:323
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:124
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:188
@@ -56925,7 +56946,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:210
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:73
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:228
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:227
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:68
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:78
@@ -57000,10 +57021,10 @@ msgstr "Nimekefraasi"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:265
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:161
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:266
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:96
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:95
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:66
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:283
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:809
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:285
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:811
 #, c-format
 msgid "Title:"
 msgstr "Nimeke:"
@@ -57012,7 +57033,7 @@ msgstr "Nimeke:"
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:14
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:108
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:80
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:156
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:157
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:81
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
@@ -57065,11 +57086,6 @@ msgstr "loppuen"
 #, c-format
 msgid "To "
 msgstr " - "
-
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:77
-#, c-format
-msgid "To Date : "
-msgstr "Päivämäärään : "
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:205
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:154
@@ -57132,7 +57148,8 @@ msgstr "Luodaksesi toisen asiakkaan, mene: "
 msgid "To create circulation rule, go to: "
 msgstr "Luodaksesi lainaussäännön, mene: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:153
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:77
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:154
 #, c-format
 msgid "To date: "
 msgstr "Päivään: "
@@ -57240,9 +57257,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:123
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:74
 #: intranet-tmpl/prog/en/modules/labels/label-edit-range.tt:32
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:880
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:891
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:902
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:882
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:893
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:904
 #, c-format
 msgid "To:"
 msgstr "Saakka:"
@@ -57422,7 +57439,7 @@ msgstr "Työkaluliitännäiset"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:34
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:83
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:19
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:27
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:35
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:14
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:14
@@ -57760,7 +57777,7 @@ msgid "Total tax inc. (%s)"
 msgstr "Yhteensä (verollinen) (%s)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:435
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:479
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:481
 #, c-format
 msgid "Total: "
 msgstr "Yhteensä: "
@@ -58029,7 +58046,7 @@ msgid "Tuesday"
 msgstr "Tiistai"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Tuesdays"
 msgstr "Tiistai"
 
@@ -58205,7 +58222,7 @@ msgstr "Kuvan tallennus tietokantaan epäonnistui."
 msgid "Unapprove"
 msgstr "Hylkää"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:648
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:650
 #, fuzzy, c-format
 msgid "Unarchive"
 msgstr "Arkistoitu"
@@ -58249,7 +58266,7 @@ msgstr "Ei muutettu"
 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:54
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:26
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:560
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:562
 #, c-format
 msgid "Uncheck all"
 msgstr "Tyhjennä valinnat"
@@ -58325,18 +58342,18 @@ msgstr "Yhtenäistetty nimeke: %s "
 msgid "Uniform Resource Identifier"
 msgstr "URL-osoite"
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:173
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:186
 #, c-format
 msgid "Uninstall"
 msgstr "Poista asennus"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:237
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:238
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 #, c-format
 msgid "Unique holiday"
 msgstr "Yksittäinen"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:318
 #, c-format
 msgid "Unique holidays"
 msgstr "Yksittäinen kiinniolopäivä"
@@ -58576,7 +58593,7 @@ msgid "Update SQL"
 msgstr "Päivitä SQL"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:337
 msgid "Update action"
 msgstr "Päivitä toiminto"
 
@@ -58602,7 +58619,7 @@ msgstr "Päivitä lapsi aikuiseksi"
 msgid "Update errors :"
 msgstr "Päivitysvirheet:"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
 #, fuzzy, c-format
 msgid "Update existing or add new"
 msgstr "Käytä olemassa olevaa tietuetta"
@@ -58612,12 +58629,12 @@ msgstr "Käytä olemassa olevaa tietuetta"
 msgid "Update hold(s)"
 msgstr "Päivitä varaukset"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:723
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:725
 #, fuzzy, c-format
 msgid "Update item types with: "
 msgstr "Rajoita aineistolaji: "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:733
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:735
 #, fuzzy, c-format
 msgid "Update manager"
 msgstr "Release manager:"
@@ -58787,8 +58804,8 @@ msgstr "Lataushakemisto: "
 msgid "Upload file"
 msgstr "Lähetä tiedosto"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:185
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:255
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:186
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
 #, c-format
 msgid "Upload file:"
 msgstr "Lähetä tiedosto:"
@@ -59146,6 +59163,11 @@ msgstr "Käytä työkalut-liitännäisiä"
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Käytä ylävalikkoa siirtyäksesi toiseen Kohan osioon."
+
+#: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
+#, fuzzy, c-format
+msgid "UseTransportCostMatrix"
+msgstr "Kuljetusten painomatriisi"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:45
 #, c-format
@@ -59855,7 +59877,7 @@ msgstr "Nro."
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:10
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:14
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:502
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:229
 #, c-format
 msgid "Volume"
 msgstr "Numero"
@@ -59878,7 +59900,7 @@ msgstr "Osan numero"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:43
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:163
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:268
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:106
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:105
 #, c-format
 msgid "Volume:"
 msgstr "Numero:"
@@ -60079,7 +60101,7 @@ msgstr ""
 "Varoitus: Tämä tiedosto on versio %s, mutta osaan tuoda tietoja vain "
 "versiosta %s. Yritän silti."
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:138
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:151
 #, fuzzy, c-format
 msgid ""
 "Warning: This plugin was written for an older version of Koha. Run at your "
@@ -60105,7 +60127,7 @@ msgstr ""
 "Tämä raportti vaatii paljon järjestelmäresursseja, jos tietokannassa on "
 "paljon myöhässä olevia lainoja."
 
-#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:132
+#: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:145
 #, fuzzy, c-format
 msgid ""
 "Warning: This report was written for a newer version of Koha. Run at your "
@@ -60288,7 +60310,7 @@ msgid "Wednesday"
 msgstr "Keskiviikko"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Wednesdays"
 msgstr "Keskiviikko"
 
@@ -60301,13 +60323,13 @@ msgstr "Keskiviikko"
 msgid "Week"
 msgstr "Viikko"
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:268
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:269
 #, c-format
 msgid "Weekly - Repeatable holidays"
 msgstr "Viikoittain toistuvat kiinniolot"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Weekly holiday: %s"
 msgstr "Viikoittainen kiinniolo: %s"
 
@@ -60490,7 +60512,7 @@ msgstr ""
 msgid "Words: _({0}"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:236
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:237
 #, c-format
 msgid "Working day"
 msgstr "Työpäivä"
@@ -60606,13 +60628,13 @@ msgstr "Vuosi"
 msgid "Year: "
 msgstr "Vuosi: "
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:291
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:292
 #, c-format
 msgid "Yearly - Repeatable holidays"
 msgstr "Vuosittain toistuvat kiinniolot"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:355
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:356
 msgid "Yearly holiday: %s"
 msgstr "Vuosittainen kiinniolo: %s"
 
@@ -60846,7 +60868,7 @@ msgstr "Kyllä: Näytä olemassa olevat niteet"
 msgid "YesNo"
 msgstr "KylläEi"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:422
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:424
 #, c-format
 msgid "You"
 msgstr ""
@@ -61084,7 +61106,7 @@ msgstr ""
 "viikko kiinni lauantaisin ja sunnuntaisin, voit asettaa jonkin tietyn "
 "lauantain poikkeuksena, jolloin kirjasto on sinä lauantaina auki."
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:94
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:95
 #, c-format
 msgid "You can make an exception on a range of dates repeated yearly."
 msgstr "Voit asettaa vuosittain toistuvalle kiinniolopäivälle poikkeuksen."
@@ -61254,7 +61276,7 @@ msgid ""
 "process..."
 msgstr "Olet jo syöttänyt viivakoodin, odota lainauksen etenemistä..."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:183
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:191
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -61907,7 +61929,7 @@ msgstr "[ Uusi lista ]"
 msgid "[% discount | format ("
 msgstr "[% discount | format ("
 
-#: intranet-tmpl/prog/en/modules/tools/holidays.tt:331
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:332
 #, c-format
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
@@ -62064,7 +62086,7 @@ msgstr "[Ohitettu] "
 msgid "[Previous page]"
 msgstr "[Edellinen sivu]"
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:805
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:807
 #, c-format
 msgid "[clear]"
 msgstr "[tyhjennä]"
@@ -62404,7 +62426,7 @@ msgstr " "
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:31
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:83
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:197
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:198
 #, c-format
 msgid "by %s"
 msgstr "%s"
@@ -62527,19 +62549,19 @@ msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "by Zhixin Wen is licensed under the MIT license."
 
 #: intranet-tmpl/prog/en/includes/budget_planning.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:195
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:196
 #, c-format
 msgid "by item types"
 msgstr "aineistolajeittain"
 
 #: intranet-tmpl/prog/en/includes/budget_planning.inc:4
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:196
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:197
 #, c-format
 msgid "by libraries"
 msgstr "kirjastoittain"
 
 #: intranet-tmpl/prog/en/includes/budget_planning.inc:3
-#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:194
+#: intranet-tmpl/prog/en/modules/admin/aqplan.tt:195
 #, c-format
 msgid "by months"
 msgstr "kuukausittain"
@@ -62549,7 +62571,7 @@ msgstr "kuukausittain"
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "by the Bridge Consortium of Carleton College and St. Olaf College."
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:419
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:421
 #, fuzzy, c-format
 msgid "by:"
 msgstr " "
@@ -62843,12 +62865,12 @@ msgstr "tee haku luettelosta"
 msgid "doXulting"
 msgstr "Kierto"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
 #, c-format
 msgid "doesn't exist"
 msgstr "ei ole olemassa"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:247
 #, c-format
 msgid "doesn't match"
 msgstr "ei osumaa"
@@ -62936,7 +62958,7 @@ msgstr "esim. barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgid "example"
 msgstr "Esimerkiksi: 5.00"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:244
 #, c-format
 msgid "exists"
 msgstr "on jo olemassa."
@@ -62971,12 +62993,12 @@ msgstr "ajo epäonnistui"
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:239
 #, c-format
 msgid "field "
 msgstr "kenttä "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
 #, c-format
 msgid "field(s) "
 msgstr "kentät "
@@ -63120,8 +63142,6 @@ msgstr "liikaa varauksia."
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:288
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:225
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
-#: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
 #, c-format
 msgid "here"
 msgstr "tästä"
@@ -63157,10 +63177,20 @@ msgstr "kotikirjasto määritelty"
 msgid "hryvnia sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
 #, c-format
 msgid "if"
 msgstr "jos"
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:119
+#, fuzzy, c-format
+msgid "if "
+msgstr "jos"
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:119
+#, c-format
+msgid "if set.)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #, c-format
@@ -63171,15 +63201,9 @@ msgstr ""
 "jos tämä tyyppi näytetään aina. Muuten valitse kirjastot, joissa tämä arvo "
 "näytetään. "
 
-#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
-#: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
-#, c-format
-msgid "if you wish to enable this feature."
-msgstr "jos haluat käyttää tätä ominaisuutta."
-
 #. INPUT type=text name=regex_modifiers
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:311
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:225
 msgid "ig"
 msgstr "ig"
 
@@ -63567,8 +63591,8 @@ msgid "last on: %s"
 msgstr "viimeksi: %s"
 
 #. INPUT type=text name=from_subfield
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:210
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:217
 msgid "let blank for the entire field"
 msgstr "jätä tyhjäksi koko kenttä"
 
@@ -63618,7 +63642,7 @@ msgstr "loading_2.ogg"
 msgid "lost"
 msgstr "kortti kadonnut"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:252
 #, c-format
 msgid "m/"
 msgstr "m/"
@@ -63628,7 +63652,7 @@ msgstr "m/"
 msgid "manat sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 #, c-format
 msgid "matches"
 msgstr "osumat"
@@ -63869,6 +63893,13 @@ msgstr "tai luo"
 msgid "or create:"
 msgstr "tai luo:"
 
+#: intranet-tmpl/prog/en/includes/member-alt-contact-style.inc:148
+#: intranet-tmpl/prog/en/includes/member-main-address-style.inc:154
+#: intranet-tmpl/prog/en/includes/member-alt-address-style.inc:163
+#, fuzzy, c-format
+msgid "or enter"
+msgstr "Kommentoija "
+
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "panic.ogg"
@@ -63951,9 +63982,9 @@ msgstr "tilauksen tekeminen"
 #. INPUT type=text name=other_reason
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:73
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:75
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:377
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:379
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:711
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:381
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:713
 msgid "please note your reason here..."
 msgstr "syötä syy tähän"
 
@@ -64009,13 +64040,13 @@ msgstr "Valitse yksi): "
 
 #. INPUT type=text name=regex_search
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:309
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:225
 msgid "regex pattern"
 msgstr "regex-kaava"
 
 #. INPUT type=text name=regex_replace
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:225
 msgid "regex replacement"
 msgstr "regex-korvaus"
 
@@ -64074,7 +64105,7 @@ msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "s&eacute;lection au moyen d'une liste de descripteurs"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:308
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:224
 #, c-format
 msgid "s/"
 msgstr "s/"
@@ -64331,7 +64362,7 @@ msgstr "tilaukset %s joiden nimeke täsmää "
 
 #. A
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:585
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:587
 msgid "suggestion"
 msgstr "ehdotus"
 
@@ -64341,7 +64372,7 @@ msgstr "ehdotus"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:246
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:518
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:520
 #, c-format
 msgid "suggestion #%s"
 msgstr "ehdotus #%s"
@@ -64355,6 +64386,12 @@ msgstr "suomi, suomen kieli (Finnish) Pasi Korkalo"
 #, c-format
 msgid "superlibrarian"
 msgstr "superlibrarian"
+
+#: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:46
+#: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:30
+#, fuzzy, c-format
+msgid "system preference if you wish to enable this feature."
+msgstr "jos haluat käyttää tätä ominaisuutta."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:10
@@ -64465,7 +64502,7 @@ msgstr "varataan."
 msgid "to create"
 msgstr "luodaksesi"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #, c-format
 msgid "to field "
 msgstr "kenttään "
@@ -64496,7 +64533,7 @@ msgstr "määrittämätön"
 msgid "unknown"
 msgstr "tuntematon"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
 #, c-format
 msgid "unless"
 msgstr "paitsi"
@@ -64654,12 +64691,12 @@ msgstr ""
 "kategoria DEPARTMENT. %s Pääkäyttäjän tulee luoda yksi tai useampi "
 "auktorisoitu arvo kategoriaan DEPARTMENT. %s "
 
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:701
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:703
 #, c-format
 msgid "with this reason:"
 msgstr "tästä syystä:"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:203
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
 #, c-format
 msgid "with value "
 msgstr "arvolla "
@@ -64804,7 +64841,7 @@ msgstr "| Status: %s "
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:411
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:62
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:290
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:877
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:627
@@ -64819,10 +64856,10 @@ msgstr "| Status: %s "
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:99
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:178
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:223
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:248
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:249
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:103
 #, c-format
 msgid "×"

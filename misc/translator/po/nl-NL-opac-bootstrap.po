@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.05\n"
-"POT-Creation-Date: 2020-10-20 22:59-0300\n"
-"PO-Revision-Date: 2020-08-27 06:54+0000\n"
+"POT-Creation-Date: 2020-11-18 21:01-0300\n"
+"PO-Revision-Date: 2020-11-23 08:27+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl_NL\n"
@@ -18,13 +18,13 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/20.05/nl-NL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1598511285.814622\n"
+"X-POOTLE-MTIME: 1606120030.725958\n"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( HOLD.is_in_transit ) 
 #. %4$s:  SET transfer = HOLD.item.get_transfer 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:120
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:121
 #, c-format
 msgid "%s %s %s %s Item in transit from "
 msgstr "%s %s %s %s Item is onderweg van "
@@ -82,7 +82,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:12
 #, c-format
 msgid "%s %s %s %s%s/%s/images/favicon.ico %s "
-msgstr ""
+msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -113,9 +113,10 @@ msgstr "%s %s %s Koha online %s catalogus %s &rsaquo; %s %s "
 #. %6$s:  library.branchname | html 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-library.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog &rsaquo; Libraries %s &rsaquo; %s %s "
-msgstr "%s %s %s Koha online %s catalogus %s &rsaquo; %s %s "
+msgstr ""
+"%s %s %s Koha online %s catalogus &rsaquo; Bibliotheken %s &rsaquo; %s %s "
 
 #. %1$s:  IF ( biblio.title ) 
 #. %2$s:  biblio.title | html 
@@ -168,6 +169,9 @@ msgid ""
 "Your problem report has been sent to the library. %s %s Something wrong "
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
+"%s %s %s Je probleemmelding is verstuurd naar de Koha beheerder. %s Je "
+"probleemmelding is verstuurd naar de bibliotheek. %s %s Er ging iets mis bij "
+"het versturen van de melding. Neem contact op met de bibliotheek. %s "
 
 #. %1$s: - IF account.credit_type_code -
 #. %2$s: - SWITCH account.credit_type_code -
@@ -268,21 +272,21 @@ msgstr "%s %s Bedoelde u: "
 #. %1$s:  END 
 #. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:124
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Einddatum: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:117
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:118
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Item onderweg naar "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
 #. %2$s:  IF ( HOLD.found ) 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:105
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:106
 #, c-format
 msgid "%s %s Item waiting at "
 msgstr "%s %s Item ligt klaar bij "
@@ -412,7 +416,7 @@ msgstr "%s %s door %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:480
 #, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
 msgstr "%s %s heeft openstaande boetes en kosten van in totaal:"
@@ -537,7 +541,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:625
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Account geblokkeerd %s %s "
@@ -599,13 +603,13 @@ msgstr ""
 "contact op met een medewerker om dit probleem op te lossen. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Automatische verlenging "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "%s Automatische verlenging mislukt, uw account is verlopen. "
@@ -722,13 +726,13 @@ msgstr ""
 "bibliotheek. %s "
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:115
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:116
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Item wacht om opgehaald te worden uit "
 
 #. %1$s:  issues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:224
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:226
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Item(s) uitgeleend"
@@ -743,7 +747,7 @@ msgstr "%s Bibliotheek %s Bibliotheken %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
 #, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -753,7 +757,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:371
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Geen verlenging voor %s "
@@ -783,20 +787,20 @@ msgid "%s No title %s %s%s,%s "
 msgstr "%s Geen titel %s %s%s,%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s Niet toegestaan"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:357
 #, c-format
 msgid "%s Not renewable "
 msgstr "%s Niet te verlengen "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:359
 #, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "%s Niet te verlengen %s Niet toegestaan "
@@ -804,7 +808,7 @@ msgstr "%s Niet te verlengen %s Niet toegestaan "
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:634
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Gereserveerd %s Geen verlengingen over %s "
@@ -843,7 +847,7 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:731
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s Ingediend %s In behandeling %s Voltooid %s Geannuleerd %s "
@@ -866,7 +870,8 @@ msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
 "suggestions %s %s "
 msgstr ""
-"%s Aankoopsuggesties %s %s Uw aankoopsuggesties %s Aankoopsuggesties %s %s "
+"%s Aanschafsuggesties %s %s Je aanschafsuggesties %s Aanschafsuggesties %s "
+"%s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:496
@@ -876,7 +881,7 @@ msgstr "%s Citaten"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s Verlenging niet toegestaan %s "
@@ -888,7 +893,7 @@ msgstr "%s Verlenging niet toegestaan %s "
 #. %4$s:  debarred_comment | html_line_break 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
 msgstr "%s Beperking toegevoegd door rappelproces %s %s %s %s "
@@ -1042,7 +1047,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:644
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Ja %s Nee %s "
@@ -1051,7 +1056,7 @@ msgstr "%s Ja %s Nee %s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:385
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr "%s Ja (Item te laat of zoek) %s Ja (Kosten lenen) %s Nee %s "
@@ -1059,7 +1064,7 @@ msgstr "%s Ja (Item te laat of zoek) %s Ja (Kosten lenen) %s Nee %s "
 #. %1$s:  IF bibitemloo.forced_hold_level == 'item' 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:163
 #, c-format
 msgid ""
 "%s You already have at least one item level hold on this title. All further "
@@ -1144,13 +1149,13 @@ msgstr ""
 "zien"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
 #, c-format
 msgid "%s per day"
 msgstr "%s per dag"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
 #, c-format
 msgid "%s per hour"
 msgstr "%s per uur"
@@ -1161,7 +1166,7 @@ msgstr "%s per uur"
 #. %4$s:  HOLD.expirationdate | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:108
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:109
 #, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s sinds %s %s tot %s %s %s "
@@ -1438,8 +1443,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 "%sPurchase Suggestions%s"
 msgstr ""
-"%s%s%sKoha online%s catalogus &rsaquo; %sDoe een nieuwe aankoopsuggestie%s "
-"%sAankoopsuggesties%s"
+"%s%s%sKoha online%s catalogus &rsaquo; %sDoe een nieuwe aanschafsuggestie%s "
+"%sAanschafsuggesties%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2218,7 +2223,7 @@ msgstr "%sDit record heeft geen items.%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
 #, c-format
 msgid "%sUpdate your contact information%sGo to your contact information%s"
 msgstr "%sWerk uw contactinformatie bij%sGa naar uw contactinformatie%s"
@@ -2885,21 +2890,21 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft | html 
 #. %2$s:  ISSUE.renewsallowed | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:368
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:371
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s van de %s verlengingen over)"
 
 #. For the first occurrence,
 #. %1$s:  HOLDS.count | html 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:8
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:9
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:665
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:277
 #, c-format
 msgid "(%s total)"
@@ -2965,7 +2970,7 @@ msgstr "(Niet ondersteund door Koha)"
 msgid "(Not supported yet)"
 msgstr "(Nog niet ondersteund)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
 #, fuzzy, c-format
 msgid "(On-site checkout)"
 msgstr "Lokale uitleningen"
@@ -2999,7 +3004,7 @@ msgid "(Optional, default 1)"
 msgstr "(Optioneel, standaard 1)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:32
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
 #, c-format
 msgid ""
 "(Please note: there may be a delay in restoring your account if you submit "
@@ -3113,19 +3118,19 @@ msgstr "(gefilterd van _MAX_ totaal aantal)"
 msgid "(modified on %s)"
 msgstr "(gewijzigd op %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:359
 #, c-format
 msgid "(on hold)"
 msgstr "(gereserveerd)"
 
 #. %1$s:  ar.item.barcode | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:692
 #, c-format
 msgid "(only %s)"
 msgstr "(slechts %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:634
 #, c-format
 msgid "(overdue)"
 msgstr "(te laat)"
@@ -3203,7 +3208,7 @@ msgstr ". Neem a.u.b. contact op met de bibliotheek voor meer informatie."
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:144
 #, c-format
 msgid ".%sYou have fines.%s %s "
 msgstr ".%sU heeft boetes.%s %s "
@@ -3224,8 +3229,8 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:81
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:87
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:82
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:88
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
@@ -3359,7 +3364,7 @@ msgid "Access online"
 msgstr "Online toegang"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
 #, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
@@ -3498,8 +3503,8 @@ msgstr "Adres:"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:107
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:164
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:259
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:350
 msgid "Adlibris cover image"
 msgstr "Adlibris omslagafbeelding"
@@ -3542,12 +3547,12 @@ msgid "All collections"
 msgstr "Alle collecties"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "All holds will be suspended."
 msgstr "Alle reserveringen worden tijdelijk opgeschort."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "All holds will resume."
 msgstr "Alle reserveringen worden hervat."
 
@@ -3563,7 +3568,7 @@ msgstr "Alle type items"
 msgid "All libraries"
 msgstr "Alle bibliotheken"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:158
 #, c-format
 msgid "Allow auto-renewal: "
 msgstr "Automatische verlenging toestaan: "
@@ -3610,9 +3615,9 @@ msgid "Alternate contact"
 msgstr "Alternatief contactpersoon"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:12
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:443
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:472
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:445
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
 #, c-format
 msgid "Amount"
 msgstr "Bedrag"
@@ -3737,14 +3742,14 @@ msgid "April"
 msgstr "april"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Weet u zeker dat u deze aanvraag voor een artikel wilt annuleren?"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:125
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Bent u zeker dat u deze reservering wilt annuleren?"
 
@@ -3810,7 +3815,7 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Weet u zeker dat u het delen hiervan wilt uitschakelen?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Bent u zeker dat u alle geblokkeerde reserveringen wilt opheffen?"
 
@@ -3820,7 +3825,7 @@ msgid "Are you sure you want to return this item?"
 msgstr "Weet u zeker dat u dit exemplaar wilt inleveren?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Bent u zeker dat u alle reserveringen wilt blokkeren?"
 
@@ -3829,13 +3834,13 @@ msgstr "Bent u zeker dat u alle reserveringen wilt blokkeren?"
 msgid "Arrived"
 msgstr "Binnengekomen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:665
 #, c-format
 msgid "Article requests "
 msgstr "Artikel aanvragen "
 
 #. %1$s:  logged_in_user.article_requests_current.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:205
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
 #, c-format
 msgid "Article requests (%s)"
 msgstr "Artikel aanvragen (%s)"
@@ -3920,8 +3925,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:669
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:231
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:226
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:582
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:584
@@ -4052,7 +4057,7 @@ msgstr "Beschikbare nummers"
 #. %2$s:  item.ratings.count | html 
 #: opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:443
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 #, c-format
@@ -4094,17 +4099,17 @@ msgstr "Terug naar lijst zoekresultaat"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:152
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:237
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1163
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:133
 #, c-format
 msgid "Barcode"
 msgstr "Barcode"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, c-format
 msgid "Barcode:"
 msgstr "Barcode:"
@@ -4230,16 +4235,16 @@ msgid "CSV - %s"
 msgstr "CSV - %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:237
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:239
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:547
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:283
 #, c-format
 msgid "Call no."
 msgstr "Standpl."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:338
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "Call no.:"
 msgstr "Plaatsnummer:"
@@ -4301,8 +4306,7 @@ msgstr "Standplaats: %s"
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:16
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:128
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:125
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:170
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:190
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:171
 #: opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:12
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:224
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:164
@@ -4315,7 +4319,7 @@ msgstr "Standplaats: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:749
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
@@ -4356,7 +4360,7 @@ msgstr "Annuleer inschrijving "
 msgid "Cancel rating"
 msgstr "Annuleer beoordeling"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:746
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:748
 #, c-format
 msgid "Cancel:"
 msgstr "Annuleren:"
@@ -4452,7 +4456,7 @@ msgstr "Wijzig uw wachtwoord"
 msgid "Change your password "
 msgstr "Wijzig uw wachtwoord "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:676
 #, c-format
 msgid "Chapters"
 msgstr "Hoofdstukken"
@@ -4464,14 +4468,14 @@ msgid "Chapters:"
 msgstr "Hoofdstukken:"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:1
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:443
 #, c-format
 msgid "Charges"
 msgstr "Kosten"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
 #, c-format
 msgid "Charges (%s)"
@@ -4519,7 +4523,7 @@ msgid "Checked out"
 msgstr "Uitgeleend"
 
 #. %1$s:  issues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Uitgeleend (%s)"
@@ -4652,8 +4656,8 @@ msgstr "Wis alles"
 msgid "Clear date"
 msgstr "Wis datum"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:165
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:166
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:211
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Wis datum voor permanente blokkade"
@@ -4708,8 +4712,8 @@ msgid "Click to open in new window"
 msgstr "Klik om een nieuw venster te openen"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:269
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
 msgid "Click to view in Google Books"
 msgstr "Klik om te bekijken in Google Books"
 
@@ -4742,7 +4746,7 @@ msgstr "Sluit venster"
 
 #. %1$s:  borrower_club_enrollments.count || 0 | html 
 #. %2$s:  borrower_enrollable_clubs.count || 0 | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
 #, c-format
 msgid "Clubs (%s/%s) "
 msgstr "Clubs (%s/%s) "
@@ -5015,7 +5019,7 @@ msgstr "Cursussen"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:155
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:365
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:367
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:287
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:111
@@ -5058,13 +5062,13 @@ msgstr ""
 "Maakt, voor een gebruiker, een reservering op exemplaarniveau bij een "
 "bibliografisch record in Koha."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
 #, c-format
 msgid "Credits"
 msgstr "Credits"
 
 #. %1$s:  amountoutstanding * -1 | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:194
 #, c-format
 msgid "Credits (%s)"
 msgstr "Tegoed (%s)"
@@ -5120,7 +5124,7 @@ msgstr "Dvd-video / Videodisc"
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:161
@@ -5160,9 +5164,9 @@ msgstr "Datum toegevoegd:"
 msgid "Date due"
 msgstr "Datum verwacht"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:618
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:318
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
 #, c-format
 msgid "Date due:"
 msgstr "Datum verwacht:"
@@ -5429,7 +5433,7 @@ msgstr "Download"
 msgid "Download "
 msgstr "Download"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:426
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr "Download als iCal/.ics-bestand"
@@ -5460,9 +5464,9 @@ msgstr "Download lijst "
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:284
 #, c-format
 msgid "Due"
@@ -5496,7 +5500,7 @@ msgstr "FOUT: Geen recordnummer opgegeven. "
 msgid "Edit"
 msgstr "Bewerken"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:402
 #, c-format
 msgid "Edit / Create note"
 msgstr "Bewerk / Maak notitie"
@@ -5605,7 +5609,7 @@ msgstr "Inschrijven in "
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:41
 #, c-format
 msgid "Enter a new purchase suggestion"
-msgstr "Doe een nieuwe aankoopsuggestie"
+msgstr "Doe een nieuwe aanschafsuggestie"
 
 #. INPUT type=text name=q
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:100
@@ -5786,13 +5790,13 @@ msgstr "Selectie van een specifiek exemplaar verwacht."
 msgid "Expiration date:"
 msgstr "Verloopdatum:"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:77
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:82
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:78
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:83
 #, c-format
 msgid "Expiration:"
 msgstr "Vervaldatum:"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:18
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:19
 #, c-format
 msgid "Expires on"
 msgstr "Verloopt op"
@@ -5841,7 +5845,7 @@ msgstr "februari"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:349
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr "Kosten voor itemtype '%s': %s"
@@ -5881,20 +5885,20 @@ msgstr "Filter betaalde transacties"
 msgid "Fine amount"
 msgstr "Boetebedrag"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:287
 #, c-format
 msgid "Fines"
 msgstr "Boetes"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, c-format
 msgid "Fines and charges"
 msgstr "Boetes en kosten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:385
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:644
 #, c-format
 msgid "Fines:"
 msgstr "Boetes:"
@@ -6065,7 +6069,7 @@ msgid "Get new password recovery link"
 msgstr "Vraag een nieuw link aan voor wachtwoord herstel"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
 #, c-format
 msgid "Get your discharge"
 msgstr "Uw afboeking verkrijgen"
@@ -6200,7 +6204,7 @@ msgid "Go to the previous page"
 msgstr "Ga terug naar de hoofdpagina"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
 #, c-format
 msgid "Go to your account page"
 msgstr "Ga naar uw accountpagina"
@@ -6309,7 +6313,7 @@ msgstr "Verberg venster"
 msgid "Highlight"
 msgstr "Markeer"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:69
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:70
 #, c-format
 msgid "Hold date:"
 msgstr "Reserveringsdatum:"
@@ -6365,13 +6369,13 @@ msgstr "Bezit:"
 msgid "Holds"
 msgstr "Aanvragen"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:8
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
 msgid "Holds "
 msgstr "Reserveringen "
 
 #. %1$s:  RESERVES.count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
 #, c-format
 msgid "Holds (%s)"
 msgstr "Reserveringen (%s)"
@@ -6581,7 +6585,7 @@ msgstr "IdRef"
 msgid "Identity"
 msgstr "Identiteit"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
 #, c-format
 msgid "If this is an error, please contact the library."
 msgstr "Als dit een fout is, neem dan contact op met de bibliotheek."
@@ -6831,7 +6835,7 @@ msgstr "Interbibliothecaire leenaanvragen"
 msgid "Invalid shelf number."
 msgstr "Ongeldige plaatscode."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, c-format
 msgid "Issue"
 msgstr "Aflevering"
@@ -6937,8 +6941,8 @@ msgstr "Exemplaar verlengd"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:543
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:234
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:132
 #, c-format
@@ -6946,7 +6950,7 @@ msgid "Item type"
 msgstr "Type item"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:159
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:148
 #, c-format
@@ -7249,7 +7253,7 @@ msgid "Link"
 msgstr "Link"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:245
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:247
 #, c-format
 msgid "Links"
 msgstr "Boetes"
@@ -7326,11 +7330,11 @@ msgstr "Laden "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Loading..."
 msgstr "Laden..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:435
 #, c-format
 msgid "Loading... "
 msgstr "Laden... "
@@ -7671,7 +7675,7 @@ msgstr "Ontbrekende nummers: %s "
 msgid "Mo"
 msgstr "ma"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:30
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:31
 #, c-format
 msgid "Modify"
 msgstr "Aanpassen"
@@ -7759,7 +7763,7 @@ msgstr "Nauwere Term"
 msgid "Never"
 msgstr "Nooit"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:82
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:83
 #, c-format
 msgid "Never expires "
 msgstr "Verloopt nooit "
@@ -7879,8 +7883,8 @@ msgstr "Eerstvolgend beschikbare exemplaar"
 msgid "No"
 msgstr "Nee"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:176
 #, fuzzy, c-format
 msgid "No "
 msgstr "Nee"
@@ -7924,12 +7928,12 @@ msgstr "Geen uitleningen"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:121
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:263
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:280
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:567
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
@@ -8077,12 +8081,12 @@ msgstr ""
 "Nee, ik ga niet akkoord. Verwijder mijn account binnen afzienbare tijd."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "No, do not cancel article request"
 msgstr "Nee, de artikelaanvraag niet annuleren"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "No, do not cancel hold"
 msgstr "Nee, de reservering niet annuleren"
 
@@ -8111,7 +8115,7 @@ msgid "No, do not remove sharing"
 msgstr "Nee, de reserveringen niet hervatten"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "No, do not resume holds"
 msgstr "Nee, de reserveringen niet hervatten"
 
@@ -8197,7 +8201,6 @@ msgstr "Niet gereserveerd"
 msgid "Not what you expected? Check for "
 msgstr "Niet wat u verwachtte? Controleer "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:788
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:313
 #, c-format
@@ -8214,16 +8217,14 @@ msgstr "Opmerking:"
 msgid "Note: "
 msgstr "Annotaties: "
 
-#. %1$s:  END 
-#. %2$s:  END # / UNLESS bibitemloo.holdable 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
-"locally. Please come to the library to retrieve these items %s %s "
+"locally. Please come to the library to retrieve these items"
 msgstr ""
 "Let op: De bibliotheek staat aanvragen van boeken niet toe indien deze ter "
-"plekke beschikbaar zijn. Kom naar de bibliotheek om ze daar te lenen %s %s "
+"plekke beschikbaar zijn. Kom naar de bibliotheek om ze daar te lenen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:47
 #, c-format
@@ -8287,7 +8288,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:163
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:675
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:39
 #, c-format
@@ -8322,7 +8323,7 @@ msgid "Nothing"
 msgstr "Niets"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8519,7 +8520,7 @@ msgstr "OutputIntermediateFormat "
 msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:209
 #, c-format
 msgid "OverDrive Account"
 msgstr "OverDrive accountpagina"
@@ -8544,12 +8545,12 @@ msgid "Overall queue priority: %s"
 msgstr "Totale wachtrij prioriteit: %s"
 
 #. %1$s:  overdues_count | html 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
 #, c-format
 msgid "Overdue (%s)"
 msgstr "Te laat (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
 #, c-format
 msgid "Overdues "
 msgstr "Te laat meldingen "
@@ -8560,7 +8561,7 @@ msgstr "Te laat meldingen "
 msgid "Owner only"
 msgstr "Alleen de eigenaar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:675
 #, c-format
 msgid "Pages"
 msgstr "Pagina's"
@@ -8717,18 +8718,18 @@ msgstr "Telefoon:"
 msgid "Physical details:"
 msgstr "Fysieke gegevens:"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:20
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:21
 #, c-format
 msgid "Pick up location"
 msgstr "Afhaallocatie"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:92
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:239
 #, c-format
 msgid "Pick up location:"
 msgstr "Afhaallocatie:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:679
 #, c-format
 msgid "Pickup library"
 msgstr "Afhaalbibliotheek"
@@ -8778,9 +8779,9 @@ msgstr "Plaats reservering"
 msgid "Place request"
 msgstr "Plaats aanvraag"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:14
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:15
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:17
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:669
 #, c-format
 msgid "Placed on"
 msgstr "Geplaatst op"
@@ -8979,16 +8980,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:69
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
 #, c-format
 msgid "Please note:"
 msgstr "Let op:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:144
 #, c-format
 msgid "Please note: "
 msgstr "Let op: "
@@ -9157,12 +9158,12 @@ msgstr "Print lijst"
 msgid "Print receipt and end session"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:23
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:24
 #, c-format
 msgid "Priority"
 msgstr "Prioriteit"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:98
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:99
 #, c-format
 msgid "Priority:"
 msgstr "Prioriteit:"
@@ -9317,7 +9318,7 @@ msgstr "Uitgever:"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:316
 #, c-format
 msgid "Purchase suggestions"
-msgstr "Aankoopsuggesties"
+msgstr "Aanschafsuggesties"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:134
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:138
@@ -9401,12 +9402,12 @@ msgstr "Record URL"
 msgid "Record not found"
 msgstr "Record niet gevonden"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:668
 #, c-format
 msgid "Record title"
 msgstr "Record titel"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:212
 #, c-format
 msgid "RecordedBooks Account"
 msgstr "RecordedBooks Account"
@@ -9465,17 +9466,17 @@ msgstr "Regulier drukwerk"
 msgid "Related Term"
 msgstr "Gerelateerde Term"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
 #, c-format
 msgid "Relative"
 msgstr "Familielid"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:190
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "Uitleningen aan familieleden"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:195
 #, c-format
 msgid "Relatives' fines"
 msgstr "Boetes van familieleden"
@@ -9529,18 +9530,18 @@ msgstr "Verwijder geselecteerde zoekacties"
 msgid "Remove share"
 msgstr "Delen beëindigen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:239
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:285
 #, c-format
 msgid "Renew"
 msgstr "Verleng"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Renew all"
 msgstr "Verleng alles"
 
@@ -9553,8 +9554,8 @@ msgid "Renew item"
 msgstr "Verleng item"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Renew selected"
 msgstr "Verleng selectie"
 
@@ -9565,7 +9566,7 @@ msgstr "Verleng selectie"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:343
 #, c-format
 msgid "Renewed!"
 msgstr "Verlengd!"
@@ -9573,6 +9574,7 @@ msgstr "Verlengd!"
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:28
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:250
 #, c-format
 msgid "Report a problem"
 msgstr ""
@@ -9761,17 +9763,17 @@ msgstr "Resultaat van zoekactie voor '%s'"
 msgid "Results per page: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:144
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:145
 #, c-format
 msgid "Resume"
 msgstr "Hervatten"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:217
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:218
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Hervat alle geblokkeerde reserveringen"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:155
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:156
 #, c-format
 msgid "Resume your hold on "
 msgstr "Hervat aanvraag op "
@@ -10135,8 +10137,8 @@ msgstr "Sectie:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:356
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:128
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:106
@@ -10535,7 +10537,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Something went wrong. The note has not been saved"
 msgstr "Er is iets misgegaan. De opmerking is niet opgeslagen"
 
@@ -10756,12 +10758,12 @@ msgstr "Provincie:"
 msgid "Statistics"
 msgstr "Statistieken"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:25
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:121
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:111
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:676
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:678
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:316
@@ -10769,7 +10771,7 @@ msgstr "Statistieken"
 msgid "Status"
 msgstr "Status"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:103
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:104
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:181
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:376
 #, c-format
@@ -10874,7 +10876,7 @@ msgstr "Indienen en venster sluiten"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:188
 msgid "Submit changes"
 msgstr "Wijzigingen indienen"
@@ -10886,8 +10888,8 @@ msgstr "Wijzigingen indienen"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:399
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:401
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #, c-format
 msgid "Submit note"
 msgstr "Opmerking indienen"
@@ -11044,26 +11046,26 @@ msgstr "Achternaam:"
 msgid "Surveys"
 msgstr "Onderzoeken"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:27
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:148
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:166
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:169
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:177
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:28
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:149
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:167
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:170
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:178
 #, c-format
 msgid "Suspend"
 msgstr "Opschorten"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:204
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:205
 #, c-format
 msgid "Suspend all holds"
 msgstr "Blokkeer alle reserveringen"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:162
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:163
 #, c-format
 msgid "Suspend until:"
 msgstr "Opschorten tot:"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:157
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:158
 #, c-format
 msgid "Suspend your hold on "
 msgstr "Aanvraag opschorten op "
@@ -11620,6 +11622,13 @@ msgstr "Dit item is reeds uitgeleend aan u."
 msgid "This item is on hold for another borrower."
 msgstr "Dit exemplaar is gereserveerd voor een andere lener."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:97
+#, fuzzy, c-format
+msgid "This item is scheduled for auto renewal."
+msgstr ""
+"Dit exemplaar is ingepland voor automatische verlenging en kan niet worden "
+"verlengd"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:132
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11709,7 +11718,7 @@ msgstr "donderdag"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:193
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:195
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:12
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:13
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
@@ -11721,10 +11730,10 @@ msgstr "donderdag"
 #: opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:668
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:495
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:238
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:577
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
@@ -11753,7 +11762,7 @@ msgstr "Titel (Z-A)"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:496
 #, c-format
 msgid "Title notes ( %s )"
-msgstr "Titel opmerkingen ( %s )"
+msgstr "Meer informatie ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:80
 #, c-format
@@ -12000,7 +12009,7 @@ msgid "Update"
 msgstr "Update"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:183
 msgid "Update auto-renewal preference"
 msgstr ""
 
@@ -12008,6 +12017,11 @@ msgstr ""
 #, c-format
 msgid "Updates to your record"
 msgstr "Wijzigingen in uw record"
+
+#. TH
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:250
+msgid "Use this to report any problems with your currently checked out items"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:201
 #, c-format
@@ -12045,7 +12059,7 @@ msgstr ""
 "boetes. Als uw account vrij is van boetes, neem dan contact op met de "
 "bibliotheek."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
 #, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -12121,8 +12135,8 @@ msgid "View interlibrary loan request"
 msgstr "Toon interbibliothecaire leenaanvraag"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:567
 msgid "View on Amazon.com"
 msgstr "Bekijk op Amazon.com"
 
@@ -12143,7 +12157,7 @@ msgstr "Zoekgeschiedenis bekijken"
 msgid "Vol info"
 msgstr "Bandinfo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #, c-format
 msgid "Volume"
 msgstr "Deel"
@@ -12290,8 +12304,8 @@ msgstr "Jaar: "
 msgid "Yes"
 msgstr "Ja"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:160
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #, c-format
 msgid "Yes "
 msgstr ""
@@ -12302,12 +12316,12 @@ msgid "Yes, I agree."
 msgstr "Ja, ik ga akkoord."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Yes, cancel article request"
 msgstr "Ja, annuleer de artikelaanvraag"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Yes, cancel hold"
 msgstr "Ja, annuleer de aanvraag"
 
@@ -12336,12 +12350,12 @@ msgid "Yes, remove sharing"
 msgstr "Delen beëindigen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Yes, resume all holds"
 msgstr "Ja, hervat alle aanvragen"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Yes, suspend all holds"
 msgstr "Ja, blokkeer alle aanvragen"
 
@@ -12391,9 +12405,7 @@ msgstr "U mag deze pagina niet rechtstreeks openen"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:412
 #, c-format
 msgid "You are not authorized to see pending purchase suggestions."
-msgstr ""
-"U bent niet bevoegd om aankoopsuggesties te bekijken die nog in behandeling "
-"zijn."
+msgstr "Je bent niet bevoegd om wachtende aanschafsuggesties te bekijken."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:37
 #, c-format
@@ -12471,7 +12483,7 @@ msgid "You cannot place any more suggestions"
 msgstr "U kunt geen nieuwe suggesties meer indienen"
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:144
 #, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
@@ -12492,7 +12504,7 @@ msgstr "U heeft momenteel geen lopende aanvragen."
 msgid "You currently have nothing checked out."
 msgstr "U heeft momenteel niets geleend."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "U heeft openstaande boetes en bijdragen voor het bedrag van:"
@@ -12564,7 +12576,7 @@ msgstr ""
 "U heeft een verouderde link gevolgd bijv. vanuit een zoekmachine of uw "
 "favorieten."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:462
 #, c-format
 msgid "You have a credit of:"
 msgstr "U heeft een krediet van:"
@@ -12574,7 +12586,7 @@ msgstr "U heeft een krediet van:"
 msgid "You have already requested this title."
 msgstr "U heeft deze titel reeds aangevraagd."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:758
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:760
 #, c-format
 msgid "You have no article requests currently."
 msgstr "U heeft op dit moment geen artikelaanvragen."
@@ -12603,7 +12615,7 @@ msgstr ""
 "U heeft niet alle verplichte velden ingevuld. Vul a.u.b. alle missende "
 "velden en dien opnieuw in."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:427
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #, c-format
 msgid "You have nothing checked out"
 msgstr "U heeft niets geleend"
@@ -12779,7 +12791,7 @@ msgstr "Uw account"
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
 #, c-format
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Uw account is geblokkeerd. %s Opmerking: "
@@ -12812,7 +12824,7 @@ msgstr ""
 "Uw account heeft openstaande boetes ter hoogte van %s. Aanvragen is "
 "geblokkeerd vanwege het overschrijden van de limiet."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
 #, c-format
 msgid "Your account is frozen because it has been discharged. "
 msgstr "Uw account is geblokkeerd omdat het afgeboekt is. "
@@ -12926,7 +12938,7 @@ msgstr "Uw download zou automatisch moeten beginnen."
 msgid "Your library card has been marked as lost or stolen."
 msgstr "Uw bibliotheekpas staat geregistreerd als vermist of gestolen. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
 #, c-format
 msgid "Your library card has been marked as lost or stolen. "
 msgstr "Uw bibliotheekpas staat geregistreerd als vermist of gestolen. "
@@ -12973,17 +12985,17 @@ msgid "Your messaging settings"
 msgstr "Uw instellingen voor berichten"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Your note about %s could not be saved."
 msgstr "Uw opmerking over %s kon niet worden opgeslagen."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Uw aantekening over %s is opgeslagen en naar de bibliotheek verzonden."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 msgid "Your note about %s was removed."
 msgstr "Uw aantekening over %s is verwijderd."
 
@@ -13059,7 +13071,7 @@ msgstr "Uw aanschafsuggesties"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:195
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1383
 msgid "Your rating: %s, "
 msgstr "Uw waardering: %s, "
@@ -13673,7 +13685,7 @@ msgstr "show_loans"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:125
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:126
 #, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -13815,7 +13827,7 @@ msgstr "om een opmerking te plaatsen."
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:209
 #, c-format
 msgid "until "
 msgstr "tot "
@@ -14005,7 +14017,7 @@ msgstr "uw tags"
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:3
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
-#: opac-tmpl/bootstrap/en/includes/holds-table.inc:153
+#: opac-tmpl/bootstrap/en/includes/holds-table.inc:154
 #: opac-tmpl/bootstrap/en/includes/recordedbooks-checkout.inc:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:183
 #, c-format
