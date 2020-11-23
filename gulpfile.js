@@ -42,35 +42,47 @@ var sassOptions = {
 
 // CSS processing for development
 function css() {
-    return src(css_base + "/src/**/*.scss")
+    var stream = src(css_base + "/src/**/*.scss")
         .pipe(sourcemaps.init())
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(sourcemaps.write('./maps'))
-        .pipe(dest(css_base))
-
-        .pipe(rtlcss())
-        .pipe(rename({
-            suffix: '-rtl'
-        })) // Append "-rtl" to the filename.
         .pipe(dest(css_base));
+
+    if (args.view == "opac") {
+        stream = stream
+            .pipe(rtlcss())
+            .pipe(rename({
+                suffix: '-rtl'
+            })) // Append "-rtl" to the filename.
+            .pipe(dest(css_base));
+    }
+
+    stream = stream.pipe(sourcemaps.write('./maps'))
+        .pipe(dest(css_base));
+
+    return stream;
+
 }
 
 // CSS processing for production
 function build() {
-    return src(css_base + "/src/**/*.scss")
+    var stream = src(css_base + "/src/**/*.scss")
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(cssnano({
             zindex: false
         }))
-        .pipe(dest(css_base))
+        .pipe(dest(css_base));
 
-        .pipe(rtlcss())
+    if( args.view == "opac" ){
+        stream = stream.pipe(rtlcss())
         .pipe(rename({
             suffix: '-rtl'
         })) // Append "-rtl" to the filename.
         .pipe(dest(css_base));
+    }
+
+    return stream;
 }
 
 const poTasks = {
