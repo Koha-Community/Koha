@@ -29,9 +29,10 @@ require C4::Context;
 # work around spurious wide character warnings
 use open ':std', ':encoding(utf8)';
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use Test::Warn;
+use t::lib::Mocks;
 
 use Koha::Caches;
 
@@ -211,6 +212,7 @@ sub mock_GetMarcSubfieldStructure {
                     'biblio.biblionumber' => [{ tagfield =>  '999', tagsubfield => 'c' }],
                     'biblio.isbn' => [{ tagfield => '020', tagsubfield => 'a' }],
                     'biblio.title' => [{ tagfield => '245', tagsubfield => 'a' }],
+                    'biblio.author' => [{ tagfield => '100', tagsubfield => 'a' }],
                     'biblio.notes' => [{ tagfield => '500', tagsubfield => 'a' }],
                     'items.barcode' => [{ tagfield => '952', tagsubfield => 'p' }],
                     'items.booksellerid' => [{ tagfield => '952', tagsubfield => 'e' }],
@@ -919,6 +921,42 @@ subtest 'MARC21 + DOM' => sub {
 subtest 'UNIMARC + DOM' => sub {
     plan tests => 14;
     run_unimarc_search_tests();
+};
+
+
+subtest 'FindDuplicate' => sub {
+    plan tests => 3;
+    Koha::Caches->get_instance('config')->flush_all;
+    t::lib::Mocks::mock_preference('marcflavour', 'marc21' );
+    mock_GetMarcSubfieldStructure('marc21');
+    my $searcher = Test::MockModule->new('C4::Search');
+    $searcher->mock('SimpleSearch', sub {
+        warn shift @_;
+        return 1;
+    });
+
+    my $record = MARC::Record->new;
+    $record->add_fields(
+            [ '100', '0', '0', a => 'Morgenstern, Erin' ],
+            [ '245', '0', '0', a => 'The night circus /' ]
+    );
+    warning_is { C4::Search::FindDuplicate($record);}
+        q/ti,ext:"The night circus \/" and au,ext:"Morgenstern, Erin"/,"Term correctly formed";
+
+    $record = MARC::Record->new;
+    $record->add_fields(
+            [ '245', '0', '0', a => 'The book of nothing /' ]
+    );
+    warning_is { C4::Search::FindDuplicate($record);}
+        q/ti,ext:"The book of nothing \/"/,"Term correctly formed";
+
+    $record = MARC::Record->new;
+    $record->add_fields(
+            [ '245', '0', '0', a => 'Frog and toad all year /' ]
+    );
+    warning_is { C4::Search::FindDuplicate($record);}
+        q/ti,ext:"Frog and toad all year \/"/,"Term correctly formed";
+
 };
 
 # Make sure that following tests are not using our config settings
