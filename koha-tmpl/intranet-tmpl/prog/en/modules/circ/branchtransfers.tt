@@ -126,7 +126,7 @@
                                           [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
                                               <li>Item type: <strong>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</strong></li>
                                           [% ELSE %]
-                                          <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', errmsgloo.code ) | html %]</strong></li>
+                                          <li>Collection: <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => errmsgloo.code ) | html %]</strong></li>
                                           [% END %]
                                           <li>Originating library: <strong>[% Branches.GetName( errmsgloo.fbr ) | html %]</strong></li>
                                           <li>Destination library: <strong>[% Branches.GetName( errmsgloo.tbr ) | html %]</strong></li>
