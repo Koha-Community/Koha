@@ -107,9 +107,6 @@ sub FindDuplicate {
         $result->{title} =~ s /\(//g;
         $result->{title} =~ s /\)//g;
 
-        # FIXME: instead of removing operators, could just do
-        # quotes around the value
-        $result->{title} =~ s/(and|or|not)//g;
         $query = "$titleindex:\"$result->{title}\"";
         if   ( $result->{author} ) {
             $result->{author} =~ s /\\//g;
@@ -117,8 +114,6 @@ sub FindDuplicate {
             $result->{author} =~ s /\(//g;
             $result->{author} =~ s /\)//g;
 
-            # remove valid operators
-            $result->{author} =~ s/(and|or|not)//g;
             $query .= " $op $authorindex:\"$result->{author}\"";
         }
     }
