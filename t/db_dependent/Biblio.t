@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 15;
 use Test::MockModule;
+use Test::Warn;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
 
@@ -43,7 +44,7 @@ Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'AddBiblio' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $marcflavour = 'MARC21';
     t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour );
@@ -56,12 +57,9 @@ subtest 'AddBiblio' => sub {
 
     my $nb_biblios = Koha::Biblios->count;
     my ( $biblionumber, $biblioitemnumber );
-    {
-        local *STDERR;
-        open STDERR, '>', '/dev/null';
-        ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
-        close STDERR;
-    }
+    warnings_like { ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' ) }
+        [ qr/Data too long for column 'lccn'/, qr/Data too long for column 'lccn'/ ],
+        "expected warnings when adding too long LCCN";
     is( $biblionumber, undef,
         'AddBiblio returns undef for biblionumber if something went wrong' );
     is( $biblioitemnumber, undef,
