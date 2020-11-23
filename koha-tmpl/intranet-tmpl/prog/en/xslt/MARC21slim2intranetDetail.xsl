@@ -712,14 +712,14 @@
                                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelect">
                                     <xsl:with-param name="codes">avxyz</xsl:with-param>
                                     <xsl:with-param name="delimeter"> AND </xsl:with-param>
-                                    <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
+                                    <xsl:with-param name="prefix">(index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/></xsl:with-param>
                                     <xsl:with-param name="suffix"><xsl:value-of select="$TracingQuotesRight"/>)</xsl:with-param>
                                     <xsl:with-param name="urlencode">1</xsl:with-param>
                                 </xsl:call-template>
                                 </xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=index-term-genre<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
                             </xsl:otherwise>
                         </xsl:choose>
                     <xsl:call-template name="subfieldSelect">
