@@ -370,9 +370,7 @@ sub CanItemBeReserved {
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
-    my $allowedreserves  = 0; # Total number of holds allowed across all records
-    my $holds_per_record = 1; # Total number of holds allowed for this one given record
-    my $holds_per_day;        # Default to unlimited
+    my $allowedreserves  = 0; # Total number of holds allowed across all records, default to none
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
@@ -425,15 +423,29 @@ sub CanItemBeReserved {
     }
 
     # we retrieve rights
-    if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->effective_itemtype, $branchcode ) ) {
-        $ruleitemtype     = $rights->{itemtype};
-        $allowedreserves  = $rights->{reservesallowed} // $allowedreserves;
-        $holds_per_record = $rights->{holds_per_record} // $holds_per_record;
-        $holds_per_day    = $rights->{holds_per_day};
+    if (
+        my $reservesallowed = Koha::CirculationRules->get_effective_rule({
+                itemtype     => $item->effective_itemtype,
+                categorycode => $borrower->{categorycode},
+                branchcode   => $branchcode,
+                rule_name    => 'reservesallowed',
+        })
+    ) {
+        $ruleitemtype     = $reservesallowed->itemtype;
+        $allowedreserves  = $reservesallowed->rule_value // 0; #undefined is 0, blank is unlimited
     }
     else {
         $ruleitemtype = undef;
     }
+
+    my $rights = Koha::CirculationRules->get_effective_rules({
+        categorycode => $borrower->{'categorycode'},
+        itemtype     => $item->effective_itemtype,
+        branchcode   => $branchcode,
+        rules        => ['holds_per_record','holds_per_day']
+    });
+    my $holds_per_record = $rights->{holds_per_record} // 1;
+    my $holds_per_day    = $rights->{holds_per_day};
 
     my $search_params = {
         borrowernumber => $borrowernumber,
@@ -2243,61 +2255,17 @@ sub GetMaxPatronHoldsForRecord {
 
         $branchcode = $item->homebranch if ( $controlbranch eq "ItemHomeLibrary" );
 
-        my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode );
-        my $holds_per_record = $rule ? $rule->{holds_per_record} : 0;
+        my $rule = Koha::CirculationRules->get_effective_rule({
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            branchcode   => $branchcode,
+            rule_name    => 'holds_per_record'
+        });
+        my $holds_per_record = $rule ? $rule->rule_value : 0;
         $max = $holds_per_record if $holds_per_record > $max;
     }
 
     return $max;
-}
-
-=head2 GetHoldRule
-
-my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode );
-
-Returns the matching hold related issuingrule fields for a given
-patron category, itemtype, and library.
-
-=cut
-
-sub GetHoldRule {
-    my ( $categorycode, $itemtype, $branchcode ) = @_;
-
-    my $reservesallowed = Koha::CirculationRules->get_effective_rule(
-        {
-            itemtype     => $itemtype,
-            categorycode => $categorycode,
-            branchcode   => $branchcode,
-            rule_name    => 'reservesallowed',
-            order_by     => {
-                -desc => [ 'categorycode', 'itemtype', 'branchcode' ]
-            }
-        }
-    );
-
-    my $rules;
-    if ( $reservesallowed ) {
-        $rules->{reservesallowed} = $reservesallowed->rule_value;
-        $rules->{itemtype}        = $reservesallowed->itemtype;
-        $rules->{categorycode}    = $reservesallowed->categorycode;
-        $rules->{branchcode}      = $reservesallowed->branchcode;
-    }
-
-    my $holds_per_x_rules = Koha::CirculationRules->get_effective_rules(
-        {
-            itemtype     => $itemtype,
-            categorycode => $categorycode,
-            branchcode   => $branchcode,
-            rules        => ['holds_per_record', 'holds_per_day'],
-            order_by     => {
-                -desc => [ 'categorycode', 'itemtype', 'branchcode' ]
-            }
-        }
-    );
-    $rules->{holds_per_record} = $holds_per_x_rules->{holds_per_record};
-    $rules->{holds_per_day} = $holds_per_x_rules->{holds_per_day};
-
-    return $rules;
 }
 
 =head1 AUTHOR
