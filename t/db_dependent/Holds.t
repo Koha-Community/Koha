@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 use MARC::Record;
 
 use C4::Biblio;
@@ -1250,4 +1250,73 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'CanItemBeReserved rule precedence tests' => sub {
+
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
+    $schema->storage->txn_begin;
+    my $library  = $builder->build_object( { class => 'Koha::Libraries', value => {
+        pickup_location => 1,
+    }});
+    my $item = $builder->build_sample_item({
+        homebranch    => $library->branchcode,
+        holdingbranch => $library->branchcode
+    });
+    my $item2 = $builder->build_sample_item({
+        homebranch    => $library->branchcode,
+        holdingbranch => $library->branchcode,
+        itype         => $item->itype
+    });
+    my $patron   = $builder->build_object({ class => 'Koha::Patrons', value => {
+        branchcode => $library->branchcode
+    }});
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            rules        => {
+                reservesallowed  => 1,
+            }
+        }
+    );
+    is_deeply(
+        CanItemBeReserved( $patron->borrowernumber, $item->itemnumber, $library->branchcode ),
+        { status => 'OK' },
+        'Patron of specified category can place 1 hold on specified itemtype'
+    );
+    my $hold = $builder->build_object({ class => 'Koha::Holds', value => {
+        biblionumber   => $item2->biblionumber,
+        itemnumber     => $item2->itemnumber,
+        found          => undef,
+        priority       => 1,
+        branchcode     => $library->branchcode,
+        borrowernumber => $patron->borrowernumber,
+    }});
+    is_deeply(
+        CanItemBeReserved( $patron->borrowernumber, $item->itemnumber, $library->branchcode ),
+        { status => 'tooManyReserves', limit => 1 },
+        'Patron of specified category can place 1 hold on specified itemtype, cannot place a second'
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed  => 2,
+            }
+        }
+    );
+    is_deeply(
+        CanItemBeReserved( $patron->borrowernumber, $item->itemnumber, $library->branchcode ),
+        { status => 'OK' },
+        'Patron of specified category can place 1 hold on specified itemtype if library rule for all types and categories set to 2'
+    );
+
+    $schema->storage->txn_rollback;
+
 };
