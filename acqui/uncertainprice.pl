@@ -88,6 +88,7 @@ if ( $op eq 'validate' ) {
     for (my $i=0; $i < $count; $i++) {
         my $order = pop(@orders);
         my $ordernumber = $order->{ordernumber};
+        next unless ($input->param('qty'.$ordernumber));
         my $order_as_from_db=GetOrder($order->{ordernumber});
         $order->{'listprice'} = $input->param('price'.$ordernumber);
         $order->{'ecost'}= $input->param('price'.$ordernumber) - (($input->param('price'.$ordernumber) /100) * $bookseller->discount);
