@@ -45,11 +45,11 @@ sub get_component_part_query {
 
         if (!defined($pf003)) {
             # search for 773$w='Host001'
-            $searchstr = "rcn='".$pf001->data()."'";
+            $searchstr = "rcn=\"".$pf001->data()."\"";
         } else {
             # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
-            $searchstr = "(rcn='".$pf001->data()."' AND cni='".$pf003->data()."')";
-            $searchstr .= " OR rcn='".$pf003->data()." ".$pf001->data()."'";
+            $searchstr = "(rcn=\"".$pf001->data()."\" AND cni=\"".$pf003->data()."\")";
+            $searchstr .= " OR rcn=\"".$pf003->data()." ".$pf001->data()."\"";
         }
     }
 }

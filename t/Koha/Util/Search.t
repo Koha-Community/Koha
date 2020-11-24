@@ -38,5 +38,5 @@ subtest 'get_component_part_query' => sub {
     $record->append_fields($marc_001_field);
     ModBiblioMarc($record, $biblionumber);
 
-    is(Koha::Util::Search::get_component_part_query($biblionumber), "rcn='$biblionumber'");
+    is(Koha::Util::Search::get_component_part_query($biblionumber), "rcn=\"$biblionumber\"");
 };
