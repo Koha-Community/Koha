@@ -247,32 +247,55 @@ subtest 'cash_registers' => sub {
 
 subtest 'get_hold_libraries and validate_hold_sibling' => sub {
 
-    plan tests => 5;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library4 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library5 = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $root = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
-    my $g1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root->id, branchcode => $library1->branchcode } } );
-    my $g2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root->id, branchcode => $library2->branchcode } } );
+    my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+    my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+    # G1
+    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library1->branchcode } } );
+    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library2->branchcode } } );
+    # G2
+    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
+    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
+    $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library5->branchcode } } );
 
-    my @hold_libraries = ($library1, $library2);
+    my @hold_libraries_1 = ($library1, $library2);
+    my @hold_libraries_2 = ($library3, $library4, $library5);
 
     my @result = $library1->get_hold_libraries();
-
-    ok(scalar(@result) == 2, 'get_hold_libraries returns 2 libraries');
+    # library1 and library2 are siblings
+    is(scalar(@result), 2, 'get_hold_libraries returns 2 libraries');
 
     my %map = map {$_->branchcode, 1} @result;
 
-    foreach my $hold_library ( @hold_libraries ) {
+    foreach my $hold_library ( @hold_libraries_1 ) {
+        ok(exists $map{$hold_library->branchcode}, 'library in hold group');
+    }
+
+    @result = $library3->get_hold_libraries();
+    # library3, library4 and library5 are siblings
+    is(scalar(@result), 3, 'get_hold_libraries returns 3 libraries');
+
+    %map = map {$_->branchcode, 1} @result;
+
+    foreach my $hold_library ( @hold_libraries_2 ) {
         ok(exists $map{$hold_library->branchcode}, 'library in hold group');
     }
 
     ok($library1->validate_hold_sibling( { branchcode => $library2->branchcode } ), 'Library 2 is a valid hold sibling');
     ok(!$library1->validate_hold_sibling( { branchcode => $library3->branchcode } ), 'Library 3 is not a valid hold sibling');
+
+    ok($library3->validate_hold_sibling( { branchcode => $library4->branchcode } ), 'Library 4 is a valid hold sibling');
+    ok($library3->validate_hold_sibling( { branchcode => $library5->branchcode } ), 'Library 5 is a valid hold sibling');
+    ok(!$library3->validate_hold_sibling( { branchcode => $library2->branchcode } ), 'Library 2 is not a valid hold sibling');
 
     $schema->storage->txn_rollback;
 
