@@ -132,7 +132,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 70;
+    plan tests => 74;
 
     $schema->storage->txn_begin;
 
@@ -430,7 +430,7 @@ subtest 'UpdateFine tests' => sub {
     is( $fine3->amount+0, 30, "Third fine reduced" );
     is( $fine3->amountoutstanding+0, 10, "Third fine amount outstanding is reduced" );
 
-    # Ensure calculations work correctly for floats (bug #25127)
+    # Ensure maxfine calculations work correctly for floats (bug #25127)
     # 7.2 (maxfine) - 7.2 (total_amount_other) != 8.88178419700125e-16 (😢)
     t::lib::Mocks::mock_preference( 'MaxFine', '7.2' );
     my $patron_1   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -502,6 +502,39 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        4,    "New amount should be 0 so no fine added" );
     ok( C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1), "Returning the item and forgiving fines succeeds");
+
+    t::lib::Mocks::mock_preference( 'MaxFine', 0 );
+
+    # Ensure CalcFine calculations work correctly for floats (bug #27079)
+    # 1.800000 (amount from database) != 1.8~ (CalcFine of 0.15cents * 12units) (😢)
+    my $amount = 0.15 * 12;
+    UpdateFine(
+        {
+            issue_id       => $checkout_2->issue_id,
+            itemnumber     => $item_2->itemnumber,
+            borrowernumber => $patron_1->borrowernumber,
+            amount         => $amount,
+            due            => $checkout_2->date_due
+        }
+    );
+    $fine = Koha::Account::Lines->search({ issue_id => $checkout_2->issue_id })->single;
+    ok( $fine, 'Fine added for checkout 2');
+    is( $fine->amount, "1.800000", "Fine amount is 1.800000 as expected");
+
+    $fine->amountoutstanding(0)->store;
+    $fine->discard_changes;
+    is( $fine->amountoutstanding + 0, 0, "Fine was paid off");
+    UpdateFine(
+        {
+            issue_id       => $checkout_2->issue_id,
+            itemnumber     => $item_2->itemnumber,
+            borrowernumber => $patron_1->borrowernumber,
+            amount         => $amount,
+            due            => $checkout_2->date_due
+        }
+    );
+    my $refunds = Koha::Account::Lines->search({ itemnumber => $item_2->itemnumber, credit_type_code => 'OVERPAYMENT' });
+    is( $refunds->count, 0, "Overpayment refund not added when the amounts are equal" );
 
     $schema->storage->txn_rollback;
 };
