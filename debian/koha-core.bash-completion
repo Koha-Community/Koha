@@ -1,0 +1,342 @@
+#!/bin/bash
+#
+# koha-core.bash-completion script for koha-* commands
+#
+# This file is part of Koha.
+#
+# Copyright 2013 Universidad Nacional de Cordoba
+#                Tomas Cohen Arazi
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
+
+_build_substract_switches()
+{
+    local substract
+
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    echo "$substract"
+}
+
+_build_substract_instances()
+{
+    local substract
+
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        substract="$substract -e ${COMP_WORDS[i]}"
+    done
+
+    echo "$substract"
+}
+
+_koha_single_instance()
+{
+    local filter=$1
+
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    if [ $COMP_CWORD -eq 1 ]; then
+        COMPREPLY=( $( compgen -W "$(koha-list $filter)" $cur ) )
+    else
+        COMPREPLY=()
+    fi
+
+    return 0
+}
+
+_koha_list_cmd()
+{
+    local filter=$1
+
+    local cur substract instancelist
+    _get_comp_words_by_ref cur
+
+    # Build a list of the already used words
+    substract=`_build_substract_instances`
+
+    if [[ "$substract" != "" ]]; then
+        instancelist=$( koha-list $filter | grep -v -x $substract )
+    else
+        instancelist=$( koha-list $filter )
+    fi
+
+    COMPREPLY=( $(compgen -W "$instancelist" -- $cur ) )
+    return 0
+}
+
+_koha_email_disable()
+{
+    _koha_list_cmd "--email"
+    return 0
+}
+complete -F _koha_email_disable koha-email-disable
+
+_koha_email_enable()
+{
+    _koha_list_cmd "--noemail"
+    return 0
+}
+complete -F _koha_email_enable koha-email-enable
+
+_koha_sip_enabled_instances()
+{
+    _koha_list_cmd "--sip"
+    return 0
+}
+
+_koha_sip_disabled()
+{
+    _koha_list_cmd "--nosip"
+    return 0
+}
+
+_koha_disabled_instances()
+{
+    _koha_list_cmd "--disabled"
+    return 0
+}
+
+_koha_enabled_instances()
+{
+    _koha_list_cmd "--enabled"
+    return 0
+}
+
+# koha-enable autocompletes with disabled instances
+complete -F _koha_disabled_instances koha-enable
+
+# koha-disable autocompletes with enabled instances
+complete -F _koha_enabled_instances koha-disable
+
+# koha-mysql autocompletes with a single instance name
+complete -F _koha_single_instance koha-mysql
+
+_koha_list()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--enabled --disabled --email --noemail --plack --noplack --sip --nosip --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --disabled)
+                    substract="$substract -e --enabled"; ;;
+                --enabled)
+                    substract="$substract -e --disabled"; ;;
+                --email)
+                    substract="$substract -e --noemail"; ;;
+                --noemail)
+                    substract="$substract -e --email"; ;;
+                --plack)
+                    substract="$substract -e --noplack"; ;;
+                --noplack)
+                    substract="$substract -e --plack"; ;;
+                --sip)
+                    substract="$substract -e --nosip"; ;;
+                --nosip)
+                    substract="$substract -e --sip"; ;;
+                --help)
+                    substract="$substract -e -h"; ;;
+                -h)
+                    substract="$substract -e --help"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha_list koha-list
+
+_koha_plack_instances()
+{
+    _koha_list_cmd "--plack"
+    return 0
+}
+
+_koha_noplack_instances()
+{
+    _koha_list_cmd "--noplack"
+    return 0
+}
+
+_koha-plack()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--start --stop --restart --enable --disable --quiet -q --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --start) _koha_plack_instances ; return 0 ;;
+                 --stop) _koha_plack_instances ; return 0 ;;
+              --restart) _koha_plack_instances ; return 0 ;;
+               --enable) _koha_noplack_instances ; return 0 ;;
+              --disable) _koha_plack_instances ; return 0 ;;
+                 --help) COMPREPLY=() ; return 0 ;; # no more completions
+                     -h) COMPREPLY=() ; return 0 ;; # no more completions
+                --quiet) # filter the other quiet switches and go on
+                    substract="$substract -e -q"; ;;
+                -q)      # filter the other quiet switches and go on
+                    substract="$substract -e --quiet"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha-plack koha-plack
+
+_koha-indexer()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--start --stop --restart --quiet -q --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --start) _koha_list_cmd ; return 0 ;;
+                 --stop) _koha_list_cmd ; return 0 ;;
+              --restart) _koha_list_cmd ; return 0 ;;
+                 --help) COMPREPLY=() ; return 0 ;; # no more completions
+                     -h) COMPREPLY=() ; return 0 ;; # no more completions
+                --quiet) # filter the other quiet switches and go on
+                    substract="$substract -e -q"; ;;
+                -q)      # filter the other quiet switches and go on
+                    substract="$substract -e --quiet"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha-indexer koha-indexer
+
+_koha-zebra()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--start --stop --restart --status --quiet -q --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --start) _koha_list_cmd ; return 0 ;;
+                 --stop) _koha_list_cmd ; return 0 ;;
+              --restart) _koha_list_cmd ; return 0 ;;
+               --status) _koha_list_cmd ; return 0 ;;
+                 --help) COMPREPLY=() ; return 0 ;; # no more completions
+                     -h) COMPREPLY=() ; return 0 ;; # no more completions
+                --quiet) # filter the other quiet switches and go on
+                    substract="$substract -e -q"; ;;
+                -q)      # filter the other quiet switches and go on
+                    substract="$substract -e --quiet"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha-zebra koha-zebra
+
+_koha-sip()
+{
+    local cur opts substract
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    opts="--start --stop --restart --status --enable --verbose -v --help -h"
+
+    # Build a list of the already used option switches
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == -* ]]; then
+            case ${COMP_WORDS[i]} in
+                --start) _koha_sip_enabled_instances ; return 0 ;;
+                 --stop) _koha_sip_enabled_instances ; return 0 ;;
+              --restart) _koha_sip_enabled_instances ; return 0 ;;
+               --status) _koha_sip_enabled_instances ; return 0 ;;
+               --enable) _koha_sip_disabled ; return 0 ;;
+                 --help) COMPREPLY=() ; return 0 ;; # no more completions
+                     -h) COMPREPLY=() ; return 0 ;; # no more completions
+              --verbose) # filter the other quiet switches and go on
+                    substract="$substract -e -q"; ;;
+                -v)      # filter the other quiet switches and go on
+                    substract="$substract -e --verbose"; ;;
+            esac
+            substract="$substract -e ${COMP_WORDS[i]}"
+        fi
+    done
+
+    if [[ "$substract" != "" ]]; then
+        opts=$( echo $opts | sed -e 's/ /\n/g'  | grep -v -x $substract )
+    fi
+
+    COMPREPLY=( $(compgen -W "$opts" -- $cur ) )
+
+    return 0
+}
+complete -F _koha-sip koha-sip
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh

@@ -1,0 +1,267 @@
+#!/bin/sh
+
+set -e
+
+# Default to "yes"
+AUTOMATIC_TRANSLATIONS_UPDATE="yes"
+
+. /usr/share/debconf/confmodule
+
+# Read configuration variable file if it is present
+CONFIG=/etc/koha/koha-common.conf
+if [ -r $CONFIG ]; then
+    . $CONFIG
+fi
+
+conf=/etc/mysql/koha-common.cnf
+if [ ! -e "$conf" ] && [ ! -L "$conf" ]
+then
+    ln -s debian.cnf "$conf"
+fi
+
+#DEBHELPER#
+
+koha-upgrade-schema $(koha-list)
+
+# Generate a config file if one doesn't exist already
+if [ ! -e $CONFIG ]; then
+    cat <<EOF > $CONFIG
+## Automatic template translation update
+#
+# This variable controls whether template translations should
+# be updated automatically on koha-common package upgrades.
+# Options: 'yes' (default)
+#          'no'
+# Note: if you choose 'no' then you will have to issue
+#  $ koha-translate --update <lang_code>
+#
+AUTOMATIC_TRANSLATIONS_UPDATE="yes"
+EOF
+fi
+
+# Substitute the values from debconf into the file.
+db_get koha-core/automatically-update-translations
+UPDATE="$RET"
+if [ "$UPDATE" = "false" ]; then
+    UPDATE="no"
+else
+    UPDATE="yes"
+fi
+# In case they were removed/commented out, we add it in.
+grep -Eq '^ *AUTOMATIC_TRANSLATIONS_UPDATE=' $CONFIG || \
+    echo "AUTOMATIC_TRANSLATIONS_UPDATE=" >> $CONFIG
+
+sed -e "s/^ *AUTOMATIC_TRANSLATIONS_UPDATE=.*/AUTOMATIC_TRANSLATIONS_UPDATE=\"$UPDATE\"/" < $CONFIG > $CONFIG.tmp
+mv -f $CONFIG.tmp $CONFIG
+
+if [ "$AUTOMATIC_TRANSLATIONS_UPDATE" = "yes" ]; then
+    for lang in $(koha-translate --list | grep -v -x "en"); do
+        if koha-translate --update $lang; then
+            echo "Updated the $lang translations."
+        else
+            cat <<EOF >&2
+ERROR: an error was found when updating '$lang' translations. Please manually
+run 'koha-translate --update $lang'. Run man koha-translate for more options.
+EOF
+        fi
+    done
+else
+    # no auto-update, check update needed and warn if needed
+    if koha-translate --list | grep -v -q -x "en"; then
+        # translations installed, update needed
+        cat <<EOF >&2
+Warning: template translations are not set to be automatically updated.
+Please manually run 'koha-translate --update lang_code' to update them.
+
+You can run 'koha-translate --list' to get a list of the installed translations codes.
+EOF
+    fi
+fi
+
+# Check if we need to rename the Apache vhost files
+RENAME_APACHE_FILES="no"
+for vhost in $(koha-list); do
+    if [ -f "/etc/apache2/sites-available/$vhost" ] && \
+       [ ! -f "/etc/apache2/sites-available/$vhost.conf" ]; then
+       RENAME_APACHE_FILES="yes"
+       break # at least one, trigger renaming
+    fi
+done
+
+if [ "$RENAME_APACHE_FILES" = "yes" ]; then
+    # If the user agreed we now rename their Apache files
+    db_get koha-core/rename-apache-vhost-files
+    if [ "$RET" = "false" ]; then
+        # We're not renaming the files, just print a warning
+        cat <<EOF >&2
+Warning: you have chosen not to migrate your Apache virtual hosts files to the
+Apache 2.4 naming schema. You can do it manually by running this for each
+Koha instance:
+
+    $ sudo a2dissite instance
+    $ sudo mv /etc/apache2/sites-available/instance \
+              /etc/apache2/sites-available/instance.conf
+    $ sudo a2ensite instance
+EOF
+    else
+        # We have to rename the Apache files
+        for site in $(koha-list); do
+            ENABLE_VHOST="yes"
+            if [ -f "/etc/apache2/sites-available/$site" ] && \
+               [ ! -f "/etc/apache2/sites-available/$site.conf" ]; then
+                if [ ! -f "/etc/apache2/sites-enabled/$site" ]; then
+                    ENABLE_VHOST="no"
+                fi
+                a2dissite $site > /dev/null 2>&1 || true
+                rm -f "/etc/apache2/sites-enabled/$site"
+                # Rename the vhost definition files
+                mv "/etc/apache2/sites-available/$site" \
+                   "/etc/apache2/sites-available/$site.conf"
+
+                if [ "$ENABLE_VHOST" = "yes" ]; then
+                    if ! {
+                        a2ensite "$site" > /dev/null 2>&1 ||
+                        a2ensite "${site}.conf" > /dev/null 2>&1
+                    }; then
+                        echo "Warning: problem enabling $site in Apache" >&2
+                    fi
+                fi
+            fi
+        done
+    fi
+fi
+
+log4perl_component()
+{
+    local config=$1
+    local component=$2
+
+    if grep -q "log4perl.logger.$component" $config; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Take care of the instance's log4perl.conf file
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "z3950"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.z3950 = WARN, Z3950
+log4perl.appender.Z3950=Log::Log4perl::Appender::File
+log4perl.appender.Z3950.filename=/var/log/koha/$site/z3950-error.log
+log4perl.appender.Z3950.mode=append
+log4perl.appender.Z3950.layout=PatternLayout
+log4perl.appender.Z3950.layout.ConversionPattern=[%d] [%p] %m %l %n
+log4perl.appender.Z3950.utf8=1
+
+EOF
+    fi
+
+    if ! log4perl_component $log4perl_config "api"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.api = WARN, API
+log4perl.appender.API=Log::Log4perl::Appender::File
+log4perl.appender.API.filename=/var/log/koha/$site/api-error.log
+log4perl.appender.API.mode=append
+log4perl.appender.API.layout=PatternLayout
+log4perl.appender.API.layout.ConversionPattern=[%d] [%p] %m %l %n
+log4perl.appender.API.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "sip"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.sip = DEBUG, SIP
+log4perl.appender.SIP=Log::Log4perl::Appender::File
+log4perl.appender.SIP.filename=/var/log/koha/$site/sip.log
+log4perl.appender.SIP.mode=append
+log4perl.appender.SIP.layout=PatternLayout
+log4perl.appender.SIP.layout.ConversionPattern=[%d] [%p] %m %l %n
+log4perl.appender.SIP.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-opac"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-opac = WARN, PLACKOPAC
+log4perl.appender.PLACKOPAC=Log::Log4perl::Appender::File
+log4perl.appender.PLACKOPAC.filename=/var/log/koha/$site/plack-opac-error.log
+log4perl.appender.PLACKOPAC.mode=append
+log4perl.appender.PLACKOPAC.layout=PatternLayout
+log4perl.appender.PLACKOPAC.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKOPAC.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-api"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-api = WARN, PLACKAPI
+log4perl.appender.PLACKAPI=Log::Log4perl::Appender::File
+log4perl.appender.PLACKAPI.filename=/var/log/koha/$site/plack-api-error.log
+log4perl.appender.PLACKAPI.mode=append
+log4perl.appender.PLACKAPI.layout=PatternLayout
+log4perl.appender.PLACKAPI.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKAPI.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "plack-intranet"; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.plack-intranet = WARN, PLACKINTRANET
+log4perl.appender.PLACKINTRANET=Log::Log4perl::Appender::File
+log4perl.appender.PLACKINTRANET.filename=/var/log/koha/$site/plack-intranet-error.log
+log4perl.appender.PLACKINTRANET.mode=append
+log4perl.appender.PLACKINTRANET.layout=PatternLayout
+log4perl.appender.PLACKINTRANET.layout.ConversionPattern=[%d] [%p] %m
+log4perl.appender.PLACKINTRANET.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
+    kohaconfig="/etc/koha/sites/$site/koha-conf.xml"
+    logdir="$( xmlstarlet sel -t -v 'yazgfs/config/logdir' $kohaconfig )"
+    if [ "$logdir" != "" ] && [ "$logdir" != "0" ]; then
+        chown -R $site-koha:$site-koha $logdir
+    else
+        chown -R $site-koha:$site-koha /var/log/koha/$site
+    fi
+done
+
+# Bug 14106 - fix the modulePath of existing koha instances so that it'll
+# continue to work. This will only patch the files if the exact original string
+# that we're fixing them from is there, so we just run it every time. Maybe
+# in many years time we can get rid of this, when no one will be running
+# Koha < 3.20.
+for zfile in $( find /etc/koha/sites -name zebra-authorities-dom.cfg -or -name zebra-biblios-dom.cfg ); do
+    perl -p -i -e 's{^modulePath: /usr/lib/idzebra-2.0/modules$}{modulePath: /usr/lib/idzebra-2.0/modules:/usr/lib/x86_64-linux-gnu/idzebra-2.0/modules:/usr/lib/i386-linux-gnu/idzebra-2.0/modules:/usr/lib/aarch64-linux-gnu/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabi/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabihf/idzebra-2.0/modules:/usr/lib/mips-linux-gnu/idzebra-2.0/modules:/usr/lib/mipsel-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc64le-linux-gnu/idzebra-2.0/modules:/usr/lib/s390x-linux-gnu/idzebra-2.0/modules}' $zfile
+done
+
+db_stop
+
+# Bug 18250: Correct startup order of koha-common and memcached
+# Since the init script has been updated, we can force the order in rc.d
+# by disabling and enabling again.
+update-rc.d koha-core disable
+update-rc.d koha-core enable
+
+exit 0

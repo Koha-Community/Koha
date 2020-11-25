@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+a2enmod mpm_itk rewrite cgi rewrite headers proxy_http
+service apache2 restart
+
+rabbitmq-plugins enable rabbitmq_stomp
+service rabbitmq-server restart
+
+exit 0

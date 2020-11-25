@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+# Bug 14055 - remove the yui symlink if there's one in the way preventing upgrades
+[ -h /usr/share/koha/opac/htdocs/opac-tmpl/lib/yui ] && rm /usr/share/koha/opac/htdocs/opac-tmpl/lib/yui
+
+# Bug 25485: remove the tiny_mce symlink if there's one in the way preventing upgrades
+[ -h /usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce ] && rm /usr/share/koha/intranet/htdocs/intranet-tmpl/lib/tiny_mce
+
+exit 0

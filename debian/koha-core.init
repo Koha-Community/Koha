@@ -1,0 +1,226 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          koha-core
+# Required-Start:    $remote_fs memcached
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start required services for each Koha instance
+# Description:       For each enabled Koha instance on this host,
+#                    if enabled, start:
+#                      - a Zebra server (using koha-zebra)
+#                      - a Plack server (using koha-plack)
+#                      - a SIP server   (using koha-sip)
+#                      - a Z3950 server (using koha-z3950-responder)
+### END INIT INFO
+
+# Author: Lars Wirzenius <lars@catalyst.net.nz>
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Koha ILS"
+NAME="koha-core"
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Exit if the package is not installed
+[ -x /usr/sbin/koha-zebra ] || exit 0
+
+# Read configuration variable file if it is present
+if [ -r /etc/default/$NAME ]; then
+    # Debian / Ubuntu
+    . /etc/default/$NAME
+elif [ -r /etc/sysconfig/$NAME ]; then
+    # RedHat / SuSE
+    . /etc/sysconfig/$NAME
+fi
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+    # We insure all required directories exist, including disabled ones.
+    koha-create-dirs $(koha-list)
+##    koha-zebra --start $(koha-list --enabled)
+##    koha-sip   --start $(koha-list --enabled --sip)
+##    koha-plack --start $(koha-list --enabled --plack)
+##    koha-z3950-responder --start --quiet $(koha-list --enabled --z3950)
+##    koha-worker --start $(koha-list --enabled)
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --start --quiet $(koha-list --enabled)
+    fi
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+    # We stop everything, including disabled ones.
+##    koha-zebra --stop $(koha-list) || true
+##    koha-sip   --stop $(koha-list --sip)
+##    koha-plack --stop --quiet $(koha-list --enabled --plack)
+##    koha-z3950-responder --stop --quiet $(koha-list --enabled --z3950)
+##    koha-worker --stop --quiet $(koha-list --enabled)
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --stop --quiet $(koha-list --enabled)
+    fi
+}
+
+#
+# Function that sends a SIGHUP to the daemon/service
+#
+do_reload() {
+##    koha-zebra --restart $(koha-list --enabled)
+##    koha-sip   --restart $(koha-list --enabled --sip)
+##    koha-plack --restart --quiet $(koha-list --enabled --plack)
+##    koha-z3950-responder --restart --quiet $(koha-list --enabled --z3950)
+##    koha-worker --restart --quiet $(koha-list --enabled)
+
+    if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
+        koha-indexer --restart --quiet $(koha-list --enabled)
+    fi
+}
+
+#
+# Function that shows the status of the zebrasrv daemon for
+# enabled instances
+#
+zebra_status()
+{
+    for instance in $(koha-list --enabled); do
+
+        log_daemon_msg "Zebra server running for instance $instance"
+
+        if is_zebra_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+#
+# Function that shows the status of the SIP server daemon for
+# enabled instances
+#
+sip_status()
+{
+    for instance in $(koha-list --enabled --sip); do
+
+        log_daemon_msg "SIP server running for instance $instance"
+
+        if is_sip_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+#
+# Function that shows the status of the Plack server daemon for
+# enabled instances
+#
+plack_status()
+{
+    for instance in $(koha-list --enabled --plack); do
+
+        log_daemon_msg "Plack server running for instance ${instance}"
+
+        if is_plack_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+#
+# Function that shows the status of the Z39.50/SRU server daemon for
+# enabled instances
+#
+z3950_status()
+{
+    for instance in $(koha-list --enabled --z3950); do
+
+        log_daemon_msg "Z39.50/SRU daemon running for instance ${instance}"
+
+        if is_z3950_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		*) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+	case "$?" in
+		0) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		*) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  restart|force-reload)
+	#
+	# If the "reload" option is implemented then remove the
+	# 'force-reload' alias
+	#
+	log_daemon_msg "Restarting $DESC" "$NAME"
+	do_stop
+	case "$?" in
+	  0)
+		do_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			*) log_end_msg 1 ;; # Failed to start
+		esac
+		;;
+	  *)
+		# Failed to stop
+		log_end_msg 1
+		;;
+	esac
+	;;
+  status)
+        zebra_status
+        sip_status
+        plack_status
+        z3950_status
+        ;;
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
+	exit 3
+	;;
+esac
+
+:

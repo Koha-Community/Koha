@@ -1,0 +1,25 @@
+Template: koha-core/3.2-3.4-upgrade-notice
+Type: note
+Description: koha-core upgrade actions required
+ If you are upgrading from a Koha 3.2 to 3.4 release, you must run:
+  sudo /usr/sbin/koha-upgrade-to-3.4
+ .
+ For large catalogues, running this may take a while. Your Koha installation
+ should be largely operational during the process, but some things,
+ particularly to do with items, may appear strange until the upgrade and
+ re-index is complete.
+
+Template: koha-core/automatically-update-translations
+Type: boolean
+Default: true
+Description: automatically update translations
+  When Koha is upgraded, any existing translated templates can be regenerated
+  to keep everything in sync. Select "yes" if you want this.
+
+Template: koha-core/rename-apache-vhost-files
+Type: boolean
+Default: true
+Description: Rename the Apache virtual hosts files for Koha instances?
+ When Koha is upgraded, the Apache's virtual host definition files can be
+ renamed to match the needs of the newer Apache 2.4. Previously defined
+ Koha instances will get their Apache files appended '.conf'.

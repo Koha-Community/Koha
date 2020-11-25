@@ -1,0 +1,37 @@
+## General koha-common default options file
+
+PERL5LIB="/usr/share/koha/lib"
+KOHA_HOME="/usr/share/koha"
+
+## Background record indexing
+#
+# The following options control the use of an indexing daemon for
+# Koha instances.
+#
+# More information can be found here:
+#
+#     http://wiki.koha-community.org/wiki/PackagesIndexDaemon
+#
+# USE_INDEXER_DAEMON: "no" | "yes"
+#
+USE_INDEXER_DAEMON="no"
+
+# Set an alternate indexer daemon. The default is to use the rebuild_zebra.pl
+# in daemon mode.
+#
+# Example: ALTERNATE_INDEXER_DAEMON="koha-index-daemon"
+#
+# ALTERNATE_INDEXER_DAEMON=""
+
+# Lookup/indexing frecquency (in seconds) for the indexing daemon.
+#
+# The default value is 5
+#
+INDEXER_TIMEOUT=5
+
+# Parameters to be passed to the indexer daemon. Useful for alternate indexers.
+# Defaults to INDEXER_PARAMS="-daemon -sleep $INDEXER_TIMEOUT"
+#
+# INDEXER_PARAMS=""
+
+## End of general koha-common default options
