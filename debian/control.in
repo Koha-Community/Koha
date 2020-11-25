@@ -24,7 +24,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  debconf,
  idzebra-2.0,
  memcached,
- mysql-client | default-mysql-client | virtual-mysql-client,
+ mysql-client | virtual-mysql-client,
  perl-doc,
  pwgen,
  rabbitmq-server,
@@ -34,7 +34,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  unzip,
  xmlstarlet,
  yaz
-Suggests: mysql-server | default-mysql-server | virtual-mysql-server,
+Suggests: mysql-server | virtual-mysql-server,
  letsencrypt,
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
@@ -49,7 +49,7 @@ Architecture: all
 Depends: ${shlib:Depends}, ${misc:Depends},
  koha-common,
  dbconfig-common,
- mysql-server | default-mysql-server | virtual-mysql-server
+ mysql-server | virtual-mysql-server
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
@@ -71,8 +71,8 @@ Depends: ${misc:Depends},
  daemon,
  debconf,
  idzebra-2.0,
- mysql-client | default-mysql-client | virtual-mysql-client,
- mysql-server | default-mysql-server | virtual-mysql-server,
+ mysql-client | virtual-mysql-client,
+ mysql-server | virtual-mysql-server,
  perl-doc,
  pwgen,
  rabbitmq-server,
@@ -113,7 +113,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  cron-daemon,
  daemon,
  debconf,
- mysql-client | default-mysql-client | virtual-mysql-client,
+ mysql-client | virtual-mysql-client,
  perl-doc,
  pwgen,
  starman,
@@ -130,7 +130,7 @@ Depends:
  apache2-mpm-itk | libapache2-mpm-itk,
  idzebra-2.0,
  memcached,
- mysql-server | default-mysql-server | virtual-mysql-server,
+ mysql-server | virtual-mysql-server,
  rabbitmq-server,
 Architecture: all
 Description: integrated (physical) library management system
