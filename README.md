@@ -3,8 +3,6 @@
 
 Koha is distributed under the GNU GPL version 3 or later.
 
-**Note:** This is a synced mirror of the official Koha repo.
-
 **Note:** Koha does not accept pull requests from git hosting sites.
 
 **Note:** This project has its own bug tracker, to report a bug or submit a patch visit http://bugs.koha-community.org.
