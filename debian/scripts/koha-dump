@@ -80,8 +80,8 @@ dump_instance()
         [ "$quiet" = "no" ] && echo "* schema to $schemadump"
         mysqldump $dbflag -d --host="$mysqlhost" \
             --user="$mysqluser" --password="$mysqlpass" "$mysqldb" > "$schemadump"
-        chown "root:$name-koha" "$dbdump"
-        chmod g+r "$dbdump"
+        chown "root:$name-koha" "$schemadump"
+        chmod g+r "$schemadump"
     else
         [ "$quiet" = "no" ] && echo "* DB to $dbdump"
         mysqldump $dbflag --host="$mysqlhost" \
