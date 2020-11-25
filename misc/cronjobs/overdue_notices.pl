@@ -58,23 +58,25 @@ overdue_notices.pl
   [ -email <email_type> ... ]
 
  Options:
-   -help                          brief help message
-   -man                           full documentation
-   -v                             verbose
-   -n                             No email will be sent
-   -max          <days>           maximum days overdue to deal with
-   -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
-   -csv          <filename>       populate CSV file
-   -html         <directory>      Output html to a file in the given directory
-   -text         <directory>      Output plain text to a file in the given directory
-   -itemscontent <list of fields> item information in templates
-   -borcat       <categorycode>   category code that must be included
-   -borcatout    <categorycode>   category code that must be excluded
-   -t                             only include triggered overdues
+   -help                          Brief help message.
+   -man                           Full documentation.
+   -v                             Verbose mode.
+   -n                             No email will be sent.
+   -max          <days>           Maximum days overdue to deal with.
+   -library      <branchcode>     Only deal with overdues from this library.
+                                  (repeatable : several libraries can be given)
+   -csv          <filename>       Populate CSV file.
+   -html         <directory>      Output html to a file in the given directory.
+   -text         <directory>      Output plain text to a file in the given directory.
+   -itemscontent <list of fields> Item information in templates.
+   -borcat       <categorycode>   Category code that must be included.
+   -borcatout    <categorycode>   Category code that must be excluded.
+   -t                             Only include triggered overdues.
    --test                         Run in test mode. No changes will be made on the DB.
-   -list-all                      list all overdues
-   -date         <yyyy-mm-dd>     emulate overdues run for this date
-   -email        <email_type>     type of email that will be used. Can be 'email', 'emailpro' or 'B_email'. Repeatable.
+   -list-all                      List all overdues.
+   -date         <yyyy-mm-dd>     Emulate overdues run for this date.
+   -email        <email_type>     Type of email that will be used.
+                                  Can be 'email', 'emailpro' or 'B_email'. Repeatable.
 
 =head1 OPTIONS
 
