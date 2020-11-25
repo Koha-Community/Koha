@@ -568,7 +568,7 @@ sub UpdateFine {
     }
 
     if ( $accountline ) {
-        if ( $accountline->amount != $amount ) {
+        if ( Koha::Number::Price->new($accountline->amount)->round != Koha::Number::Price->new($amount)->round ) {
             $accountline->adjust(
                 {
                     amount    => $amount,
