@@ -10,6 +10,7 @@ export PERL_MM_USE_DEFAULT=1
 
 override_dh_gencontrol:
 	debian/bd-to-depends >> debian/koha-common.substvars
+	debian/bd-to-depends >> debian/koha-core.substvars
 	dh_gencontrol
 
 override_dh_auto_install:
