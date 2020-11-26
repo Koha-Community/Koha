@@ -896,6 +896,24 @@ Circulation:
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
               syntax: text/x-yaml
+        -
+            - pref: DefaultHoldExpirationdate
+              default: 0
+              choices:
+                  yes: Set
+                  no: Don't set
+            - default expiration date for holds automatically.
+            - If enabled, set expiration date
+            - pref: DefaultHoldExpirationdatePeriod
+              default: 0
+              class: integer
+            - pref: DefaultHoldExpirationdateUnitOfTime
+              default: days
+              choices:
+                  days: days
+                  months: months
+                  years: years
+            - from reserve date.
     Interlibrary loans:
         -
             - pref: ILLModule

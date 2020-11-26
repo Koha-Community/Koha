@@ -562,6 +562,21 @@ sub cancel {
     return $self;
 }
 
+sub store {
+    my ($self) = @_;
+
+    if ( C4::Context->preference('DefaultHoldExpirationdate')
+        and ( not defined $self->expirationdate or $self->expirationdate eq '' ) ){
+
+        my $period = C4::Context->preference('DefaultHoldExpirationdatePeriod');
+        my $timeunit = C4::Context->preference('DefaultHoldExpirationdateUnitOfTime');
+
+        $self->expirationdate( dt_from_string( $self->reservedate )->add( $timeunit => $period ) );
+    }
+
+    $self = $self->SUPER::store;
+}
+
 =head3 _move_to_old
 
 my $is_moved = $hold->_move_to_old;

@@ -29,7 +29,7 @@ use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::Exception;
 use Test::Warn;
 
@@ -141,6 +141,27 @@ $hold->found('W');
 ok( !$hold->is_at_destination(), "Waiting hold where hold branchcode is not the same as the item's holdingbranch is not at destination" );
 $item->holdingbranch( $branches[1]->{branchcode} );
 ok( $hold->is_at_destination(), "Waiting hold where hold branchcode is the same as the item's holdingbranch is at destination" );
+
+# Test setting expiration date
+t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdate', 1 );
+t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdatePeriod', 2 );
+t::lib::Mocks::mock_preference( 'DefaultHoldExpirationdateUnitOfTime', 'years' );
+
+my $hold_2 = Koha::Hold->new(
+    {
+        biblionumber   => $biblionumber,
+        itemnumber     => $item->id(),
+        reservedate    => '2020-11-30',
+        waitingdate    => '2020-11-30',
+        borrowernumber => $borrower->{borrowernumber},
+        branchcode     => $branches[1]->{branchcode},
+        suspend        => 0,
+    }
+);
+$hold_2->store();
+
+my $expected_date = dt_from_string( $hold_2->reservedate )->add( years => 2);
+is($hold_2->expirationdate->ymd, $expected_date->ymd,'Expiration date is correctly set.');
 
 $schema->storage->txn_rollback();
 
