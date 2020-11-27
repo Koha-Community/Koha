@@ -154,9 +154,19 @@
         [% END %]
 
         [% IF t.packaging %]
-        <li><strong>Packaging manager:</strong>
-            [% INCLUDE person p=t.packaging %]
-        </li>
+            [% IF t.packaging.size / 2 == 1 %]
+            <li><strong>Packaging manager:</strong>
+                [% INCLUDE person p=t.packaging %]
+            </li>
+            [% ELSE %]
+            <li><strong>Packaging team:</strong>
+                <ul>
+                    [% FOREACH pa IN t.packaging %]
+                    <li>[% INCLUDE person p = pa %]</li>
+                    [% END %]
+                </ul>
+            </li>
+            [% END %]
         [% END %]
 
         [% IF t.ci %]
