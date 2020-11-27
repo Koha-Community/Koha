@@ -23023,7 +23023,7 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '20.06.00.049';
 if( CheckVersion( $DBversion ) ) {
 
-    if( !column_exists( 'biblioimages', 'itemnumber' ) ) {
+    if( TableExists('biblioimages') && !column_exists( 'biblioimages', 'itemnumber' ) ) {
         $dbh->do(q|
             ALTER TABLE biblioimages
             ADD COLUMN itemnumber INT(11) DEFAULT NULL
@@ -23280,13 +23280,13 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = '20.06.00.065';
 if( CheckVersion( $DBversion ) ) {
-    if( !column_exists( 'issues', 'issuer' ) ) {
+    if( !column_exists( 'issues', 'issuer_id' ) ) {
         $dbh->do( q| ALTER TABLE issues ADD issuer_id INT(11) DEFAULT NULL AFTER borrowernumber | );
     }
     if (!foreign_key_exists( 'issues', 'issues_ibfk_borrowers_borrowernumber' )) {
         $dbh->do( q| ALTER TABLE issues ADD CONSTRAINT `issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE | );
     }
-    if( !column_exists( 'old_issues', 'issuer' ) ) {
+    if( !column_exists( 'old_issues', 'issuer_id' ) ) {
         $dbh->do( q| ALTER TABLE old_issues ADD issuer_id INT(11) DEFAULT NULL AFTER borrowernumber | );
     }
     if (!foreign_key_exists( 'old_issues', 'old_issues_ibfk_borrowers_borrowernumber' )) {
