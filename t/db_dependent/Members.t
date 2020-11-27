@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 48;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -300,6 +300,8 @@ $patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patro
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by branchcode and list');
 $patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by category_code and list');
+$patstodel = GetBorrowersToExpunge( {category_code => ['CIVILIAN','STAFFER'],patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),1,'Borrower with issue not deleted by multiple category_code and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),1,'Borrower with issue not deleted by expiration_date and list');
 $builder->schema->resultset( 'Issue' )->delete_all;
@@ -307,6 +309,8 @@ $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()}
 ok( scalar(@$patstodel)== 2,'Borrowers without issue deleted from list');
 $patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by category_code and list');
+$patstodel = GetBorrowersToExpunge( {category_code => ['CIVILIAN','STAFFER'],patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),2,'Borrowers without issues deleted by multiple category_code and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by expiration_date and list');
 $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );

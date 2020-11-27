@@ -362,7 +362,7 @@ sub get_cardnumber_length {
   $borrowers = &GetBorrowersToExpunge(
       not_borrowed_since => $not_borrowed_since,
       expired_before       => $expired_before,
-      category_code        => $category_code,
+      category_code        => \@category_code,
       patron_list_id       => $patron_list_id,
       branchcode           => $branchcode
   );
@@ -424,8 +424,11 @@ sub GetBorrowersToExpunge {
         push @query_params, $filterlastseen;
     }
     if ( $filtercategory ) {
-        $query .= " AND categorycode = ? ";
-        push( @query_params, $filtercategory );
+        if (ref($filtercategory) ne 'ARRAY' ) {
+            $filtercategory = [ $filtercategory ];
+        }
+        $query .= " AND categorycode IN (" . join(',', ('?') x @$filtercategory) . ") ";
+        push( @query_params, @$filtercategory );
     }
     if ( $filterpatronlist ){
         $query.=" AND patron_list_id = ? ";

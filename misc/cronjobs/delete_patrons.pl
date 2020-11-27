@@ -12,14 +12,15 @@ use Koha::Patrons;
 use C4::Log;
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
-    $category_code, $branchcode, $file, $confirm );
+    @category_code, $branchcode, $file, $confirm );
+
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
     'not_borrowed_since:s'   => \$not_borrowed_since,
     'expired_before:s'       => \$expired_before,
     'last_seen:s'            => \$last_seen,
-    'category_code:s'        => \$category_code,
+    'category_code:s'        => \@category_code,
     'library:s'              => \$branchcode,
     'file:s'                 => \$file,
     'c|confirm'              => \$confirm,
@@ -39,7 +40,7 @@ if ( $last_seen and not C4::Context->preference('TrackLastPatronActivity') ) {
     pod2usage(q{The --last_seen option cannot be used with TrackLastPatronActivity turned off});
 }
 
-unless ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode or $file ) {
+unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode or $file ) {
     pod2usage(q{At least one filter is mandatory});
 }
 
@@ -58,13 +59,13 @@ if ($file) {
 }
 
 my $members;
-if ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode ) {
+if ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode ) {
     $members = GetBorrowersToExpunge(
         {
             not_borrowed_since   => $not_borrowed_since,
             expired_before       => $expired_before,
             last_seen            => $last_seen,
-            category_code        => $category_code,
+            category_code        => \@category_code,
             branchcode           => $branchcode,
         }
     );
@@ -143,7 +144,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--library=LIBRARY] [--file=FILE]
+delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--category_code=CAT ...] [--library=LIBRARY] [--file=FILE]
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' --iso-8601`.
@@ -177,6 +178,8 @@ The system preference TrackLastPatronActivity must be enabled to use this option
 =item B<--category_code>
 
 Delete patrons who have this category code.
+
+Can be used multiple times for additional category codes.
 
 =item B<--library>
 
