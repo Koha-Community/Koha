@@ -23410,6 +23410,11 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24083, ["Add circulation_rules 'unseen_renewals_allowed'", "Add issues.unseen_renewals & old_issues.unseen_renewals)", "Add new system preference UnseenRenewals"] );
 }
 
+$DBversion = '20.11.00.000';
+if( CheckVersion( $DBversion ) ) {
+    NewVersion( $DBversion, "", "Koha 20.11.00 release" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
