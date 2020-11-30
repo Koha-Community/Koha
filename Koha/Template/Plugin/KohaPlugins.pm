@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use base qw( Template::Plugin );
 
+use Try::Tiny;
+
 use Koha::Plugins;
 
 =head1 NAME
@@ -143,6 +145,41 @@ sub get_plugins_intranet_js {
     my @data = map { $_->intranet_js || q{} } @plugins;
 
     return join( "\n", @data );
+}
+
+sub get_plugins_intranet_catalog_biblio_tab {
+
+    my $tabs = [];
+
+    return $tabs unless C4::Context->config("enable_plugins");
+
+    my $p = Koha::Plugins->new();
+    return $tabs unless $p;
+
+    my @plugins = $p->GetPlugins(
+        {
+            method => 'intranet_catalog_biblio_tab',
+        }
+    );
+
+    foreach my $plugin (@plugins) {
+        try {
+            my @newtabs = $plugin->intranet_catalog_biblio_tab();
+            foreach my $newtab (@newtabs) {
+                # Add a unique HTML id
+                my $html_id = 'tab-'. $plugin->{class} . '-' . $newtab->title;
+                # Using characters except ASCII letters, digits, '_', '-' and '.' may cause compatibility problems
+                $html_id =~ s/[^0-9A-Za-z]+/-/g;
+                $newtab->id($html_id);
+            }
+            push @$tabs, @newtabs;
+        }
+        catch {
+            warn "Error calling 'intranet_catalog_biblio_tab' on the " . $plugin->{class} . "plugin ($_)";
+        };
+    }
+
+    return $tabs;
 }
 
 1;
