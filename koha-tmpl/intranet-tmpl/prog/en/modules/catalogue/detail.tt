@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE KohaPlugins %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Biblio %]
@@ -29,6 +30,8 @@
         [% END %]
     [% END %]
 [% END %]
+
+[% SET plugins_intranet_catalog_biblio_tabs = KohaPlugins.get_plugins_intranet_catalog_biblio_tab %]
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -260,8 +263,8 @@
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
-[% FOREACH tab IN tabs %]
-    <li><a href="#[% tab.id | uri %]">[% tab.title | html %]</a></li>
+[% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+    <li><a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]">[% plugins_intranet_catalog_biblio_tab.title | html %]</a></li>
 [% END %]
 </ul>
 
@@ -936,9 +939,9 @@ Note that permanent location is a code, and location may be an authval.
     </div>
 [% END %]
 
-[% FOREACH tab IN tabs %]
-    <div id="[% tab.id | html %]">
-        [% tab.content | $raw %]
+[% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+    <div id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
+        [% plugins_intranet_catalog_biblio_tab.content | $raw %]
     </div>
 [% END %]
 
