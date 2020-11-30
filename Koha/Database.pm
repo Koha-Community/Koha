@@ -90,20 +90,14 @@ sub _new_schema {
         $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
     }
 
-    my $RaiseError = (
-           $ENV{DEBUG}
-        || $ENV{KOHA_TESTING}
-        ||  exists $ENV{_} && $ENV{_} =~ m|prove|
-    ) ? 1 : 0;
     my $schema = Koha::Schema->connect(
         {
             dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
             user => $db_user,
             password => $db_passwd,
             %encoding_attr,
-            RaiseError => $RaiseError,
+            RaiseError => 1,
             PrintError => 1,
-            unsafe => !$RaiseError,
             quote_names => 1,
             auto_savepoint => 1,
             on_connect_do => [
@@ -116,7 +110,6 @@ sub _new_schema {
 
     my $dbh = $schema->storage->dbh;
     eval {
-        $dbh->{RaiseError} = 1;
         if ( $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} ) {
             $dbh->{RaiseError} = 0;
             $dbh->{PrintError} = 0;
@@ -124,7 +117,8 @@ sub _new_schema {
         $dbh->do(q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
-        $dbh->{RaiseError} = $RaiseError
+        $dbh->{RaiseError} = 1;
+        $dbh->{PrintError} = 1;
     };
     $dbh->{RaiseError} = 0 if $@;
 
