@@ -31,8 +31,8 @@ deployment:
 - Debian 9 (Stretch) with MariaDB 10.1
 - Debian 10 (Buster) with MariaDB 10.3
 - Debian 11 (Bullseye) with MariaDB 10.3 (Experimental)
-- Ubuntu 18.11 (Bionic) with MariaDB 10.1
-- Ubuntu 20.11 (Focal) with MariaDB 10.3
+- Ubuntu 18.04 (Bionic) with MariaDB 10.1
+- Ubuntu 20.04 (Focal) with MariaDB 10.3
 - Debian Stretch with MySQL 8.0 (Experimental MySQL 8.0 support)
 
 Additional notes:
