@@ -152,7 +152,7 @@
                     <th>Enqueued on</th>
                     <th>Started on</th>
                     <th>Ended on</th>
-                    <th>Actions (NIY)</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,7 +176,6 @@
                         [% IF job.status == 'new' || job.status == 'started' %]
                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
                         [% END %]
-                        <a class="btn btn-default btn-xs disabled" href="/cgi-bin/koha/admin/background_jobs.pl?op=replay&amp;id=[% job.id | html %]"><i class="fa fa-refresh"></i> Replay</a>
                     </td>
                 </tr>
                 [% END %]
