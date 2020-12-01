@@ -580,7 +580,7 @@ sub build_tabs {
                     }
 
                     # now, loop again to add parameter subfield that are not in the MARC::Record
-                    foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) )
+                    foreach my $subfield ( keys %{ $tagslib->{$tag} } )
                     {
                         next if ( length $subfield != 1 );
                         next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
@@ -633,12 +633,15 @@ sub build_tabs {
             }
             else {
                 my @subfields_data;
-                foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) ) {
-                    next if ( length $subfield != 1 );
+                foreach my $subfield (
+                    sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} }
+                    grep { ref($_) && %$_ } # Not a subfield (values for "important", "lib", "mandatory", etc.) or empty
+                    values %{ $tagslib->{$tag} } )
+                {
                     next
-                      if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -4 )
-                        or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 5 ) )
-                      and not ( $subfield eq "9" and
+                      if ( ( $subfield->{hidden} <= -4 )
+                        or ( $subfield->{hidden} >= 5 ) )
+                      and not ( $subfield->{subfield} eq "9" and
                                 exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
                                 defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
                                 $tagslib->{$tag}->{'a'}->{authtypecode} ne ""
@@ -647,11 +650,11 @@ sub build_tabs {
                            # if subfield is $9 in a field whose $a is authority-controlled,
                            # always include in the form regardless of the hidden setting - bug 2206
                     next
-                      if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
+                      if ( $subfield->{tab} ne $tabloop );
 			push(
                         @subfields_data,
                         &create_input(
-                            $tag, $subfield, '', $index_tag, $tabloop, $record,
+                            $tag, $subfield->{subfield}, '', $index_tag, $tabloop, $record,
                             $authorised_values_sth,$input
                         )
                     );

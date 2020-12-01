@@ -37,7 +37,7 @@ sub string_search {
     my $count = @data;
     my $sth   =
       $dbh->prepare(
-"Select * from marc_subfield_structure where (tagfield like ? and frameworkcode=?) order by tagfield"
+"Select * from marc_subfield_structure where (tagfield like ? and frameworkcode=?) order by tagfield, display_order"
       );
     $sth->execute( "$searchstring%", $frameworkcode );
     my @results;
@@ -161,7 +161,7 @@ if ( $op eq 'add_form' ) {
     # build values list
     my $sth =
       $dbh->prepare(
-"select * from marc_subfield_structure where tagfield=? and frameworkcode=?"
+"select * from marc_subfield_structure where tagfield=? and frameworkcode=? order by display_order"
       );    # and tagsubfield='$tagsubfield'");
     $sth->execute( $tagfield, $frameworkcode );
     my @loop_data = ();
@@ -263,7 +263,7 @@ elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
     my $sth_update = $dbh->prepare(qq{
-        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, important=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
+        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, important=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?, display_order=?
         where tagfield=? and tagsubfield=? and frameworkcode=?
     });
     my @tagsubfield       = $input->multi_param('tagsubfield');
@@ -279,7 +279,8 @@ elsif ( $op eq 'add_validate' ) {
     my @link              = $input->multi_param('link');
     my @defaultvalue      = $input->multi_param('defaultvalue');
     my @maxlength         = $input->multi_param('maxlength');
-    
+
+    my $display_order;
     for ( my $i = 0 ; $i <= $#tagsubfield ; $i++ ) {
         my $tagfield    = $input->param('tagfield');
         my $tagsubfield = $tagsubfield[$i];
@@ -323,6 +324,7 @@ elsif ( $op eq 'add_validate' ) {
                     $link,
                     $defaultvalue,
                     $maxlength,
+                    $display_order->{$tagfield} || 0,
                     (
                         $tagfield,
                         $tagsubfield,
@@ -356,9 +358,11 @@ elsif ( $op eq 'add_validate' ) {
                         link             => $link,
                         defaultvalue     => $defaultvalue,
                         maxlength        => $maxlength,
+                        display_order    => $display_order->{$tagfield} || 0,
                     }
                 )->store;
             }
+            $display_order->{$tagfield}++;
         }
     }
     $sth_update->finish;

@@ -80,13 +80,15 @@
                             <div id="subfieldtabs" class="toptabs numbered">
                                 <ul>
                                     [% FOREACH loo IN loop %]
-                                        [% IF ( loo.new_subfield ) %]
-                                            <li><a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
-                                        [% ELSE %]
-                                            <li><a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">
-                                                [% loo.subfieldcode | html %]
-                                        </a></li>
-                                        [% END %]
+                                        <li id="tab_subfield_[% loo.urisubfieldcode | html %]">
+                                            [% IF ( loo.new_subfield ) %]
+                                                <a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">New</a>
+                                            [% ELSE %]
+                                                <a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">
+                                                    [% loo.subfieldcode | html %]
+                                                </a>
+                                            [% END %]
+                                        </li>
                                     [% END %]
                                 </ul>
 

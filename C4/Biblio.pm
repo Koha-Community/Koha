@@ -961,10 +961,10 @@ sub GetMarcStructure {
     }
 
     $sth = $dbh->prepare(
-        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength,important
+        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength,important, display_order
          FROM   marc_subfield_structure 
          WHERE  frameworkcode=? 
-         ORDER BY tagfield,tagsubfield
+         ORDER BY tagfield, tagsubfield
         "
     );
 
@@ -981,16 +981,18 @@ sub GetMarcStructure {
     my $link;
     my $defaultvalue;
     my $maxlength;
+    my $display_order;
 
     while (
         (   $tag,          $subfield,      $liblibrarian, $libopac, $tab,    $mandatory, $repeatable, $authorised_value,
             $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue,
-            $maxlength, $important
+            $maxlength, $important, $display_order
         )
         = $sth->fetchrow
       ) {
         $res->{$tag}->{$subfield}->{lib}              = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
         $res->{$tag}->{$subfield}->{tab}              = $tab;
+        $res->{$tag}->{$subfield}->{subfield}         = $subfield;
         $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
         $res->{$tag}->{$subfield}->{important}        = $important;
         $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
@@ -1004,6 +1006,7 @@ sub GetMarcStructure {
         $res->{$tag}->{$subfield}->{'link'}           = $link;
         $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
         $res->{$tag}->{$subfield}->{maxlength}        = $maxlength;
+        $res->{$tag}->{$subfield}->{display_order}    = $display_order;
     }
 
     $cache->set_in_cache($cache_key, $res);
@@ -1031,7 +1034,7 @@ sub GetUsedMarcStructure {
         FROM   marc_subfield_structure
         WHERE   tab > -1 
             AND frameworkcode = ?
-        ORDER BY tagfield, tagsubfield
+        ORDER BY tagfield, display_order, tagsubfield
     };
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($frameworkcode);
@@ -1096,7 +1099,7 @@ sub GetMarcSubfieldStructure {
         FROM marc_subfield_structure
         WHERE frameworkcode = ?
         AND kohafield > ''
-        ORDER BY frameworkcode,tagfield,tagsubfield
+        ORDER BY frameworkcode, tagfield, display_order, tagsubfield
     |, { Slice => {} }, $frameworkcode );
     # Now map the output to a hash structure
     my $subfield_structure = {};

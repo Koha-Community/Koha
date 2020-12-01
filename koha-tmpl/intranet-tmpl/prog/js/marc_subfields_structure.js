@@ -1,6 +1,26 @@
 /* global dataTablesDefaults */
 $(document).ready(function() {
-    $('#subfieldtabs').tabs();
+    var tabs = $('#subfieldtabs').tabs();
+    var current_index;
+    tabs.find( ".ui-tabs-nav" ).sortable({
+        axis: "x",
+        start: function (e, ui) {
+            current_index = $(ui.item[0]).index();
+        },
+        stop: function (e, ui) {
+            var new_index = $(ui.item[0]).index();
+            if (current_index < new_index) new_index++;
+            var subfield_code = $(ui.item[0]).attr('id').replace( /^tab_subfield_/, '');
+            var content = $('#sub' + subfield_code + 'field');
+            var panels = $("#subfieldtabs > div");
+            if ( new_index < $(panels).size() ){
+                $(content).insertBefore($("#subfieldtabs > div")[new_index]);
+            } else {
+                $(content).insertAfter($("#subfieldtabs > div")[new_index-1]);
+            }
+            tabs.tabs("refresh");
+        }
+    });
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function() {
         populateHiddenCheckboxes($(this).attr('id').split('-')[1]);
@@ -9,6 +29,7 @@ $(document).ready(function() {
         "columnDefs": [
             { 'sortable': false, 'targets': [ 'NoSort' ] }
         ],
+        aaSorting: [],
         paginate: false
     }));
 });
