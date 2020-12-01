@@ -1,0 +1,1 @@
+NSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('SaveRecordbyControlNumber', '0', 'If set, advanced editor (Rancor) will use the control number field to populate the name of the save file, otherwise it uses the biblionumber.', NULL, 'YesNo');

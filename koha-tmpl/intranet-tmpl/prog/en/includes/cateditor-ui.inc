@@ -289,7 +289,18 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         'iso2709': {
             saveLabel: _("Save as MARC (.mrc) file"),
             save: function( id, record, done ) {
-                saveAs( new Blob( [record.toISO2709()], { 'type': 'application/octet-stream;charset=utf-8' } ), 'record.mrc' );
+                var recname = 'record.mrc';
+                if(state.recordID) {
+                    recname = state.recordID+'.mrc';
+                }
+
+                [% IF (Koha.Preference('SaveRecordbyControlNumber') == '1') %]
+                var controlnumfield = record.field('001');
+                if(controlnumfield) {
+                    recname = controlnumfield.subfield('@')+'.mrc';
+                }
+                [% END %]
+                saveAs( new Blob( [record.toISO2709()], { 'type': 'application/octet-stream;charset=utf-8' } ), recname );
 
                 done( {} );
             }
@@ -297,7 +308,18 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         'marcxml': {
             saveLabel: _("Save as MARCXML (.xml) file"),
             save: function( id, record, done ) {
-                saveAs( new Blob( [record.toXML()], { 'type': 'application/octet-stream;charset=utf-8' } ), 'record.xml' );
+                var recname = 'record.mrc';
+                if(state.recordID) {
+                    recname = state.recordID+'.mrc';
+                }
+
+                [% IF (Koha.Preference('SaveRecordbyControlNumber') == '1') %]
+                var controlnumfield = record.field('001');
+                if(controlnumfield) {
+                    recname = controlnumfield.subfield('@')+'.xml';
+                }
+                [% END %]
+                saveAs( new Blob( [record.toXML()], { 'type': 'application/octe     t-stream;charset=utf-8' } ), recname );
 
                 done( {} );
             }
