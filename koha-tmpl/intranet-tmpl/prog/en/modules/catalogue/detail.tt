@@ -30,7 +30,7 @@
     [% END %]
 [% END %]
 
-[% SET plugins_intranet_catalog_biblio_tabs = KohaPlugins.get_plugins_intranet_catalog_biblio_tab %]
+[% SET plugins_intranet_catalog_biblio_tabs = KohaPlugins.get_plugins_intranet_catalog_biblio_tab({ biblio => biblio }) %]
 
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
