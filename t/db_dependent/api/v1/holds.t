@@ -690,11 +690,21 @@ subtest 'pickup_locations() tests' => sub {
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { userid => 'tomasito', flags => 1 }
+            value => { userid => 'tomasito', flags => 0 }
         }
     );
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
 
     my $item_class = Test::MockModule->new('Koha::Item');
     $item_class->mock(
