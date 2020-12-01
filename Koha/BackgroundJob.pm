@@ -167,7 +167,7 @@ sub messages {
         @messages = @{ $data_dump->{messages} };
     }
 
-    return @messages;
+    return \@messages;
 }
 
 =head3 report
