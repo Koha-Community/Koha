@@ -160,7 +160,7 @@ method to output to the list of extra cataloguing tabs on intranet pages.
 =cut
 
 sub get_plugins_intranet_catalog_biblio_tab {
-
+    my ( $self, $params ) = @_;
     my $tabs = [];
 
     return $tabs unless C4::Context->config("enable_plugins");
@@ -176,7 +176,7 @@ sub get_plugins_intranet_catalog_biblio_tab {
 
     foreach my $plugin (@plugins) {
         try {
-            my @newtabs = $plugin->intranet_catalog_biblio_tab();
+            my @newtabs = $plugin->intranet_catalog_biblio_tab($params);
             foreach my $newtab (@newtabs) {
                 # Add a unique HTML id
                 my $html_id = 'tab-'. $plugin->{class} . '-' . $newtab->title;
