@@ -224,12 +224,11 @@ $(document).ready(function() {
                     var cur_select = $(this);
                     var res_id = $(this).attr('reserve_id');
                     $(this).after('<div id="updating_reserveno'+res_id+'" class="waiting"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt="" /><span class="waiting_msg"></span></div>');
-                    var api_url = '/api/v1/holds/'+res_id;
-                    var update_info = JSON.stringify({ pickup_library_id: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
+                    var api_url = '/api/v1/holds/' + encodeURIComponent(res_id) + '/pickup_location';
                     $.ajax({
                         method: "PUT",
                         url: api_url,
-                        data: update_info ,
+                        data: $(this).val(),
                         success: function( data ){ holdsTable.api().ajax.reload(); },
                         error: function( jqXHR, textStatus, errorThrown) {
                             alert('There was an error:'+textStatus+" "+errorThrown);

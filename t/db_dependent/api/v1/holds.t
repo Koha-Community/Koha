@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -1016,6 +1016,58 @@ subtest 'add() tests' => sub {
     $item_hold_data->{pickup_library_id} = $library_2->branchcode;
     $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
       ->status_is(201);
+
+    $schema->storage->txn_rollback;
+};
+
+
+subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $library_1   =  $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'place_holds',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $library_1->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+            }
+        )
+    );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location" => json => $library_2->branchcode )->status_is(200)->json_is($library_2->branchcode);
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
 
     $schema->storage->txn_rollback;
 };
