@@ -3454,6 +3454,7 @@ CREATE TABLE `marc_subfield_structure` (
   `link` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `defaultvalue` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `maxlength` int(4) NOT NULL DEFAULT 9999,
+  `display_order` int(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`frameworkcode`,`tagfield`,`tagsubfield`),
   KEY `kohafield_2` (`kohafield`),
   KEY `tab` (`frameworkcode`,`tab`),
