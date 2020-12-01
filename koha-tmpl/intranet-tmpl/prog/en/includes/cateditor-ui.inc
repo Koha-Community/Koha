@@ -308,9 +308,9 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         'marcxml': {
             saveLabel: _("Save as MARCXML (.xml) file"),
             save: function( id, record, done ) {
-                var recname = 'record.mrc';
+                var recname = 'record.xml';
                 if(state.recordID) {
-                    recname = state.recordID+'.mrc';
+                    recname = state.recordID+'.xml';
                 }
 
                 [% IF (Koha.Preference('SaveRecordbyControlNumber') == '1') %]
