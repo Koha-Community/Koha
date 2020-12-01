@@ -77,7 +77,7 @@ overdue_notices.pl
    -date         <yyyy-mm-dd>     Emulate overdues run for this date.
    -email        <email_type>     Type of email that will be used.
                                   Can be 'email', 'emailpro' or 'B_email'. Repeatable.
-   --owning                       Send notices from item homebranch library instead of issuing library
+   --frombranch                   Set the from address for the notice to one of 'item-homebranch' or 'item-issuebranch'.
 
 =head1 OPTIONS
 
@@ -186,9 +186,11 @@ use it in order to send overdues on a specific date and not Now. Format: YYYY-MM
 
 Allows to specify which type of email will be used. Can be email, emailpro or B_email. Repeatable.
 
-=item B<--owning>
+=item B<--frombranch>
 
 Use the address information from the item homebranch library instead of the issuing library.
+
+Defaults to 'item-issuebranch'
 
 =back
 
@@ -299,7 +301,7 @@ my $verbose = 0;
 my $nomail  = 0;
 my $MAX     = 90;
 my $test_mode = 0;
-my $owning_library = 0;
+my $frombranch = 'item-issuebranch';
 my @branchcodes; # Branch(es) passed as parameter
 my @emails_to_use;    # Emails to use for messaging
 my @emails;           # Emails given in command-line parameters
@@ -331,7 +333,7 @@ GetOptions(
     'borcat=s'       => \@myborcat,
     'borcatout=s'    => \@myborcatout,
     'email=s'        => \@emails,
-    'owning'         => \$owning_library,
+    'frombranch=s'   => \$frombranch,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -340,6 +342,11 @@ cronlogaction() unless $test_mode;
 if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
+
+die "--frombranch takes item-homebranch or item-issuebranch only"
+    unless ( $frombranch eq 'item-issuebranch'
+        || $frombranch eq 'item-homebranch' );
+my $owning_library = ( $frombranch eq 'item-homebranch' ) ? 1 : 0;
 
 my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();    # Branches with overdue rules
 my @branches;                                    # Branches passed as parameter with overdue rules

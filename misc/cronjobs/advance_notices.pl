@@ -214,7 +214,7 @@ GetOptions(
             'help|?'         => \$help,
             'man'            => \$man,
             'library=s'      => \@branchcodes,
-            'frombranch'     => \$frombranch,
+            'frombranch=s'   => \$frombranch,
             'c'              => \$confirm,
             'n'              => \$nomail,
             'm:i'            => \$maxdays,
@@ -242,7 +242,7 @@ unless ($confirm) {
 }
 cronlogaction();
 
-my %branches = {};
+my %branches = ();
 if (@branchcodes) {
     %branches = map { $_ => 1 } @branchcodes;
 }
@@ -304,14 +304,14 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
-        my $branchcode;
-        if($owning_library) {
-        $branchcode = $upcoming->{'homebranch'};
-        } else {
-        $branchcode = $upcoming->{'branchcode'};
-        }
-        # Skip this DUE if we specify list of libraries and this one is not part of it
-        next if (@branchcodes && !$branches{$branchcode});
+            my $branchcode;
+            if($owning_library) {
+                $branchcode = $upcoming->{'homebranch'};
+            } else {
+                $branchcode = $upcoming->{'branchcode'};
+            }
+            # Skip this DUE if we specify list of libraries and this one is not part of it
+            next if (@branchcodes && !$branches{$branchcode});
 
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'DUE';
@@ -351,14 +351,14 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
-        my $branchcode;
-        if($owning_library) {
-        $branchcode = $upcoming->{'homebranch'};
-        } else {
-        $branchcode = $upcoming->{'branchcode'};
-        }
-        # Skip this PREDUE if we specify list of libraries and this one is not part of it
-        next if (@branchcodes && !$branches{$branchcode});
+            my $branchcode;
+            if($owning_library) {
+            $branchcode = $upcoming->{'homebranch'};
+            } else {
+            $branchcode = $upcoming->{'branchcode'};
+            }
+            # Skip this PREDUE if we specify list of libraries and this one is not part of it
+            next if (@branchcodes && !$branches{$branchcode});
 
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'PREDUE';
@@ -389,7 +389,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
       if ($nomail) {
         for my $letter ( @letters ) {
             local $, = "\f";
-            print $letter->{'content'};
+            print $letter->{'content'}."\n";
         }
       }
       else {
