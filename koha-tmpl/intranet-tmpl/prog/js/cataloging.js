@@ -127,7 +127,7 @@ var Select2Utils = {
                                 var category = $(this).data("category");
                                 $("#avCreate #new_av_category").html(category);
                                 $("#avCreate input[name='category']").val(category);
-                                $("#avCreate input[name='value']").val();
+                                $("#avCreate input[name='value']").val('');
                                 $("#avCreate input[name='description']").val(e.params.data.text);
 
                                 $(this).val($(this).find("option:first").val()).trigger('change');
