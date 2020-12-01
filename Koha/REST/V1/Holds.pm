@@ -477,4 +477,36 @@ sub pickup_locations {
     };
 }
 
+=head3 update_pickup_location
+
+Method that handles modifying the pickup location of a Koha::Hold object
+
+=cut
+
+sub update_pickup_location {
+    my $c = shift->openapi->valid_input or return;
+
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold = Koha::Holds->find($hold_id);
+
+    unless ($hold) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Hold not found" }
+        );
+    }
+
+    return try {
+        my $pickup_location = $c->req->json;
+
+        $hold->branchcode($pickup_location)->store;
+
+        return $c->render( status => 200, openapi => $pickup_location );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+
 1;
