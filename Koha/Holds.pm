@@ -92,6 +92,40 @@ sub forced_hold_level {
     return;
 }
 
+sub get_items_that_can_fill {
+    my ( $self ) = @_;
+
+    my @biblionumbers = $self->get_column('biblionumber');
+
+    my @branchtransfers = map { $_->itemnumber }
+      Koha::Item::Transfers->search(
+          { datearrived => undef },
+          {
+              columns => ['itemnumber'],
+              collapse => 1,
+          }
+      );
+    my @waiting_holds = map { $_->itemnumber }
+      Koha::Holds->search(
+          { 'found' => 'W' },
+          {
+              columns => ['itemnumber'],
+              collapse => 1,
+          }
+      );
+
+    return Koha::Items->search(
+        {
+            biblionumber => { in => \@biblionumbers },
+            itemlost     => 0,
+            withdrawn    => 0,
+            notforloan   => 0,
+            onloan       => undef,
+            itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
+        }
+    );
+}
+
 =head3 type
 
 =cut

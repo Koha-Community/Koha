@@ -188,27 +188,14 @@ if ( C4::Context->preference('IndependentBranches') ){
 }
 
 # get all distinct unfulfilled reserves
-my @biblionumbers = Koha::Holds->search(
+my $holds = Koha::Holds->search(
     { %where },
     { join => 'itembib', alias => 'reserve', distinct  => 1, columns => qw[me.biblionumber] }
-)->get_column('biblionumber');
-
-my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
-my @waiting_holds = map { $_->itemnumber } Koha::Holds->search({'found' => 'W'}, { columns => [ 'itemnumber' ], collapse => 1 });
-
-my @all_items = Koha::Items->search(
-    {
-        biblionumber => { in => \@biblionumbers },
-        itemlost     => 0,
-        withdrawn    => 0,
-        notforloan   => 0,
-        onloan       => undef,
-        itemnumber   => { -not_in => [ @branchtransfers, @waiting_holds ] },
-    }
 );
+my @biblionumbers = $holds->get_column('biblionumber');
 
 my $all_items;
-foreach my $item ( @all_items ) {
+foreach my $item ( $holds->get_items_that_can_fill ) {
     push @{$all_items->{$item->biblionumber}}, $item;
 }
 
