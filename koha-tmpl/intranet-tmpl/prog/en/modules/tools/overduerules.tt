@@ -73,6 +73,8 @@
               <th scope="col">Letter</th>
               <th scope="col">Restrict</th>
               [% FOREACH mtt IN message_transport_types %]
+                [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
                 <th scpre="col">
                   [% SWITCH mtt %]
                   [% CASE 'email' %]
@@ -121,16 +123,14 @@
               [% END %]
               </td>
               [% FOREACH mtt IN value.message_transport_types %]
+                [% NEXT IF mtt.value == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
+                [% NEXT IF mtt.value == 'phone' AND !Koha.Preference('PhoneNotification') %]
                 <td>
                   [% IF mtt.selected %]
                     <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" checked="checked" />
                   [% ELSE %]
                     [% IF mtt.value == "sms" and not Koha.Preference("SMSSendDriver") %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
-                    [% ELSIF mtt.value == "itiva" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-                      <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
-                    [% ELSIF mtt.value == "phone" and not Koha.Preference("PhoneNotification") %]
-                        <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" disabled="disabled" />
                     [% ELSE %]
                       <input type="checkbox" name="mtt[% tab.number | html %]-[% value.overduename | html %]" value="[% mtt.value | html %]" />
                     [% END %]
