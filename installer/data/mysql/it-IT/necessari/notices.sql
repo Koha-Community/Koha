@@ -57,19 +57,20 @@ VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Su
     </ul>
     </p>',1, 'email'),
     ('circulation','CHECKINSLIP','Checkin slip','Checkin slip',
-    "<h3><<branches.branchname>></h3>
-    Checked in items for <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
-    (<<borrowers.cardnumber>>) <br />
+"<h3>[% branch.branchname %]</h3>
+Checked in items for [% borrower.title %] [% borrower.firstname %] [% borrower.initials %] [% borrower.surname %] <br />
+([% borrower.cardnumber %]) <br />
 
-    <<today>><br />
+[% today %]<br />
 
-    <h4>Checked in today</h4>
-    <checkedin>
-    <p>
-    <<biblio.title>> <br />
-    Barcode: <<items.barcode>><br />
-    </p>
-    </checkedin>",1, 'print');
+<h4>Checked in today</h4>
+[% FOREACH checkin IN old_checkouts %]
+[% SET item = checkin.item %]
+<p>
+[% item.biblio.title %] <br />
+Barcode: [% item.barcode %] <br />
+</p>
+[% END %]", 1, 'print');
 
 INSERT INTO letter (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ricevuta di prestito','Ricevuta di prestito', '<h3><<branches.branchname>></h3>

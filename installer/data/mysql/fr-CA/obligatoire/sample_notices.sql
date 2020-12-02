@@ -23,19 +23,20 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 ('suggestions','AVAILABLE','','Suggestion d\'achat disponible',0,'Suggestion d\'achat disponible','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons le plaisir de vous informer que le document fait aujourd\'hui partie de nos collection et qu\'il est disponible à la bibliothèque.\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email'),
 ('suggestions','ORDERED','','Suggestion d\'achat commandée',0,'Suggestion d\'achat commandée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons le plaisir de vous informer que le document a été commandé.\r\n\r\nVous recevrez une nouvelle notification quand le document sera disponible à bibliothèque.\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email'),
 ('suggestions','REJECTED','','Suggestion d\'achat rejetée',0,'Suggestion d\'achat rejetée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons évalué votre suggestion aujourd\'hui et décidé de ne pas l\'acheter cette fois.\r\n\r\nLa raison de notre refus est : <<suggestions.reason>>\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email'),
-('circulation','CHECKINSLIP','','Checkin slip',1,'Checkin slip',"<h3><<branches.branchname>></h3>
-Checked in items for <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
-(<<borrowers.cardnumber>>) <br />
+('circulation','CHECKINSLIP','','Checkin slip',1,'Checkin slip',"<h3>[% branch.branchname %]</h3>
+Checked in items for [% borrower.title %] [% borrower.firstname %] [% borrower.initials %] [% borrower.surname %] <br />
+([% borrower.cardnumber %]) <br />
 
-<<today>><br />
+[% today %]<br />
 
 <h4>Checked in today</h4>
-<checkedin>
+[% FOREACH checkin IN old_checkouts %]
+[% SET item = checkin.item %]
 <p>
-<<biblio.title>> <br />
-Barcode: <<items.barcode>><br />
+[% item.biblio.title %] <br />
+Barcode: [% item.barcode %] <br />
 </p>
-</checkedin>", 'print');
+[% END %]", 'print');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
 VALUES ('suggestions','NEW_SUGGESTION','Nouvelle suggestion','Nouvelle suggestion','<h3>Suggestion en attente</h3>

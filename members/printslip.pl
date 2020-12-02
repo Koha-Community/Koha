@@ -88,7 +88,7 @@ if ( $print eq 'checkinslip' ) {
     my $today_end = dt_from_string->set( hour => 23, minute => 59, second => 0 );
     $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_start );
     $today_end = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_end );
-    my $todays_checkins = Koha::Old::Checkouts->search({
+    my @todays_checkins = Koha::Old::Checkouts->search({
         returndate => {
             '>=' => $today_start,
             '<=' => $today_end,
@@ -97,15 +97,8 @@ if ( $print eq 'checkinslip' ) {
         branchcode => $checkinslip_branch,
     });
 
-    my @checkins;
-    while ( my $c = $todays_checkins->next ) {
-        push @checkins, {
-            biblio => $c->item->biblio->unblessed,
-            items => $c->item->unblessed,
-        };
-    }
-    my %repeat = (
-        checkedin => \@checkins,
+    my %loops = (
+        old_issues => [ map { $_->issue_id } @todays_checkins ],
     );
 
     my $letter = C4::Letters::GetPreparedLetter(
@@ -116,7 +109,7 @@ if ( $print eq 'checkinslip' ) {
             branches => $checkinslip_branch,
             borrowers => $borrowernumber,
         },
-        repeat => \%repeat,
+        loops => \%loops,
         message_transport_type => 'print'
     );
 
