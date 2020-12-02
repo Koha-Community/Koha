@@ -52,6 +52,9 @@
                     [% IF ( CAN_user_reports ) %]
                         <li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
                     [% END %]
+                    [% IF ( CAN_user_suggestions_suggestions_manage ) %]
+                        <li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>
+                    [% END %]
                     [% IF ( CAN_user_tools ) %]
                         <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
                     [% END %]
