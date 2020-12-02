@@ -31,6 +31,7 @@ use C4::Biblio;
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
+use Koha::Libraries;
 
 use List::Util qw(shuffle);
 use List::MoreUtils qw(any);
@@ -361,6 +362,38 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     } @items ];
 }
 
+=head2 _checkHoldPolicy
+
+    _checkHoldPolicy($item, $request)
+
+    check if item agrees with hold policies
+
+=cut
+
+sub _checkHoldPolicy {
+    my ($item, $request) = @_;
+
+    return 0 unless $item->{holdallowed};
+    return 0 if $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch};
+
+    my $library = Koha::Libraries->find($item->{homebranch});
+
+    return 0 if $item->{'holdallowed'} == 3 && !$library->validate_hold_sibling({branchcode => $request->{borrowerbranch}});
+
+    my $hold_fulfillment_policy = $item->{hold_fulfillment_policy};
+
+    return 0 if $hold_fulfillment_policy eq 'holdgroup' && !$library->validate_hold_sibling({branchcode => $request->{branchcode}});
+    return 0 if $hold_fulfillment_policy eq 'homebranch' && $request->{branchcode} ne $item->$hold_fulfillment_policy;
+    return 0 if $hold_fulfillment_policy eq 'holdingbranch' && $request->{branchcode} ne $item->$hold_fulfillment_policy;
+
+    my $patronLibrary = Koha::Libraries->find($request->{borrowerbranch});
+
+    return 0 if $hold_fulfillment_policy eq 'patrongroup' && !patronLibrary->validate_hold_sibling({branchcode => $request->{branchcode}});
+
+    return 1;
+
+}
+
 =head2 MapItemsToHoldRequests
 
   MapItemsToHoldRequests($hold_requests, $available_items, $branches, $transport_cost_matrix)
@@ -407,10 +440,9 @@ sub MapItemsToHoldRequests {
 
             my $local_hold_match;
             foreach my $item (@$available_items) {
-                next
-                  if ( !$item->{holdallowed} )
-                  || ( $item->{holdallowed} == 1
-                    && $item->{homebranch} ne $request->{borrowerbranch} );
+                next if $item->{_object}->exclude_from_local_holds_priority;
+
+                next unless _checkHoldPolicy($item, $request);
 
                 next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
 
@@ -465,12 +497,10 @@ sub MapItemsToHoldRequests {
             if (
                     exists $items_by_itemnumber{ $request->{itemnumber} }
                 and not exists $allocated_items{ $request->{itemnumber} }
-                and ( # Don't fill item level holds that contravene the hold pickup policy at this time
-                    ( $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} eq 'any' )
-                    || ( $request->{branchcode} eq $items_by_itemnumber{ $request->{itemnumber} }->{ $items_by_itemnumber{ $request->{itemnumber} }->{hold_fulfillment_policy} }  )
+                and  _checkHoldPolicy($items_by_itemnumber{ $request->{itemnumber} }, $request) # Don't fill item level holds that contravene the hold pickup policy at this time
                 and ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                     || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
-                )
+
                 and $items_by_itemnumber{ $request->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } )
 
               )
@@ -524,8 +554,7 @@ sub MapItemsToHoldRequests {
 
                 if (
                     $request->{borrowerbranch} eq $item->{homebranch}
-                    && ( ( $item->{hold_fulfillment_policy} eq 'any' ) # Don't fill item level holds that contravene the hold pickup policy at this time
-                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} } )
+                    && _checkHoldPolicy($item, $request) # Don't fill item level holds that contravene the hold pickup policy at this time
                     && ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                         || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
                   )
@@ -547,8 +576,7 @@ sub MapItemsToHoldRequests {
                     next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                     # Don't fill item level holds that contravene the hold pickup policy at this time
-                    next unless $item->{hold_fulfillment_policy} eq 'any'
-                        || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
+                    next unless _checkHoldPolicy($item, $request);
 
                     # If hold itemtype is set, item's itemtype must match
                     next unless ( !$request->{itemtype}
@@ -580,7 +608,7 @@ sub MapItemsToHoldRequests {
                 $holdingbranch ||= $branch;
                 foreach my $item (@$holding_branch_items) {
                     next if $pickup_branch ne $item->{homebranch};
-                    next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
+                    next unless _checkHoldPolicy($item, $request);
                     next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                     # Don't fill item level holds that contravene the hold pickup policy at this time
@@ -598,23 +626,18 @@ sub MapItemsToHoldRequests {
             }
 
             # Now try items from the least cost branch based on the transport cost matrix or StaticHoldsQueueWeight
-            unless ( $itemnumber ) {
+            unless ( $itemnumber || !$holdingbranch) {
                 foreach my $current_item ( @{ $items_by_branch{$holdingbranch} } ) {
-                    if ( $holdingbranch && ( $current_item->{holdallowed} == 2 || $request->{borrowerbranch} eq $current_item->{homebranch} ) ) {
+                    next unless _checkHoldPolicy($current_item, $request); # Don't fill item level holds that contravene the hold pickup policy at this time
 
-                        # Don't fill item level holds that contravene the hold pickup policy at this time
-                        next unless $current_item->{hold_fulfillment_policy} eq 'any'
-                            || $request->{branchcode} eq $current_item->{ $current_item->{hold_fulfillment_policy} };
+                    # If hold itemtype is set, item's itemtype must match
+                    next unless ( !$request->{itemtype}
+                        || $current_item->{itype} eq $request->{itemtype} );
 
-                        # If hold itemtype is set, item's itemtype must match
-                        next unless ( !$request->{itemtype}
-                            || $current_item->{itype} eq $request->{itemtype} );
+                    next unless $items_by_itemnumber{ $current_item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
-                        next unless $items_by_itemnumber{ $current_item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
-
-                        $itemnumber = $current_item->{itemnumber};
-                        last; # quit this loop as soon as we have a suitable item
-                    }
+                    $itemnumber = $current_item->{itemnumber};
+                    last; # quit this loop as soon as we have a suitable item
                 }
             }
 
@@ -626,11 +649,8 @@ sub MapItemsToHoldRequests {
                       or next;
 
                     foreach my $item (@$holding_branch_items) {
-                        next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
-
                         # Don't fill item level holds that contravene the hold pickup policy at this time
-                        next unless $item->{hold_fulfillment_policy} eq 'any'
-                            || $request->{branchcode} eq $item->{ $item->{hold_fulfillment_policy} };
+                        next unless _checkHoldPolicy($item, $request);
 
                         # If hold itemtype is set, item's itemtype must match
                         next unless ( !$request->{itemtype}
