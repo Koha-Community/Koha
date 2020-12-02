@@ -819,10 +819,10 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             return "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=" + oObj.borrowernumber + "'>"
-                                + oObj.borrower.firstname.escapeHtml()
+                                + ( oObj.borrower.firstname ? oObj.borrower.firstname.escapeHtml() : "" )
                                 + " " +
-                                oObj.borrower.surname.escapeHtml()
-                                + " (" + oObj.borrower.cardnumber.escapeHtml() + ")</a>"
+                                ( oObj.borrower.surname ? oObj.borrower.surname.escapeHtml() : "" )
+                                + " (" + ( oObj.borrower.cardnumber ? oObj.borrower.cardnumber.escapeHtml() : "" ) + ")</a>"
                         }
                     },
                 ],
