@@ -89,8 +89,8 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
-    my $today         = dt_from_string;
-    my $plugin_action = 'create';
+    my $today  = dt_from_string;
+    my $action = 'create';
 
     unless ( $self->in_storage ) { #AddItem
         unless ( $self->permanent_location ) {
@@ -114,12 +114,9 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-        logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
-          if $log_action && C4::Context->preference("CataloguingLog");
-
     } else { # ModItem
 
-        $plugin_action = 'modify';
+        $action = 'modify';
 
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
@@ -186,8 +183,6 @@ sub store {
             $self->_set_found_trigger($pre_mod_item);
         }
 
-        logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
-          if $log_action && C4::Context->preference("CataloguingLog");
     }
 
     unless ( $self->dateaccessioned ) {
@@ -195,10 +190,15 @@ sub store {
     }
 
     my $result = $self->SUPER::store;
+    if ( $log_action && C4::Context->preference("CataloguingLog") ) {
+        $action eq 'create'
+          ? logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
+          : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper( $self->unblessed ) );
+    }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
-    $self->get_from_storage->_after_item_action_hooks({ action => $plugin_action });
+    $self->get_from_storage->_after_item_action_hooks({ action => $action });
 
     return $result;
 }
