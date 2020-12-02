@@ -16,10 +16,10 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-    [% IF ( uploadimage ) %]
-        <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a> &rsaquo; Upload results
-    [% ELSE %]
-        Upload local cover image
+    <a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a>
+    [% IF ( uploadimage ) %] &rsaquo; Upload results
+    [% ELSIF itemnumber %] &rsaquo; Upload cover for itemnumber: [% itemnumber | html %]
+    [% ELSIF biblionumber %] &rsaquo; Upload cover for biblionumber: [% biblionumber | html %]
     [% END %]
 </div>
 
@@ -28,10 +28,8 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                <h1>Upload local cover image</h1>
-
                 [% IF ( uploadimage ) %]
-                    <p>Image upload results :</p>
+                    <h1>Image upload results :</h1>
                     <ul>
                         <li>[% total | html %] images found</li>
                         [% IF ( error ) %]
@@ -58,8 +56,21 @@
                     </ul>
                     <hr />
                 [% END # /IF uploadimage %]
+
+                [% UNLESS itemnumber || biblionumber %]
+                    <h1>Upload local cover image</h1>
+                [% ELSIF itemnumber %]
+                    <h1>Upload local cover image for itemnumber: [% itemnumber | html %]</h1>
+                [% ELSIF biblionumber %]
+                    <h1>Upload local cover image for biblionumber: [% biblionumber | html %]</h1>
+                [% END %]
+
                 <ul>
-                    <li>Select an image file or ZIP file to upload. The tool will accept images in GIF, JPEG, PNG, and XPM formats.</li>
+                    [% UNLESS itemnumber || biblionumber %]
+                        <li>Select an image file or ZIP file to upload. The tool will accept images in GIF, JPEG, PNG, and XPM formats.</li>
+                    [% ELSE %]
+                        <li>Select an image file to upload. The tool will accept images in GIF, JPEG, PNG, and XPM formats.</li>
+                    [% END %]
                 </ul>
 
                 <form method="post" action="/cgi-bin/koha/tools/upload-cover-image.pl" id="uploadfile" enctype="multipart/form-data">
@@ -88,15 +99,13 @@
                 </form> <!-- /#uploadfile -->
 
                 <form method="post" id="processfile" action="/cgi-bin/koha/tools/upload-cover-image.pl" enctype="multipart/form-data">
-                    <fieldset class="rows">
-                        <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
-                        <input type="hidden" name="runinbackground" id="runinbackground" value="" />
-                        <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-                    </fieldset>
-                    <fieldset class="rows">
-                        <legend>File type</legend>
-                        <ol>
-                            [% UNLESS itemnumber %]
+                    <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+                    <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+                    <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+                    [% UNLESS itemnumber || biblionumber %]
+                        <fieldset class="rows">
+                            <legend>File type</legend>
+                            <ol>
                                 <li class="radio">
                                     [% IF (filetype != 'image' ) %]
                                         <input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" />
@@ -122,13 +131,15 @@
                                     <label for="biblionumber">Enter cover biblionumber: </label>
                                     <input type="text" id="biblionumber" name="biblionumber" value="[% biblionumber | html %]" size="15" /></span>
                                 </li>
-                            [% ELSE %]
-                                <label for="itemnumber">Cover itemnumber: </label>
-                                <input type="text" id="itemnumber" name="itemnumber" value="[% itemnumber | html %]" size="15" readonly="readonly" />
-                                <input type="hidden" name="filetype" value="image" />
-                            [% END %]
-                        </ol>
-                    </fieldset>
+                            </ol>
+                        </fieldset>
+                    [% ELSIF itemnumber %]
+                        <input type="hidden" id="itemnumber" name="itemnumber" value="[% itemnumber | html %]" />
+                        <input type="hidden" name="filetype" value="image" />
+                    [% ELSIF biblionumber %]
+                        <input type="hidden" id="biblionumber" name="biblionumber" value="[% biblionumber | html %]" />
+                        <input type="hidden" name="filetype" value="image" />
+                    [% END %]
                     <fieldset class="rows">
                         <legend>Options</legend>
                         <ol>
