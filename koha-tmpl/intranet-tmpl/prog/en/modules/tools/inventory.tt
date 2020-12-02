@@ -397,16 +397,15 @@
                 return false;
             });
 
-            var checkboxes = $("#inventoryt input:checkbox");
             $(".checkall").click(function(e){
                 e.preventDefault();
-                checkboxes.each(function(){
+                $("#inventoryt input:checkbox").each(function(){
                     $(this).prop("checked", true);
                 });
             });
             $(".clearall").click(function(e){
                 e.preventDefault();
-                checkboxes.each(function(){
+                $("#inventoryt input:checkbox").each(function(){
                     $(this).prop("checked", false);
                 });
             });
