@@ -64,7 +64,8 @@ my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
 
 subtest 'store' => sub {
-    plan tests => 4;
+    plan tests => 5;
+
     my $biblio = $builder->build_sample_biblio;
     my $today = dt_from_string->set( hour => 0, minute => 0, second => 0 );
     my $item = Koha::Item->new(
@@ -82,6 +83,46 @@ subtest 'store' => sub {
     is( $item->itype, $biblio->biblioitem->itemtype, 'items.itype must have been set to biblioitem.itemtype is not given');
     is( $item->permanent_location, $item->location, 'permanent_location must have been set to location if not given' );
     $item->delete;
+
+    subtest 'log_action' => sub {
+        plan tests => 2;
+        t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
+
+        my $item = Koha::Item->new(
+            {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblio->biblionumber,
+                location      => 'my_loc',
+            }
+        )->store;
+        is(
+            Koha::ActionLogs->search(
+                {
+                    module => 'CATALOGUING',
+                    action => 'ADD',
+                    object => $item->itemnumber,
+                    info   => 'item'
+                }
+            )->count,
+            1,
+            "Item creation logged"
+        );
+
+        $item->location('another_loc')->store;
+        is(
+            Koha::ActionLogs->search(
+                {
+                    module => 'CATALOGUING',
+                    action => 'MODIFY',
+                    object => $item->itemnumber
+                }
+            )->count,
+            1,
+            "Item modification logged"
+        );
+        $item->delete;
+    };
 };
 
 subtest 'get_transfer' => sub {
