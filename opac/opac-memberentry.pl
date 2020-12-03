@@ -93,12 +93,15 @@ if ( defined $min ) {
      );
  }
 
+my $defaultCategory = Koha::Patron::Categories->find(C4::Context->preference('PatronSelfRegistrationDefaultCategory'));
+
 $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, $action ),
     mandatory         => $mandatory,
     libraries         => \@libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
+    defaultCategory  => $defaultCategory,
 );
 
 my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
@@ -476,7 +479,7 @@ sub CheckForInvalidFields {
         push( @invalidFields, "password_match" );
     }
     if ( $borrower->{'password'} ) {
-        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $borrower->{password}, Koha::Patron::Categories->find($borrower->{categorycode}) );
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $borrower->{password}, Koha::Patron::Categories->find($borrower->{categorycode}||C4::Context->preference('PatronSelfRegistrationDefaultCategory')) );
           unless ( $is_valid ) {
               push @invalidFields, 'password_too_short' if $error eq 'too_short';
               push @invalidFields, 'password_too_weak' if $error eq 'too_weak';
