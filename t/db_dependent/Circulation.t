@@ -695,6 +695,9 @@ subtest "CanBookBeRenewed tests" => sub {
         }
     );
 
+    # Make sure fine calculation isn't skipped when adding renewal
+    t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
+
     t::lib::Mocks::mock_preference('RenewalLog', 0);
     my $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     my %params_renewal = (
