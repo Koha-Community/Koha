@@ -220,9 +220,10 @@ elsif ( $step && $step == 3 ) {
 
     my $op = $query->param('op');
     if ( $op && $op eq 'finished' ) {
-        #
+        # Remove the HandleError set at the beginning of the installer process
+        C4::Context->dbh->disconnect;
+
         # we have finished, just redirect to mainpage.
-        #
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
         exit;
     }

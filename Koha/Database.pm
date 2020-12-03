@@ -110,17 +110,19 @@ sub _new_schema {
 
     my $dbh = $schema->storage->dbh;
     eval {
+        my $HandleError = $dbh->{HandleError};
         if ( $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} ) {
-            $dbh->{RaiseError} = 0;
-            $dbh->{PrintError} = 0;
+            $dbh->{HandleError} = sub { return 1 };
         }
         $dbh->do(q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
-        $dbh->{RaiseError} = 1;
-        $dbh->{PrintError} = 1;
+        $dbh->{HandleError} = $HandleError;
     };
-    $dbh->{RaiseError} = 0 if $@;
+
+    if ( $@ ) {
+        $dbh->{HandleError} = sub { warn $_[0]; return 1 };
+    }
 
     return $schema;
 }
