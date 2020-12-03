@@ -48,7 +48,15 @@
                 </div>
                 [% IF ( CAN_user_tools_upload_local_cover_images ) %]
                     <hr />
-                    <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                    <p>
+                        [% IF itemnumber %]
+                            Upload an image file for this item:
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% itemnumber | uri %]&amp;filetype=image">
+                        [% ELSE %]
+                            Upload an image file for this bibliographic record:
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image">
+                        [% END %]
+                        <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
                     </p>
                 [% END %]
             </div>
