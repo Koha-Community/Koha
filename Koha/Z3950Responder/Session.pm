@@ -294,8 +294,6 @@ sub add_item_status {
         push @statuses, $status_strings->{ON_HOLD};
     }
 
-    $field->delete_subfield( code => $itemnumber_subfield );
-
     if ( $server->{add_status_multi_subfield} ) {
         $field->add_subfields( map { ( $add_subfield, $_ ) } ( @statuses ? @statuses : $status_strings->{AVAILABLE} ) );
     } else {
