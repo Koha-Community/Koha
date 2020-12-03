@@ -110,24 +110,30 @@ $(document).ready(function() {
                 exempt_fine:    $("#exemptfine").is(':checked')
             };
 
-            $.post( "/cgi-bin/koha/svc/checkin", params, function( data ) {
-                id = "#checkin_" + data.itemnumber;
+            $.post({
+                url: "/cgi-bin/koha/svc/checkin",
+                data: params,
+                success: function( data ) {
+                    id = "#checkin_" + data.itemnumber;
 
-                content = "";
-                if ( data.returned ) {
-                    content = __("Checked in");
-                    $(id).parent().parent().addClass('ok');
-                    $('#date_due_' + data.itemnumber).html( __("Checked in") );
-                    if ( data.patronnote != null ) {
-                        $('.patron_note_' + data.itemnumber).html( __("Patron note") + ": " + data.patronnote);
+                    content = "";
+                    if ( data.returned ) {
+                        content = __("Checked in");
+                        $(id).parent().parent().addClass('ok');
+                        $('#date_due_' + data.itemnumber).html( __("Checked in") );
+                        if ( data.patronnote != null ) {
+                            $('.patron_note_' + data.itemnumber).html( __("Patron note") + ": " + data.patronnote);
+                        }
+                    } else {
+                        content = __("Unable to check in");
+                        $(id).parent().parent().addClass('warn');
                     }
-                } else {
-                    content = __("Unable to check in");
-                    $(id).parent().parent().addClass('warn');
-                }
 
-                $(id).replaceWith( content );
-            }, "json")
+                    $(id).replaceWith( content );
+                },
+                dataType: "json",
+                async: false,
+            });
         });
 
         $(".confirm:checked:visible").each(function() {
@@ -170,36 +176,42 @@ $(document).ready(function() {
                 params.date_due = dueDate
             }
 
-            $.post( "/cgi-bin/koha/svc/renew", params, function( data ) {
-                var id = "#renew_" + data.itemnumber;
+            $.post({
+                url: "/cgi-bin/koha/svc/renew",
+                data: params,
+                success: function( data ) {
+                    var id = "#renew_" + data.itemnumber;
 
-                var content = "";
-                if ( data.renew_okay ) {
-                    content = __("Renewed, due:") + " " + data.date_due;
-                    $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
-                } else {
-                    content = __("Renew failed:") + " ";
-                    if ( data.error == "no_checkout" ) {
-                        content += __("not checked out");
-                    } else if ( data.error == "too_many" ) {
-                        content += __("too many renewals");
-                    } else if ( data.error == "too_unseen" ) {
-                        content += __("too many consecutive renewals without being seen by the library");
-                    } else if ( data.error == "on_reserve" ) {
-                        content += __("on hold");
-                    } else if ( data.error == "restriction" ) {
-                        content += __("Not allowed: patron restricted");
-                    } else if ( data.error == "overdue" ) {
-                        content += __("Not allowed: overdue");
-                    } else if ( data.error ) {
-                        content += data.error;
+                    var content = "";
+                    if ( data.renew_okay ) {
+                        content = __("Renewed, due:") + " " + data.date_due;
+                        $('#date_due_' + data.itemnumber).replaceWith( data.date_due );
                     } else {
-                        content += __("reason unknown");
+                        content = __("Renew failed:") + " ";
+                        if ( data.error == "no_checkout" ) {
+                            content += __("not checked out");
+                        } else if ( data.error == "too_many" ) {
+                            content += __("too many renewals");
+                        } else if ( data.error == "too_unseen" ) {
+                            content += __("too many consecutive renewals without being seen by the library");
+                        } else if ( data.error == "on_reserve" ) {
+                            content += __("on hold");
+                        } else if ( data.error == "restriction" ) {
+                            content += __("Not allowed: patron restricted");
+                        } else if ( data.error == "overdue" ) {
+                            content += __("Not allowed: overdue");
+                        } else if ( data.error ) {
+                            content += data.error;
+                        } else {
+                            content += __("reason unknown");
+                        }
                     }
-                }
 
-                $(id).replaceWith( content );
-            }, "json")
+                    $(id).replaceWith( content );
+            },
+            dataType: "json",
+            async: false,
+            });
         });
 
         // Refocus on barcode field if it exists
