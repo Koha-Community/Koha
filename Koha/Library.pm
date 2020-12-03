@@ -171,6 +171,9 @@ Return if given library is a valid hold group member
 
 sub validate_hold_sibling {
     my ( $self, $params ) = @_;
+
+    return 1 if $params->{branchcode} eq $self->id;
+
     my @hold_libraries = $self->get_hold_libraries;
 
     foreach (@hold_libraries) {

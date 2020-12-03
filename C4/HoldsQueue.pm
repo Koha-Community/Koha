@@ -383,12 +383,12 @@ sub _checkHoldPolicy {
     my $hold_fulfillment_policy = $item->{hold_fulfillment_policy};
 
     return 0 if $hold_fulfillment_policy eq 'holdgroup' && !$library->validate_hold_sibling({branchcode => $request->{branchcode}});
-    return 0 if $hold_fulfillment_policy eq 'homebranch' && $request->{branchcode} ne $item->$hold_fulfillment_policy;
-    return 0 if $hold_fulfillment_policy eq 'holdingbranch' && $request->{branchcode} ne $item->$hold_fulfillment_policy;
+    return 0 if $hold_fulfillment_policy eq 'homebranch' && $request->{branchcode} ne $item->{$hold_fulfillment_policy};
+    return 0 if $hold_fulfillment_policy eq 'holdingbranch' && $request->{branchcode} ne $item->{$hold_fulfillment_policy};
 
     my $patronLibrary = Koha::Libraries->find($request->{borrowerbranch});
 
-    return 0 if $hold_fulfillment_policy eq 'patrongroup' && !patronLibrary->validate_hold_sibling({branchcode => $request->{branchcode}});
+    return 0 if $hold_fulfillment_policy eq 'patrongroup' && !$patronLibrary->validate_hold_sibling({branchcode => $request->{branchcode}});
 
     return 1;
 
