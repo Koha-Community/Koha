@@ -33,7 +33,7 @@ Koha::Items - Koha Item object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -50,7 +50,35 @@ sub filter_by_for_loan {
     return $self->search( { notforloan => [ 0, undef ] } );
 }
 
-=head3 type
+=head3 filter_by_visible_in_opac
+
+    my $filered_items = $items->filter_by_visible_in_opac({ rules => $rules });
+
+Returns a new resultset, containing those items that are not expected to be hidden in OPAC.
+If no I<rules> are passed, it returns the whole resultset, with the only caveat that the
+I<hidelostitems> system preference is honoured.
+
+=cut
+
+sub filter_by_visible_in_opac {
+    my ($self, $params) = @_;
+
+    my $rules = $params->{rules} // {};
+
+    my $search_params;
+    foreach my $field (keys %$rules){
+        $search_params->{$field}->{'-not_in'} = $rules->{$field};
+    }
+
+    $search_params->{itemlost}->{'<='} = 0
+        if C4::Context->preference('hidelostitems');
+
+    return $self->search( $search_params );
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
