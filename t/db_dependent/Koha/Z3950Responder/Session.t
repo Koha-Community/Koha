@@ -17,7 +17,7 @@ $schema->storage->txn_begin;
 
 subtest 'add_item_status' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     ## FIRST ITEM HAS ALL THE STATUSES ##
     my $item_1 = $builder->build({
@@ -30,8 +30,9 @@ subtest 'add_item_status' => sub {
             withdrawn => 1,
         }
     });
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
     my $item_marc_1 = C4::Items::GetMarcItem( $item_1->{biblionumber}, $item_1->{itemnumber} );
-    my $item_field_1 = scalar $item_marc_1->field('952');
+    my $item_field_1 = scalar $item_marc_1->field($itemtag);
     $builder->build({ source => 'Reserve', value=> { itemnumber => $item_1->{itemnumber} } });
     $builder->build({ source => 'Branchtransfer', value=> { itemnumber => $item_1->{itemnumber}, datearrived => undef } });
     ## END FIRST ITEM ##
@@ -48,8 +49,8 @@ subtest 'add_item_status' => sub {
         }
     });
     my $item_marc_2 = C4::Items::GetMarcItem( $item_2->{biblionumber}, $item_2->{itemnumber} );
-    my $item_field_2 = scalar $item_marc_2->field('952');
-    ## END SECOND ITEM ##
+    my $item_field_2 = scalar $item_marc_2->field($itemtag);
+   ## END SECOND ITEM ##
 
     # Create the responder
     my $args={ PEER_NAME => 'PEER'};
@@ -61,6 +62,8 @@ subtest 'add_item_status' => sub {
 
     $args->{HANDLE}->add_item_status($item_field_2);
     is($item_field_2->subfield('k'),'Available',"Available status added as expected");
+
+    is($item_field_2->subfield( $itemsubfield ), $item_2->{itemnumber}, "Itemnumber not removed when status added");
 
 };
 
