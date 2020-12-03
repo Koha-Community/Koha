@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 use Test::Exception;
 
 use C4::Circulation;
@@ -175,3 +175,111 @@ is( Koha::Items->search->count, $nb_of_items + 1, 'Delete should have deleted th
 
 $schema->storage->txn_rollback;
 
+subtest 'filter_by_visible_in_opac() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    # have a fresh biblio
+    my $biblio = $builder->build_sample_biblio;
+    # have two itemtypes
+    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    # have 5 items on that biblio
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => -1,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 1
+        }
+    );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 2
+        }
+    );
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 1,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 3
+        }
+    );
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 4
+        }
+    );
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => undef,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5
+        }
+    );
+
+    my $rules = {};
+
+    t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
+    is( $biblio->items->filter_by_visible_in_opac->count,
+        5, 'No rules passed, hidelostitems unset' );
+
+    t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        4,
+        'No rules passed, hidelostitems set'
+    );
+
+    $rules = { withdrawn => [ 1, 2 ] };
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        2,
+        'Rules on withdrawn, hidelostitems set'
+    );
+
+    $rules = { itype => [ $itype_1->itemtype ] };
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        2,
+        'Rules on itype, hidelostitems set'
+    );
+
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ] };
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        1,
+        'Rules on itype and withdrawn, hidelostitems set'
+    );
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )
+          ->next->itemnumber,
+        $item_4->itemnumber,
+        'The right item is returned'
+    );
+
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ] };
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        1,
+        'Rules on itype and withdrawn, hidelostitems set'
+    );
+    is(
+        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )
+          ->next->itemnumber,
+        $item_5->itemnumber,
+        'The right item is returned'
+    );
+
+    $schema->storage->txn_rollback;
+};
