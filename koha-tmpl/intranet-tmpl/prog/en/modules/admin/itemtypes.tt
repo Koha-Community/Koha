@@ -381,6 +381,15 @@ Item types &rsaquo; Administration &rsaquo; Koha
                     <span class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</span>
                 </li>
                 <li>
+                    <label for="automatic_checkin">Automatic checkin: </label>
+                        [% IF itemtype.automatic_checkin %]
+                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" checked="checked" value="1" />
+                        [% ELSE %]
+                            <input type="checkbox" id="automatic_checkin" name="automatic_checkin" value="1" />
+                        [% END %]
+                        <span class="hint">If checked, items will be checked in automatically after a period of time. Useful for materials where you really don't care for fisical return, like museum passes, etc.</span>
+                </li>
+                <li>
                     <label for="summary">Summary: </label>
                    <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>
                     <p>Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </p>

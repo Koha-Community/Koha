@@ -99,6 +99,7 @@ if ( $op eq 'add_form' ) {
     my $searchcategory = $input->param('searchcategory');
     my $rentalcharge_daily_calendar  = $input->param('rentalcharge_daily_calendar') // 0;
     my $rentalcharge_hourly_calendar = $input->param('rentalcharge_hourly_calendar') // 0;
+    my $automatic_checkin = $input->param('automatic_checkin') // 0;
 
     if ( $itemtype and $is_a_modif ) {    # it's a modification
         $itemtype->description($description);
@@ -118,6 +119,7 @@ if ( $op eq 'add_form' ) {
         $itemtype->searchcategory($searchcategory);
         $itemtype->rentalcharge_daily_calendar($rentalcharge_daily_calendar);
         $itemtype->rentalcharge_hourly_calendar($rentalcharge_hourly_calendar);
+        $itemtype->automatic_checkin($automatic_checkin);
 
         eval {
           $itemtype->store;
@@ -150,6 +152,7 @@ if ( $op eq 'add_form' ) {
                 searchcategory      => $searchcategory,
                 rentalcharge_daily_calendar  => $rentalcharge_daily_calendar,
                 rentalcharge_hourly_calendar => $rentalcharge_hourly_calendar,
+                automatic_checkin   => $automatic_checkin,
             }
         );
         eval {

@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context;
+use C4::Circulation;
 use Koha::Checkout;
 use Koha::Database;
 use Koha::DateUtils;
@@ -60,6 +61,33 @@ sub calculate_dropbox_date {
     my $dropbox_date = $calendar->addDuration( $today, -1 );
 
     return $dropbox_date;
+}
+
+=head3 automatic_checkin
+
+my $automatic_checkins = Koha::Checkouts->automatic_checkin()
+
+Checks in every due issue which itemtype has automatic_checkin enabled
+
+=cut
+
+sub automatic_checkin {
+    my ($self, $params) = @_;
+
+    my $current_date = dt_from_string;
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $due_checkouts = $self->search(
+        { date_due => { '<=' => $dtf->format_datetime($current_date) } },
+        { prefetch => 'item'}
+    );
+
+    while(my $checkout = $due_checkouts->next) {
+        if($checkout->item->itemtype->automatic_checkin) {
+            C4::Circulation::AddReturn($checkout->item->barcode, $checkout->branchcode);
+        }
+    }
+
 }
 
 =head3 type
