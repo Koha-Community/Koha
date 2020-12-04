@@ -70,7 +70,7 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
     m/priority/ and $show_priority = 1;
 }
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber, { prefetch => ['categorycode'] } );
 my $category = $patron->category;
 # no OpacHiddenItems rules used if category is excepted
 my $item_hide_rules =
@@ -88,7 +88,7 @@ unless ( $can_place_hold_if_available_at_pickup ) {
 }
 
 # check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
-if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
+if ( $category->effective_BlockExpiredPatronOpacActions ) {
 
     if ( $patron->is_expired ) {
 
@@ -100,7 +100,7 @@ if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 }
 
 # Pass through any reserve charge
-my $reservefee = $patron->category->reservefee;
+my $reservefee = $category->reservefee;
 if ( $reservefee > 0){
     $template->param( RESERVE_CHARGE => $reservefee);
 }
