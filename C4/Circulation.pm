@@ -62,6 +62,7 @@ use Koha::Charges::Fees;
 use Koha::Config::SysPref;
 use Koha::Checkouts::ReturnClaims;
 use Koha::SearchEngine::Indexer;
+use Koha::Exceptions::Checkout;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -3039,6 +3040,11 @@ sub AddRenewal {
         );
 
         $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $borrowernumber, $itemnumber );
+        if ( $sth->err ){
+            Koha::Exceptions::Checkout::FailedRenewal->throw(
+                error => 'Update of issue# ' . $issue->issue_id . ' failed with error: ' . $sth->errstr
+            );
+        }
 
         # Update the renewal count on the item, and tell zebra to reindex
         $renews = ( $item_object->renewals || 0 ) + 1;
