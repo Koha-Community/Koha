@@ -102,6 +102,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = $items;
         $dat->{HASAUTHORS}     = $dat->{'author'} || @$marcauthorsarray;
+        $dat->{HOSTITEMENTRIES} = $biblio->get_marc_host;
 
         $iso2709 .= $record->as_usmarc();
 

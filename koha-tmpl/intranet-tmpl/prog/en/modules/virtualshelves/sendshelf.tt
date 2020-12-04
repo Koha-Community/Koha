@@ -134,6 +134,16 @@ Your list: [% shelfname | $raw %]
                 LCCN: [% BIBLIO_RESULT.lccn | $raw %]
             </span><br/>
             [% END %]
+
+            [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                    <span>Host item entry:
+                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
+                    </span>
+                    <br/>
+                [% END %]
+            [% END %]
+
             [% IF ( BIBLIO_RESULT.url ) %]
             <span>
                 URL: [% BIBLIO_RESULT.url | html %]

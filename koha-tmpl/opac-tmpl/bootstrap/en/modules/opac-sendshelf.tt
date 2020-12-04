@@ -135,6 +135,16 @@ Your list : [% shelfname | $raw %]
                 LCCN: [% BIBLIO_RESULT.lccn | $raw %]
             </span><br/>
             [% END %]
+
+            [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                    <span>Host item entry:
+                        <a href="[% OPACBaseURL | $raw %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
+                    </span>
+                    <br/>
+                [% END %]
+            [% END %]
+
             [% IF ( BIBLIO_RESULT.url ) %]
             <span>
                 URL: [% BIBLIO_RESULT.url | html %]
