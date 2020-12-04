@@ -60,6 +60,7 @@ use Koha::Charges::Fees;
 use Koha::Config::SysPref;
 use Koha::Checkouts::ReturnClaims;
 use Koha::SearchEngine::Indexer;
+use Koha::Exceptions::Checkout;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -2970,12 +2971,16 @@ sub AddRenewal {
         # Update the issues record to have the new due date, and a new count
         # of how many times it has been renewed.
         my $renews = ( $issue->renewals || 0 ) + 1;
-        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
-                                WHERE borrowernumber=?
-                                AND itemnumber=?"
-        );
+        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ? WHERE issue_id = ?");
 
-        $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
+        eval{
+            $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $issue->issue_id );
+        };
+        if( $sth->err ){
+            Koha::Exceptions::Checkout::FailedRenewal->throw(
+                error => 'Update of issue# ' . $issue->issue_id . ' failed with error: ' . $sth->errstr
+            );
+        }
 
         # Update the renewal count on the item, and tell zebra to reindex
         $renews = ( $item_object->renewals || 0 ) + 1;
