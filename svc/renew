@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use CGI;
 use JSON qw(to_json);
+use Try::Tiny;
 
 use C4::Circulation;
 use C4::Context;
@@ -67,8 +68,16 @@ if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference
 }
 
 if ( $data->{renew_okay} ) {
-    $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due, undef, undef, $seen );
-    $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
+    try{
+        $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due, undef, undef, $seen );
+        $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::Checkout::FailedRenewal' ) {
+            $data->{error} = 'renewal_failed';
+        } else {
+            $_->rethrow;
+        }
+    };
 }
 
 print to_json($data);
