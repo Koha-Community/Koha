@@ -71,6 +71,12 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
 }
 
 my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+# no OpacHiddenItems rules used if category is excepted
+my $item_hide_rules =
+    ( $category->override_hidden_items )
+    ? {}
+    : C4::Context->yaml_preference('OpacHiddenItems');
 
 my $can_place_hold_if_available_at_pickup = C4::Context->preference('OPACHoldsIfAvailableAtPickup');
 unless ( $can_place_hold_if_available_at_pickup ) {
@@ -460,6 +466,12 @@ foreach my $biblioNum (@biblionumbers) {
 
     my @notforloan_avs = Koha::AuthorisedValues->search_by_koha_field({ kohafield => 'items.notforloan', frameworkcode => $frameworkcode });
     my $notforloan_label_of = { map { $_->authorised_value => $_->opac_description } @notforloan_avs };
+
+    my $visible_items = { map { $_->itemnumber => 1 } $biblio->items->filter_by_visible_in_opac( { rules => $item_hide_rules } ) };
+
+    # Only keep the items that are visible in the opac (i.e. those in %visible_items)
+    # FIXME: We should get rid of itemInfos altogether and use $visible_items
+    $biblioData->{itemInfos} = [ grep { $visible_items->{ $_->{itemnumber} } } @{ $biblioData->{itemInfos} } ];
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
