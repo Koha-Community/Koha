@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Circulation;
 use Koha::Checkouts;
@@ -32,30 +32,43 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder         = t::lib::TestBuilder->new;
-my $library         = $builder->build( { source => 'Branch' } );
-my $patron          = $builder->build( { source => 'Borrower', value => { branchcode => $library->{branchcode} } } );
+my $builder = t::lib::TestBuilder->new;
+my $library = $builder->build( { source => 'Branch' } );
+my $patron  = $builder->build(
+    { source => 'Borrower', value => { branchcode => $library->{branchcode} } }
+);
 my $item_1          = $builder->build_sample_item;
 my $item_2          = $builder->build_sample_item;
 my $nb_of_checkouts = Koha::Checkouts->search->count;
 my $new_checkout_1  = Koha::Checkout->new(
-    {   borrowernumber => $patron->{borrowernumber},
+    {
+        borrowernumber => $patron->{borrowernumber},
         itemnumber     => $item_1->itemnumber,
         branchcode     => $library->{branchcode},
     }
 )->store;
 my $new_checkout_2 = Koha::Checkout->new(
-    {   borrowernumber => $patron->{borrowernumber},
+    {
+        borrowernumber => $patron->{borrowernumber},
         itemnumber     => $item_2->itemnumber,
         branchcode     => $library->{branchcode},
     }
 )->store;
 
-like( $new_checkout_1->issue_id, qr|^\d+$|, 'Adding a new checkout should have set the issue_id' );
-is( Koha::Checkouts->search->count, $nb_of_checkouts + 2, 'The 2 checkouts should have been added' );
+like( $new_checkout_1->issue_id, qr|^\d+$|,
+    'Adding a new checkout should have set the issue_id' );
+is(
+    Koha::Checkouts->search->count,
+    $nb_of_checkouts + 2,
+    'The 2 checkouts should have been added'
+);
 
 my $retrieved_checkout_1 = Koha::Checkouts->find( $new_checkout_1->issue_id );
-is( $retrieved_checkout_1->itemnumber, $new_checkout_1->itemnumber, 'Find a checkout by id should return the correct checkout' );
+is(
+    $retrieved_checkout_1->itemnumber,
+    $new_checkout_1->itemnumber,
+    'Find a checkout by id should return the correct checkout'
+);
 
 subtest 'is_overdue' => sub {
     plan tests => 6;
@@ -91,17 +104,25 @@ subtest 'is_overdue' => sub {
 subtest 'item' => sub {
     plan tests => 2;
     my $item = $retrieved_checkout_1->item;
-    is( ref( $item ), 'Koha::Item', 'Koha::Checkout->item should return a Koha::Item' );
-    is( $item->itemnumber, $item_1->itemnumber, 'Koha::Checkout->item should return the correct item' );
+    is( ref($item), 'Koha::Item',
+        'Koha::Checkout->item should return a Koha::Item' );
+    is( $item->itemnumber, $item_1->itemnumber,
+        'Koha::Checkout->item should return the correct item' );
 };
 
 subtest 'patron' => sub {
     plan tests => 3;
-    my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->{branchcode} }
+        }
+    );
 
-    my $item = $builder->build_sample_item;
+    my $item     = $builder->build_sample_item;
     my $checkout = Koha::Checkout->new(
-        {   borrowernumber => $patron->borrowernumber,
+        {
+            borrowernumber => $patron->borrowernumber,
             itemnumber     => $item->itemnumber,
             branchcode     => $library->{branchcode},
         }
@@ -115,29 +136,46 @@ subtest 'patron' => sub {
 
     # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
-    C4::Circulation::MarkIssueReturned( $p->borrowernumber, $checkout->itemnumber );
+    C4::Circulation::MarkIssueReturned( $p->borrowernumber,
+        $checkout->itemnumber );
     $p->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
     is( $old_issue->patron, undef,
-        'Koha::Checkout->patron should return undef if the patron record has been deleted'
+'Koha::Checkout->patron should return undef if the patron record has been deleted'
     );
 };
 
 $retrieved_checkout_1->delete;
-is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
+is(
+    Koha::Checkouts->search->count,
+    $nb_of_checkouts + 1,
+    'Delete should have deleted the checkout'
+);
 
 subtest 'issuer' => sub {
     plan tests => 3;
-    my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
-    my $issuer = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->{branchcode} }
+        }
+    );
+    my $issuer = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->{branchcode} }
+        }
+    );
 
-    my $item = $builder->build_sample_item;
-    my $checkout = Koha::Checkout->new({
-        borrowernumber => $patron->borrowernumber,
-        issuer_id      => $issuer->borrowernumber,
-        itemnumber     => $item->itemnumber,
-        branchcode     => $library->{branchcode},
-    })->store;
+    my $item     = $builder->build_sample_item;
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            issuer_id      => $issuer->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branchcode     => $library->{branchcode},
+        }
+    )->store;
 
     my $i = $checkout->issuer;
     is( ref($i), 'Koha::Patron',
@@ -147,11 +185,12 @@ subtest 'issuer' => sub {
 
     # Testing Koha::Old::Checkout->patron now
     my $issue_id = $checkout->issue_id;
-    C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $checkout->itemnumber );
+    C4::Circulation::MarkIssueReturned( $patron->borrowernumber,
+        $checkout->itemnumber );
     $i->delete;
     my $old_issue = Koha::Old::Checkouts->find($issue_id);
     is( $old_issue->issuer_id, undef,
-        'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
+'Koha::Checkout->issuer_id should return undef if the patron record has been deleted'
     );
 
 };
@@ -222,3 +261,82 @@ subtest 'Koha::Old::Checkouts->filter_by_todays_checkins' => sub {
 
 $schema->storage->txn_rollback;
 
+subtest 'automatic_checkin' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $due_ac_item =
+      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+    my $ac_item =
+      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+    my $normal_item =
+      $builder->build_sample_item( { homebranch => $patron->branchcode } );
+
+    $due_ac_item->itemtype->automatic_checkin(1)->store;
+    $ac_item->itemtype->automatic_checkin(1)->store;
+    $normal_item->itemtype->automatic_checkin(0)->store;
+
+    my $current_date = dt_from_string;
+
+    # due checkout for automatic checkin
+    my $checkout_due_aci = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $due_ac_item->itemnumber,
+            branchcode     => $patron->branchcode,
+            date_due       => $current_date,
+        }
+    )->store;
+
+    # in time checkout for automatic checkin
+    my $checkout_aci = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $ac_item->itemnumber,
+            branchcode     => $patron->branchcode,
+        }
+    )->store;
+
+    # due checkout for nomal itemtype
+    my $checkout_ni = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->borrowernumber,
+            itemnumber     => $normal_item->itemnumber,
+            branchcode     => $patron->branchcode,
+            date_due       => $current_date,
+        }
+    )->store;
+
+    my $searched = Koha::Checkouts->find( $checkout_ni->issue_id );
+    is( $searched->issue_id, $checkout_ni->issue_id,
+        'checkout for normal_item exists' );
+
+    $searched = Koha::Checkouts->find( $checkout_aci->issue_id );
+    is( $searched->issue_id, $checkout_aci->issue_id,
+        'checkout for ac_item exists' );
+
+    $searched = Koha::Checkouts->find( $checkout_due_aci->issue_id );
+    is(
+        $searched->issue_id,
+        $checkout_due_aci->issue_id,
+        'checkout for due_ac_item exists'
+    );
+
+    Koha::Checkouts->automatic_checkin;
+
+    $searched = Koha::Checkouts->find( $checkout_ni->issue_id );
+    is( $searched->issue_id, $checkout_ni->issue_id,
+        'checkout for normal_item still exists' );
+
+    $searched = Koha::Checkouts->find( $checkout_aci->issue_id );
+    is( $searched->issue_id, $checkout_aci->issue_id,
+        'checkout for ac_item still exists' );
+
+    $searched = Koha::Checkouts->find( $checkout_due_aci->issue_id );
+    is( $searched, undef, 'checkout for due_ac_item doesn\'t exist anymore' );
+
+    $schema->storage->txn_rollback;
+}
