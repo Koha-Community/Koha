@@ -26,7 +26,7 @@ sub get_barcode {
     my ($args) = @_;
     my $nextnum;
     # not the best, two catalogers could add the same barcode easily this way :/
-    my $query = "select max(abs(barcode)) from items";
+    my $query = "select max(cast(barcode as unsigned)) from items";
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     while (my ($count)= $sth->fetchrow_array) {
