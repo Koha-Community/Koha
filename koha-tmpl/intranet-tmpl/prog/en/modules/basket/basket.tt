@@ -219,6 +219,19 @@
                                         </tr>
                                     [% END %]
 
+                                    [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                        <tr>
+                                            <th scope="row">Host item entries</th>
+                                            <td>
+                                                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                    <p>
+                                                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
+                                                    </p>
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END %]
+
                                     <tr>
                                         <th scope="row">Location(s)</th>
                                         <td>
@@ -284,6 +297,13 @@
                                             </p>
                                             [% IF ( BIBLIO_RESULT.notes ) %]
                                                 <p>[% BIBLIO_RESULT.notes | html %]</p>
+                                            [% END %]
+                                            [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                    <p>Host item entry:
+                                                        [% INCLUDE 'biblio-title.inc' link = 1 biblio=entry %]
+                                                    </p>
+                                                [% END %]
                                             [% END %]
                                             <!-- COinS / Openurl -->
                                             <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>

@@ -236,6 +236,19 @@
                                             </tr>
                                         [% END %]
 
+                                        [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                            <tr>
+                                                <th scope="row">Host item entries</th>
+                                                <td>
+                                                    [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        <p>
+                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
+                                                        </p>
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+
                                         <tr>
                                             <th scope="row">Location(s) (Status)</th>
                                             <td>
@@ -293,6 +306,14 @@
                                                 <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
                                                 <span id="newtag[% BIBLIO_RESULT.biblionumber | html %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</span>
+                                                [% END %]
+
+                                                [% IF BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                    [% FOREACH entry IN BIBLIO_RESULT.HOSTITEMENTRIES %]
+                                                        <p>Host item entry:
+                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% entry.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=entry %]</a>
+                                                        </p>
+                                                    [% END %]
                                                 [% END %]
                                             </td>
                                             <td>[% BIBLIO_RESULT.author | html %]</td>

@@ -90,6 +90,7 @@ if ($to_address) {
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = $items;
         $dat->{HASAUTHORS}     = $dat->{'author'} || @$marcauthorsarray;
+        $dat->{HOSTITEMENTRIES} = $biblio->get_host_item_entries;
 
         $iso2709 .= $record->as_usmarc();
 
