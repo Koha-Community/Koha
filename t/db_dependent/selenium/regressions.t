@@ -70,10 +70,10 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
 
 subtest 'OPAC - Remove from cart' => sub {
     plan tests => 4;
-   
+
     # We need to prevent scrolling to prevent the floating toolbar from overlapping buttons we are testing
     my $window_size = $driver->get_window_size();
-    $driver->set_window_size(1920,1080);
+    $driver->set_window_size(1920,10800);
 
     $driver->get( $opac_base_url . "opac-search.pl?q=d" );
 
