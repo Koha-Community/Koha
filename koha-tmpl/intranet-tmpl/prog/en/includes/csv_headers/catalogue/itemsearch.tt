@@ -1,1 +1,34 @@
-[%- BLOCK -%]Title, Publication date, Publisher, Collection, Barcode, Call number, Home library, Current library, Shelving location, Item type, Inventory number, Not for loan status, Lost status, Withdrawn status, Checkouts[%- END -%]
+[%- USE raw -%]
+[%- USE Koha -%]
+[%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
+[%- BLOCK -%]
+"Title"
+[%- delimiter | $raw -%]
+"Publication date"
+[%- delimiter | $raw -%]
+"Publisher"
+[%- delimiter | $raw -%]
+"Collection"
+[%- delimiter | $raw -%]
+"Barcode"
+[%- delimiter | $raw -%]
+"Call number"
+[%- delimiter | $raw -%]
+"Home library"
+[%- delimiter | $raw -%]
+"Current library"
+[%- delimiter | $raw -%]
+"Shelving location"
+[%- delimiter | $raw -%]
+"Item type"
+[%- delimiter | $raw -%]
+"Inventory number"
+[%- delimiter | $raw -%]
+"Not for loan status"
+[%- delimiter | $raw -%]
+"Lost status"
+[%- delimiter | $raw -%]
+"Withdrawn status"
+[%- delimiter | $raw -%]
+"Checkouts"
+[%- END -%]

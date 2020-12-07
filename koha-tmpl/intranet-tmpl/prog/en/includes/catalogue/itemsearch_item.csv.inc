@@ -1,7 +1,37 @@
+[%- USE raw -%]
 [%- USE Branches -%]
 [%- USE Koha -%]
 [%- USE ItemTypes -%]
 [%- USE AuthorisedValues -%]
 [%- SET biblio = item.biblio -%]
 [%- SET biblioitem = item.biblioitem -%]
-"[% biblio.title | html %] [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %]by [% END %][% biblio.author | html %]", "[% (biblioitem.publicationyear || biblio.copyrightdate) | html %]", "[% biblioitem.publishercode | html %]", "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]", "[% item.barcode | html %]", "[% item.itemcallnumber | html %]", "[% Branches.GetName(item.homebranch) | html %]", "[% Branches.GetName(item.holdingbranch) | html %]", "[% AuthorisedValues.GetDescriptionByKohaField(frameworkcode => biblio.frameworkcode, kohafield => 'items.location', authorised_value => item.location) | html %]", "[% ItemTypes.GetDescription(item.itype) | html %]", "[% item.stocknumber | html %]", "[% AuthorisedValues.GetDescriptionByKohaField(frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | html %]","[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | html %]","[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | html %]", "[% (item.issues || 0) | html %]"
+[%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
+"[% biblio.title | replace('"', '""') | $raw %] [% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %]by [% END %][% biblio.author | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% (biblioitem.publicationyear || biblio.copyrightdate) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% biblioitem.publishercode | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% item.barcode | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% item.itemcallnumber | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% Branches.GetName(item.homebranch) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% Branches.GetName(item.holdingbranch) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% AuthorisedValues.GetDescriptionByKohaField(frameworkcode => biblio.frameworkcode, kohafield => 'items.location', authorised_value => item.location) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% ItemTypes.GetDescription(item.itype) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% item.stocknumber | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% AuthorisedValues.GetDescriptionByKohaField(frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
+"[% (item.issues || 0) | $raw %]"
