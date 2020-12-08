@@ -20,6 +20,8 @@ package C4::AuthoritiesMarc;
 
 use strict;
 use warnings;
+use MARC::Field;
+
 use C4::Context;
 use C4::Biblio qw( GetFrameworkCode GetMarcBiblio ModBiblio );
 use C4::Search qw( FindDuplicate new_record_from_zebra );
@@ -625,11 +627,15 @@ sub AddAuthority {
   }
 
     # Save record into auth_header, update 001
+    my $action;
     if (!$authid ) {
+        $action = 'create';
         # Save a blank record, get authid
         $dbh->do( "INSERT INTO auth_header (datecreated,marcxml) values (NOW(),?)", undef, '' );
         $authid = $dbh->last_insert_id( undef, undef, 'auth_header', 'authid' );
         logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
+    } else {
+        $action = 'modify';
     }
     # Insert/update the recordID in MARC record
     $record->delete_field( $record->field('001') );
@@ -639,6 +645,7 @@ sub AddAuthority {
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
     $indexer->index_records( $authid, "specialUpdate", "authorityserver", $record );
 
+    _after_authority_action_hooks({ action => $action, authority_id => $authid });
     return ( $authid );
 }
 
@@ -667,6 +674,8 @@ sub DelAuthority {
     logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::AUTHORITIES_INDEX });
     $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
+
+    _after_authority_action_hooks({ action => 'delete', authority_id => $authid });
 }
 
 =head2 ModAuthority
@@ -1583,6 +1592,17 @@ sub compare_fields {
     return 1;
 }
 
+
+=head2 _after_authority_action_hooks
+
+Helper method that takes care of calling all plugin hooks
+
+=cut
+
+sub _after_authority_action_hooks {
+    my ( $args ) = @_; # hash keys: action, authority_id
+    return Koha::Plugins->call( 'after_authority_action', $args );
+}
 
 END { }       # module clean-up code here (global destructor)
 
