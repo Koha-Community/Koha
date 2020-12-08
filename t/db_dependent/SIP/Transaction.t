@@ -243,9 +243,10 @@ subtest do_hold => sub {
 };
 
 subtest do_checkin => sub {
-    plan tests => 8;
+    plan tests => 11;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -291,6 +292,12 @@ subtest do_checkin => sub {
     is( $patron->checkouts->count, 1, 'Checkout should have been done successfully');
     $ci_transaction->do_checkin($library->branchcode, undef);
     is( $patron->checkouts->count, 0, 'Checkin should have been done successfully');
+
+    my $result  = $ci_transaction->do_checkin($library2->branchcode, undef);
+    is($ci_transaction->alert_type,'04',"Checkin of item no issued at another branch succeeds");
+    is_deeply($result,{ messages => { 'NotIssued' => $item->barcode, 'WasTransfered' => 1 } },"Messages show not issued and transferred");
+    is( $ci_transaction->item->destination_loc,$library->branchcode,"Item destination correctly set");
+
 };
 
 subtest checkin_lost => sub {
