@@ -1,5 +1,16 @@
 $(document).ready(function() {
 
+    var getLinks = function(row) {
+        if (row.links.length === 0) {
+            return false;
+        }
+        return row.links.map(function(link) {
+            return '<a href="' + link.url + '" target="_blank">' +
+                link.text +
+                '</a>';
+        });
+    };
+
     window.doSearch = function() {
         // In case the source doesn't supply data required for DT to calculate
         // pagination, we need to do it ourselves
@@ -51,9 +62,16 @@ $(document).ready(function() {
         // Here we store them
         var renders = {
             title: function(data, type, row) {
-                return row.url ?
-                    '<a href="'+row.url+'" target="_blank">'+row.title+'</a>' :
-                    row.title;
+                var links = getLinks(row);
+                if (links) {
+                    return row.title + ' - ' + links.join(', ');
+                } else if (row.url) {
+                    return '<a href="' + row.url  + '" target="_blank">' +
+                        row.title +
+                        '</a>';
+                } else {
+                    return row.title;
+                }
             },
             source: function(data, type, row) {
                 return row.opac_url ?
