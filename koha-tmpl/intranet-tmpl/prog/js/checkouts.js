@@ -559,7 +559,7 @@ $(document).ready(function() {
                         } else if ( ClaimReturnedLostValue ) {
                           content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                         } else {
-                          content = '<a class="btn btn-default btn-xs" disabled="disabled" title="Claim returned is disabled"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
+                          content = '<a class="btn btn-default btn-xs" disabled="disabled" title="ClaimReturnedLostValue is not set, this feature is disabled"><i class="fa fa-exclamation-circle"></i> ' + __("Claim returned") + '</a>';
                         }
                         return content;
                     }
