@@ -35,13 +35,17 @@ Koha::MarcSubfieldStructures - Koha MarcSubfieldStructure Object set class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
 sub _type {
     return 'MarcSubfieldStructure';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::MarcSubfieldStructure';

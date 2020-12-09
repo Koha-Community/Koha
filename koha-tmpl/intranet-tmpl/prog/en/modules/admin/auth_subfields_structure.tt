@@ -18,7 +18,6 @@
   [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a> &rsaquo;
   [% END %]
   [% IF ( delete_confirm ) %]Confirm deletion of subfield [% tagsubfield | html %]?[% END %]
-  [% IF ( delete_confirmed ) %]Data deleted[% END %]
   [% IF ( add_form ) %]
   [% IF ( use_heading_flags_p ) %]
   [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints[% END %]
@@ -111,7 +110,7 @@
                         <ol>
                             <li><label for="ohidden[% loo.row | html %]">Select to display or not:</label>
                                 <select name="ohidden" size="1" id="ohidden[% loo.row | html %]">
-                                    [%- IF ( loo.ohidden ==  0 ) -%]
+                                    [%- IF ( loo.hidden ==  0 ) -%]
                                     <option value= "0" selected="selected">Show all</option>
                                     <option value="1">Hide all</option>
                                     [%- ELSE -%]
@@ -248,16 +247,6 @@
     </form></div>
 [% END %]
 
-[% IF ( delete_confirmed ) %]
-
-   <div class="dialog message"> <h3>Data deleted</h3>
-    <form action="[% script_name | html %]" method="post">
-        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-        <input type="submit" class="approve" value="OK" />
-    </form></div>
-[% END %]
-
-
 [% IF ( else ) %]
 <h1>Authority MARC subfield structure admin for [% tagfield | html %] (authority: [% authtypecode | html %])</h1>
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit.</p>
@@ -279,14 +268,14 @@
             <a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?op=add_form&tagfield=[% tagfield | uri %]&authtypecode=[% authtypecode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a>
         </td>
         <td>
-            [% IF ( loo.subfield_ignored ) %]
+            [% IF loo.tab == -1 %]
                     <em>[% loo.liblibrarian | html_entity %]</em>
             [% ELSE %]
                     [% loo.liblibrarian | html_entity %]
             [% END %]
         </td>
         <td>
-            [% IF ( loo.subfield_ignored ) %]
+            [% IF loo.subfield_ignored == -1 %]
                     <em>subfield ignored</em>
             [% ELSE %]
                 <strong>Tab:</strong>[% loo.tab | html %],
@@ -322,16 +311,6 @@
     <input type="submit" value="Edit subfields" />
     <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
     </form>
-
-    [% IF ( previous ) %]
-    <input type="image" src="[% interface | html %]/[% theme | html %]/images/1leftarrow.png" title="previous" alt="previous" />
-    </a>
-    [% END %]
-    [% IF ( next ) %]
-        [% next | html %]
-    <input type="image" src="[% interface | html %]/[% theme | html %]/images/1rightarrow.png" title="next" alt="next" />
-    </a>
-    [% END %]
 
 [% END %]
 

@@ -29,38 +29,6 @@ use Koha::Filter::MARC::ViewPolicy;
 
 use List::MoreUtils qw( uniq );
 
-sub string_search {
-    my ( $searchstring, $frameworkcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    $searchstring =~ s/\'/\\\'/g;
-    my @data  = split( ' ', $searchstring );
-    my $count = @data;
-    my $sth   =
-      $dbh->prepare(
-"Select * from marc_subfield_structure where (tagfield like ? and frameworkcode=?) order by tagfield, display_order"
-      );
-    $sth->execute( "$searchstring%", $frameworkcode );
-    my @results;
-    my $cnt = 0;
-    my $u   = 1;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-        $cnt++;
-        $u++;
-    }
-    $sth->finish;
-    return ( $cnt, \@results );
-}
-
-sub marc_subfield_structure_exists {
-    my ($tagfield, $tagsubfield, $frameworkcode) = @_;
-    my $dbh  = C4::Context->dbh;
-    my $sql  = "select tagfield from marc_subfield_structure where tagfield = ? and tagsubfield = ? and frameworkcode = ?";
-    my $rows = $dbh->selectall_arrayref($sql, {}, $tagfield, $tagsubfield, $frameworkcode);
-    return @$rows > 0;
-}
-
 my $input         = CGI->new;
 my $tagfield      = $input->param('tagfield');
 my $tagsubfield   = $input->param('tagsubfield');
@@ -159,42 +127,24 @@ if ( $op eq 'add_form' ) {
     closedir DIR;
 
     # build values list
-    my $sth =
-      $dbh->prepare(
-"select * from marc_subfield_structure where tagfield=? and frameworkcode=? order by display_order"
-      );    # and tagsubfield='$tagsubfield'");
-    $sth->execute( $tagfield, $frameworkcode );
+    my $mss = Koha::MarcSubfieldStructures->search(
+        { tagfield => $tagfield, frameworkcode => $frameworkcode },
+        { order_by => 'display_order' }
+    )->unblessed;
     my @loop_data = ();
     my $i         = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        my %row_data;    # get a fresh hash for the row data
-        $row_data{defaultvalue}      = $data->{defaultvalue};
-        $row_data{maxlength}         = $data->{maxlength};
-        $row_data{tab}               = $data->{tab};
-        $row_data{tagsubfield}       = $data->{tagsubfield};
-        $row_data{subfieldcode}      = $data->{'tagsubfield'};
+    for my $m ( @$mss ) {
+        my %row_data = %$m;    # get a fresh hash for the row data
+        $row_data{subfieldcode}      = $m->{tagsubfield};
         $row_data{urisubfieldcode}   = $row_data{subfieldcode} eq '%' ? 'pct' : $row_data{subfieldcode};
-        $row_data{liblibrarian}      = $data->{'liblibrarian'};
-        $row_data{libopac}           = $data->{'libopac'};
-        $row_data{seealso}           = $data->{'seealso'};
         $row_data{kohafields}        = \@kohafields;
-        $row_data{kohafield}         = $data->{kohafield};
         $row_data{authorised_values} = \@authorised_values;
-        $row_data{authorised_value}  = $data->{authorised_value};
         $row_data{value_builders}    = \@value_builder;
-        $row_data{value_builder}     = $data->{'value_builder'};
         $row_data{authtypes}         = \@authtypes;
-        $row_data{authtypecode}      = $data->{'authtypecode'};
-        $row_data{repeatable}        = $data->{repeatable};
-        $row_data{mandatory}         = $data->{mandatory};
-        $row_data{important}         = $data->{important};
-        $row_data{hidden}            = $data->{hidden};
-        $row_data{isurl}             = $data->{isurl};
         $row_data{row}               = $i;
-        $row_data{link}              = $data->{'link'};
 
-        if ( defined $data->{kohafield}
-            and $data->{kohafield} eq 'biblio.biblionumber' )
+        if ( defined $m->{kohafield}
+            and $m->{kohafield} eq 'biblio.biblionumber' )
         {
             my $hidden_opac = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
                     {
@@ -262,10 +212,6 @@ if ( $op eq 'add_form' ) {
 elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
-    my $sth_update = $dbh->prepare(qq{
-        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, important=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?, display_order=?
-        where tagfield=? and tagsubfield=? and frameworkcode=?
-    });
     my @tagsubfield       = $input->multi_param('tagsubfield');
     my @liblibrarian      = $input->multi_param('liblibrarian');
     my @libopac           = $input->multi_param('libopac');
@@ -303,33 +249,28 @@ elsif ( $op eq 'add_validate' ) {
         my $maxlength = $maxlength[$i] ? $maxlength[$i] : 9999;
         
         if (defined($liblibrarian) && $liblibrarian ne "") {
-            if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
-                $sth_update->execute(
-                    $tagfield,
-                    $tagsubfield,
-                    $liblibrarian,
-                    $libopac,
-                    $repeatable,
-                    $mandatory,
-                    $important,
-                    $kohafield,
-                    $tab,
-                    $seealso,
-                    $authorised_value,
-                    $authtypecode,
-                    $value_builder,
-                    $hidden,
-                    $isurl,
-                    $frameworkcode,
-                    $link,
-                    $defaultvalue,
-                    $maxlength,
-                    $display_order->{$tagfield} || 0,
-                    (
-                        $tagfield,
-                        $tagsubfield,
-                        $frameworkcode,
-                    )
+            my $mss = Koha::MarcSubfieldStructures->find({tagfield => $tagfield, tagsubfield => $tagsubfield, frameworkcode => $frameworkcode });
+            if ($mss) {
+                $mss->update(
+                    {
+                        liblibrarian     => $liblibrarian,
+                        libopac          => $libopac,
+                        repeatable       => $repeatable,
+                        mandatory        => $mandatory,
+                        important        => $important,
+                        kohafield        => $kohafield,
+                        tab              => $tab,
+                        seealso          => $seealso,
+                        authorised_value => $authorised_value,
+                        authtypecode     => $authtypecode,
+                        value_builder    => $value_builder,
+                        hidden           => $hidden,
+                        isurl            => $isurl,
+                        link             => $link,
+                        defaultvalue     => $defaultvalue,
+                        maxlength        => $maxlength,
+                        display_order    => $display_order->{$tagfield} || 0
+                    }
                 );
             } else {
                 if( $frameworkcode ne q{} ) {
@@ -365,7 +306,6 @@ elsif ( $op eq 'add_validate' ) {
             $display_order->{$tagfield}++;
         }
     }
-    $sth_update->finish;
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
@@ -379,22 +319,16 @@ elsif ( $op eq 'add_validate' ) {
     # called by default form, used to confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirm' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"select * from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?"
-      );
-
-    $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
+    my $mss = Koha::MarcSubfieldStructures->find(
+        {
+            tagfield      => $tagfield,
+            tagsubfield   => $tagsubfield,
+            frameworkcode => $frameworkcode
+        }
+    );
     $template->param(
-        liblibrarian  => $data->{'liblibrarian'},
-        tagsubfield   => $data->{'tagsubfield'},
+        mss => $mss,
         delete_link   => $script_name,
-        tagfield      => $tagfield,
-        tagsubfield   => $tagsubfield,
-        frameworkcode => $frameworkcode,
     );
 
     # END $OP eq DELETE_CONFIRM
@@ -402,13 +336,14 @@ elsif ( $op eq 'delete_confirm' ) {
   # called by delete_confirm, used to effectively confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirmed' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-"delete from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?"
-      );
-    $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
-    $sth->finish;
+    Koha::MarcSubfieldStructures->find(
+        {
+            tagfield      => $tagfield,
+            tagsubfield   => $tagsubfield,
+            frameworkcode => $frameworkcode
+        }
+    )->delete;
+
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
@@ -420,33 +355,15 @@ elsif ( $op eq 'delete_confirmed' ) {
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
-    my ( $count, $results ) = string_search( $tagfield, $frameworkcode );
-    my @loop_data = ();
-    for ( my $i = 0; $i < $count; $i++ ) {
-        my %row_data;    # get a fresh hash for the row data
-        $row_data{tagfield}         = $results->[$i]{'tagfield'};
-        $row_data{tagsubfield}      = $results->[$i]{'tagsubfield'};
-        $row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
-        $row_data{kohafield}        = $results->[$i]{'kohafield'};
-        $row_data{repeatable}       = $results->[$i]{'repeatable'};
-        $row_data{mandatory}        = $results->[$i]{'mandatory'};
-        $row_data{important}        = $results->[$i]{'important'};
-        $row_data{tab}              = $results->[$i]{'tab'};
-        $row_data{seealso}          = $results->[$i]{'seealso'};
-        $row_data{authorised_value} = $results->[$i]{'authorised_value'};
-        $row_data{authtypecode}     = $results->[$i]{'authtypecode'};
-        $row_data{value_builder}    = $results->[$i]{'value_builder'};
-        $row_data{hidden}           = $results->[$i]{'hidden'};
-        $row_data{isurl}            = $results->[$i]{'isurl'};
-        $row_data{link}             = $results->[$i]{'link'};
+    my $mss = Koha::MarcSubfieldStructures->search(
+        {
+            tagfield      => { -like => "$tagfield%" },
+            frameworkcode => $frameworkcode
+        },
+        { order_by => [ 'tagfield', 'display_order' ] }
+    )->unblessed;
 
-        if ( $row_data{tab} eq -1 ) {
-            $row_data{subfield_ignored} = 1;
-        }
-
-        push( @loop_data, \%row_data );
-    }
-    $template->param( loop => \@loop_data );
+    $template->param( loop => $mss );
     $template->param(
         edit_tagfield      => $tagfield,
         edit_frameworkcode => $frameworkcode

@@ -26,34 +26,14 @@ use C4::Koha;
 
 use Koha::Authority::Types;
 use Koha::AuthorisedValues;
+use Koha::AuthSubfieldStructures;
 
 use List::MoreUtils qw( uniq );
-
-sub string_search  {
-	my ($searchstring,$authtypecode)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-    my $sth=$dbh->prepare("Select * from auth_subfield_structure where (tagfield like ? and authtypecode=?) order by tagfield, display_order");
-	$sth->execute("$searchstring%",$authtypecode);
-	my $results = $sth->fetchall_arrayref({});
-	return (scalar(@$results), $results);
-}
-
-sub auth_subfield_structure_exists {
-	my ($authtypecode, $tagfield, $tagsubfield) = @_;
-	my $dbh  = C4::Context->dbh;
-	my $sql  = "select tagfield from auth_subfield_structure where authtypecode = ? and tagfield = ? and tagsubfield = ?";
-	my $rows = $dbh->selectall_arrayref($sql, {}, $authtypecode, $tagfield, $tagsubfield);
-	return @$rows > 0;
-}
 
 my $input        = CGI->new;
 my $tagfield     = $input->param('tagfield');
 my $tagsubfield  = $input->param('tagsubfield');
 my $authtypecode = $input->param('authtypecode');
-my $offset       = $input->param('offset');
-$offset = 0 if not defined $offset or $offset < 0;
 my $op           = $input->param('op') || '';
 my $script_name  = "/cgi-bin/koha/admin/auth_subfields_structure.pl";
 
@@ -123,35 +103,17 @@ if ($op eq 'add_form') {
         @value_builder= sort {$a cmp $b} @value_builder;
 	closedir DIR;
 
-	# build values list
-    my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and authtypecode=? order by display_order"); # and tagsubfield='$tagsubfield'");
-	$sth->execute($tagfield,$authtypecode);
-	my @loop_data = ();
-	my $i=0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        my %row_data;    # get a fresh hash for the row data
-        $row_data{defaultvalue}      = $data->{defaultvalue};
-        $row_data{tab}               = $data->{tab};
-        $row_data{ohidden}           = $data->{'hidden'};
-        $row_data{tagsubfield}       = $data->{'tagsubfield'};
-        $row_data{liblibrarian}      = $data->{'liblibrarian'};
-        $row_data{libopac}           = $data->{'libopac'};
-        $row_data{seealso}           = $data->{'seealso'};
+    my @loop_data;
+    my $asses = Koha::AuthSubfieldStructures->search({ tagfield => $tagfield, authtypecode => $authtypecode}, {order_by => 'display_order'})->unblessed;
+    my $i;
+    for my $ass ( @$asses ) {
+        my %row_data = %$ass;
         $row_data{kohafields}        = \@kohafields;
-        $row_data{kohafield}         = $data->{'kohafield'};
         $row_data{authorised_values} = \@authorised_value_categories;
-        $row_data{authorised_value}  = $data->{'authorised_value'};
         $row_data{frameworkcodes}    = \@authtypes;
-        $row_data{frameworkcode}     = $data->{'frameworkcode'};
         $row_data{value_builders}    = \@value_builder;
-        $row_data{value_builder}     = $data->{'value_builder'};
-        $row_data{repeatable}        = $data->{repeatable};
-        $row_data{mandatory}         = $data->{mandatory};
-        $row_data{hidden}            = $data->{hidden};
-        $row_data{isurl}             = $data->{isurl};
-        $row_data{row}               = $i;
+        $row_data{row}               = $i++;
         push( @loop_data, \%row_data );
-        $i++;
     }
 
     # Add a new row for the "New" tab
@@ -187,12 +149,6 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(tagfield => "$input->param('tagfield')");
-#	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
-#									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl,defaultvalue, display_order)
-                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?, display_order=?
-                                    where authtypecode=? and tagfield=? and tagsubfield=?");
 	my @tagsubfield	= $input->multi_param('tagsubfield');
 	my @liblibrarian	= $input->multi_param('liblibrarian');
 	my @libopac		= $input->multi_param('libopac');
@@ -224,55 +180,46 @@ if ($op eq 'add_form') {
         my $defaultvalue = $defaultvalue[$i];
 		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
-		if ($liblibrarian) {
-				if (auth_subfield_structure_exists($authtypecode, $tagfield, $tagsubfield)) {
-					$sth_update->execute(
-						$authtypecode,
-						$tagfield,
-						$tagsubfield,
-						$liblibrarian,
-						$libopac,
-						$repeatable,
-						$mandatory,
-						$kohafield,
-						$tab,
-						$seealso,
-						$authorised_value,
-						$frameworkcode,
-						$value_builder,
-						$hidden,
-						$isurl,
-                        $defaultvalue,
-                        $display_order->{$tagfield} || 0,
-						(
-							$authtypecode,
-							$tagfield,
-							$tagsubfield
-						),
-					);
-				} else {
-					$sth_insert->execute(
-						$authtypecode,
-						$tagfield,
-						$tagsubfield,
-						$liblibrarian,
-						$libopac,
-						$repeatable,
-						$mandatory,
-						$kohafield,
-						$tab,
-						$seealso,
-						$authorised_value,
-						$frameworkcode,
-						$value_builder,
-						$hidden,
-						$isurl,
-                        $defaultvalue,
-                        display_order    => $display_order->{$tagfield} || 0,
-					);
-				}
+        if ($liblibrarian) {
+            my $ass = Koha::AuthSubfieldStructures->find(
+                {
+                    authtypecode => $authtypecode,
+                    tagfield     => $tagfield,
+                    tagsubfield  => $tagsubfield
+                }
+            );
+            my $attributes = {
+                liblibrarian     => $liblibrarian,
+                libopac          => $libopac,
+                repeatable       => $repeatable,
+                mandatory        => $mandatory,
+                kohafield        => $kohafield,
+                tab              => $tab,
+                seealso          => $seealso,
+                authorised_value => $authorised_value,
+                frameworkcode    => $frameworkcode,
+                value_builder    => $value_builder,
+                hidden           => $hidden,
+                isurl            => $isurl,
+                defaultvalue     => $defaultvalue,
+                display_order    => $display_order->{$tagfield} || 0,
+            };
+
+            if ($ass) {
+                $ass->update($attributes);
+            }
+            else {
+                Koha::AuthSubfieldStructure->new(
+                    {
+                        authtypecode => $authtypecode,
+                        tagfield     => $tagfield,
+                        tagsubfield  => $tagsubfield,
+                        %$attributes
+                    }
+                )->store;
+            }
             $display_order->{$tagfield}++;
-		}
+        }
 	}
     print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
     exit;
@@ -280,62 +227,45 @@ if ($op eq 'add_form') {
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
-	$sth->execute($tagfield,$tagsubfield,$authtypecode);
-	my $data=$sth->fetchrow_hashref;
-	$template->param(liblibrarian => $data->{'liblibrarian'},
-							tagsubfield => $data->{'tagsubfield'},
-							delete_link => $script_name,
-							tagfield      =>$tagfield,
-							tagsubfield => $tagsubfield,
-							authtypecode => $authtypecode,
-							);
-													# END $OP eq DELETE_CONFIRM
-################## DELETE_CONFIRMED ##################################
-# called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-    my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
-    $sth->execute($tagfield,$tagsubfield,$authtypecode);
+}
+elsif ( $op eq 'delete_confirm' ) {
+  my $ass = Koha::AuthSubfieldStructures->find(
+      {
+          authtypecode => $authtypecode,
+          tagfield     => $tagfield,
+          tagsubfield  => $tagsubfield
+      }
+  );
+  $template->param(
+      ass         => $ass,
+      delete_link => $script_name,
+  );
+}
+elsif ( $op eq 'delete_confirmed' ) {
+    Koha::AuthSubfieldStructures->find(
+        {
+            authtypecode => $authtypecode,
+            tagfield     => $tagfield,
+            tagsubfield  => $tagsubfield
+        }
+    )->delete;
     print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
     exit;
-													# END $OP eq DELETE_CONFIRMED
-################## DEFAULT ##################################
-} else { # DEFAULT
-	my ($count,$results)=string_search($tagfield,$authtypecode);
-	my @loop_data = ();
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row_data;  # get a fresh hash for the row data
-		$row_data{tagfield} = $results->[$i]{'tagfield'};
-		$row_data{tagsubfield} = $results->[$i]{'tagsubfield'};
-		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
-		$row_data{kohafield} = $results->[$i]{'kohafield'};
-		$row_data{repeatable} = $results->[$i]{'repeatable'};
-		$row_data{mandatory} = $results->[$i]{'mandatory'};
-		$row_data{tab} = $results->[$i]{'tab'};
-		$row_data{seealso} = $results->[$i]{'seealso'};
-		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{authtypecode}	= $results->[$i]{'authtypecode'};
-		$row_data{value_builder}	= $results->[$i]{'value_builder'};
-		$row_data{hidden}	= $results->[$i]{'hidden'} if($results->[$i]{'hidden'} gt "000") ;
-		$row_data{isurl}	= $results->[$i]{'isurl'};
-		if ($row_data{tab} eq -1) {
-			$row_data{subfield_ignored} = 1;
-		}
+}
+else {    # DEFAULT
+    my $ass = Koha::AuthSubfieldStructures->search(
+        {
+            tagfield      => { -like => "$tagfield%" },
+            authtypecode  => $authtypecode,
+        },
+        { order_by => [ 'tagfield', 'display_order' ] }
+    )->unblessed;
 
-		push(@loop_data, \%row_data);
-	}
-	$template->param(loop => \@loop_data);
-	$template->param(edit_tagfield => $tagfield,
-		edit_authtypecode => $authtypecode);
-	
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=\"$script_name?offset=$nextpage\">");
-	}
+    $template->param( loop => $ass );
+    $template->param(
+        edit_tagfield      => $tagfield,
+        edit_authtypecode  => $authtypecode,
+    );
+
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;

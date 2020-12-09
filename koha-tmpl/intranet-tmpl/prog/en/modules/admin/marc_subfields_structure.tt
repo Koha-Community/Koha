@@ -14,10 +14,7 @@
         [%- END -%]
     [%- END -%]
     [%- IF ( delete_confirm ) -%]
-        MARC subfield structure &rsaquo; Confirm deletion of subfield [%- tagsubfield | html -%]
-    [%- END -%]
-    [%- IF ( delete_confirmed ) -%]
-        MARC subfield structure &rsaquo; Subfield deleted
+        MARC subfield structure &rsaquo; Confirm deletion of subfield [%- mss.tagsubfield | html -%]
     [%- END -%]
     [%- IF ( else ) -%]
         MARC subfield structure
@@ -48,10 +45,7 @@
             [% END %]
         [% END %]
         [% IF ( delete_confirm ) %]
-            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% tagsubfield | html %]
-        [% END %]
-        [% IF ( delete_confirmed ) %]
-            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Subfield deleted
+            <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% mss.tagfield | uri %]&amp;frameworkcode=[% mss.frameworkcode | uri %]">Tag [% mss.tagfield | html %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% mss.tagsubfield | html %]
         [% END %]
         [% IF ( else ) %]
             Tag [% tagfield | html %] Subfield structure
@@ -286,36 +280,26 @@
 
                     [% IF ( delete_confirm ) %]
                         <div class="dialog alert">
-                            <h3>Confirm deletion of subfield [% tagsubfield | html %]?</h3>
-                            <p>Subfield: [% tagsubfield | html %]</p>
-                            <p>Description: [% liblibrarian | html_entity %]</p>
+                            <h3>Confirm deletion of subfield [% mss.tagsubfield | html %]?</h3>
+                            <p>Subfield: [% mss.tagsubfield | html %]</p>
+                            <p>Description: [% mss.liblibrarian | html_entity %]</p>
 
                             <form action="[% delete_link | html %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
-                                <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-                                <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-                                <input type="hidden" name="tagsubfield" value="[% tagsubfield | html %]" />
-                                <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
+                                <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
+                                <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
+                                <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
                                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
                             </form>
 
 
                             <form action="[% script_name | html %]" method="post">
-                                <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-                                <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-                                <input type="hidden" name="tagsubfield" value="[% tagsubfield | html %]" />
-                                <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
+                                <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
+                                <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
+                                <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
                                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
                             </form>
                         </div> <!-- /.dialog.alert -->
                     [% END # /IF ( delete_confirm ) %]
-
-                    [% IF ( delete_confirmed ) %]
-                        <h3>Data deleted</h3>
-                        <form action="[% script_name | html %]" method="post">
-                            <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-                            <input type="submit" value="OK" />
-                        </form>
-                    [% END %]
 
                     [% IF ( else ) %]
                         <h1>MARC subfield structure admin for [% tagfield | html %] [% IF ( frameworkcode ) %](framework [% frameworkcode | html %])[% ELSE %](default framework)[% END %]</h1>
@@ -337,14 +321,14 @@
                                     <tr>
                                         <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
                                         <td>
-                                            [% IF ( loo.subfield_ignored ) %]
+                                            [% IF loo.tab == -1 %]
                                                 <em>[% loo.liblibrarian | html_entity %]</em>
                                             [% ELSE %]
                                                 [% loo.liblibrarian | html_entity %]
                                             [% END %]
                                         </td>
                                         <td>
-                                            [% IF ( loo.subfield_ignored ) %]
+                                            [% IF loo.tab == -1 %]
                                                 <em>subfield ignored</em>
                                             [% ELSE %]
                                                 Tab:[% loo.tab | html %],

@@ -948,7 +948,7 @@ sub GetMarcStructure {
         ORDER BY tagfield"
     );
     $sth->execute($frameworkcode);
-    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable, $important, $ind1_defaultvalue, $ind2_defaultvalue );
+    my ( $liblibrarian, $libopac, $tag, $res, $mandatory, $repeatable, $important, $ind1_defaultvalue, $ind2_defaultvalue );
 
     while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable, $important, $ind1_defaultvalue, $ind2_defaultvalue ) = $sth->fetchrow ) {
         $res->{$tag}->{lib}        = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
@@ -960,53 +960,13 @@ sub GetMarcStructure {
     $res->{$tag}->{ind2_defaultvalue} = $ind2_defaultvalue;
     }
 
-    $sth = $dbh->prepare(
-        "SELECT tagfield,tagsubfield,liblibrarian,libopac,tab,mandatory,repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue,maxlength,important, display_order
-         FROM   marc_subfield_structure 
-         WHERE  frameworkcode=? 
-         ORDER BY tagfield, tagsubfield
-        "
-    );
-
-    $sth->execute($frameworkcode);
-
-    my $subfield;
-    my $authorised_value;
-    my $authtypecode;
-    my $value_builder;
-    my $kohafield;
-    my $seealso;
-    my $hidden;
-    my $isurl;
-    my $link;
-    my $defaultvalue;
-    my $maxlength;
-    my $display_order;
-
-    while (
-        (   $tag,          $subfield,      $liblibrarian, $libopac, $tab,    $mandatory, $repeatable, $authorised_value,
-            $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue,
-            $maxlength, $important, $display_order
-        )
-        = $sth->fetchrow
-      ) {
-        $res->{$tag}->{$subfield}->{lib}              = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
-        $res->{$tag}->{$subfield}->{tab}              = $tab;
-        $res->{$tag}->{$subfield}->{subfield}         = $subfield;
-        $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
-        $res->{$tag}->{$subfield}->{important}        = $important;
-        $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
-        $res->{$tag}->{$subfield}->{authorised_value} = $authorised_value;
-        $res->{$tag}->{$subfield}->{authtypecode}     = $authtypecode;
-        $res->{$tag}->{$subfield}->{value_builder}    = $value_builder;
-        $res->{$tag}->{$subfield}->{kohafield}        = $kohafield;
-        $res->{$tag}->{$subfield}->{seealso}          = $seealso;
-        $res->{$tag}->{$subfield}->{hidden}           = $hidden;
-        $res->{$tag}->{$subfield}->{isurl}            = $isurl;
-        $res->{$tag}->{$subfield}->{'link'}           = $link;
-        $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
-        $res->{$tag}->{$subfield}->{maxlength}        = $maxlength;
-        $res->{$tag}->{$subfield}->{display_order}    = $display_order;
+    my $mss = Koha::MarcSubfieldStructures->search( { frameworkcode => $frameworkcode } )->unblessed;
+    for my $m (@$mss) {
+        $res->{ $m->{tagfield} }->{ $m->{tagsubfield} } = {
+            lib => ( $forlibrarian or !$m->{libopac} ) ? $m->{liblibrarian} : $m->{libopac},
+            subfield => $m->{tagsubfield},
+            %$m
+        };
     }
 
     $cache->set_in_cache($cache_key, $res);
