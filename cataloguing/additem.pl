@@ -130,6 +130,7 @@ sub generate_subfield_form {
         $subfield_data{important}  = $subfieldlib->{important};
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
         $subfield_data{maxlength}  = $subfieldlib->{maxlength};
+        $subfield_data{display_order} = $subfieldlib->{display_order};
         
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
@@ -994,7 +995,7 @@ foreach my $tag ( keys %{$tagslib}){
         }
   }
 }
-@loop_data = sort {$a->{subfield} cmp $b->{subfield} } @loop_data;
+@loop_data = sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} } @loop_data;
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(

@@ -839,7 +839,7 @@ Item's itemcallnumber
 Item's call number normalized for sorting
 
 =back
-  
+
 =cut
 
 sub GetItemsLocationInfo {
@@ -1618,29 +1618,32 @@ sub PrepareItemrecordDisplay {
 
             # loop through each subfield
             my $cntsubf;
-            foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
-                next if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
-                next unless ( $tagslib->{$tag}->{$subfield}->{'tab'} );
-                next if ( $tagslib->{$tag}->{$subfield}->{'tab'} ne "10" );
+            foreach my $subfield (
+                sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} }
+                grep { ref($_) && %$_ } # Not a subfield (values for "important", "lib", "mandatory", etc.) or empty
+                values %{ $tagslib->{$tag} } )
+            {
+                next unless ( $subfield->{'tab'} );
+                next if ( $subfield->{'tab'} ne "10" );
                 my %subfield_data;
                 $subfield_data{tag}           = $tag;
-                $subfield_data{subfield}      = $subfield;
+                $subfield_data{subfield}      = $subfield->{subfield};
                 $subfield_data{countsubfield} = $cntsubf++;
-                $subfield_data{kohafield}     = $tagslib->{$tag}->{$subfield}->{'kohafield'};
-                $subfield_data{id}            = "tag_".$tag."_subfield_".$subfield."_".int(rand(1000000));
+                $subfield_data{kohafield}     = $subfield->{kohafield};
+                $subfield_data{id}            = "tag_".$tag."_subfield_".$subfield->{subfield}."_".int(rand(1000000));
 
                 #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-                $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
-                $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
-                $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
+                $subfield_data{marc_lib}   = $subfield->{lib};
+                $subfield_data{mandatory}  = $subfield->{mandatory};
+                $subfield_data{repeatable} = $subfield->{repeatable};
                 $subfield_data{hidden}     = "display:none"
-                  if ( ( $tagslib->{$tag}->{$subfield}->{hidden} > 4 )
-                    || ( $tagslib->{$tag}->{$subfield}->{hidden} < -4 ) );
+                  if ( ( $subfield->{hidden} > 4 )
+                    || ( $subfield->{hidden} < -4 ) );
                 my ( $x, $defaultvalue );
                 if ($itemrecord) {
-                    ( $x, $defaultvalue ) = _find_value( $tag, $subfield, $itemrecord );
+                    ( $x, $defaultvalue ) = _find_value( $tag, $subfield->{subfield}, $itemrecord );
                 }
-                $defaultvalue = $tagslib->{$tag}->{$subfield}->{defaultvalue} unless $defaultvalue;
+                $defaultvalue = $subfield->{defaultvalue} unless $defaultvalue;
                 if ( !defined $defaultvalue ) {
                     $defaultvalue = q||;
                 } else {
@@ -1664,10 +1667,10 @@ sub PrepareItemrecordDisplay {
                     $defaultvalue =~ s/<<USER>>/$username/g;
                 }
 
-                my $maxlength = $tagslib->{$tag}->{$subfield}->{maxlength};
+                my $maxlength = $subfield->{maxlength};
 
                 # search for itemcallnumber if applicable
-                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                if ( $subfield->{kohafield} eq 'items.itemcallnumber'
                     && C4::Context->preference('itemcallnumber') && $itemrecord) {
                     foreach my $itemcn_pref (split(/,/,C4::Context->preference('itemcallnumber'))){
                         my $CNtag      = substr( $itemcn_pref, 0, 3 );
@@ -1677,10 +1680,10 @@ sub PrepareItemrecordDisplay {
                         last if $defaultvalue;
                     }
                 }
-                if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                if (   $subfield->{kohafield} eq 'items.itemcallnumber'
                     && $defaultvalues
                     && $defaultvalues->{'callnumber'} ) {
-                    if( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ){
+                    if( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield->{subfield}) ){
                         # if the item record exists, only use default value if the item has no callnumber
                         $defaultvalue = $defaultvalues->{callnumber};
                     } elsif ( !$itemrecord and $defaultvalues ) {
@@ -1688,18 +1691,18 @@ sub PrepareItemrecordDisplay {
                         $defaultvalue = $defaultvalues->{callnumber};
                     }
                 }
-                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
+                if (   ( $subfield->{kohafield} eq 'items.holdingbranch' || $subfield->{kohafield} eq 'items.homebranch' )
                     && $defaultvalues
                     && $defaultvalues->{'branchcode'} ) {
                     if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ) {
                         $defaultvalue = $defaultvalues->{branchcode};
                     }
                 }
-                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
+                if (   ( $subfield->{kohafield} eq 'items.location' )
                     && $defaultvalues
                     && $defaultvalues->{'location'} ) {
 
-                    if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield) ) {
+                    if ( $itemrecord and $defaultvalues and not $itemrecord->subfield($tag,$subfield->{subfield}) ) {
                         # if the item record exists, only use default value if the item has no locationr
                         $defaultvalue = $defaultvalues->{location};
                     } elsif ( !$itemrecord and $defaultvalues ) {
@@ -1707,19 +1710,19 @@ sub PrepareItemrecordDisplay {
                         $defaultvalue = $defaultvalues->{location};
                     }
                 }
-                if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
+                if ( $subfield->{authorised_value} ) {
                     my @authorised_values;
                     my %authorised_lib;
 
                     # builds list, depending on authorised value...
                     #---- branch
-                    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+                    if ( $subfield->{'authorised_value'} eq "branches" ) {
                         if (   ( C4::Context->preference("IndependentBranches") )
                             && !C4::Context->IsSuperLibrarian() ) {
                             my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches WHERE branchcode = ? ORDER BY branchname" );
                             $sth->execute( C4::Context->userenv->{branch} );
                             push @authorised_values, ""
-                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                              unless ( $subfield->{mandatory} );
                             while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
                                 push @authorised_values, $branchcode;
                                 $authorised_lib{$branchcode} = $branchname;
@@ -1728,7 +1731,7 @@ sub PrepareItemrecordDisplay {
                             my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches ORDER BY branchname" );
                             $sth->execute;
                             push @authorised_values, ""
-                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                              unless ( $subfield->{mandatory} );
                             while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
                                 push @authorised_values, $branchcode;
                                 $authorised_lib{$branchcode} = $branchname;
@@ -1741,7 +1744,7 @@ sub PrepareItemrecordDisplay {
                         }
 
                         #----- itemtypes
-                    } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+                    } elsif ( $subfield->{authorised_value} eq "itemtypes" ) {
                         my $itemtypes = Koha::ItemTypes->search_with_localization;
                         push @authorised_values, "";
                         while ( my $itemtype = $itemtypes->next ) {
@@ -1753,7 +1756,7 @@ sub PrepareItemrecordDisplay {
                         }
 
                         #---- class_sources
-                    } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
+                    } elsif ( $subfield->{authorised_value} eq "cn_source" ) {
                         push @authorised_values, "";
 
                         my $class_sources = GetClassSources();
@@ -1771,7 +1774,7 @@ sub PrepareItemrecordDisplay {
                         #---- "true" authorised value
                     } else {
                         $authorised_values_sth->execute(
-                            $tagslib->{$tag}->{$subfield}->{authorised_value},
+                            $subfield->{authorised_value},
                             $branch_limit ? $branch_limit : ()
                         );
                         push @authorised_values, "";
@@ -1786,17 +1789,17 @@ sub PrepareItemrecordDisplay {
                         default => $defaultvalue // q{},
                         labels  => \%authorised_lib,
                     };
-                } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
+                } elsif ( $subfield->{value_builder} ) {
                 # it is a plugin
                     require Koha::FrameworkPlugin;
                     my $plugin = Koha::FrameworkPlugin->new({
-                        name => $tagslib->{$tag}->{$subfield}->{value_builder},
+                        name => $subfield->{value_builder},
                         item_style => 1,
                     });
                     my $pars = { dbh => $dbh, record => undef, tagslib =>$tagslib, id => $subfield_data{id}, tabloop => undef };
                     $plugin->build( $pars );
                     if ( $itemrecord and my $field = $itemrecord->field($tag) ) {
-                        $defaultvalue = $field->subfield($subfield) || q{};
+                        $defaultvalue = $field->subfield($subfield->{subfield}) || q{};
                     }
                     if( !$plugin->errstr ) {
                         #TODO Move html to template; see report 12176/13397
@@ -1812,12 +1815,12 @@ sub PrepareItemrecordDisplay {
                 elsif ( $tag eq '' ) {       # it's an hidden field
                     $subfield_data{marc_value} = qq(<input type="hidden" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
-                elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
+                elsif ( $subfield->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
                     $subfield_data{marc_value} = qq(<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
                 elsif ( length($defaultvalue) > 100
                             or (C4::Context->preference("marcflavour") eq "UNIMARC" and
-                                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
+                                  300 <= $tag && $tag < 400 && $subfield->{subfield} eq 'a' )
                             or (C4::Context->preference("marcflavour") eq "MARC21"  and
                                   500 <= $tag && $tag < 600                     )
                           ) {
