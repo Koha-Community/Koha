@@ -131,11 +131,7 @@ for my $overdue ( @{$overdues} ) {
         ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
       : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
       :                                     $overdue->{branchcode};
-
-# In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
-    if ( !exists $is_holiday{$branchcode} ) {
-        $is_holiday{$branchcode} = set_holiday( $branchcode, $today );
-    }
+    # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
 
     my $datedue = dt_from_string( $overdue->{date_due} );
     if ( DateTime->compare( $datedue, $today ) == 1 ) {
@@ -147,9 +143,7 @@ for my $overdue ( @{$overdues} ) {
       CalcFine( $overdue, $patron->categorycode,
         $branchcode, $datedue, $today );
 
-    # Don't update the fine if today is a holiday.
-    # This ensures that dropbox mode will remove the correct amount of fine.
-    if ( $mode eq 'production' && !$is_holiday{$branchcode} ) {
+    if ( $mode eq 'production' ) {
         if ( $amount && $amount > 0 ) {
             UpdateFine(
                 {
@@ -191,13 +185,6 @@ Number of Overdue Items:
     reported $counted
 
 EOM
-}
-
-sub set_holiday {
-    my ( $branch, $dt ) = @_;
-
-    my $calendar = Koha::Calendar->new( branchcode => $branch );
-    return $calendar->is_holiday($dt);
 }
 
 sub get_filename {
