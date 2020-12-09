@@ -1,4 +1,4 @@
-package Koha::MarcSubfieldStructure;
+package Koha::AuthSubfieldStructures;
 
 # This file is part of Koha.
 #
@@ -21,11 +21,13 @@ use Carp;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::AuthSubfieldStructure;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::MarcSubfieldStructure - Koha MarcSubfieldStructure Object class
+Koha::AuthSubfieldStructures - Koha AuthSubfieldStructure Object set class
 
 =head1 API
 
@@ -33,14 +35,20 @@ Koha::MarcSubfieldStructure - Koha MarcSubfieldStructure Object class
 
 =cut
 
-=head2 Internal methods
-
-=head3 _type
+=head3 type
 
 =cut
 
 sub _type {
-    return 'MarcSubfieldStructure';
+    return 'AuthSubfieldStructure';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::AuthSubfieldStructure';
 }
 
 1;
