@@ -1238,8 +1238,8 @@
         var default_strong_password = [% defaultCategory.effective_require_strong_password | html %];
         $(document).ready(function() {
             var setPwdMessage = function() {
-                var require_strong = $('select#borrower_categorycode option:selected').data('pwdStrong')||default_strong_password;
-                var min_lenght = $('select#borrower_categorycode option:selected').data('pwdLength')||default_password_length;
+                var require_strong = $('select#borrower_categorycode option:selected').length ? $('select#borrower_categorycode option:selected').data('pwdStrong') : default_strong_password;
+                var min_lenght = $('select#borrower_categorycode option:selected').length ? $('select#borrower_categorycode option:selected').data('pwdLength') : default_password_length;
                 $('#password_alert').html((require_strong?PWD_STRONG_MSG:PWD_WEAK_MSG).format(min_lenght));
             };
             setPwdMessage();
