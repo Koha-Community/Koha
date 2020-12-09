@@ -390,6 +390,12 @@ if ($op eq ""){
         }
         $imported++;
     }
+
+    # If all bibliographic records from the batch have been imported we modifying the status of the batch accordingly
+    SetImportBatchStatus( $import_batch_id, 'imported' )
+        if    @{ GetImportRecordsRange( $import_batch_id, undef, undef, 'imported' )}
+           == @{ GetImportRecordsRange( $import_batch_id )};
+
     # go to basket page
     if ( $imported ) {
         print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=".$cgiparams->{'basketno'}."&amp;duplinbatch=$duplinbatch");
@@ -450,6 +456,7 @@ sub import_batches_list {
                 };
             } else {
                 # if there are no more line to includes, set the status to imported
+                # FIXME This should be removed in the future.
                 SetImportBatchStatus( $batch->{'import_batch_id'}, 'imported' );
             }
         }
