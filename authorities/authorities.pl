@@ -477,14 +477,17 @@ sub build_tabs {
             }
             else {
                 my @subfields_data;
-                foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) ) {
-                    next if ( length $subfield != 1 );
-                    next if $tagslib->{$tag}->{$subfield}->{hidden} && $subfield ne '9';
-                    next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
+                foreach my $subfield (
+                    sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} }
+                    grep { ref($_) && %$_ } # Not a subfield (values for "important", "lib", "mandatory", etc.) or empty
+                    values %{ $tagslib->{$tag} } )
+                {
+                    next if $subfield->{hidden} && $subfield->{subfield} ne '9';
+                    next if ( $subfield->{tab} ne $tabloop );
                     push(
                         @subfields_data,
                         &create_input(
-                            $tag, $subfield, '', $index_tag, $tabloop, $record,
+                            $tag, $subfield->{subfield}, '', $index_tag, $tabloop, $record,
                             $authorised_values_sth,$input
                         )
                     );

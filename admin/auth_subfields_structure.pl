@@ -34,7 +34,7 @@ sub string_search  {
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
-	my $sth=$dbh->prepare("Select * from auth_subfield_structure where (tagfield like ? and authtypecode=?) order by tagfield");
+    my $sth=$dbh->prepare("Select * from auth_subfield_structure where (tagfield like ? and authtypecode=?) order by tagfield, display_order");
 	$sth->execute("$searchstring%",$authtypecode);
 	my $results = $sth->fetchall_arrayref({});
 	return (scalar(@$results), $results);
@@ -124,7 +124,7 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and authtypecode=?"); # and tagsubfield='$tagsubfield'");
+    my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and authtypecode=? order by display_order"); # and tagsubfield='$tagsubfield'");
 	$sth->execute($tagfield,$authtypecode);
 	my @loop_data = ();
 	my $i=0;
@@ -189,9 +189,9 @@ if ($op eq 'add_form') {
 	$template->param(tagfield => "$input->param('tagfield')");
 #	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
 #									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl,defaultvalue)
-                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?
+    my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl,defaultvalue, display_order)
+                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?, display_order=?
                                     where authtypecode=? and tagfield=? and tagsubfield=?");
 	my @tagsubfield	= $input->multi_param('tagsubfield');
 	my @liblibrarian	= $input->multi_param('liblibrarian');
@@ -205,6 +205,8 @@ if ($op eq 'add_form') {
 	my @frameworkcodes	= $input->multi_param('frameworkcode');
 	my @value_builder	=$input->multi_param('value_builder');
     my @defaultvalue = $input->multi_param('defaultvalue');
+
+    my $display_order;
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -241,6 +243,7 @@ if ($op eq 'add_form') {
 						$hidden,
 						$isurl,
                         $defaultvalue,
+                        $display_order->{$tagfield} || 0,
 						(
 							$authtypecode,
 							$tagfield,
@@ -265,8 +268,10 @@ if ($op eq 'add_form') {
 						$hidden,
 						$isurl,
                         $defaultvalue,
+                        display_order    => $display_order->{$tagfield} || 0,
 					);
 				}
+            $display_order->{$tagfield}++;
 		}
 	}
     print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");

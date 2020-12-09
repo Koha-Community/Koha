@@ -844,6 +844,7 @@ CREATE TABLE `auth_subfield_structure` (
   `kohafield` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `frameworkcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `defaultvalue` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display_order` INT(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`),
   CONSTRAINT `auth_subfield_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE

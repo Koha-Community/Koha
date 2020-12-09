@@ -44,13 +44,13 @@
         <div id="subfieldtabs" class="toptabs numbered">
             <ul>
                 [% FOREACH loo IN loop %]
-                    [% IF ( loo.new_subfield ) %]
-                        <li><a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
-                    [% ELSE %]
-                        <li><a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">
-                            [% loo.tagsubfield | html %]
-                    </a></li>
-                    [% END %]
+                    <li id="tab_subfield_[% loo.tagsubfield | html %]">
+                        [% IF ( loo.new_subfield ) %]
+                            <a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">New</a>
+                        [% ELSE %]
+                            <a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">[% loo.tagsubfield | html %]</a>
+                        [% END %]
+                    </li>
                 [% END %]
             </ul>
 
@@ -350,13 +350,36 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
-            $('#subfieldtabs').tabs();
             $("#table_authsubfieldstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "columnDefs": [
                     { 'sortable': false, 'targets': [ 'NoSort' ] }
                 ],
+                aaSorting: [],
                 paginate: false
             }));
+
+            var tabs = $('#subfieldtabs').tabs();
+            var current_index;
+            tabs.find( ".ui-tabs-nav" ).sortable({
+                axis: "x",
+                start: function (e, ui) {
+                    current_index = $(ui.item[0]).index();
+                },
+                stop: function (e, ui) {
+                    var new_index = $(ui.item[0]).index();
+                    if (current_index < new_index) new_index++;
+                    var subfield_code = $(ui.item[0]).attr('id').replace( /^tab_subfield_/, '');
+                    var content = $('#sub' + subfield_code + 'field');
+                    var panels = $("#subfieldtabs > div");
+                    if ( new_index < $(panels).size() ){
+                        $(content).insertBefore($("#subfieldtabs > div")[new_index]);
+                    } else {
+                        $(content).insertAfter($("#subfieldtabs > div")[new_index-1]);
+                    }
+                    tabs.tabs("refresh");
+                }
+            });
+
         });
     </script>
 [% END %]
