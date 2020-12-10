@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -37,7 +38,12 @@ Koha::NewsItem represents a single piece of news from the opac_news table
 
 =cut
 
-=head3 type
+sub author {
+    my ( $self ) = @_;
+    return Koha::Patron->_new_from_dbic($self->_result->borrowernumber);
+}
+
+=head3 _type
 
 =cut
 
