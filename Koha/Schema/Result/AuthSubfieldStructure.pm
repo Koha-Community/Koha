@@ -130,6 +130,12 @@ __PACKAGE__->table("auth_subfield_structure");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 display_order
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -173,6 +179,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "defaultvalue",
   { data_type => "mediumtext", is_nullable => 1 },
+  "display_order",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -209,8 +217,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5Prv/DCQk32mTQaqtYhUuA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-12-10 09:06:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QaSzsLBl3m/n+8u8nXuOeQ
 
 sub koha_object_class {
     'Koha::Authority::Subfield';

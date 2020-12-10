@@ -140,6 +140,12 @@ __PACKAGE__->table("marc_subfield_structure");
   default_value: 9999
   is_nullable: 0
 
+=head2 display_order
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -181,6 +187,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "maxlength",
   { data_type => "integer", default_value => 9999, is_nullable => 0 },
+  "display_order",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -222,8 +230,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-11 14:36:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lCe1ZenRM/9rXnRHXhDuSw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-12-10 09:06:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KVbDXEVf96eDkbPYpcmQVA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
