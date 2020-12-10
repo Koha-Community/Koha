@@ -106,7 +106,12 @@
                             <div class="newsfooter">
                                 Published on [% koha_new.published_on | $KohaDates %]
                                 [% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %]
-                                    by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %]
+                                    [% IF news_item %]
+                                        [% SET author = koha_new.author %]
+                                        by <span class="newsauthor_title">[% author.title | html %] </span>[% author.firstname | html %] [% author.surname | html %]
+                                    [% ELSE %]
+                                        by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %]
+                                    [% END %]
                                 [% END %]
                                 [% IF ( news_item ) %]
                                     &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
