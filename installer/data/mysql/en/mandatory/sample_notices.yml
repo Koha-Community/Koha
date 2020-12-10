@@ -1478,3 +1478,28 @@ tables:
             - "Barcode: [% item.barcode %] <br />"
             - "</p>"
             - "[% END %]"
+
+        - module: circulation
+          code: AUTO_RENEWALS_DGST
+          branchcode: ""
+          name: "Notification on auto renewals"
+          is_html: 0
+          title: "Auto renewals (Digest)"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
+            - "[% IF error %]"
+            - "There were [% error %] items that were not renewed."
+            - "[% END %]"
+            - "[% IF success %]"
+            - "There were [% success %] items that where renewed."
+            - "[% END %]"
+            - "[% FOREACH checkout IN checkouts %]"
+            - "[% checkout.item.biblio.title %] : [% checkout.item.barcode %]"
+            - "[% IF !checkout.auto_renew_error %]"
+            - "was renewed until [% checkout.date_due | $KohaDates as_due_date => 1%]"
+            - "[% ELSE %]"
+            - "was not renewed with error: [% checkout.auto_renew_error %]"
+            - "[% END %]"
+            - "[% END %]"
