@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE TablesSettings %]
 <!-- columns_settings.inc -->
 
@@ -41,15 +42,21 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         }
     }
 
+    var export_numeric = {
+        body: function ( data, row, column, node ) {
+            var newnode = $(node);
+
+            if ( newnode.find(".noExport").length > 0 ) {
+                newnode = newnode.clone();
+                newnode.find(".noExport").remove();
+            }
+            let tp = newnode.text().replace( /\n/g, ' ' ).trim();
+            tp = $('<p>' + tp + '</p>').text();
+            return $.isNumeric(tp.replace(',', '.')) ? tp.replace(',', '.') : tp;
+        }
+    }
+
     var export_buttons = [
-        {
-            extend: 'excelHtml5',
-            text: _("Excel"),
-            exportOptions: {
-                columns: exportColumns,
-                format:  export_format
-            },
-        },
         {
             extend: 'csvHtml5',
             text: _("CSV"),
@@ -75,6 +82,30 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             },
         }
     ];
+
+    [% IF Koha.Preference("CurrencyFormat") != 'FR' %]
+        export_buttons.unshift (
+            {
+                extend: 'excelHtml5',
+                text: _("Excel"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_format
+                },
+            }
+        );
+    [% ELSE %]
+        export_buttons.unshift (
+            {
+                extend: 'excelHtml5',
+                text: _("Excel"),
+                exportOptions: {
+                    columns: exportColumns,
+                    format:  export_numeric
+                },
+            }
+        );
+    [% END %]
 
     dt_parameters[ "buttons" ] = [
         {
