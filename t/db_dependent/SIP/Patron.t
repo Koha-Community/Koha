@@ -4,15 +4,17 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
-use Koha::Database;
-use Koha::Patrons;
-use Koha::DateUtils;
-use t::lib::TestBuilder;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::SIP::ILS::Patron;
+use Koha::Account::Lines;
+use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patron::Attributes;
+use Koha::Patrons;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -180,6 +182,68 @@ subtest "update_lastseen tests" => sub {
     $sip_patron->update_lastseen();
     $seen_patron = Koha::Patrons->find({ cardnumber => $seen_patron->cardnumber() });
     is( output_pref({str => $seen_patron->lastseen(), dateonly => 1}), output_pref({dt => dt_from_string(), dateonly => 1}),'Last seen updated to today if tracking patrons');
+};
+
+subtest "fine_items tests" => sub {
+
+    plan tests => 12;
+
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+        }
+    );
+
+    my $fee1 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                amountoutstanding => 1,
+            }
+        }
+    );
+
+    my $fee2 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                amountoutstanding => 1,
+            }
+        }
+    );
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->{cardnumber} );
+
+    my $all_fine_items = $sip_patron->fine_items;
+    is( @$all_fine_items, 2, "Got all fine items" );
+
+    # Should return only the first fine item
+    my $fine_items = $sip_patron->fine_items(1,1);
+    is( @$fine_items, 1, "Got one fine item" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct fine item");
+
+    # Should return only the second fine item
+    $fine_items = $sip_patron->fine_items(2,2);
+    is( @$fine_items, 1, "Got one fine item" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct fine item");
+
+    # Should return all fine items
+    $fine_items = $sip_patron->fine_items(1,2);
+    is( @$fine_items, 2, "Got two fine items" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item");
+    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item");
+
+    # Check an invalid end boundary
+    $fine_items = $sip_patron->fine_items(1,99);
+    is( @$fine_items, 2, "Got two fine items" );
+    is( $fine_items->[0]->{barcode}, $all_fine_items->[0]->{barcode}, "Got correct first fine item");
+    is( $fine_items->[1]->{barcode}, $all_fine_items->[1]->{barcode}, "Got correct second fine item");
+
+    # Check an invalid start boundary
+    $fine_items = $sip_patron->fine_items(98,99);
+    is( @$fine_items, 0, "Got zero fine items" );
 };
 
 $schema->storage->txn_rollback;
