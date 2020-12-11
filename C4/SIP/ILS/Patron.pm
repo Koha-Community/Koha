@@ -377,7 +377,7 @@ sub fine_items {
     );
 
     $start = $start ? $start - 1 : 0;
-    $end   = $end   ? $end       : scalar @fees - 1;
+    $end   = $end   ? $end - 1   : scalar @fees - 1;
 
     my $av_field_template = $server ? $server->{account}->{av_field_template} : undef;
     $av_field_template ||= "[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
@@ -387,6 +387,8 @@ sub fine_items {
     my @return_values;
     for ( my $i = $start; $i <= $end; $i++ ) {
         my $fee = $fees[$i];
+
+        next unless $fee;
 
         my $output;
         $tt->process( \$av_field_template, { accountline => $fee }, \$output );
