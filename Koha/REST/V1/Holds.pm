@@ -231,7 +231,25 @@ sub edit {
 
         my $body = $c->req->json;
 
-        my $pickup_library_id = $body->{pickup_library_id} // $hold->branchcode;
+        my $pickup_library_id = $body->{pickup_library_id};
+
+        unless (
+            !defined $pickup_library_id
+            or $hold->is_pickup_location_valid(
+                { library_id => $pickup_library_id }
+            )
+          )
+        {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error => 'The supplied pickup location is not valid'
+                }
+            );
+        }
+
+        $pickup_library_id = $hold->branchcode
+            unless defined $pickup_library_id;
         my $priority          = $body->{priority} // $hold->priority;
         # suspended_until can also be set to undef
         my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
