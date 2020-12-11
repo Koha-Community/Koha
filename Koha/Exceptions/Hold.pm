@@ -27,6 +27,10 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Hold',
         description => "Found holds cannot be suspended",
         fields      =>  ['status']
+    },
+    'Koha::Exceptions::Hold::InvalidPickupLocation' => {
+        isa         => 'Koha::Exceptions::Hold',
+        description => 'The supplied pickup location is not valid'
     }
 );
 

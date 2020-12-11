@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use Data::Dumper qw(Dumper);
+use List::MoreUtils qw(any);
 
 use C4::Context qw(preference);
 use C4::Log;
@@ -193,6 +194,59 @@ sub set_waiting {
     $values->{expirationdate} = $cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd;
 
     $self->set($values)->store();
+
+    return $self;
+}
+
+=head3 set_pickup_location
+
+    $hold->set_pickup_location({ library_id => $library->id });
+
+Updates the hold pickup location. It throws a I<Koha::Exceptions::Hold::InvalidPickupLocation> if
+the passed pickup location is not valid.
+
+=cut
+
+sub set_pickup_location {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw('The library_id parameter is mandatory')
+        unless $params->{library_id};
+
+    my @pickup_locations;
+
+    if ( $self->itemnumber ) { # item-level
+        @pickup_locations = $self->item->pickup_locations({ patron => $self->patron });
+    }
+    else { # biblio-level
+        @pickup_locations = $self->biblio->pickup_locations({ patron => $self->patron });
+    }
+
+    if ( any { $_->branchcode eq $params->{library_id} } @pickup_locations ) {
+        # all good, set the new pickup location
+        $self->branchcode( $params->{library_id} )->store;
+    }
+    else {
+        Koha::Exceptions::Hold::InvalidPickupLocation->throw;
+    }
+
+    return $self;
+}
+
+=head3 set_processing
+
+$hold->set_processing;
+
+Mark the hold as in processing.
+
+=cut
+
+sub set_processing {
+    my ( $self ) = @_;
+
+    $self->priority(0);
+    $self->found('P');
+    $self->store();
 
     return $self;
 }
