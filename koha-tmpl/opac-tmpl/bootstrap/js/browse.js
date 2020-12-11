@@ -26,29 +26,29 @@ $(document).ready(function(){
         }
 
         // remove any error states and show the results area (except right pane)
-        $('#browse-suggestionserror').addClass('hidden');
-        $('#browse-searchresults .no-results').addClass('hidden');
-        $('#browse-resultswrapper').removeClass('hidden');
-        $('#browse-selection').addClass('hidden').text("");
-        $('#browse-selectionsearch').addClass('hidden');
+        $('#browse-suggestionserror').addClass('d-none');
+        $('#browse-searchresults .no-results').addClass('d-none');
+        $('#browse-resultswrapper').removeClass('d-none');
+        $('#browse-selection').addClass('d-none').text("");
+        $('#browse-selectionsearch').addClass('d-none');
 
         // clear any results from left and right panes
         leftPaneResults.remove();
         rightPaneResults.remove();
 
         // show the spinner in the left pane
-        $('#browse-searchresults .loading').removeClass('hidden');
+        $('#browse-searchresults .loading').removeClass('d-none');
 
         xhrGetSuggestions = $.get(window.location.pathname, {api: "GetSuggestions", field: userField, prefix: userInput, fuzziness: userFuzziness})
             .always(function() {
                 // hide spinner
-                $('#browse-searchresults .loading').addClass('hidden');
+                $('#browse-searchresults .loading').addClass('d-none');
             })
             .done(function(data) {
                 var fragment = document.createDocumentFragment();
 
                 if (data.length === 0) {
-                    $('#browse-searchresults .no-results').removeClass('hidden');
+                    $('#browse-searchresults .no-results').removeClass('d-none');
 
                     return;
                 }
@@ -75,8 +75,8 @@ $(document).ready(function(){
             .fail(function(jqXHR) {
                 //if 500 or 404 (abort is okay though)
                 if (jqXHR.statusText !== "abort") {
-                    $('#browse-resultswrapper').addClass('hidden');
-                    $('#browse-suggestionserror').removeClass('hidden');
+                    $('#browse-resultswrapper').addClass('d-none');
+                    $('#browse-suggestionserror').removeClass('d-none');
                 }
             });
     });
@@ -99,31 +99,31 @@ $(document).ready(function(){
         $(this).addClass('selected');
 
         // copy in the clicked text
-        $('#browse-selection').removeClass('hidden').text(term);
+        $('#browse-selection').removeClass('d-none').text(term);
 
         // show the right hand pane if it is not shown already
-        $('#browse-selectionsearch').removeClass('hidden');
+        $('#browse-selectionsearch').removeClass('d-none');
 
         // hide the no results element
-        $('#browse-selectionsearch .no-results').addClass('hidden');
+        $('#browse-selectionsearch .no-results').addClass('d-none');
 
         // clear results
         rightPaneResults.remove();
 
         // turn the spinner on
-        $('#browse-selectionsearch .loading').removeClass('hidden');
+        $('#browse-selectionsearch .loading').removeClass('d-none');
 
         // do the query for the term
         xhrGetResults = $.get(window.location.pathname, {api: "GetResults", field: field, term: term})
             .always(function() {
                 // hide spinner
-                $('#browse-selectionsearch .loading').addClass('hidden');
+                $('#browse-selectionsearch .loading').addClass('d-none');
             })
             .done(function(data) {
                 var fragment = document.createDocumentFragment();
 
                 if (data.length === 0) {
-                    $('#browse-selectionsearch .no-results').removeClass('hidden');
+                    $('#browse-selectionsearch .no-results').removeClass('d-none');
 
                     return;
                 }
@@ -162,8 +162,8 @@ $(document).ready(function(){
             .fail(function(jqXHR) {
                 //if 500 or 404 (abort is okay though)
                 if (jqXHR.statusText !== "abort") {
-                    $('#browse-resultswrapper').addClass('hidden');
-                    $('#browse-suggestionserror').removeClass('hidden');
+                    $('#browse-resultswrapper').addClass('d-none');
+                    $('#browse-suggestionserror').removeClass('d-none');
                 }
             });
 
