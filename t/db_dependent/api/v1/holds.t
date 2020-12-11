@@ -1020,17 +1020,17 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-
 subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
 
-    plan tests => 4;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
     my $password = 'AbcdEFG123';
 
-    my $library_1   =  $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
     my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 0 } } );
@@ -1051,7 +1051,27 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
     t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
+    my $libraries_query = { branchcode => [ $library_1->branchcode, $library_2->branchcode ] };
+
+    my $mocked_biblio = Test::MockModule->new('Koha::Biblio');
+    $mocked_biblio->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search($libraries_query);
+    });
+
+    my $mocked_item = Test::MockModule->new('Koha::Item');
+    $mocked_item->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search($libraries_query);
+    });
+
     my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library_1->branchcode
+        }
+    );
+
+    # biblio-level hold
     my $hold = Koha::Holds->find(
         AddReserve(
             {
@@ -1059,13 +1079,64 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
                 borrowernumber => $patron->borrowernumber,
                 biblionumber   => $biblio->biblionumber,
                 priority       => 1,
+                itemnumber     => undef,
             }
         )
     );
 
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $hold->id
-          . "/pickup_location" => json => $library_2->branchcode )->status_is(200)->json_is($library_2->branchcode);
+          . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )
+      ->status_is(200)
+      ->json_is({ pickup_library_id => $library_2->branchcode });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
+
+    $libraries_query = { branchcode => $library_1->branchcode };
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location" => json => { pickup_library_id => $library_3->branchcode } )
+      ->status_is(400)
+      ->json_is({ error => '[The supplied pickup location is not valid]' });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library unchanged' );
+
+    # item-level hold
+    $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $library_1->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => $item->itemnumber,
+            }
+        )
+    );
+
+    $libraries_query = { branchcode => $library_1->branchcode };
+
+    # Attempt to use an invalid pickup locations ends in 400
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )
+      ->status_is(400)
+      ->json_is({ error => '[The supplied pickup location is not valid]' });
+
+    is( $hold->discard_changes->branchcode->branchcode, $library_1->branchcode, 'pickup library unchanged' );
+
+    $libraries_query = {
+        branchcode => {
+            '-in' => [ $library_1->branchcode, $library_2->branchcode ]
+        }
+    };
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold->id
+          . "/pickup_location" => json => { pickup_library_id => $library_2->branchcode } )
+      ->status_is(200)
+      ->json_is({ pickup_library_id => $library_2->branchcode });
 
     is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
 
