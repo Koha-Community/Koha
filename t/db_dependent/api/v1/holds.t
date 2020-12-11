@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -200,7 +200,7 @@ subtest "Test endpoints without permission" => sub {
 
 subtest "Test endpoints with permission" => sub {
 
-    plan tests => 62;
+    plan tests => 44;
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
@@ -212,33 +212,6 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(200)
       ->json_is('/0/patron_id', $patron_2->borrowernumber)
       ->json_hasnt('/1');
-
-    # While suspended_until is date-time, it's always set to midnight.
-    my $expected_suspended_until = $suspended_until->strftime('%FT00:00:00%z');
-    substr($expected_suspended_until, -2, 0, ':');
-
-    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => $put_data )
-      ->status_is(200)
-      ->json_is( '/hold_id', $reserve_id )
-      ->json_is( '/suspended_until', $expected_suspended_until )
-      ->json_is( '/priority', 2 )
-      ->json_is( '/pickup_library_id', $branchcode );
-
-    # Change only pickup library, everything else should remain
-    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => { pickup_library_id => $branchcode2 } )
-      ->status_is(200)
-      ->json_is( '/hold_id', $reserve_id )
-      ->json_is( '/suspended_until', $expected_suspended_until )
-      ->json_is( '/priority', 2 )
-      ->json_is( '/pickup_library_id', $branchcode2 );
-
-    # Reset suspended_until, everything else should remain
-    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => { suspended_until => undef } )
-      ->status_is(200)
-      ->json_is( '/hold_id', $reserve_id )
-      ->json_is( '/suspended_until', undef )
-      ->json_is( '/priority', 2 )
-      ->json_is( '/pickup_library_id', $branchcode2 );
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
       ->status_is(204, 'SWAGGER3.2.4')
@@ -774,6 +747,124 @@ subtest 'pickup_locations() tests' => sub {
           . $hold_2->id
           . "/pickup_locations" )
       ->json_is( [ $library_1->to_api, $library_2->to_api ] );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'edit() tests' => sub {
+
+    plan tests => 14;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 1 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'modify_holds_priority',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    # let's control what Koha::Biblio->pickup_locations returns, for testing
+    $mock_biblio->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+    # let's mock what Koha::Item->pickup_locations returns, for testing
+    $mock_item->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    # Test biblio-level holds
+    my $biblio_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => undef,
+                priority     => 1,
+            }
+        }
+    );
+
+    my $biblio_hold_data = $biblio_hold->to_api;
+    $biblio_hold_data->{pickup_library_id} = $library_1->branchcode;
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $biblio_hold->id
+          => json => $biblio_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
+
+    $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $biblio_hold->id
+          => json => $biblio_hold_data )
+      ->status_is(200);
+
+    $biblio_hold->discard_changes;
+    is( $biblio_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
+
+    # Test item-level holds
+    my $item_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => $item->itemnumber,
+                priority     => 1,
+            }
+        }
+    );
+
+    my $item_hold_data = $item_hold->to_api;
+    $item_hold_data->{pickup_library_id} = $library_1->branchcode;
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $item_hold->id
+          => json => $item_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    $item_hold->discard_changes;
+    is( $item_hold->branchcode, $library_3->branchcode, 'branchcode remains untouched' );
+
+    $item_hold_data->{pickup_library_id} = $library_2->branchcode;
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $item_hold->id
+          => json => $item_hold_data )
+      ->status_is(200);
+
+    $item_hold->discard_changes;
+    is( $item_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
 
     $schema->storage->txn_rollback;
 };
