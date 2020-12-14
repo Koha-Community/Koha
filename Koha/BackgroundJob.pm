@@ -77,13 +77,7 @@ sub connect {
         $credentials->{host} = $config->{vhost} if $config->{vhost};
     }
     my $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
-    my $frame = $stomp->connect( $credentials );
-    unless ($frame && $frame->command eq 'CONNECTED'){
-        if ($frame){
-            warn $frame->as_string;
-        }
-        die "Cannot connect to message broker";
-    }
+    $stomp->connect( $credentials );
     return $stomp;
 }
 
