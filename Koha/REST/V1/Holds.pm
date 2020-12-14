@@ -487,6 +487,9 @@ sub update_pickup_location {
     my $c = shift->openapi->valid_input or return;
 
     my $hold_id = $c->validation->param('hold_id');
+    my $body    = $c->validation->param('body');
+    my $pickup_library_id = $body->{pickup_library_id};
+
     my $hold = Koha::Holds->find($hold_id);
 
     unless ($hold) {
@@ -497,13 +500,27 @@ sub update_pickup_location {
     }
 
     return try {
-        my $pickup_location = $c->req->json;
 
-        $hold->branchcode($pickup_location)->store;
+        $hold->set_pickup_location({ library_id => $pickup_library_id });
 
-        return $c->render( status => 200, openapi => $pickup_location );
+        return $c->render(
+            status  => 200,
+            openapi => {
+                pickup_library_id => $pickup_library_id
+            }
+        );
     }
     catch {
+
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::InvalidPickupLocation') ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error => "$_"
+                }
+            );
+        }
+
         $c->unhandled_exception($_);
     };
 }
