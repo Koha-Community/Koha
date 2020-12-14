@@ -243,7 +243,7 @@ subtest do_hold => sub {
 };
 
 subtest do_checkin => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
@@ -298,6 +298,38 @@ subtest do_checkin => sub {
     is_deeply($result,{ messages => { 'NotIssued' => $item->barcode, 'WasTransfered' => 1 } },"Messages show not issued and transferred");
     is( $ci_transaction->item->destination_loc,$library->branchcode,"Item destination correctly set");
 
+    subtest 'Checkin an in transit item' => sub {
+
+        plan tests => 5;
+
+        my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+        my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => {branchcode => $library_1->branchcode, }});
+        my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+        my $item = $builder->build_sample_item({ library => $library_1->branchcode });
+        my $sip_item   = C4::SIP::ILS::Item->new( $item->barcode );
+
+        t::lib::Mocks::mock_userenv(
+            { branchcode => $library_1->branchcode, flags => 1 } );
+
+        my $reserve = AddReserve($library_1->branchcode,$patron->borrowernumber,$item->biblionumber);
+
+        ModReserveAffect( $item->itemnumber, $patron->borrowernumber ); # Mark waiting
+
+        my $ci_transaction = C4::SIP::ILS::Transaction::Checkin->new();
+        is( $ci_transaction->patron($sip_patron),
+            $sip_patron, "Patron assigned to transaction" );
+        is( $ci_transaction->item($sip_item),
+            $sip_item, "Item assigned to transaction" );
+
+        my $checkin = $ci_transaction->do_checkin($library_2->branchcode, C4::SIP::Sip::timestamp);
+
+        my $hold = Koha::Holds->find($reserve);
+        is( $hold->found, 'T', );
+        is( $hold->itemnumber, $item->itemnumber, );
+        is( Koha::Checkouts->search({itemnumber => $item->itemnumber})->count, 0, );
+    };
 };
 
 subtest checkin_lost => sub {
