@@ -718,7 +718,13 @@
           "description": "Pickup location",
           "required": true,
           "schema": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "pickup_library_id": {
+                "type": "string",
+                "description": "Internal identifier for the pickup library"
+              }
+            }
           }
         }
       ],
@@ -729,7 +735,19 @@
         "200": {
           "description": "The new pickup location value for the hold",
           "schema": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "pickup_library_id": {
+                "type": "string",
+                "description": "Internal identifier for the pickup library"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
           }
         },
         "401": {
