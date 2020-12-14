@@ -1,4 +1,4 @@
-#
+
 # An object to handle checkin status
 #
 
@@ -121,9 +121,9 @@ sub do_checkin {
 
         } else {
             $self->alert_type('02');
-            ModReserveAffect( $messages->{ResFound}->{itemnumber},
+            ModReserveAffect( $self->{item}->{itemnumber},
                 $messages->{ResFound}->{borrowernumber}, 1, $messages->{ResFound}->{reserve_id});
-            ModItemTransfer( $messages->{ResFound}->{itemnumber},
+            ModItemTransfer( $self->{item}->{itemnumber},
                 $branch,
                 $messages->{ResFound}->{branchcode},
                 $messages->{TransferTrigger},
