@@ -198,6 +198,36 @@ sub set_waiting {
     return $self;
 }
 
+=head3 is_pickup_location_valid
+
+    if ($hold->is_pickup_location_valid({ library_id => $library->id }) ) {
+        ...
+    }
+
+Returns a I<boolean> representing if the passed pickup location is valid for the hold.
+It throws a I<Koha::Exceptions::_MissingParameter> if the library_id parameter is not
+passed.
+
+=cut
+
+sub is_pickup_location_valid {
+    my ( $self, $params ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw('The library_id parameter is mandatory')
+        unless $params->{library_id};
+
+    my @pickup_locations;
+
+    if ( $self->itemnumber ) { # item-level
+        @pickup_locations = $self->item->pickup_locations({ patron => $self->patron });
+    }
+    else { # biblio-level
+        @pickup_locations = $self->biblio->pickup_locations({ patron => $self->patron });
+    }
+
+    return any { $_->branchcode eq $params->{library_id} } @pickup_locations;
+}
+
 =head3 set_pickup_location
 
     $hold->set_pickup_location({ library_id => $library->id });
@@ -213,16 +243,7 @@ sub set_pickup_location {
     Koha::Exceptions::MissingParameter->throw('The library_id parameter is mandatory')
         unless $params->{library_id};
 
-    my @pickup_locations;
-
-    if ( $self->itemnumber ) { # item-level
-        @pickup_locations = $self->item->pickup_locations({ patron => $self->patron });
-    }
-    else { # biblio-level
-        @pickup_locations = $self->biblio->pickup_locations({ patron => $self->patron });
-    }
-
-    if ( any { $_->branchcode eq $params->{library_id} } @pickup_locations ) {
+    if ( $self->is_pickup_location_valid({ library_id => $params->{library_id} }) ) {
         # all good, set the new pickup location
         $self->branchcode( $params->{library_id} )->store;
     }
