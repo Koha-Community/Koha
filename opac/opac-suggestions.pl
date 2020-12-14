@@ -217,7 +217,7 @@ foreach my $suggestion(@$suggestions_loop) {
     }
 }
 
-my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
+my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG", "opac");
 
 my @mandatoryfields;
 {
