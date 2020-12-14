@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Test::Exception;
 use Test::MockModule;
@@ -137,6 +137,64 @@ subtest 'set_pickup_location() tests' => sub {
         'Exception thrown if missing parameter';
 
     is( "$@", 'The library_id parameter is mandatory', 'Exception message is clear' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_pickup_location_valid() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    # let's control what Koha::Biblio->pickup_locations returns, for testing
+    $mock_biblio->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+    # let's mock what Koha::Item->pickup_locations returns, for testing
+    $mock_item->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    # Test biblio-level holds
+    my $biblio_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => undef,
+            }
+        }
+    );
+
+    ok( !$biblio_hold->is_pickup_location_valid({ library_id => $library_1->branchcode }), 'Pickup location invalid');
+    ok( $biblio_hold->is_pickup_location_valid({ library_id => $library_2->id }), 'Pickup location valid');
+
+    # Test item-level holds
+    my $item_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => $item->itemnumber,
+            }
+        }
+    );
+
+    ok( !$item_hold->is_pickup_location_valid({ library_id => $library_1->branchcode }), 'Pickup location invalid');
+    ok( $item_hold->is_pickup_location_valid({ library_id => $library_2->id }), 'Pickup location valid' );
 
     $schema->storage->txn_rollback;
 };
