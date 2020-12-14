@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -238,9 +238,16 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
+    # Make sure pickup location checks doesn't get in the middle
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
+
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
       ->json_has('/hold_id');
+
     # Get id from response
     $reserve_id = $t->tx->res->json->{hold_id};
 
@@ -290,6 +297,12 @@ subtest 'Reserves with itemtype' => sub {
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
+    # Make sure pickup location checks doesn't get in the middle
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
+
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
       ->json_has('/hold_id');
@@ -329,6 +342,12 @@ subtest 'test AllowHoldDateInFuture' => sub {
 
     t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 1 );
 
+    # Make sure pickup location checks doesn't get in the middle
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
+
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
       ->json_is('/hold_date', output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }));
@@ -345,12 +364,18 @@ subtest 'test AllowHoldPolicyOverride' => sub {
             itemtype     => undef,
             branchcode   => undef,
             rules        => {
-                holdallowed              => 1
+                holdallowed => 1
             }
         }
     );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+    # Make sure pickup location checks doesn't get in the middle
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
@@ -605,6 +630,12 @@ subtest 'add() tests (maxreserves behaviour)' => sub {
     my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
     my $biblio_3 = $builder->build_sample_biblio;
     my $item_3   = $builder->build_sample_item({ biblionumber => $biblio_3->biblionumber });
+
+    # Make sure pickup location checks doesn't get in the middle
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    $mock_biblio->mock( 'pickup_locations', sub { return Koha::Libraries->search; });
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+    $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
 
     # Disable logging
     t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
@@ -865,6 +896,108 @@ subtest 'edit() tests' => sub {
 
     $item_hold->discard_changes;
     is( $item_hold->branchcode, $library_2->id, 'Pickup location changed correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add() tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 1 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'modify_holds_priority',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $mock_biblio = Test::MockModule->new('Koha::Biblio');
+    my $mock_item   = Test::MockModule->new('Koha::Item');
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    # let's control what Koha::Biblio->pickup_locations returns, for testing
+    $mock_biblio->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+    # let's mock what Koha::Item->pickup_locations returns, for testing
+    $mock_item->mock( 'pickup_locations', sub {
+        return Koha::Libraries->search( { branchcode => [ $library_2->branchcode, $library_3->branchcode ] } );
+    });
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item   = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    # Test biblio-level holds
+    my $biblio_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => undef,
+                priority     => 1,
+            }
+        }
+    );
+
+    my $biblio_hold_data = $biblio_hold->to_api;
+    $biblio_hold->delete;
+    $biblio_hold_data->{pickup_library_id} = $library_1->branchcode;
+    delete $biblio_hold_data->{hold_id};
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $biblio_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    $biblio_hold_data->{pickup_library_id} = $library_2->branchcode;
+    $t->post_ok( "//$userid:$password@/api/v1/holds"  => json => $biblio_hold_data )
+      ->status_is(201);
+
+    # Test item-level holds
+    my $item_hold = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $library_3->branchcode,
+                itemnumber   => $item->itemnumber,
+                priority     => 1,
+            }
+        }
+    );
+
+    my $item_hold_data = $item_hold->to_api;
+    $item_hold->delete;
+    $item_hold_data->{pickup_library_id} = $library_1->branchcode;
+    delete $item_hold->{hold_id};
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
+      ->status_is(400)
+      ->json_is({ error => 'The supplied pickup location is not valid' });
+
+    $item_hold_data->{pickup_library_id} = $library_2->branchcode;
+    $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $item_hold_data )
+      ->status_is(201);
 
     $schema->storage->txn_rollback;
 };

@@ -27,6 +27,7 @@ use Koha::Patrons;
 use Koha::Holds;
 use Koha::DateUtils;
 
+use List::MoreUtils qw(any);
 use Try::Tiny;
 
 =head1 API
@@ -65,6 +66,7 @@ sub add {
         my $body = $c->validation->param('body');
 
         my $biblio;
+        my $item;
 
         my $biblio_id         = $body->{biblio_id};
         my $pickup_library_id = $body->{pickup_library_id};
@@ -98,7 +100,7 @@ sub add {
             }
         }
         elsif ($item_id) {
-            my $item = Koha::Items->find($item_id);
+            $item = Koha::Items->find($item_id);
 
             unless ($item) {
                 return $c->render(
@@ -134,6 +136,28 @@ sub add {
                 openapi => { error => 'patron_id not found' }
             );
         }
+
+        # Validate pickup location
+        my $valid_pickup_location;
+        if ($item) {    # item-level hold
+            $valid_pickup_location =
+              any { $_->branchcode eq $pickup_library_id }
+            $item->pickup_locations(
+                { patron => $patron } );
+        }
+        else {
+            $valid_pickup_location =
+              any { $_->branchcode eq $pickup_library_id }
+            $biblio->pickup_locations(
+                { patron => $patron } );
+        }
+
+        return $c->render(
+            status  => 400,
+            openapi => {
+                error => 'The supplied pickup location is not valid'
+            }
+        ) unless $valid_pickup_location;
 
         my $can_place_hold
             = $item_id
