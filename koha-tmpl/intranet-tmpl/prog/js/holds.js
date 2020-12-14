@@ -221,7 +221,7 @@ $(document).ready(function() {
                     $.ajax({
                         method: "PUT",
                         url: api_url,
-                        data: $(this).val(),
+                        data: JSON.stringify({ "pickup_library_id": $(this).val() }),
                         success: function( data ){ holdsTable.api().ajax.reload(); },
                         error: function( jqXHR, textStatus, errorThrown) {
                             alert('There was an error:'+textStatus+" "+errorThrown);
