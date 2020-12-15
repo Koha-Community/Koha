@@ -507,33 +507,33 @@
                         <td>
                             <p>
                                 [% IF ( books_loo.order_received ) %] <span class="order-received">(received)</span>[% END %]
-                                [% IF books_loo.title %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | uri %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END %]
-                                [% ELSE %]
+                                [%- IF books_loo.title %]
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | uri %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END -%]
+                                [%- ELSE -%]
                                     <em>Deleted bibliographic record, can't find title</em><br />
-                                [% END %]
+                                [%- END %]
                                 <br />
-                                [% IF ( books_loo.isbn ) %] - [% books_loo.isbn | html %][% END %]
-                                [% IF ( books_loo.issn ) %] - [% books_loo.issn | html %][% END %]
-                                [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode | html %][% END %]
-                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear | html %]
-                                [% ELSIF ( books_loo.copyrightdate ) %] [% books_loo.copyrightdate | html %][% END %]
-                                [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement | html %][% END %]
-                                [% IF ( books_loo.suggestionid ) %]
+                                [%- IF ( books_loo.isbn ) %] - [% books_loo.isbn | html %][% END -%]
+                                [%- IF ( books_loo.issn ) %] - [% books_loo.issn | html %][% END -%]
+                                [%- IF ( books_loo.publishercode ) %], [% books_loo.publishercode | html %][% END -%]
+                                [%- IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear | html -%]
+                                [%- ELSIF ( books_loo.copyrightdate ) %] [% books_loo.copyrightdate | html %][% END -%]
+                                [%- IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement | html %][% END -%]
+                                [%- IF ( books_loo.suggestionid ) %]
                                     <br/>
                                     Suggested by: [% books_loo.surnamesuggestedby | html %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby | html %] [% END %]
                                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid | uri %]&amp;op=show">suggestion #[% books_loo.suggestionid | html %]</a>)
                                 [% END %]
                             </p>
                                 [% IF ( books_loo.order_internalnote ) %]
-                                    <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil"></i> Edit internal note</a></p>
+                                    <p class="ordernote"><strong>Internal note: </strong><span id="internal-note-[% books_loo.ordernumber | html %]">[% books_loo.order_internalnote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Edit internal note"><i class="fa fa-pencil"></i> Edit internal note</a></p>
                                 [% ELSE %]
-                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
+                                    <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=internal" title="Add internal note"><i class="fa fa-plus"></i> Add internal note</a>
                                 [% END %]
                                 [% IF ( books_loo.order_vendornote ) %]
-                                    <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil"></i> Edit vendor note</a></p>
+                                    <p class="ordernote"><strong>Vendor note: </strong> <span id="vendor-note-[% books_loo.ordernumber | html %]">[% books_loo.order_vendornote | html %]</span> <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Edit vendor note"><i class="fa fa-pencil"></i> Edit vendor note</a></p>
                                 [% ELSE %]
-                                    <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
+                                    <a class="edit_note noExport" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
                                 [% END %]
                             [% IF (books_loo.transferred_from) %]
                               [% basket = books_loo.transferred_from.basket %]
