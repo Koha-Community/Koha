@@ -55,6 +55,9 @@
                 <td><span class="status_warn">[% elasticsearch_fatal_config_error | html %]</span></td>
             [% ELSE %]
                 <td>
+                    Version:
+                    <span>[% elasticsearch_status.version | html %]</span>
+                    |
                     Nodes:
                     <span>[% elasticsearch_status.nodes.join(' / ') | html %]</span>
                     |
@@ -335,6 +338,12 @@
                     Some system preferences have badly formatted YAML content: [% bad_yaml_prefs.join(', ') | html %]
                     </td></tr>
                 [% END %]
+                [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && elasticsearch_status.version.substr(0,1) < 6 %]
+                    <tr><th scope="row"><strong>Deprecation warning</strong></th><td>
+                            Elasticsearch version 5.x is not supported in Koha 20.11 and greater. Please upgrade your Elasticsearch cluster
+                    </td></tr>
+                [% END %]
+
             </table>
         [% END %]
 

@@ -86,6 +86,14 @@ Searching:
                   yes: Enable
                   no: Disable
             - "browsing search results from the bibliographic record detail page in staff client."
+        -
+            - pref: ElasticsearchCrossFields
+              default: 0
+              choices:
+                  yes: Enable
+                  no: Disable
+            - "the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
+            - "See documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
     Search form:
         -
             - Load the unlogged history to the next user.
