@@ -341,10 +341,12 @@
                "paginationType": "full",
         }));
 
-        $(".add_button").on("click", function(e) {
+        $("#invoices").on("click", ".add_button", function(e) {
             e.preventDefault();
             fnClickAddRow(sale_table, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
-            items_table.fnFilter( '' );
+            if($('#invoices_filter').find('input[type=search]').val() !== ''){
+                items_table.fnFilter( '' );
+            }
         });
 
         // Change calculation and modal
