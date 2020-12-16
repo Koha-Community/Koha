@@ -41,44 +41,70 @@
                     <h1>Browse search</h1>
 
                     <form>
-                        <label for="browse-searchterm">Search for:</label>
-                        <input type="search" id="browse-searchterm" name="searchterm" value="">
-                        <label for="browse-searchfield" class="hide-text">Search type:</label>
-                        <select id="browse-searchfield" name="searchfield">
-                            <option value="author">Author</option>
-                            <option value="subject">Subject</option>
-                            <option value="title">Title</option>
-                        </select>
-
-                        <div id="browse-searchfuzziness">
-                            <label for="exact" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="exact" value="0">Exact</label>
-                            <label for="fuzzy" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="fuzzy" value="1" checked="checked"> Fuzzy</label>
-                            <label for="reallyfuzzy" class="radio inline"><input type="radio" name="browse-searchfuzziness" id="reallyfuzzy" value="2"> Really fuzzy</label>
+                        <div class="form-row">
+                            <div class="col">
+                                <label for="browse-searchterm">Search for:</label>
+                                <input type="search" id="browse-searchterm" class="form-control" name="searchterm" value="" />
+                            </div> <!-- /.col-12.col-sm-9 -->
+                            <div class="col-auto">
+                                <label for="browse-searchfield">Search type:</label>
+                                <select id="browse-searchfield" name="searchfield" class="form-control">
+                                    <option value="author">Author</option>
+                                    <option value="subject">Subject</option>
+                                    <option value="title">Title</option>
+                                </select>
+                            </div> <!-- /.col-auto -->
+                        </div> <!-- /.form-row -->
+                        <div class="form-row">
+                            <div class="col">
+                                <div id="browse-searchfuzziness">
+                                    <div class="form-check form-check-inline">
+                                        <label for="exact" class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="browse-searchfuzziness" id="exact" value="0" />Exact
+                                        </label>
+                                    </div> <!-- /.form-check.form-check-inline -->
+                                    <div class="form-check form-check-inline">
+                                        <label for="fuzzy" class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="browse-searchfuzziness" id="fuzzy" value="1" checked="checked" /> Fuzzy
+                                        </label>
+                                    </div> <!-- /.form-check.form-check-inline -->
+                                    <div class="form-check form-check-inline">
+                                        <label for="reallyfuzzy" class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="browse-searchfuzziness" id="reallyfuzzy" value="2" /> Really fuzzy
+                                        </label>
+                                    </div> <!-- /.form-check.form-check-inline -->
+                                </div> <!-- /#browse-searchfuzziness -->
+                            </div> <!-- /.col -->
+                        </div> <!-- /.form-row -->
+                        <div class="form-row">
+                            <div class="col">
+                                <button class="btn btn-primary" type="submit" accesskey="s">Search</button>
+                            </div>
                         </div>
-                        <button class="btn btn-success" type="submit" accesskey="s">Search</button>
                     </form>
 
-                    <p id="browse-suggestionserror" class="error hidden">
-                    An error occurred, please try again.</p>
+                    <div id="browse-suggestionserror" class="alert alert-warning d-none" role="alert">
+                        An error occurred, please try again.
+                    </div>
 
                     <div id="browse-resultswrapper" class="d-none">
-                        <ul id="browse-searchresults" start="-1" aria-live="polite">
-                            <li class="loading hidden"><img src="[% interface | html %]/[% theme |html %]/images/loading.gif" alt=""> Loading</li>
+                        <h2>Results</h2>
 
-                            <li class="no-results hidden">Sorry, there are no results, try a different search term.</li>
-                        </ul>
+                        <div class="loading d-none"><img src="[% interface | html %]/[% theme |html %]/images/loading.gif" alt=""> Loading</div>
+                        <div class="alert alert-warning no-results d-none" role="alert">Sorry, there are no results. Try a different search term.</div>
 
-                        <h3 id="browse-selection"></h3>
-
-                        <div id="browse-selectionsearch" class="d-none">
-                            <div class="loading hidden">
-                                <img src="[% interface | html %]/[% theme | html %]/images/loading.gif" alt=""> Loading
-                            </div>
-
-                            <div class="no-results hidden">No results</div>
-
-                            <ol aria-live="polite"></ol>
-                        </div>
+                        <div class="accordion" id="browse-searchresults">
+                            <div id="card_template" class="card">
+                                <div class="card-header" id="heading">
+                                    <a class="expand-result" href="#" data-toggle="collapse" aria-expanded="false" aria-controls="collapse">
+                                    </a>
+                                </div> <!-- /#heading.card-header -->
+                                <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#browse-searchresults">
+                                    <div class="card-body">
+                                    </div>
+                                </div> <!-- /#collapse.collapse -->
+                            </div> <!-- /#card_template.card -->
+                        </div> <!-- /#browse-searchresults.accordion -->
                     </div><!-- / #browse-resultswrapper -->
                 </div><!-- /#browse-search -->
             [% ELSE %]
