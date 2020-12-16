@@ -104,6 +104,7 @@ sub _filter_for_output {
           {
             id => $biblionumber,
             title    => $biblio->title,
+            subtitle => $biblio->subtitle,
             author  => $biblio->author,
           };
     };
