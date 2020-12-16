@@ -33,6 +33,22 @@ Koha::Quote - Koha Quote object class
 
 =cut
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Quote object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id        => 'quote_id',
+        source    => 'source',
+        text      => 'text',
+        timestamp => 'displayed_on',
+    };
+}
+
 =head3 _type
 
 =cut

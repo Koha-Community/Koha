@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "quote_id": {
+      "$ref": "../x-primitives.json#/quote_id"
+    },
+    "source": {
+      "description": "source of the quote",
+      "type": "string"
+    },
+    "text": {
+      "description": "text",
+      "type": ["string", "null"]
+    },
+    "displayed_on": {
+      "description": "Last display date",
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["quote_id", "source", "text"]
+}

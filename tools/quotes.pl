@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# Copyright 2012 Foundations Bible College Inc.
-#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -20,23 +18,80 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use autouse 'Data::Dumper' => qw(Dumper);
+use Try::Tiny;
 
 use C4::Auth;
-use C4::Koha;
 use C4::Context;
 use C4::Output;
+use Koha::Quotes;
 
-my $cgi = CGI->new;
+my $input = CGI->new;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/quotes.tt",
-        query           => $cgi,
-        type            => "intranet",
-        flagsrequired   => { tools => 'edit_quotes' },
-        debug           => 1,
+        template_name => "tools/quotes.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { tools => 'edit_quotes' },
+        debug         => 1,
     }
 );
 
-output_html_with_http_headers $cgi, $cookie, $template->output;
+my $id = $input->param('id');
+my $op = $input->param('op') || 'list';
+my @messages;
+
+if ( $op eq 'add_form' ) {
+    $template->param( quote => Koha::Quotes->find($id), );
+}
+elsif ( $op eq 'add_validate' ) {
+    my @fields = qw(
+      source
+      text
+    );
+
+    if ($id) {
+        my $quote = Koha::Quotes->find($id);
+        for my $field (@fields) {
+            $quote->$field( scalar $input->param($field) );
+        }
+
+        try {
+            $quote->store;
+            push @messages, { type => 'message', code => 'success_on_update' };
+        }
+        catch {
+            push @messages, { type => 'alert', code => 'error_on_update' };
+        }
+    }
+    else {
+        my $quote = Koha::Quote->new(
+            {
+                id => $id,
+                ( map { $_ => scalar $input->param($_) || undef } @fields )
+            }
+        );
+
+        try {
+            $quote->store;
+            push @messages, { type => 'message', code => 'success_on_insert' };
+        }
+        catch {
+            push @messages, { type => 'alert', code => 'error_on_insert' };
+        };
+    }
+    $op = 'list';
+}
+else {
+    $op = 'list';
+}
+
+$template->param( quotes_count => Koha::Quotes->search->count )
+  if $op eq 'list';
+
+$template->param(
+    messages => \@messages,
+    op       => $op,
+);
+
+output_html_with_http_headers $input, $cookie, $template->output;

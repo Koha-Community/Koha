@@ -18,9 +18,18 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                <div id="toolbar" class="btn-toolbar" style="visibility: hidden; position: absolute">
+                    <div class="btn-group"><a class="btn btn-default" id="save_quotes" href="#"><i class="fa fa-save"></i> Save quotes</a></div>
+                    <div class="btn-group"><a href="/cgi-bin/koha/tools/quotes-upload.pl" id="cancel_quotes" class="btn btn-default"><i class="fa fa-remove"></i> Cancel import</a></div>
+                </div>
 
-                [% INCLUDE 'quotes-upload-toolbar.inc' %]
                 <h2>Quote uploader</h2>
+
+                <div id="messages" style="display: none;">
+                    <div class="import_success dialog message" style="display: none;"></div>
+                    <div class="import_errors dialog alert" style="display: none;"></div>
+                </div>
+
                 <div id="instructions">
                 <fieldset id="file_uploader_help" class="rows">
                     <legend>Instructions</legend>
@@ -34,12 +43,12 @@
                     <div id="file_editor_inst">
                         <ul>
                         <li>Click on any field to edit the contents; Press the &lt;Enter&gt; key to save edit.</li>
-                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete Quote(s)' button to delete selected quotes.</li>
                         <li>Click the 'Save Quotes' button in the toolbar to save the entire batch of quotes.</li>
                         </ul>
                     </div>
                 </fieldset>
                 </div>
+
                 <fieldset id="file_uploader" class="rows">
                     <legend>Upload quotes</legend>
                     <div id="file_upload">
@@ -232,7 +241,6 @@
             $('#file_uploader').css("top","-150px");
             $('#quotes_editor').css("visibility","visible");
             $("#save_quotes").on("click", yuiGetData);
-            $("#delete_quote").on("click", fnClickDeleteRow);
 
             oTable = $('#quotes_editor').dataTable( {
                 "bAutoWidth"        : false,
@@ -262,8 +270,6 @@
                     /* do foo on various cells in the current row */
                     var quoteNum = $('td', nRow)[0].innerHTML;
                     $(nRow).attr("id", quoteNum); /* set row ids to quote number */
-                    $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
-                    $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
                     /* apply no_edit id to noEditFields */
                     noEditFields = [0]; /* number */
                     for (i=0; i<noEditFields.length; i++) {
@@ -335,44 +341,44 @@
 
         $('#file_upload').one('change', fnHandleFileSelect);
 
-        });
-
+        var MSG_IMPORT_SUCCESS = _("%s quotes imported successfully");
+        var MSG_IMPORT_ERROR   = _("%s quotes have not been imported. An error occurred");
         function fnGetData(element) {
-            var jqXHR = $.ajax({
-                url         : "/cgi-bin/koha/tools/quotes/quotes-upload_ajax.pl",
-                type        : "POST",
-                contentType : "application/x-www-form-urlencoded", // we must claim this mimetype or CGI will not decode the URL encoding
-                dataType    : "json",
-                data        : {
-                                "quote"     : encodeURI ( JSON.stringify(oTable.fnGetData()) ),
-                                "action"    : "add",
-                              },
-                success     : function(){
-                    var response = JSON.parse(jqXHR.responseText);
-                    if (response.success) {
-                        alert(_("%s quotes saved.").format(response.records));
-                        window.location.reload(true);   // is this the best route?
-                    } else {
-                        alert(_("%s quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.").format(response.records));
-                        window.location.reload(true);   // is this the best route?
-                    }
-                  },
+            var lines = oTable.fnGetData();
+            $(lines).each(function(line){
+                var data = {source: this[1], text: this[2]};
+                var success = 0; var error = 0;
+                $.ajax({
+                    url      : "/api/v1/quotes",
+                    method   : "POST",
+                    data     : JSON.stringify(data),
+                    dataType : "application/json",
+                    success  : function(data) {
+                        $("#messages").show();
+                        var import_success = $("#messages .import_success");
+                        import_success.show();
+                        import_success.data("nb")
+                        nb_success = import_success.data("nb") || 0;
+                        nb_success++;
+                        $("#messages .import_success").text(MSG_IMPORT_SUCCESS.format(nb_success));
+                        import_success.data("nb", nb_success);
+                    },
+                    error    : function(xhr) {
+                        if (xhr.status==201) { this.success(null, "Created", xhr); return; }
+                        $("#messages").show();
+                        var import_error = $("#messages .import_error");
+                        import_error.show();
+                        import_error.data("nb")
+                        nb_error = import_error.data("nb") || 0;
+                        nb_error++;
+                        $("#messages .import_error").text(MSG_IMPORT_ERROR.format(nb_error));
+                        import_error.data("nb", nb_error);
+                    },
+                });
             });
         }
 
-        function fnClickDeleteRow() {
-            var idsToDelete = oTable.$('.selected').map(function() {
-                  return this.id;
-            }).get().join(', ');
-            if (!idsToDelete) {
-                alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
-            }
-            else if (confirm(_("Are you sure you wish to delete quote(s) %s?").format(idsToDelete))) {
-                oTable.$('.selected').each(function(){
-                    oTable.fnDeleteRow(this);
-                });
-            }
-        }
+        }); // $(document).ready
     </script>
 [% END %]
 

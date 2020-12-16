@@ -1,10 +1,10 @@
 [% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
-    [% INCLUDE 'doc-head-open.inc' %]
-    <title>Koha &rsaquo; Tools &rsaquo; Quote editor</title>
-    [% INCLUDE 'doc-head-close.inc' %]
-    [% Asset.css("css/quotes.css") | $raw %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Quote editor</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/quotes.css") | $raw %]
 </head>
 
 <body id="tools_quotes" class="tools">
@@ -18,43 +18,110 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                [% INCLUDE 'quotes-toolbar.inc' %]
-                <h2>Quote editor</h2>
-                <div id="instructions">
-                <fieldset id="quote_editor_help" class="rows">
-                    <legend>Instructions</legend>
-                    <div id="quote_editor_inst">
-                        <ul>
-                        <li>Click on the 'Add quote' button to add a single quote; Press the &lt;Enter&gt; key to save the quote.<br />
-                            <strong>Note: </strong>Both the 'source' and 'text' fields must have content in order for the quote to be saved.</li>
-                        <li>Click on any field to edit the contents; Press the &lt;Enter&gt; key to save edit.</li>
-                        <li>Click on one or more quote numbers to select entire quotes for deletion; Click the 'Delete quote(s)' button to delete selected quotes.</li>
-                        <li>Click the 'Import quotes' button in the toolbar to import a CSV file of quotes.</li>
-                        </ul>
-                    </div>
-                </fieldset>
+[% FOREACH m IN messages %]
+    <div class="dialog [% m.type | html %]" id="quote_action_result_dialog">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            An error occurred when updating this quote. Perhaps it already exists.
+        [% CASE 'error_on_insert' %]
+            An error occurred when adding this quote.
+        [% CASE 'success_on_update' %]
+            Quote updated successfully.
+        [% CASE 'success_on_insert' %]
+            Quote added successfully.
+        [% CASE %]
+            [% m.code | html %]
+        [% END %]
+    </div>
+[% END %]
+
+    <div class="dialog message" id="quote_delete_success" style="display: none;"></div>
+    <div class="dialog alert"   id="quote_delete_error"   style="display: none;"></div>
+
+[% IF op == 'list' %]
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="newquote" href="/cgi-bin/koha/tools/quotes.pl?op=add_form"><i class="fa fa-plus"></i> New quote</a>
+        <a class="btn btn-default" id="import_quotes" href="/cgi-bin/koha/tools/quotes-upload.pl"><i class="fa fa-folder-open"></i> Import quotes</a>
+    </div>
+[% END %]
+
+[% IF op == 'add_form' %]
+    <h3>[% IF quote %]Modify quote[% ELSE %]New quote[% END %]</h3>
+    <form action="/cgi-bin/koha/tools/quotes.pl" id="Aform" name="Aform" class="validated" method="post">
+        <fieldset class="rows">
+            <input type="hidden" name="op" value="add_validate" />
+            <ol>
+                <li>
+                    <label for="text" class="required">Source: </label>
+                    <input type="text" name="source" id="source" value="[% quote.source | html %]" class="required" required="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="text" class="required">Text: </label>
+                    <textarea name="text" id="text" class="required" required="required" />[% quote.text | html %]</textarea>
+                    <span class="required">Required</span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <input type="hidden" name="id" value="[% quote.id %]" />
+            <input type="submit" value="Submit" />
+            <a class="cancel" href="/cgi-bin/koha/tools/quotes.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'delete_confirm' %]
+    <div class="dialog alert">
+        <form action="/cgi-bin/koha/tools/quotes.pl" method="post">
+            <h3>Are you sure you want to delete the following quote?</h3>
+            [% quote.source | html %] - [% quote.text | html %]
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="id" value="[% quote.id | html %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/tools/quotes.pl" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
+[% END %]
+
+[% IF op == 'list' %]
+    <h3>Quotes</h3>
+    [% IF quotes_count > 0 %]
+        <table id="quotes">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Source</th>
+                    <th>Text</th>
+                    <th>Last display</th>
+                    <th data-class-name="actions">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    [% ELSE %]
+        <div class="dialog message">There are no quotes defined. <a href="/cgi-bin/koha/tools/quotes.pl?op=add_form">Start defining quotes</a>.</div>
+    [% END %]
+
+    <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="delete_confirm_modal_label">Delete quote</h3>
                 </div>
-                <table id="quotes_editor">
-                <thead>
-                    <tr>
-                        <th><span style="cursor: help" id="id_help">ID</span></th>
-                        <th>Source</th>
-                        <th>Text</th>
-                        <th>Last displayed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- tbody content is generated by DataTables -->
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>Loading data...</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                </table>
-                <fieldset id="footer" class="action">
-                </fieldset>
+                <div class="modal-body">
+                    <div id="delete_confirm_dialog"></div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" id="delete_confirm_modal_button" role="button" data-toggle="modal">Delete</a>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- #delete_confirm_modal -->
+[% END %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -68,164 +135,99 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/dataTables.fnReloadAjax.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
+
     <script>
-        var oTable; /* oTable needs to be global */
-        var sEmptyTable = _("No quotes available. Please use the 'Add quote' button to add a quote."); /* override the default message in datatables.inc */
         $(document).ready(function() {
-            /* NOTE: This is an ajax-source datatable and *not* a server-side sourced datatable. */
-            /* See the datatable docs if you don't understand this difference. */
-            oTable = $("#quotes_editor").dataTable({
-                "bAutoWidth"        : false,
-                "bProcessing"       : true,
-                "bPaginate"         : true,
-                "sPaginationType"   : "full_numbers",
-                "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-                "sAjaxSource"       : "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
-                "aoColumns"         : [
-                                        { "sWidth": "3%"  },
-                                        { "sWidth": "11%" },
-                                        { "sWidth": "75%" },
-                                        { "sWidth": "11%" },
-                                      ],
-               "oLanguage": dataTablesDefaults.oLanguage,
-               "fnPreDrawCallback": function(oSettings) {
-                    return true;
+
+            var quotes_url = '/api/v1/quotes';
+            var quotes = $("#quotes").api({
+                "ajax": {
+                    "url": quotes_url
                 },
-                "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                    /* do foo on the current row and its child nodes */
-                    var noEditFields = [];
-                    var quoteID = $('td', nRow)[0].innerHTML;
-                    $(nRow).attr("id", quoteID); /* set row ids to quote id */
-                    $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
-                    $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
-                    $('td', nRow).attr("id",quoteID); /* FIXME: this is a bit of a hack */
-                    if (isNaN(quoteID)) {
-                        noEditFields = [0,1,2,3]; /* all fields when adding a quote */
-                    } else {
-                        noEditFields = [0,3]; /* id, timestamp */
-                    }
-                    /* apply no_edit id to noEditFields */
-                    for (i=0; i<noEditFields.length; i++) {
-                        $('td', nRow)[noEditFields[i]].setAttribute("id","no_edit");
-                    }
-                    return nRow;
-                },
-               "fnDrawCallback": function(oSettings) {
-                    /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
-                    $('#quotes_editor tbody td[id!="no_edit"]').editable( "/cgi-bin/koha/tools/quotes/quotes_ajax.pl", {
-                        "submitdata"    : function ( value, settings ) {
-                                              return {
-                                                  "column"        : oTable.fnGetPosition( this )[2],
-                                                  "action"        : "edit",
-                                              };
-                                          },
-                        "placeholder"   : "Saving data...",
-                    });
-               },
-            });
-            $("#add_quote").click(function(){
-                fnClickAddRow();
-                return false;
-            });
-            $("#delete_quote").click(function(){
-                fnClickDeleteRow();
-                return false;
-            });
-            $("#id_help").on("click",function(e){
-                e.stopPropagation();
-                alert( _("Click on the quote's id to select or deselect the quote. Multiple quotes may be selected.") );
-            });
-        });
-
-        function fnClickAddQuote(e, node) {
-            if (e.charCode) {
-                /* some browsers only give charCode, so this will need to be */
-                /* fixed up to handle that */
-                console.log('charCode: '+e.charCode);
-            }
-            if (e.keyCode == 13) {
-                var quoteSource = $('#quoteSource').val();
-                var quoteText = $('#quoteText').val()
-                /* If passed a quote source, add the quote to the db */
-                if (quoteSource && quoteText) {
-                    $.ajax({
-                        url: "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
-                        type: "POST",
-                        data: {
-                            "source"    : quoteSource,
-                            "text"      : quoteText,
-                            "action"    : "add",
-                        },
-                        success: function(data){
-                            var newQuote = data[0];
-                            var aRow = oTable.fnUpdate(
-                                newQuote,
-                                node,
-                                undefined,
-                                false,
-                                false
-                            );
-                            oTable.fnPageChange( 'last' );
-                            $('.add_quote_button').attr('onclick', 'fnClickAddRow()'); // re-enable add button
+                'emptyTable': '<div class="dialog message">'+_("There are no quotes defined.")+' <a href="/cgi-bin/koha/tools/quotes.pl?op=add_form">'+_("Start defining quotes")+'</a>.</div>',
+                "columnDefs": [ {
+                    "targets": [0,1,2,3],
+                    "render": function (data, type, row, meta) {
+                        if ( type == 'display' ) {
+                            if ( data != null ) {
+                                return data.escapeHtml();
+                            }
+                            else {
+                                return "";
+                            }
                         }
-                    });
-                } else {
-                    alert(_("Please supply both the text and source of the quote before saving."));
-                }
-            } else if (e.keyCode == 27) {
-                if (confirm(_("Are you sure you want to cancel adding this quote?"))) {
-                    oTable.fnDeleteRow(node);
-                } else {
-                    return;
-                }
-            }
-        }
-
-        function fnClickAddRow() {
-            $('.add_quote_button').removeAttr('onclick'); // disable add button once it has been clicked
-            var aRow = oTable.fnAddData(
-                [
-                    'NA', // this is hackish to fool the datatable sort routine into placing this row at the end of the list...
-                    '<input id="quoteSource" type="text" style="width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
-                    '<input id="quoteText" type="text" style="width:99%" onkeydown="fnClickAddQuote(event,this.parentNode.parentNode)"/>',
-                    '0000-00-00 00:00:00',
-                ],
-                false
-            );
-            oTable.fnPageChange( 'last' );
-            $('#quoteSource').focus();
-        }
-
-        function fnClickDeleteRow() {
-            var idsToDelete = oTable.$('.selected').map(function() {
-                  return this.id;
-            }).get().join(', ');
-            if (!idsToDelete) {
-                alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
-            } else if (confirm(_("Are you sure you wish to delete quote(s) %s?").format(idsToDelete))) {
-                oTable.$('.selected').each(function(){
-                    var quoteID = $(this).attr('id');
-                    $.ajax({
-                        url: "/cgi-bin/koha/tools/quotes/quotes_ajax.pl",
-                        type: "POST",
-                        data: {
-                                "id"        : quoteID,
-                                "action"    : "delete",
+                        return data;
+                    }
+                } ],
+                "columns": [
+                    {
+                        "data": "quote_id",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "source",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "text",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            return $datetime(row.displayed_on);
                         },
-                        /* Delete the row from the datatable */
-                        success: function(){
-                            oTable.fnDeleteRow(this);
-                            oTable.fnReloadAjax(null, null, true);
-                        }
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+
+                            var result = '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/quotes.pl?op=add_form&amp;id='+encodeURIComponent(row.quote_id)+'" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>';
+                            result += '<form action="/cgi-bin/koha/tools/quotes.pl" method="post">';
+                            result += '<input type="hidden" name="id" value="'+row.quote_id.escapeHtml()+'" />'+"\n";
+
+                            result += '<a class="btn btn-default btn-xs delete_quote" role="button" href="#" data-toggle="modal" data-target="#delete_confirm_modal" data-quote-id="'+ encodeURIComponent(row.quote_id) +'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Delete")+'</a>';
+
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                ]
+            });
+
+            $('#quotes').on( "click", '.delete_quote', function () {
+                var quote_id   = decodeURIComponent($(this).data('quote-id'));
+
+                $("#delete_confirm_dialog").html(
+                    _("You are about to delete the quote #%s.").format(quote_id)
+                );
+
+                $("#delete_confirm_modal_button").unbind("click").on( "click", function () {
+                    $.ajax({
+                        method: "DELETE",
+                        url: "/api/v1/quotes/"+quote_id
+                    }).success(function() {
+                        $("#delete_confirm_modal").modal('hide');
+                        quotes.api().ajax.reload(function (data) {
+                            if (data.recordsTotal == 0) {
+                                $("#quotes").hide();
+                            }
+                            $("#quote_action_result_dialog").hide();
+                            $("#quote_delete_success").html(_("Quote #%s deleted successfully.").format(quote_id)).show();
+                        });
+                    }).error(function () {
+                        $("#quote_delete_error").html(_("Error deleting quote #%s. Check the logs.").format(quote_id)).show();
                     });
                 });
-            } else {
-                return;
-            }
-        }
+            });
+
+        });
     </script>
 [% END %]
 

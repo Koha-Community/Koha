@@ -1,0 +1,327 @@
+{
+  "/quotes": {
+    "get": {
+      "x-mojo-to": "Quotes#list",
+      "operationId": "listQuotes",
+      "tags": [
+        "quotes"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "quote_id",
+          "in": "query",
+          "description": "Case insensitive search on quote id",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "source",
+          "in": "query",
+          "description": "Case insensitive search on source",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "text",
+          "in": "query",
+          "description": "Case insensitive search on text",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "displayed_on",
+          "in": "query",
+          "description": "Case Insensative search on last displayed date",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of quotes",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/quote"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Quotes#add",
+      "operationId": "addQuote",
+      "tags": [
+        "quotes"
+      ],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new quote",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/quote"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "Quote added",
+          "schema": {
+            "$ref": "../definitions.json#/quote"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "tools": "edit_quotes"
+        }
+      }
+    }
+  },
+  "/quotes/{quote_id}": {
+    "get": {
+      "x-mojo-to": "Quotes#get",
+      "operationId": "getQuote",
+      "tags": [
+        "quotes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/quote_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A Quote",
+          "schema": {
+            "$ref": "../definitions.json#/quote"
+          }
+        },
+        "404": {
+          "description": "Quote not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Quotes#update",
+      "operationId": "updateQuote",
+      "tags": [
+        "quotes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/quote_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "a quote object",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/quote"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A quote",
+          "schema": {
+            "$ref": "../definitions.json#/quote"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Quote not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "tools": "edit_quotes"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Quotes#delete",
+      "operationId": "deleteQuote",
+      "tags": [
+        "quotes"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/quote_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "Quote deleted"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Quote not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "tools": "edit_quotes"
+        }
+      }
+    }
+  }
+}
