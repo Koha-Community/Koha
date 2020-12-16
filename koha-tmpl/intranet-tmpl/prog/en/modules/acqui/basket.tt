@@ -451,6 +451,7 @@
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>Supplier report</th>
                         [% END %]
+                        <th>Estimated delivery date</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th class="NoSort">Modify</th>
@@ -480,6 +481,7 @@
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <th>&nbsp;</th>
                         [% END %]
+                        <th>[% foot_loo.estimated_delivery_date | $KohaDates | html %]</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                                 <th>&nbsp;</th>
@@ -507,6 +509,7 @@
                     [% IF Koha.Preference('EDIFACT') && ediaccount %]
                     <th>&nbsp;</th>
                     [% END %]
+                    <th>[% estimated_delivery_date | $KohaDates | html %]</th>
                     [% IF ( active ) %]
                         [% UNLESS ( closedate ) %]
                             <th>&nbsp;</th>
@@ -593,6 +596,7 @@
                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                         <td>[% books_loo.suppliers_report | html %]</td>
                         [% END %]
+                        <td>[% books_loo.estimated_delivery_date | $KohaDates | html %]</td>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                             <td>

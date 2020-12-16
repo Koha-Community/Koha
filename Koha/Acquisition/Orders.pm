@@ -69,17 +69,22 @@ sub filter_by_lates {
 
     my @delivery_time_conditions;
     my $date_add = "DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)";
+    my @estimated_delivery_time_conditions;
     if ( defined $estimated_from or defined $estimated_to ) {
         push @delivery_time_conditions, \[ "$date_add IS NOT NULL" ];
+        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date IS NOT NULL" ];
     }
     if ( defined $estimated_from ) {
         push @delivery_time_conditions, \[ "$date_add >= ?", $dtf->format_date($estimated_from) ];
+        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date >= ?", $dtf->format_date($estimated_from) ];
     }
     if ( defined $estimated_to ) {
         push @delivery_time_conditions, \[ "$date_add <= ?", $dtf->format_date($estimated_to) ];
+        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date <= ?", $dtf->format_date($estimated_to) ];
     }
     if ( defined $estimated_from and not defined $estimated_to ) {
         push @delivery_time_conditions, \[ "$date_add <= ?", $dtf->format_date(dt_from_string) ];
+        push @estimated_delivery_time_conditions, \[ "estimated_delivery_date <= ?", $dtf->format_date(dt_from_string) ];
     }
 
     $self->search(
@@ -110,7 +115,15 @@ sub filter_by_lates {
 
             # ( $branchcode ? ('borrower.branchcode')) # FIXME branch is not a filter we may not need to implement this
 
-            ( @delivery_time_conditions ? ( -and => \@delivery_time_conditions ) : ()),
+            ( ( @delivery_time_conditions and @estimated_delivery_time_conditions ) ?
+                ( -or =>
+                    [
+                        -and => \@delivery_time_conditions,
+                        -and => \@estimated_delivery_time_conditions
+                    ]
+                )
+                : ()
+            ),
             (
                 C4::Context->preference('IndependentBranches')
                   && !C4::Context->IsSuperLibrarian
@@ -122,8 +135,12 @@ sub filter_by_lates {
 
         },
         {
-            '+select' => [\"DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)"],
-            '+as' => ['estimated_delivery_date'],
+            '+select' => [
+                \"DATE_ADD(basketno.closedate, INTERVAL COALESCE(booksellerid.deliverytime, booksellerid.deliverytime, 0) day)",
+            ],
+            '+as' => [qw/
+                calculated_estimated_delivery_date
+            /],
             join => { 'basketno' => 'booksellerid' },
             prefetch => {'basketno' => 'booksellerid'},
         }

@@ -480,7 +480,8 @@ $template->param(
     acqcreate        => $basketobj->effective_create_items eq "ordering" ? 1 : "",
     users_ids        => join(':', @order_user_ids),
     users            => \@order_users,
-    (uc(C4::Context->preference("marcflavour"))) => 1
+    (uc(C4::Context->preference("marcflavour"))) => 1,
+    estimated_delivery_date => $data->{estimated_delivery_date},
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

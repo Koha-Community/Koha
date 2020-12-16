@@ -496,11 +496,12 @@ sub get_order_infos {
         $line{order_object}         = $order;
     }
 
-
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
     $line{suggestionid}         = $$suggestion{suggestionid};
     $line{surnamesuggestedby}   = $$suggestion{surnamesuggestedby};
     $line{firstnamesuggestedby} = $$suggestion{firstnamesuggestedby};
+
+    $line{estimated_delivery_date} = $order->{estimated_delivery_date};
 
     foreach my $key (qw(transferred_from transferred_to)) {
         if ($line{$key}) {

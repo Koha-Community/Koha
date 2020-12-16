@@ -137,6 +137,7 @@ use Koha::Acquisition::Currencies qw( get_active );
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Baskets;
 use C4::Barcodes;
+use Koha::DateUtils;
 
 ### "-------------------- addorder.pl ----------"
 
@@ -326,9 +327,11 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     }
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
+    $orderinfo->{estimated_delivery_date} = $orderinfo->{estimated_delivery_date} ? dt_from_string($orderinfo->{estimated_delivery_date}) : undef;
 
     my $order;
     my $log_action_name;
+
     if ( $orderinfo->{ordernumber} ) {
         $order = Koha::Acquisition::Orders->find($orderinfo->{ordernumber});
         $order->set($orderinfo);

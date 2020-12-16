@@ -481,6 +481,11 @@
                 <label for="order_vendornote">Vendor note: </label>
                 <textarea id="order_vendornote" cols="30" rows="3" name="order_vendornote" >[% IF ( order_vendornote ) %][% order_vendornote | html %][% END %]</textarea>
             </li>
+            <li>
+                <label for="estimated_delivery_date">Estimated delivery date: </label>
+                <input type="text" id="estimated_delivery_date" size="10" name="estimated_delivery_date" class="datepicker" value="[% estimated_delivery_date | html %]"/>
+                <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <label for="sort1">Statistic 1: </label>
                 <input id="sort1" type="text" id="sort1" size="20" name="sort1" value="[% sort1 | html %]" />
@@ -681,6 +686,8 @@
                 getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
             });
             $("#budget_id").change();
+
+            $("#estimated_delivery_date").datepicker();
         });
 
         function UserSearchPopup(f) {

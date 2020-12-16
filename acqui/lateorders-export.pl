@@ -44,7 +44,7 @@ unless ( $csv_profile_id ) {
         push @orders, {
                 orderdate => $order->{orderdate},
                 latesince => $order->{latesince},
-                estimateddeliverydate => $order->{estimateddeliverydate},
+                estimateddeliverydate => $order->{estimated_delivery_date} ? $order->{estimated_delivery_date} : $order->{calculateddeliverydate},
                 supplier => $order->{supplier},
                 supplierid => $order->{supplierid},
                 title => $order->{title},

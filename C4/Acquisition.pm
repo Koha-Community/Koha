@@ -1242,7 +1242,7 @@ sub GetOrder {
                 aqbooksellers.name        AS supplier,
                 aqbooksellers.id          AS supplierid,
                 biblioitems.publishercode AS publisher,
-                ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS estimateddeliverydate,
+                ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS calculateddeliverydate,
                 DATE(aqbasket.closedate)  AS orderdate,
                 aqorders.quantity - COALESCE(aqorders.quantityreceived,0)                 AS quantity_to_receive,
                 (aqorders.quantity - COALESCE(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,

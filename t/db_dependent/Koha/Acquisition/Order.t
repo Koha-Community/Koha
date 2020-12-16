@@ -389,7 +389,7 @@ subtest 'claim*' => sub {
 };
 
 subtest 'filter_by_late' => sub {
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
     my $now        = dt_from_string;
@@ -415,6 +415,7 @@ subtest 'filter_by_late' => sub {
                 basketno                => $basket_1->basketno,
                 datereceived            => undef,
                 datecancellationprinted => undef,
+                estimated_delivery_date => undef,
             }
         }
     );
@@ -434,6 +435,7 @@ subtest 'filter_by_late' => sub {
                 basketno                => $basket_2->basketno,
                 datereceived            => undef,
                 datecancellationprinted => undef,
+                estimated_delivery_date => undef,
             }
         }
     );
@@ -453,6 +455,7 @@ subtest 'filter_by_late' => sub {
                 basketno                => $basket_3->basketno,
                 datereceived            => undef,
                 datecancellationprinted => undef,
+                estimated_delivery_date => undef,
             }
         }
     );
@@ -472,6 +475,7 @@ subtest 'filter_by_late' => sub {
                 basketno                => $basket_4->basketno,
                 datereceived            => undef,
                 datecancellationprinted => undef,
+                estimated_delivery_date => undef,
             }
         }
     );
@@ -535,6 +539,34 @@ subtest 'filter_by_late' => sub {
         {
             estimated_from => $now->clone->subtract( days => 4 ),
             estimated_to   => $now->clone->subtract( days => 3 )
+        }
+    );
+    is( $late_orders->count, 1 );
+
+    my $basket_5 = $builder->build_object(    # closed today
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                booksellerid => $bookseller->id,
+                closedate    => $now,
+            }
+        }
+    );
+    my $order_5 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_4->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+                estimated_delivery_date => $now->clone->subtract( days => 2 ),
+            }
+        }
+    );
+    $late_orders = $orders->filter_by_lates(
+        {
+            estimated_from => $now->clone->subtract( days => 3 ),
+            estimated_to   => $now->clone->subtract( days => 2 )
         }
     );
     is( $late_orders->count, 1 );
