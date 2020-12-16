@@ -21,74 +21,19 @@ use Modern::Perl;
 
 use vars qw($AUTOLOAD $context @context_stack);
 BEGIN {
-	if ($ENV{'HTTP_USER_AGENT'})	{
-		require CGI::Carp;
-        # FIXME for future reference, CGI::Carp doc says
-        #  "Note that fatalsToBrowser does not work with mod_perl version 2.0 and higher."
-		import CGI::Carp qw(fatalsToBrowser);
-			sub handle_errors {
-			    my $msg = shift;
-			    my $debug_level;
-			    eval {C4::Context->dbh();};
-			    if ($@){
-				$debug_level = 1;
-			    } 
-			    else {
-				$debug_level =  C4::Context->preference("DebugLevel");
-			    }
-
-                print q(<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-                       <html lang="en" xml:lang="en"  xmlns="http://www.w3.org/1999/xhtml">
-                       <head><title>Koha Error</title></head>
-                       <body>
-                );
-				if ($debug_level eq "2"){
-					# debug 2 , print extra info too.
-					my %versions = get_versions();
-
-		# a little example table with various version info";
-					print "
-						<h1>Koha error</h1>
-						<p>The following fatal error has occurred:</p> 
-                        <pre><code>$msg</code></pre>
-						<table>
-						<tr><th>Apache</th><td>  $versions{apacheVersion}</td></tr>
-						<tr><th>Koha</th><td>    $versions{kohaVersion}</td></tr>
-						<tr><th>Koha DB</th><td> $versions{kohaDbVersion}</td></tr>
-						<tr><th>MySQL</th><td>   $versions{mysqlVersion}</td></tr>
-						<tr><th>OS</th><td>      $versions{osVersion}</td></tr>
-						<tr><th>Perl</th><td>    $versions{perlVersion}</td></tr>
-						</table>";
-
-				} elsif ($debug_level eq "1"){
-					print "
-						<h1>Koha error</h1>
-						<p>The following fatal error has occurred:</p> 
-                        <pre><code>$msg</code></pre>";
-				} else {
-					print "<p>production mode - trapped fatal error</p>";
-				}       
-                print "</body></html>";
-			}
-		#CGI::Carp::set_message(\&handle_errors);
-		## give a stack backtrace if KOHA_BACKTRACES is set
-		## can't rely on DebugLevel for this, as we're not yet connected
-		if ($ENV{KOHA_BACKTRACES}) {
-			$main::SIG{__DIE__} = \&CGI::Carp::confess;
-		}
+    if ( $ENV{'HTTP_USER_AGENT'} ) { # Only hit when plack is not enabled
 
         # Redefine multi_param if cgi version is < 4.08
         # Remove the "CGI::param called in list context" warning in this case
-        require CGI; # Can't check version without the require.
-        if (!defined($CGI::VERSION) || $CGI::VERSION < 4.08) {
+        require CGI;    # Can't check version without the require.
+        if ( !defined($CGI::VERSION) || $CGI::VERSION < 4.08 ) {
             no warnings 'redefine';
             *CGI::multi_param = \&CGI::param;
             use warnings 'redefine';
             $CGI::LIST_CONTEXT_WARN = 0;
         }
-    }  	# else there is no browser to send fatals to!
-}
+    }
+};
 
 use Carp;
 use DateTime::TimeZone;
