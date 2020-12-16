@@ -114,16 +114,27 @@
 <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
   <fieldset class="brief">
 <h4>Filter on:</h4>
-	<fieldset><legend>Date due:</legend>
-	<ol>
-    <li><label for="from">From:</label>
-    <input type="text" id="from" name="dateduefrom" size="10" value="[% filters.dateduefrom | $KohaDates %]" class="datepickerfrom" />
-	</li>
-	<li>
-    <label for="to">To:</label>
-    <input type="text" id="to" name="datedueto" size="10" value="[% filters.datedueto | $KohaDates %]" class="datepickerto" />
-    </li>
-    </ol></fieldset>
+    <fieldset><legend>Date due:</legend>
+        <ol>
+            <li class="radio">
+                <label for="showall">Show any items currently checked out:</label>
+                [% IF ( showall ) %]
+                        <input type="checkbox" id="showall" name="showall" value="show" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="showall" name="showall" value="show" />
+                [% END %]
+            </li>
+
+            <li class="date_due_filter">
+                <label for="from">From:</label>
+                <input type="text" id="from" name="dateduefrom" size="10" value="[% filters.dateduefrom | $KohaDates %]" class="datepickerfrom" />
+            </li>
+            <li class="date_due_filter">
+                <label for="to">To:</label>
+                <input type="text" id="to" name="datedueto" size="10" value="[% filters.datedueto | $KohaDates %]" class="datepickerto" />
+            </li>
+        </ol>
+    </fieldset>
     <ol>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% filters.borname | html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
@@ -132,6 +143,7 @@
       [% END %]
       </select>
     </li>
+
     <li><label>Patron flags:</label>
         <select name="borflag" size="1" id="borflag">
             <option value="">None</option>
@@ -202,13 +214,6 @@
         </select>
     </li>
 
-<li class="radio"><label for="showall">Show any items currently checked out:</label>
-	[% IF ( showall ) %]
-            <input type="checkbox" id="showall" name="showall" value="show" checked="checked" />
-    [% ELSE %]
-        <input type="checkbox" id="showall" name="showall" value="show" />
-    [% END %]
-</li>
 </ol>
    <fieldset class="action">
       <input type="submit" value="Apply filter" class="submit" />
@@ -277,6 +282,18 @@
             });
         }
 
+        function update_date_due_filters_visibility(){
+            if( $("#showall").is(":checked")) {
+                $(".date_due_filter").hide();
+                $("#from").prop("disabled", true);
+                $("#to").prop("disabled", true);
+            } else {
+                $(".date_due_filter").show();
+                $("#from").prop("disabled", false);
+                $("#to").prop("disabled", false);
+            }
+        }
+
         $(document).ready(function(){
             var columns_settings = [% TablesSettings.GetColumns( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
             KohaTable("overduest", {
@@ -285,6 +302,11 @@
                 "autoWidth": false,
                 "stateSave": true
             }, columns_settings);
+
+            $("#showall").on("change", function(){
+                update_date_due_filters_visibility();
+            });
+            update_date_due_filters_visibility();
         });
   </script>
 [% END %]
