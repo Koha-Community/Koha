@@ -100,9 +100,9 @@ sub build_query {
             fields           => $fields,
             lenient          => JSON::true,
             analyze_wildcard => JSON::true,
-            type             => 'cross_fields',
         }
     };
+    $res->{query}->{query_string}->{type} = 'cross_fields' if C4::Context->preference('ElasticsearchCrossFields');
 
     if ( $options{sort} ) {
         foreach my $sort ( @{ $options{sort} } ) {
