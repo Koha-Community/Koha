@@ -280,7 +280,7 @@ $( document ).ready( function () {
 
     $("#select_all").on("click",function(e){
         e.preventDefault();
-        $(".dbcolumn_selection").prop("checked", true);
+        $(".dbcolumn_selection:not(:disabled)").prop("checked", true);
     });
     $("#clear_all").on("click",function(e){
         e.preventDefault();
