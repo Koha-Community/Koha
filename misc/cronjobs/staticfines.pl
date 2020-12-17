@@ -95,7 +95,7 @@ foreach (@pcategories) {
 }
 
 use vars qw(@borrower_fields @item_fields @other_fields);
-use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
+use vars qw($fldir $libname $control $branch_type $mode $delim $dbname $today $today_iso $today_days);
 use vars qw($filename);
 
 CHECK {
@@ -104,6 +104,7 @@ CHECK {
     @other_fields    = qw(type days_overdue fine);
     $libname         = C4::Context->preference('LibraryName');
     $control         = C4::Context->preference('CircControl');
+    $branch_type     = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
     $mode            = C4::Context->preference('finesMode');
     $dbname          = C4::Context->config('database');
     $delim           = "\t";                                                                          # ?  C4::Context->preference('delimiter') || "\t";
@@ -157,7 +158,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
 
     my $branchcode =
         ( $useborrowerlibrary )           ? $patron->branchcode
-      : ( $control eq 'ItemHomeLibrary' ) ? $data->[$i]->{homebranch}
+      : ( $control eq 'ItemHomeLibrary' ) ? $data->[$i]->{$branch_type}
       : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
       :                                     $data->[$i]->{branchcode};
     # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).

@@ -478,8 +478,9 @@ sub TooMany {
             } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
                 $checkouts = $patron->checkouts; # if branch is the patron's home branch, then count all loans by patron
             } else {
+                my $branch_type = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
                 $checkouts = $patron->checkouts->search(
-                    { 'item.homebranch' => $maxissueqty_rule->branchcode } );
+                    { "item.$branch_type" => $maxissueqty_rule->branchcode } );
             }
         } else {
             $checkouts = $patron->checkouts; # if rule is not branch specific then count all loans by patron
@@ -574,9 +575,10 @@ sub TooMany {
         } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
             $checkouts = $patron->checkouts; # if branch is the patron's home branch, then count all loans by patron
         } else {
+            my $branch_type = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
             $checkouts = $patron->checkouts->search(
-                { 'item.homebranch' => $branch},
-                { prefetch          => 'item' } );
+                { "item.$branch_type" => $branch},
+                { prefetch            => 'item' } );
         }
 
         my $checkout_count = $checkouts->count;
@@ -4315,8 +4317,9 @@ sub _CalculateAndUpdateFine {
     # we only need to calculate and change the fines if we want to do that on return
     # Should be on for hourly loans
     my $control = C4::Context->preference('CircControl');
+    my $branch_type = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
     my $control_branchcode =
-        ( $control eq 'ItemHomeLibrary' ) ? $item->{homebranch}
+        ( $control eq 'ItemHomeLibrary' ) ? $item->{$branch_type}
       : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
       :                                     $issue->branchcode;
 

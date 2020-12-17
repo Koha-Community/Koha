@@ -100,6 +100,7 @@ my @item_fields  = qw(itemnumber barcode date_due);
 my @other_fields = qw(days_overdue fine);
 my $libname      = C4::Context->preference('LibraryName');
 my $control      = C4::Context->preference('CircControl');
+my $branch_type  = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
 my $mode         = C4::Context->preference('finesMode');
 my $delim = "\t";    # ?  C4::Context->preference('CSVDelimiter') || "\t";
 
@@ -131,7 +132,7 @@ for my $overdue ( @{$overdues} ) {
     }
     my $patron = Koha::Patrons->find( $overdue->{borrowernumber} );
     my $branchcode =
-        ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
+        ( $control eq 'ItemHomeLibrary' ) ? $overdue->{$branch_type}
       : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
       :                                     $overdue->{branchcode};
 
