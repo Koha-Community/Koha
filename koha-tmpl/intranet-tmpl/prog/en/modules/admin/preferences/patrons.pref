@@ -80,7 +80,7 @@ Patrons:
                yes: Enable
                no: Disable
          - "automatic approval of patron detail changes from the OPAC."
-         - Requires OPACPatronDetails to be activated.
+         - Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACPatronDetails">OPACPatronDetails</a> to be activated.
      -
          - pref: ProtectSuperlibrarianPrivileges
            choices:
@@ -120,7 +120,7 @@ Patrons:
                yes: Allow
                no: "Don't allow"
          - "staff to manage which notices patrons will receive and when they will receive them."
-         - "<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+         - '<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EnhancedMessagingPreferencesOPAC">EnhancedMessagingPreferencesOPAC</a>.'
          - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
      -
          - pref: EnhancedMessagingPreferencesOPAC
@@ -128,7 +128,7 @@ Patrons:
                yes: Show
                no: "Don't show"
          - "patron messaging setting on the OPAC."
-         - "<br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
+         - '<br><strong>NOTE:</strong> <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EnhancedMessagingPreferences">EnhancedMessagingPreferences</a> must be enabled.'
      -
          - pref: AutoEmailOpacUser
            choices:
@@ -158,14 +158,14 @@ Patrons:
                yes: Enable
                no: Disable
          - patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported).
-         - <br/><i class="fa fa-exclamation-triangle"></i> If <code>TalkingTechItivaPhoneNotification</code> is enabled, <code>PhoneNotification</code> should be disabled.
+         - <br/><i class="fa fa-exclamation-triangle"></i> If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification">TalkingTechItivaPhoneNotification</a> is enabled, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification">PhoneNotification</a> should be disabled.
      -
          - pref: PhoneNotification
            choices:
                yes: Enable
                no: Disable
          - patron phone notifications generation. A plugin will be required to process the phone notifications.
-         - <br/><i class="fa fa-exclamation-triangle"></i> If <code>PhoneNotification</code> is enabled, <code>TalkingTechItivaPhoneNotification</code> should be disabled.
+         - <br/><i class="fa fa-exclamation-triangle"></i> If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PhoneNotification">PhoneNotification</a> is enabled, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=TalkingTechItivaPhoneNotification">TalkingTechItivaPhoneNotification</a> should be disabled.
      -
          - "Use the SMS::Send::"
          - pref: SMSSendDriver
@@ -191,7 +191,7 @@ Patrons:
          - pref: BorrowerMandatoryField
            type: modalselect
            source: borrowers
-         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+         - '<strong>NOTE:</strong> If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum">autoMemberNum</a> is enabled, the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</code>.'
      -
          - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
          - pref: BorrowerUnwantedField
@@ -208,12 +208,12 @@ Patrons:
                yes: Do
                no: "Don't"
          - default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942).
-         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+         - '<strong>NOTE:</strong> If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=autoMemberNum">autoMemberNum</a> is enabled, the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField">BorrowerMandatoryField</a> must not contain the field <code>cardnumber</code>.'
      -
          - Card numbers for patrons must be
          - pref: CardnumberLength
          - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
-         - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size of 32."
+         - 'If <code>cardnumber</code> is included in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BorrowerMandatoryField">BorrowerMandatoryField</a> list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size of 32.'
      -
          - pref: uppercasesurnames
            choices:
@@ -309,7 +309,7 @@ Patrons:
          - Use the following URL
          - pref: PrivacyPolicyURL
          - to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)
-         - "<br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
+         - '<br><strong>NOTE:</strong> The URL will only be displayed if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=GDPR_Policy">GDPR_Policy</a> is set.'
      -
          - "Set GDPR policy to:"
          - pref: GDPR_Policy
@@ -318,7 +318,7 @@ Patrons:
                Enforced: 'enforced'
                Permissive: 'permissive'
          - ". GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
-         - "<br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
+         - '<br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PrivacyPolicyURL">PrivacyPolicyURL</a> setting.'
      -
          - Lock/expire patrons that submitted an unsubscribe request (refused consent) after
          - pref: UnsubscribeReflectionDelay

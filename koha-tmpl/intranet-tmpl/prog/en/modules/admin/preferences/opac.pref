@@ -41,7 +41,7 @@ OPAC:
                   yes: Enable
                   no: Disable
             - "Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
-            - "Note: This doesn't affect the public API, see the <code>RESTPublicAnonymousRequests</code> to control the API."
+            - 'Note: This does not affect the public API, see the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RESTPublicAnonymousRequests">RESTPublicAnonymousRequests</a> to control the API.'
         -
             - pref: HighlightOwnItemsOnOPAC
               choices:
@@ -68,7 +68,7 @@ OPAC:
                   no: "Don't show"
             - "a warning that the OPAC is under maintenance, instead of the OPAC itself. Note: this shows the same warning as when the database needs to be upgraded, but unconditionally."
         -
-            - "Show the following HTML when OpacMaintenance is enabled:"
+            - 'Show the following HTML when <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacMaintenance">OpacMaintenance</a> is enabled:'
             - pref: OpacMaintenanceNotice
               type: textarea
               syntax: text/html
@@ -132,7 +132,7 @@ OPAC:
                   no: "Don't include"
             - "COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
             - "<br/>If you want to display a link to an OpenURL resolver, look at the following system preferences:"
-            - "<br/><code>OpenURLResolverURL</code>, <code>OPACShowOpenURL</code>, <code>OPACOpenURLItemTypes</code>, <code>OpenURLText</code>, <code>OpenURLImageLocation</code>"
+            - '<br/><a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLResolverURL">OpenURLResolverURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACShowOpenURL">OPACShowOpenURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACOpenURLItemTypes">OPACOpenURLItemTypes</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLText">OpenURLText</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation">OpenURLImageLocation</a>'
         -
             - pref: OPACShowUnusedAuthorities
               choices:
@@ -243,7 +243,7 @@ OPAC:
               syntax: text/html
               class: code
         -
-            - "Show the following HTML on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available:"
+            - 'Show the following HTML on the left hand column of the main page and patron account on the OPAC, after <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacNav">OpacNav</a>, and before patron account links if available:'
             - pref: OpacNavBottom
               type: textarea
               syntax: text/html
@@ -299,7 +299,7 @@ OPAC:
                   Details: "detail page only"
                   Results: "result page only"
                   Both: "both detail and result pages"
-            - '. Note: The corresponding OPACXSLT option must be turned on.'
+            - '. Note: The corresponding <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACXSLT">OPACXSLT</a> option must be turned on.'
         -
             - 'Select export options that should be available from OPAC detail page:'
             - pref: OpacExportOptions
@@ -358,7 +358,7 @@ OPAC:
                   no: "Don't allow"
             - patrons to submit problem reports for OPAC pages to the library or Koha administrator.
             - "<br/>"
-            - "<strong>NOTE:</strong> You must have KohaAdminEmailAddress enabled."
+            - '<strong>NOTE:</strong> You must have <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a> enabled.'
         -
             - pref: opacuserlogin
               choices:
@@ -466,7 +466,7 @@ OPAC:
               choices:
                   yes: Show
                   no: Hide
-            - reviewer's avatar beside comments in OPAC. The avatar will be searched on www.libravatar.org using the patron's e-mail address.
+            - reviewer's avatar beside comments in OPAC. The avatar will be searched on <a href="https://www.libravatar.org" target="_blank">Libravatar</a> using the patron's e-mail address.
         -
             - pref: RequestOnOpac
               choices:
@@ -549,7 +549,7 @@ OPAC:
             - pref: OpenURLResolverURL
               class: url
         -
-            - 'Text of OpenURL links (or image title if OpenURLImageLocation is defined):'
+            - 'Text of OpenURL links (or image title if <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation">OpenURLImageLocation</a> is defined):'
             - pref: OpenURLText
         -
             - 'Location of image for OpenURL links:'
@@ -603,7 +603,7 @@ OPAC:
               choices:
                   yes: Include
                   no: "Don't include"
-            - "outstanding/unapplied credits when applying the OPACFineNoRenewals rule to patrons."
+            - outstanding/unapplied credits when applying the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a> rule to patrons.
         -
             - pref: OPACViewOthersSuggestions
               choices:
@@ -641,7 +641,7 @@ OPAC:
                 branch: Library or branch
                 patronreason: Patron reason
                 note: Note
-            - "<br />Note: Do not make OPACSuggestionMandatoryFields unwanted fields "
+            - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
         -
             - pref: OpacHiddenItems
               type: textarea
@@ -649,7 +649,7 @@ OPAC:
               class: code
             - Define custom rules to hide specific items from search and view on the OPAC. How to write these rules is documented on the <a href="http://wiki.koha-community.org/wiki/OpacHiddenItems" target="_blank">Koha wiki</a>.
         -
-            - "List of patron categories, separated by |, that can see items otherwise hidden by <code>OpacHiddenItems</code>:"
+            - 'List of patron categories, separated by |, that can see items otherwise hidden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpacHiddenItems">OpacHiddenItems</a>:'
             - pref: OpacHiddenItemsExceptions
         -
             - pref: OpacAllowPublicListCreation
@@ -690,7 +690,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons that aren't logged in to make purchase suggestions. Suggestions are connected to the AnonymousPatron system preference."
+            - 'patrons that aren''t logged in to make purchase suggestions. Suggestions are connected to the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preference.'
         -
             - pref: opacreadinghistory
               choices:
@@ -716,7 +716,7 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons to choose their own privacy settings for their checkout history. This requires opacreadinghistory and AnonymousPatron system preferences."
+            - 'patrons to choose their own privacy settings for their checkout history. This requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory">opacreadinghistory</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preferences.'
         -
             - pref: AllowPatronToSetCheckoutsVisibilityForGuarantor
               default: 0
@@ -796,7 +796,7 @@ OPAC:
                   yes: Allow
                   no: "Don't allow"
             - "library patrons to register for an account via the OPAC."
-            - "<br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+            - <br><strong>NOTE:</strong> This needs <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a> to be set to a valid patron category code.'
         -
             - pref: PatronSelfRegistrationVerifyByEmail
               choices:
@@ -810,7 +810,7 @@ OPAC:
               class: short
             - "as the default patron category for patrons registered via the OPAC."
         -
-            - "Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
+            - Delete patrons still in the category indicated by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a>'
             - pref: PatronSelfRegistrationExpireTemporaryAccountsDelay
               class: integer
             - "days after account creation."

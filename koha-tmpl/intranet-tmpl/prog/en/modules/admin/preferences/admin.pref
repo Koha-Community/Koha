@@ -24,7 +24,7 @@ Administration:
             - "Email address failed overdue notices are sent to: "
             - pref: AddressForFailedOverdueNotices
               class: email
-            - "If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, ReplytoDefault and KohaAdminEmailAddress"
+            - 'If left empty then it will fallback to the first defined address in the following list: Library ReplyTo, Library Email, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault">ReplytoDefault</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress">KohaAdminEmailAddress</a>'
         -
 
             - "How much debugging information to show in the browser when an internal error occurs: "
@@ -199,14 +199,14 @@ Administration:
                   2: "No, let me think about it"
             - "."
             - "<br>Website where usage statistics are published: <a href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
-            - "<br><strong>NOTE:</strong> The other UsageStats system preferences have no effect if this system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> The other <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preferences have no effect if this system preference is set to "No" (don't share).
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
             - "<br><strong>NOTE:</strong> Use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated configuration page</a> to edit the statisics you share."
         -
             - "Use the following library name to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryName
             - . If this field is empty the data will be sent anonymously.
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -
             - "The country where your library is located to be shown on the Hea Community website: "
             - pref: UsageStatsCountry
@@ -409,11 +409,11 @@ Administration:
                 Zimbabwe       : "Zimbabwe"
 
             - . This will be shown on the <a href="https://hea.koha-community.org">Hea Koha community website</a>.
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -
             - "The library URL to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryUrl
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -
             - "The library type to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryType
@@ -430,18 +430,18 @@ Administration:
                   government  : "government"
                   religiousOrg: "religious organization"
                   subscription: "subscription"
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -
             - pref: UsageStatsLibrariesInfo
               choices:
                   yes: "Share"
                   no: "Don't share"
             - "libraries information (name, URL, country)."
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -
             - "Geolocation of the main library: "
             - pref: UsageStatsGeolocation
-            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"No\" (don't share)."
+            - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
             - "<br><strong>NOTE:</strong> You must use the <a href=\"/cgi-bin/koha/admin/usage_statistics.pl\">dedicated configuration page</a> to set and edit this system preference."
     Search engine:
         -

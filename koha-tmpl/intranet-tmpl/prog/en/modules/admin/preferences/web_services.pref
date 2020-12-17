@@ -58,7 +58,7 @@ Web services:
             - "YAML OAI Koha server configuration file:"
             - pref: "OAI-PMH:ConfFile"
               class: file
-            - . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:ConfFile specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records.
+            - . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:ConfFile">OAI-PMH:ConfFile</a> specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records.
         -
             - pref: "OAI-PMH:AutoUpdateSets"
               choices:
@@ -71,7 +71,7 @@ Web services:
                   yes: Enable
                   no: Disable
             - embedding of item data when automatically updating OAI-PMH sets.
-            - <br><strong>NOTE:</strong> This needs OAI-PMH:AutoUpdateSets syspref to be enabled.
+            - <br><strong>NOTE:</strong> This needs <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:AutoUpdateSets">OAI-PMH:AutoUpdateSets</a> syspref to be enabled.
         -
             - Koha's deletedbiblio table
             - pref: "OAI-PMH:DeletedRecord"

@@ -73,7 +73,7 @@ Circulation:
             - Set the default start date for the Holds to pull list to
             - pref: HoldsToPullStartDate
               class: integer
-            - day(s) ago. Note that the default end date is controlled by the system preference ConfirmFutureHolds.
+            - day(s) ago. Note that the default end date is controlled by the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ConfirmFutureHolds">ConfirmFutureHolds</a>.
         -
             - pref: AllowAllMessageDeletion
               choices:
@@ -231,13 +231,13 @@ Circulation:
               choices:
                   yes: Require
                   no: "Don't require"
-            - staff to manually override all fines, even fines less than set in the noissuescharge system preference.
+            - staff to manually override all fines, even fines less than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: AllowFineOverride
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - staff to manually override and check out items to patrons who have more in fines than set in the noissuescharge system preference.
+            - staff to manually override and check out items to patrons who have more in fines than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: AutomaticItemReturn
               choices:
@@ -371,19 +371,19 @@ Circulation:
               choices:
                   yes: Include
                   no: "Don't include"
-            - rental charges when summing up charges for limit set in the noissuescharge system preference.
+            - rental charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: ManInvInNoissuesCharge
               choices:
                   yes: Include
                   no: "Don't include"
-            - custom debit type charges when summing up charges for limit set in the noissuescharge system preference.
+            - custom debit type charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: HoldsInNoissuesCharge
               choices:
                   yes: Include
                   no: "Don't include"
-            - hold charges when summing up charges for limit set in the noissuescharge system preference.
+            - hold charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: ReturnBeforeExpiry
               choices:
@@ -517,7 +517,7 @@ Circulation:
                   no: allow
             - renewing of items.
         -
-            - If a patron owes more than the value of OPACFineNoRenewals,
+            - If a patron owes more than the value of <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a>,
             - pref: OPACFineNoRenewalsBlockAutoRenew
               choices:
                   yes: block
@@ -529,14 +529,14 @@ Circulation:
               choices:
                   yes: renew
                   no: "don't renew"
-            - the item automatically. If the system preference "RenewalPeriodBase" is set to "due date", renewed items may still be overdue.
+            - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
         -
             - If a patron pays off all fines on an overdue item that is accruing fines in the OPAC via a payment plugin,
             - pref: RenewAccruingItemInOpac
               choices:
                   yes: renew
                   no: "don't renew"
-            - the item automatically. If the system preference "RenewalPeriodBase" is set to "due date", renewed items may still be overdue.
+            - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
         -
             - pref: ItemsDeniedRenewal
               type: textarea
@@ -599,7 +599,7 @@ Circulation:
                   no: "Don't"
             - calculate and update overdue charges when an item is returned.
             - "<br /><strong>NOTE:</strong> If you are doing hourly loans then you should have this on."
-            - "<br /><strong>NOTE:</strong> This system preference requires FinesMode to be set to 'Calculate and charge.'"
+            - '<br /><strong>NOTE:</strong> This system preference requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode">FinesMode</a> to be set to "Calculate and charge."'
         -
             - pref: CalculateFinesOnBackdate
               choices:
@@ -655,7 +655,7 @@ Circulation:
               choices:
                   yes: Store
                   no: "Don't store"
-            - the last patron to return an item. This setting is independent of the opacreadinghistory and AnonymousPatron system preferences.
+            - 'the last patron to return an item. This setting is independent of the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory">opacreadinghistory</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preferences.'
     Holds policy:
         -
             - In the staff interface, split the holds queue into separate tables by
@@ -708,7 +708,7 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
+            - patrons to place holds that don't enter the waiting list until a certain future date. (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture">AllowHoldDateInFuture</a> must also be enabled).
         -
             - Confirm future hold requests (starting no later than
             - pref: ConfirmFutureHolds
@@ -731,9 +731,9 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "holds to expire automatically if they have not been picked by within the time period specified in the ReservesMaxPickUpDelay system preference.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
+            - 'holds to expire automatically if they have not been picked by within the time period specified in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay">ReservesMaxPickUpDelay</a> system preference.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it.'
         -
-            - If using ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold to expire a fee of
+            - If using <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
               class: currency
             - "."
@@ -877,7 +877,7 @@ Circulation:
                   no: "Don't allow"
             - to pickup holds at libraries where the item is available.
         -
-            - "Patron categories not affected by OPACHoldsIfAvailableAtPickup:"
+            - 'Patron categories not affected by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup">OPACHoldsIfAvailableAtPickup</a>:'
             - pref: OPACHoldsIfAvailableAtPickupExceptions
             - "(list of patron categories separated with a pipe '|')"
         -
@@ -886,10 +886,10 @@ Circulation:
                   do_not_allow: "Do not allow to mark items as lost"
                   allow: "Allow to mark items as lost"
                   allow_and_notify: "Allow to mark items as lost and notify the patron"
-            - "from the 'Holds to pull' page. Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
+            - from the 'Holds to pull' page. Values to be applied must be defined in <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UpdateItemWhenLostFromHoldList">UpdateItemWhenLostFromHoldList</a>.
         -
             - A list of values to update an item's values with when it is marked as lost from the 'Holds to pull' page.
-            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost. (Requires CanMarkHoldsToPullAsLost)'
+            - 'Example: "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost. (Requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CanMarkHoldsToPullAsLost">CanMarkHoldsToPullAsLost</a>)'
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
               syntax: text/x-yaml
@@ -967,7 +967,7 @@ Circulation:
                   off: "Don't calculate"
                   production: Calculate and charge
             - fines (when <code>cronjobs/fines.pl</code> is being run).
-            - "<br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
+            - '<br><strong>NOTE:</strong> If the cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CalculateFinesOnReturn">CalculateFinesOnReturn</a> is enabled, final fines will be calculated when an item is returned.'
         -
             - If a lost item is returned, apply the refunding rules defined for the
             - pref: RefundLostOnReturnControl
