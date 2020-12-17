@@ -52,8 +52,8 @@ FIXME - this should be moved to a configuration file.
 my %subdivisions = (
     'j' => 'formsubdiv',
     'x' => 'generalsubdiv',
-    'y' => 'chronologicalsubdiv',
-    'z' => 'geographicsubdiv',
+    'y' => 'geographicsubdiv',
+    'z' => 'chronologicalsubdiv',
 );
 
 my $bib_heading_fields;
@@ -160,14 +160,19 @@ sub _get_search_heading {
         my $code    = $subfields[$i]->[0];
         my $code_re = quotemeta $code;
         my $value   = $subfields[$i]->[1];
-        $value =~ s/[-,.:=;!%\/]*$//;
+        $value =~ s/[\s]*[-,.:=;!%\/][\s]*$//;
         next unless $subfields =~ qr/$code_re/;
         if ($first) {
             $first   = 0;
             $heading = $value;
         }
         else {
-            $heading .= " $value";
+            if ( exists $subdivisions{$code} ) {
+                $heading .= " $subdivisions{$code} $value";
+            }
+            else {
+                $heading .= " $value";
+            }
         }
     }
 
