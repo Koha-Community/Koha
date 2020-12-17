@@ -812,13 +812,26 @@ sub _get_match_keys {
     for (my $i = 0; $i <= $#{ $matchpoint->{'components'} }; $i++) {
         my $component = $matchpoint->{'components'}->[$i];
         my $j = -1;
-        FIELD: foreach my $field ($source_record->field($component->{'tag'})) {
+
+        my @fields = ();
+        my $tag = $component->{'tag'};
+        if ($tag && $tag eq 'LDR'){
+            $fields[0] = $source_record->leader();
+        }
+        else {
+            @fields = $source_record->field($tag);
+        }
+
+        FIELD: foreach my $field (@fields) {
             $j++;
             last FIELD if $j > 0 and $check_only_first_repeat;
             last FIELD if $i > 0 and $j > $#keys;
 
             my $string;
-            if ( $field->is_control_field() ) {
+            if ( ! ref $field ){
+                $string = "$field";
+            }
+            elsif ( $field->is_control_field() ) {
                 $string = $field->data();
             } else {
                 $string = $field->as_string(
