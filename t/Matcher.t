@@ -27,7 +27,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 12;
+        plan tests => 13;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -264,6 +264,23 @@ subtest '_get_match_keys() tests' => sub {
 
 };
 
+subtest '_get_match_keys() leader tests' => sub {
+    plan tests => 2;
+    my $record = MARC::Record->new();
+    my $matchpoint = get_leader_matchpoint({
+        length => 1,
+        offset => 6,
+    });
+
+    my @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], ' ', 'Match key correctly calculated as " " from LDR6 when no leader available');
+
+    $record->leader('01344cam a22003014a 4500');
+
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'a', 'Match key correctly calculated as "a" from LDR6');
+};
+
 sub get_title_matchpoint {
 
     my $params = shift;
@@ -354,6 +371,26 @@ sub get_isbn_matchpoint {
         ],
         index => "isbn",
         score => 1000
+    };
+
+    return $matchpoint;
+}
+
+sub get_leader_matchpoint {
+    my $params = shift;
+    my $length = $params->{length} // 0;
+    my $norms  = $params->{norms}  // [];
+    my $offset = $params->{offset} // 0;
+
+    my $matchpoint = {
+        components =>  [
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                tag => 'LDR'
+            },
+        ],
     };
 
     return $matchpoint;
