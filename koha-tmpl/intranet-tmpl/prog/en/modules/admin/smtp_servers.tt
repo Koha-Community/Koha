@@ -366,23 +366,30 @@ SMTP servers
                 $("#delete_confirm_dialog").html(
                     _("You are about to delete the '%s' SMTP server.").format(smtp_server_name)
                 );
+                $("#delete_confirm_modal_button").data('smtp-server-id', smtp_server_id);
+                $("#delete_confirm_modal_button").data('smtp-server-name', smtp_server_name);
+            });
 
-                $("#delete_confirm_modal_button").on( "click", function () {
-                    $.ajax({
-                        method: "DELETE",
-                        url: "/api/v1/config/smtp_servers/"+smtp_server_id
-                    }).success(function() {
-                        $("#delete_confirm_modal").modal('hide');
-                        window.smtp_servers.api().ajax.reload(function (data) {
-                            if (data.recordsTotal == 0) {
-                                $("#smtp_servers_wrapper").hide();
-                            }
-                            $("#smtp_action_result_dialog").hide();
-                            $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(smtp_server_name)).show();
-                        });
-                    }).error(function () {
-                        $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(smtp_server_name)).show();
+            $("#delete_confirm_modal_button").on( "click", function () {
+
+                var smtp_server_id   = $(this).data('smtp-server-id');
+                var smtp_server_name = $(this).data('smtp-server-name');
+
+                $.ajax({
+                    method: "DELETE",
+                    url: "/api/v1/config/smtp_servers/"+smtp_server_id
+                }).success(function() {
+                    window.smtp_servers.api().ajax.reload(function (data) {
+                        if (data.recordsTotal == 0) {
+                            $("#smtp_servers_wrapper").hide();
+                        }
+                        $("#smtp_action_result_dialog").hide();
+                        $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(smtp_server_name)).show();
                     });
+                }).fail(function () {
+                    $("#smtp_delete_error").html(_("Error deleting server '%s'. Check the logs.").format(smtp_server_name)).show();
+                }).done(function () {
+                    $("#delete_confirm_modal").modal('hide');
                 });
             });
         });
