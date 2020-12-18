@@ -29,7 +29,7 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 my $schema = Koha::Database->new->schema;
 
@@ -648,6 +648,62 @@ subtest "Tests for investigate (singular)." => sub {
     })->store;
     is($dbitem->investigate->{reason}, 'repatriation',
        "Item advances, but not at stage branch.");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "Tests for toggle_indemand" => sub {
+    plan tests => 15;
+    $schema->storage->txn_begin;
+
+    my $sritem = $builder->build({
+        source => 'Stockrotationitem',
+        value => { 'fresh' => 0, 'indemand' => 0 }
+    });
+    my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
+    my $firstbranch = $dbitem->stage->branchcode_id;
+    $dbitem->itemnumber->holdingbranch($firstbranch)->store;
+    my $dbstage = $dbitem->stage;
+    $dbstage->position(1)->duration(50)->store; # Configure stage.
+    # Configure item
+    $dbitem->itemnumber->holdingbranch($firstbranch)->store;
+    $dbitem->itemnumber->homebranch($firstbranch)->store;
+    # Sanity check
+    is($dbitem->stage->stage_id, $dbstage->stage_id, "Stage sanity check.");
+
+    # Test if an item is not in transfer, toggle always acts.
+    is($dbitem->indemand, 0, "Item not in transfer starts with indemand disabled.");
+    $dbitem->toggle_indemand;
+    is($dbitem->indemand, 1, "Item not in transfer toggled correctly first time.");
+    $dbitem->toggle_indemand;
+    is($dbitem->indemand, 0, "Item not in transfer toggled correctly second time.");
+
+    # Add stages
+    my $srstage = $builder->build({
+        source => 'Stockrotationstage',
+        value => { duration => 50 }
+    });
+    my $dbstage2 = Koha::StockRotationStages->find($srstage->{stage_id});
+    $dbstage2->move_to_group($dbitem->stage->rota_id);
+    $dbstage2->position(2)->store;
+    my $secondbranch = $dbstage2->branchcode_id;
+
+    # Test an item in transfer, toggle cancels transfer and resets indemand.
+    ok($dbitem->advance, "Advancement done.");
+    $dbitem->get_from_storage;
+    my $transfer = $dbitem->itemnumber->get_transfer;
+    is(ref($transfer), 'Koha::Item::Transfer', 'Item set to in transfer as expected');
+    is($transfer->frombranch, $firstbranch, 'Transfer from set correctly');
+    is($transfer->tobranch, $secondbranch, 'Transfer to set correctly');
+    is($transfer->datearrived, undef, 'Transfer datearrived not set');
+    $dbitem->toggle_indemand;
+    my $updated_transfer = $transfer->get_from_storage;
+    is($updated_transfer->frombranch, $firstbranch, 'Transfer from retained correctly');
+    is($updated_transfer->tobranch, $firstbranch, 'Transfer to updated correctly');
+    isnt($updated_transfer->datearrived, undef, 'Transfer datearrived set as expected');
+    is($dbitem->indemand, 0, "Item retains indemand as expected.");
+    is($dbitem->stage_id, $dbstage->id, 'Item stage reset as expected.');
+    is($dbitem->itemnumber->homebranch, $firstbranch, 'Item homebranch reset as expected.');
 
     $schema->storage->txn_rollback;
 };

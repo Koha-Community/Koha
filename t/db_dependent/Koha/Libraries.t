@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Biblio;
 use C4::Context;
@@ -299,4 +299,39 @@ subtest 'get_hold_libraries and validate_hold_sibling' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'outgoing_transfers' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $transfer1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value  => { frombranch => $library->branchcode },
+        }
+    );
+    my $transfer2 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value  => { frombranch => $library->branchcode },
+        }
+    );
+
+    my $outgoing_transfers = $library->outgoing_transfers;
+    is( ref($outgoing_transfers), 'Koha::Item::Transfers',
+'Koha::Library->outgoing_transfers should return a set of Koha::Item::Transfers'
+    );
+    is( $outgoing_transfers->count, 2,
+        'Koha::Library->outgoing_transfers should return the correct number of transfers'
+    );
+
+    $transfer1->delete;
+    is( $library->outgoing_transfers->next->id, $transfer2->id,
+        'Koha::Library->outgoing_transfers should return the correct transfers'
+    );
+
+    $schema->storage->txn_rollback;
 };
