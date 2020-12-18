@@ -199,6 +199,15 @@
                                     </td>
                                     <td>[% issuelength | html %]</td>
                                     <td>
+                                        [% SWITCH daysmode %]
+                                        [% CASE 'Calendar' %]<span title="Use the calendar to skip days the library is closed">Skip closed days</span>
+                                        [% CASE 'Datedue' %]<span title="Use the calendar to push the due date to the next open day">Next open day</span>
+                                        [% CASE 'Days' %]<span title="Ignore the calendar">Ignore the calendar</span>
+                                        [% CASE 'Dayweek' %]<span title="Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise">Same week day</span>
+                                        [% CASE %]<span title="Use the system preference 'useDaysMode' as a default value">Default</span>
+                                        [% END %]
+                                    </td>
+                                    <td>
                                         [% IF ( lengthunit == 'days' ) %]
                                             Days
                                         [% ELSIF ( lengthunit == 'hours') %]
