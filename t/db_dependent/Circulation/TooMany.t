@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
 use C4::Context;
 
 use C4::Members;
@@ -50,6 +50,10 @@ t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type
 
 my $branch = $builder->build({
     source => 'Branch',
+});
+
+my $branch2 = $builder->build({
+     source => 'Branch',
 });
 
 my $category = $builder->build({
@@ -583,6 +587,8 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
+
     is(
         C4::Circulation::TooMany( $patron, $branch_item ),
         undef,
@@ -655,7 +661,6 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         'We are only allowed one for general rule, and have checked out two at this branch'
     );
 
-    my $branch2   = $builder->build({source => 'Branch',});
     t::lib::Mocks::mock_userenv({ branchcode => $branch2->{branchcode} });
     is_deeply(
         C4::Circulation::TooMany( $patron, $item_2 ),
@@ -972,6 +977,70 @@ subtest 'itemtype group tests' => sub {
             count       => 4,
         },
 'Checkout not allowed, using specific type rule of 2, checkout of sibling itemtype not counted, but parent rule (4) prevents another'
+    );
+
+    teardown();
+};
+
+subtest 'HomeOrHoldingBranch is used' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'CircControl', 'ItemHomeLibrary' );
+
+    my $item_1 = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch2->{branchcode},
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                maxissueqty       => 0,
+            }
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch2->{branchcode},
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                maxissueqty       => 1,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branch2->{branchcode} });
+    my $issue = C4::Circulation::AddIssue( $patron, $item_1->barcode, dt_from_string() );
+
+    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_1 ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            max_allowed => 0,
+            count       => 1,
+        },
+        'We are allowed zero issues from the homebranch specifically'
+    );
+
+    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'holdingbranch');
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_1 ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            max_allowed => 1,
+            count       => 1,
+        },
+        'We are allowed one issue from the holdingbranch specifically'
     );
 
     teardown();
