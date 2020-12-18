@@ -195,7 +195,7 @@ $template->param(
     normalized_isbn => $isbn,
 );
 
-my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
+my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour });
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
 

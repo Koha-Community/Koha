@@ -816,7 +816,7 @@ if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     );
 }
 
-my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour,1);
+my $marcnotesarray = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
 
 if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;

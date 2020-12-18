@@ -32,7 +32,6 @@ BEGIN {
         GetMarcBiblio
         GetISBDView
         GetMarcControlnumber
-        GetMarcNotes
         GetMarcISBN
         GetMarcISSN
         GetMarcSubjects
@@ -1527,60 +1526,6 @@ sub GetMarcISSN {
     }
     return \@marcissns;
 }    # end GetMarcISSN
-
-=head2 GetMarcNotes
-
-    $marcnotesarray = GetMarcNotes( $record, $marcflavour );
-
-    Get all notes from the MARC record and returns them in an array.
-    The notes are stored in different fields depending on MARC flavour.
-    MARC21 5XX $u subfields receive special attention as they are URIs.
-
-=cut
-
-sub GetMarcNotes {
-    my ( $record, $marcflavour, $opac ) = @_;
-    if (!$record) {
-        carp 'GetMarcNotes called on undefined record';
-        return;
-    }
-
-    my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';
-    my @marcnotes;
-
-    #MARC21 specs indicate some notes should be private if first indicator 0
-    my %maybe_private = (
-        541 => 1,
-        542 => 1,
-        561 => 1,
-        583 => 1,
-        590 => 1
-    );
-
-    my %hiddenlist = map { $_ => 1 }
-        split( /,/, C4::Context->preference('NotesToHide'));
-    foreach my $field ( $record->field($scope) ) {
-        my $tag = $field->tag();
-        next if $hiddenlist{ $tag };
-        next if $opac && $maybe_private{$tag} && !$field->indicator(1);
-        if( $marcflavour ne 'UNIMARC' && $field->subfield('u') ) {
-            # Field 5XX$u always contains URI
-            # Examples: 505u, 506u, 510u, 514u, 520u, 530u, 538u, 540u, 542u, 552u, 555u, 561u, 563u, 583u
-            # We first push the other subfields, then all $u's separately
-            # Leave further actions to the template (see e.g. opac-detail)
-            my $othersub =
-                join '', ( 'a' .. 't', 'v' .. 'z', '0' .. '9' ); # excl 'u'
-            push @marcnotes, { marcnote => $field->as_string($othersub) };
-            foreach my $sub ( $field->subfield('u') ) {
-                $sub =~ s/^\s+|\s+$//g; # trim
-                push @marcnotes, { marcnote => $sub };
-            }
-        } else {
-            push @marcnotes, { marcnote => $field->as_string() };
-        }
-    }
-    return \@marcnotes;
-}
 
 =head2 GetMarcSubjects
 

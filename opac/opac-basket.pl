@@ -70,6 +70,7 @@ foreach my $biblionumber ( @bibs ) {
 
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
+    my $biblio           = Koha::Biblios->find( $biblionumber );
 
     # No filtering on the item records needed for the record itself
     # since the only reason item information is grabbed is because of branchcodes.
@@ -81,7 +82,7 @@ foreach my $biblionumber ( @bibs ) {
     });
     $record_processor->process($record);
     next unless $record;
-    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour, 1 );
+    my $marcnotesarray   = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);

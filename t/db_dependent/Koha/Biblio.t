@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use C4::Biblio;
 use Koha::Database;
@@ -548,6 +548,65 @@ subtest 'subscriptions() tests' => sub {
         'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
     );
     is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_marc_notes() MARC21 tests' => sub {
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'NotesToHide', '520' );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $record = $biblio->metadata->record;
+    $record->append_fields(
+        MARC::Field->new( '500', '', '', a => 'Note1' ),
+        MARC::Field->new( '505', '', '', a => 'Note2', u => 'http://someserver.com' ),
+        MARC::Field->new( '520', '', '', a => 'Note3 skipped' ),
+        MARC::Field->new( '541', '0', '', a => 'Note4 skipped on opac' ),
+        MARC::Field->new( '541', '', '', a => 'Note5' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+    my $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21' });
+    is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
+    is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
+    is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
+    is( $notes->[3]->{marcnote}, 'Note4 skipped on opac',"Not shows if not opac" );
+    is( $notes->[4]->{marcnote}, 'Note5', 'Fifth note' );
+    is( @$notes, 5, 'No more notes' );
+    $notes = $biblio->get_marc_notes({ marcflavour => 'MARC21', opac => 1 });
+    is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
+    is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
+    is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
+    is( $notes->[3]->{marcnote}, 'Note5', 'Fifth note shows after fourth skipped' );
+    is( @$notes, 4, 'No more notes' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_marc_notes() UNIMARC tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'NotesToHide', '310' );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $record = $biblio->metadata->record;
+    $record->append_fields(
+        MARC::Field->new( '300', '', '', a => 'Note1' ),
+        MARC::Field->new( '300', '', '', a => 'Note2' ),
+        MARC::Field->new( '310', '', '', a => 'Note3 skipped' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber);
+    my $notes = $biblio->get_marc_notes({ marcflavour => 'UNIMARC' });
+    is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
+    is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
+    is( @$notes, 2, 'No more notes' );
 
     $schema->storage->txn_rollback;
 };

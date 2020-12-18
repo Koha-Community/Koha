@@ -416,15 +416,6 @@ sub run_tests {
     }
     is ($newincbiblioitemnumber, $biblioitemnumbertotest, 'Check newincbiblioitemnumber');
 
-    # test for GetMarcNotes
-    my $a1= GetMarcNotes( $marc_record, $marcflavour );
-    my $field2 = MARC::Field->new( $marcflavour eq 'UNIMARC'? 300: 555, 0, '', a=> 'Some text', u=> 'http://url-1.com', u=> 'nohttp://something_else' );
-    $marc_record->append_fields( $field2 );
-    my $a2= GetMarcNotes( $marc_record, $marcflavour );
-    is( ( $marcflavour eq 'UNIMARC' && @$a2 == @$a1 + 1 ) ||
-        ( $marcflavour ne 'UNIMARC' && @$a2 == @$a1 + 3 ), 1,
-        'Check the number of returned notes of GetMarcNotes' );
-
     # test for GetMarcUrls
     $marc_record->append_fields(
         MARC::Field->new( '856', '', '', u => ' https://koha-community.org ' ),
@@ -586,14 +577,14 @@ sub create_author_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 48;
+    plan tests => 47;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 48;
+    plan tests => 47;
 
     # Mock the auth type data for UNIMARC
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
@@ -604,7 +595,7 @@ subtest 'UNIMARC' => sub {
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 48;
+    plan tests => 47;
     run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
