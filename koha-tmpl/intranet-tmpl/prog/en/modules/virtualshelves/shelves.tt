@@ -435,7 +435,10 @@
         <script>
             $( document ).ready(function() {
                 window.print();
-                setTimeout('window.close()', 1);
+                window.onafterprint = function () {
+                    window.close();
+                }
+                setTimeout('window.close()', 1000); // Hack for Chrome < 63
             });
         </script>
     [% END %]
