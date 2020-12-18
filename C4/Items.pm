@@ -351,20 +351,30 @@ sub ModItemTransfer {
     my $dbh = C4::Context->dbh;
     my $item = Koha::Items->find( $itemnumber );
 
-    # Remove the 'shelving cart' location status if it is being used.
-    CartToShelf( $itemnumber ) if $item->location && $item->location eq 'CART' && ( !$item->permanent_location || $item->permanent_location ne 'CART' );
+    # NOTE: This retains the existing hard coded behaviour by ignoring transfer limits
+    # and always replacing any existing transfers. (In theory, calls to ModItemTransfer
+    # will have been preceded by a check of branch transfer limits)
+    my $to_library = Koha::Libraries->find($tobranch);
+    my $transfer = $item->request_transfer(
+        {
+            to            => $to_library,
+            reason        => $trigger,
+            ignore_limits => 1,
+            replace       => 1
+        }
+    );
 
-    $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ? AND datearrived IS NULL", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
+    # Immediately set the item to in transit if it is checked in
+    if ( !$item->checkout ) {
+        $item->holdingbranch($frombranch)->store(
+            {
+                log_action        => 0,
+                skip_record_index => $params->{skip_record_index}
+            }
+        );
+        $transfer->transit;
+    }
 
-    #new entry in branchtransfers....
-    my $sth = $dbh->prepare(
-        "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch, reason)
-        VALUES (?, ?, NOW(), ?, ?)");
-    $sth->execute($itemnumber, $frombranch, $tobranch, $trigger);
-
-    # FIXME we are fetching the item twice in the 2 next statements!
-    Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ log_action => 0, skip_record_index => $params->{skip_record_index} });
-    ModDateLastSeen($itemnumber, undef, { skip_record_index => $params->{skip_record_index} });
     return;
 }
 
