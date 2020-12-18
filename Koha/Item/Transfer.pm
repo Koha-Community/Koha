@@ -19,7 +19,11 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Items;
+
 use Koha::Database;
+use Koha::DateUtils;
+use Koha::Exceptions::Item::Transfer;
 
 use base qw(Koha::Object);
 
@@ -45,6 +49,39 @@ sub item {
     my ($self) = @_;
     my $item_rs = $self->_result->itemnumber;
     return Koha::Item->_new_from_dbic($item_rs);
+}
+
+=head3 transit
+
+Set the transfer as in transit by updating the datesent time.
+
+Also, update date last seen and ensure item holdingbranch is correctly set.
+
+=cut
+
+sub transit {
+    my ($self) = @_;
+
+    # Throw exception if item is still checked out
+    Koha::Exceptions::Item::Transfer::Out->throw() if ( $self->item->checkout );
+
+    # Remove the 'shelving cart' location status if it is being used (Bug 3701)
+    CartToShelf( $self->item->itemnumber )
+      if $self->item->location
+      && $self->item->location eq 'CART'
+      && (!$self->item->permanent_location
+        || $self->item->permanent_location ne 'CART' );
+
+    # Update the transit state
+    $self->set(
+        {
+            frombranch => $self->item->holdingbranch,
+            datesent   => dt_from_string,
+        }
+    )->store;
+
+    ModDateLastSeen( $self->item->itemnumber );
+    return $self;
 }
 
 =head3 type
