@@ -24,8 +24,10 @@ use DateTime::Duration;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Item::Transfer;
-use t::lib::TestBuilder;
+
 use Test::Warn;
+use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Test::More tests => 8;
 
@@ -136,26 +138,65 @@ subtest 'Tests for needs_repatriating' => sub {
 };
 
 subtest "Tests for repatriate." => sub {
-    plan tests => 3;
+    plan tests => 9;
     $schema->storage->txn_begin;
-    my $sritem = $builder->build(
+
+    my $sritem_1 = $builder->build_object(
         {
-            source => 'Stockrotationitem',
-            value =>
-              { itemnumber_id => $builder->build_sample_item->itemnumber }
+            class => 'Koha::StockRotationItems',
+            value  => {
+                itemnumber_id => $builder->build_sample_item->itemnumber
+            }
         }
     );
-    my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    $dbitem->stage->position(1);
-    $dbitem->stage->duration(50);
+    my $item_id = $sritem_1->itemnumber->itemnumber;
+    my $srstage_1 = $sritem_1->stage;
+    $sritem_1->discard_changes;
+    $sritem_1->stage->position(1);
+    $sritem_1->stage->duration(50);
     my $branch = $builder->build({ source => 'Branch' });
-    $dbitem->itemnumber->holdingbranch($branch->{branchcode});
+    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
 
     # Test a straight up repatriate
-    ok($dbitem->repatriate, "Repatriation done.");
-    my $intransfer = $dbitem->itemnumber->get_transfer;
+    ok($sritem_1->repatriate, "Repatriation done.");
+    my $intransfer = $sritem_1->itemnumber->get_transfer;
     is($intransfer->frombranch, $branch->{branchcode}, "Origin correct.");
-    is($intransfer->tobranch, $dbitem->stage->branchcode_id, "Target Correct.");
+    is($intransfer->tobranch, $sritem_1->stage->branchcode_id, "Target Correct.");
+
+    # Reset
+    $intransfer->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
+
+    # Setup a conflicting manual transfer
+    my $item = Koha::Items->find($item_id);
+    $item->request_transfer({ to => $srstage_1->branchcode, reason => "Manual" });
+    $intransfer = $item->get_transfer;
+    is (ref($intransfer), 'Koha::Item::Transfer', "Conflicting transfer added");
+    is ($intransfer->reason, 'Manual', "Conflicting transfer reason is 'Manual'");
+
+    # Stockrotation should handle transfer clashes
+    is($sritem_1->repatriate, 0, "Repatriation skipped if transfer in progress.");
+
+    # Reset
+    $intransfer->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($branch->{branchcode});
+
+    # Confirm that stockrotation ignores transfer limits
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $branch->{branchcode},
+            toBranch   => $srstage_1->branchcode_id,
+            itemtype   => $sritem_1->itemnumber->effective_itemtype,
+        }
+    )->store;
+
+    # Stockrotation should overrule transfer limits
+    ok($sritem_1->repatriate, "Repatriation done regardless of transfer limits.");
+    $intransfer = $sritem_1->itemnumber->get_transfer;
+    is($intransfer->frombranch, $branch->{branchcode}, "Origin correct.");
+    is($intransfer->tobranch, $sritem_1->stage->branchcode_id, "Target Correct.");
 
     $schema->storage->txn_rollback;
 };
@@ -232,112 +273,220 @@ subtest "Tests for needs_advancing." => sub {
 };
 
 subtest "Tests for advance." => sub {
-    plan tests => 23;
+    plan tests => 44;
     $schema->storage->txn_begin;
 
-    my $sritem = $builder->build(
+    my $sritem_1 = $builder->build_object(
         {
-            source => 'Stockrotationitem',
+            class => 'Koha::StockRotationItems',
             value  => {
                 'fresh'       => 1,
                 itemnumber_id => $builder->build_sample_item->itemnumber
             }
         }
     );
-    my $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id);
-    my $dbstage = $dbitem->stage;
-    $dbstage->position(1)->duration(50)->store; # Configure stage.
+    $sritem_1->discard_changes;
+    $sritem_1->itemnumber->holdingbranch($sritem_1->stage->branchcode_id);
+    my $item_id = $sritem_1->itemnumber->itemnumber;
+    my $srstage_1 = $sritem_1->stage;
+    $srstage_1->position(1)->duration(50)->store; # Configure stage.
     # Configure item
-    $dbitem->itemnumber->holdingbranch($dbstage->branchcode_id)->store;
-    $dbitem->itemnumber->homebranch($dbstage->branchcode_id)->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+    $sritem_1->itemnumber->homebranch($srstage_1->branchcode_id)->store;
     # Sanity check
-    is($dbitem->stage->stage_id, $dbstage->stage_id, "Stage sanity check.");
+    is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Stage sanity check.");
 
     # Test if an item is fresh, always move to first stage.
-    is($dbitem->fresh, 1, "Fresh is correct.");
-    $dbitem->advance;
-    is($dbitem->stage->stage_id, $dbstage->stage_id, "Stage is first stage after fresh advance.");
-    is($dbitem->fresh, 0, "Fresh reset after advance.");
+    is($sritem_1->fresh, 1, "Fresh is correct.");
+    $sritem_1->advance;
+    is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Stage is first stage after fresh advance.");
+    is($sritem_1->fresh, 0, "Fresh reset after advance.");
 
     # Test cases of single stage
-    $dbstage->rota->cyclical(1)->store;         # Set Rota to cyclical.
-    ok($dbitem->advance, "Single stage cyclical advance done.");
-    ## Refetch dbitem
-    $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    is($dbitem->stage->stage_id, $dbstage->stage_id, "Single stage cyclical stage OK.");
+    $srstage_1->rota->cyclical(1)->store;         # Set Rota to cyclical.
+    ok($sritem_1->advance, "Single stage cyclical advance done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
+    is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Single stage cyclical stage OK.");
 
     # Test with indemand advance
-    $dbitem->indemand(1)->store;
-    ok($dbitem->advance, "Indemand item advance done.");
-    ## Refetch dbitem
-    $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    is($dbitem->indemand, 0, "Indemand OK.");
-    is($dbitem->stage->stage_id, $dbstage->stage_id, "Indemand item advance stage OK.");
+    $sritem_1->indemand(1)->store;
+    ok($sritem_1->advance, "Indemand item advance done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
+    is($sritem_1->indemand, 0, "Indemand OK.");
+    is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Indemand item advance stage OK.");
 
     # Multi stages
-    my $srstage = $builder->build({
-        source => 'Stockrotationstage',
+    my $srstage_2 = $builder->build_object({
+        class => 'Koha::StockRotationStages',
         value => { duration => 50 }
     });
-    my $dbstage2 = Koha::StockRotationStages->find($srstage->{stage_id});
-    $dbstage2->move_to_group($dbitem->stage->rota_id);
-    $dbstage2->move_last;
+    $srstage_2->discard_changes;
+    $srstage_2->move_to_group($sritem_1->stage->rota_id);
+    $srstage_2->move_last;
 
     # Test a straight up advance
-    ok($dbitem->advance, "Advancement done.");
-    ## Refetch dbitem
-    $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
+    ok($sritem_1->advance, "Advancement done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
     ## Test results
-    is($dbitem->stage->stage_id, $dbstage2->stage_id, "Stage updated.");
+    is($sritem_1->stage->stage_id, $srstage_2->stage_id, "Stage updated.");
     is(
-        $dbitem->itemnumber->homebranch,
-        $dbstage2->branchcode_id,
+        $sritem_1->itemnumber->homebranch,
+        $srstage_2->branchcode_id,
         "Item homebranch updated"
     );
-    my $intransfer = $dbitem->itemnumber->get_transfer;
-    is($intransfer->frombranch, $dbstage->branchcode_id, "Origin correct.");
-    is($intransfer->tobranch, $dbstage2->branchcode_id, "Target Correct.");
+    my $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
+    is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target Correct.");
+    is($transfer_request->datesent, undef, "Transfer requested, but not sent.");
 
     # Arrive at new branch
-    $intransfer->datearrived(dt_from_string())->store;
-    $dbitem->itemnumber->holdingbranch($srstage->{branchcode_id})->store;
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
 
     # Test a cyclical advance
-    ok($dbitem->advance, "Cyclical advancement done.");
-    ## Refetch dbitem
-    $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
+    ok($sritem_1->advance, "Cyclical advancement done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
     ## Test results
-    is($dbitem->stage->stage_id, $dbstage->stage_id, "Stage updated.");
+    is($sritem_1->stage->stage_id, $srstage_1->stage_id, "Stage updated.");
     is(
-        $dbitem->itemnumber->homebranch,
-        $dbstage->branchcode_id,
+        $sritem_1->itemnumber->homebranch,
+        $srstage_1->branchcode_id,
         "Item homebranch updated"
     );
-    $intransfer = $dbitem->itemnumber->get_transfer;
-    is($intransfer->frombranch, $dbstage2->branchcode_id, "Origin correct.");
-    is($intransfer->tobranch, $dbstage->branchcode_id, "Target correct.");
+    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->frombranch, $srstage_2->branchcode_id, "Origin correct.");
+    is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
 
     # Arrive at new branch
-    $intransfer->datearrived(dt_from_string())->store;
-    $dbitem->itemnumber->holdingbranch($srstage->{branchcode_id})->store;
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
 
-    $dbstage->rota->cyclical(0)->store;         # Set Rota to non-cyclical.
+    # Confirm that stockrotation ignores transfer limits
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $srstage_1->branchcode_id,
+            toBranch   => $srstage_2->branchcode_id,
+            itemtype   => $sritem_1->itemnumber->effective_itemtype,
+        }
+    )->store;
+
+    ok($sritem_1->advance, "Advancement overrules transfer limits.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
+    ## Test results
+    is($sritem_1->stage->stage_id, $srstage_2->stage_id, "Stage updated ignoring transfer limits.");
+    is(
+        $sritem_1->itemnumber->homebranch,
+        $srstage_2->branchcode_id,
+        "Item homebranch updated ignoring transfer limits"
+    );
+    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct ignoring transfer limits.");
+    is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target correct ignoring transfer limits.");
+
+    # Arrive at new branch
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+
+    # Setup a conflicting manual transfer
+    my $item = Koha::Items->find($item_id);
+    $item->request_transfer({ to => $srstage_1->branchcode, reason => "Manual" });
+    $transfer_request = $item->get_transfer;
+    is (ref($transfer_request), 'Koha::Item::Transfer', "Conflicting transfer added");
+    is ($transfer_request->reason, 'Manual', "Conflicting transfer reason is 'Manual'");
+
+    # Advance item whilst conflicting manual transfer exists
+    ok($sritem_1->advance, "Advancement done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
+
+    ## Refetch conflicted transfer
+    $transfer_request->discard_changes;
+
+    # Conflicted transfer should have been cancelled
+    isnt($transfer_request->datecancelled, undef, "Conflicting manual transfer was cancelled");
+
+    # StockRotationAdvance transfer added
+    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->reason, 'StockrotationAdvance', "StockrotationAdvance transfer added");
+    is($transfer_request->frombranch, $srstage_2->branchcode_id, "Origin correct.");
+    is($transfer_request->tobranch, $srstage_1->branchcode_id, "Target correct.");
+
+    # Arrive at new branch
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_1->branchcode_id)->store;
+
+    # Setup a conflicting reserve transfer
+    $item->request_transfer({ to => $srstage_2->branchcode, reason => "Reserve" });
+    $transfer_request = $item->get_transfer;
+    is (ref($transfer_request), 'Koha::Item::Transfer', "Conflicting transfer added");
+    is ($transfer_request->reason, 'Reserve', "Conflicting transfer reason is 'Reserve'");
+
+    # Advance item whilst conflicting reserve transfer exists
+    ok($sritem_1->advance, "Advancement done.");
+    ## Refetch sritem_1
+    $sritem_1->discard_changes;
+
+    ## Refetch conflicted transfer
+    $transfer_request->discard_changes;
+
+    # Conflicted transfer should not been cancelled
+    is($transfer_request->datecancelled, undef, "Conflicting reserve transfer was not cancelled");
+
+    # StockRotationAdvance transfer added
+    my $transfer_requests = Koha::Item::Transfers->search(
+        {
+            itemnumber    => $sritem_1->itemnumber->itemnumber,
+            datearrived   => undef,
+            datecancelled => undef
+        }
+    );
+    is($transfer_requests->count, '2', "StockrotationAdvance transfer queued");
+
+    # Arrive at new branch
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+
+    # StockRotationAdvance transfer added
+    $transfer_request = $sritem_1->itemnumber->get_transfer;
+    is($transfer_request->reason, 'StockrotationAdvance', "StockrotationAdvance transfer remains after reserve is met");
+    is($transfer_request->frombranch, $srstage_1->branchcode_id, "Origin correct.");
+    is($transfer_request->tobranch, $srstage_2->branchcode_id, "Target correct.");
+
+    # Arrive at new branch
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_2->branchcode_id)->store;
+
+    $srstage_1->rota->cyclical(0)->store;         # Set Rota to non-cyclical.
+
+    my $srstage_3 = $builder->build_object({
+        class => 'Koha::StockRotationStages',
+        value => { duration => 50 }
+    });
+    $srstage_3->discard_changes;
+    $srstage_3->move_to_group($sritem_1->stage->rota_id);
+    $srstage_3->move_last;
 
     # Advance again, to end of rota.
-    ok($dbitem->advance, "Non-cyclical advance to last stage.");
+    ok($sritem_1->advance, "Non-cyclical advance to last stage.");
 
     # Arrive at new branch
-    $intransfer->datearrived(dt_from_string())->store;
-    $dbitem->itemnumber->holdingbranch($srstage->{branchcode_id})->store;
+    $transfer_request->datearrived(dt_from_string())->store;
+    $sritem_1->itemnumber->holdingbranch($srstage_3->branchcode_id)->store;
 
     # Advance again, Remove from rota.
-    ok($dbitem->advance, "Non-cyclical advance.");
-    ## Refetch dbitem
-    $dbitem = Koha::StockRotationItems->find($sritem->{itemnumber_id});
-    is($dbitem, undef, "StockRotationItem has been removed.");
-    my $item = Koha::Items->find($sritem->{itemnumber_id});
-    is($item->homebranch, $srstage->{branchcode_id}, "Item homebranch remains");
+    ok($sritem_1->advance, "Non-cyclical advance.");
+    ## Refetch sritem_1
+    $sritem_1 = Koha::StockRotationItems->find({ itemnumber_id => $item_id });
+    is($sritem_1, undef, "StockRotationItem has been removed.");
+    $item = Koha::Items->find($item_id);
+    is($item->homebranch, $srstage_3->branchcode_id, "Item homebranch remains");
 
     $schema->storage->txn_rollback;
 };

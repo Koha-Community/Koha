@@ -405,17 +405,25 @@ sub holds {
 =head3 request_transfer
 
   my $transfer = $item->request_transfer(
-      { to => $to_library, reason => $reason, ignore_limits => 0 } );
+    {
+        to     => $to_library,
+        reason => $reason,
+        [ ignore_limits => 0, enqueue => 1, replace => 1 ]
+    }
+  );
 
 Add a transfer request for this item to the given branch for the given reason.
 
 An exception will be thrown if the BranchTransferLimits would prevent the requested
 transfer, unless 'ignore_limits' is passed to override the limits.
 
-Note: At this time, only one active transfer (i.e pending arrival date) may exist
-at a time for any given item. An exception will be thrown should you attempt to
-add a request when a transfer has already been queued, whether it is in transit
-or just at the request stage.
+An exception will be thrown if an active transfer (i.e pending arrival date) is found;
+The caller should catch such cases and retry the transfer request as appropriate passing
+an appropriate override.
+
+Overrides
+* enqueue - Used to queue up the transfer when the existing transfer is found to be in transit.
+* replace - Used to replace the existing transfer request with your own.
 
 =cut
 
@@ -431,13 +439,16 @@ sub request_transfer {
         }
     }
 
-    my $request;
-    Koha::Exceptions::Item::Transfer::Found->throw( transfer => $request )
-      if ( $request = $self->get_transfer );
-
     Koha::Exceptions::Item::Transfer::Limit->throw()
       unless ( $params->{ignore_limits}
         || $self->can_be_transferred( { to => $params->{to} } ) );
+
+    my $request = $self->get_transfer;
+    Koha::Exceptions::Item::Transfer::Found->throw( transfer => $request )
+      if ( $request && !$params->{enqueue} && !$params->{replace} );
+
+    $request->cancel( $params->{reason} )
+      if ( defined($request) && $params->{replace} );
 
     my $transfer = Koha::Item::Transfer->new(
         {
@@ -449,6 +460,7 @@ sub request_transfer {
             comments      => $params->{comment}
         }
     )->store();
+
     return $transfer;
 }
 

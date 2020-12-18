@@ -26,6 +26,7 @@ use Koha::DateUtils qw/dt_from_string/;
 use Koha::Item::Transfer;
 use Koha::Item;
 use Koha::StockRotationStage;
+use Try::Tiny;
 
 use base qw(Koha::Object);
 
@@ -143,8 +144,11 @@ sub needs_advancing {
 
   1|0 = $sritem->repatriate
 
-Put this item into branch transfer with 'StockrotationCorrection' comment, so
+Put this item into branch transfer with 'StockrotationRepatriation' comment, so
 that it may return to it's stage.branch to continue its rota as normal.
+
+Note: Stockrotation falls outside of the normal branch transfer limits and so we
+pass 'ignore_limits' in the call to request_transfer.
 
 =cut
 
@@ -152,18 +156,21 @@ sub repatriate {
     my ( $self, $msg ) = @_;
 
     # Create the transfer.
-    my $transfer = $self->itemnumber->request_transfer(
-        {
-            to      => $self->stage->branchcode,
-            reason  => "StockrotationRepatriation",
-            comment => $msg
-        }
-    );
+    my $transfer = try {
+        $self->itemnumber->request_transfer(
+            {
+                to            => $self->stage->branchcode,
+                reason        => "StockrotationRepatriation",
+                comment       => $msg,
+                ignore_limits => 1
+            }
+        );
+    };
 
     # Ensure the homebranch is still in sync with the rota stage
     $self->itemnumber->homebranch( $self->stage->branchcode_id )->store;
 
-    return $transfer;
+    return defined($transfer) ? 1 : 0;
 }
 
 =head3 advance
@@ -179,6 +186,9 @@ StockRotationItem.
 
 If this item is 'indemand', and advance is invoked, we disable 'indemand' and
 advance the item as per usual.
+
+Note: Stockrotation falls outside of the normal branch transfer limits and so we
+pass 'ignore_limits' in the call to request_transfer.
 
 =cut
 
@@ -221,13 +231,44 @@ sub advance {
     # Update stage and record transfer
     $self->stage_id( $new_stage->stage_id )->store;          # Set new stage
     $item->homebranch( $new_stage->branchcode_id )->store;   # Update homebranch
-    $transfer = $item->request_transfer(
-        {
-            to            => $new_stage->branchcode,
-            reason        => "StockrotationAdvance",
-            ignore_limits => 1
+    $transfer = try {
+        $item->request_transfer(
+            {
+                to            => $new_stage->branchcode,
+                reason        => "StockrotationAdvance",
+                ignore_limits => 1                      # Ignore transfer limits
+            }
+        );                                              # Add transfer
+    }
+    catch {
+        if ( $_->isa('Koha::Exceptions::Item::Transfer::Found') ) {
+            my $exception = $_;
+            my $found_transfer = $_->transfer;
+            if (   $found_transfer->in_transit
+                || $found_transfer->reason eq 'Reserve' )
+            {
+                return $item->request_transfer(
+                    {
+                        to            => $new_stage->branchcode,
+                        reason        => "StockrotationAdvance",
+                        ignore_limits => 1,
+                        enqueue       => 1
+                    }
+                );                                      # Queue transfer
+            } else {
+                return $item->request_transfer(
+                    {
+                        to            => $new_stage->branchcode,
+                        reason        => "StockrotationAdvance",
+                        ignore_limits => 1,
+                        replace       => 1
+                    }
+                );                                      # Replace transfer
+            }
+        } else {
+            $_->rethrow();
         }
-    );                                                       # Add transfer
+    };
     $transfer->receive
       if $item->holdingbranch eq $new_stage->branchcode_id;  # Already at branch
 
