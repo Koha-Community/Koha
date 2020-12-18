@@ -105,9 +105,9 @@ sub calc_date_due {
 
     # first test with empty expiry date
     # note that this expiry date will never lead to an issue btw !!
-    $patron->{dateexpiry} = '0000-00-00';
+    $patron->{dateexpiry} = undef;
     my $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
-    is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry 0000-00-00" );
+    is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry undef" );
 
     # second test expiry date==today
     my $d2 = output_pref( { dt => $today, dateonly => 1, dateformat => 'sql' } );

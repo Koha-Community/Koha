@@ -53,7 +53,7 @@ function Click$function_name(event) {
 function set_to_today( id, force ) {
     /* The force parameter is used in Click but not in Focus ! */
     if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
-    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' || force ) {
+    if (\$("#" + id).val() == '' || force ) {
         \$("#" + id).val("$date");
     }
 }

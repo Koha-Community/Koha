@@ -39,7 +39,7 @@ use URI::Escape;
 sub Init{
     my $suggestion= shift @_;
     # "Managed by" is used only when a suggestion is being edited (not when created)
-    if ($suggestion->{'suggesteddate'} eq "0000-00-00" ||$suggestion->{'suggesteddate'} eq "") {
+    if ($suggestion->{'suggesteddate'} eq "") {
         # new suggestion
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{'suggestedby'} = C4::Context->userenv->{"number"} unless ($suggestion->{'suggestedby'});
