@@ -89,9 +89,9 @@ subtest "test weighted autotruncated" => sub {
     is($simple_query,'test',"Simple query is correct");
     is($query_cgi,'idx=kw&q=test','Query cgi is correct');
     is($query_desc,'kw,wrdl: test','Query desc is correct');
-    is($limit,'',"Limit is correct");
+    is($limit,undef,"Limit is correct");
     is($limit_cgi,undef,"Limit cgi is correct");
-    is($limit_desc,'',"Limit desc is correct");
+    is($limit_desc,undef,"Limit desc is correct");
     is($query_type,undef,"Query type is correct");
     my $q = Net::Z3950::ZOOM::query_create();
     my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
@@ -127,9 +127,9 @@ subtest "test* weighted autotruncated" => sub {
     is($simple_query,'test*',"Simple query is correct");
     is($query_cgi,'idx=kw&q=test%2A','Query cgi is correct');
     is($query_desc,'kw,wrdl: test*','Query desc is correct');
-    is($limit,'',"Limit is correct");
+    is($limit,undef,"Limit is correct");
     is($limit_cgi,undef,"Limit cgi is correct");
-    is($limit_desc,'',"Limit desc is correct");
+    is($limit_desc,undef,"Limit desc is correct");
     is($query_type,undef,"Query type is correct");
     my $q = Net::Z3950::ZOOM::query_create();
     my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
@@ -164,9 +164,9 @@ subtest "test weighted not-autotruncated" => sub {
     is($simple_query,'test',"Simple query is correct");
     is($query_cgi,'idx=kw&q=test','Query cgi is correct');
     is($query_desc,'kw,wrdl: test','Query desc is correct');
-    is($limit,'',"Limit is correct");
+    is($limit,undef,"Limit is correct");
     is($limit_cgi,undef,"Limit cgi is correct");
-    is($limit_desc,'',"Limit desc is correct");
+    is($limit_desc,undef,"Limit desc is correct");
     is($query_type,undef,"Query type is correct");
     my $q = Net::Z3950::ZOOM::query_create();
     my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
@@ -313,9 +313,9 @@ subtest "one and two weighted autotruncated" => sub {
     is($simple_query,'one and two',"Simple query is correct");
     is($query_cgi,'idx=kw&q=one%20and%20two','Query cgi is correct');
     is($query_desc,'kw,wrdl: one and two','Query desc is correct');
-    is($limit,'',"Limit is correct");
+    is($limit,undef,"Limit is correct");
     is($limit_cgi,undef,"Limit cgi is correct");
-    is($limit_desc,'',"Limit desc is correct");
+    is($limit_desc,undef,"Limit desc is correct");
     is($query_type,undef,"Query type is correct");
     my $q = Net::Z3950::ZOOM::query_create();
     my ($ccl_errcode, $ccl_errstr, $ccl_errpos) = (0,"",0);
