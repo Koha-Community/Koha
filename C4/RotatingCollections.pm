@@ -30,8 +30,7 @@ use C4::Reserves qw(CheckReserves);
 use Koha::Database;
 
 use DBI;
-
-use Data::Dumper;
+use Try::Tiny;
 
 use vars qw(@ISA @EXPORT);
 
@@ -410,8 +409,7 @@ Transfers a collection to another branch
 
  Output:
    $success: 1 if all database operations were successful, 0 otherwise
-   $errorCode: Code for reason of failure, good for translating errors in templates
-   $errorMessage: English description of error
+   $messages: Arrayref of messages for user feedback
 
 =cut
 
@@ -435,7 +433,8 @@ sub TransferCollection {
                         colBranchcode = ? 
                         WHERE colId = ?"
     );
-    $sth->execute( $colBranchcode, $colId ) or return ( 0, 4, $sth->errstr() );
+    $sth->execute( $colBranchcode, $colId ) or return 0;
+    my $to_library = Koha::Libraries->find( $colBranchcode );
 
     $sth = $dbh->prepare(q{
         SELECT items.itemnumber, items.barcode FROM collections_tracking
@@ -444,21 +443,64 @@ sub TransferCollection {
         WHERE issues.borrowernumber IS NULL
           AND collections_tracking.colId = ?
     });
-    $sth->execute($colId) or return ( 0, 4, $sth->errstr );
-    my @results;
+    $sth->execute($colId) or return 0;
+    my $messages;
     while ( my $item = $sth->fetchrow_hashref ) {
-        my ($status) = CheckReserves( $item->{itemnumber} );
-        my @transfers = C4::Circulation::GetTransfers( $item->{itemnumber} );
-        C4::Circulation::transferbook({
-            from_branch => $item->holdingbranch,
-            to_branch => $colBranchcode,
-            barcode => $item->{barcode},
-            ignore_reserves => 1,
-            trigger => 'RotatingCollection'
-        }) unless ( $status eq 'Waiting' || $status eq 'Processing' || @transfers );
+        my $item_object = Koha::Items->find( $item->{itemnumber} );
+        try {
+            $item_object->request_transfer(
+                {
+                    to            => $to_library,
+                    reason        => 'RotatingCollection',
+                    ignore_limits => 0
+                }
+            );    # Request transfer
+        }
+        catch {
+            if ( $_->isa('Koha::Exceptions::Item::Transfer::Found') ) {
+                my $exception      = $_;
+                my $found_transfer = $_->transfer;
+                if (   $found_transfer->in_transit
+                    || $found_transfer->reason eq 'Reserve' )
+                {
+                    my $transfer = $item_object->request_transfer(
+                        {
+                            to            => $to_library,
+                            reason        => "RotatingCollection",
+                            ignore_limits => 0,
+                            enqueue       => 1
+                        }
+                    );    # Queue transfer
+                    push @{$messages},
+                      {
+                        type           => 'enqueu',
+                        item           => $item_object,
+                        found_transfer => $found_transfer
+                      };
+                }
+                else {
+                    my $transfer = $item_object->request_transfer(
+                        {
+                            to            => $to_library,
+                            reason        => "RotatingCollection",
+                            ignore_limits => 0,
+                            replace       => 1
+                        }
+                    );    # Replace transfer
+                    # NOTE: If we just replaced a StockRotationAdvance,
+                    # it will get enqueued afresh on the next cron run
+                }
+            }
+            elsif ( $_->isa('Koha::Exceptions::Item::Transfer::Limit') ) {
+                push @{$messages}, { type => 'failure', item => $item_object };
+            }
+            else {
+                $_->rethrow();
+            }
+        };
     }
 
-    return 1;
+    return (1, $messages);
 }
 
 =head2 GetCollectionItemBranches

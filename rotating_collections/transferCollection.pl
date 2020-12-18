@@ -41,19 +41,21 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 ## Transfer collection
-my ( $success, $errorCode, $errorMessage );
+my ( $success, $messages );
 if ($toBranch) {
-    ( $success, $errorCode, $errorMessage ) =
+    ( $success, $messages) =
       TransferCollection( $colId, $toBranch );
 
     if ($success) {
-        $template->param( transferSuccess => 1 );
+        $template->param(
+            transferSuccess => 1,
+            messages        => $messages
+        );
     }
     else {
         $template->param(
             transferFailure => 1,
-            errorCode       => $errorCode,
-            errorMessage    => $errorMessage
+            messages        => $messages
         );
     }
 }
