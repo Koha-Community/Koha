@@ -38,8 +38,8 @@ my $limit    = undef;
 my $method = 'LOGIN';
 my $help = 0;
 my $verbose = 0;
-my $type = q{};
-my $letter_code;
+my @type;
+my @letter_code;
 
 GetOptions(
     'u|username:s'      => \$username,
@@ -48,8 +48,8 @@ GetOptions(
     'm|method:s'        => \$method,
     'h|help|?'          => \$help,
     'v|verbose'         => \$verbose,
-    't|type:s'          => \$type,
-    'c|code:s'          => \$letter_code,
+    't|type:s'          => \@type,
+    'c|code:s'          => \@letter_code,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -62,8 +62,8 @@ advance_notices.pl script.
 This script has the following parameters :
     -u --username: username of mail account
     -p --password: password of mail account
-    -t --type: If supplied, only processes this type of message ( email, sms )
-    -c --code: If supplied, only processes messages with this letter code
+    -t --type: If supplied, only processes this type of message ( email, sms ), repeatable
+    -c --code: If supplied, only processes messages with this letter code, repeatable
     -l --limit: The maximum number of messages to process for this run
     -m --method: authentication method required by SMTP server (See perldoc Sendmail.pm for supported authentication types.)
     -h --help: this message
@@ -99,8 +99,8 @@ if ( C4::Context->config("enable_plugins") ) {
                     {
                         verbose     => $verbose,
                         limit       => $limit,
-                        type        => $type,
-                        letter_code => $letter_code,
+                        type        => \@type,
+                        letter_code => @letter_code,
                     }
                 );
             }
@@ -118,8 +118,8 @@ C4::Letters::SendQueuedMessages(
         password    => $password,
         method      => $method,
         limit       => $limit,
-        type        => $type,
-        letter_code => $letter_code,
+        type        => \@type,
+        letter_code => \@letter_code,
     }
 );
 
