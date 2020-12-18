@@ -252,13 +252,14 @@ else {
 # the SQL query to search on isbn
 my $sth_isbn = $dbh->prepare("SELECT biblionumber,biblioitemnumber FROM biblioitems WHERE isbn=?");
 
-$dbh->{AutoCommit} = 0;
 my $loghandle;
 if ($logfile){
    $loghandle= IO::File->new($logfile, $writemode) ;
    print $loghandle "id;operation;status\n";
 }
 
+my $schema = Koha::Database->schema;
+$schema->txn_begin;
 RECORD: while (  ) {
     my $record;
     # get records
@@ -537,14 +538,15 @@ RECORD: while (  ) {
             }
             $yamlhash->{$originalid} = $biblionumber if ($yamlfile);
         }
-        $dbh->commit() if (0 == $i % $commitnum);
+        if ( 0 == $i % $commitnum ) {
+            $schema->txn_commit;
+            $schema->txn_begin;
+        }
     }
     print $record->as_formatted()."\n" if ($verbose//0)==2;
     last if $i == $number;
 }
-$dbh->commit();
-$dbh->{AutoCommit} = 1;
-
+$schema->txn_commit;
 
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
