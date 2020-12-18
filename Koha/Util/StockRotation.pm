@@ -97,21 +97,16 @@ sub get_stages {
 
 sub toggle_indemand {
 
-    my ($item_id, $stage_id) = @_;
+    my ($item_id) = @_;
 
     # Get the item object
-    my $item = Koha::StockRotationItems->find(
+    my $sr_item = Koha::StockRotationItems->find(
         {
             itemnumber_id => $item_id,
-            stage_id      => $stage_id
         }
     );
 
-    # Toggle the item's indemand flag
-    my $new_indemand = ($item->indemand == 1) ? 0 : 1;
-
-    $item->indemand($new_indemand)->store;
-
+    $sr_item->toggle_indemand;
 }
 
 =head2 move_to_next_stage

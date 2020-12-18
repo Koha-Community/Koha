@@ -51,6 +51,34 @@ sub stockrotationstages {
     return Koha::StockRotationStages->_new_from_dbic( $rs );
 }
 
+=head3 outgoing_transfers
+
+  my $outgoing_transfers = Koha::Library->outgoing_transfers;
+
+Returns the outgoing item transfers associated with this Library.
+
+=cut
+
+sub outgoing_transfers {
+    my ( $self ) = @_;
+    my $rs = $self->_result->branchtransfers_frombranches;
+    return Koha::Item::Transfers->_new_from_dbic( $rs );
+}
+
+=head3 inbound_transfers
+
+  my $inbound_transfers = Koha::Library->inbound_transfers;
+
+Returns the inbound item transfers associated with this Library.
+
+=cut
+
+sub inbound_transfers {
+    my ( $self ) = @_;
+    my $rs = $self->_result->branchtransfers_tobranches;
+    return Koha::Item::Transfers->_new_from_dbic( $rs );
+}
+
 =head3 get_effective_marcorgcode
 
     my $marcorgcode = Koha::Libraries->find( $library_id )->get_effective_marcorgcode();

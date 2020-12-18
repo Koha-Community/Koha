@@ -277,6 +277,49 @@ sub advance {
     return $transfer;
 }
 
+=head3 toggle_indemand
+
+  $sritem->toggle_indemand;
+
+Toggle this items in_demand status.
+
+If the item is in the process of being advanced to the next stage then we cancel
+the transfer, revert the advancement and reset the 'StockrotationAdvance' counter,
+as though 'in_demand' had been set prior to the call to advance, by updating the
+in progress transfer.
+
+=cut
+
+sub toggle_indemand {
+    my ( $self ) = @_;
+
+    # Toggle the item's indemand flag
+    my $new_indemand = ($self->indemand == 1) ? 0 : 1;
+
+    # Cancel 'StockrotationAdvance' transfer if one is in progress
+    if ($new_indemand) {
+        my $item = $self->itemnumber;
+        my $transfer = $item->get_transfer;
+        if ($transfer && $transfer->reason eq 'StockrotationAdvance') {
+            my $stage = $self->stage;
+            my $new_stage;
+            if ( $stage->rota->cyclical && !$stage->first_sibling ) { # First stage
+                $new_stage = $stage->last_sibling;
+            } else {
+                $new_stage = $stage->previous_sibling;
+            }
+            $self->stage_id($new_stage->stage_id)->store;        # Revert stage change
+            $item->homebranch($new_stage->branchcode_id)->store; # Revert update homebranch
+            $new_indemand = 0;                                   # Reset indemand
+            $transfer->tobranch($new_stage->branchcode_id);      # Reset StockrotationAdvance
+            $transfer->datearrived(dt_from_string);              # Reset StockrotationAdvance
+            $transfer->store;
+        }
+    }
+
+    $self->indemand($new_indemand)->store;
+}
+
 =head3 investigate
 
   my $report = $item->investigate;

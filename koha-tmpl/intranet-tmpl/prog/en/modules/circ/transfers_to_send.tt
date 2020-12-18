@@ -1,0 +1,115 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Branches %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers to send</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="circ_transferstosend" class="circ">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to send</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <main>
+                <div class="row">
+
+                    [% IF Koha.Preference('CircSidebar') %]
+                    <div class="col-sm-10 col-sm-push-2">
+                    [% ELSE %]
+                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    [% END %]
+
+                        <h1>Transfers requested of your library as of [% show_date | $KohaDates %]</h1>
+
+                        [% IF ( libraries ) %]
+                        <p>Your library is the origin for the following transfer(s)</p>
+                        <div id="resultlist">
+                            [% FOREACH library IN libraries %]
+                                [% IF ( library.branchcode ) %]
+                                <table style="width: 100%" id="transferst[% library.branchcode | html %]">
+                                    <caption>Sending to [% library.branchname | html %]</caption>
+                                    <thead>
+                                        <tr>
+                                            <th class="title-string">Date of request</th>
+                                            <th class="anti-the">Title</th>
+                                            <th>Reason</th>
+                                            <th>On loan</th>
+                                            <th>Home library</th>
+                                            <th>Call no.</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        [% FOREACH transfer IN library.inbound_transfers %]
+                                            [% UNLESS transfer.datesent %]
+                                            <tr>
+                                                <td><p><span title="[% transfer.daterequested | html %]">[% transfer.daterequested | $KohaDates %]</span></p></td>
+                                                <td>
+                                                    [% INCLUDE 'biblio-title.inc' biblio = transfer.item.biblio link = 1 %][% IF ( transfer.item.biblio.author ) %] by [% transfer.item.biblio.author | html %][% END %]
+                                                    [% IF ( transfer.item.effective_itemtype ) %] (<b>[% transfer.item.effective_itemtype | html %]</b>)[% END %]
+                                                    <br />Barcode: [% transfer.item.barcode | html %]
+                                                </td>
+                                                <td><p>[% transfer.reason | html %]</p></td>
+                                                <td>[% IF transfer.item.onloan %]Due [% transfer.item.onloan | $KohaDates %][% ELSE %]On shelf[% END %]</td>
+                                                <td>[% Branches.GetName( transfer.item.homebranch ) | html %]</td>
+                                                <td>[% transfer.item.itemcallnumber | html %]</td>
+                                                <td class="actions">
+                                                    [% IF transfer.reason == 'StockrotationAdvance' %]
+                                                    <a href="/cgi-bin/koha/catalogue/stockrotation.pl?op=toggle_in_demand&stage_id=4&item_id=[% transfer.itemnumber | uri %]&biblionumber=[% transfer.item.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-fire"></i> Mark "In demand"</a>
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                            [% END %]
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                                [% END %]
+                            [% END %]
+                        </div>
+                        [% ELSE %]
+                        <p>No transfers to send</p>
+                        [% END %]
+
+                    </div> <!-- /.col-sm-10.col-sm-push-2 OR /.col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2-->
+
+                    [% IF Koha.Preference('CircSidebar') %]
+                    <div class="col-sm-2 col-sm-pull-10">
+                        <aside>
+                            [% INCLUDE 'circ-nav.inc' %]
+                        </aside>
+                    </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                    [% END %]
+
+                </div> <!-- /.row -->
+            </main>
+        </div> <!-- /.col-sm-12 -->
+    </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+            [% FOREACH library IN libraries %]
+            $("#transferst[% library.branchcode | html %]").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sDom": 't',
+                "bPaginate": false
+            }));
+            [% END %]
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
