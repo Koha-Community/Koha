@@ -210,7 +210,6 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         if ( $formatteddate ) {
             $newdata{$_} = $formatteddate;
         } else {
-            ($userdate eq '0000-00-00') and warn "Data error: $_ is '0000-00-00'";
             $template->param( "ERROR_$_" => 1 );
             push(@errors,"ERROR_$_");
         }

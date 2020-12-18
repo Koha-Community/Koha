@@ -89,7 +89,7 @@ my $holds = Koha::Holds->waiting->search({ priority => 0, ( $all_branches ? () :
 my $today = Date_to_Days(&Today);
 
 while ( my $hold = $holds->next ) {
-    next unless ($hold->waitingdate && $hold->waitingdate ne '0000-00-00');
+    next unless $hold->waitingdate;
 
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $hold->expirationdate);
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
