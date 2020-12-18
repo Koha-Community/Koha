@@ -23,11 +23,33 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'item relation tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item     = $builder->build_sample_item();
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item->itemnumber,
+            }
+        }
+    );
+
+    my $transfer_item = $transfer->item;
+    is( ref( $transfer_item ), 'Koha::Item', 'Koha::Item::Transfer->item should return a Koha::Item' );
+    is( $transfer_item->itemnumber, $item->itemnumber, 'Koha::Item::Transfer->item should return the correct item' );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'transit tests' => sub {
     plan tests => 7;
