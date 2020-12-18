@@ -20,10 +20,11 @@
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::DateUtils;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
@@ -166,6 +167,42 @@ subtest 'receive tests' => sub {
 
     # Last seen
     ok( $item->datelastseen, 'Receipt set item datelastseen date' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'in_transit tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library_from = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_to   = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item     = $builder->build_sample_item(
+        {
+            homebranch    => $library_to->branchcode,
+            holdingbranch => $library_from->branchcode,
+        }
+    );
+
+    my $transfer = Koha::Item::Transfer->new(
+        {
+            itemnumber    => $item->itemnumber,
+            frombranch    => $library_from->branchcode,
+            tobranch      => $library_to->branchcode,
+            daterequested => dt_from_string,
+        }
+    )->store;
+
+    ok( !$transfer->in_transit, 'in_transit returns false when only daterequested is defined' );
+
+    $transfer->datesent(dt_from_string)->store;
+    ok( $transfer->in_transit, 'in_transit returns true when datesent is defined');
+
+    $transfer->datearrived(dt_from_string)->store;
+    ok( !$transfer->in_transit, 'in_transit returns false when datearrived is defined');
+
 
     $schema->storage->txn_rollback;
 };

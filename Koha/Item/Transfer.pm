@@ -82,6 +82,19 @@ sub transit {
 
     ModDateLastSeen( $self->item->itemnumber );
     return $self;
+
+}
+
+=head3 in_transit
+
+Boolean returning whether the transfer is in transit or waiting
+
+=cut
+
+sub in_transit {
+    my ($self) = @_;
+
+    return ( defined( $self->datesent ) && !defined( $self->datearrived ) );
 }
 
 =head3 receive
