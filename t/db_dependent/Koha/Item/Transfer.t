@@ -24,7 +24,7 @@ use Koha::DateUtils;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
@@ -203,6 +203,60 @@ subtest 'in_transit tests' => sub {
     $transfer->datearrived(dt_from_string)->store;
     ok( !$transfer->in_transit, 'in_transit returns false when datearrived is defined');
 
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item     = $builder->build_sample_item(
+        {
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library2->branchcode,
+            datelastseen  => undef
+        }
+    );
+    my $cancellation_reason = 'Manual';
+
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber          => $item->itemnumber,
+                frombranch          => $library2->branchcode,
+                tobranch            => $library1->branchcode,
+                datesent            => \'NOW()',
+                datearrived         => undef,
+                datecancelled       => undef,
+                reason              => 'Manual',
+                cancellation_reason => undef
+            }
+        }
+    );
+    is( ref($transfer), 'Koha::Item::Transfer', 'Mock transfer added' );
+
+    # Missing mandatory parameter
+    throws_ok { $transfer->cancel() } 'Koha::Exceptions::MissingParameter',
+      'Exception thrown if a reason is not passed to cancel';
+
+    # Item in transit should result in failure
+    throws_ok { $transfer->cancel($cancellation_reason) }
+    'Koha::Exceptions::Item::Transfer::Transit',
+      'Exception thrown if item is in transit';
+
+    $transfer->datesent(undef)->store();
+
+    # Transit state unset
+    $transfer->discard_changes;
+    $transfer->cancel($cancellation_reason);
+    ok( $transfer->datecancelled, 'Cancellation date set upon call to cancel' );
+    is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set');
+    is( $transfer->reason, 'Manual', 'Reason is not updated by cancelling the transfer' );
 
     $schema->storage->txn_rollback;
 };
