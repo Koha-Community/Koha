@@ -84,18 +84,9 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }
     $firstissuedate = $subs->{firstacquidate} || '';  # in iso format.
-    for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
-        next unless defined $subs->{$_};
-	# TODO : Handle date formats properly.
-         if ($subs->{$_} eq '0000-00-00') {
-            $subs->{$_} = ''
-    	} else {
-            $subs->{$_} = $subs->{$_};
-        }
-	  }
-      if (!defined $subs->{letter}) {
-          $subs->{letter}= q{};
-      }
+    if (!defined $subs->{letter}) {
+        $subs->{letter}= q{};
+    }
     my $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate} eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}  if($op eq 'modify');

@@ -354,12 +354,6 @@ sub PrepareSerialsData {
     my $previousnote = "";
 
     foreach my $subs (@{$lines}) {
-        for my $datefield ( qw(publisheddate planneddate) ) {
-            # handle 0000-00-00 dates
-            if (defined $subs->{$datefield} and $subs->{$datefield} =~ m/^00/) {
-                $subs->{$datefield} = undef;
-            }
-        }
         $subs->{ "status" . $subs->{'status'} } = 1;
         if ( grep { $_ == $subs->{status} } ( EXPECTED, LATE, MISSING_STATUSES, CLAIMED ) ) {
             $subs->{"checked"} = 1;
@@ -1236,13 +1230,8 @@ sub GetNextExpected {
         $nextissue = $sth->fetchrow_hashref;
     }
     foreach(qw/planneddate publisheddate/) {
-        if ( !defined $nextissue->{$_} ) {
-            # or should this default to 1st Jan ???
-            $nextissue->{$_} = strftime( '%Y-%m-%d', localtime );
-        }
-        $nextissue->{$_} = ($nextissue->{$_} ne '0000-00-00')
-                         ? $nextissue->{$_}
-                         : undef;
+        # or should this default to 1st Jan ???
+        $nextissue->{$_} //= strftime( '%Y-%m-%d', localtime );
     }
 
     return $nextissue;

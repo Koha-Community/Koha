@@ -813,7 +813,6 @@ sub _parseletter {
         # Dates replacement
         my $replacedby   = defined ($val) ? $val : '';
         if (    $replacedby
-            and not $replacedby =~ m|0000-00-00|
             and not $replacedby =~ m|9999-12-31|
             and $replacedby =~ m|^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$| )
         {

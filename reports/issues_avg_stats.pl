@@ -449,8 +449,6 @@ sub calculate {
         $emptycol=1 if (!defined($col));
         $col = "zzEMPTY" if (!defined($col));
         $row = "zzEMPTY" if (!defined($row));
-        # fill returndate to avoid an error with date calc (needed for all non returned issues)
-        $returndate= join '-',Date::Calc::Today if $returndate eq '0000-00-00';
     #  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
     #  and seconds between the two
         $loanlength = Delta_Days(split(/-/,$issuedate),split (/-/,$returndate)) ;

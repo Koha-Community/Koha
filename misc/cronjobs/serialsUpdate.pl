@@ -119,7 +119,7 @@ while ( my $issue = $sth->fetchrow_hashref ) {
     my $subscription = &GetSubscription( $issue->{subscriptionid} );
     my $publisheddate  = $issue->{publisheddate};
 
-    if ( $subscription && $publisheddate && $publisheddate ne "0000-00-00" ) {
+    if ( $subscription && $publisheddate ) {
         my $freqdata = GetSubscriptionFrequency($subscription->{'periodicity'});
         my $nextpublisheddate = GetNextDate( $subscription, $publisheddate, $freqdata );
         my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
