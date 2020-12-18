@@ -1232,8 +1232,10 @@ sub _add_attachments {
   This function's parameter hash reference takes the following
   optional named parameters:
    message_transport_type: method of message sending (e.g. email, sms, etc.)
+                           Can be a single string, or an arrayref of strings
    borrowernumber        : who the message is to be sent
    letter_code           : type of message being sent (e.g. PASSWORD_RESET)
+                           Can be a single string, or an arrayref of strings
    message_id            : the message_id of the message. In that case the sub will return only 1 result
    limit                 : maximum number of messages to send
 
@@ -1264,12 +1266,20 @@ sub _get_unsent_messages {
             push @query_params, $params->{'borrowernumber'};
         }
         if ( $params->{'letter_code'} ) {
-            $statement .= ' AND mq.letter_code = ? ';
-            push @query_params, $params->{'letter_code'};
+            my @letter_codes = ref $params->{'letter_code'} eq "ARRAY" ? @{$params->{'letter_code'}} : $params->{'letter_code'};
+            if ( @letter_codes ) {
+                my $q = join( ",", ("?") x @letter_codes );
+                $statement .= " AND mq.letter_code IN ( $q ) ";
+                push @query_params, @letter_codes;
+            }
         }
         if ( $params->{'type'} ) {
-            $statement .= ' AND message_transport_type = ? ';
-            push @query_params, $params->{'type'};
+            my @types = ref $params->{'type'} eq "ARRAY" ? @{$params->{'type'}} : $params->{'type'};
+            if ( @types ) {
+                my $q = join( ",", ("?") x @types );
+                $statement .= " AND message_transport_type IN ( $q ) ";
+                push @query_params, @types;
+            }
         }
         if ( $params->{message_id} ) {
             $statement .= ' AND message_id = ?';
