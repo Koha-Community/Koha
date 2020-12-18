@@ -35,7 +35,6 @@ BEGIN {
         GetMarcISBN
         GetMarcISSN
         GetMarcSubjects
-        GetMarcAuthors
         GetMarcSeries
         GetMarcUrls
         GetUsedMarcStructure
@@ -1657,105 +1656,6 @@ sub GetMarcSubjects {
     }
     return \@marcsubjects;
 }    #end getMARCsubjects
-
-=head2 GetMarcAuthors
-
-  authors = GetMarcAuthors($record,$marcflavour);
-
-Get all authors from the MARC record and returns them in an array.
-The authors are stored in different fields depending on MARC flavour
-
-=cut
-
-sub GetMarcAuthors {
-    my ( $record, $marcflavour ) = @_;
-    if (!$record) {
-        carp 'GetMarcAuthors called on undefined record';
-        return;
-    }
-    my ( $mintag, $maxtag, $fields_filter );
-
-    # tagslib useful only for UNIMARC author responsibilities
-    my $tagslib;
-    if ( $marcflavour eq "UNIMARC" ) {
-        # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
-        $tagslib = GetMarcStructure( 1, '', { unsafe => 1 });
-        $mintag = "700";
-        $maxtag = "712";
-        $fields_filter = '7..';
-    } else { # marc21
-        $mintag = "700";
-        $maxtag = "720";
-        $fields_filter = '7..';
-    }
-
-    my @marcauthors;
-    my $AuthoritySeparator = C4::Context->preference('AuthoritySeparator');
-
-    foreach my $field ( $record->field($fields_filter) ) {
-        next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
-        my @subfields_loop;
-        my @link_loop;
-        my @subfields  = $field->subfields();
-        my $count_auth = 0;
-
-        # if there is an authority link, build the link with Koha-Auth-Number: subfield9
-        my $subfield9 = $field->subfield('9');
-        if ($subfield9) {
-            my $linkvalue = $subfield9;
-            $linkvalue =~ s/(\(|\))//g;
-            @link_loop = ( { 'limit' => 'an', 'link' => $linkvalue } );
-        }
-
-        # other subfields
-        my $unimarc3;
-        for my $authors_subfield (@subfields) {
-            next if ( $authors_subfield->[0] eq '9' );
-
-            # unimarc3 contains the $3 of the author for UNIMARC.
-            # For french academic libraries, it's the "ppn", and it's required for idref webservice
-            $unimarc3 = $authors_subfield->[1] if $marcflavour eq 'UNIMARC' and $authors_subfield->[0] =~ /3/;
-
-            # don't load unimarc subfields 3, 5
-            next if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /3|5/ ) );
-
-            my $code = $authors_subfield->[0];
-            my $value        = $authors_subfield->[1];
-            my $linkvalue    = $value;
-            $linkvalue =~ s/(\(|\))//g;
-            # UNIMARC author responsibility
-            if ( $marcflavour eq 'UNIMARC' and $code eq '4' ) {
-                $value = GetAuthorisedValueDesc( $field->tag(), $code, $value, '', $tagslib );
-                $linkvalue = "($value)";
-            }
-            # if no authority link, build a search query
-            unless ($subfield9) {
-                push @link_loop, {
-                    limit    => 'au',
-                    'link'   => $linkvalue,
-                    operator => (scalar @link_loop) ? ' and ' : undef
-                };
-            }
-            my @this_link_loop = @link_loop;
-            # do not display $0
-            unless ( $code eq '0') {
-                push @subfields_loop, {
-                    tag       => $field->tag(),
-                    code      => $code,
-                    value     => $value,
-                    link_loop => \@this_link_loop,
-                    separator => (scalar @subfields_loop) ? $AuthoritySeparator : ''
-                };
-            }
-        }
-        push @marcauthors, {
-            MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop,
-            authoritylink => $subfield9,
-            unimarc3 => $unimarc3
-        };
-    }
-    return \@marcauthors;
-}
 
 =head2 GetMarcUrls
 

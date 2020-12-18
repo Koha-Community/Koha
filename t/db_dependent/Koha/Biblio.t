@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Warn;
 
 use C4::Biblio qw( AddBiblio ModBiblio ModBiblioMarc );
@@ -855,6 +855,34 @@ subtest 'current_checkouts() and old_checkouts() tests' => sub {
 
     is( $current_checkouts->count, 2, 'Count is correct for current checkouts' );
     is( $old_checkouts->count, 1, 'Count is correct for old checkouts' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_authors_from_MARC() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $record = $biblio->metadata->record;
+
+    # add author information
+    my $field = MARC::Field->new('700','1','','a' => 'Jefferson, Thomas');
+    $record->append_fields($field);
+    $field = MARC::Field->new('700','1','','d' => '1743-1826');
+    $record->append_fields($field);
+    $field = MARC::Field->new('700','1','','e' => 'former owner.');
+    $record->append_fields($field);
+    $field = MARC::Field->new('700','1','','5' => 'MH');
+    $record->append_fields($field);
+
+    # get record
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    is( 4, @{$biblio->get_authors_from_MARC}, 'get_authors_from_MARC retrieves correct number of author subfields' );
 
     $schema->storage->txn_rollback;
 };

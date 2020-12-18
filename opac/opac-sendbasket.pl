@@ -81,12 +81,13 @@ if ( $email_add ) {
 
         my $dat              = GetBiblioData($biblionumber);
         next unless $dat;
+        my $biblio           = Koha::Biblios->find( $biblionumber );
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => 1,
             opac         => 1,
             borcat       => $borcat });
-        my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
+        my $marcauthorsarray = $biblio->get_authors_from_MARC;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );

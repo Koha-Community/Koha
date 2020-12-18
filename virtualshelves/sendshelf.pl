@@ -73,11 +73,12 @@ if ($to_address) {
 
     while ( my $content = $contents->next ) {
         my $biblionumber     = $content->biblionumber;
+        my $biblio           = Koha::Biblios->find( $biblionumber );
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => 1 });
-        my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
+        my $marcauthorsarray = $biblio->get_authors_from_MARC;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo($biblionumber);

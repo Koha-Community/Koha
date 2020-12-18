@@ -784,6 +784,7 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 }
 
 my $marcnotesarray = $biblio->get_marc_notes({ marcflavour => $marcflavour, opac => 1 });
+my $marcauthorsarray = $biblio->get_authors_from_MARC;
 
 if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
@@ -799,6 +800,7 @@ if( C4::Context->preference('ArticleRequests') ) {
 my $norequests = ! $biblio->items->filter_by_for_hold->count;
     $template->param(
                      MARCNOTES               => $marcnotesarray,
+                     MARCAUTHORS             => $marcauthorsarray,
                      norequests              => $norequests,
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_materials      => $itemfields{materials},

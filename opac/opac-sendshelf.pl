@@ -92,10 +92,11 @@ if ( $email ) {
             opac         => 1,
             borcat       => $borcat });
         next unless $record;
+        my $biblio           = Koha::Biblios->find( $biblionumber );
         my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
 
-        my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
+        my $marcauthorsarray = $biblio->get_authors_from_MARC;
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
         my @items = GetItemsInfo( $biblionumber );
