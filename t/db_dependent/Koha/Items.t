@@ -303,41 +303,48 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         }
     );
 
-    my $rules = {};
+    my $rules = undef;
+
+    my $mocked_context = Test::MockModule->new('C4::Context');
+    $mocked_context->mock( 'yaml_preference', sub {
+        return $rules;
+    });
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
     is( $biblio->items->filter_by_visible_in_opac->count,
         6, 'No rules passed, hidelostitems unset' );
 
+    $rules = {};
+
     t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        $biblio->items->filter_by_visible_in_opac->count,
         3,
         'No rules passed, hidelostitems set'
     );
 
     $rules = { withdrawn => [ 1, 2 ] };
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        $biblio->items->filter_by_visible_in_opac->count,
         2,
         'Rules on withdrawn, hidelostitems set'
     );
 
     $rules = { itype => [ $itype_1->itemtype ] };
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        $biblio->items->filter_by_visible_in_opac->count,
         2,
         'Rules on itype, hidelostitems set'
     );
 
     $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ] };
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        $biblio->items->filter_by_visible_in_opac->count,
         1,
         'Rules on itype and withdrawn, hidelostitems set'
     );
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )
+        $biblio->items->filter_by_visible_in_opac
           ->next->itemnumber,
         $item_4->itemnumber,
         'The right item is returned'
@@ -345,12 +352,12 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
 
     $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ] };
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
+        $biblio->items->filter_by_visible_in_opac->count,
         1,
         'Rules on itype and withdrawn, hidelostitems set'
     );
     is(
-        $biblio->items->filter_by_visible_in_opac( { rules => $rules } )
+        $biblio->items->filter_by_visible_in_opac
           ->next->itemnumber,
         $item_5->itemnumber,
         'The right item is returned'

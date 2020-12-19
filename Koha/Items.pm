@@ -39,18 +39,17 @@ Koha::Items - Koha Item object set class
 
 =head3 filter_by_visible_in_opac
 
-    my $filered_items = $items->filter_by_visible_in_opac({ rules => $rules });
+    my $filered_items = $items->filter_by_visible_in_opac;
 
 Returns a new resultset, containing those items that are not expected to be hidden in OPAC.
-If no I<rules> are passed, it returns the whole resultset, with the only caveat that the
-I<hidelostitems> system preference is honoured.
+The I<OpacHiddenItems> and I<hidelostitems> system preferences are honoured.
 
 =cut
 
 sub filter_by_visible_in_opac {
     my ($self, $params) = @_;
 
-    my $rules = $params->{rules} // {};
+    my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
 
     my $rules_params;
     foreach my $field (keys %$rules){
