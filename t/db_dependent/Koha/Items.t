@@ -289,7 +289,15 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     my $item_5 = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
-            itemlost     => undef,
+            itemlost     => 0,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5
+        }
+    );
+    my $item_6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 2,
             itype        => $itype_1->itemtype,
             withdrawn    => 5
         }
@@ -299,12 +307,12 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
     is( $biblio->items->filter_by_visible_in_opac->count,
-        5, 'No rules passed, hidelostitems unset' );
+        6, 'No rules passed, hidelostitems unset' );
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
     is(
         $biblio->items->filter_by_visible_in_opac( { rules => $rules } )->count,
-        4,
+        3,
         'No rules passed, hidelostitems set'
     );
 

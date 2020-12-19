@@ -52,13 +52,24 @@ sub filter_by_visible_in_opac {
 
     my $rules = $params->{rules} // {};
 
-    my $search_params;
+    my $rules_params;
     foreach my $field (keys %$rules){
-        $search_params->{$field}->{'-not_in'} = $rules->{$field};
+        $rules_params->{$field}->{'-not_in'} = $rules->{$field};
     }
 
-    $search_params->{itemlost}->{'<='} = 0
+    my $itemlost_params;
+    $itemlost_params = { itemlost => 0 }
         if C4::Context->preference('hidelostitems');
+
+    my $search_params;
+    if ( $rules_params and $itemlost_params ) {
+        $search_params = {
+            '-and' => [ $rules_params, $itemlost_params ]
+        };
+    }
+    else {
+        $search_params = $rules_params // $itemlost_params;
+    }
 
     return $self->search( $search_params );
 }
