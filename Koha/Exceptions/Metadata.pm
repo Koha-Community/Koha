@@ -36,7 +36,7 @@ sub full_message {
 
     unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Metadata::Invalid') ) {
-            $msg = sprintf( "Invalid data, cannot decode object (id=%s, biblionumber=%s, format=%s, schema=%s, decoding_error='%s')",
+            $msg = sprintf( "Invalid data, cannot decode metadata object (biblio_metadata.id=%s, biblionumber=%s, format=%s, schema=%s, decoding_error='%s')",
                 $self->id, $self->biblionumber, $self->format, $self->schema, $self->decoding_error );
         }
     }
