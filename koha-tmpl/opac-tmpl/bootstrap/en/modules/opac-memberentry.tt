@@ -1235,12 +1235,12 @@
         var PWD_STRONG_MSG = _("Password must contain at least %s characters, including UPPERCASE, lowercase and numbers");
         var PWD_WEAK_MSG = _("Password must contain at least %s characters");
         var default_password_length = [% defaultCategory.effective_min_password_length | html %];
-        var default_strong_password = [% defaultCategory.effective_require_strong_password | html %];
+        var default_strong_password = [% defaultCategory.effective_require_strong_password ? defaultCategory.effective_require_strong_password : 0 | html %];
         $(document).ready(function() {
             var setPwdMessage = function() {
                 var require_strong = $('select#borrower_categorycode option:selected').length ? $('select#borrower_categorycode option:selected').data('pwdStrong') : default_strong_password;
-                var min_lenght = $('select#borrower_categorycode option:selected').length ? $('select#borrower_categorycode option:selected').data('pwdLength') : default_password_length;
-                $('#password_alert').html((require_strong?PWD_STRONG_MSG:PWD_WEAK_MSG).format(min_lenght));
+                var min_length = $('select#borrower_categorycode option:selected').length ? $('select#borrower_categorycode option:selected').data('pwdLength') : default_password_length;
+                $('#password_alert').html((require_strong?PWD_STRONG_MSG:PWD_WEAK_MSG).format(min_length));
             };
             setPwdMessage();
             $('select#borrower_categorycode').change(setPwdMessage);
