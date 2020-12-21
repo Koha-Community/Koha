@@ -38,6 +38,14 @@ Koha::NewsItem represents a single piece of news from the opac_news table
 
 =cut
 
+=head3 author
+
+    $newsitem->author;
+
+Return the Koha::Patron object for the patron who authored this news item
+
+=cut
+
 sub author {
     my ( $self ) = @_;
     return Koha::Patron->_new_from_dbic($self->_result->borrowernumber);
