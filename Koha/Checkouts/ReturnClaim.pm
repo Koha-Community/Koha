@@ -48,7 +48,7 @@ exceptions as needed.
 sub store {
     my ( $self ) = @_;
 
-    unless ( $self->created_by ) {
+    unless ( $self->in_storage || $self->created_by ) {
         Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy->throw();
     }
 
