@@ -123,7 +123,7 @@ subtest 'Koha::Exceptions::Metadata tests' => sub {
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", 'Invalid data, cannot decode object (id=an_id, biblionumber=a_biblionumber, format=a_format, schema=a_schema, decoding_error=\'a_nasty_error\')', 'Exception stringified correctly' );
+    is( "$@", 'Invalid data, cannot decode metadata object (biblio_metadata.id=an_id, biblionumber=a_biblionumber, format=a_format, schema=a_schema, decoding_error=\'a_nasty_error\')', 'Exception stringified correctly' );
 
     throws_ok
         { Koha::Exceptions::Metadata::Invalid->throw( "Manual message exception" ) }
