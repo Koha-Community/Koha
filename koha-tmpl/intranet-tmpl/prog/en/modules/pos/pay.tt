@@ -67,7 +67,7 @@
                                     <td>[% invoice.description | html %]</td>
                                     <td>[% invoice.default_amount | $Price %]</td>
                                     <td>
-                                        <button type="button" class="add_button" data-invoice-code="[% invoice.code | html %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
+                                        <button type="button" class="btn btn-default btn-xs add_button" data-invoice-code="[% invoice.code | html %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
                                     </td>
                                 </tr>
                             [% END %]
@@ -112,11 +112,12 @@
                         <ol>
                             <li>
                                 <label for="paid">Amount being paid: </label>
-                                <input type="number" min="0.00" max="10000.00" step="0.01" name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]" readonly/>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]" readonly/>
                             </li>
                             <li>
-                                <label for="collected">Amount tendered: </label>
-                                <input type="number" min="0.00" max="10000.00" step="0.01" name="collected" id="collected" value=""/>
+                                <label for="collected" class="required">Amount tendered: </label>
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="collected" id="collected" value="" class="required" required="required" />
+                                <span class="required">Required</span>
                             </li>
                             <li>
                                 <label>Change to give: </label>
@@ -127,11 +128,12 @@
                             [% PROCESS account_payment_types %]
 
                             <li>
-                                <label for="registerid">Cash register: </label>
-                                <select name="registerid" id="registerid">
+                                <label for="registerid" class="required">Cash register: </label>
+                                <select name="registerid" id="registerid" class="required" required="required">
                                     <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
                                     [% PROCESS options_for_registers %]
                                 </select>
+                                <span class="required">Required</span>
                             </li>
                         </ol>
 
@@ -242,7 +244,7 @@
         defaultPrice.value,
         1,
         null,
-        '<button class="drop" type="button"><i class="fa fa-trash"></i> Remove</button>',
+        '<button class="btn btn-default btn-xs drop" type="button"><i class="fa fa-trash"></i> Remove</button>',
         invoiceCode
         ]
       );
