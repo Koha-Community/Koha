@@ -19,7 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
+
+use Test::MockModule;
 use Test::Exception;
 
 use C4::Circulation;
@@ -177,9 +179,16 @@ $schema->storage->txn_rollback;
 
 subtest 'filter_by_visible_in_opac() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
+    my $exception = 1;
+    $mocked_category->mock( 'override_hidden_items', sub {
+        return $exception;
+    });
 
     # have a fresh biblio
     my $biblio = $builder->build_sample_biblio;
@@ -247,6 +256,9 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     is( $biblio->items->filter_by_visible_in_opac->count,
         6, 'No rules passed, hidelostitems unset' );
 
+    is( $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
+        6, 'No rules passed, hidelostitems unset, patron exception changes nothing' );
+
     $rules = {};
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
@@ -256,11 +268,23 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         'No rules passed, hidelostitems set'
     );
 
+    is(
+        $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
+        3,
+        'No rules passed, hidelostitems set, patron exception changes nothing'
+    );
+
     $rules = { withdrawn => [ 1, 2 ] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         2,
         'Rules on withdrawn, hidelostitems set'
+    );
+
+    is(
+        $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
+        3,
+        'hidelostitems set, rules on withdrawn but patron override passed'
     );
 
     $rules = { itype => [ $itype_1->itemtype ] };
@@ -295,6 +319,125 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         $item_5->itemnumber,
         'The right item is returned'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_out_lost() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # have a fresh biblio
+    my $biblio = $builder->build_sample_biblio;
+    # have 3 items on that biblio
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => -1,
+        }
+    );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 0,
+        }
+    );
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itemlost     => 1,
+        }
+    );
+
+    is( $biblio->items->filter_out_lost->next->itemnumber, $item_2->itemnumber, 'Right item returned' );
+    is( $biblio->items->filter_out_lost->count, 1, 'Only one item is not lost' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_out_opachiddenitems() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    # have a fresh biblio
+    my $biblio = $builder->build_sample_biblio;
+    # have two itemtypes
+    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    # have 5 items on that biblio
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 1
+        }
+    );
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 2
+        }
+    );
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 3
+        }
+    );
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_2->itemtype,
+            withdrawn    => 4
+        }
+    );
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5
+        }
+    );
+    my $item_6 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype_1->itemtype,
+            withdrawn    => 5
+        }
+    );
+
+    my $rules = undef;
+
+    my $mocked_context = Test::MockModule->new('C4::Context');
+    $mocked_context->mock( 'yaml_preference', sub {
+        return $rules;
+    });
+
+    is( $biblio->items->filter_out_opachiddenitems->count, 6, 'No rules passed' );
+
+    $rules = {};
+
+    $rules = { withdrawn => [ 1, 2 ] };
+    is( $biblio->items->filter_out_opachiddenitems->count, 4, 'Rules on withdrawn' );
+
+    $rules = { itype => [ $itype_1->itemtype ] };
+    is( $biblio->items->filter_out_opachiddenitems->count, 2, 'Rules on itype' );
+
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ] };
+    is( $biblio->items->filter_out_opachiddenitems->count, 1, 'Rules on itype and withdrawn' );
+    is( $biblio->items->filter_out_opachiddenitems->next->itemnumber,
+        $item_4->itemnumber,
+        'The right item is returned'
+    );
+
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ] };
+    is( $biblio->items->filter_out_opachiddenitems->count, 3, 'Rules on itype and withdrawn' );
 
     $schema->storage->txn_rollback;
 };
