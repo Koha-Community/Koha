@@ -204,6 +204,8 @@ subtest 'resolve_claim() tests' => sub {
 
     my $claim_id = $claim->id;
 
+    $claim->created_by(undef)->store; # resolve the claim must work even if the created_by patron has been removed
+
     # Resolve a claim
     $t->put_ok(
         "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
