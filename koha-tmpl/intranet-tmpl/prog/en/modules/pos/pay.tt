@@ -112,7 +112,7 @@
                         <ol>
                             <li>
                                 <label for="paid">Amount being paid: </label>
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]" readonly/>
+                                <input type="text" inputmode="none" pattern="[0-9]*" name="paid" id="paid" value="" readonly/>
                             </li>
                             <li>
                                 <label for="collected" class="required">Amount tendered: </label>
@@ -258,7 +258,6 @@
             var paid = $('#paid')[0];
             moneyFormat(paid);
             $('#collected').rules( "add", { min: Number(paid.value) });
-            $("#payForm").valid()
             change.innerHTML = zero_formatted;
             $(':input[name="change"]').val(zero_formatted);
         } else {
@@ -372,10 +371,18 @@
             $('#payForm').submit();
         });
 
-        $( "#payForm" ).validate({
+        $('#payForm').validate({
             rules: {
-                paid: { required: true },
+                paid: {
+                    required: true
+                },
                 collected: {
+                    required: true
+                },
+                payment_type: {
+                    required: true
+                },
+                registerid: {
                     required: true
                 }
             }
@@ -400,17 +407,6 @@
                     }).appendTo('#payForm');
                 });
                 return true;
-            }
-        });
-
-        $('#payForm').validate({
-            rules: {
-                collected: {
-                    required: true
-                },
-                registerid: {
-                    required: true
-                }
             }
         });
 
