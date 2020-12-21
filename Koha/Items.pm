@@ -52,15 +52,48 @@ sub filter_by_for_loan {
 
 =head3 filter_by_visible_in_opac
 
-    my $filered_items = $items->filter_by_visible_in_opac;
+    my $filered_items = $items->filter_by_visible_in_opac(
+        {
+            [ patron => $patron ]
+        }
+    );
 
-Returns a new resultset, containing those items that are not expected to be hidden in OPAC.
+Returns a new resultset, containing those items that are not expected to be hidden in OPAC
+for the passed I<Koha::Patron> object that is passed.
+
 The I<OpacHiddenItems> and I<hidelostitems> system preferences are honoured.
 
 =cut
 
 sub filter_by_visible_in_opac {
     my ($self, $params) = @_;
+
+    my $patron = $params->{patron};
+
+    my $result = $self;
+
+    unless ( $patron and $patron->category->override_hidden_items ) {
+        $result = $result->filter_out_opachiddenitems;
+    }
+
+    if (C4::Context->preference('hidelostitems')) {
+        $result = $result->filter_out_lost;
+    }
+
+    return $result;
+}
+
+=head3 filter_out_opachiddenitems
+
+    my $filered_items = $items->filter_out_opachiddenitems;
+
+Returns a new resultset, containing those items that are not expected to be hidden in OPAC.
+The I<OpacHiddenItems> system preference is honoured.
+
+=cut
+
+sub filter_out_opachiddenitems {
+    my ($self) = @_;
 
     my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
 
@@ -69,21 +102,23 @@ sub filter_by_visible_in_opac {
         $rules_params->{$field}->{'-not_in'} = $rules->{$field};
     }
 
-    my $itemlost_params;
-    $itemlost_params = { itemlost => 0 }
-        if C4::Context->preference('hidelostitems');
+    return $self->search( $rules_params );
+}
 
-    my $search_params;
-    if ( $rules_params and $itemlost_params ) {
-        $search_params = {
-            '-and' => [ $rules_params, $itemlost_params ]
-        };
-    }
-    else {
-        $search_params = $rules_params // $itemlost_params;
-    }
+=head3 filter_out_lost
 
-    return $self->search( $search_params );
+    my $filered_items = $items->filter_out_lost;
+
+Returns a new resultset, containing those items that are not marked as lost.
+
+=cut
+
+sub filter_out_lost {
+    my ($self) = @_;
+
+    my $params = { itemlost => 0 };
+
+    return $self->search( $params );
 }
 
 =head2 Internal methods
