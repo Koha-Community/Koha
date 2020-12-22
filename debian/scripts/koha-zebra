@@ -79,11 +79,12 @@ start_zebra()
         ZEBRA_PARAMS="-v $loglevels \
                       -k $max_record_size \
                       -f /etc/koha/sites/${name}/koha-conf.xml"
+        ZEBRA_TIMEFORMAT='%FT%T'
 
         [ "$verbose" != "no" ] && \
             log_daemon_msg "Starting Koha Zebra daemon for ${name}"
 
-        if daemon $DAEMONOPTS -- $ZEBRA_DAEMON $ZEBRA_PARAMS; then
+        if daemon $DAEMONOPTS -- $ZEBRA_DAEMON $ZEBRA_PARAMS -m "$ZEBRA_TIMEFORMAT"; then
             ([ "$verbose" != "no" ] && \
                 log_end_msg 0) || return 0
         else
