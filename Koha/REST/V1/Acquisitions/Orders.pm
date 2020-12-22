@@ -335,7 +335,7 @@ sub fix_query {
         'biblio.publication_place'   => 'biblio.biblioitem.publication_place',
         'biblio.publication_year'    => 'biblio.biblioitem.publication_year',
         'biblio.publisher'           => 'biblio.biblioitem.publisher',
-        'biblio.serial_total_issues' => 'biblio.biblioitem.serial_total_issues'
+        'biblio.serial_total_issues' => 'biblio.biblioitem.serial_total_issues',
         'biblio.url'                 => 'biblio.biblioitem.url',
         'biblio.volume'              => 'biblio.biblioitem.volume',
         'biblio.volume_date'         => 'biblio.biblioitem.volume_date',
