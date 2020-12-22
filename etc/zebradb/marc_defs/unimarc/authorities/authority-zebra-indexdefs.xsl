@@ -45,48 +45,14 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:record>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Local-Number:w Local-Number:s Local-Number:n Local-Number:p">
+    <z:index name="Local-Number:w Local-Number:p Local-Number:n Local-Number:s">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='200']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('abcdfgjxyz', @code)">
-        <z:index name="Personal-name:w Personal-name:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Personal-name-heading:w Personal-name-heading:p Personal-name-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='400']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdfgjxyz', @code)">
-        <z:index name="Personal-name-see:w Personal-name-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='500']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdfgjxyz', @code)">
-        <z:index name="Personal-name-see-also:w Personal-name-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='700']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Personal-name-parallel:w Personal-name-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Personal-name:w Personal-name:p Personal-name:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -95,41 +61,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='210']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('abcdefgjxyz', @code)">
-        <z:index name="Corporate-name:w Corporate-name:p Conference-name:w Conference-name:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Corporate-name-heading:w Corporate-name-heading:p Corporate-name-heading:s Conference-name-heading:w Conference-name-heading:p Conference-name-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='410']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdefgjxyz', @code)">
-        <z:index name="Corporate-name-see:w Corporate-name-see:p Conference-name-see:w Conference-name-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='510']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdefgjxyz', @code)">
-        <z:index name="Corporate-name-see-also:w Corporate-name-see-also:p Conference-name-see-also:w Conference-name-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='710']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdefgjxyz', @code)">
-        <z:index name="Corporate-name-parallel:w Corporate-name-parallel:s Conference-name-parallel:w Conference-name-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Corporate-name:w Corporate-name:p Corporate-name:s Conference-name:w Conference-name:p Conference-name:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -138,41 +70,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='215']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Name-geographic:w Name-geographic:p Name-geographic:s Term-geographic:w Term-geographic:p Term-geographic:s Heading:w Heading:p Heading:s Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s Name-geographic-heading:w Name-geographic-heading:p Name-geographic-heading:s Term-geographic-heading:w Term-geographic-heading:p Term-geographic-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='415']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Name-geographic-see:w Name-geographic-see:p Term-geographic-see:w Term-geographic-see:p Term-geographic-see:s See:w See:p See:s Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='515']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Name-geographic-see-also:w Name-geographic-see-also:p Term-geographic-see-also:w Term-geographic-see-also:p Term-geographic-see-also:s See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='715']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Name-geographic-parallel:w Name-geographic-parallel:s Term-geographic-parallel:w Term-geographic-parallel:s Term-geographic-parallel:p Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Name-geographic:w Name-geographic:p Name-geographic:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -181,41 +79,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='216']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('afcjxyz', @code)">
-        <z:index name="Trademark:w Trademark:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Trademark-heading:w Trademark-heading:p Trademark-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='416']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afcjxyz', @code)">
-        <z:index name="Trademark-see:w Trademark-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='516']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afcjxyz', @code)">
-        <z:index name="Trademark-see-also:w Trademark-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='716']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afcjxyz', @code)">
-        <z:index name="Trademark-parallel:w Trademark-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Trademark:w Trademark:p Trademark:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -224,41 +88,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='220']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('afjxyz', @code)">
-        <z:index name="Name:w Name:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Name-heading:w Name-heading:p Name-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='420']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afjxyz', @code)">
-        <z:index name="Name-see:w Name-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='520']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afjxyz', @code)">
-        <z:index name="Name-see-also:w Name-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='720']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('afjxyz', @code)">
-        <z:index name="Name-parallel:w Name-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Name:w Name:p Name:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -267,41 +97,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='230']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)">
-        <z:index name="Title-uniform:w Title-uniform:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='430']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)">
-        <z:index name="Title-uniform-see:w Title-uniform-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='530']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)">
-        <z:index name="Title-uniform-see-also:w Title-uniform-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='730']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Title-uniform-parallel:w Title-uniform-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Title-uniform:w Title-uniform:p Title-uniform:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -310,41 +106,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='235']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('abekmrsuwjxyz', @code)">
-        <z:index name="Title-uniform:w Title-uniform:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='435']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abekmrsuwjxyz', @code)">
-        <z:index name="Title-uniform-see:w Title-uniform-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='535']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abekmrsuwjxyz', @code)">
-        <z:index name="Title-uniform-see-also:w Title-uniform-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='735']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Title-uniform-parallel:w Title-uniform-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Title-uniform:w Title-uniform:p Title-uniform:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -353,84 +115,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='240']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Name-Title:w Name-Title:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Name-Title-heading:w Name-Title-heading:p Name-Title-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='440']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Name-Title-see:w Name-Title-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='540']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Name-Title-see-also:w Name-Title-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='740']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Name-Title-parallel:w Name-Title-parallel:s Parallel:w Parallel:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='245']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Title-uniform:w Title-uniform:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='445']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Title-uniform-see:w Title-uniform-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='545']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('atjxyz', @code)">
-        <z:index name="Title-uniform-see-also:w Title-uniform-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='745']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Title-uniform-parallel:w Title-uniform-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Name-Title:w Name-Title:p Name-Title:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -439,41 +124,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='250']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Subject:w Subject:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p Subject-heading:w Subject-heading:p Subject-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='450']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Subject-see:w Subject-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='550']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Subject-see-also:w Subject-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='750']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Subject-parallel:w Subject-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Subject-topical:w Subject-topical:p Subject-topical:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -482,41 +133,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='260']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('abcdjxyz', @code)">
-        <z:index name="Place:w Place:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p Place-heading:w Place-heading:p Place-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='460']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdjxyz', @code)">
-        <z:index name="Place-see:w Place-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='560']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('abcdjxyz', @code)">
-        <z:index name="Place-see-also:w Place-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='760']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Place-parallel:w Place-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Place:w Place:p Place:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -525,41 +142,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='280']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Form:w Form:p Heading:w Heading:p Match:w Match:p Match-heading:w Match-heading:p Form-heading:w Form-heading:p Form-heading:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Heading:s Heading-Main:w Heading-Main:p Heading-Main:s">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='480']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Form-see:w Form-see:p See:w See:p Match:w Match:p Match-heading-see-form:w Match-heading-see-form:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='580']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('ajxyz', @code)">
-        <z:index name="Form-see-also:w Form-see-also:p See-also:w See-also:p Match:w Match:p">
-          <xslo:value-of select="."/>
-        </z:index>
-      </xslo:if>
-    </xslo:for-each>
-  </xslo:template>
-  <xslo:template mode="index_subfields" match="marc:datafield[@tag='780']">
-    <xslo:for-each select="marc:subfield">
-      <xslo:if test="contains('a', @code)">
-        <z:index name="Form-parallel:w Form-parallel:s Parallel:w Parallel:p Match:w Match:p">
+        <z:index name="Form:w Form:p Form:s">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -646,6 +229,2914 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
   </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='200']">
+    <z:index name="Personal-name-heading:w Personal-name-heading:p Personal-name-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Personal-name-heading:w Personal-name-heading:p Personal-name-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='400']">
+    <z:index name="Personal-name-see-from:w Personal-name-see-from:p Personal-name-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Personal-name-see-from:w Personal-name-see-from:p Personal-name-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='500']">
+    <z:index name="Personal-name-see-also-from:w Personal-name-see-also-from:p Personal-name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Personal-name-see-also-from:w Personal-name-see-also-from:p Personal-name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='700']">
+    <z:index name="Personal-name-parallel:w Personal-name-parallel:p Personal-name-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Personal-name-parallel:w Personal-name-parallel:p Personal-name-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='210']">
+    <z:index name="Corporate-name-heading:w Corporate-name-heading:p Corporate-name-heading:s Conference-name-heading:w Conference-name-heading:p Conference-name-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Corporate-name-heading:w Corporate-name-heading:p Corporate-name-heading:s Conference-name-heading:w Conference-name-heading:p Conference-name-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='410']">
+    <z:index name="Corporate-name-see-from:w Corporate-name-see-from:p Corporate-name-see-from:s Conference-name-see-from:w Conference-name-see-from:p Conference-name-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Corporate-name-see-from:w Corporate-name-see-from:p Corporate-name-see-from:s Conference-name-see-from:w Conference-name-see-from:p Conference-name-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='510']">
+    <z:index name="Corporate-name-see-also-from:w Corporate-name-see-also-from:p Corporate-name-see-also-from:s Conference-name-see-also-from:w Conference-name-see-also-from:p Conference-name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Corporate-name-see-also-from:w Corporate-name-see-also-from:p Corporate-name-see-also-from:s Conference-name-see-also-from:w Conference-name-see-also-from:p Conference-name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='710']">
+    <z:index name="Corporate-name-parallel:w Corporate-name-parallel:p Corporate-name-parallel:s Conference-name-parallel:w Conference-name-parallel:p Conference-name-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Corporate-name-parallel:w Corporate-name-parallel:p Corporate-name-parallel:s Conference-name-parallel:w Conference-name-parallel:p Conference-name-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='215']">
+    <z:index name="Name-geographic-heading:w Name-geographic-heading:p Name-geographic-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Name-geographic-heading:w Name-geographic-heading:p Name-geographic-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='415']">
+    <z:index name="Name-geographic-see-from:w Name-geographic-see-from:p Name-geographic-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Name-geographic-see-from:w Name-geographic-see-from:p Name-geographic-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='515']">
+    <z:index name="Name-geographic-see-also-from:w Name-geographic-see-also-from:p Name-geographic-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Name-geographic-see-also-from:w Name-geographic-see-also-from:p Name-geographic-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='715']">
+    <z:index name="Name-geographic-parallel:w Name-geographic-parallel:p Name-geographic-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Name-geographic-parallel:w Name-geographic-parallel:p Name-geographic-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='216']">
+    <z:index name="Trademark-heading:w Trademark-heading:p Trademark-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Trademark-heading:w Trademark-heading:p Trademark-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='416']">
+    <z:index name="Trademark-see-from:w Trademark-see-from:p Trademark-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Trademark-see-from:w Trademark-see-from:p Trademark-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='516']">
+    <z:index name="Trademark-see-also-from:w Trademark-see-also-from:p Trademark-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Trademark-see-also-from:w Trademark-see-also-from:p Trademark-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='716']">
+    <z:index name="Trademark-parallel:w Trademark-parallel:p Trademark-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Trademark-parallel:w Trademark-parallel:p Trademark-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='220']">
+    <z:index name="Name-heading:w Name-heading:p Name-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Name-heading:w Name-heading:p Name-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='420']">
+    <z:index name="Name-see-from:w Name-see-from:p Name-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Name-see-from:w Name-see-from:p Name-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='520']">
+    <z:index name="Name-see-also-from:w Name-see-also-from:p Name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Name-see-also-from:w Name-see-also-from:p Name-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='720']">
+    <z:index name="Name-parallel:w Name-parallel:p Name-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Name-parallel:w Name-parallel:p Name-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='230']">
+    <z:index name="Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='430']">
+    <z:index name="Title-uniform-see-from:w Title-uniform-see-from:p Title-uniform-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Title-uniform-see-from:w Title-uniform-see-from:p Title-uniform-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='530']">
+    <z:index name="Title-uniform-see-also-from:w Title-uniform-see-also-from:p Title-uniform-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Title-uniform-see-also-from:w Title-uniform-see-also-from:p Title-uniform-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='730']">
+    <z:index name="Title-uniform-parallel:w Title-uniform-parallel:p Title-uniform-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Title-uniform-parallel:w Title-uniform-parallel:p Title-uniform-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='235']">
+    <z:index name="Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Title-uniform-heading:w Title-uniform-heading:p Title-uniform-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='435']">
+    <z:index name="Title-uniform-see-from:w Title-uniform-see-from:p Title-uniform-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Title-uniform-see-from:w Title-uniform-see-from:p Title-uniform-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='535']">
+    <z:index name="Title-uniform-see-also-from:w Title-uniform-see-also-from:p Title-uniform-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Title-uniform-see-also-from:w Title-uniform-see-also-from:p Title-uniform-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='735']">
+    <z:index name="Title-uniform-parallel:w Title-uniform-parallel:p Title-uniform-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Title-uniform-parallel:w Title-uniform-parallel:p Title-uniform-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='240']">
+    <z:index name="Name-Title-heading:w Name-Title-heading:p Name-Title-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Name-Title-heading:w Name-Title-heading:p Name-Title-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='440']">
+    <z:index name="Name-Title-see-from:w Name-Title-see-from:p Name-Title-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Name-Title-see-from:w Name-Title-see-from:p Name-Title-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='540']">
+    <z:index name="Name-Title-see-also-from:w Name-Title-see-also-from:p Name-Title-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Name-Title-see-also-from:w Name-Title-see-also-from:p Name-Title-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='740']">
+    <z:index name="Name-Title-parallel:w Name-Title-parallel:p Name-Title-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Name-Title-parallel:w Name-Title-parallel:p Name-Title-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='250']">
+    <z:index name="Subject-topical-heading:w Subject-topical-heading:p Subject-topical-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Subject-topical-heading:w Subject-topical-heading:p Subject-topical-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='450']">
+    <z:index name="Subject-topical-see-from:w Subject-topical-see-from:p Subject-topical-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Subject-topical-see-from:w Subject-topical-see-from:p Subject-topical-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='550']">
+    <z:index name="Subject-topical-see-also-from:w Subject-topical-see-also-from:p Subject-topical-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Subject-topical-see-also-from:w Subject-topical-see-also-from:p Subject-topical-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='750']">
+    <z:index name="Subject-topical-parallel:w Subject-topical-parallel:p Subject-topical-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Subject-topical-parallel:w Subject-topical-parallel:p Subject-topical-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='260']">
+    <z:index name="Place-heading:w Place-heading:p Place-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Place-heading:w Place-heading:p Place-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='460']">
+    <z:index name="Place-see-from:w Place-see-from:p Place-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Place-see-from:w Place-see-from:p Place-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='560']">
+    <z:index name="Place-see-also-from:w Place-see-also-from:p Place-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Place-see-also-from:w Place-see-also-from:p Place-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='760']">
+    <z:index name="Place-parallel:w Place-parallel:p Place-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Place-parallel:w Place-parallel:p Place-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='280']">
+    <z:index name="Form-heading:w Form-heading:p Form-heading:s Heading:w Heading:p Heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Form-heading:w Form-heading:p Form-heading:s Heading:w Heading:p Heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='480']">
+    <z:index name="Form-see-from:w Form-see-from:p Form-see-from:s See-from:w See-from:p See-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Form-see-from:w Form-see-from:p Form-see-from:s See-from:w See-from:p See-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='580']">
+    <z:index name="Form-see-also-from:w Form-see-also-from:p Form-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Form-see-also-from:w Form-see-also-from:p Form-see-also-from:s See-also-from:w See-also-from:p See-also-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_heading" match="marc:datafield[@tag='780']">
+    <z:index name="Form-parallel:w Form-parallel:p Form-parallel:s Parallel:w Parallel:p Parallel:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Form-parallel:w Form-parallel:p Form-parallel:s Parallel:w Parallel:p Parallel:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='200']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='400']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='500']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='700']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdfgjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='210']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='410']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='510']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='710']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='215']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='415']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='515']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='715']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdefgjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='216']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='416']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='516']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='716']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afcjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='220']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='420']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='520']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='720']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('afjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='230']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='430']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='530']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='730']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abhiklmnqrsuwjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='235']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='435']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='535']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='735']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abekmrsuwjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='240']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='440']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='540']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='740']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('atjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='250']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='450']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='550']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='750']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='260']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='460']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='560']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='760']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('abcdjxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='280']">
+    <z:index name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading:w Match-heading:p Match-heading:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='480']">
+    <z:index name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p Match-heading-see-from:w Match-heading-see-from:p Match-heading-see-from:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='580']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_match_heading" match="marc:datafield[@tag='780']">
+    <z:index name="Match:w Match:p">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('ajxyz', @code)" name="Match:w Match:p">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('jxyz', @code)">
+                  <xslo:choose>
+                    <xslo:when test="@code = $general_subdivision_subfield">
+                      <xslo:text> generalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $form_subdivision_subfield">
+                      <xslo:text> formsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $chronological_subdivision_subfield">
+                      <xslo:text> chronologicalsubdiv </xslo:text>
+                    </xslo:when>
+                    <xslo:when test="@code = $geographic_subdivision_subfield">
+                      <xslo:text> geographicsubdiv </xslo:text>
+                    </xslo:when>
+                  </xslo:choose>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:call-template name="chopPunctuation">
+              <xslo:with-param name="chopString">
+                <xslo:value-of select="."/>
+              </xslo:with-param>
+            </xslo:call-template>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+  </xslo:template>
+  <xslo:variable name="form_subdivision_subfield">j</xslo:variable>
+  <xslo:variable name="general_subdivision_subfield">x</xslo:variable>
+  <xslo:variable name="geographic_subdivision_subfield">y</xslo:variable>
+  <xslo:variable name="chronological_subdivision_subfield">z</xslo:variable>
   <xslo:template mode="index_all" match="text()">
     <z:index name="Any:w Any:p">
       <xslo:value-of select="."/>
