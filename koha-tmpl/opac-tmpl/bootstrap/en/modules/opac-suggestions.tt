@@ -142,11 +142,11 @@
                                         <li>
                                             [% IF ( itemtype_required ) %]
                                                 <label for="itemtype" class="required">Item type:</label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20, required = 1, blank = 1 %]
                                                 <span class="required">Required</span>
                                             [% ELSE %]
                                                 <label for="itemtype">Item type:</label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20, blank = 1 %]
                                             [% END %]
                                         </li>
                                         [% IF branchcode %]

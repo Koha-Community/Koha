@@ -10,7 +10,14 @@
 [% DEFAULT class = '' size = 20 %]
 
 [% IF avs %]
-  <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" >
+  [% IF required %]
+      <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" required="required">
+  [% ELSE %]
+      <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]">
+  [% END %]
+  [% IF blank %]
+    <option value="">None</option>
+  [% END %]
   [% FOR av IN avs %]
     [% IF av.authorised_value == default %]
       <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html_entity %]</option>
