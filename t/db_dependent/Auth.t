@@ -52,6 +52,7 @@ subtest 'checkauth() tests' => sub {
         }
     );
     $cgi->mock( 'cookie', sub { return; } );
+    $cgi->mock( 'request_method', sub { return 'POST' } );
 
     my $authnotrequired = 1;
     my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, $authnotrequired );
@@ -68,6 +69,7 @@ subtest 'checkauth() tests' => sub {
             elsif ( $param eq 'password' ) { return $db_user_pass; }
             else { return; }
         });
+    $cgi->mock( 'request_method', sub { return 'POST' } );
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, $authnotrequired );
     is ( $userid, undef, 'If DB user is used, it should not be logged in' );
 
