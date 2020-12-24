@@ -216,7 +216,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 56;
+    plan tests => 57;
 
     my $qb;
 
@@ -277,6 +277,13 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         "(donald duck)",
         "query not altered if QueryAutoTruncate disabled"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'], ['kw,phr'] );
+    is(
+        $query->{query}{query_string}{query},
+        '("donald duck")',
+        "keyword as phrase correctly quotes search term and strips index"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'], ['title'] );
