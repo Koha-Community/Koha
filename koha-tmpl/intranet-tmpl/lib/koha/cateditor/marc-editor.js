@@ -812,7 +812,8 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
         createFieldOrdered: function( tag ) {
             var line, contents;
 
-            for ( line = 0; (contents = this.cm.getLine(line)); line++ ) {
+            for ( line = 0; line <= this.cm.lastLine(); line++ ) {
+                contents = this.cm.getLine(line);
                 if ( contents && contents.substr(0, 3) > tag ) break;
             }
 
