@@ -23,12 +23,12 @@
                     <li><a href="/cgi-bin/koha/catalogue/itemsearch.pl">Item search</a></li>[% END %]
                 </ul>
             </li>
-            [% IF ( intranetbookbag ) %]
+            [% IF ( Koha.Preference('intranetbookbag') ) %]
                 <li>
                     <a href="#" id="cartmenulink"><i class="fa fa-shopping-cart"></i>Cart<span id="basketcount"></span></a>
                 </li>
             [% END %]
-            [% IntranetNav | $raw %]
+            [% Koha.Preference('IntranetNav') | $raw %]
             <li class="dropdown">
                 <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -46,7 +46,7 @@
                     [% IF ( CAN_user_serials ) %]
                         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
                     [% END %]
-                    [% IF ( UseCourseReserves ) %]
+                    [% IF ( Koha.Preference('UseCourseReserves') ) %]
                         <li><a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a></li>
                     [% END %]
                     [% IF ( CAN_user_reports ) %]
@@ -205,6 +205,6 @@
         </ul>
 
     [% IF Koha.Preference('showLastPatron') %][% INCLUDE 'last-borrower.inc' %][% END %]
-    [% IF ( intranetbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
+    [% IF ( Koha.Preference('intranetbookbag') ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 
 </nav>
