@@ -732,7 +732,7 @@ sub _convert_index_fields {
             type  => $index_type_convert{ $t // '__default' }
         };
         $r->{field} = ($mc . $r->{field}) if $mc && $r->{field};
-        $r->{field} ? $r : undef;
+        $r->{field} || $r->{type} ? $r : undef;
     } @indexes;
 }
 
