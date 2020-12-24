@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE AudioAlerts %]
 [% USE To %]
+[% USE Koha %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <script>
@@ -36,7 +37,7 @@
 [% END %]
 
 <!-- js_includes.inc -->
-[% IF ( virtualshelves || intranetbookbag ) %]
+[% IF ( Koha.Preference('virtualshelves') || Koha.Preference('intranetbookbag') ) %]
     [% Asset.js("js/basket.js") | $raw %]
 [% END %]
 
