@@ -3739,7 +3739,7 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
@@ -3782,6 +3782,11 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     # Check the item out
     AddIssue( $patron->unblessed, $item->barcode );
+
+    throws_ok {
+        AddRenewal( $patron->borrowernumber, $item->itemnumber, $library->id, undef, {break=>"the_renewal"} );
+    } 'Koha::Exceptions::Checkout::FailedRenewal', 'Exception is thrown when renewal update to issues fails';
+
     t::lib::Mocks::mock_preference( 'RenewalLog', 0 );
     my $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     my %params_renewal = (
