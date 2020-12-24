@@ -1093,10 +1093,13 @@ sub checkauth {
                 }
                 else {
                     my $retuserid;
-                    ( $return, $cardnumber, $retuserid, $cas_ticket ) =
-                      checkpw( $dbh, $q_userid, $password, $query, $type );
-                    $userid = $retuserid if ($retuserid);
-                    $info{'invalid_username_or_password'} = 1 unless ($return);
+                    my $request_method = $query->request_method();
+                    if ($request_method eq 'POST'){
+                        ( $return, $cardnumber, $retuserid, $cas_ticket ) =
+                          checkpw( $dbh, $q_userid, $password, $query, $type );
+                        $userid = $retuserid if ($retuserid);
+                        $info{'invalid_username_or_password'} = 1 unless ($return);
+                    }
                 }
             }
 
