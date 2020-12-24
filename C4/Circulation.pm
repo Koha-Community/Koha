@@ -3039,8 +3039,10 @@ sub AddRenewal {
                                 AND itemnumber=?"
         );
 
+        eval{
         $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $borrowernumber, $itemnumber );
-        if ( $sth->err ){
+        };
+        if( $sth->err ){
             Koha::Exceptions::Checkout::FailedRenewal->throw(
                 error => 'Update of issue# ' . $issue->issue_id . ' failed with error: ' . $sth->errstr
             );
