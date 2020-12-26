@@ -101,7 +101,6 @@ my $control      = C4::Context->preference('CircControl');
 my $mode         = C4::Context->preference('finesMode');
 my $delim = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
 
-my %is_holiday;
 my $today = dt_from_string();
 my $filename;
 if ($log or $output_dir) {
