@@ -610,7 +610,6 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '360', 'Aquafortiste');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '365', 'Expert (catalogue de vente)');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '370', 'Monteur');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '370', 'Réalisateur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '380', 'Faussaire');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '390', 'Ancien possesseur');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'qualif', '395', 'Fondateur (publication en série)');
