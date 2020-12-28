@@ -62,7 +62,7 @@
         $(document).ready(function () {
             $.validator.addMethod("gt", function(value, element, params) {
                 return parseInt(value) >= parseInt($(params).val());
-            }, _("Must be greater than from value."));
+            }, _("Must be greater or equal to the from value."));
 
             $("form[name=add_by_number]").validate({
                 rules: {
