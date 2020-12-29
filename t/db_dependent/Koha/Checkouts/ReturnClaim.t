@@ -30,7 +30,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "store() tests" => sub {
 
-    plan tests => 8;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -60,6 +60,23 @@ subtest "store() tests" => sub {
           )->store }
         'Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy',
         'Exception thrown correctly';
+
+    my $nullified_created_by = $builder->build_object(
+        {
+            class => 'Koha::Checkouts::ReturnClaims',
+            value => {
+                created_by => undef
+            }
+        }
+    );
+
+    is( $nullified_created_by->created_by, undef, 'Is undef' );
+    ok( $nullified_created_by->in_storage, 'In storage' );
+    is(
+        ref($nullified_created_by->notes('Some other note')->store),
+        'Koha::Checkouts::ReturnClaim',
+        'No exception, store success'
+    );
 
     is( Koha::Checkouts::ReturnClaims->search({ issue_id => $checkout->id })->count, 0, 'No claims stored' );
 
