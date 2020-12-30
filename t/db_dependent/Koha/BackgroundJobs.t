@@ -73,7 +73,7 @@ $new_job->status('new')->store;
 $new_job =
   t::lib::Koha::BackgroundJob::BatchTest->process( { job_id => $new_job->id } );
 is( $new_job->status,             "finished", 'job is new finished!' );
-is( scalar( $new_job->messages ), 10,         '10 messages generated' );
+is( scalar( @{ $new_job->messages } ), 10,    '10 messages generated' );
 is_deeply(
     $new_job->report,
     { total_records => 10, total_success => 10 },
