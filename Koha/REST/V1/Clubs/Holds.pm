@@ -110,16 +110,18 @@ sub add {
             $expiration_date = output_pref( dt_from_string( $expiration_date, 'rfc3339' ) );
         }
 
-        my $club_hold = Koha::Club::Hold::add({
-            club_id => $club_id,
-            biblio_id => $biblio->biblionumber,
-            item_id => $item_id,
-            pickup_library_id => $pickup_library_id,
-            expiration_date => $expiration_date,
-            notes => $notes,
-            item_type => $item_type,
-            default_patron_home => $default_patron_home
-        });
+        my $club_hold = Koha::Club::Hold::add(
+            {
+                club_id             => $club_id,
+                biblio_id           => $biblio->biblionumber,
+                item_id             => $item_id,
+                pickup_library_id   => $pickup_library_id,
+                expiration_date     => $expiration_date,
+                notes               => $notes,
+                item_type           => $item_type,
+                default_patron_home => $default_patron_home
+            }
+        );
 
         return $c->render(
             status  => 201,
@@ -139,48 +141,5 @@ sub add {
         $c->unhandled_exception($_);
     };
 }
-
-=head3 _to_api
-
-Helper function that maps unblessed Koha::Club::Hold objects into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $club_hold    = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Clubs::Holds::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Clubs::Holds::to_api_mapping->{$column};
-        if (    exists $club_hold->{ $column }
-             && defined $mapped_column )
-        {
-            # key != undef
-            $club_hold->{ $mapped_column } = delete $club_hold->{ $column };
-        }
-        elsif (    exists $club_hold->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef
-            delete $club_hold->{ $column };
-        }
-    }
-
-    # Calculate the 'restricted' field
-    return $club_hold;
-}
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    id => 'club_hold_id',
-    club_id => 'club_id',
-    biblio_id => 'biblio_id',
-    item_id => 'item_id'
-};
-
 
 1;

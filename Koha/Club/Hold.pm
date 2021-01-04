@@ -161,10 +161,7 @@ on the API.
 
 sub to_api_mapping {
     return {
-        id        => 'club_hold_id',
-        club_id   => 'club_id',
-        biblio_id => 'biblio_id',
-        item_id   => 'item_id'
+        id => 'club_hold_id'
     };
 }
 
