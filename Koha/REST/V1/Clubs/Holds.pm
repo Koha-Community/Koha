@@ -128,19 +128,9 @@ sub add {
     }
     catch {
         if ( blessed $_ ) {
-            if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
-                my $broken_fk = $_->broken_fk;
-
-                if ( grep { $_ eq $broken_fk } keys %{$Koha::REST::V1::Clubs::Holds::to_api_mapping} ) {
-                    $c->render(
-                        status  => 404,
-                        openapi => $Koha::REST::V1::Clubs::Holds::to_api_mapping->{$broken_fk} . ' not found.'
-                    );
-                }
-            }
-            elsif ($_->isa('Koha::Exceptions::ClubHold')) {
+            if ($_->isa('Koha::Exceptions::ClubHold::NoPatrons')) {
                 return $c->render(
-                    status  => 500,
+                    status  => 403,
                     openapi => { error => $_->description }
                 );
             }
