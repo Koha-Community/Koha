@@ -5,7 +5,7 @@
 	<div id="patron_category_search" class="residentsearch">
 	<form action="[% script_name | html %]" method="post">
         <label class="tip" for="description">Search by patron category name:</label>
-        <input class="head-searchbox" type="text" name="description" id="description" size="40" value="[% searchfield | html %]" />
+        <input class="head-searchbox" type="text" name="description" size="40" value="[% searchfield | html %]" />
 		<input type="submit" class="submit" name="search" value="Search" />
 	</form>	
 	</div>
