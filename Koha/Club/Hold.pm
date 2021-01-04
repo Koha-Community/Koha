@@ -26,6 +26,7 @@ use Koha::Database;
 use Koha::Club::Template::Fields;
 
 use base qw(Koha::Object);
+use Koha::Exceptions;
 use Koha::Exceptions::ClubHold;
 use Koha::Club::Hold::PatronHold;
 use Koha::Clubs;
@@ -53,8 +54,14 @@ Class (static) method that returns a new Koha::Club::Hold instance
 sub add {
     my ( $params ) = @_;
 
-    Koha::Exceptions::ClubHold->throw()
-        unless $params->{club_id} && $params->{biblio_id};
+    # check for mandatory params
+    my @mandatory = ( 'biblio_id', 'club_id' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
 
     my $club = Koha::Clubs->find($params->{club_id});
     my @enrollments = $club->club_enrollments->as_list;
