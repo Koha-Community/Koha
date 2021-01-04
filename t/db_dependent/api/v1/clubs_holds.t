@@ -86,7 +86,7 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/clubs/"
               . $club_without_enrollments->id
               . "/holds" => json => $data )
-          ->status_is(500)
+          ->status_is(403)
           ->json_is( '/error' => "Cannot place a hold on a club without patrons." );
 
         $t->post_ok( "//$userid:$password@/api/v1/clubs/"
