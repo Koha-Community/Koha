@@ -151,7 +151,7 @@ CAN_user_serials_create_subscription ) %]
                     [% END %]
                 [% END %]
                 <li role="separator" class="divider"></li>
-                [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+                [% IF ( add_to_some_private_shelves and add_to_some_private_shelves.count > 10 ) or ( add_to_some_public_shelves and add_to_some_public_shelves.count > 10 ) %]
                     <li>
                         <a href="#" class="addtolist morelists">More lists</a>
                     </li>
