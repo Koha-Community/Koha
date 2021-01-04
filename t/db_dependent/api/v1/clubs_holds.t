@@ -36,75 +36,100 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
-
-my $remote_address = '127.0.0.1';
-my $t              = Test::Mojo->new('Koha::REST::V1');
+my $t = Test::Mojo->new('Koha::REST::V1');
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'add() tests' => sub {
+
     plan tests => 2;
 
     $schema->storage->txn_begin;
 
     my ($club_with_enrollments, $club_without_enrollments, $item, @enrollments) = create_test_data();
 
-    unauthorized_access_tests('POST', "/api/v1/clubs/".$club_with_enrollments->id."/holds", undef, {
-        biblio_id => $item->biblionumber,
-        pickup_library_id => $item->home_branch->branchcode
-    });
+    unauthorized_access_tests(
+        'POST',
+        "/api/v1/clubs/" . $club_with_enrollments->id . "/holds",
+        undef,
+        {
+            biblio_id         => $item->biblionumber,
+            pickup_library_id => $item->home_branch->branchcode
+        }
+    );
 
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
+
         plan tests => 8;
 
         $schema->storage->txn_begin;
 
         my ($club_with_enrollments, $club_without_enrollments, $item, @enrollments) = create_test_data();
+        my $club_with_enrollments_id = $club_with_enrollments->id;
 
-        my ( undef, $session_id ) = create_user_and_session({ authorized => 1 });
+        my $librarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 2**6 }    # reserveforothers flag = 6
+            }
+        );
+        my $password = 'thePassword123';
+        $librarian->set_password( { password => $password, skip_validation => 1 } );
+        my $userid = $librarian->userid;
+
         my $data = {
-            biblio_id => $item->biblionumber,
+            biblio_id         => $item->biblionumber,
             pickup_library_id => $item->home_branch->branchcode
         };
-        my $tx = $t->ua->build_tx(POST => "/api/v1/clubs/".$club_without_enrollments->id."/holds" => json => $data);
-        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-        $t->request_ok($tx)
-            ->status_is(500)
-            ->json_is('/error' => "Cannot place a hold on a club without patrons.");
 
-        $tx = $t->ua->build_tx(POST => "/api/v1/clubs/".$club_with_enrollments->id."/holds" => json => $data);
-        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-        $t->request_ok($tx)
-          ->status_is(201, 'Created Hold')
-          ->json_has('/club_hold_id', 'got a club hold id')
-          ->json_is( '/club_id' => $club_with_enrollments->id)
-          ->json_is( '/biblio_id'    => $item->biblionumber);
+        $t->post_ok( "//$userid:$password@/api/v1/clubs/"
+              . $club_without_enrollments->id
+              . "/holds" => json => $data )
+          ->status_is(500)
+          ->json_is( '/error' => "Cannot place a hold on a club without patrons." );
+
+        $t->post_ok( "//$userid:$password@/api/v1/clubs/"
+              . $club_with_enrollments->id
+              . "/holds" => json => $data )
+          ->status_is( 201, 'Created Hold' )
+          ->json_has( '/club_hold_id', 'got a club hold id' )
+          ->json_is( '/club_id'   => $club_with_enrollments->id )
+          ->json_is( '/biblio_id' => $item->biblionumber );
 
         $schema->storage->txn_rollback;
     };
 };
 
 subtest "default patron home" => sub {
+
     plan tests => 8;
 
     $schema->storage->txn_begin;
 
     my ($club_with_enrollments, $club_without_enrollments, $item, @enrollments) = create_test_data();
+    my $club_with_enrollments_id = $club_with_enrollments->id;
 
-    my ( undef, $session_id ) = create_user_and_session({ authorized => 1 });
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2**6 }    # reserveforothers flag = 6
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
     my $data = {
-        biblio_id => $item->biblionumber,
-        pickup_library_id => $item->home_branch->branchcode,
+        biblio_id           => $item->biblionumber,
+        pickup_library_id   => $item->home_branch->branchcode,
         default_patron_home => 1
     };
 
-    my $tx = $t->ua->build_tx(POST => "/api/v1/clubs/".$club_with_enrollments->id."/holds" => json => $data);
-    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-    $t->request_ok($tx)
-        ->status_is(201, 'Created Hold');
+    $t->post_ok( "//$userid:$password@/api/v1/clubs/"
+          . $club_with_enrollments->id
+          . "/holds" => json => $data )
+      ->status_is( 201, 'Created Hold' );
 
     my $json_response = decode_json $t->tx->res->content->get_body_chunk;
 
@@ -128,49 +153,26 @@ sub unauthorized_access_tests {
     subtest 'unauthorized access tests' => sub {
         plan tests => 5;
 
-        my $tx = $t->ua->build_tx($verb => $endpoint => json => $json);
-        $t->request_ok($tx)
+        my $verb_ok = lc($verb) . '_ok';
+
+        $t->$verb_ok($endpoint => json => $json)
           ->status_is(401);
 
-        my ($borrowernumber, $session_id) = create_user_and_session({
-            authorized => 0 });
+        my $unauthorized_patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 0 }
+            }
+        );
+        my $password = "thePassword123!";
+        $unauthorized_patron->set_password(
+            { password => $password, skip_validation => 1 } );
+        my $unauth_userid = $unauthorized_patron->userid;
 
-        $tx = $t->ua->build_tx($verb => $endpoint => json => $json);
-        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
-        $t->request_ok($tx)
+        $t->$verb_ok( "//$unauth_userid:$password\@$endpoint" => json => $json )
           ->status_is(403)
           ->json_has('/required_permissions');
     };
-}
-
-sub create_user_and_session {
-
-    my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? 64 : 0;
-
-    my $user = $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                flags => $flags,
-                gonenoaddress => 0,
-                lost => 0,
-                email => 'nobody@example.com',
-                emailpro => 'nobody@example.com',
-                B_email => 'nobody@example.com'
-            }
-        }
-    );
-
-    # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->{borrowernumber} );
-    $session->param( 'id',       $user->{userid} );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
-
-    return ( $user->{borrowernumber}, $session->id );
 }
 
 sub create_test_data {
