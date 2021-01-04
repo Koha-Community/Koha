@@ -53,17 +53,21 @@ Class (static) method that returns a new Koha::Club::Hold instance
 sub add {
     my ( $params ) = @_;
 
-    throw Koha::Exceptions::ClubHold unless $params->{club_id} && $params->{biblio_id};
+    Koha::Exceptions::ClubHold->throw()
+        unless $params->{club_id} && $params->{biblio_id};
+
     my $club = Koha::Clubs->find($params->{club_id});
     my @enrollments = $club->club_enrollments->as_list;
-    throw Koha::Exceptions::ClubHold::NoPatrons() unless scalar @enrollments;
+
+    Koha::Exceptions::ClubHold::NoPatrons->throw()
+        unless scalar @enrollments;
 
     my $biblio = Koha::Biblios->find($params->{biblio_id});
 
     my $club_params = {
-        club_id => $params->{club_id},
+        club_id   => $params->{club_id},
         biblio_id => $params->{biblio_id},
-        item_id => $params->{item_id}
+        item_id   => $params->{item_id}
     };
 
     my $club_hold = Koha::Club::Hold->new($club_params)->store();
