@@ -50,6 +50,11 @@
       <arg><option>--smtp-user-name</option> user</arg>
       <arg><option>--smtp-password</option>  pass</arg>
       <arg><option>--smtp-debug</option></arg>
+      <arg><option>--mb-host</option> host</arg>
+      <arg><option>--mb-port</option> port</arg>
+      <arg><option>--mb-user</option> user</arg>
+      <arg><option>--mb-pass</option> pass</arg>
+      <arg><option>--mb-vhost</option> vhost</arg>
       <arg><option>--help</option>|<option>-h</option></arg>
 
       <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
@@ -262,6 +267,41 @@
       <term><option>--smtp-debug</option></term>
       <listitem>
         <para>Enable debug mode.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--mb-host</option></term>
+      <listitem>
+        <para>Specify the host name for the RabbitMQ server. (default: localhost)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--mb-port</option></term>
+      <listitem>
+        <para>Specify the port for the RabbitMQ server. (default: 61613)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--mb-user</option></term>
+      <listitem>
+        <para>Specify the user to connect to the RabbitMQ server. (default: guest)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--mb-pass</option></term>
+      <listitem>
+        <para>Specify the password to connect to the RabbitMQ server. (default: guest)</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--mb-vhost</option></term>
+      <listitem>
+        <para>Specify the vhost to use on the RabbitMQ service. (default: koha_instance)</para>
       </listitem>
     </varlistentry>
 
