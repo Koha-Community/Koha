@@ -95,16 +95,6 @@ sub register {
                 $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
             }
 
-            if ( defined $path_params ) {
-
-                # Apply the mapping function to the passed params
-                $filtered_params //= {};
-                $path_params = $result_set->attributes_from_api($path_params);
-                foreach my $param (keys %{$path_params}) {
-                    $filtered_params->{$param} = $path_params->{$param};
-                }
-            }
-
             if( defined $reserved_params->{q} || defined $reserved_params->{query} || defined $reserved_params->{'x-koha-query'}) {
                 $filtered_params //={};
                 my @query_params_array;
