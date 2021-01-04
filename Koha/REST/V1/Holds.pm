@@ -445,8 +445,6 @@ sub pickup_locations {
     my $c = shift->openapi->valid_input or return;
 
     my $hold_id = $c->validation->param('hold_id');
-    # FIXME: We should really skip the path params in $c->objects->search
-    delete $c->validation->output->{hold_id};
     my $hold = Koha::Holds->find( $hold_id, { prefetch => [ 'patron' ] } );
 
     unless ($hold) {
