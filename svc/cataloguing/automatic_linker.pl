@@ -19,9 +19,8 @@
 
 use Modern::Perl;
 use CGI;
-use CGI::Cookie;
 use JSON;
-use C4::Auth;
+use C4::Auth qw(check_cookie_auth);
 use C4::Biblio;
 use C4::Context;
 
@@ -29,10 +28,8 @@ my $input = CGI->new;
 print $input->header('application/json');
 
 # Check the user's permissions
-my %cookies = CGI::Cookie->fetch;
-my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
 my ( $auth_status, $auth_sessid ) =
-  C4::Auth::check_cookie_auth( $sessid, { editauthorities => 1, editcatalogue => 1 } );
+  C4::Auth::check_cookie_auth( $input->cookie('CGISESSID'), { editauthorities => 1, editcatalogue => 1 } );
 if ( $auth_status ne "ok" ) {
     print to_json( { status => 'UNAUTHORIZED' } );
     exit 0;
