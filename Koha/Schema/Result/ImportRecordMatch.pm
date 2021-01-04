@@ -92,6 +92,10 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-03 14:22:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jN0xJqlL5brcUwa3bvEHHQ
 
+__PACKAGE__->add_columns(
+    '+chosen' => { is_boolean => 1 },
+);
+
 sub koha_object_class {
     'Koha::Import::Record::Match';
 }
