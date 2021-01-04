@@ -83,6 +83,13 @@ Options:
   --smtp-user-name user     User name to be used on SMTP auth
   --smtp-password  pass     Password to authenticate SMTP
   --smtp-debug              Enable debug mode for SMTP
+
+  --mb-host host            RabbitMQ host name (default: localhost)
+  --mb-port NN              RabbitMQ port (default: 61613)
+  --mb-user user            RabbitMQ user (default: guest)
+  --mb-pass pass            RabbitMQ password (default: guest)
+  --mb-vhost vhost          RabbitMQ vhost (default: koha_<instance>)
+
   --help,-h                 Show this help.
 
 Note: the instance name cannot be longer that 11 chars.
@@ -132,6 +139,11 @@ generate_config_file() {
         -e "s/__SMTP_USER_NAME__/$SMTP_USER_NAME/g" \
         -e "s/__SMTP_PASSWORD__/$SMTP_PASSWORD/g" \
         -e "s/__SMTP_DEBUG__/$SMTP_DEBUG/g" \
+        -e "s/__MESSAGE_BROKER_HOST__/$MESSAGE_BROKER_HOST/g" \
+        -e "s/__MESSAGE_BROKER_PORT__/$MESSAGE_BROKER_PORT/g" \
+        -e "s/__MESSAGE_BROKER_USER__/$MESSAGE_BROKER_USER/g" \
+        -e "s/__MESSAGE_BROKER_PASS__/$MESSAGE_BROKER_PASS/g" \
+        -e "s/__MESSAGE_BROKER_VHOST__/$MESSAGE_BROKER_VHOST/g" \
         "/etc/koha/$1" > "$2"
 
 }
@@ -289,6 +301,33 @@ set_smtp()
     fi
 }
 
+set_message_broker()
+{
+    local instance="$1"
+
+    if [ "$CLO_MESSAGE_BROKER_HOST" != "" ]; then
+        MESSAGE_BROKER_HOST=$CLO_MESSAGE_BROKER_HOST
+    fi
+
+    if [ "$CLO_MESSAGE_BROKER_PORT" != "" ]; then
+        MESSAGE_BROKER_PORT=$CLO_MESSAGE_BROKER_PORT
+    fi
+
+    if [ "$CLO_MESSAGE_BROKER_USER" != "" ]; then
+        MESSAGE_BROKER_USER=$CLO_MESSAGE_BROKER_USER
+    fi
+
+    if [ "$CLO_MESSAGE_BROKER_PASS" != "" ]; then
+        MESSAGE_BROKER_PASS=$CLO_MESSAGE_BROKER_PASS
+    fi
+
+    if [ "$CLO_MESSAGE_BROKER_VHOST" != "" ]; then
+        MESSAGE_BROKER_VHOST=$CLO_MESSAGE_BROKER_VHOST
+    else
+        MESSAGE_BROKER_VHOST="$DEFAULT_MESSAGE_BROKER_PREFIX$instance"
+    fi
+}
+
 set_upload_path()
 {
     local instance="$1"
@@ -395,6 +434,14 @@ SMTP_USER_NAME=""
 SMTP_PASSWORD=""
 SMTP_DEBUG="0"
 
+# Message broker (a.k.a. RabbitMQ) config
+DEFAULT_MESSAGE_BROKER_PREFIX="koha_"
+MESSAGE_BROKER_HOST="localhost"
+MESSAGE_BROKER_PORT="61613"
+MESSAGE_BROKER_USER="guest"
+MESSAGE_BROKER_PASS="guest"
+MESSAGE_BROKER_VHOST=""
+
 # memcached variables
 USE_MEMCACHED="yes"
 MEMCACHED_SERVERS=""
@@ -434,7 +481,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,smtp-host:,smtp-port,smtp-timeout:,smtp-ssl-mode:smtp-user-name:,smtp-password:,smtp-debug,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,smtp-host:,smtp-port:,smtp-timeout:,smtp-ssl-mode:,smtp-user-name:,smtp-password:,smtp-debug,mb-host:,mb-port:,mb-user:,mb-pass:,mb-vhost:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -460,6 +507,12 @@ CLO_SMTP_SSL_MODE=""
 CLO_SMTP_USER_NAME=""
 CLO_SMTP_PASSWORD=""
 CLO_SMTP_DEBUG=""
+
+CLO_MESSAGE_BROKER_HOST=""
+CLO_MESSAGE_BROKER_PORT=""
+CLO_MESSAGE_BROKER_USER=""
+CLO_MESSAGE_BROKER_PASS=""
+CLO_MESSAGE_BROKER_VHOST=""
 
 while true ; do
     case "$1" in
@@ -495,6 +548,16 @@ while true ; do
             CLO_ADMINUSER="$2" ; shift 2 ;;
         --enable-sru)
             ENABLE_SRU="yes" ; shift ;;
+        --mb-host)
+            CLO_MESSAGE_BROKER_HOST="$2" ; shift 2 ;;
+        --mb-port)
+            CLO_MESSAGE_BROKER_PORT="$2" ; shift 2 ;;
+        --mb-user)
+            CLO_MESSAGE_BROKER_USER="$2" ; shift 2 ;;
+        --mb-pass)
+            CLO_MESSAGE_BROKER_PASS="$2" ; shift 2 ;;
+        --mb-vhost)
+            CLO_MESSAGE_BROKER_VHOST="$2" ; shift 2 ;;
         --smtp-debug)
             CLO_SMTP_DEBUG="1" ; shift ;;
         --smtp-host)
@@ -606,6 +669,8 @@ if [ "$USE_MEMCACHED" = "no" ]; then
 else
     set_memcached $name
 fi
+
+set_message_broker $name
 
 # Set template cache dir
 if [ "$CLO_TEMPLATE_CACHE_DIR" != "" ]; then
