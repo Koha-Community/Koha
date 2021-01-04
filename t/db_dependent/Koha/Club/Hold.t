@@ -36,7 +36,8 @@ my $builder = t::lib::TestBuilder->new;
 my $schema = Koha::Database->new->schema;
 
 subtest 'add' => sub {
-    plan tests => 5;
+
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -45,32 +46,82 @@ subtest 'add' => sub {
     my $item1 = $builder->build_sample_item({ library => $library->branchcode });
     my $item2 = $builder->build_sample_item({ library => $library->branchcode });
 
-    try {
-        Koha::Club::Hold::add({ club_id => $club->id, biblio_id => $item1->biblionumber, pickup_library_id => $library->branchcode });
-    } catch {
-        my $class = ref $_;
-        ok($class eq 'Koha::Exceptions::ClubHold::NoPatrons', 'Exception thrown when no patron is enrolled in club');
-    };
+    throws_ok {
+        Koha::Club::Hold::add(
+            {
+                club_id => $club->id
+            }
+        );
+    }
+    'Koha::Exceptions::MissingParameter',
+      'Exception thrown when biblio_id is passed';
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library->branchcode } });
-    my $e = $builder->build_object({ class => 'Koha::Club::Enrollments' , value => { club_id => $club->id, borrowernumber => $patron->borrowernumber, date_canceled => undef }} );
+    is( "$@", 'The biblio_id parameter is mandatory' );
 
-    my $club_hold = Koha::Club::Hold::add({
-        club_id => $club->id,
-        biblio_id => $item1->biblionumber,
-        pickup_library_id => $library->branchcode
-    });
+    throws_ok {
+        Koha::Club::Hold::add(
+            {
+                biblio_id => $item1->biblionumber
+            }
+        );
+    }
+    'Koha::Exceptions::MissingParameter',
+      'Exception thrown when club_id is passed';
+
+    is( "$@", 'The club_id parameter is mandatory' );
+
+    throws_ok {
+        Koha::Club::Hold::add(
+            {
+                club_id           => $club->id,
+                biblio_id         => $item1->biblionumber,
+                pickup_library_id => $library->branchcode
+            }
+        );
+    }
+    'Koha::Exceptions::ClubHold::NoPatrons',
+      'Exception thrown when no patron is enrolled in club';
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+    my $e = $builder->build_object(
+        {
+            class => 'Koha::Club::Enrollments',
+            value => {
+                club_id        => $club->id,
+                borrowernumber => $patron->borrowernumber,
+                date_canceled  => undef
+            }
+        }
+    );
+
+    my $club_hold = Koha::Club::Hold::add(
+        {
+            club_id           => $club->id,
+            biblio_id         => $item1->biblionumber,
+            pickup_library_id => $library->branchcode
+        }
+    );
 
     is(blessed($club_hold), 'Koha::Club::Hold', 'add returns a Koha::Club::Hold');
 
     $e->date_canceled(dt_from_string)->store;
 
-    try {
-        Koha::Club::Hold::add({ club_id => $club->id, biblio_id => $item2->biblionumber, pickup_library_id => $library->branchcode });
-    } catch {
-        my $class = ref $_;
-        ok($class eq 'Koha::Exceptions::ClubHold::NoPatrons', 'Exception thrown when no patron is enrolled in club');
-    };
+    throws_ok {
+        Koha::Club::Hold::add(
+            {
+                club_id           => $club->id,
+                biblio_id         => $item2->biblionumber,
+                pickup_library_id => $library->branchcode
+            }
+        );
+    }
+    'Koha::Exceptions::ClubHold::NoPatrons',
+      'Exception thrown when no patron is enrolled in club';
 
     my $patron_holds = Koha::Club::Hold::PatronHolds->search({ club_hold_id => $club_hold->id });
 
