@@ -50,7 +50,8 @@ sub force_borrower_messaging_defaults {
     my $sql =
 q|SELECT DISTINCT bo.borrowernumber, bo.categorycode FROM borrowers bo
 LEFT JOIN borrower_message_preferences mp USING (borrowernumber)
-WHERE 1|
+WHERE 1|;
+
     if ( $since ) {
         $sql .= " AND bo.dateenrolled >= ?";
     }
