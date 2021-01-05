@@ -307,8 +307,7 @@ if ( $op eq "add" ) {
   my $basketno=$input->param('basketno');
   my $basketgroupid=$input->param('basketgroupid');
   ModBasket( { basketno => $basketno,
-                         basketgroupid => $basketgroupid,
-                         borrowernumber => $loggedinuser } );
+                         basketgroupid => $basketgroupid } );
   print $input->redirect("basket.pl?basketno=" . $basketno);
 } elsif ( $op eq 'closeandprint') {
 #
