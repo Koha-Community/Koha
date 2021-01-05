@@ -129,11 +129,8 @@ if ( $op eq "renew" ) {
     );
 }
 
-my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
-
 $template->param(
     op => $op,
-    libraries      => $libraries,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
