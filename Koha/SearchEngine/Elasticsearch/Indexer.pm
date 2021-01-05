@@ -26,6 +26,7 @@ use base qw(Koha::SearchEngine::Elasticsearch);
 use Koha::Exceptions;
 use Koha::Exceptions::Elasticsearch;
 use Koha::SearchEngine::Zebra::Indexer;
+use Koha::BackgroundJob::UpdateElasticIndex;
 use C4::AuthoritiesMarc qw//;
 use C4::Biblio;
 use C4::Context;
@@ -97,12 +98,28 @@ Arrayref of C<MARC::Record>s.
 =cut
 
 sub update_index {
-    my ($self, $biblionums, $records) = @_;
+    my ($self, $record_ids, $records) = @_;
+
+    my $index_record_ids;
+    unless ( $records && @$records ) {
+        for my $record_id ( sort { $a <=> $b } @$record_ids ) {
+
+            next unless $record_id;
+
+            my $record = $self->_get_record( $record_id );
+            if( $record ){
+                push @$records, $record;
+                push @$index_record_ids, $record_id;
+            }
+        }
+    } else {
+        $index_record_ids = $record_ids;
+    }
 
     my $documents = $self->marc_records_to_documents($records);
     my @body;
-    for (my $i = 0; $i < scalar @$biblionums; $i++) {
-        my $id = $biblionums->[$i];
+    for (my $i = 0; $i < scalar @$index_record_ids; $i++) {
+        my $id = $index_record_ids->[$i];
         my $document = $documents->[$i];
         push @body, {
             index => {
@@ -271,7 +288,7 @@ sub update_mappings {
     $self->set_index_status_ok();
 }
 
-=head2 update_index_background($biblionums, $records)
+=head2 update_index_background($record_numbers, $server)
 
 This has exactly the same API as C<update_index> however it'll
 return immediately. It'll start a background process that does the adding.
@@ -281,12 +298,10 @@ it to be updated by a regular index cron job in the future.
 
 =cut
 
-# TODO implement in the future - I don't know the best way of doing this yet.
-# If fork: make sure process group is changed so apache doesn't wait for us.
-
 sub update_index_background {
-    my $self = shift;
-    $self->update_index(@_);
+    my ( $self, $record_numbers, $server ) = @_;
+
+    Koha::BackgroundJob::UpdateElasticIndex->new->enqueue({ record_ids => $record_numbers, record_server => $server });
 }
 
 =head2 index_records
@@ -307,19 +322,11 @@ sub index_records {
     $record_numbers = [$record_numbers] if ref $record_numbers ne 'ARRAY' && defined $record_numbers;
     $records = [$records] if ref $records ne 'ARRAY' && defined $records;
     if ( $op eq 'specialUpdate' ) {
-        my $index_record_numbers;
         if ($records){
-            $index_record_numbers = $record_numbers;
+            $self->update_index( $record_numbers, $records );
         } else {
-            foreach my $record_number ( @$record_numbers ){
-                my $record = _get_record( $record_number, $server );
-                if( $record ){
-                    push @$records, $record;
-                    push @$index_record_numbers, $record_number;
-                }
-            }
+            $self->update_index_background( $record_numbers, $server );
         }
-        $self->update_index_background( $index_record_numbers, $records ) if $index_record_numbers && $records;
     }
     elsif ( $op eq 'recordDelete' ) {
         $self->delete_index_background( $record_numbers );
@@ -329,10 +336,10 @@ sub index_records {
 }
 
 sub _get_record {
-    my ( $id, $server ) = @_;
-    return $server eq 'biblioserver'
-        ? C4::Biblio::GetMarcBiblio({ biblionumber => $id, embed_items  => 1 })
-        : C4::AuthoritiesMarc::GetAuthority($id);
+    my ( $self, $record_id ) = @_;
+    return $self->index eq $Koha::SearchEngine::BIBLIOS_INDEX
+        ? C4::Biblio::GetMarcBiblio({ biblionumber => $record_id, embed_items  => 1 })
+        : C4::AuthoritiesMarc::GetAuthority($record_id);
 }
 
 =head2 delete_index($biblionums)

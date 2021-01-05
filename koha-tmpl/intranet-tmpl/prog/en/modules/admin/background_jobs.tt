@@ -37,6 +37,8 @@
         <span>Batch item record deletion</span>
     [% CASE "batch_hold_cancel" %]
         <span>Batch hold cancellation</span>
+    [% CASE 'update_elastic_index' %]
+        <span>Update Elasticsearch index</span>
     [% CASE %]<span>Unknown job type '[% job_type | html %]'</span>
     [% END %]
 
