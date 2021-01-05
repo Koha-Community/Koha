@@ -183,8 +183,8 @@ sub SearchAuthorities {
                 $attr .= " \@attr 4=107 ";    #Number Exact match
             }
             elsif ( $operator and $operator eq "start" ) {
-                $attr .= " \@attr 3=2 \@attr 4=1 \@attr 5=1 "
-                  ;    #Firstinfield Phrase, Right truncated
+                $attr .= " \@attr 3=2 \@attr 4=1 \@attr 5=1 \@attr 6=3 "
+                  ;    #Firstinfield Phrase, Right truncated, Complete field
             }
             elsif ( $operator and $operator eq "exact" ) {
                 $attr .= " \@attr 4=1  \@attr 5=100 \@attr 6=3 "
