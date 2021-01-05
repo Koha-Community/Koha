@@ -319,17 +319,20 @@ sub get_template_and_user {
             $template->param( CAN_user_editcatalogue    => 1 );
             $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );
+            $template->param( CAN_user_suggestions      => 1 );
             $template->param( CAN_user_tools            => 1 );
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
             $template->param( CAN_user_staffaccess      => 1 );
-            $template->param( CAN_user_plugins          => 1 );
             $template->param( CAN_user_coursereserves   => 1 );
+            $template->param( CAN_user_plugins          => 1 );
+            $template->param( CAN_user_lists            => 1 );
             $template->param( CAN_user_clubs            => 1 );
             $template->param( CAN_user_ill              => 1 );
             $template->param( CAN_user_stockrotation    => 1 );
-            $template->param( CAN_user_problem_reports   => 1 );
+            $template->param( CAN_user_cash_management  => 1 );
+            $template->param( CAN_user_problem_reports  => 1 );
 
             foreach my $module ( keys %$all_perms ) {
                 foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
