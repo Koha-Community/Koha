@@ -272,23 +272,22 @@ foreach my $bibnum ( @biblionumbers ){
     }
     $hold_info->{itemtypes} = \@res_itemtypes;
 
-    # get available locations for each biblio
-    $hold_info->{locations} = [ uniq map { defined $_->location ? $_->location : () } @$items ];
+    # get available values for each biblio
+    my $fields = {
+        locations       => 'location',
+        callnumbers     => 'itemcallnumber',
+        enumchrons      => 'enumchron',
+        copynumbers     => 'copynumber',
+        barcodes        => 'barcode',
+        holdingbranches => 'holdingbranch'
+    };
 
-    # get available callnumbers for each biblio
-    $hold_info->{callnumbers} = [ uniq map { defined $_->itemcallnumber ? $_->itemcallnumber : () } @$items ];
-
-    # get available enumchrons for each biblio
-    $hold_info->{enumchrons} = [ uniq map { defined $_->enumchron ? $_->enumchron : () } @$items ];
-
-    # get available copynumbers for each biblio
-    $hold_info->{copynumbers} = [ uniq map { defined $_->copynumber ? $_->copynumber : () } @$items ];
-
-    # get available barcodes for each biblio
-    $hold_info->{barcodes} = [ uniq map { defined $_->barcode ? $_->barcode : () } @$items ];
-
-    # get available holding branches for each biblio
-    $hold_info->{holdingbranches} = [ uniq map { defined $_->holdingbranch ? $_->holdingbranch : () } @$items ];
+    while (
+        my ( $key, $field ) = each %$fields )
+    {
+        $hold_info->{$key} =
+          [ uniq map { defined $_->$field ? $_->$field : () } @$items ];
+    }
 
     # items available
     $hold_info->{items_count} = $items_count;
