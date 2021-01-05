@@ -28,8 +28,6 @@ use C4::Context;
 
 use Koha::Patrons;
 
-my $dbh = '';
-
 # Start transaction
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin();
@@ -131,12 +129,11 @@ subtest 'checkpw_ldap tests' => sub {
 
     plan tests => 4;
 
-    my $dbh = C4::Context->dbh;
     ## Connection fail tests
     $desired_connection_result = 'error';
     warning_is {
         $ret =
-          C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' );
+          C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
     }
     'LDAP connexion failed',
       'checkpw_ldap prints correct warning if LDAP conexion fails';
@@ -158,7 +155,7 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
         qr/Anonymous LDAP bind failed: LDAP error #1: error_name/,
@@ -171,7 +168,7 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
@@ -204,7 +201,7 @@ subtest 'checkpw_ldap tests' => sub {
             }
         );
 
-        C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' );
+        C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' );
         ok(
             Koha::Patrons->find($borrower->{borrowernumber})->extended_attributes->count,
             'Extended attributes are not deleted'
@@ -219,7 +216,7 @@ subtest 'checkpw_ldap tests' => sub {
         $patron->delete;
         reload_ldap_module();
         is(
-            C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' ),
+            C4::Auth_with_ldap::checkpw_ldap( 'hola', password => 'hey' ),
             0,
             'checkpw_ldap returns 0 if user lookup returns 0'
         );
@@ -228,7 +225,7 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
@@ -246,7 +243,7 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
         qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
@@ -271,7 +268,7 @@ subtest 'checkpw_ldap tests' => sub {
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
 qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
@@ -286,7 +283,7 @@ qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: er
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
 qr/LDAP Auth rejected : invalid password for user 'hola'./,
@@ -300,7 +297,7 @@ qr/LDAP Auth rejected : invalid password for user 'hola'./,
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
 qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: error_name/,
@@ -313,7 +310,7 @@ qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: er
         reload_ldap_module();
 
         warning_like {
-            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+            $ret = C4::Auth_with_ldap::checkpw_ldap( 'hola',
                 password => 'hey' );
         }
 qr/LDAP Auth rejected : invalid password for user 'hola'./,

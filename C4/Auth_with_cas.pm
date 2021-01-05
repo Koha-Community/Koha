@@ -99,7 +99,7 @@ sub login_cas_url {
 # Checks for password correctness
 # In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
-    my ($dbh, $ticket, $query, $type) = @_;
+    my ($ticket, $query, $type) = @_;
     my $retnumber;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
 
@@ -117,6 +117,7 @@ sub checkpw_cas {
             # we should store the CAS ticekt too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
 
             # Does it match one of our users ?
+            my $dbh = C4::Context->dbh;
             my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
             $sth->execute($userid);
             if ( $sth->rows ) {
@@ -147,7 +148,7 @@ sub checkpw_cas {
 
 # Proxy CAS auth
 sub check_api_auth_cas {
-    my ($dbh, $PT, $query, $type) = @_;
+    my ($PT, $query, $type) = @_;
     my $retnumber;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
 
@@ -164,6 +165,7 @@ sub check_api_auth_cas {
             # we should store the CAS ticket too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
 
             # Does it match one of our users ?
+            my $dbh = C4::Context->dbh;
             my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
             $sth->execute($userid);
             if ( $sth->rows ) {

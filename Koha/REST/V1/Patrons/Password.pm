@@ -119,8 +119,7 @@ sub set_public {
     }
 
     return try {
-        my $dbh = C4::Context->dbh;
-        unless ( checkpw_internal($dbh, $user->userid, $old_password ) ) {
+        unless ( checkpw_internal($user->userid, $old_password ) ) {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Invalid password" }

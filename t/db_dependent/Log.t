@@ -30,7 +30,6 @@ use t::lib::TestBuilder;
 # Make sure we can rollback.
 our $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-our $dbh = C4::Context->dbh;
 
 subtest 'Existing tests' => sub {
     plan tests => 3;
@@ -47,17 +46,15 @@ subtest 'Existing tests' => sub {
     ok($success, "logaction seemed to work");
 
     # We want numbers to be the same between runs.
-    $dbh->do("DELETE FROM action_logs;");
+    Koha::ActionLogs->search->delete;
 
     t::lib::Mocks::mock_preference('CronjobLog',0);
     cronlogaction();
-    my $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
-    is($cronJobCount,0,"Cronjob not logged as expected.");
+    is(Koha::ActionLogs->search({ module => 'CRONJOBS' })->count,0,"Cronjob not logged as expected.");
 
     t::lib::Mocks::mock_preference('CronjobLog',1);
     cronlogaction();
-    $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
-    is($cronJobCount,1,"Cronjob logged as expected.");
+    is(Koha::ActionLogs->search({ module => 'CRONJOBS' })->count,0,"Cronjob logged as expected.");
 };
 
 subtest 'logaction(): interface is correctly logged' => sub {
@@ -65,28 +62,28 @@ subtest 'logaction(): interface is correctly logged' => sub {
     plan tests => 4;
 
     # No interface passed, using C4::Context->interface
-    $dbh->do("DELETE FROM action_logs;");
+    Koha::ActionLogs->search->delete;
     C4::Context->interface( 'commandline' );
     logaction( "MEMBERS", "MODIFY", 1, "test operation");
     my $log = Koha::ActionLogs->search->next;
     is( $log->interface, 'commandline', 'Interface correctly deduced (commandline)');
 
     # No interface passed, using C4::Context->interface
-    $dbh->do("DELETE FROM action_logs;");
+    Koha::ActionLogs->search->delete;
     C4::Context->interface( 'opac' );
     logaction( "MEMBERS", "MODIFY", 1, "test operation");
     $log = Koha::ActionLogs->search->next;
     is( $log->interface, 'opac', 'Interface correctly deduced (opac)');
 
     # Explicit interfaces
-    $dbh->do("DELETE FROM action_logs;");
+    Koha::ActionLogs->search->delete;
     C4::Context->interface( 'intranet' );
     logaction( "MEMBERS", "MODIFY", 1, 'test info', 'intranet');
     $log = Koha::ActionLogs->search->next;
     is( $log->interface, 'intranet', 'Passed interface is respected (intranet)');
 
     # Explicit interfaces
-    $dbh->do("DELETE FROM action_logs;");
+    Koha::ActionLogs->search->delete;
     C4::Context->interface( 'sip' );
     logaction( "MEMBERS", "MODIFY", 1, 'test info', 'sip');
     $log = Koha::ActionLogs->search->next;
@@ -114,7 +111,7 @@ subtest 'GDPR logging' => sub {
     t::lib::Mocks::mock_preference('AuthFailureLog', 1);
     my $strong_password = 'N0tStr0ngAnyM0reN0w:)';
     $patron->set_password({ password => $strong_password });
-    my @ret = checkpw( $dbh, $patron->userid, 'WrongPassword', undef, undef, 1);
+    my @ret = checkpw( $patron->userid, 'WrongPassword', undef, undef, 1);
     is( $ret[0], 0, 'Authentication failed' );
     # Look for auth failure but NOT on patron id, pass userid in info parameter
     $logs = Koha::ActionLogs->search(
@@ -126,7 +123,7 @@ subtest 'GDPR logging' => sub {
     );
     is( $logs->count, 1, 'We should find one auth failure with this userid' );
     t::lib::Mocks::mock_preference('AuthFailureLog', 0);
-    @ret = checkpw( $dbh, $patron->userid, 'WrongPassword', undef, undef, 1);
+    @ret = checkpw( $patron->userid, 'WrongPassword', undef, undef, 1);
     $logs = Koha::ActionLogs->search(
         {
             module => 'AUTH',
@@ -136,7 +133,7 @@ subtest 'GDPR logging' => sub {
     );
     is( $logs->count, 1, 'Still only one failure with this userid' );
     t::lib::Mocks::mock_preference('AuthSuccessLog', 1);
-    @ret = checkpw( $dbh, $patron->userid, $strong_password, undef, undef, 1);
+    @ret = checkpw( $patron->userid, $strong_password, undef, undef, 1);
     is( $ret[0], 1, 'Authentication succeeded' );
     # Now we can look for patron id
     $logs = Koha::ActionLogs->search(

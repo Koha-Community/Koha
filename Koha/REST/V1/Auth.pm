@@ -505,8 +505,7 @@ sub _basic_auth {
     my $decoded_credentials = decode_base64( $credentials );
     my ( $user_id, $password ) = split( /:/, $decoded_credentials, 2 );
 
-    my $dbh = C4::Context->dbh;
-    unless ( checkpw_internal($dbh, $user_id, $password ) ) {
+    unless ( checkpw_internal($user_id, $password ) ) {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Invalid password' );
     }
 

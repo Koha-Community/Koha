@@ -28,7 +28,6 @@ BEGIN {
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
-my $dbh     = C4::Context->dbh;
 
 # FIXME: SessionStorage defaults to mysql, but it seems to break transaction
 # handling
@@ -258,14 +257,14 @@ subtest 'no_set_userenv parameter tests' => sub {
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     $patron->set_password({ password => $password });
 
-    ok( checkpw( $dbh, $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
+    ok( checkpw( $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
     is( C4::Context->userenv, undef, 'Userenv should be undef as required' );
     C4::Context->_new_userenv('DUMMY SESSION');
     C4::Context->set_userenv(0,0,0,'firstname','surname', $library->branchcode, 'Library 1', 0, '', '');
     is( C4::Context->userenv->{branch}, $library->branchcode, 'Userenv gives correct branch' );
-    ok( checkpw( $dbh, $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
+    ok( checkpw( $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
     is( C4::Context->userenv->{branch}, $library->branchcode, 'Userenv branch is preserved if no_set_userenv is true' );
-    ok( checkpw( $dbh, $patron->userid, $password, undef, undef, 0 ), 'checkpw still returns true' );
+    ok( checkpw( $patron->userid, $password, undef, undef, 0 ), 'checkpw still returns true' );
     isnt( C4::Context->userenv->{branch}, $library->branchcode, 'Userenv branch is overwritten if no_set_userenv is false' );
 };
 
@@ -280,15 +279,15 @@ subtest 'checkpw lockout tests' => sub {
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
     $patron->set_password({ password => $password });
 
-    my ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->cardnumber, $password, undef, undef, 1 );
+    my ( $checkpw, undef, undef ) = checkpw( $patron->cardnumber, $password, undef, undef, 1 );
     ok( $checkpw, 'checkpw returns true with right password when logging in via cardnumber' );
-    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->userid, "wrong_password", undef, undef, 1 );
+    ( $checkpw, undef, undef ) = checkpw( $patron->userid, "wrong_password", undef, undef, 1 );
     is( $checkpw, 0, 'checkpw returns false when given wrong password' );
     $patron = $patron->get_from_storage;
     is( $patron->account_locked, 1, "Account is locked from failed login");
-    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->userid, $password, undef, undef, 1 );
+    ( $checkpw, undef, undef ) = checkpw( $patron->userid, $password, undef, undef, 1 );
     is( $checkpw, undef, 'checkpw returns undef with right password when account locked' );
-    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->cardnumber, $password, undef, undef, 1 );
+    ( $checkpw, undef, undef ) = checkpw( $patron->cardnumber, $password, undef, undef, 1 );
     is( $checkpw, undef, 'checkpw returns undefwith right password when logging in via cardnumber if account locked' );
 
 };
@@ -488,7 +487,7 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     $patron->password('123')->store; # yes, deliberately not hashed
 
     is( $patron->account_locked, 0, 'Patron not locked' );
-    my @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    my @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
         # Note: 123 will not be hashed to 123 !
     is( $test[0], 0, 'checkpw should have failed' );
     $patron->discard_changes; # refresh
@@ -496,7 +495,7 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     is( $patron->account_locked, 1, 'Check locked status' );
 
     # And another try to go over the limit: different return value!
-    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( @test, 0, 'checkpw failed again and returns nothing now' );
     $patron->discard_changes; # refresh
     is( $patron->login_attempts, 3, 'Login attempts not increased anymore' );
@@ -506,11 +505,11 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     my $auth = Test::MockModule->new( 'C4::Auth' );
     $auth->mock( 'checkpw_hash', sub { return 1; } ); # not for production :)
     $patron->login_attempts(0)->store;
-    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( $test[0], 1, 'Build confidence in the mock' );
     $patron->login_attempts(-1)->store;
     is( $patron->account_locked, 1, 'Check administrative lockout' );
-    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( @test, 0, 'checkpw gave red' );
     $patron->discard_changes; # refresh
     is( $patron->login_attempts, -1, 'Still locked out' );

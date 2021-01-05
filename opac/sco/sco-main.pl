@@ -118,8 +118,7 @@ my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
 my $patronid = $jwt ? Koha::Token->new->decode_jwt({ token => $jwt }) : undef;
 unless ( $patronid ) {
     if ( C4::Context->preference('SelfCheckoutByLogin') ) {
-        my $dbh = C4::Context->dbh;
-        ( undef, $patronid ) = checkpw( $dbh, $patronlogin, $patronpw );
+        ( undef, $patronid ) = checkpw( $patronlogin, $patronpw );
     }
     else {    # People should not do that unless they know what they are doing!
               # SelfCheckAllowByIPRanges MUST be configured

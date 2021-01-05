@@ -274,9 +274,8 @@ sub check_password {
     # If the record has a NULL password, accept '' as match
     return $pwd eq q{} unless $self->{password};
 
-    my $dbh = C4::Context->dbh;
     my $ret = 0;
-    ($ret) = checkpw( $dbh, $self->{userid}, $pwd, undef, undef, 1 ); # dbh, userid, query, type, no_set_userenv
+    ($ret) = checkpw( $self->{userid}, $pwd, undef, undef, 1 ); # userid, query, type, no_set_userenv
     return $ret;
 }
 

@@ -109,7 +109,7 @@ sub search_method {
 }
 
 sub checkpw_ldap {
-    my ($dbh, $userid, $password) = @_;
+    my ($userid, $password) = @_;
     my @hosts = split(',', $prefhost);
     my $db = Net::LDAP->new(\@hosts);
     unless ( $db ) {
@@ -355,7 +355,7 @@ sub _do_changepassword {
     #warn "changing local password for borrowernumber=$borrowerid to '$digest'\n";
     Koha::Patrons->find($borrowerid)->set_password({ password => $password, skip_validation => 1 });
 
-    my ($ok, $cardnum) = checkpw_internal(C4::Context->dbh, $userid, $password);
+    my ($ok, $cardnum) = checkpw_internal($userid, $password);
     return $cardnum if $ok;
 
     warn "Password mismatch after update to borrowernumber=$borrowerid";
