@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 
+use C4::Circulation;
 use C4::Reserves;
 use Koha::AuthorisedValueCategory;
 use Koha::Database;
@@ -406,6 +407,81 @@ subtest 'Desks' => sub {
     is($hold->found, 'W', 'Hold is waiting with correct status set');
     is($hold->desk_id, $desk->desk_id, 'Hold is attach to its desk');
 
+};
+
+subtest 'get_items_that_can_fill' => sub {
+    plan tests => 1;
+
+    my $biblio = $builder->build_sample_biblio;
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )
+      ;    # onloan
+    my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )
+      ;    # in transfer
+    my $item_5 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $lost       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1 } );
+    my $withdrawn  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
+    my $notforloan = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
+
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
+
+    my $reserve_id_1 = C4::Reserves::AddReserve(
+        {
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+            itemnumber     => $item_1->itemnumber,
+        }
+    );
+
+    my $reserve_id_2 = C4::Reserves::AddReserve(
+        {
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 2,
+            itemnumber     => $item_1->itemnumber,
+        }
+    );
+
+    my $waiting_reserve_id = C4::Reserves::AddReserve(
+        {
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 0,
+            found          => 'W',
+            itemnumber     => $item_1->itemnumber,
+        }
+    );
+
+    # item 3 is on loan
+    AddIssue( $patron_3->unblessed, $item_3->barcode );
+
+    # item 4 is in transfer
+    my $from = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $to   = $builder->build_object( { class => 'Koha::Libraries' } );
+    Koha::Item::Transfer->new(
+        {
+            itemnumber  => $item_4->itemnumber,
+            datearrived => undef,
+            frombranch  => $from->branchcode,
+            tobranch    => $to->branchcode
+        }
+    )->store;
+
+    my $holds = Koha::Holds->search(
+        {
+            reserve_id => [ $reserve_id_1, $reserve_id_2, $waiting_reserve_id, ]
+        }
+    );
+
+    my @items = $holds->get_items_that_can_fill;
+    is_deeply( [ map { $_->itemnumber } @items ],
+        [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 1 and 5 are available for filling the hold' );
 };
 
 $schema->storage->txn_rollback;
