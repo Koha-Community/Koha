@@ -406,7 +406,6 @@ sub get_template_and_user {
                 # we add them to the logged-in search history
                 my @recentSearches = C4::Search::History::get_from_session( { cgi => $in->{'query'} } );
                 if (@recentSearches) {
-                    my $dbh   = C4::Context->dbh;
                     my $query = q{
                         INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, type,  total, time )
                         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -840,7 +839,6 @@ sub checkauth {
           @allowed_scripts_for_private_opac;
     }
 
-    my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
     my $cookie_mgr = Koha::CookieManager->new;
@@ -1050,7 +1048,7 @@ sub checkauth {
                 my $retuserid;
 
                 # Do not pass password here, else shib will not be checked in checkpw.
-                ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $q_userid, undef, $query );
+                ( $return, $cardnumber, $retuserid ) = checkpw( $q_userid, undef, $query );
                 $userid      = $retuserid;
                 $shibSuccess = $return;
                 $info{'invalidShibLogin'} = 1 unless ($return);
@@ -1061,7 +1059,7 @@ sub checkauth {
                 if ( $cas && $query->param('ticket') ) {
                     my $retuserid;
                     ( $return, $cardnumber, $retuserid, $cas_ticket ) =
-                      checkpw( $dbh, $userid, $password, $query, $type );
+                      checkpw( $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
                 }
@@ -1130,7 +1128,7 @@ sub checkauth {
                     {
 
                         ( $return, $cardnumber, $retuserid, $cas_ticket ) =
-                          checkpw( $dbh, $q_userid, $password, $query, $type );
+                          checkpw( $q_userid, $password, $query, $type );
                         $userid = $retuserid if ($retuserid);
                         $info{'invalid_username_or_password'} = 1 unless ($return);
                     }
@@ -1180,6 +1178,7 @@ sub checkauth {
                     FROM borrowers
                     LEFT JOIN branches on borrowers.branchcode=branches.branchcode
                     ";
+                    my $dbh = C4::Context->dbh;
                     my $sth = $dbh->prepare("$select where userid=?");
                     $sth->execute($userid);
                     unless ( $sth->rows ) {
@@ -1544,7 +1543,6 @@ sub check_api_auth {
 
     my $query         = shift;
     my $flagsrequired = shift;
-    my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
     unless ( C4::Context->preference('Version') ) {
@@ -1597,7 +1595,7 @@ sub check_api_auth {
 
             # In case of a CAS authentication, we use the ticket instead of the password
             my $PT = $query->param('PT');
-            ( $return, $cardnumber, $userid, $cas_ticket ) = check_api_auth_cas( $dbh, $PT, $query );    # EXTERNAL AUTH
+            ( $return, $cardnumber, $userid, $cas_ticket ) = check_api_auth_cas( $PT, $query );    # EXTERNAL AUTH
         } else {
 
             # User / password auth
@@ -1607,7 +1605,7 @@ sub check_api_auth {
                 return ( "failed", undef, undef );
             }
             my $newuserid;
-            ( $return, $cardnumber, $newuserid, $cas_ticket ) = checkpw( $dbh, $userid, $password, $query );
+            ( $return, $cardnumber, $newuserid, $cas_ticket ) = checkpw( $userid, $password, $query );
         }
 
         if ( $return and haspermission( $userid, $flagsrequired ) ) {
@@ -1629,6 +1627,7 @@ sub check_api_auth {
                     $userflags,      $branchcode, $branchname,
                     $emailaddress
                 );
+                my $dbh = C4::Context->dbh;
                 my $sth =
                   $dbh->prepare(
 "select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
@@ -1894,7 +1893,7 @@ sub get_session {
 # Currently it's only passed from C4::SIP::ILS::Patron::check_password, but
 # not having a userenv defined could cause a crash.
 sub checkpw {
-    my ( $dbh, $userid, $password, $query, $type, $no_set_userenv ) = @_;
+    my ( $userid, $password, $query, $type, $no_set_userenv ) = @_;
     $type = 'opac' unless $type;
 
     # Get shibboleth login attribute
@@ -1931,10 +1930,9 @@ sub checkpw {
 
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
-        $query->delete('ticket');                                         # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) =
-            checkpw_cas( $ticket, $query, $type );                        # EXTERNAL AUTH
-        if ($retval) {
+        $query->delete('ticket');                                   # remove ticket to come back to original URL
+        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) = checkpw_cas( $ticket, $query, $type );    # EXTERNAL AUTH
+        if ( $retval ) {
             @return = ( $retval, $retcard, $retuserid, $patron, $cas_ticket );
         } else {
             @return = (0);
@@ -1965,10 +1963,10 @@ sub checkpw {
     }
 
     # INTERNAL AUTH
-    if ($check_internal_as_fallback) {
-        @return = checkpw_internal( $dbh, $userid, $password, $no_set_userenv );
+    if ( $check_internal_as_fallback ) {
+        @return = checkpw_internal( $userid, $password, $no_set_userenv);
         push( @return, $patron );
-        $passwd_ok = 1 if $return[0] > 0;    # 1 or 2
+        $passwd_ok = 1 if $return[0] > 0; # 1 or 2
     }
 
     if ($patron) {
@@ -1993,11 +1991,12 @@ sub checkpw {
 }
 
 sub checkpw_internal {
-    my ( $dbh, $userid, $password, $no_set_userenv ) = @_;
+    my ( $userid, $password, $no_set_userenv ) = @_;
 
     $password = Encode::encode( 'UTF-8', $password )
       if Encode::is_utf8($password);
 
+    my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
         "select password,cardnumber,borrowernumber,userid,firstname,surname,borrowers.branchcode,branches.branchname,flags from borrowers join branches on borrowers.branchcode=branches.branchcode where userid=?"
