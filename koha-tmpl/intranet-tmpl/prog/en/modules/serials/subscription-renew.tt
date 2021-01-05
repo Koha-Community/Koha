@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF subscription %]
@@ -64,9 +65,7 @@
             <option value="">None</option>
         [% END %]
         [% IF CAN_user_serials_superserials %]
-            [% FOREACH library IN libraries %]
-                <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
-            [% END %]
+            [% PROCESS options_for_libraries libraries => Branches.all(selected => subscription.branchcode) %]
         [% END %]
     </select> (select a library)
     </li>
