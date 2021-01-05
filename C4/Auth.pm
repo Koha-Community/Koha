@@ -824,7 +824,7 @@ sub checkauth {
     my $template_name   = shift;
     $type = 'opac' unless $type;
 
-    unless ( C4::Context->preference("OpacPublic") ) {
+    if ( $type eq 'opac' && !C4::Context->preference("OpacPublic") ) {
         my @allowed_scripts_for_private_opac = qw(
           opac-memberentry.tt
           opac-registration-email-sent.tt
