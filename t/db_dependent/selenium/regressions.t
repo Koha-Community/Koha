@@ -67,7 +67,7 @@ subtest 'OPAC - borrowernumber, branchcode and categorycode as html attributes' 
     is( $elt->get_attribute('data-borrowernumber', 1), $patron->borrowernumber,
 "Since bug 20921 span.loggedinusername should contain data-borrowernumber"
     );
-    is( $elt->get_attribute('data-categorycode'), $patron->categorycode,
+    is( $elt->get_attribute('data-categorycode', 1), $patron->categorycode,
 "Since bug 26847 span.loggedinusername should contain data-categorycode"
     );
     push @cleanup, $patron, $patron->category, $patron->library;
