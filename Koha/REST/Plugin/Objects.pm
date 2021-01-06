@@ -124,19 +124,15 @@ sub register {
             }
             # Perform search
             my $objects = $result_set->search( $filtered_params, $attributes );
+            my $total   = $result_set->search->count;
 
-            if ($objects->is_paged) {
-                $c->add_pagination_headers({
-                    total => $objects->pager->total_entries,
-                    params => $args,
-                });
-            }
-            else {
-                $c->add_pagination_headers({
-                    total => $objects->count,
-                    params => $args,
-                });
-            }
+            $c->add_pagination_headers(
+                {
+                    total      => ($objects->is_paged ? $objects->pager->total_entries : $objects->count),
+                    base_total => $total,
+                    params     => $args,
+                }
+            );
 
             return $objects->to_api({ embed => $embed });
         }

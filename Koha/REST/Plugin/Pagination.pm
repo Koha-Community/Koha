@@ -50,7 +50,7 @@ sub register {
 
 Adds a Link header to the response message $c carries, following RFC5988, including
 the following relation types: 'prev', 'next', 'first' and 'last'.
-It also adds X-Total-Count, containing the total results count.
+It also adds X-Total-Count containing the total results count, and X-Base-Total-Count containing the total of the non-filtered results count.
 
 If page size is omitted, it defaults to the value of the RESTdefaultPageSize syspref.
 
@@ -61,6 +61,7 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
             my ( $c, $args ) = @_;
 
             my $total    = $args->{total};
+            my $base_total = $args->{base_total};
             my $req_page = $args->{params}->{_page} // 1;
             my $per_page = $args->{params}->{_per_page} //
                             C4::Context->preference('RESTdefaultPageSize') // 20;
@@ -114,6 +115,7 @@ If page size is omitted, it defaults to the value of the RESTdefaultPageSize sys
 
             # Add X-Total-Count header
             $c->res->headers->add( 'X-Total-Count' => $total );
+            $c->res->headers->add( 'X-Base-Total-Count' => $base_total );
             return $c;
         }
     );

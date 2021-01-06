@@ -82,14 +82,15 @@ sub list {
           if $restricted;
 
         my $patrons = $patrons_rs->search( $filtered_params, $attributes );
-        if ( $patrons_rs->is_paged ) {
-            $c->add_pagination_headers(
-                {
-                    total  => $patrons->pager->total_entries,
-                    params => $args,
-                }
-            );
-        }
+        my $total   = $patrons_rs->search->count;
+
+        $c->add_pagination_headers(
+            {
+                total      => ($patrons->is_paged ? $patrons->pager->total_entries : $patrons->count),
+                base_total => $total,
+                params => $args,
+            }
+        );
 
         return $c->render( status => 200, openapi => $patrons->to_api );
     }

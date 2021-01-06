@@ -544,6 +544,9 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     json.recordsTotal = total;
                                     json.recordsFiltered = total;
                                 }
+                                if(total = this._xhr.getResponseHeader('x-base-total-count')) {
+                                    json.recordsTotal = total;
+                                }
                                 return JSON.stringify(json);
                             },
                             'data': function( data, settings ) {
