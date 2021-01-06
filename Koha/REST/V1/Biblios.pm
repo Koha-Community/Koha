@@ -230,10 +230,7 @@ sub get_public {
         );
     }
     catch {
-        return $c->render(
-            status  => 500,
-            openapi => { error => "Something went wrong, check the logs ($_)" }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
