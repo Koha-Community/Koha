@@ -33,19 +33,19 @@ get '/empty' => sub {
 
 get '/pagination_headers' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _page => 2, _per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, base_total => 12, params => { _page => 2, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
 get '/pagination_headers_first_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _page => 1, _per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, base_total => 12, params => { _page => 1, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
 get '/pagination_headers_last_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _page => 4, _per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, base_total => 12, params => { _page => 4, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
@@ -60,13 +60,13 @@ get '/dbic_merge_pagination' => sub {
 
 get '/pagination_headers_without_page_size' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _page => 2, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, base_total => 12, params => { _page => 2, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
 get '/pagination_headers_without_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { _per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, base_total => 12, params => { _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
@@ -75,6 +75,7 @@ get '/pagination_headers_with_minus_one' => sub {
     $c->add_pagination_headers(
         {
             total => 10,
+            base_total => 12,
             params => { _per_page => -1, firstname => 'Jonathan' }
         }
     );
@@ -86,6 +87,7 @@ get '/pagination_headers_with_minus_one_and_invalid_page' => sub {
     $c->add_pagination_headers(
         {
             total  => 10,
+            base_total => 12,
             params => { page => 100, _per_page => -1, firstname => 'Jonathan' }
         }
     );
@@ -101,18 +103,20 @@ use t::lib::Mocks;
 
 subtest 'add_pagination_headers() tests' => sub {
 
-    plan tests => 101;
+    plan tests => 109;
 
     my $t = Test::Mojo->new;
 
     $t->get_ok('/empty')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => undef, 'X-Total-Count is undefined' )
+      ->header_is( 'X-Base-Total-Count' => undef, 'X-Base-Total-Count is undefined' )
       ->header_is( 'Link'          => undef, 'Link is undefined' );
 
     $t->get_ok('/pagination_headers')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="prev",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*_page=1.*>; rel="prev",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
@@ -129,6 +133,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_first_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*>; rel="prev",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="next",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=2.*>; rel="next",/ )
@@ -143,6 +148,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_last_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="prev",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=3.*>; rel="prev",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
@@ -158,6 +164,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_without_page_size')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
@@ -174,6 +181,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_without_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, even without page param' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )
@@ -190,6 +198,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_with_minus_one')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, with per_page=-1' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )
@@ -204,6 +213,7 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers_with_minus_one_and_invalid_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count header present, with per_page=-1' )
+      ->header_is( 'X-Base-Total-Count' => 12, 'X-Base-Total-Count contains the passed value' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*per_page=-1.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/, 'First page, no previous' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/, 'First page, no previous' )

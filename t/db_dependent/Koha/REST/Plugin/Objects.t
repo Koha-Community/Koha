@@ -259,6 +259,41 @@ subtest 'objects.search helper, encoding' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'objects.search helper, X-Total-Count and X-Base-Total-Count' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    Koha::Cities->delete;
+
+    my $long_city_name = 'Llanfairpwllgwyngyll';
+    for my $i ( 1 .. length($long_city_name) ) {
+        $builder->build_object(
+            {
+                class => 'Koha::Cities',
+                value => {
+                    city_name    => substr( $long_city_name, 0, $i ),
+                    city_country => 'Wales'
+                }
+            }
+        );
+    }
+
+    my $t = Test::Mojo->new;
+    $t->get_ok('/cities?name=L&_per_page=10&_page=1&_match=starts_with')
+      ->status_is(200)
+      ->header_is( 'X-Total-Count' => 20, 'X-Total-Count header present' )
+      ->header_is( 'X-Base-Total-Count' => 20, 'X-Base-Total-Count header present' );
+
+    $t->get_ok('/cities?name=Llan&_per_page=10&_page=1&_match=starts_with')
+      ->status_is(200)
+      ->header_is( 'X-Total-Count' => 17, 'X-Total-Count header present' )
+      ->header_is('X-Base-Total-Count' => 20, 'X-Base-Total-Count header present' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'objects.search helper, embed' => sub {
 
     plan tests => 2;
