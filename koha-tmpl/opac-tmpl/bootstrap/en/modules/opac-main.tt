@@ -5,6 +5,7 @@
 [% USE Categories %]
 [% USE Price %]
 [% USE KohaNews %]
+[% PROCESS 'i18n.inc' %]
 [% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
 [% SET OpacMainUserBlock = KohaNews.get( location => "OpacMainUserBlock", lang => lang, library => branchcode ) %]
 [% SET OpacLoginInstructions = KohaNews.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
@@ -218,25 +219,60 @@
                                 <h3>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</span></a></h3>
                                 <ul id="user_summary_shortcuts">
                                     [% IF checkouts && checkouts > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts"><span class="user_checkouts_count count_label">[% checkouts | html %]</span> checkout(s)</a></li>
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">
+                                                <span class="user_checkouts_count count_label">[% checkouts | html %]</span>
+                                                [% tn('checkout', 'checkouts', checkouts ) | html %]
+                                            </a>
+                                        </li>
                                     [% END %]
                                     [% IF overdues && overdues > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues"><span class="user_overdues_count count_label">[% overdues | html %]</span> overdue(s)</a></li>
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">
+                                                <span class="user_overdues_count count_label">[% overdues | html %]</span>
+                                                [% tn('overdue', 'overdues', overdues ) | html %]
+                                            </a>
+                                        </li>
                                     [% END %]
                                     [% IF holds_pending && holds_pending > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_pending_count count_label">[% holds_pending | html %]</span> hold(s) pending</a></li>
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
+                                                <span class="user_holds_pending_count count_label">[% holds_pending | html %]</span>
+                                                [% tn('hold pending', 'holds pending', holds_pending ) | html %]
+                                            </a>
+                                        </li>
                                     [% END %]
                                     [% IF holds_waiting && holds_waiting > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span> hold(s) waiting</a></li>
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">
+                                                <span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span>
+                                                [% tn('hold waiting', 'holds waiting', holds_waiting ) | html %]
+                                            </a>
+                                        </li>
                                     [% END %]
                                     [% IF total_owing && total_owing > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span> due in fines and charges</a></li>
+                                        <li>
+                                            <a href="/cgi-bin/koha/opac-account.pl">
+                                                <span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span>
+                                                due in fines and charges
+                                            </a>
+                                        </li>
                                     [% END %]
                                     [% IF patron_messages && patron_messages.count > 0 || opacnote %]
                                         [% IF opacnote %]
-                                            <li><a href="/cgi-bin/koha/opac-user.pl"><span class="count_label">[% patron_messages.count + 1 | html %]</span> message(s)</a></li>
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl">
+                                                    <span class="count_label">[% patron_messages.count + 1 | html %]</span>
+                                                    [% tn('message', 'messages', patron_messages.count + 1 ) | html %]
+                                                </a>
+                                            </li>
                                         [% ELSE %]
-                                            <li><a href="/cgi-bin/koha/opac-user.pl"><span class="count_label">[% patron_messages.count | html %]</span> message(s)</a></li>
+                                            <li>
+                                                <a href="/cgi-bin/koha/opac-user.pl">
+                                                    <span class="count_label">[% patron_messages.count | html %]</span>
+                                                    [% tn('message', 'messages', patron_messages.count ) | html %]
+                                                </a>
+                                            </li>
                                         [% END %]
                                     [% END %]
                                 </ul>
