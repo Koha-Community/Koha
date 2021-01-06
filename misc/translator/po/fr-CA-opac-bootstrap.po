@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-25 11:18-0300\n"
-"PO-Revision-Date: 2020-11-13 16:14+0000\n"
-"Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
+"PO-Revision-Date: 2020-12-22 15:57+0000\n"
+"Last-Translator: Marjorie  Barry-Vila <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1605284088.699942\n"
+"X-POOTLE-MTIME: 1608652655.460769\n"
 "X-Pootle-Path: /fr_CA/20.05/fr-CA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -133,7 +133,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -142,14 +142,15 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %sPaiement %sAmnistie %sDette remise %sCrédit %sRemboursement de frais "
-"de document perdu %sRemboursement de paiement en trop %sRemboursement %s%s "
-"%s %s %s %sFrais d'abonnement %sFrais de renouvellement d'abonnement "
-"%sDocument perdu %sFrais manuel %sNouvelle carte %sAmende %sFrais "
-"d'aministration pour document perdu %sFrais de location %sFrais de location "
+"%s %s %s %sFrais d'abonnement %sFrais de renouvellement d'abonnement %"
+"sDocument perdu %sFrais manuel %sNouvelle carte %sAmende %sFrais "
+"d'administration pour document perdu %sFrais de location %sFrais de location "
 "quotidien %sRenouvellement d'un document en location %sRenouvellement d'un "
 "document en location quotidienne %sFrais de réservation %sRéservation en "
-"attente depuis trop longtemps %s%s %s %s %s "
+"attente depuis trop longtemps %sRemise %s%s %s %s %s %s %sPaiement %"
+"sAmnistie %sDette remise %sCrédit %sRemboursement de frais de document perdu "
+"%sRemboursement pour paiement en trop %sRemboursement %sFrais annulé %s%s %s "
+"%s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -861,6 +862,8 @@ msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
 msgstr ""
+"%s Non renouvelable %s Le prêt doit être renouvelé à la bibliothèque. %s "
+"renouvellements restants %s Interdit "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -1931,9 +1934,10 @@ msgstr "%s%s%sCatalogue en ligne%s Catalogue &rsaquo; Vos consentements"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
-msgstr "%s%s%sCatalogue en ligne%s Koha &rsaquo; Votre historique de prêt"
+msgstr ""
+"%s%s%sCatalogue en ligne%s Koha &rsaquo; Votre historique de réservations"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2065,9 +2069,9 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s "
 #. %8$s:  END 
 #. %9$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
-msgstr "%s depuis %s %s jusqu'au %s %s %s "
+msgstr "%s, %s, %s %s depuis %s %s jusqu'au %s %s %s "
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
@@ -2245,15 +2249,16 @@ msgstr ""
 #. %12$s:  ELSE 
 #. %13$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
 "ready %sInterlibrary loan unavailable %sUnknown %s"
 msgstr ""
-"%sDocument à retourner %sAvis de courtoisie %sEvénements à venir "
-"%sRéservation mise de côté %sRetour %s %s Emprunt et renouvellement %s "
-"Emprunt %s %sInconnu %s"
+"%sDocument à retourner %sAvis de courtoisie %sEvénements à venir %"
+"sRéservation mise de côté %sRetour %s %s Emprunt et renouvellement %s "
+"Emprunt %s %sPrêt entre bibliothèques disponible %sPrêt entre bibliothèques "
+"non disponible %sInconnu %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2808,9 +2813,9 @@ msgid ""
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;RenewLoan&gt; &lt;"
-"success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
-"date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt; "
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; "
+"&lt;success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; "
+"&lt;date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:129
 #, c-format
@@ -3003,6 +3008,8 @@ msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
+"( %s de %s renouvellements restants %s / %s de %s renouvellements restants "
+"avant que la bibliothèque ait besoin de voir le document %s )"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:63
@@ -3139,7 +3146,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:51
 #, c-format
 msgid "(Refunded)"
-msgstr ""
+msgstr "(Remboursé)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:50
 #, c-format
@@ -3530,13 +3537,13 @@ msgstr "Acquis durant les derniers:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:52
 #, c-format
 msgid "Acquisition date: Newest to oldest"
-msgstr "Date d'acquisition: du plus récent au plus ancien"
+msgstr "Date d'acquisition : du plus récent au plus ancien"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:57
 #, c-format
 msgid "Acquisition date: Oldest to newest"
-msgstr "Date d'acquisition: du plus ancien au plus récent"
+msgstr "Date d'acquisition : du plus ancien au plus récent"
 
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:74
@@ -5127,13 +5134,13 @@ msgstr "Date de publication :"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:305
 #, c-format
 msgid "Copyright date (newest to oldest)"
-msgstr "Date de publication/droit d'auteur (plus récente à la plus ancienne)"
+msgstr "Date de publication/droit d'auteur (du plus récent au plus ancien)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:308
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:310
 #, c-format
 msgid "Copyright date (oldest to newest)"
-msgstr "Date de publication/droit d'auteur (plus ancienne à la plus récente)"
+msgstr "Date de publication/droit d'auteur (du plus ancien au plus récent)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:99
@@ -5240,7 +5247,7 @@ msgid ""
 "Creates, for a patron, a title-level hold request on a given bibliographic "
 "record in Koha."
 msgstr ""
-"Créé une réservation au niveau de la notice bibliographique pour un "
+"Crée une réservation au niveau de la notice bibliographique pour un "
 "utilisateur."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:761
@@ -5248,7 +5255,7 @@ msgstr ""
 msgid ""
 "Creates, for a patron, an item-level hold request on a specific item of a "
 "bibliographic record Koha."
-msgstr "Créé une réservation au niveau d'un exemplaire pour un utilisateur."
+msgstr "Crée une réservation au niveau d'un exemplaire pour un utilisateur."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:62
 #, fuzzy, c-format
@@ -5340,13 +5347,13 @@ msgstr "Date ajoutée"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:317
 #, c-format
 msgid "Date added (newest to oldest)"
-msgstr "Date d'acquisition (plus récente à la plus ancienne)"
+msgstr "Date d'ajout au catalogue (du plus récent au plus ancien)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:320
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:322
 #, c-format
 msgid "Date added (oldest to newest)"
-msgstr "Date d'acquisition (plus anciennce à la plus récente)"
+msgstr "Date d'ajout au catalogue (du plus ancien au plus récent)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:169
 #, c-format
@@ -5364,7 +5371,7 @@ msgstr "Date d'échéance"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:661
 #, c-format
 msgid "Date due:"
-msgstr "Date d'échéance:"
+msgstr "Date d'échéance :"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:12
 #, c-format
@@ -5661,13 +5668,13 @@ msgstr "Dublin Core"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:297
 #, c-format
 msgid "Due"
-msgstr "Retour le"
+msgstr "Échéance"
 
 #. %1$s:  itemLoo.dateDue | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:407
 #, c-format
 msgid "Due %s"
-msgstr "Dû %s"
+msgstr "Échéance %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:110
 #, c-format
@@ -9003,7 +9010,7 @@ msgstr "Bibliothèque de collecte :"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 msgid "Place a hold on"
-msgstr "Réserver  "
+msgstr "Réserver"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:186
 #, c-format
@@ -9013,7 +9020,7 @@ msgstr "Réserver "
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:469
 msgid "Place a hold on: "
-msgstr "Réserver "
+msgstr "Réserver : "
 
 #. %1$s:  biblio.title | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:38
@@ -9541,13 +9548,13 @@ msgstr "Lieu de publication : "
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:42
 #, c-format
 msgid "Publication/Copyright date: Newest to oldest"
-msgstr "Date de publication/droits d'auteur: du plus récent au plus ancien"
+msgstr "Date de publication/droits d'auteur : du plus récent au plus ancien"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:45
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:47
 #, c-format
 msgid "Publication/Copyright date: Oldest to newest"
-msgstr "Date de publication/droit d'auteur: du plus ancien au plus récent"
+msgstr "Date de publication/droit d'auteur : du plus ancien au plus récent"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:493
@@ -10066,12 +10073,12 @@ msgstr "Reprendre"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:217
 #, c-format
 msgid "Resume all suspended holds"
-msgstr "Réactiver les réservations suspendues"
+msgstr "Réactiver toutes les réservations suspendues"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:150
 #, c-format
 msgid "Resume your hold on "
-msgstr "Réactiver votre réservation sur"
+msgstr "Réactiver votre réservation de "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:98
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:126
@@ -11389,12 +11396,12 @@ msgstr "Suspendre toutes les réservations"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:160
 #, c-format
 msgid "Suspend until:"
-msgstr "Suspendre jusqu'à:"
+msgstr "Suspendre jusqu'à :"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:152
 #, c-format
 msgid "Suspend your hold on "
-msgstr "Suspendre votre réservation sur "
+msgstr "Suspendre votre réservation de "
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:6
@@ -11977,7 +11984,7 @@ msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
 msgstr ""
 "Cette liste est vide. %s Vous pouvez ajouter des éléments à partir des "
-"résultats de n'importe laquelle  "
+"résultats de n'importe quelle "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
@@ -12615,14 +12622,14 @@ msgstr "Voulez-vous imprimer un reçu?"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:67
 #, c-format
 msgid "Writeoff"
-msgstr ""
+msgstr "Amnistie"
 
 #. %1$s:  message.message_date | $KohaDates 
 #. %2$s:  Branches.GetName(message.branchcode) | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-note.inc:8
 #, c-format
 msgid "Written on %s by %s"
-msgstr "Ecrit le %s par %s"
+msgstr "Écrit le %s par %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
@@ -13004,12 +13011,13 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have renewed this item the maximum number of consecutive times without "
 "it being seen by the library."
 msgstr ""
-"Vous avez renouvelé cet exemplaire le nombre maximal de fois autorisé. "
+"Vous avez renouvelé ce prêt le nombre maximal de fois consécutives sans que "
+"le document n'ait été vu par la bibliothèque."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:97
 #, c-format
@@ -13556,7 +13564,7 @@ msgstr "[% limiter aux"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1008
 #, c-format
 msgid "[%s tag not supported by your browser.]"
-msgstr "[%s mot-clé non supporté par votre navigateur.] "
+msgstr "[%s mot-clé non supporté par votre navigateur.]"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -14073,7 +14081,7 @@ msgstr "schéma"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
 #, c-format
 msgid "search"
-msgstr "chercher"
+msgstr "recherche"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:91
 #, c-format

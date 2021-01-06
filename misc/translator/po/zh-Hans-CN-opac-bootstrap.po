@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-25 12:40-0300\n"
-"PO-Revision-Date: 2020-07-08 02:10+0000\n"
+"PO-Revision-Date: 2020-12-04 01:59+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1594174236.925533\n"
+"X-POOTLE-MTIME: 1607047157.266458\n"
 "X-Pootle-Path: /zh_CN/20.05/zh-Hans-CN-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -588,10 +588,10 @@ msgstr "%s 无法自动续借，您的账号已过期。 "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:231
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr "借出%s, 还入%s 或续借馆藏："
+msgstr "%s借出, 还入或续借馆藏：%s 借出或续借馆藏：%s"
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount | html 
@@ -712,15 +712,15 @@ msgstr "%s 未生效，请洽图书馆。%s"
 
 #. %1$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Item in transit to "
-msgstr "%s %s 馆藏转送到 "
+msgstr "%s 馆藏转送到 "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s Item waiting at "
-msgstr "%s %s 馆藏处理中 "
+msgstr "%s 馆藏处理中 "
 
 #. %1$s:  issues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:236
@@ -1873,9 +1873,9 @@ msgstr "%s%s%s Koha 线上%s 目录&rsaquo; 最近的评论"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sLibrary catalog%s"
-msgstr "图书馆目录"
+msgstr "%s%s%s图书馆目录%s"
 
 #. %1$s:  IF Koha.Preference('URLLinkText') 
 #. %2$s:  Koha.Preference('URLLinkText') | html 
@@ -1935,9 +1935,9 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 #. %8$s:  END 
 #. %9$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
-msgstr "%%s 从 %s %s 至 %s %s %s"
+msgstr "%s, %s,%s %s 从 %s %s 至 %s %s %s"
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
@@ -3117,9 +3117,9 @@ msgstr "(逾期)"
 #. %1$s:  priority | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:637
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1405
-#, fuzzy, c-format
+#, c-format
 msgid "(priority %s)"
-msgstr "优先"
+msgstr "(优先 %s)"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
@@ -3185,9 +3185,9 @@ msgstr "，请与图书馆连络取得详情。"
 #. %2$s:  END 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:154
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "您没有罚款及其他应付款"
+msgstr ".%s您有罚款 %s %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3345,11 +3345,11 @@ msgstr "权限不足"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:35
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
 "Please contact the library. "
-msgstr "根据我们的记录，还没有更新%s"
+msgstr "根据我们的记录，还没有更新联络信息，请通知图书馆"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-topissues.inc:65
 #, c-format
@@ -3461,9 +3461,9 @@ msgstr "其他资讯"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:658
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:813
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:815
-#, fuzzy, c-format
+#, c-format
 msgid "Address 2:"
-msgstr "%s 地址 2："
+msgstr "地址 2："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:445
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:447
@@ -3471,9 +3471,9 @@ msgstr "%s 地址 2："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:645
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:800
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:802
-#, fuzzy, c-format
+#, c-format
 msgid "Address:"
-msgstr "%s 地址："
+msgstr "地址："
 
 #. IMG
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:116
@@ -3547,9 +3547,9 @@ msgid "All libraries"
 msgstr "所有图书馆"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:168
-#, fuzzy, c-format
+#, c-format
 msgid "Allow auto-renewal: "
-msgstr "%s 自动更新 "
+msgstr "允许自动更新:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:40
 #, c-format
@@ -4389,9 +4389,9 @@ msgstr "您的密码长度至少应有%s 字元。"
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:219
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "您的密码长度至少应有%s 字元。"
+msgstr "您的密码长度至少应有 %s 和 %s 字元。"
 
 #. %1$s:  minlength_cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
@@ -4539,9 +4539,8 @@ msgstr "借出 (%s)"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
-#, fuzzy
 msgid "Checked out until: "
-msgstr "借出 (%s)"
+msgstr "借出直到: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:15
@@ -4591,9 +4590,9 @@ msgstr "引用"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:826
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:828
-#, fuzzy, c-format
+#, c-format
 msgid "City:"
-msgstr "%s 县市："
+msgstr "县市："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
 #, c-format
@@ -4655,9 +4654,9 @@ msgstr "清除日期"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "Click here if you're not %s"
-msgstr "请点选，若您不是 %s %s"
+msgstr "请点选这里，若您不是 %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:176
 #, fuzzy, c-format
@@ -4855,9 +4854,9 @@ msgstr "变更您的密码"
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:140
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm holds for:%s (%s)"
-msgstr "确认以下的预约: %s %s %s (%s) %s "
+msgstr "确认以下的预约: %s (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:152
 #, fuzzy, c-format
@@ -4872,9 +4871,9 @@ msgstr "变更您的密码"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:592
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm primary email:"
-msgstr "%s 主要电子邮件："
+msgstr "确认主要电子邮件："
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:241
@@ -4895,9 +4894,9 @@ msgstr "联络资讯："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:747
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:749
-#, fuzzy, c-format
+#, c-format
 msgid "Contact note:"
-msgstr "%s 连络说明："
+msgstr "连络说明："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
 #, c-format
@@ -4993,9 +4992,9 @@ msgstr "计算"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:710
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:865
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:867
-#, fuzzy, c-format
+#, c-format
 msgid "Country:"
-msgstr "%s 国家："
+msgstr "国家："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:41
 #, c-format
@@ -5199,9 +5198,9 @@ msgstr "收到日期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:345
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:347
-#, fuzzy, c-format
+#, c-format
 msgid "Date of birth:"
-msgstr "%s 生日："
+msgstr "生日："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:129
 #, c-format
@@ -5330,9 +5329,9 @@ msgid "Details for %s"
 msgstr "详情 %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: "
-msgstr "详情 %s"
+msgstr "详情: "
 
 #. %1$s:  biblio.title | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:20
@@ -5656,15 +5655,14 @@ msgstr "错误："
 #. %1$s:  errno | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:16
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Error %s"
-msgstr "错误："
+msgstr "错误 %s"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
-#, fuzzy
 msgid "Error searching %s collection"
-msgstr "搜寻OverDrive馆藏时错误"
+msgstr "错误搜寻 %s 馆藏"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
@@ -5831,14 +5829,14 @@ msgstr "延长原定的到期日。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:617
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:619
-#, fuzzy, c-format
+#, c-format
 msgid "Fax:"
-msgstr "%s 传真："
+msgstr "传真："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-library.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "Fax: "
-msgstr "%s 传真："
+msgstr "传真："
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5933,9 +5931,9 @@ msgstr "最前页"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:334
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:787
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:789
-#, fuzzy, c-format
+#, c-format
 msgid "First name:"
-msgstr "%s 名："
+msgstr "名："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:287
 #, c-format
@@ -5948,18 +5946,18 @@ msgstr ""
 "的出版品。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in and change your password."
-msgstr "为了方便起见，本页面的登入盒已预填资料。请登入%s，并更改密码%s。"
+msgstr "为了方便起见，本页面的登入盒已预填资料。请登入并更改密码."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in."
-msgstr "为了方便起见，本页面的登入盒已预填资料。请登入%s，并更改密码%s。"
+msgstr "为了方便起见，本页面的登入盒已预填资料。请登入并更改密码。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
@@ -6004,9 +6002,8 @@ msgstr "找到"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
-#, fuzzy
 msgid "Found %s results in the library's %s collection"
-msgstr "图书馆的OverDrive馆藏内结果。"
+msgstr "發現 %s 結果在圖書館的 %s 收藏區"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:3
 #, fuzzy, c-format
@@ -6243,9 +6240,9 @@ msgstr "图书馆群组"
 #. %7$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:173
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "出版者：%s %s 在%s %s %s , %s %s %s , %s %s "
+msgstr "作保人：%s %s %s %s %s , %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:390
 #, c-format

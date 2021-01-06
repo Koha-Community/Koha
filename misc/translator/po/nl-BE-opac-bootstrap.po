@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2020-11-25 12:01-0300\n"
-"PO-Revision-Date: 2020-06-20 10:06+0000\n"
-"Last-Translator: Hans Supply <hans.supply@gmail.com>\n"
+"PO-Revision-Date: 2020-12-07 15:01+0000\n"
+"Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1592647573.954124\n"
+"X-POOTLE-MTIME: 1607353306.863435\n"
 "X-Pootle-Path: /nl/20.05/nl-BE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -117,7 +117,7 @@ msgstr ""
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -126,12 +126,14 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %sBetaling %sAfschrijving %sVergeven %sKrediet %sVerloren item kosten "
-"terugbetaling %s%s %s %s %s %sAccount aanmaak kosten %sAccount verlenging "
-"kosten %sVerloren item %sGebruiksaanwijzing kosten %sNiewe kaart %sBoete "
-"%sVerloren item behandelingskost %sOntleen kost %sDagelijkse ontleen kost "
-"%sVerlenging van ontleend item %sVerlenging van dagelijks ontleend item "
-"%sReservatiekost %sReservatie wacht te lang %s%s %s %s %s %s"
+"%s %s %s %sAanmaakkosten account%sVernieuwskosten account %sZoek exemplaar %"
+"sHandmatige kosten %sNieuwe kaart %sBoete %sVerwerkingskosten zoek exemplaar "
+"%sHuurkosten %sDagelijkse huurkosten %sVerlenging van huurexemplaar %"
+"sVerlenging van dagelijks huurexemplaar %sAanvraagkosten %sAanvraag wacht te "
+"lang %sUitbetaling %s%s %s %s %s %s %sBetaling %sAfschrijving %"
+"sKwijtgescholden %sKrediet %sZoek exemplaar kosten terugstorting %"
+"sTerugstorting teveelbetaling %sTerugstorting %sGeannuleerde kosten %s%s %s %"
+"s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -620,10 +622,12 @@ msgstr "%s Automatische verlening geweigerd, uw account is vervallen."
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:231
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Check out, return, or renew an item: %s Check out or renew an item: %s "
-msgstr "Ontlenen%s, terugbrengen%s of een item verlengen: "
+msgstr ""
+"%s Exemplaar uitlenen, innemen of verlengen: %s Exemplaar uitlenen of "
+"verlengen: %s "
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount | html 
@@ -749,15 +753,15 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Item in transit to "
-msgstr "%s %s Item gaat over naar "
+msgstr "%s Exemplaar onderweg naar "
 
 #. %1$s:  IF ( HOLD.is_at_destination ) 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:100
-#, fuzzy, c-format
+#, c-format
 msgid "%s Item waiting at "
-msgstr "%s %s Item wacht bij "
+msgstr "%s Exemplaar wacht bij "
 
 #. %1$s:  issues_count | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:236
@@ -997,7 +1001,7 @@ msgstr "%s De wachtwoorden komen niet overeen. %s"
 #. %17$s:  ELSIF ( circ_error_ADDITIONAL_MATERIALS ) 
 #. %18$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s The system does not recognize this barcode. %s You have checked out too "
 "many items and can't check out any more. %s This item is checked out to "
@@ -1015,11 +1019,12 @@ msgstr ""
 "gebruiker. %s Dit item kan niet opnieuw worden verlengd. %s Dit item is niet "
 "uitleenbaar. %s U heeft een openstaande schuld van %s en kunt momenteel niet "
 "meer lenen. %s Dit item is uit de collectie verwijderd. %s Dit item is "
-"beperkt beschikbaar. %s Dit item is gereserveerd door een andere gebruiker. "
-"%s Dit item behoort tot een andere vestiging. %s Uw account is verlopen. %s "
+"beperkt beschikbaar. %s Dit item is gereserveerd door een andere gebruiker. %"
+"s Dit item behoort tot een andere vestiging. %s Uw account is verlopen. %s "
 "Uw account is geschorst. %s Deze kaart is als verloren opgegeven. %s Uw "
 "contactgegevens lijken niet volledig te zijn. %s Ongeldige inleverdatum. %s "
-"Neem contact op met een bibliotheekmedewerker."
+"Exemplaar moet uitgeleend zijn via een uitleenbalie. %s Neem contact op met "
+"een bibliotheekmedewerker."
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -1956,9 +1961,9 @@ msgstr "%s%s%sKoha online%s recente catalogus opmerkingen"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sLibrary catalog%s"
-msgstr "Bibliotheekcatalogus"
+msgstr "%s%s%sBibliotheekcatalogus%s"
 
 #. %1$s:  IF Koha.Preference('URLLinkText') 
 #. %2$s:  Koha.Preference('URLLinkText') | html 
@@ -2018,9 +2023,9 @@ msgstr "%s(MM/DD/JJJJ)%s(DD/MM/JJJJ)%s(JJJJ-MM-DD)%s"
 #. %8$s:  END 
 #. %9$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
-msgstr "%s sinds %s %s tot %s %s %s "
+msgstr "%s %s %s %s sinds %s %s tot %s %s %s "
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
@@ -2198,14 +2203,15 @@ msgstr ""
 #. %12$s:  ELSE 
 #. %13$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
 "ready %sInterlibrary loan unavailable %sUnknown %s"
 msgstr ""
-"%sItem verwacht %sUitgebreid bericht %sToekomstige activiteiten "
-"%sReservering ingevuld %sItem binnenbrengen %sItem uitlenen %sOnbekend %s"
+"%sExemplaar verwacht %sBericht vooraf %sToekomstige activiteiten %sAanvraag "
+"vervuld %sExemplaar innemen %s %sExemplaar uitlenen en verlengen %s "
+"Exemplaar uitlenen %s %s IBL gereed %s IBL niet beschikbaar %sOnbekend %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -8406,13 +8412,13 @@ msgid "Note: "
 msgstr "Nota: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
 "locally. Please come to the library to retrieve these items"
 msgstr ""
-"Let op: Bibliotheekbeleid staat niet toe om items lokaal te reserveren of af "
-"te halen. U dient zich hierrvoor naar de bibliotheek te begeven %s %s "
+"Let op: Bibliotheekbeleid staat niet toe om exemplaren lokaal te reserveren "
+"of af te halen. Ga hiervoor naar de bibliotheek."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:51
 #, c-format
@@ -10235,9 +10241,8 @@ msgstr "Zoek "
 
 #. LINK
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:57
-#, fuzzy
 msgid "Search %s"
-msgstr "Zoek "
+msgstr "Zoeken %s"
 
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
@@ -10427,9 +10432,8 @@ msgstr "Kies geen"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:258
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:261
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:265
-#, fuzzy
 msgid "Select search result: %s"
-msgstr "Selecteer zoekopdrachten om: "
+msgstr "Kies zoekresultaat: %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:66
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:110
@@ -14033,13 +14037,13 @@ msgstr "show_loans"
 #. %12$s:  END 
 #. %13$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending for "
 "next available item of item type '%s' %s Pending %s %s %s "
 msgstr ""
-"sinds %s %s Opgeschort %s tot %s %s %s %s In afwachting van het volgende "
-"item van item type '%s' %s In afwachting %s %s %s"
+"sinds %s %s Exemplaar wordt verwerkt %s Opgeschort %s tot %s %s %s %s In "
+"afwachting van het volgende item van item type '%s' %s In afwachting %s %s %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:43
 #, c-format

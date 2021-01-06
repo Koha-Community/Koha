@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: 2020-11-25 11:26-0300\n"
-"PO-Revision-Date: 2020-11-25 07:37+0000\n"
+"PO-Revision-Date: 2020-12-29 13:08+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1606289850.666453\n"
+"X-POOTLE-MTIME: 1609247321.980052\n"
 "X-Pootle-Path: /hi/20.05/hi-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -119,7 +119,7 @@ msgstr "%s %s %s %s%s/%s/images/favicon.ico %s "
 #. %37$s: - SWITCH account.status -
 #. %38$s: - CASE 'UNRETURNED' -
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
@@ -128,11 +128,12 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %sभुगतान %sराइटऑफ %sमाफ़ कर दिया %sक्रेडिट %sगायब आइटम शुल्क वापसी %sओवरपेमेंट "
-"रिफंड %sरिफंड%s%s %s %s %s %sखाता निर्माण शुल्क %sखाता नवीनीकरण शुल्क %sखोई आइटम "
-"%sमेन्यूल फी %sनया कार्ड %sफाइन %sखोई हुई वस्तु प्रसंस्करण शुल्क %sकिराया फी %sदैनिक "
-"किराया फीस %sकिराये की वस्तु का नवीनीकरण %sदैनिक किराये की वस्तु का नवीनीकरण %sहोल्ड "
-"फी %sहोल्ड प्रतीक्षा बहुत लंबा %s%s %s %s %s"
+"%s %s %s %sलेखा निर्माण फीस %sलेखा नवीनीकरण फीस %sगायब आइटम %sमेन्यूल फीस "
+"%sनया कार्ड %sजुर्माना %sखोई हुई वस्तु प्रसंस्करण शुल्क%sकिराया फीस %sदैनिक "
+"किराया फीस %sकिराये की आइटम का नवीनीकरण%sदैनिक किराये की वस्तु का नवीनीकरण "
+"%sहोल्ड फीस %sहोल्ड प्रतीक्षा बहुत लंबा %sपेआउट %s%s %s %s %s %s %sभुगतान "
+"%sराइटऑफ %sForgiven %sक्रेडिट %sखोया हुआ आइटम शुल्क वापसी %sओवरपेमेंट "
+"रिफंड%sरिफंड %sरद्द किया गया प्रभार %s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -716,7 +717,7 @@ msgstr "%s डिलीट%s डिलीट लिस्ट %s "
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:140
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr ""
+msgstr "%s पूर्ण %s रद्द %sप्रतीक्षारत %sपारगमन %s लंबित %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -826,6 +827,8 @@ msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
 msgstr ""
+"%s नवीकरणीय नहीं %s आइटम को लाइब्रेरी में नवीनीकृत किया जाना चाहिए. %s नवीनी"
+"करण शेष %s की अनुमति नहीं है"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -1100,9 +1103,9 @@ msgstr "%s आप इस लाइब्रेरी से कभी भी क
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s "
-msgstr "%s आप इस लाइब्रेरी से कभी भी कुछ उधार नहीं लिया है. %s "
+msgstr "%s आपने इस लाइब्रेरी से कभी कोई होल्ड नहीं रखी है. %s "
 
 #. %1$s:  IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' 
 #. %2$s:  RESERVE_CHARGE | $Price 
@@ -1858,9 +1861,9 @@ msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; �
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
-msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; आपका निर्गम इतिहास"
+msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; आपकी होल्ड इतिहास"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1989,9 +1992,9 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 #. %8$s:  END 
 #. %9$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:102
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s,%s %s since %s %s until %s %s %s "
-msgstr "%s के बाद से %s %s तक %s %s %s "
+msgstr "%s, %s,%s %s के बाद से %s %s तक %s %s %s "
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
@@ -2167,14 +2170,15 @@ msgstr ""
 #. %12$s:  ELSE 
 #. %13$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
 "ready %sInterlibrary loan unavailable %sUnknown %s"
 msgstr ""
-"%sआइटम देय %sअग्रिम नोटिस %sआनेवाली घटना %sहोल्ड भरा गया %sआइटम चैक-इन %s %sआइटम "
-"चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंजान %s"
+"%sआइटम देय %sअग्रिम नोटिस %sआनेवाली घटना %sहोल्ड भरा गया %sआइटम चैक-इन %s %"
+"sआइटम चैकआउट और नवीकरण%s आइटम चैकआउट %s %sअंतर पुस्तकालय ऋण तैयार %sइंटर "
+"लाइब्रेरी लोन अनुपलब्ध %sअंजान %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2920,6 +2924,8 @@ msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
+"( %s का %s नवीनीकरण शेष है%s / %s of %s आइटम से पहले छोड़ दिया नवीकरण पुस्तका"
+"लय द्वारा देखा जाना चाहिए %s )"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:63
@@ -2955,9 +2961,9 @@ msgid ""
 msgstr "(डेटाबेस पर नहीं मिला, कृपया सहायता के लिए लाइब्रेरी स्टाफ देखें)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:55
-#, fuzzy, c-format
+#, c-format
 msgid "(Cancelled)"
-msgstr "होल्ड रद्द"
+msgstr "(रद्द किया)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:179
 #, c-format
@@ -3054,7 +3060,7 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:51
 #, c-format
 msgid "(Refunded)"
-msgstr ""
+msgstr "(वापसी की गई है)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:50
 #, c-format
@@ -4429,14 +4435,14 @@ msgid "CancelRecall "
 msgstr "रिकॉल रद्द"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Cancellation date"
-msgstr "प्रकाशन तिथि"
+msgstr "रद्द करने की तारीख"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Cancelled charge"
-msgstr "रेटिंग रद्द करें"
+msgstr "रद्द किया गया प्रभार"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
 #, c-format
@@ -5143,9 +5149,9 @@ msgstr ""
 "स्तर होल्ड अनुरोध के लिए। "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:62
-#, fuzzy, c-format
+#, c-format
 msgid "Credit applied"
-msgstr "भुगतान लागू:"
+msgstr "क्रेडिट लागू किया गया"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:498
 #, c-format
@@ -5855,9 +5861,9 @@ msgid "Expecting a specific item selection."
 msgstr "एक विशेष आइटम के चयन की उम्मीद थी."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Expiration date"
-msgstr "समाप्ति तिथि:"
+msgstr "समाप्ति तिथि"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
 #, c-format
@@ -6080,9 +6086,9 @@ msgid "Found %s results in the library's %s collection"
 msgstr "लाइब्रेरी के%s संग्रह में%s परिणाम मिला"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Found in Open Library:"
-msgstr "ओपन लाइब्रेरी: "
+msgstr "ओपन लाइब्रेरी में मिला:"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -6390,7 +6396,7 @@ msgid "Highlight"
 msgstr "विशिष्टता"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Hold date"
 msgstr "होल्ड दिनांक"
 
@@ -6462,9 +6468,9 @@ msgid "Holds (%s)"
 msgstr "होल्डस  (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "पूर्ण इतिहास"
+msgstr "होल्डस इतिहास"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:15
@@ -7606,9 +7612,9 @@ msgid "LookupPatron"
 msgstr "संरक्षकदेखना"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "Lost item returned"
-msgstr "आइटम नवीनीकृत"
+msgstr "खोया हुआ सामान वापस मिल गया"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7692,12 +7698,12 @@ msgstr "के द्वारा प्रबंधित:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:64
 #, c-format
 msgid "Manual credit"
-msgstr ""
+msgstr "मैनुअल क्रेडिट"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:65
 #, c-format
 msgid "Manual invoice"
-msgstr ""
+msgstr "मैनुअल चालान"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -8786,9 +8792,9 @@ msgid "PayPal Acceptance Mark"
 msgstr "पेपैल स्वीकृति मार्क"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:63
-#, fuzzy, c-format
+#, c-format
 msgid "Payment"
-msgstr "भुगतान माध्यम"
+msgstr "भुगतान"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:73
 #, c-format
@@ -9774,9 +9780,9 @@ msgid "Requested from:"
 msgstr "से अनुरोध:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "Requested item type"
-msgstr "अनुरोधित आइटम:"
+msgstr "अनुरोधित आइटम प्रकार"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:186
 #, c-format
@@ -10536,9 +10542,9 @@ msgid "Show"
 msgstr "दिखाना"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Show 50 items"
-msgstr "पिछले 50 आइटम दिखाएँ "
+msgstr "50 आइटम दिखाएँ "
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -10607,9 +10613,9 @@ msgid "Showing %s of about %s results"
 msgstr "दिखाना %s के बारे में %sपरिणाम"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Showing 50 items. "
-msgstr "पिछले 50 आइटम दिखाएँ"
+msgstr "50 आइटमें दिखाएँ"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -12265,9 +12271,9 @@ msgid "View your search history"
 msgstr "अपना खोज इतिहास देखें"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Void payment"
-msgstr "आपका भुगतान"
+msgstr "शून्य भुगतान"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1237
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
@@ -12287,9 +12293,9 @@ msgid "Volume:"
 msgstr "खंड:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting date"
-msgstr "समाप्ति तिथि:"
+msgstr "प्रतीक्षा की तिथि"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:52
 #, c-format
@@ -12396,7 +12402,7 @@ msgstr "आप एक रसीद प्रिंट करना चाहे�
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:67
 #, c-format
 msgid "Writeoff"
-msgstr ""
+msgstr "ख़ारिज करना"
 
 #. %1$s:  message.message_date | $KohaDates 
 #. %2$s:  Branches.GetName(message.branchcode) | html 
@@ -12763,11 +12769,13 @@ msgstr "इस समय आपके द्वारा सुझाए गए 
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have renewed this item the maximum number of consecutive times without "
 "it being seen by the library."
-msgstr "आपने इस आइटम की अधिकतम संख्या को नवीनीकृत कर दिया है।"
+msgstr ""
+"आपने इस आइटम को लाइब्रेरी द्वारा देखे बिना लगातार अधिकतम बार नवीनीकृत किया "
+"है।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:97
 #, c-format
@@ -13047,9 +13055,9 @@ msgid "Your download should begin automatically."
 msgstr "आपका डाउनलोड स्वचालित रूप से शुरू करना चाहिए।"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "Your holds history"
-msgstr "आपकी चेकआउट इतिहास"
+msgstr "आपका होल्ड इतिहास"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
 #, c-format
@@ -13857,13 +13865,13 @@ msgstr "show_loans"
 #. %12$s:  END 
 #. %13$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Item in processing %s Suspended %s until %s %s %s %s Pending for "
 "next available item of item type '%s' %s Pending %s %s %s "
 msgstr ""
-"के बाद %s %s निलंबित %s जब तक %s %s %s %s आइटम प्रकार के अगले उपलब्ध आइटम के लिए "
-"लंबित '%s' %sलंबित %s %s %s "
+"के बाद %s %s प्रसंस्करण में आइटम %s निलंबित %s जब तक %s %s %s %s आइटम प्रकार "
+"के अगले उपलब्ध आइटम के लिए लंबित '%s' %sलंबित %s %s %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/maintenance.tt:43
 #, c-format
@@ -13982,7 +13990,7 @@ msgid "there was a problem processing your payment"
 msgstr "वहाँ एक समस्या आपका भुगतान संसाधित में था"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
-#, fuzzy, c-format
+#, c-format
 msgid "to post a comment. "
 msgstr "एक टिप्पणी पोस्ट करने के लिए."
 
@@ -14102,7 +14110,7 @@ msgid "your charges"
 msgstr "आपके शुल्क"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "your checkout history"
 msgstr "आपकी चेकआउट इतिहास"
 
@@ -14112,9 +14120,9 @@ msgid "your consents"
 msgstr "आपकी सहमति"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:83
-#, fuzzy, c-format
+#, c-format
 msgid "your holds history"
-msgstr "आपकी चेकआउट इतिहास"
+msgstr "आपका होल्ड इतिहास"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:139
 #, c-format
