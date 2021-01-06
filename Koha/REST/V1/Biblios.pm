@@ -237,4 +237,38 @@ sub get_public {
     };
 }
 
+=head3 get_items
+
+Controller function that handles retrieving biblio's items
+
+=cut
+
+sub get_items {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio = Koha::Biblios->find( { biblionumber => $c->validation->param('biblio_id') }, { prefetch => ['items'] } );
+
+    unless ( $biblio ) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => "Object not found."
+            }
+        );
+    }
+
+    return try {
+
+        my $items_rs = $biblio->items;
+        my $items    = $c->objects->search( $items_rs );
+        return $c->render(
+            status  => 200,
+            openapi => $items
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
