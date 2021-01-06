@@ -215,9 +215,6 @@
                     }).success(function() {
                         $("#delete_confirm_modal").modal('hide');
                         quotes.api().ajax.reload(function (data) {
-                            if (data.recordsTotal == 0) {
-                                $("#quotes").hide();
-                            }
                             $("#quote_action_result_dialog").hide();
                             $("#quote_delete_success").html(_("Quote #%s deleted successfully.").format(quote_id)).show();
                         });
