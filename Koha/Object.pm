@@ -538,6 +538,7 @@ sub prefetch_whitelist {
                     ...
                 }
             },
+            public => 0|1,
             ...
          ]
         }
@@ -572,7 +573,19 @@ sub to_api {
         }
     }
 
-    my $embeds = $params->{embed};
+    # Remove forbidden attributes if required
+    if (    $params->{public}
+        and $self->can('api_privileged_attrs') )
+    {
+        foreach my $privileged_attr ( @{ $self->api_privileged_attrs } ) {
+            delete $json_object->{$privileged_attr};
+        }
+    }
+
+    # Make sure we duplicate the $params variable to avoid
+    # breaking calls in a loop (Koha::Objects->to_api)
+    $params    = {%$params};
+    my $embeds = delete $params->{embed};
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
@@ -591,19 +604,29 @@ sub to_api {
                 if ( defined $children and ref($children) eq 'ARRAY' ) {
                     my @list = map {
                         $self->_handle_to_api_child(
-                            { child => $_, next => $next, curr => $curr } )
+                            {
+                                child  => $_,
+                                next   => $next,
+                                curr   => $curr,
+                                params => $params
+                            }
+                        )
                     } @{$children};
                     $json_object->{$curr} = \@list;
                 }
                 else {
                     $json_object->{$curr} = $self->_handle_to_api_child(
-                        { child => $children, next => $next, curr => $curr } );
+                        {
+                            child  => $children,
+                            next   => $next,
+                            curr   => $curr,
+                            params => $params
+                        }
+                    );
                 }
             }
         }
     }
-
-
 
     return $json_object;
 }
@@ -858,9 +881,10 @@ sub _type { }
 sub _handle_to_api_child {
     my ($self, $args ) = @_;
 
-    my $child = $args->{child};
-    my $next  = $args->{next};
-    my $curr  = $args->{curr};
+    my $child  = $args->{child};
+    my $next   = $args->{next};
+    my $curr   = $args->{curr};
+    my $params = $args->{params};
 
     my $res;
 
@@ -870,7 +894,8 @@ sub _handle_to_api_child {
             if defined $next and blessed $child and !$child->can('to_api');
 
         if ( blessed $child ) {
-            $res = $child->to_api({ embed => $next });
+            $params->{embed} = $next;
+            $res = $child->to_api($params);
         }
         else {
             $res = $child;

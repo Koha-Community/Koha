@@ -258,6 +258,25 @@ sub to_api_mapping {
     };
 }
 
+=head3 api_privileged_attrs
+
+This method returns the list of privileged access-only attributes. This is used
+by $library->to_api($params) to render the object correctly, based on the passed I<$params>.
+
+=cut
+
+sub api_privileged_attrs {
+    return [
+        'illemail',
+        'reply_to_email',
+        'return_path_email',
+        'ip',
+        'notes',
+        'marc_org_code'
+    ];
+}
+
+
 =head3 get_hold_libraries
 
 Return all libraries (including self) that belong to the same hold groups

@@ -315,7 +315,7 @@ subtest '->search() tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -397,6 +397,43 @@ subtest "to_api() tests" => sub {
 
         $i++;
     }
+
+    subtest 'unprivileged request tests' => sub {
+
+        my @privileged_attrs = @{ Koha::Library->api_privileged_attrs };
+
+        # Create sample libraries
+        my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+        my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+        my $library_3 = $builder->build_object({ class => 'Koha::Libraries' });
+        my $libraries = Koha::Libraries->search(
+            {
+                branchcode => {
+                    '-in' => [
+                        $library_1->branchcode, $library_2->branchcode,
+                        $library_3->branchcode
+                    ]
+                }
+            }
+        );
+
+        plan tests => scalar @privileged_attrs * 2 * $libraries->count;
+
+        my $libraries_unprivileged_representation = $libraries->to_api({ public => 1 });
+        my $libraries_privileged_representation   = $libraries->to_api();
+
+        for (my $i = 0; $i < $libraries->count; $i++) {
+            my $privileged_representation   = $libraries_privileged_representation->[$i];
+            my $unprivileged_representation = $libraries_unprivileged_representation->[$i];
+            foreach my $privileged_attr ( @privileged_attrs ) {
+                ok( exists $privileged_representation->{$privileged_attr},
+                    "Attribute $privileged_attr' is present" );
+                ok( !exists $unprivileged_representation->{$privileged_attr},
+                    "Attribute '$privileged_attr' is not present" );
+            }
+        }
+    };
+
 
     $schema->storage->txn_rollback;
 };

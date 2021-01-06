@@ -223,7 +223,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 28;
+    plan tests => 29;
 
     $schema->storage->txn_begin;
 
@@ -372,6 +372,26 @@ subtest "to_api() tests" => sub {
         }
         'Koha::Exceptions::Object::MethodNotCoveredByTests',
         'Unknown method exception thrown if is_count not specified';
+
+    subtest 'unprivileged request tests' => sub {
+
+        my @privileged_attrs = @{ Koha::Library->api_privileged_attrs };
+
+        plan tests => scalar @privileged_attrs * 2;
+
+        # Create a sample library
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+        my $unprivileged_representation = $library->to_api({ public => 1 });
+        my $privileged_representation   = $library->to_api;
+
+        foreach my $privileged_attr ( @privileged_attrs ) {
+            ok( exists $privileged_representation->{$privileged_attr},
+                "Attribute $privileged_attr' is present" );
+            ok( !exists $unprivileged_representation->{$privileged_attr},
+                "Attribute '$privileged_attr' is not present" );
+        }
+    };
 
     $schema->storage->txn_rollback;
 };
