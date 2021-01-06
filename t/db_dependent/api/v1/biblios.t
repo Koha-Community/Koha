@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -99,6 +99,43 @@ subtest 'get() tests' => sub {
                  => { Accept => 'application/marc' } )
       ->status_is(404)
       ->json_is( '/error', 'Object not found.' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_items() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+    $t->get_ok("//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items")
+      ->status_is(403);
+
+    $patron->flags(4)->store;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items")
+      ->status_is(200)
+      ->json_is( '' => [], 'No items on the biblio' );
+
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items")
+      ->status_is(200)
+      ->json_is( '' => [ $item_1->to_api, $item_2->to_api ], 'The items are returned' );
 
     $schema->storage->txn_rollback;
 };
