@@ -603,9 +603,15 @@
                     <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;op=show" title="suggestion" >
                         [% suggestions_loo.title | html %][% IF ( suggestions_loo.author ) %], by [% suggestions_loo.author | html %][% END %]</a>
                     <br />
-                    [% IF ( suggestions_loo.copyrightdate ) %]&copy;<span class="suggestion_copyrightdate"> [% suggestions_loo.copyrightdate | html %]</span> [% END %]
-                        [% IF ( suggestions_loo.volumedesc ) %]; <span class="suggestion_volume"Volume:<em>[% suggestions_loo.volumedesc | html %]</em></span> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %];<span class="suggestion_isbn"> ISBN:<em>[% suggestions_loo.isbn | html %]</em></span> [% END %][% IF ( suggestions_loo.publishercode ) %];<span class="suggestion_publishercode"> Published by [% suggestions_loo.publishercode | html %]</span> [% END %][% IF ( suggestions_loo.publicationyear ) %]in<span class="suggestion_publicationyear"> <em>[% suggestions_loo.publicationyear | html %]</em></span> [% END %][% IF ( suggestions_loo.place ) %]in <span class="suggestion_place"><em>[% suggestions_loo.place | html %]</em></span> [% END %][% IF ( suggestions_loo.collectiontitle ) %];<span class="suggestion_collectiontitle"> [% suggestions_loo.collectiontitle | html %]</span> [% END %][% IF ( suggestions_loo.itemtype ) %];<span class="suggestion_itype"> [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]</span><br />[% IF ( suggestions_loo.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestions_loo.note | html %]</div>[% END %]
+                    [% IF ( suggestions_loo.copyrightdate ) %]&copy; <span class="suggestion_copyrightdate">[% suggestions_loo.copyrightdate | html %]</span> [% END %]
+                        [% IF ( suggestions_loo.volumedesc ) %]; <span class="suggestion_volume">Volume:<em>[% suggestions_loo.volumedesc | html %]</em></span> [% END %]
+                        [% IF ( suggestions_loo.isbn ) %]; <span class="suggestion_isbn">ISBN: <em>[% suggestions_loo.isbn | html %]</em></span> [% END %]
+                        [% IF ( suggestions_loo.publishercode ) %]; <span class="suggestion_publishercode">Published by [% suggestions_loo.publishercode | html %]</span> [% END %]
+                        [% IF ( suggestions_loo.publicationyear ) %]in <span class="suggestion_publicationyear"><em>[% suggestions_loo.publicationyear | html %]</em></span> [% END %]
+                        [% IF ( suggestions_loo.place ) %]in <span class="suggestion_place"><em>[% suggestions_loo.place | html %]</em></span> [% END %]
+                        [% IF ( suggestions_loo.collectiontitle ) %]; <span class="suggestion_collectiontitle">[% suggestions_loo.collectiontitle | html %]</span> [% END %]
+                        [% IF ( suggestions_loo.itemtype ) %]; <span class="suggestion_itype">[% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %]</span> [% END %]<br />
+                        [% IF ( suggestions_loo.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestions_loo.note | html %]</div>[% END %]
                         [% IF suggestions_loo.archived %]<br /><i class="fa fa-archive"></i> Archived[% END %]
                 </td>
                 <td>
