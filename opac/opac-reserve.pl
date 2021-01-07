@@ -565,7 +565,7 @@ foreach my $biblioNum (@biblionumbers) {
 
     my $status = CanBookBeReserved( $borrowernumber, $biblioNum )->{status};
     $biblioLoopIter{holdable} &&= $status eq 'OK';
-    $biblioLoopIter{already_patron_possession} = $status eq 'alreadypossession';
+    $biblioLoopIter{$status} = 1;
 
     if ( $biblioLoopIter{holdable} and C4::Context->preference('AllowHoldItemTypeSelection') ) {
         # build the allowed item types loop

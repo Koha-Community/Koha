@@ -203,8 +203,16 @@
                                     [% ELSIF ( bibitemloo.recall ) %]
                                         <div class="alert alert-warning">You have already placed a recall on this title.</div>
                                     [% ELSE %]
-                                        [% IF ( bibitemloo.already_patron_possession ) %]
+                                        [% IF bibitemloo.alreadypossession %]
                                             <div class="alert alert-warning">This title cannot be requested because it's already in your possession.</div>
+                                        [% ELSIF bibitemloo.tooManyReserves %]
+                                            <div class="alert alert-warning">This title cannot be requested because you reached the maximum number of holds.</div>
+                                        [% ELSIF bibitemloo.tooManyHoldsForThisRecord %]
+                                            <div class="alert alert-warning">This title cannot be requested because you exceeded max holds per record.</div>
+                                        [% ELSIF bibitemloo.tooManyReservesToday %]
+                                            <div class="alert alert-warning">This title cannot be requested because you reached the daily hold limit.</div>
+                                        [% ELSIF bibitemloo.itemAlreadyOnHold %]
+                                            <div class="alert alert-warning">This title cannot be requested because you already have hold for this item.</div>
                                         [% ELSE %]
                                             [% UNLESS ( bibitemloo.bib_available ) %]
                                                 <div class="alert">There are no items that can be placed on hold.</div>
