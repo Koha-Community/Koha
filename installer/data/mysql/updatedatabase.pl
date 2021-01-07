@@ -20762,10 +20762,19 @@ if ( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
 }
 
-
 $DBversion = "19.11.13.000";
 if ( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (19.11.13 release)\n";
+    SetVersion( $DBversion );
+}
+
+$DBversion = '19.11.13.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+       ('ElasticsearchCrossFields', '0', '', 'Enable "cross_fields" option for searches using Elastic search.', 'YesNo')
+    });
+    print "Upgrade to $DBversion done (Bug 27252 - Add ElasticsearchCrossFields system preference)\n";
     SetVersion( $DBversion );
 }
 
