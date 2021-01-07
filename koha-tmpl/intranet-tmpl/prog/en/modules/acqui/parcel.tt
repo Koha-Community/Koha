@@ -560,7 +560,7 @@
                       "orderable": true,
                       "render": function(data, type, row, meta) {
                         if (type != 'display') return data;
-                        return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + row.basket.basket_id + "\">" + data + " (" + row.basket.basket_id + ")</a>";
+                        return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + encodeURIComponent(row.basket.basket_id) + "\">" + data.escapeHtml() + " (" + row.basket.basket_id.escapeHtml() + ")</a>";
                       }
                     },
                     { "data": "basket.basket_group.name",
@@ -579,9 +579,9 @@
                         }
                         else {
                             return "<a href=\"/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid="
-                                    + row.basket.vendor_id + "&amp;basketgroupid="
-                                    + row.basket.basket_group_id + "\">"
-                                    + row.basket.basket_group.name + " (" + row.basket.basket_group_id + ")</a>";
+                                    + encodeURIComponent(row.basket.vendor_id) + "&amp;basketgroupid="
+                                    + encodeURIComponent(row.basket.basket_group_id) + "\">"
+                                    + row.basket.basket_group.name.escapeHtml() + " (" + row.basket.basket_group_id.escapeHtml() + ")</a>";
                         }
                       }
                     },
@@ -589,7 +589,7 @@
                         "data": "order_id",
                         "render": function(data, type, row, meta) {
                             if (type != 'display') return data;
-                            return "<a href=\"neworderempty.pl?ordernumber="+data+"&amp;booksellerid="+row.basket.vendor_id+"\">"+data+"</a>";
+                            return "<a href=\"neworderempty.pl?ordernumber="+encodeURIComponent(data)+"&amp;booksellerid="+encodeURIComponent(row.basket.vendor_id)+"\">"+data.escapeHtml()+"</a>";
                         }
                     },
                     {
@@ -646,7 +646,7 @@
                                                             + encodeURIComponent(suggestion.suggestionid)
                                                             + '&amp;op=show">'
                                                             + suggested_by.join(", ")
-                                                            + " (#" + suggestions[0].suggestionid + ")</a>"; // FIXME: could be changed if we allow matching multiple suggestions
+                                                            + " (#" + suggestions[0].suggestionid.escapeHtml() + ")</a>"; // FIXME: could be changed if we allow matching multiple suggestions
                                     }
                                 }
                                 result += '</p>';
