@@ -23422,6 +23422,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Sorry, this is my first life, I am still learning!" );
 }
 
+$DBversion = '20.12.00.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+       ('ElasticsearchCrossFields', '1', '', 'Enable "cross_fields" option for searches using Elastic search.', 'YesNo')
+    });
+    NewVersion( $DBversion, 27252, "Add ElasticsearchCrossFields system preference");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
