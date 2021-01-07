@@ -143,8 +143,13 @@ sub filter_by_active {
     my ($self) = @_;
     return $self->search(
         {
-            orderstatus => [ 'new', 'ordered', 'partial' ]
-        }
+            '-or' => [
+                { 'basket.is_standing' => 1,
+                  'orderstatus' => [ 'new', 'ordered', 'partial' ] },
+                { 'orderstatus' => [ 'ordered', 'partial' ] }
+            ]
+        },
+        { join => 'basket' }
     );
 }
 
