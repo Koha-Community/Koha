@@ -20,7 +20,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -491,6 +491,90 @@ subtest 'pickup_locations() tests' => sub {
           . "patron_id=" . $patron->id )
       ->status_is( 404 )
       ->json_is( '/error' => 'Biblio not found' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_items_public() tests' => sub {
+
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    my $override_hidden_items = 0;
+
+    my $mocked_category = Test::MockModule->new('Koha::Patron::Category');
+    $mocked_category->mock(
+        'override_hidden_items',
+        sub {
+            return $override_hidden_items;
+        }
+    );
+
+    my $rules = undef;
+
+    my $mocked_context = Test::MockModule->new('C4::Context');
+    $mocked_context->mock(
+        'yaml_preference',
+        sub {
+            return $rules;
+        }
+    );
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    $t->get_ok(
+        "//$userid:$password@/api/v1/public/biblios/" . $biblio->id . "/items" )
+      ->status_is(200)->json_is( '' => [], 'No items on the biblio' );
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->id } );
+    my $item_2 = $builder->build_sample_item(
+        { biblionumber => $biblio->id, withdrawn => 1 } );
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/"
+          . $biblio->biblionumber
+          . "/items" )->status_is(200)->json_is(
+        '' => [
+            $item_1->to_api( { public => 1 } ),
+            $item_2->to_api( { public => 1 } )
+        ],
+        'The items are returned'
+          );
+
+    $rules = { withdrawn => ['1'] };
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/"
+          . $biblio->biblionumber
+          . "/items" )->status_is(200)->json_is(
+        '' => [ $item_1->to_api( { public => 1 } ) ],
+        'The items are returned, hidden one is not returned'
+          );
+
+    $t->get_ok( "/api/v1/public/biblios/"
+          . $biblio->biblionumber
+          . "/items" )->status_is(200)->json_is(
+        '' => [ $item_1->to_api( { public => 1 } ) ],
+        'Anonymous user, items are returned, hidden one is not returned'
+          );
+
+
+    $override_hidden_items = 1;
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/"
+          . $biblio->biblionumber
+          . "/items" )->status_is(200)->json_is(
+        '' => [
+            $item_1->to_api( { public => 1 } ),
+            $item_2->to_api( { public => 1 } )
+        ],
+        'The items are returned, the patron category has an override'
+          );
 
     $schema->storage->txn_rollback;
 };
