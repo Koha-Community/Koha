@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 
 use Module::Load::Conditional qw(can_load);
@@ -292,6 +292,28 @@ subtest 'x-koha-override stash tests' => sub {
     my $overrides = $stash->{'koha.overrides'};
     is( ref($overrides), 'HASH', 'arrayref returned' );
     ok( $overrides->{'any'}, "The value 'any' is found" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'public routes have "is_public" info stashed' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $stash;
+    $t->app->hook(
+        after_dispatch => sub {
+            $stash = shift->stash;
+        }
+    );
+
+    $t->get_ok('/api/v1/public/biblios/1');
+
+    my $is_public = $stash->{is_public};
+
+    ok( $is_public, 'Correctly stashed the fact it is a public route' );
 
     $schema->storage->txn_rollback;
 };

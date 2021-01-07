@@ -149,6 +149,9 @@ sub authenticate_api_request {
 
     my $user;
 
+    $c->stash( 'is_public' => 1 )
+        if $params->{is_public};
+
     # The following supports retrieval of spec with Mojolicious::Plugin::OpenAPI@1.17 and later (first one)
     # and older versions (second one).
     # TODO: remove the latter 'openapi.op_spec' if minimum version is bumped to at least 1.17.
