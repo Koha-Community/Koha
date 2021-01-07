@@ -431,5 +431,254 @@
         }
       }
     }
+  },
+  "/public/libraries": {
+    "get": {
+      "x-mojo-to": "Libraries#list",
+      "operationId": "listLibrariesPublic",
+      "tags": [
+        "library"
+      ],
+      "summary": "List libraries",
+      "parameters": [
+        {
+          "name": "name",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on name",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "address1",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on address1",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "address2",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on address2",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "address3",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on address3",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "postal_code",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on postal code",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "city",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on city",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on state",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on country",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on phone number",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "fax",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on fax number",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on email address",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "reply_to_email",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on Reply-To email address",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "return_path_email",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on Return-Path email address",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on website URL",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "ip",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on IP address",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "notes",
+          "in": "query",
+          "description": "Case insensitive 'starts_with' search on notes",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "opac_info",
+          "in": "query",
+          "description": "Case insensitive 'starts-with' search on OPAC info",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
+        },
+        {
+          "$ref": "../parameters.json#/q_param"
+        },
+        {
+          "$ref": "../parameters.json#/q_body"
+        },
+        {
+          "$ref": "../parameters.json#/q_header"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of libraries",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/library"
+            }
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        }
+      },
+      "x-koha-embed": [
+        "smtp_server"
+      ]
+    }
+  },
+  "/public/libraries/{library_id}": {
+    "get": {
+      "x-mojo-to": "Libraries#get",
+      "operationId": "getLibraryPublic",
+      "tags": [
+        "libraries"
+      ],
+      "summary": "Get library (public)",
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/library_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A library"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "406": {
+          "description": "Not acceptable",
+          "schema": {
+            "type": "array",
+            "description": "Accepted content-types",
+            "items": {
+                "type": "string"
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
   }
 }
