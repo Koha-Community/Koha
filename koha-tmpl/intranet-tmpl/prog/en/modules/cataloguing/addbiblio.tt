@@ -192,7 +192,7 @@ function addCreateAuthorityButton(tag_subfield_line, heading, tag_index) {
     var elem = $('<a href="#" title="' + title + '"><i class="fa fa-plus-circle"></i></a>');
     tag_subfield_line.append(elem);
     var tag_subfield_line_a = $('.subfield_line[id^=subfield' + heading.tag + 'a]').eq(tag_index);
-    var subfield_a = tag_subfield_line_a.children('.input_marceditor').eq(0);
+    var subfield_a = tag_subfield_line_a.find('.input_marceditor').eq(0);
     var index = subfield_a.attr('id');
     elem.click(function() {
         var popup = window.open("", "new_auth_popup",'fullscreen,toolbar=false,scrollbars=yes');
@@ -267,6 +267,7 @@ function updateHeadingLinks(links) {
         if( tag_subfield_line.length < 1 ){ return; }
 
         var subfield = tag_subfield_line.find('.input_marceditor').eq(0);
+        subfield.removeClass("matching_authority_field no_matching_authority_field");
 
         // Delete the old status if one exists
         tag_subfield_line.children('.subfield_status').remove();
@@ -282,17 +283,17 @@ function updateHeadingLinks(links) {
         subfield.val(heading.authid);
 
         // Add the new status
-        var image = '<i class="fa fa-close no_matching_authority" </i> ';
+        var image = '<i class="fa fa-close subfield_status no_matching_authority" </i> ';
         var message = '';
         var field_class = 'no_matching_authority_field';
         switch(heading.status) {
             case 'LOCAL_FOUND':
-                image = '<i class="fa fa-check matching_authority"</i> ';
+                image = '<i class="fa fa-check subfield_status matching_authority"</i> ';
                 message = _("A matching authority was found in the local database.");
                 field_class = 'matching_authority_field';
                 break;
             case 'CREATED':
-                image = '<i class="fa fa-check matching_authority"></i> ';
+                image = '<i class="fa fa-check subfield_status matching_authority"></i> ';
                 message = _("No matching authority found. A new authority was created automatically.");
                 field_class = 'matching_authority_field';
                 break;

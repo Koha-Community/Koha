@@ -745,13 +745,14 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', '1');
 
     my $linker = C4::Linker::Default->new();
-    my $record = MARC::Record->new();
+    my $biblio = $builder->build_sample_biblio();
+    my $record = $biblio->metadata->record;
 
     # Generate a record including all valid subfields and an invalid one 'e'
     my $field = MARC::Field->new('650','','','a' => 'Beach city', 'b' => 'Weirdness', 'v' => 'Fiction', 'x' => 'Books', 'y' => '21st Century', 'z' => 'Fish Stew Pizza', 'e' => 'Depicted');
 
     $record->append_fields($field);
-    my ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef);
+    my ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef,650);
 
     is( $num_headings_changed, 1, 'We changed the one we passed' );
     is_deeply( $results->{added},
@@ -767,8 +768,8 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     );
 
     #Add test for this case using verbose
-    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 1);
-    my $details = $results->{details};
+    $record->field('650')->delete_subfield('9');
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 650, 1);
     is( $num_headings_changed, 1, 'We changed the one we passed' );
     is( $results->{details}->[0]->{status}, 'CREATED', "We added an authority record for the heading using verbose");
 
@@ -781,11 +782,10 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     );
 
     # Example series link with volume and punctuation
-    $record = MARC::Record->new();
     $field = MARC::Field->new('800','','','a' => 'Tolkien, J. R. R.', 'q' => '(John Ronald Reuel),', 'd' => '1892-1973.', 't' => 'Lord of the rings ;', 'v' => '1');
     $record->append_fields($field);
 
-    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef);
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 800);
 
     is( $num_headings_changed, 1, 'We changed the one we passed' );
     is_deeply( $results->{added},
@@ -801,7 +801,8 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     );
 
     # The same example With verbose
-    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 1);
+    $record->field('800')->delete_subfield('9');
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef, 800, 1);
     is( $num_headings_changed, 1, 'We changed the one we passed' );
     is( $results->{details}->[0]->{status}, 'CREATED', "We added an authority record for the heading using verbose");
 

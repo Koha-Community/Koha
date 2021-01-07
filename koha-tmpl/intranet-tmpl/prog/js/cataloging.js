@@ -189,7 +189,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     inputs[j].value = "";
 
                     //Remove the color added by the automatic linker
-                    $(inputs[j]).css({backgroundColor:""});
+                    $(inputs[j]).removeClass("matching_authority_field no_matching_authority_field");
                 }
             }
             var textareas = divs[i].getElementsByTagName('textarea');
