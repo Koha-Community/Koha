@@ -36,6 +36,20 @@ subtest 'filter_by_active() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    my $basket_1 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => { is_standing => 1 }
+        }
+    );
+
+    my $basket_2 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => { is_standing => 0 }
+        }
+    );
+
     my $order_1 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
@@ -51,7 +65,10 @@ subtest 'filter_by_active() tests' => sub {
     my $order_3 = $builder->build_object(
         {
             class => 'Koha::Acquisition::Orders',
-            value => { orderstatus => 'new' }
+            value => {
+                basketno    => $basket_1->basketno,
+                orderstatus => 'new'
+            }
         }
     );
     my $order_4 = $builder->build_object(
@@ -66,6 +83,15 @@ subtest 'filter_by_active() tests' => sub {
             value => { orderstatus => 'partial' }
         }
     );
+    my $order_6 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno    => $basket_2->basketno,
+                orderstatus => 'new'
+            }
+        }
+    );
 
     my $this_orders_rs = Koha::Acquisition::Orders->search(
         {
@@ -75,6 +101,7 @@ subtest 'filter_by_active() tests' => sub {
                 $order_3->ordernumber,
                 $order_4->ordernumber,
                 $order_5->ordernumber,
+                $order_6->ordernumber,
             ]
         },
         {
@@ -84,7 +111,7 @@ subtest 'filter_by_active() tests' => sub {
 
     my $rs = $this_orders_rs->filter_by_active;
 
-    is( $rs->count, 3, 'Only new, ordered and partial orders are returned' );
+    is( $rs->count, 3, 'Only new (basket is standing), ordered and partial orders are returned' );
     is( $rs->next->ordernumber, $order_3->ordernumber , 'Expected order in resultset' );
     is( $rs->next->ordernumber, $order_4->ordernumber , 'Expected order in resultset' );
     is( $rs->next->ordernumber, $order_5->ordernumber , 'Expected order in resultset' );
@@ -123,8 +150,8 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_1->ordernumber });
 
     is( $orders_rs->count, 2, 'The two referenced orders are returned' );
-    is( $orders_rs->next->ordernumber, $order_2->ordernumber, 'The right order is returned' );
     is( $orders_rs->next->ordernumber, $order_1->ordernumber, 'The right order is returned' );
+    is( $orders_rs->next->ordernumber, $order_2->ordernumber, 'The right order is returned' );
 
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_2->ordernumber });
 
