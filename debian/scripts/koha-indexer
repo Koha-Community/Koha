@@ -217,7 +217,7 @@ if [ $INDEXER_TIMEOUT -lt 1 ]; then
     INDEXER_TIMEOUT=5
 fi
 
-if [ -z $INDEXER_PARAMS ]; then
+if [ -z "$INDEXER_PARAMS" ]; then
     # Default to the parameters required by rebuild_zebra.pl
     INDEXER_PARAMS="-daemon -sleep $INDEXER_TIMEOUT $DEBUG"
 fi
