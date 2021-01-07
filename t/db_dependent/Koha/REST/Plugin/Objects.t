@@ -79,8 +79,27 @@ get '/biblios' => sub {
     $c->render( status => 200, json => {count => scalar(@$biblios), biblios => $biblios} );
 };
 
+get '/libraries/:library_id_1/:library_id_2' => sub {
+
+    my $c = shift;
+
+    # Emulate a public route by stashing the is_public value
+    $c->stash( 'is_public' => 1 );
+
+    my $library_id_1 = $c->param('library_id_1');
+    my $library_id_2 = $c->param('library_id_2');
+
+    my $libraries_rs = Koha::Libraries->search({ branchcode => [ $library_id_1, $library_id_2 ] });
+    my $libraries    = $c->objects->search( $libraries_rs );
+
+    $c->render(
+        status => 200,
+        json   => $libraries
+    );
+};
+
 # The tests
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -509,6 +528,24 @@ subtest 'objects.find helper, embed' => sub {
 
     $t->get_ok( '/orders/' . $order->ordernumber )
       ->json_is( $order->to_api( { embed => ( { fund => {} } ) } ) );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.search helper, public requests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/libraries/'.$library_1->id.'/'.$library_2->id )
+      ->json_is('/0' => $library_1->to_api({ public => 1 }), 'Public representation of $library_1 is retrieved')
+      ->json_is('/1' => $library_2->to_api({ public => 1 }), 'Public representation of $library_2 is retrieved');
 
     $schema->storage->txn_rollback;
 };

@@ -91,6 +91,8 @@ for API rendering.
 
             # Extract reserved params
             my ( $filtered_params, $reserved_params, $path_params ) = $c->extract_reserved_params($args);
+            # Privileged reques?
+            my $is_public = $c->stash('is_public');
             # Look for embeds
             my $embed = $c->stash('koha.embed');
 
@@ -162,7 +164,7 @@ for API rendering.
                 }
             );
 
-            return $objects->to_api({ embed => $embed });
+            return $objects->to_api({ embed => $embed, public => $is_public });
         }
     );
 }
