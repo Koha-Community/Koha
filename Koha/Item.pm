@@ -1219,6 +1219,24 @@ sub _set_found_trigger {
     return $self;
 }
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'itemnumber',     'biblionumber',    'homebranch',
+        'holdingbranch',  'location',        'collectioncode',
+        'itemcallnumber', 'copynumber',      'enumchron',
+        'barcode',        'dateaccessioned', 'itemnotes',
+        'onloan',         'uri',             'itype',
+        'notforloan',     'damaged',         'itemlost',
+        'withdrawn',      'restricted'
+    ];
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Item object
