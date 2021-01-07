@@ -380,9 +380,6 @@ SMTP servers
                     url: "/api/v1/config/smtp_servers/"+smtp_server_id
                 }).success(function() {
                     window.smtp_servers.api().ajax.reload(function (data) {
-                        if (data.recordsTotal == 0) {
-                            $("#smtp_servers_wrapper").hide();
-                        }
                         $("#smtp_action_result_dialog").hide();
                         $("#smtp_delete_success").html(_("Server '%s' deleted successfully.").format(smtp_server_name)).show();
                     });
