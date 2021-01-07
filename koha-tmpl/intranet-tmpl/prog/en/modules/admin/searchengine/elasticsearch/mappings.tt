@@ -253,7 +253,11 @@ a.add, a.delete {
                                   [% mapping.search_field_label | html %]
                                 </td>
                                 <td>
-                                  <input type="hidden" name="mapping_sort" value="[% mapping.sort | html %]" readonly />[% IF mapping.sort == 'undef' %]Undef[% ELSE %][% mapping.sort | html %][% END %]
+                                  [% IF mapping.sort == 0 %]
+                                      <input type="hidden" name="mapping_sort" value="0" readonly />No
+                                  [% ELSE %]
+                                      <input type="hidden" name="mapping_sort" value="1" readonly />Yes
+                                  [% END %]
                                 </td>
                                 <td>
                                   <input type="hidden" name="mapping_facet" value="[% mapping.facet | html %]" readonly />[% IF mapping.facet == 1 %]Yes[% ELSE %]No[% END %]
@@ -277,20 +281,12 @@ a.add, a.delete {
                                 </td>
                                 <td>
                                   <select name="mapping_sort">
-                                    [% IF mapping.sort == 'undef' %]
-                                      <option value="undef" selected="selected">Undef</option>
-                                    [% ELSE %]
-                                      <option value="undef">Undef</option>
-                                    [% END %]
                                     [% IF mapping.sort == 0 %]
-                                      <option value="0" selected="selected">0</option>
+                                      <option value="0" selected="selected">No</option>
+                                      <option value="1">Yes</option>
                                     [% ELSE %]
-                                      <option value="0">0</option>
-                                    [% END %]
-                                    [% IF  mapping.sort == 1 %]
-                                      <option value="1" selected="selected">1</option>
-                                    [% ELSE %]
-                                      <option value="1">1</option>
+                                      <option value="0">No</option>
+                                      <option value="1" selected="selected">Yes</option>
                                     [% END %]
                                   </select>
                                 </td>
