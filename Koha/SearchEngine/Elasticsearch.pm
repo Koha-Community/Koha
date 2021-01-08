@@ -374,7 +374,7 @@ sub reset_elasticsearch_mappings {
                 $search_field->add_to_search_marc_maps($marc_field, {
                     facet => $mapping->{facet} || 0,
                     suggestible => $mapping->{suggestible} || 0,
-                    sort => $mapping->{sort},
+                    sort => $mapping->{sort} // 1,
                     search => $mapping->{search} // 1
                 });
             }
