@@ -49,7 +49,7 @@ subtest 'list() tests' => sub {
     $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
 
-    my $basket = $builder->build_object({ class => 'Koha::Acquisition::Baskets' });
+    my $basket = $builder->build_object({ class => 'Koha::Acquisition::Baskets', value => { is_standing => 1 } });
 
     my $biblio = $builder->build_sample_biblio;
     my $biblioitem = $biblio->biblioitem;
