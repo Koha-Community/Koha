@@ -694,7 +694,7 @@ sub _convert_sort_fields {
     my %sort_field_convert = (
         acqdate     => 'date-of-acquisition',
         author      => 'author',
-        call_number => 'local-classification',
+        call_number => 'cn-sort',
         popularity  => 'issues',
         relevance   => undef,       # default
         title       => 'title',
