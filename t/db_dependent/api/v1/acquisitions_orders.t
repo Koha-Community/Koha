@@ -73,7 +73,7 @@ subtest 'list() tests' => sub {
     ## Authorized user tests
     my $count_of_orders = Koha::Acquisition::Orders->search->count;
     # Make sure we are returned with the correct amount of orders
-    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders" )
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/orders?_per_page=-1" )
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_has('/'.($count_of_orders-1).'/order_id')
       ->json_hasnt('/'.($count_of_orders).'/order_id');
