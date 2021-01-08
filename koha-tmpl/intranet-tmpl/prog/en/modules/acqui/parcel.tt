@@ -468,6 +468,13 @@
             return query_params;
         }
 
+        function _escape_str(s){
+            return s != null ? s.escapeHtml() : "";
+        }
+        function _escape_price(p){
+            return p != null ? p.escapeHtml().format_price() : "";
+        }
+
         $(document).ready(function(){
 
             if ( $("#receivedt").length ) {
@@ -536,30 +543,20 @@
                 "columnDefs": [ {
                     "targets": [3,4,5,9],
                     "render": function (data, type, row, meta) {
-                        if ( data != null ) {
-                            return data.escapeHtml();
-                        }
-                        else {
-                            return "";
-                        }
+                        return _escape_str(data);
                     }
                 },
                 {
                     "targets": [8,10],
                     "render": function (data, type, row, meta) {
-                        if ( data != null ) {
-                            return data.escapeHtml().format_price();
-                        }
-                        else {
-                            return "";
-                        }
+                        return _escape_price(data);
                     }
                 } ],
                 "columns": [
                     { "data": "basket.name",
                       "orderable": true,
                       "render": function(data, type, row, meta) {
-                        if (type != 'display') return data;
+                        if (type != 'display') return _escape_str(data);
                         return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + encodeURIComponent(row.basket.basket_id) + "\">" + data.escapeHtml() + " (" + row.basket.basket_id.escapeHtml() + ")</a>";
                       }
                     },
@@ -567,12 +564,7 @@
                       "orderable": true,
                       "render": function(data, type, row, meta) {
                         if ( type != 'display' ) {
-                            if ( data == null ) {
-                                return "";
-                            }
-                            else {
-                                return data;
-                            }
+                            return _escape_str(data);
                         }
                         if ( row.basket.basket_group_id == null ) {
                             return _("No basket group");
@@ -588,7 +580,7 @@
                     {
                         "data": "order_id",
                         "render": function(data, type, row, meta) {
-                            if (type != 'display') return data;
+                            if (type != 'display') return _escape_str(data);
                             return "<a href=\"neworderempty.pl?ordernumber="+encodeURIComponent(data)+"&amp;booksellerid="+encodeURIComponent(row.basket.vendor_id)+"\">"+data.escapeHtml()+"</a>";
                         }
                     },
