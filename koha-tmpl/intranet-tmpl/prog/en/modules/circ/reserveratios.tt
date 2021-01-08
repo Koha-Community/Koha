@@ -98,10 +98,10 @@
             <td class="actions">
                 <p>
                     [% IF ( reserveloo.thisratio_atleast1 ) %]
-                        [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | html %] -->
-                            <a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% reserveloo.ratiocalc | html %] to order</a>
+                        [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.copies_to_buy | html %] -->
+                            <a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.copies_to_buy | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% reserveloo.copies_to_buy | html %] to order</a>
                         [% ELSE %]
-                            <strong>[% reserveloo.ratiocalc | html %] to order</strong>
+                            <strong>[% reserveloo.copies_to_buy | html %] to order</strong>
                         [% END %]
                         [% IF ( reserveloo.pendingorders ) %]<br><strong>[% reserveloo.pendingorders | html %] pending</strong>[% END %]
                     [% ELSE %]
@@ -128,7 +128,7 @@
 <h4>Refine results:</h4>
 <ol>
     <li>
-        <label for="ratio">Hold ratio:</label>
+        <label for="ratio">Hold ratio (greater than or equal to):</label>
         <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
     </li>
 
