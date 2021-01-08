@@ -2,6 +2,7 @@
 [% USE To %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE HtmlId %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; System preferences</title>
@@ -49,16 +50,16 @@
             [% UNLESS ( loop.first ) %]</tbody></table>[% END %]
             <div class="row">
                 <div class="col-sm-6">
-                    <h3 id="[% LINE.title | replace('\s+', '_') | html %]"><i class="fa fa-caret-down"></i> [% LINE.title | html %]</h3>
+                    <h3 id="[% LINE.title | $HtmlId %]"><i class="fa fa-caret-down"></i> [% LINE.title | html %]</h3>
                 </div>
                 <div class="col-sm-6">
                     [% IF ( searchfield ) %]
-                        <div class="pull-right"><a class="btn btn-link" href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab_id | html %]#[% LINE.title | replace('\s+', '_') | html %]"><i class="fa fa-list-ul"></i> View all [% LINE.title | html %] preferences</a></div>
+                        <div class="pull-right"><a class="btn btn-link" href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab_id | html %]#[% LINE.title | $HtmlId %]"><i class="fa fa-list-ul"></i> View all [% LINE.title | html %] preferences</a></div>
                     [% END %]
                 </div>
             </div>
 
-            <table class="preferences" id="collapse_[% LINE.title | replace('\s+', '_') | html %]">
+            <table class="preferences" id="collapse_[% LINE.title | $HtmlId %]">
             <thead><tr><th>Preference</th><th>Value</th></tr></thead>
             [% UNLESS ( loop.last ) %]<tbody>[% END %]
             [% ELSE %]
