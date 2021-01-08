@@ -607,34 +607,14 @@ OPAC:
         -
             - "Fields that should be mandatory for patron purchase suggestions:"
             - pref: OPACSuggestionMandatoryFields
-              multiple:
-                title: Title
-                author: Author
-                copyrightdate: Copyright or publication date
-                isbn: ISBN, ISSN or other standard number
-                publishercode: Publisher name
-                collectiontitle: Collection title
-                place: Publication place
-                itemtype: Item type
-                branch: Library or branch
-                patronreason: Patron reason
-                note: Note
+              type: modalselect
+              source: suggestions
             - "<br />Note: if none of the above options are selected, 'Title' field would be mandatory anyway, by default."
         -
             - "Fields that should be hidden for patron purchase suggestions:"
             - pref: OPACSuggestionUnwantedFields
-              multiple:
-                author: Author
-                copyrightdate: Copyright or publication date
-                isbn: ISBN, ISSN or other standard number
-                publishercode: Publisher name
-                collectiontitle: Collection title
-                place: Publication place
-                itemtype: Item type
-                quantity: Quantity
-                branch: Library or branch
-                patronreason: Patron reason
-                note: Note
+              type: modalselect
+              source: suggestions
             - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
         -
             - pref: OpacHiddenItems

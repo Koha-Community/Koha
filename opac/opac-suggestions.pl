@@ -248,7 +248,7 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG", "opac");
 my @mandatoryfields;
 if ( $op eq 'add' ) {
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionMandatoryFields") || 'title';
-    @mandatoryfields = sort split(/\s*\,\s*/, $fldsreq_sp);
+    @mandatoryfields = sort split(/\s*\|\s*/, $fldsreq_sp);
     foreach (@mandatoryfields) {
         $template->param( $_."_required" => 1);
     }
@@ -271,7 +271,7 @@ my @unwantedfields;
 {
     last unless ($op eq 'add');
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionUnwantedFields");
-    @unwantedfields = sort split(/\s*\,\s*/, $fldsreq_sp);
+    @unwantedfields = sort split(/\s*\|\s*/, $fldsreq_sp);
     foreach (@unwantedfields) {
         $template->param( $_."_hidden" => 1);
     }
