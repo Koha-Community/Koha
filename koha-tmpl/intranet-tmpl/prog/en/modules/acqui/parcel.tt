@@ -701,7 +701,7 @@
                         "orderable": false // FIXME: How can we do it in DBIC?
                     },
                     {
-                        "data": "fund_id",
+                        "data": "fund.name",
                         "render": function(data, type, row, meta) {
                             if (type != 'display') return data.escapeHtml();
                             return row.fund.name.escapeHtml();
