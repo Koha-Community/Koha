@@ -943,7 +943,7 @@ $(document).ready(function() {
                         "mDataProp": function ( oObj ) {
                               let title = '<a class="return-claim-title strong" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + oObj.biblionumber + '">'
                                   + oObj.title
-                                  + ( oObj.subtitle ? oObj.subtitle : "" )
+                                  + ( oObj.subtitle ? " " + oObj.subtitle : "" )
                                   + ( oObj.enumchron || "" )
                               + '</a>';
                               if ( oObj.author ) {
