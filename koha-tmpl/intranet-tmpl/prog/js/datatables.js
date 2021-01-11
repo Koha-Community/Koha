@@ -509,7 +509,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
 (function($) {
 
-    $.fn.api = function(options, columns_settings, add_filters) {
+    $.fn.api = function(options, columns_settings, add_filters, default_filters) {
         var settings = null;
 
         if ( add_filters ) {
@@ -563,6 +563,22 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     _per_page: length
                                 };
 
+
+                                function build_query(col){
+                                    var parts = [];
+                                    var attributes = col.data.split(':');
+                                    for (var i=0;i<attributes.length;i++){
+                                        var part = {};
+                                        var attr = attributes[i];
+                                        var value = data.columns[col.idx].search.value;
+                                        part[!attr.includes('.')?'me.'+attr:attr] = options.criteria === 'exact'
+                                            ? value
+                                            : {like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
+                                        parts.push(part);
+                                    }
+                                    return parts;
+                                }
+
                                 var filter = data.search.value;
                                 // Build query for each column filter
                                 var and_query_parameters = settings.aoColumns
@@ -570,10 +586,10 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value != ''
                                 })
                                 .map(function(col) {
-                                    var part = {};
-                                    var value = data.columns[col.idx].search.value;
-                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = options.criteria === 'exact'?value:{like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'')+value+(['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
-                                    return part;
+                                    return build_query(col)
+                                })
+                                .map(function r(e){
+                                    return ($.isArray(e) ? $.map(e, r) : e);
                                 });
 
                                 // Build query for the global search filter
@@ -582,12 +598,15 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value == '' && filter != ''
                                 })
                                 .map(function(col) {
-                                    var part = {};
-                                    value = filter;
-                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = options.criteria === 'exact'?value:{like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'')+value+(['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
-                                    return part;
+                                    return build_query(col)
+                                })
+                                .map(function r(e){
+                                    return ($.isArray(e) ? $.map(e, r) : e);
                                 });
 
+                                if ( default_filters ) {
+                                    and_query_parameters.push(default_filters);
+                                }
                                 query_parameters = and_query_parameters;
                                 query_parameters.push(or_query_parameters);
                                 if(query_parameters.length) {
@@ -748,8 +767,13 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 if ( is_searchable ) {
                     var title = $(this).text();
-                    var search_title = _("%s search").format(title);
-                    $(this).html( '<input type="text" placeholder="%s" />'.format(search_title) );
+                    var existing_search = table_dt.column(i).search();
+                    if ( existing_search ) {
+                        $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
+                    } else {
+                        var search_title = _("%s search").format(title);
+                        $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
+                    }
 
                     $( 'input', this ).on( 'keyup change', function () {
                         if ( table_dt.column(i).search() !== this.value ) {

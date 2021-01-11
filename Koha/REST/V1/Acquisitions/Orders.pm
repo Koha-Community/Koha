@@ -143,19 +143,15 @@ sub list {
 
         # Perform search
         my $orders = $orders_rs->search( $filtered_params, $attributes );
+        my $total  = $orders_rs->search->count;
 
-        if ($orders->is_paged) {
-            $c->add_pagination_headers({
-                total => $orders->pager->total_entries,
-                params => $args,
-            });
-        }
-        else {
-            $c->add_pagination_headers({
-                total => $orders->count,
-                params => $args,
-            });
-        }
+        $c->add_pagination_headers(
+            {
+                total      => ($orders->is_paged ? $orders->pager->total_entries : $orders->count),
+                base_total => $total,
+                params     => $args,
+            }
+        );
 
         return $c->render(
             status  => 200,

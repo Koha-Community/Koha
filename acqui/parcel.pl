@@ -109,25 +109,6 @@ unless( $invoiceid and $invoice->{invoiceid} ) {
     exit;
 }
 
-my $sticky_filters = $input->param('sticky_filters') || 0;
-
-if ($sticky_filters) {
-    my $search          = $input->cookie("filter_parcel_summary");
-    my $ean             = $input->cookie("filter_parcel_ean");
-    my $basketname      = $input->cookie("filter_parcel_basketname");
-    my $orderno         = $input->cookie("filter_parcel_orderno");
-    my $basketgroupname = $input->cookie("filter_parcel_basketgroupname");
-
-    $template->param(
-        summaryfilter         => $search,
-        eanfilter             => $ean,
-        basketfilter          => $basketname,
-        orderfilter           => $orderno,
-        basketgroupnamefilter => $basketgroupname,
-    );
-}
-
-
 my $booksellerid = $invoice->{booksellerid};
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
@@ -211,6 +192,5 @@ $template->param(
     total_tax_excluded    => $total_tax_excluded,
     total_tax_included    => $total_tax_included,
     subtotal_for_funds    => $subtotal_for_funds,
-    sticky_filters        => $sticky_filters,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

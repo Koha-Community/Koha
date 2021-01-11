@@ -190,4 +190,4 @@ if ($suggestion_id) {
     $suggestion->update( { reason => $reason } ) if $suggestion;
 }
 
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid");

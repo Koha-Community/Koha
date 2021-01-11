@@ -105,9 +105,6 @@
                     <th>Basket</th>
                     <th>Basket group</th>
                     <th>Order line</th>
-                    <th class="hidden">Title</th>
-                    <th class="hidden">Author</th>
-                    <th class="hidden">ISBN</th>
                     <th>Summary</th>
                     <th>More</th>
                     <th>Replacement price</th>
@@ -115,24 +112,6 @@
                     <th>Unit cost</th>
                     <th>Order cost</th>
                     <th>Fund</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
-                <tr>
-                    <th><div class="input-group input-group-sm"><input id="basket_name_column_search" type="text" class="form-control column-filter" data-search-fields='["basket.name"]'></div></th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["basket.basket_group.name"]'></div></th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.order_id"]'></div></th>
-                    <th class="hidden">&nbsp;</th>
-                    <th class="hidden">&nbsp;</th>
-                    <th class="hidden">&nbsp;</th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.internal_note","me.vendor_note","biblio.title","biblio.author","biblio.isbn","biblio.publisher","biblio.publication_year","biblio.copyright_date","biblio.suggestions.suggester.surname","biblio.suggestions.suggester.firstname"]'></div></th>
-                    <th>&nbsp;</th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.replacement_price"]'></div></th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.quantity"]'></div></th>
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["me.ecost"]'></div></th>
-                    <th>&nbsp;</th>
-                    <!--th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["order_cost"]'></div></th-->
-                    <th><div class="input-group input-group-sm"><input type="text" class="form-control column-filter" data-search-fields='["fund.name"]'></div></th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -340,41 +319,6 @@
 <div class="col-sm-2 col-sm-pull-10">
 <aside>
 
-<form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" method="post">
-  <fieldset class="brief">
-    <h4>Filter</h4>
-    <ol>
-      <li>
-        <label for="summaryfilter">ISBN, author or title:</label>
-        <input type="text" name="summaryfilter" id="summaryfilter" value="[% summaryfilter | html %]"/>
-      </li>
-      <li>
-        <label for="basketfilter">Basket name:</label>
-        <input type="text" name="basketfilter" id="basketfilter" value="[% basketfilter | html %]"/>
-      </li>
-      <li>
-          <label for="basketgroupnamefilter">Basket group name:</label>
-          <input type="text" name="basketgroupnamefilter" id="basketgroupnamefilter" value="[% basketgroupnamefilter | html %]" />
-      </li>
-      <li>
-        <label for="orderfilter">Order line:</label>
-        <input type="text" name="orderfilter" id="orderfilter" value="[% orderfilter | html %]"/>
-      </li>
-      [% IF (UNIMARC) %]
-        <li>
-          <label for="eanfilter">EAN:</label>
-          <input type="text" name="eanfilter" id="eanfilter" value="[% eanfilter | html %]"/>
-        </li>
-      [% END %]
-    </ol>
-    <fieldset class="action">
-      <input type="hidden" value="search" name="op" />
-      <input type="hidden" value="[% invoiceid | html %]" name="invoiceid" />
-      <input type="submit" value="Filter" />
-      <a href="#" id="clear_form_filters">Clear</a>
-    </fieldset>
-  </fieldset>
-</form>
 [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
@@ -388,85 +332,7 @@
     <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
     <script>
         dt_overwrite_html_sorting_localeCompare();
-        var sticky_filters = [% sticky_filters | html %];
         var columns_filter = {};
-
-        function query_from_filters( base_query ) {
-
-            var query_and = [];
-
-            var summary      = $("#summaryfilter").val();
-            var basket_group = $("#basketgroupnamefilter").val();
-            var basket_name  = $("#basketfilter").val();
-            var order_id     = $("#orderfilter").val();
-            var ean          = $("#eanfilter").val();
-
-            // ean == undefined if the HTML doesn't have it
-            ean = (ean === undefined) ? '' : ean;
-
-            if ( basket_name != "" ) {
-                query_and.push( { "basket.name": { "like": '%'+basket_name+'%' } } );
-            }
-            if (basket_group != "") {
-                query_and.push( { "basket.basket_group.name": { "like": '%'+basket_group+'%' } } );
-            }
-            if (summary != "") {
-                query_and.push( { "-or": [{"biblio.title":  { "like": '%'+summary+'%' } },
-                            {"biblio.author": { "like": '%'+summary+'%' } },
-                            {"biblio.isbn":   { "like": '%'+summary+'%' } } ] } );
-            }
-            if (ean != "") {
-                query_and.push( { "biblio.ean": ean } );
-            }
-
-            $(".column-filter").each(function () {
-                var search_fields = $(this).data('search-fields');
-                var value = this.value;
-
-                if ( value != '' &&
-                     value != undefined ) { // skip if empty
-
-                    var columns_filters = [];
-
-                    search_fields.forEach( function (item) {
-                        if ( item === "me.order_id" ||
-                             item === "me.replacement_price" ||
-                             item === "me.quantity" ||
-                             item === "me.ecost" ) {
-                            // For numbers, we do 'starts with'
-                            var object = {};
-                            object[item] = { "like": value+'%' };
-                            columns_filters.push( object );
-                        }
-                        else {
-                            var object = {};
-                            object[item] = { "like": '%'+value+'%' };
-                            columns_filters.push( object );
-                        }
-                    });
-
-                    if ( columns_filters.length > 1 ) {
-                        query_and.push( { "-or": columns_filters } );
-                    }
-                    else if ( columns_filters.length > 0 ) {
-                        query_and.push( columns_filters[0] );
-                    }
-                }
-            });
-
-            var query_params = [];
-
-            if ( query_and.length > 0 ) {
-                query_and.push(base_query);
-                query_params.push('q=' + encodeURIComponent(JSON.stringify({ "-and": query_and })));
-            }
-
-            if ( order_id != "" ) {
-                query_params.push("order_id="+order_id);
-            }
-
-            return query_params;
-        }
 
         function _escape_str(s){
             return s != null ? s.escapeHtml() : "";
@@ -480,7 +346,6 @@
             if ( $("#receivedt").length ) {
                 var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "bStateSave": true,
-                    "iCookieDuration": 60*60*24*1000, // 1000 days
                     "iDisplayLength": 10,
                     "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
                     "aoColumnDefs": [
@@ -505,15 +370,9 @@
                 }));
             }
 
-            var base_query   = { "basket.vendor_id": [% booksellerid | html %]  };
-            var query_params = query_from_filters( base_query );
-
-            var THE_query = query_params.join("&");
-
-            var pending_orders_url = '/api/v1/acquisitions/orders?only_active=1';
             var pending_orders_table = $("#pending_orders").api({
                 "ajax": {
-                    "url": pending_orders_url + '&' + THE_query
+                    "url": '/api/v1/acquisitions/orders?only_active=1'
                 },
                 "header_filter": true,
                 "embed": [
@@ -527,8 +386,6 @@
                     "items"
                 ],
                 "stateSave": true, // remember state on page reload
-                "orderCellsTop": true, // tell the datatable sorting is done on the top row
-                'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "drawCallback": function (settings) {
                     $(".previewData").on("click", function(e){
                         e.preventDefault();
@@ -539,20 +396,9 @@
                         $('#dataPreview').modal({show:true});
                     });
                 },
-                "columnDefs": [ {
-                    "targets": [3,4,5,9],
-                    "render": function (data, type, row, meta) {
-                        return _escape_str(data);
-                    }
-                },
-                {
-                    "targets": [8,10],
-                    "render": function (data, type, row, meta) {
-                        return _escape_price(data);
-                    }
-                } ],
                 "columns": [
                     { "data": "basket.name",
+                    "searchable": true,
                       "orderable": true,
                       "render": function(data, type, row, meta) {
                         if (type != 'display') return _escape_str(data);
@@ -584,27 +430,10 @@
                         }
                     },
                     {
-                        "data": "biblio.author",
-                        "visible": false,
-                        "searchable": true,
-                        "orderable": false
-                    },
-                    {
-                        "data": "biblio.title",
-                        "visible": false,
-                        "searchable": true,
-                        "orderable": false
-                    },
-                    {
-                        "data": "biblio.isbn",
-                        "visible": false,
-                        "searchable": true,
-                        "orderable": false
-                    },
-                    {
-                        "data": function(row, type, val, meta) {
+                        "data": "biblio.author:biblio.title:biblio.isbn",
+                        "render": function(data, type, row, meta) {
                             var result = '';
-                            if ( row.biblio_id != null ) {
+                            if ( row && row.biblio_id != null ) {
                                 result = "<p><a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber="+encodeURIComponent(row.biblio_id)+"\">"+row.biblio.title.escapeHtml()+"</a>";
                                 if ( row.biblio.author != null )
                                     result += _(" by ") + row.biblio.author.escapeHtml();
@@ -672,16 +501,18 @@
 
                             return result;
                         },
-                        "orderable": false
+                        "orderable": false,
                     },
                     {
-                        "data": function( row, type, val, meta) {
+                        "data": "",
+                        "render": function(data, type, row, meta) {
                             var result = '<a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">' + _("Order") + '</a><br>'
                                 + '<a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a><br>'
                                 + '<a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a>';
                             return result;
                         },
-                        "orderable": false
+                        "orderable": false,
+                        "searchable": false
                     },
                     {
                         "data": "replacement_price"
@@ -694,10 +525,12 @@
                         "data": "ecost"
                     },
                     {
-                        "data": function ( row, type, val, meta ) {
+                        "data": "",
+                        "render": function(data, type, row, meta) {
                             return (row.quantity * row.ecost).format_price();
                         },
-                        "orderable": false // FIXME: How can we do it in DBIC?
+                        "orderable": false, // FIXME: How can we do it in DBIC?
+                        "searchable": false
                     },
                     {
                         "data": "fund.name",
@@ -707,17 +540,20 @@
                         }
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        "data": "",
+                        "render": function(data, type, row, meta) {
                             return '<a href="orderreceive.pl?ordernumber='
                                     + encodeURIComponent(row.order_id) + '&amp;invoiceid=[% invoiceid | uri %]' + '">'
                                     + _("Receive") + '</a><br/>'
                                     + '<a href="#" onclick="transfer_order_popup(' + row.order_id.escapeHtml() + '); return false;">'
                                     + _("Transfer") + '</a>';
                         },
-                        "orderable": false
+                        "orderable": false,
+                        "searchable": false
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        "data": "",
+                        "render": function(data, type, row, meta) {
                             var result = "";
 
                             if ( row.current_holds_count > 0 ) {
@@ -775,52 +611,11 @@
 
                             return result;
                         },
-                        "orderable": false
+                        "orderable": false,
+                        "searchable": false
                     }
                 ]
-            });
-
-            // column filter events handling
-            $(".column-filter").each(function () {
-                $(this).on( 'keyup change', function () {
-                    // recalculate the query
-                    var query_params = query_from_filters( base_query );
-                    // refresh the datatable as appropriate
-                    if ( query_params.length > 0 ) {
-                        pending_orders_table.api().ajax.url( pending_orders_url + '&' + query_params.join("&") );
-                    }
-                    else {
-                        pending_orders_table.api().ajax.url( pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query)) );
-                    }
-                    pending_orders_table.api().ajax.reload( null, false );
-                });
-            });
-
-            $("#filterform").on("submit", function(e) {
-                e.preventDefault();
-
-                // Save the filters in the cookie
-                $.cookie("filter_parcel_summary", $("#summaryfilter").val());
-                $.cookie("filter_parcel_basketname", $("#basketfilter").val());
-                $.cookie("filter_parcel_orderno", $("#orderfilter").val());
-                $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
-                $.cookie("filter_parcel_ean", $("#eanfilter").val());
-
-                var query_params = query_from_filters( base_query );
-
-                if ( query_params.length > 0 ) {
-                    pending_orders_table.api().ajax.url( pending_orders_url + '&' + query_params.join("&") );
-                }
-                else {
-                    pending_orders_table.api().ajax.url( pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query)) );
-                }
-                pending_orders_table.api().ajax.reload( null, false );
-            });
-
-            $('#clear_form_filters').on("click", function(){
-                $(this).closest('form').find("input[type=text], textarea").val("");
-                pending_orders_table.api().ajax.url(pending_orders_url + '&q=' + encodeURI(JSON.stringify(base_query))).draw();
-            });
+            }, {}, 1, {"basket.vendor_id": [% booksellerid | html %]});
 
             $(".previewData").on("click", function(e){
                 e.preventDefault();
