@@ -526,7 +526,7 @@ RECORD: while (  ) {
                     printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
                     # if we failed because of an exception, assume that
                     # the MARC columns in biblioitems were not set.
-                    ModBiblioMarc( $record, $biblionumber, $framework );
+                    ModBiblioMarc( $record, $biblionumber );
                     next RECORD;
                 } else {
                     printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ok"}) if ($logfile);
