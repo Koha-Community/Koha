@@ -564,19 +564,34 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 };
 
                                 var filter = data.search.value;
-                                var query_parameters = settings.aoColumns
+                                // Build query for each column filter
+                                var and_query_parameters = settings.aoColumns
                                 .filter(function(col) {
-                                    return col.bSearchable && typeof col.data == 'string' && (data.columns[col.idx].search.value != '' || filter != '')
+                                    return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value != ''
                                 })
                                 .map(function(col) {
                                     var part = {};
-                                    var value = data.columns[col.idx].search.value != '' ? data.columns[col.idx].search.value : filter;
+                                    var value = data.columns[col.idx].search.value;
                                     part[!col.data.includes('.')?'me.'+col.data:col.data] = options.criteria === 'exact'?value:{like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'')+value+(['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
                                     return part;
                                 });
 
+                                // Build query for the global search filter
+                                var or_query_parameters = settings.aoColumns
+                                .filter(function(col) {
+                                    return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value == '' && filter != ''
+                                })
+                                .map(function(col) {
+                                    var part = {};
+                                    value = filter;
+                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = options.criteria === 'exact'?value:{like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'')+value+(['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
+                                    return part;
+                                });
+
+                                query_parameters = and_query_parameters;
+                                query_parameters.push(or_query_parameters);
                                 if(query_parameters.length) {
-                                    query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:query_parameters);
+                                    query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:{"-and": query_parameters});
                                     if(options.header_filter) {
                                         options.query_parameters = query_parameters;
                                     } else {
