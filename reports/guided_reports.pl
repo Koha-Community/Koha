@@ -220,7 +220,6 @@ elsif ( $phase eq 'Update SQL'){
     my $cache_expiry_units = $input->param('cache_expiry_units');
     my $public = $input->param('public');
     my $save_anyway = $input->param('save_anyway');
-
     my @errors;
 
     # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
@@ -734,6 +733,9 @@ elsif ($phase eq 'Run this report'){
                 } elsif ( $authorised_value eq "date" ) {
                     # require a date, provide a date picker
                     $input = 'date';
+                } elsif ( $authorised_value eq "list" ) {
+                    # require a list, provide a textarea
+                    $input = 'textarea';
                 } else {
                     # defined $authorised_value, and not 'date'
                     my $dbh=C4::Context->dbh;
@@ -1118,7 +1120,17 @@ sub get_prepped_report {
         if ($split[$i*2+1] =~ /\|\s*date\s*$/) {
             $quoted = output_pref({ dt => dt_from_string($quoted), dateformat => 'iso', dateonly => 1 }) if $quoted;
         }
-        $quoted = C4::Context->dbh->quote($quoted);
+        unless( $split[$i*2+1] =~ /\|\s*list\s*$/ && $quoted ){
+            $quoted = C4::Context->dbh->quote($quoted);
+        } else {
+            my @list = split /\n/, $quoted;
+            my @quoted_list;
+            foreach my $item ( @list ){
+                $item =~ s/\r//;
+              push @quoted_list, C4::Context->dbh->quote($item);
+            }
+            $quoted="(".join(",",@quoted_list).")";
+        }
         $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
     }
     return $sql,$headers;

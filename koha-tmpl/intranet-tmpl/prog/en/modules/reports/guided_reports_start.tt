@@ -823,6 +823,11 @@
                                                 <label for="sql_params[% loop.count | html %]">[% sql_param.entry | html %]: </label>
                                                 <input id="sql_params[% loop.count | html %]" type="text" name="sql_params" />
                                             </li>
+                                        [% ELSIF ( sql_param.input == 'textarea' ) %]
+                                            <li>
+                                                <label for="sql_params[% loop.count | html %]">[% sql_param.entry | html %]: </label>
+                                                <textarea id="sql_params[% loop.count | html %]" name="sql_params" rows="5"></textarea>
+                                            </li>
                                         [% ELSE %]
                                             <li>
                                                 <label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>

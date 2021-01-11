@@ -916,6 +916,7 @@ Returns a hash containig all reserved words
 sub GetReservedAuthorisedValues {
     my %reserved_authorised_values =
             map { $_ => 1 } ( 'date',
+                              'list',
                               'branches',
                               'itemtypes',
                               'cn_source',
