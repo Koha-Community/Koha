@@ -511,6 +511,11 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
 
     $.fn.api = function(options, columns_settings, add_filters) {
         var settings = null;
+
+        if ( add_filters ) {
+            $(this).find('thead tr').clone(true).appendTo( $(this).find('thead') );
+        }
+
         if(options) {
             if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
             options.criteria = options.criteria.toLowerCase();
@@ -714,17 +719,38 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
             }
         );
 
-        if ( add_filters ) {
-            // Duplicate the table header row for columnFilter
-            thead_row = this.find('thead tr');
-            clone = thead_row.clone().addClass('filters_row');
-            clone.find("th.NoSort").html('');
-            thead_row.before(clone);
-        }
-
         $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
 
-        return $(this).dataTable(settings);
+        if ( add_filters ) {
+            settings['orderCellsTop'] = true;
+        }
+
+        var table = $(this).dataTable(settings);
+
+        if ( add_filters ) {
+            var table_dt = table.DataTable();
+            $(this).find('thead tr:eq(1) th').each( function (i) {
+                var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
+                if ( is_searchable ) {
+                    var title = $(this).text();
+                    var search_title = _("Search %s").format(title);
+                    $(this).html( '<input type="text" placeholder="%s" />'.format(search_title) );
+
+                    $( 'input', this ).on( 'keyup change', function () {
+                        if ( table_dt.column(i).search() !== this.value ) {
+                            table_dt
+                                .column(i)
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } else {
+                    $(this).html('');
+                }
+            } );
+        }
+
+        return table;
     };
 
 })(jQuery);
