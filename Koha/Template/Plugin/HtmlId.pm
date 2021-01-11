@@ -19,6 +19,20 @@ use Modern::Perl;
 
 use parent qw( Template::Plugin::Filter );
 
+=head1 NAME
+
+Koha::Template::Plugin::HtmlId - Filter characters for HTML IDs
+
+=head1 SYNOPSIS
+
+    [% USE HtmlId %]
+
+    <div id=[% var | HtmlId %]></div>
+
+It will replace characters that are not valid for HTML IDs with an underscore (_)
+
+=cut
+
 sub filter {
     my ( $self, $text ) = @_;
 
