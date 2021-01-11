@@ -157,6 +157,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DefaultLongOverdueDays', '', NULL, "Set the LOST value of an item when the item has been overdue for more than n days.", 'integer'),
 ('DefaultLongOverdueLostValue', '', NULL, "Set the LOST value of an item to n when the item has been overdue for more than defaultlongoverduedays days.", 'integer'),
 ('DefaultPatronSearchFields',    'surname,firstname,othernames,cardnumber,userid',NULL,'Comma separated list defining the default fields to be used during a patron search using the "standard" option. If empty Koha will default to "surname,firstname,othernames,cardnumber,userid". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page.','free'),
+('DefaultSaveRecordFileID','biblionumber','biblionumber|controlnumber','Defines whether the advanced cataloging editor will use the bibliographic record number or control number field to populate the name of the save file','Choice')
 ('defaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('defaultSortOrder','dsc','asc|dsc|az|za','Specify the default sort order','Choice'),
 ('DefaultToLoggedInLibraryCircRules',  '0', NULL ,  'If enabled, circ rules editor will default to the logged in library''s rules, rather than the ''all libraries'' rules.',  'YesNo'),

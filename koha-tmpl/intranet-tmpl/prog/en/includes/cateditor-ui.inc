@@ -291,14 +291,14 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             save: function( id, record, done ) {
                 var recname = 'record.mrc';
                 if(state.recordID) {
-                    recname = state.recordID+'.mrc';
+                    recname = 'bib-'+state.recordID+'.mrc';
                 }
 
-                [% IF (Koha.Preference('SaveRecordbyControlNumber') == '1') %]
-                var controlnumfield = record.field('001');
-                if(controlnumfield) {
-                    recname = controlnumfield.subfield('@')+'.mrc';
-                }
+                [% IF (Koha.Preference('DefaultSaveRecordFileID') == 'controlnumber') %]
+                    var controlnumfield = record.field('001');
+                    if(controlnumfield) {
+                        recname = 'record-'+controlnumfield.subfield('@')+'.mrc';
+                    }
                 [% END %]
                 saveAs( new Blob( [record.toISO2709()], { 'type': 'application/octet-stream;charset=utf-8' } ), recname );
 
@@ -310,14 +310,14 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             save: function( id, record, done ) {
                 var recname = 'record.xml';
                 if(state.recordID) {
-                    recname = state.recordID+'.xml';
+                    recname = 'bib-'+state.recordID+'.xml';
                 }
 
-                [% IF (Koha.Preference('SaveRecordbyControlNumber') == '1') %]
-                var controlnumfield = record.field('001');
-                if(controlnumfield) {
-                    recname = controlnumfield.subfield('@')+'.xml';
-                }
+                [% IF (Koha.Preference('DefaultSaveRecordFileID') == 'controlnumber') %]
+                    var controlnumfield = record.field('001');
+                    if(controlnumfield) {
+                        recname = 'record-'+controlnumfield.subfield('@')+'.xml';
+                    }
                 [% END %]
                 saveAs( new Blob( [record.toXML()], { 'type': 'application/octe     t-stream;charset=utf-8' } ), recname );
 

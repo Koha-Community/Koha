@@ -25,10 +25,21 @@ my $error = '';
 if ($op eq "export") {
     my $biblionumber = $query->param("bib");
         if ($biblionumber){
+            my $file_id = $biblionumber;
+            my $file_pre = "bib-";
 
             my $marc = GetMarcBiblio({
                 biblionumber => $biblionumber,
                 embed_items  => 1 });
+
+            if( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ){
+                my $marcflavour = C4::Context->preference('marcflavour'); #FIXME This option is required but does not change control num behaviour
+                my $control_num = GetMarcControlnumber( $marc, $marcflavour );
+                if( $control_num ){
+                    $file_id = $control_num;
+                    $file_pre = "record-";
+                }
+            }
 
             if ($format =~ /endnote/) {
                 $marc = marc2endnote($marc);
@@ -74,7 +85,7 @@ if ($op eq "export") {
             }
             print $query->header(
                 -type => 'application/octet-stream',
-                -attachment=>"bib-$biblionumber.$format");
+                -attachment=>"$file_pre$file_id.$format");
             print $marc;
         }
 }

@@ -29,13 +29,12 @@ Cataloging:
             - Currently does not include support for UNIMARC or NORMARC fixed fields.
         -
             - "When saving in a MARC/MARCXML file in the advanced cataloging editor, use the"
-            - pref: SaveRecordbyControlNumber
-              default: 0
+            - pref: DefaultSaveRecordFileID
+              default: biblionumber
               choices:
-                  yes: Enable
-                  yes: "control number"
-                  no: "record number"
-            - "in the file name. The default is to use the bibliographic record number."
+                  controlnumber: "control number"
+                  biblionumber: "bibliographic record number"
+            - "in the file name."
     Spine labels:
         -
             - When using the quick spine label printer,

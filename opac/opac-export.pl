@@ -61,6 +61,17 @@ if(!$marc) {
     exit;
 }
 
+my $file_id = $biblionumber;
+my $file_pre = "bib-";
+if( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ){
+    my $marcflavour = C4::Context->preference('marcflavour'); #FIXME This option is required but does not change control num behaviour
+    my $control_num = GetMarcControlnumber( $marc, $marcflavour );
+    if( $control_num ){
+        $file_id = $control_num;
+        $file_pre = "record-";
+    }
+}
+
 # ASSERT: There is a biblionumber, because GetMarcBiblio returned something.
 my $framework = GetFrameworkCode( $biblionumber );
 my $record_processor = Koha::RecordProcessor->new({
@@ -136,27 +147,27 @@ else {
         print $query->header(
             -type => 'application/marc',
             -charset=>'ISO-2022',
-            -attachment=>"bib-$biblionumber.$format");
+            -attachment=>"$file_pre$file_id.$format");
     }
     elsif ( $format eq 'isbd' ) {
         print $query->header(
             -type       => 'text/plain',
             -charset    => 'utf-8',
-            -attachment =>  "bib-$biblionumber.txt"
+            -attachment =>  "$file_pre$file_id.txt"
         );
     }
     elsif ( $format eq 'ris' ) {
         print $query->header(
             -type => 'text/plain',
             -charset => 'utf-8',
-            -attachment => "bib-$biblionumber.$format"
+            -attachment => "$file_pre$file_id.$format"
         );
     } else {
         binmode STDOUT, ':encoding(UTF-8)';
         print $query->header(
             -type => 'application/octet-stream',
             -charset => 'utf-8',
-            -attachment => "bib-$biblionumber.$format"
+            -attachment => "$file_pre$file_id.$format"
         );
     }
     print $marc;
