@@ -3,6 +3,9 @@
 [% USE Desks %]
 [% USE Registers %]
 [% USE Koha %]
+[% IF Koha.Preference( 'CookieConsent' ) %]
+    [% USE JSConsents %]
+[% END %]
 <nav class="navbar">
     <div class="navbar-header">
         <a href="#" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#header" aria-expanded="false" aria-controls="header">
@@ -198,6 +201,11 @@
                         </li>
                         <li class="toplinks-mycheckouts">
                             <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber | html %]">My checkouts</a>
+                        </li>
+                    [% END %]
+                    [% IF Koha.Preference( 'CookieConsent' ) && JSConsents.all('staffConsent').size %]
+                        <li class="toplinks-myconsents">
+                            <a id="viewCookieConsents" href="#" class="toplinks">My consents</a>
                         </li>
                     [% END %]
                     <li>

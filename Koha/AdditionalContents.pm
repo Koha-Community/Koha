@@ -63,6 +63,8 @@ location is one of this:
 - OpacLoginInstructions
 - OpacSuggestionInstructions
 - ArticleRequestsDisclaimerText
+- CookieConsentBar
+- CookieConsentPopup
 
 =cut
 

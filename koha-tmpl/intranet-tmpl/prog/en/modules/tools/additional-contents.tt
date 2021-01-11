@@ -494,7 +494,7 @@
             [% END %]
         [% END %]
     [% ELSE %]
-        [% SET available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'CatalogConcernHelp', 'CatalogConcernTemplate' ] %]
+        [% SET available_options = [ 'OpacNavRight', 'opacheader', 'OpacCustomSearch', 'OpacMainUserBlock', 'opaccredits', 'OpacLoginInstructions', 'OpacNav', 'OpacNavBottom', 'OpacSuggestionInstructions', 'ArticleRequestsDisclaimerText', 'OpacMoreSearches', 'OpacMySummaryNote', 'OpacLibraryInfo', 'CatalogConcernHelp', 'CatalogConcernTemplate', 'CookieConsentBar', 'CookieConsentPopup' ] %]
         [% FOREACH l IN available_options.sort %]
             [% IF l == location %]
                 <option value="[% l | html %]" selected="selected">[% l | html %]</option>

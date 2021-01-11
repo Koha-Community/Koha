@@ -5,11 +5,16 @@
 [% USE AuthClient %]
 [% USE AdditionalContents %]
 [% PROCESS 'html_helpers.inc' %]
+[% IF Koha.Preference( 'CookieConsent' ) %]
+    [% USE JSConsents %]
+[% END %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 [% SET OpacHeader = AdditionalContents.get( location => "opacheader", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacCustomSearch = AdditionalContents.get( location => "OpacCustomSearch", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
 [% SET OpacMoreSearches = AdditionalContents.get( location => "OpacMoreSearches", lang => lang, library => branchcode || default_branch ) %]
+[% SET CookieConsentBar = AdditionalContents.get( location => "CookieConsentBar", lang => lang, library => branchcode || default_branch ) %]
+[% SET CookieConsentPopup = AdditionalContents.get( location => "CookieConsentPopup", lang => lang, library => branchcode || default_branch ) %]
 
 <button id="scrolltocontent">Skip to main content</button>
 <div id="wrapper">
@@ -85,6 +90,15 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" title="Self check out" id="comenulink" role="button" data-toggle="modal" data-target="#checkoutModal">
                             <i id="checkout-icon" class="fa fa-barcode fa-icon-black" aria-hidden="true"></i> <span class="checkout-label">Self checkout</span>
+                        </a>
+                    </li>
+                [% END %]
+                <!-- Cookie consent button for non logged-in users -->
+                [% IF !loggedinusername %]
+                    <li style="display:none" id="cookieConsentDivider" class="divider-vertical" aria-hidden="true"></li>
+                    <li style="display:none" id="cookieConsentLi" class="nav-item" aria-hidden="true">
+                        <a id="cookieConsentButton" href="#" name="Your cookies" class="nav-link" title="View and amend cookies you have consented to" role="button">
+                            <span class="cookieconsentlabel">Your cookies</span>
                         </a>
                     </li>
                 [% END %]
@@ -440,3 +454,59 @@
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->
     </div>  <!-- /#modalAuth  -->
+    [% IF Koha.Preference( 'CookieConsent' ) %]
+            <!-- Cookie consent bar -->
+            <div id="cookieConsentBar" aria-hidden="true">
+                [% IF ( CookieConsentBar ) %]
+                    [% PROCESS koha_news_block news => CookieConsentBar %]
+                [% END %]
+                <div id="consentButtons">
+                    <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
+                    [% IF ( JSConsents.all('opacConsent').size ) %]
+                        <button type="button" class="btn btn-primary consentAcceptEssential">Accept only essential cookies</button>
+                        <button type="button" class="btn btn-info" id="consentMoreInfo" aria-label="Click to view more information about your cookie consents">More information</button>
+                    [% END %]
+                </div>
+            </div> <!-- /#cookieConsentBar -->
+        <!-- Cookie consent modal -->
+        <div id="cookieConsentModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="cookieConsentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="cookieConsentModalLabel">Cookie consent</h2>
+                    </div>
+                    <div class="modal-body">
+                        [% IF ( CookieConsentPopup ) %]
+                            <div id="cookieConsentPopupText">
+                                [% PROCESS koha_news_block news => CookieConsentPopup %]
+                            </div>
+                        [% END %]
+                        <div id="consentCookieList">
+                            [% consents = JSConsents.all('opacConsent') %]
+                            [% FOREACH consent IN consents %]
+                                <div class="consentModalItem">
+                                    <div class="consentItemCheckbox">
+                                        <input class="consentCheckbox" type="checkbox" name="consentCheckbox" value="[% consent.id | html %]" aria-label="Consent to cookie">
+                                    </div>
+                                    <div class="consentItemMeta">
+                                        <div class="consentItemName">[% consent.name | html %]</div>
+                                        <div class="consentItemDescription">[% consent.description | html %]</div>
+                                    </div>
+                                </div>
+                            [% END %]
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="consentButtons">
+                            <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
+                            [% IF ( JSConsents.all('opacConsent').size ) %]
+                                <button type="button" class="btn btn-primary consentAcceptEssential">Accept only essential cookies</button>
+                                <button type="button" class="btn btn-warning" id="consentAcceptSelected">Accept selected non-essential cookies</button>
+                            [% END %]
+                            <a type="button" href="#" class="btn btn-secondary consentCloseModal">Cancel</a>
+                        </div>
+                    </div>
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </div>  <!-- /#cookieConsentModal  -->
+    [% END %]

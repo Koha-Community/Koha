@@ -24,7 +24,7 @@
             [% END %]
                 <a href="/cgi-bin/koha/opac-memberentry.pl">Personal details</a></li>
 
-            [% IF Koha.Preference('PrivacyPolicyConsent') # remove when extending %]
+            [% IF Koha.Preference('PrivacyPolicyConsent') || Koha.Preference('CookieConsent') # remove when extending %]
                 [% IF consentview %]<li class="active">[% ELSE %]<li>[% END %]
                     <a href="/cgi-bin/koha/opac-patron-consent.pl">Consents</a>
                 </li>

@@ -388,6 +388,18 @@ Patrons:
          - days and remove anonymized patron accounts after
          - pref: PatronRemovalDelay
          - "days.<br>IMPORTANT: No action is performed when these delays are empty (no text). But a zero value ('0') is interpreted as no delay (do it now)! The actions are performed by the cleanup database cron job."
+     -
+         - pref: CookieConsent
+           choices:
+               1: Require
+               0: "Don't require"
+         - cookie consent to be displayed in the OPAC and staff interface.
+     -
+         - Run the following JavaScript if cookie consent is provided (e.g. tracking code).
+         - pref: CookieConsentedJS
+           type: modaljs
+           initiator: populateCookieConsentedJS
+           processor: prepareCookieConsentedJS
     Security:
      -
          - Login passwords for staff and patrons must be at least

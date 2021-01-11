@@ -2870,4 +2870,62 @@ $star-selected: #EDB867;
     }
 }
 
+/* Cookie consent bar */
+#cookieConsentBar {
+    display: none;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.7);
+    color: rgba(255,255,255,0.9);
+    z-index: 1;
+    a:link, a:visited {
+        color: #c5ecff;
+    }
+    #consentButtons {
+        margin-top: 10px;
+        text-align: right;
+    }
+    button:not(:last-child) {
+        margin-right: 10px;
+    }
+}
+
+/* Cookie consent modal */
+#cookieConsentModal {
+    .modal-dialog {
+        max-width: 1000px;
+    }
+    .consentModalItem {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+    .consentModalItem:not(:last-child) {
+        margin-bottom: 20px;
+    }
+    .consentItemCheckbox {
+        padding-right: 20px;
+    }
+    .consentItemName {
+        font-weight: bold;
+    }
+    #cookieConsentPopupText {
+        margin: 20px 0;
+    }
+}
+
+#viewCookieConsents {
+    margin-top: 10px;
+}
+
+#patronconsents h2 {
+    margin-top: 30px;
+    font-size: 1.1rem;
+}
+
 @import "responsive";

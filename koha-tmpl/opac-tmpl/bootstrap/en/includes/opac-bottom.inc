@@ -5,6 +5,9 @@
 [% USE Asset %]
 [% SET opaccredits = AdditionalContents.get( location => "opaccredits", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% PROCESS 'html_helpers.inc' %]
+[% IF Koha.Preference( 'CookieConsent' ) %]
+    [% USE JSConsents %]
+[% END %]
 [% UNLESS ( is_popup ) %]
         [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
         [% IF ( opaccredits ) %]
@@ -119,6 +122,14 @@
 
 [% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
     [% INCLUDE 'modals/checkout.inc' %]
+[% END %]
+
+<!-- CookieConsentedJS code that may run -->
+[% IF Koha.Preference( 'CookieConsent' ) && JSConsents.all('opacConsent').size %]
+    [% consents = JSConsents.all('opacConsent') %]
+    [% FOREACH consent IN consents %]
+        <div class="consentCode" style="display:none" aria-hidden="true" data-consent-id="[% consent.id | html %]" data-consent-code="[% consent.code | html %]" data-consent-match-pattern="[% consent.matchPattern | html %]" data-consent-cookie-domain="[% consent.cookieDomain | html  %]" data-consent-cookie-path="[% consent.cookiePath | html %]" data-requires-consent="[% consent.opacConsent ? 'true' : 'false' | html %]"></div>
+    [% END %]
 [% END %]
 
 <!-- JavaScript includes -->
@@ -308,6 +319,9 @@ $(document).ready(function() {
 [% END %]
 [% IF Koha.Preference( 'OpacTrustedCheckout' ) %]
     [% Asset.js("js/modals/checkout.js") | $raw %]
+[% END %]
+[% IF Koha.Preference( 'CookieConsent' ) %]
+    [% Asset.js("js/cookieconsent.js") | $raw %]
 [% END %]
 [% KohaPlugins.get_plugins_opac_js | $raw %]
 </body>
