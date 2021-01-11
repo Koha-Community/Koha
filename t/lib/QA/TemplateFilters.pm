@@ -144,6 +144,7 @@ sub process_tt_block {
         or $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*$}
         or $tt_block =~ m{\s?\|\s?\$Price[^\|]*$}
         or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*$}
+        or $tt_block =~ m{\s?\|\s?\$HtmlId[^\|]*$}
 
         # Already escaped correctly with raw
         or $tt_block =~ m{\|\s?\$raw}
