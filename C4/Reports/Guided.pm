@@ -557,6 +557,18 @@ sub execute_query {
         return (undef, { queryerr => 'Missing SELECT'} );
     }
 
+    foreach my $sql_param ( @$sql_params ){
+        if ( $sql_param =~ m/\n/ ){
+            my @list = split /\n/, $sql_param;
+            my @quoted_list;
+            foreach my $item ( @list ){
+                $item =~ s/\r//;
+              push @quoted_list, C4::Context->dbh->quote($item);
+            }
+            $sql_param = "(".join(",",@quoted_list).")";
+        }
+    }
+
     my ($useroffset, $userlimit);
 
     # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination

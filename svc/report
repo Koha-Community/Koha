@@ -39,6 +39,7 @@ if (!$report_recs || $report_recs->count == 0 ) { die "There is no such report.\
 my $report_rec = $report_recs->next();
 
 my @sql_params  = $query->multi_param('sql_params');
+my @param_names  = $query->multi_param('param_names');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -54,20 +55,18 @@ my $cache_active = $cache->is_cache_active;
 my ($cache_key, $json_text);
 if ($cache_active) {
     $cache_key = "intranet:report:".($report_name ? "report_name:$report_name:" : "id:$report_id:")
-    . join( '-', @sql_params );
+    . join( '-', @sql_params )
+      . join( '_'. @param_names );
     $json_text = $cache->get_from_cache($cache_key);
 }
 
 unless ($json_text) {
     my $offset = 0;
     my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-    my $sql = $report_rec->savedsql;
 
-    # convert SQL parameters to placeholders
-    $sql =~ s/(<<.*?>>)/\?/g;
-    $sql =~ s/\[\[(.*?)\|(.*?)\]\]/$1 AS $2/g;
+    my ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params );
 
-    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, \@sql_params, $report_id );
+    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
     if ($sth) {
         my $lines;
         if ($report_annotation) {
