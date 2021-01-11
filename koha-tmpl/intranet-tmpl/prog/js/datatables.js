@@ -50,6 +50,7 @@ var dataTablesDefaults = {
     }],
     "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
     "iDisplayLength": 20,
+    "fixedHeader": true,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
         // When the DataTables search function is triggered,
