@@ -265,6 +265,11 @@
             Manage background jobs
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_borrowers' -%]
+        <span class="sub_permission delete_borrowers_subpermission">
+            Delete patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_borrowers' -%]
         <span class="sub_permission edit_borrowers_subpermission">
             Add, modify and view patron information

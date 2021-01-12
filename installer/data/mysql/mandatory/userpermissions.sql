@@ -36,6 +36,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_keyboard_shortcuts', 'Manage keyboard shortcuts for the advanced cataloging editor'),
    ( 3, 'manage_smtp_servers', 'Manage SMTP servers configuration'),
    ( 3, 'manage_background_jobs', 'Manage background jobs'),
+   ( 4, 'delete_borrowers', 'Delete patrons'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
