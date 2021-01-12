@@ -1,4 +1,4 @@
-/* global borrowernumber advsearch dateformat __ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky Cookies */
+/* global borrowernumber advsearch dateformat __ CAN_user_borrowers_delete_borrowers CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky Cookies*/
 
 $(document).ready(function(){
 
@@ -26,10 +26,12 @@ $(document).ready(function(){
         searchfield_date_tooltip('_filter');
     });
 
-    if( CAN_user_borrowers_edit_borrowers ){
+    if( CAN_user_borrowers_delete_borrowers ){
         $("#deletepatron").click(function(){
             window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber;
         });
+    }
+    if( CAN_user_borrowers_edit_borrowers ){
         $("#renewpatron").click(function(){
             confirm_reregistration();
             $(".btn-group").removeClass("open");

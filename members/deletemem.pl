@@ -38,13 +38,14 @@ use Koha::Patron::Categories;
 
 my $input = CGI->new;
 
-my ($template, $loggedinuser, $cookie)
-                = get_template_and_user({template_name => "members/deletemem.tt",
-                                        query => $input,
-                                        type => "intranet",
-                                        flagsrequired => {borrowers => 'edit_borrowers'},
-                                        debug => 1,
-                                        });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   template_name => "members/deletemem.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'delete_borrowers' },
+        debug         => 1,
+    }
+);
 
 #print $input->header;
 my $member       = $input->param('member');
@@ -70,7 +71,7 @@ if ($patron->category->category_type eq "S") {
         exit 0; # Exit without error
     }
 } else {
-    unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>'edit_borrowers'})) {
+    unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>'delete_borrowers'})) {
 	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
         exit 0; # Exit without error
     }

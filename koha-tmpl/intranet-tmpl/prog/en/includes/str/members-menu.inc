@@ -7,6 +7,7 @@
     var destination = "[% destination | html %]";
 
     var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers | html %]";
+    var CAN_user_borrowers_delete_borrowers = "[% CAN_user_borrowers_delete_borrowers | html %]";
 
     var dateformat = "[% Koha.Preference('dateformat') | html %]";
 

@@ -64,7 +64,7 @@
                     [% END %]
                 [% END %]
 
-                [% IF CAN_user_borrowers_edit_borrowers %]
+                [% IF CAN_user_borrowers_delete_borrowers %]
                     <li><a id="deletepatron" href="#">Delete</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
