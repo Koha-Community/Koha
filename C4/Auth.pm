@@ -433,6 +433,15 @@ sub get_template_and_user {
         }
     }
 
+    # Sysprefs disabled via URL param
+    # Note that value must be defined in order to override via ENV
+    foreach my $syspref ( qw( OPACUserCSS OPACUserJS IntranetUserCSS IntranetUserJS ) ) {
+        $ENV{"OVERRIDE_SYSPREF_$syspref"} = q{ } if $in->{'query'}->param("DISABLE_SYSPREF_$syspref");
+    }
+    foreach my $syspref ( qw( intranetcolorstylesheet intranetstylesheet ) ) {
+        $ENV{"OVERRIDE_SYSPREF_$syspref"} = 0 if $in->{'query'}->param("DISABLE_SYSPREF_$syspref");
+    }
+
     # Anonymous opac search history
     # If opac search history is enabled and at least one search has already been performed
     if ( C4::Context->preference('EnableOpacSearchHistory') ) {
