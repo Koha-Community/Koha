@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -31,6 +31,32 @@ is( defined $sip_patron, 1, "Patron is valid" );
 $schema->resultset('Borrower')->search({ cardnumber => $card })->delete;
 my $sip_patron2 = C4::SIP::ILS::Patron->new( $card );
 is( $sip_patron2, undef, "Patron is not valid (anymore)" );
+
+subtest "new tests" => sub {
+
+    plan tests => 5;
+
+    my $patron = $builder->build(
+        {
+            source => 'Borrower'
+        }
+    );
+
+    my $cardnumber      = $patron->{cardnumber};
+    my $userid         = $patron->{userid};
+    my $borrowernumber = $patron->{borrowernumber};
+
+    my $ils_patron = C4::SIP::ILS::Patron->new($cardnumber);
+    is( ref($ils_patron), 'C4::SIP::ILS::Patron', 'Found patron via cardnumber scalar' );
+    $ils_patron = C4::SIP::ILS::Patron->new($userid);
+    is( ref($ils_patron), 'C4::SIP::ILS::Patron', 'Found patron via userid scalar' );
+    $ils_patron = C4::SIP::ILS::Patron->new( { borrowernumber => $borrowernumber } );
+    is( ref($ils_patron), 'C4::SIP::ILS::Patron', 'Found patron via borrowernumber hashref' );
+    $ils_patron = C4::SIP::ILS::Patron->new( { cardnumber => $cardnumber } );
+    is( ref($ils_patron), 'C4::SIP::ILS::Patron', 'Found patron via cardnumber hashref' );
+    $ils_patron = C4::SIP::ILS::Patron->new( { userid => $userid } );
+    is( ref($ils_patron), 'C4::SIP::ILS::Patron', 'Found patron via userid hashref' );
+};
 
 subtest "OverduesBlockCirc tests" => sub {
 
