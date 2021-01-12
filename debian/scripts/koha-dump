@@ -79,7 +79,7 @@ dump_instance()
         schemadump="$backupdir/$name-schema-$date.sql"
         [ "$quiet" = "no" ] && echo "* schema to $schemadump"
         mysqldump $dbflag -d --host="$mysqlhost" \
-            --user="$mysqluser" --password="$mysqlpass" "$mysqldb" > "$schemadump"
+            --user="$mysqluser" --password="$mysqlpass" "$mysqldb" | sed --expression='s/ AUTO_INCREMENT=[0-9]\+//' > "$schemadump"
         chown "root:$name-koha" "$schemadump"
         chmod g+r "$schemadump"
     else
