@@ -234,6 +234,7 @@ unless ( $sessions
     || defined $lock_days && $lock_days ne q{}
     || $labels
     || $cards
+    || $return_claims
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
