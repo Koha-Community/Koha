@@ -233,6 +233,7 @@ $( document ).ready( function () {
         $.getJSON( themelang + "/modules/admin/preferences/" + datasource + ".json", function( data ){
             var items = [];
             var checked = "";
+            var style = "";
             $.each( data, function( key, val ){
                 if( prefs.indexOf( val ) >= 0 ){
                     checked = ' checked="checked" ';
@@ -240,12 +241,14 @@ $( document ).ready( function () {
                     checked = "";
                 }
                 if( exclusions.indexOf( val ) >= 0 ){
+                    style = "disabled";
                     disabled = ' disabled="disabled" ';
                     checked  = "";
                 } else {
+                    style = "";
                     disabled = "";
                 }
-                items.push('<label><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + val + '" /> ' + key + '</label>');
+                items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + val + '" /> ' + key + '</label>');
             });
             $("<div/>", {
                 "class": "columns-2",
