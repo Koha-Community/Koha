@@ -564,13 +564,12 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                 };
 
 
-                                function build_query(col){
+                                function build_query(col, value){
                                     var parts = [];
                                     var attributes = col.data.split(':');
                                     for (var i=0;i<attributes.length;i++){
                                         var part = {};
                                         var attr = attributes[i];
-                                        var value = data.columns[col.idx].search.value;
                                         part[!attr.includes('.')?'me.'+attr:attr] = options.criteria === 'exact'
                                             ? value
                                             : {like: (['contains', 'ends_with'].indexOf(options.criteria) !== -1?'%':'') + value + (['contains', 'starts_with'].indexOf(options.criteria) !== -1?'%':'')};
@@ -586,7 +585,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value != ''
                                 })
                                 .map(function(col) {
-                                    return build_query(col)
+                                    var value = data.columns[col.idx].search.value;
+                                    return build_query(col, value)
                                 })
                                 .map(function r(e){
                                     return ($.isArray(e) ? $.map(e, r) : e);
@@ -598,7 +598,8 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                                     return col.bSearchable && typeof col.data == 'string' && data.columns[col.idx].search.value == '' && filter != ''
                                 })
                                 .map(function(col) {
-                                    return build_query(col)
+                                    var value = filter;
+                                    return build_query(col, value)
                                 })
                                 .map(function r(e){
                                     return ($.isArray(e) ? $.map(e, r) : e);
