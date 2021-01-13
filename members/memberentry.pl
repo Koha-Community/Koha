@@ -940,7 +940,7 @@ sub patron_attributes_form {
                 $i++;
                 undef $newentry->{value} if ($attr_type->unique_id() && $op eq 'duplicate');
                 $newentry->{form_id} = "patron_attr_$i";
-                push @{$items_by_class{$attr_type->{class}}}, $newentry;
+                push @{$items_by_class{$attr_type->class()}}, $newentry;
             }
         } else {
             $i++;
