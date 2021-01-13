@@ -121,14 +121,15 @@ sub list {
             $filtered_params //={};
             my @query_params_array;
             my $query_params;
-            if ( exists $reserved_params->{query} and defined $reserved_params->{query} ) {
-                push @query_params_array, fix_query({ query => $reserved_params->{query} });
-            }
-            if ( exists $reserved_params->{q} and defined $reserved_params->{q}) {
-                push @query_params_array, fix_query({ query => decode_json($reserved_params->{q}) });
-            }
-            if ( exists $reserved_params->{'x-koha-query'} and defined $reserved_params->{'x-koha-query'} ) {
-                push @query_params_array, fix_query({ query => decode_json($reserved_params->{'x-koha-query'}) });;
+
+            # FIXME The following lines are an ugly fix to deal with isbn and ean searches
+            # This must NOT be reused or extended
+            # Instead we need a better and global solution in a Koha::*Biblio method
+            for my $q ( qw( q query x-koha-query ) ) {
+                next unless $reserved_params->{$q};
+                $reserved_params->{$q} =~ s|"biblio.isbn":|"biblio.biblioitem.isbn":|g;
+                $reserved_params->{$q} =~ s|"biblio.ean":|"biblio.biblioitem.ean":|g;
+                push @query_params_array, $reserved_params->{$q};
             }
 
             if(scalar(@query_params_array) > 1) {
@@ -290,80 +291,6 @@ sub delete {
     catch {
         $c->unhandled_exception($_);
     };
-}
-
-=head2 Internal methods
-
-=head3 fix_query
-
-    my $query = fix_query($query);
-
-This method takes care of recursively fixing queries that should be done
-against biblioitems (instead if biblio as exposed on the API)
-
-=cut
-
-sub fix_query {
-    my ($args) = @_;
-
-    my $query = $args->{query};
-    my $biblioitem_fields = {
-        'biblio.age_restriction'     => 'biblio.biblioitem.age_restriction',
-        'biblio.cn_class'            => 'biblio.biblioitem.cn_class',
-        'biblio.cn_item'             => 'biblio.biblioitem.cn_item',
-        'biblio.cn_sort'             => 'biblio.biblioitem.cn_sort',
-        'biblio.cn_source'           => 'biblio.biblioitem.cn_source',
-        'biblio.cn_suffix'           => 'biblio.biblioitem.cn_suffix',
-        'biblio.collection_issn'     => 'biblio.biblioitem.collection_issn',
-        'biblio.collection_title'    => 'biblio.biblioitem.collection_title',
-        'biblio.collection_volume'   => 'biblio.biblioitem.collection_volume',
-        'biblio.ean'                 => 'biblio.biblioitem.ean',
-        'biblio.edition_statement'   => 'biblio.biblioitem.edition_statement',
-        'biblio.illustrations'       => 'biblio.biblioitem.illustrations',
-        'biblio.isbn'                => 'biblio.biblioitem.isbn',
-        'biblio.issn'                => 'biblio.biblioitem.issn',
-        'biblio.item_type'           => 'biblio.biblioitem.item_type',
-        'biblio.lc_control_number'   => 'biblio.biblioitem.lc_control_number',
-        'biblio.material_size'       => 'biblio.biblioitem.material_size',
-        'biblio.notes'               => 'biblio.biblioitem.notes',
-        'biblio.number'              => 'biblio.biblioitem.number',
-        'biblio.pages'               => 'biblio.biblioitem.pages',
-        'biblio.publication_place'   => 'biblio.biblioitem.publication_place',
-        'biblio.publication_year'    => 'biblio.biblioitem.publication_year',
-        'biblio.publisher'           => 'biblio.biblioitem.publisher',
-        'biblio.serial_total_issues' => 'biblio.biblioitem.serial_total_issues',
-        'biblio.url'                 => 'biblio.biblioitem.url',
-        'biblio.volume'              => 'biblio.biblioitem.volume',
-        'biblio.volume_date'         => 'biblio.biblioitem.volume_date',
-        'biblio.volume_description'  => 'biblio.biblioitem.volume_description',
-    };
-
-    if ( ref($query) eq 'HASH' ) {
-        foreach my $key (keys %{$query}) {
-            if ( exists $biblioitem_fields->{$key}) {
-                my $subq = delete $query->{$key};
-                $query->{$biblioitem_fields->{$key}} = (ref($subq) eq 'HASH')
-                        ? fix_query({ query => $subq })
-                        : $subq;
-            }
-            else {
-                $query->{$key} = fix_query({ query => $query->{$key} });
-            }
-        }
-    }
-    elsif ( ref($query) eq 'ARRAY' ) {
-        my @accum;
-        foreach my $item (@{$query}) {
-            push @accum, fix_query({ query => $item });
-        }
-        $query = \@accum;
-    }
-    else { # scalar
-        $query = $biblioitem_fields->{$query}
-            if exists $biblioitem_fields->{$query};
-    }
-
-    return $query;
 }
 
 1;
