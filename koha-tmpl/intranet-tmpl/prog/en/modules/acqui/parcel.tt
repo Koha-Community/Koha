@@ -430,7 +430,7 @@
                         }
                     },
                     {
-                        "data": "biblio.author:biblio.title:biblio.isbn",
+                        "data": [% IF Koha.Preference('marcflavour')=='UNIMARC' %]"biblio.author:biblio.title:biblio.isbn:biblio.ean"[% ELSE %]"biblio.author:biblio.title:biblio.isbn"[% END %],
                         "render": function(data, type, row, meta) {
                             var result = '';
                             if ( row && row.biblio_id != null ) {
@@ -439,6 +439,10 @@
                                     result += _(" by ") + row.biblio.author.escapeHtml();
                                 if ( row.biblio.isbn != null )
                                     result += " &ndash; " + row.biblio.isbn.escapeHtml();
+                                [% IF Koha.Preference('marcflavour')=='UNIMARC' %]
+                                    if ( row.biblio.ean != null )
+                                        result += " &ndash; EAN:" + row.biblio.ean.escapeHtml();
+                                [% END %]
                                 if ( row.biblio.publisher != null ) {
                                     result += "<br/>" + _("Publisher: ") + row.biblio.publisher.escapeHtml();
                                     if ( row.biblio.publication_year != null ) {
