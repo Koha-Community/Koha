@@ -122,7 +122,7 @@
                             [% ELSE %]
                                 <input type="checkbox" id="[% category.categorycode | html %]" name="selected_categorycode_[% category.categorycode | html %]" />
                             [% END %]
-                            <span class="hint">[% category.codedescription | html %]</span>
+                            <div class="hint">[% category.codedescription | html %]</div>
                         </li>
                     [% END %]
                 </ol>
@@ -141,10 +141,40 @@
                 <li><label for="branchfax">Fax: </label><input type="text" name="branchfax" id="branchfax" size="60" value="[% library.branchfax | html %]" /></li>
                 <li><label for="branchemail">Email: </label><input type="text" name="branchemail" id="branchemail" class="email"  size="80" value="[% library.branchemail | html %]" /></li>
                 [% IF (Koha.Preference('ILLModule')) %]
-                <li><label for="branchillemail">ILL staff email: </label><input type="text" name="branchillemail" id="branchillemail" class="email"  size="80" value="[% library.branchillemail | html %]" /><br /><span class="hint">Default: ILLDefaultStaffEmail system preference</span></li>
+                <li>
+                    <label for="branchillemail">ILL staff email: </label>
+                    <input type="text" name="branchillemail" id="branchillemail" class="email"  size="80" value="[% library.branchillemail | html %]" />
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ILLDefaultStaffEmail">ILLDefaultStaffEmail</a> system preference
+                        [% ELSE %]
+                            Default: ILLDefaultStaffEmail system preference
+                        [% END %]
+                    </div>
+                </li>
                 [% END %]
-                <li><label for="branchreplyto">Reply-To: </label> <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto | html %]" /><br /><span class="hint">Default: ReplyToDefault system preference</span></li>
-                <li><label for="branchreturnpath">Return-Path: </label> <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath | html %]" /><br /><span class="hint">Default: ReturnpathDefault system preference</span></li>
+                <li>
+                    <label for="branchreplyto">Reply-To: </label>
+                    <input type="text" name="branchreplyto" id="branchreplyto" class="email"  size="80" value="[% library.branchreplyto | html %]" />
+                    <div class="hint">
+                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ReplyToDefault">ReplyToDefault</a> system preference
+                        [% ELSE %]
+                            Default: ReplyToDefault system preference
+                        [% END %]
+                    </div>
+                </li>
+                <li>
+                    <label for="branchreturnpath">Return-Path: </label>
+                    <input type="text" name="branchreturnpath" id="branchreturnpath" class="email"  size="80" value="[% library.branchreturnpath | html %]" />
+                    <div class="hint">
+                         [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            Default: <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ReturnpathDefault">ReturnpathDefault</a> system preference
+                        [% ELSE %]
+                            Default: ReturnpathDefault system preference
+                        [% END %]
+                    </div>
+                </li>
                 <li><label for="smtp_server">SMTP server: </label>
                     <select name="smtp_server" id="smtp_server">
                     [% IF selected_smtp_server.is_system_default %]
@@ -163,8 +193,23 @@
                 </li>
                 <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl | html %]" class="url" /></li>
                 <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info | $raw %]</textarea></li>
-                <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
-                <li><label for="marcorgccode">MARC organization code</label> <input type="text" name="marcorgcode" id="marcorgcode" size="16" value="[% library.marcorgcode | html %]" /> <span class="hint">If not filled in defaults to system preference MARCOrgCode. You can obtain your code from <a href="http://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.</span>
+                <li>
+                    <label for="branchip">IP: </label>
+                    <input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" />
+                    <div class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</div>
+                </li>
+                <li>
+                    <label for="marcorgcode">MARC organization code</label>
+                    <input type="text" name="marcorgcode" id="marcorgcode" size="16" value="[% library.marcorgcode | html %]" />
+                    <div class="hint">
+                        [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                            If not filled in defaults to system preference <a target="_blank" href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=MARCOrgCode">MARCOrgCode</a>.
+                        [% ELSE %]
+                            If not filled in defaults to system preference MARCOrgCode.
+                        [% END %]
+                        You can obtain your code from <a href="http://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.
+                    </div>
+                </li>
                 <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" /></li>
                 <li><label for="pickup_location">Pickup location: </label>
                     <select name="pickup_location" id="pickup_location">
