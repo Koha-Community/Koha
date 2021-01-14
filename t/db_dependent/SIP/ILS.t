@@ -20,14 +20,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Reserves;
+use C4::Circulation;
 use Koha::CirculationRules;
 use Koha::Database;
+use Koha::DateUtils;
 
 BEGIN {
     use_ok('C4::SIP::ILS');
@@ -122,4 +124,53 @@ subtest cancel_hold => sub {
     is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
     is( $item->holds->count(), 0,  "Item has 0 holds remaining");
 };
+
+subtest checkout => sub {
+    plan tests => 1;
+
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+
+    my $item = $builder->build_sample_item({
+        library       => $library->branchcode,
+    });
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron->categorycode,
+            branchcode   => $library->branchcode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+                renewalsallowed  => 6,
+            }
+        }
+    );
+
+    AddIssue( $patron->unblessed, $item->barcode, undef, 0 );
+    my $checkout = $item->checkout;
+    ok( defined($checkout), "Checkout added");
+    is( $checkout->renewals, 0, "Correct renewals");
+
+    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $transaction = $ils->checkout($patron->cardnumber,$item->barcode,undef,undef);
+
+    is( $transaction->{screen_msg},"Item already checked out to you: renewing item.","We get a success message when issue is renewed");
+
+    is( $checkout->renewals, 1, "Renewals has been reduced");
+};
+
 $schema->storage->txn_rollback;
