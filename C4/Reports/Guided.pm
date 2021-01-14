@@ -656,7 +656,7 @@ sub update_sql {
     my $cache_expiry = $fields->{cache_expiry};
     my $public = $fields->{public};
 
-    $sql =~ s/(\s*\;\s*)$//;    # removes trailing whitespace and /;/
+    $sql =~ s/(\s*\;\s*)$// if defined $sql;    # removes trailing whitespace and /;/
     my $report = Koha::Reports->find($id);
     $report->last_modified(dt_from_string);
     $report->savedsql($sql);
