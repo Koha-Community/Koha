@@ -48,7 +48,8 @@ Koha::Items - Koha Item object set class
 Returns a new resultset, containing those items that are not expected to be hidden in OPAC
 for the passed I<Koha::Patron> object that is passed.
 
-The I<OpacHiddenItems> and I<hidelostitems> system preferences are honoured.
+The I<OpacHiddenItems>, I<hidelostitems> and I<OpacHiddenItemsExceptions> system preferences
+are honoured.
 
 =cut
 
@@ -59,8 +60,16 @@ sub filter_by_visible_in_opac {
 
     my $result = $self;
 
+    # Filter out OpacHiddenItems unless disabled by OpacHiddenItemsExceptions
     unless ( $patron and $patron->category->override_hidden_items ) {
-        $result = $result->filter_out_opachiddenitems;
+        my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
+
+        my $rules_params;
+        foreach my $field (keys %$rules){
+            $rules_params->{$field}->{'-not_in'} = $rules->{$field};
+        }
+
+        $result = $result->search( $rules_params );
     }
 
     if (C4::Context->preference('hidelostitems')) {
@@ -68,28 +77,6 @@ sub filter_by_visible_in_opac {
     }
 
     return $result;
-}
-
-=head3 filter_out_opachiddenitems
-
-    my $filered_items = $items->filter_out_opachiddenitems;
-
-Returns a new resultset, containing those items that are not expected to be hidden in OPAC.
-The I<OpacHiddenItems> system preference is honoured.
-
-=cut
-
-sub filter_out_opachiddenitems {
-    my ($self) = @_;
-
-    my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
-
-    my $rules_params;
-    foreach my $field (keys %$rules){
-        $rules_params->{$field}->{'-not_in'} = $rules->{$field};
-    }
-
-    return $self->search( $rules_params );
 }
 
 =head3 filter_out_lost
@@ -129,6 +116,8 @@ sub object_class {
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
+Tomas Cohen Arazi <tomascohen@theke.io>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
 
 =cut
 
