@@ -161,17 +161,15 @@
                 <option value=""></option>
                 [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => attribute_type.authorised_value_category ) %]
             </select>
-            <span>Authorized value category; if one is selected, the patron record input page will only allow values 
-                  to be chosen from the authorized value list.  However, an authorized value list is not 
-                  enforced during batch patron import.</span>
+            <div class="hint">Authorized value category; if one is selected, the patron record input page will only allow values to be chosen from the authorized value list.  However, an authorized value list is not enforced during batch patron import.</div>
         </li>
-        <li><label for="branches">Branches limitation: </label>
+        <li><label for="branches">Library limitation: </label>
             <select id="branches" name="branches" multiple size="10">
-                <option value="">All branches</option>
+                <option value="">All libraries</option>
                 [% PROCESS options_for_libraries libraries => Branches.all( selecteds => attribute_type.library_limits ) %]
             </select>
-            <span>Select All if this attribute type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
-            </span>
+            <div class="hint">Select "All libraries" if this attribute type should always be displayed. Otherwise select libraries you want to associate with this value.
+            </div>
         </li>
         <li>
             <label for="category">Category: </label>
@@ -181,12 +179,18 @@
                     [% IF ( cat.categorycode == attribute_type.category_code ) %]<option value="[% cat.categorycode | html %]" selected="selected">[% cat.description |html %]</option>[% ELSE %]<option value="[% cat.categorycode | html %]">[% cat.description |html %]</option>[% END %]
                 [% END %]
             </select>
-            <span>Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</span>
+            <div class="hint">Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</div>
         </li>
         <li>
             <label for="class">Class: </label>
             [% PROCESS 'av-build-dropbox.inc' name="class", category="PA_CLASS" default=attribute_type.class %]
-            <span>Group attributes types with a block title (based on authorized values category 'PA_CLASS')</span>
+            <div class="hint">
+                [% IF ( CAN_user_parameters_manage_auth_values ) %]
+                    Group attributes types with a block title (based on <a target="_blank" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=PA_CLASS">authorized values category 'PA_CLASS'</a>)
+                [% ELSE %]
+                    Group attributes types with a block title (based on authorized values category 'PA_CLASS')
+                [% END %]
+            </div>
         </li>
     </ol>
   </fieldset>
