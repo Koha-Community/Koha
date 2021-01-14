@@ -821,7 +821,14 @@ elsif ($phase eq 'Run this report'){
         } else {
             my ($sql,$header_types) = $report->prep_report( \@param_names, \@sql_params );
             $template->param(header_types => $header_types);
-            my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
+            my ( $sth, $errors ) = execute_query(
+                {
+                    sql        => $sql,
+                    offset     => $offset,
+                    limit      => $limit,
+                    report_id  => $report_id,
+                }
+            );
             my $total;
             if (!$sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
@@ -834,7 +841,7 @@ elsif ($phase eq 'Run this report'){
                     push @rows, { cells => \@cells };
                 }
                 if( $want_full_chart ){
-                    my ($sth2, $errors2) = execute_query($sql);
+                    my ( $sth2, $errors2 ) = execute_query( { sql => $sql, report_id => $report_id } );
                     while (my $row = $sth2->fetchrow_arrayref()) {
                         my @cells = map { +{ cell => $_ } } @$row;
                         push @allrows, { cells => \@cells };
@@ -888,7 +895,7 @@ elsif ($phase eq 'Export'){
     my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
 
     ($sql, undef) = $report->prep_report( \@param_names, \@sql_params );
-	my ($sth, $q_errors) = execute_query($sql);
+    my ( $sth, $q_errors ) = execute_query( { sql => $sql, report_id => $report_id } );
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
         if ($format eq 'tab') {

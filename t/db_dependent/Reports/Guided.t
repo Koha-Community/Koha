@@ -238,16 +238,24 @@ subtest 'get_saved_reports' => sub {
     is( scalar @{ get_saved_reports() },
         $count, "Report2 and report3 have been deleted" );
 
-    my $sth = execute_query('SELECT COUNT(*) FROM systempreferences', 0, 10);
+    my $sth = execute_query(
+        {
+            sql    => 'SELECT COUNT(*) FROM systempreferences',
+            offset => 0,
+            limit  => 10,
+        }
+    );
     my $results = $sth->fetchall_arrayref;
     is(scalar @$results, 1, 'running a query returned a result');
 
     my $version = C4::Context->preference('Version');
     $sth = execute_query(
-        'SELECT value FROM systempreferences WHERE variable = ?',
-        0,
-        10,
-        [ 'Version' ],
+        {
+            sql        => 'SELECT value FROM systempreferences WHERE variable = ?',
+            offset     => 0,
+            limit      => 10,
+            sql_params => ['Version'],
+        }
     );
     $results = $sth->fetchall_arrayref;
     is_deeply(
@@ -258,11 +266,18 @@ subtest 'get_saved_reports' => sub {
 
     # for next test, we want to let execute_query capture any SQL errors
     my $errors;
-    warning_like {local $dbh->{RaiseError} = 0; ($sth, $errors) = execute_query(
-            'SELECT surname FRM borrowers',  # error in the query is intentional
-            0, 10 ) }
-            qr/DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
-            "Wrong SQL syntax raises warning";
+    warning_like {
+        local $dbh->{RaiseError} = 0;
+        ( $sth, $errors ) = execute_query(
+            {
+                sql    => 'SELECT surname FRM borrowers',    # error in the query is intentional
+                offset => 0,
+                limit  => 10,
+            }
+        )
+    }
+    qr/DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
+      "Wrong SQL syntax raises warning";
     ok(
         defined($errors) && exists($errors->{queryerr}),
         'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
@@ -287,14 +302,14 @@ subtest 'Ensure last_run is populated' => sub {
 
     is( $report->last_run, undef, 'Newly created report has null last_run ' );
 
-    execute_query( $report->savedsql, undef, undef, undef, $report->id );
+    execute_query( { sql => $report->savedsql, report_id => $report->id } );
     $report->discard_changes();
 
     isnt( $report->last_run, undef, 'First run of report populates last_run' );
 
     my $previous_last_run = $report->last_run;
     sleep(1); # last_run is stored to the second, so we need to ensure at least one second has passed between runs
-    execute_query( $report->savedsql, undef, undef, undef, $report->id );
+    execute_query( { sql => $report->savedsql, report_id => $report->id } );
     $report->discard_changes();
 
     isnt( $report->last_run, $previous_last_run, 'Second run of report updates last_run' );

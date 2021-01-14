@@ -541,17 +541,18 @@ sub strip_limit {
 
 sub execute_query {
 
-    my ( $sql, $offset, $limit, $sql_params, $report_id ) = @_;
-
-    $sql_params = [] unless defined $sql_params;
+    my $params     = shift;
+    my $sql        = $params->{sql};
+    my $offset     = $params->{offset} || 0;
+    my $limit      = $params->{limit}  || 999999;
+    my $sql_params = defined $params->{sql_params} ? $params->{sql_params} : [];
+    my $report_id  = $params->{report_id};
 
     # check parameters
     unless ($sql) {
         carp "execute_query() called without SQL argument";
         return;
     }
-    $offset = 0    unless $offset;
-    $limit  = 999999 unless $limit;
 
     Koha::Logger->get->debug("Report - execute_query($sql, $offset, $limit)");
 
@@ -1050,7 +1051,8 @@ sub EmailReport {
     my $sql = $report->savedsql;
     return ( { FATAL => "NO_REPORT" } ) unless $sql;
 
-    my ( $sth, $errors ) = execute_query( $sql ); #don't pass offset or limit, hardcoded limit of 999,999 will be used
+    #don't pass offset or limit, hardcoded limit of 999,999 will be used
+    my ( $sth, $errors ) = execute_query( { sql => $sql, report_id => $report_id } );
     return ( undef, [{ FATAL => "REPORT_FAIL" }] ) if $errors;
 
     my $counter = 1;
