@@ -262,7 +262,13 @@ foreach my $report_id (@ARGV) {
     my $params_needed = ( $sql =~ s/(<<[^>]+>>)/\?/g );
     die("You supplied ". scalar @params . " parameter(s) and $params_needed are required by the report") if scalar @params != $params_needed;
 
-    my ($sth) = execute_query( $sql, undef, undef, \@params, $report_id );
+    my ($sth) = execute_query(
+        {
+            sql        => $sql,
+            sql_params => \@params,
+            report_id  => $report_id,
+        }
+    );
     my $count = scalar($sth->rows);
     unless ($count) {
         print "NO OUTPUT: 0 results from execute_query\n";

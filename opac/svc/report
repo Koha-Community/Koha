@@ -58,13 +58,18 @@ if ($cache_active) {
 }
 
 unless ($json_text) {
-    my $offset = 0;
     my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
 
     my ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params );
 
-    my ( $sth, $errors ) =
-      execute_query( $sql, $offset, $limit, undef, $report_id );
+    my ( $sth, $errors ) = execute_query(
+        {
+            sql        => $sql,
+            offset     => 0,
+            limit      => $limit,
+            report_id  => $report_id,
+        }
+    );
     if ($sth) {
         my $lines;
         if ($report_annotation) {
