@@ -325,7 +325,7 @@ if ($op eq 'save' || $op eq 'insert'){
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
 
-    my ( $new_barcode ) = Koha::Plugins->call( 'patron_barcode_transform', $newdata{'cardnumber'} ) || $newdata{'cardnumber'};
+    my ( $new_barcode ) = Koha::Plugins->call_recursive( 'patron_barcode_transform', $newdata{'cardnumber'} );
     $newdata{'cardnumber'} = $new_barcode;
 
     if (my $error_code = checkcardnumber( $newdata{cardnumber}, $borrowernumber )){

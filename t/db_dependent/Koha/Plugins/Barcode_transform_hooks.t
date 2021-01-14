@@ -48,6 +48,7 @@ subtest '() hook tests' => sub {
 
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
+    C4::Context->dbh->do("DELETE FROM plugin_methods WHERE plugin_class LIKE '%TestBarcodes%'");
 
     my $plugin = Koha::Plugin::Test->new->enable;
 
