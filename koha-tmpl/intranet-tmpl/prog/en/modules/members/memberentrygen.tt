@@ -1137,7 +1137,7 @@ legend:hover {
                                                     [% IF ( ERROR_password_has_whitespaces ) %]
                                                         <span class="required">Password has leading or trailing whitespaces</span>
                                                     [% END %]
-                                                    <div class="hint">Minimum password length: [% minPasswordLength | html %]</div>
+                                                    <div class="hint">Minimum password length: [% patron.category.effective_min_password_length | html %]</div>
                                                 </li>
 
                                                 <li>
