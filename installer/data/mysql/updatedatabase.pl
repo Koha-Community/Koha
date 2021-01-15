@@ -22529,6 +22529,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '20.05.07.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{UPDATE systempreferences SET `type` = 'Choice' WHERE `variable` = 'UsageStatsCountry'});
+    NewVersion( $DBversion, 27351, "Set type for UsageStatsCountry to Choice");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
