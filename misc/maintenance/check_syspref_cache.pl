@@ -43,6 +43,6 @@ my $prefs = Koha::Config::SysPrefs->search();
 while  (my $pref = $prefs->next) {
     my $var = lc $pref->variable;
     my $cached_var = $syspref_cache->get_from_cache("syspref_$var");
-    next unless $cached_var;
+    next unless defined $cached_var; #If not defined in cache we will fetch from DB so this case is OK
     print "$var: value in cache is $cached_var and value in db is ".$pref->value,"\n" unless $cached_var eq $pref->value;
 }
