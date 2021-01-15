@@ -329,12 +329,16 @@
                                     [% END %]
 
                                     [% IF ( loggedinusername ) %]
-                                        <div id="selections-toolbar" class="toolbar">
-                                            <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
-                                            <span class="links">
-                                                <span id="selections">Select suggestions to: </span>
-                                                <span id="removeitems"></span>
-                                            </span>
+                                        <div class="selections-toolbar toolbar">
+                                            <div class="check_control">
+                                                <span class="checkall"></span> <span class="clearall"></span>
+                                            </div>
+                                            <div class="links">
+                                                <span class="selections">Select suggestions to: </span>
+                                                <span id="removeitems">
+                                                    <a href="#" class="btn btn-link removeitems tag_hides disabled"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                                                </span>
+                                            </div>
                                         </div>
                                     [% END %]
 
@@ -473,11 +477,11 @@
             // Enable/disable controls if checkboxes are checked
             var checkedBoxes = $(".cb:checked");
             if ($(checkedBoxes).size()) {
-              $("#selections").html(_("With selected suggestions: "));
-              $("#selections-toolbar .links a").removeClass("disabled");
+              $(".selections").html(_("With selected suggestions: "));
+              $(".selections-toolbar .links a").removeClass("disabled");
             } else {
-              $("#selections").html(_("Select suggestions to: "));
-              $("#selections-toolbar .links a").addClass("disabled");
+              $(".selections").html(_("Select suggestions to: "));
+              $(".selections-toolbar .links a").addClass("disabled");
             }
         }
     [% END %]
@@ -515,7 +519,6 @@
         $(".cb").click(function(){
           enableCheckboxActions();
         });
-        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link removeitems tag_hides btn-disabled\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i> "+_("Delete")+"</a>");
 
         enableCheckboxActions();
 

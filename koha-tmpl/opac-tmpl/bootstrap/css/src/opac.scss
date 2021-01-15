@@ -439,25 +439,6 @@ th {
     color: #727272;
 }
 
-#selections {
-    color: #727272;
-    font-weight: bold;
-}
-
-#selections-toolbar {
-    background: #e2e8e8 none;
-    border-bottom: none;
-    margin-top: 3px;
-}
-
-.selections {
-    font-weight: bold;
-}
-
-.selections-toolbar.toolbar {
-    background: #e2e8e8 none;
-}
-
 .actions-menu {
     padding-top: 5px;
 }
@@ -498,6 +479,8 @@ th {
         &.disabled,
         &[disabled] {
             color: #333;
+            filter: alpha(opacity=65);
+            opacity: 0.65;
 
             &:hover {
                 i {
@@ -901,7 +884,6 @@ div {
         display: inline;
         font-size: 100%;
         font-weight: bold;
-        margin-left: .5em;
     }
 
     select {
@@ -913,19 +895,6 @@ div {
     }
 
     li {
-        // display: inline;
-        // list-style: none;
-
-        // a {
-        //     border-left: 1px solid #E8E8E8;
-        // }
-
-        // &:first-child {
-        //     a {
-        //         border-left: 0;
-        //     }
-        // }
-
         &.dropdown-header {
             display: block;
         }
@@ -942,21 +911,49 @@ div {
     }
 }
 
-#selections-toolbar,
+.selections {
+    color: #727272;
+    font-weight: bold;
+
+    &::before {
+        color: #6c757d;
+        content: "|";
+        display: inline-block;
+        font-weight: normal;
+        padding: 0 .5rem;
+        text-shadow: 1px 1px 0 #fff;
+    }
+}
+
+.check_control {
+    &::before {
+        color: #6c757d;
+        content: "|";
+        display: inline-block;
+        font-weight: normal;
+        padding: 0 .5rem;
+        text-shadow: 1px 1px 0 #fff;
+    }
+}
+
 .selections-toolbar {
-    background: linear-gradient( #B2B2B2 0%, #E0E0E0 14%, #E8E8E8 100% );
+    background: linear-gradient(#B2B2B2 0%, #E0E0E0 14%, #E8E8E8 100%);
+    border-bottom: none;
+    margin-top: 3px;
+    display: flex;
     margin: 0;
     padding-left: 10px;
     padding-top: .5em;
+
+    > div:first-child::before {
+        content: "";
+        padding: 0;
+    }
 
     a,
     button,
     input {
         font-size: .9rem;
-    }
-
-    .btn-sm {
-        padding: 0.1rem 0.5rem;
     }
 }
 
@@ -1291,13 +1288,12 @@ nav {
     font-size: 90%;
 }
 
-.highlight_controls {
-    float: left;
-    margin-top: 3px;
-}
+.links {
+    flex-grow: 1;
 
-.links a {
-    font-weight: bold;
+    a {
+        font-weight: bold;
+    }
 }
 
 #tagslist {
@@ -1671,6 +1667,7 @@ nav {
 }
 
 #addto {
+    display: inline-block;
     max-width: 10em;
 }
 

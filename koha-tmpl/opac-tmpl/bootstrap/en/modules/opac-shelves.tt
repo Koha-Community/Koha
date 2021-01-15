@@ -329,16 +329,26 @@
 
                                 </div> <!-- / #toolbar -->
 
-                                <div id="selections-toolbar" class="toolbar noprint">
-                                    <span class="checkall"></span> <span class="clearall"></span> <span class="sep">|</span>
-                                    <span class="links">
-                                        <span id="selections">Select titles to: </span>
-                                        [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
-                                            <span id="placehold"></span>
+                                <div class="selections-toolbar toolbar noprint">
+                                    <div class="check_control">
+                                        <span class="checkall">
+                                            <a id="CheckAll" class="btn btn-link btn-sm" href="#">Select all</a>
+                                        </span>
+                                        <span class="clearall">
+                                            <a id="CheckNone" class="btn btn-link btn-sm" href="#">Clear all</a>
+                                        </span>
+                                    </div>
+                                    <div class="links">
+                                        <span class="selections">Select titles to: </span>
+                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
+                                            <span id="placehold">
+                                                <a href="#" class="btn btn-link hold tag_hides disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
+                                            </span>
                                         [% END %]
+
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
                                             <span id="addtags">
-                                                <a id="tagsel_tag" href="#" class="btn btn-link btn-disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
+                                                <a id="tagsel_tag" href="#" class="btn btn-link disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
                                             </span>
                                             <span id="tagsel_form" class="form-inline" style="display:none">
                                                 <label for="tagsel_new">New tag(s), separated by a comma:</label>
@@ -350,8 +360,8 @@
                                         [% IF loggedinusername && can_remove_biblios %]
                                             <span id="removeitems"></span>
                                         [% END %]
-                                    </span> <!-- / .links -->
-                                </div> <!-- / #selections-toolbar -->
+                                    </div> <!-- / .links -->
+                                </div> <!-- / .selections-toolbar -->
                             </div> <!-- /#floating -->
 
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform">
@@ -879,27 +889,25 @@ function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
     var checkedBoxes = $(".cb:checked");
     if ($(checkedBoxes).size()) {
-      $("#selections").html(_("With selected titles: "));
-      $("#selections-toolbar .links a").removeClass("disabled");
+      $(".selections").html(_("With selected titles: "));
+      $(".selections-toolbar .links a").removeClass("disabled");
     } else {
-      $("#selections").html(_("Select titles to: "));
-      $("#selections-toolbar .links a").addClass("disabled");
+      $(".selections").html(_("Select titles to: "));
+      $(".selections-toolbar .links a").addClass("disabled");
     }
 }
 
 $(function() {
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]$(".addtocart,.cartRemove").removeClass("hidden");[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
-    $("a.print").show();
 
     [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
-        $("#placehold").html("<a href=\"#\" class=\"btn btn-link hold tag_hides btn-disabled\"><i class=\"fa fa-fw fa-bookmark\" aria-hidden=\"true\"></i> "+_("Place hold")+"<\/a>");
-        $("#selections-toolbar a.hold").click(function(){
+        $(".selections-toolbar a.hold").click(function(e){
+            e.preventDefault();
             holdSelections();
-            return false;
         });
     [% END %]
+
+    $("a.print").show();
 
     $("#CheckAll").on("click",function(e){
         e.preventDefault();

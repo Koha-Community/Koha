@@ -205,40 +205,94 @@
                                         [% END # /UNLESS tag %]
                                     </div> <!-- / #toolbar -->
 
-                                    <div id="selections-toolbar" class="toolbar noprint">
+                                    <div class="selections-toolbar toolbar noprint">
                                         [% IF ( OpacHighlightedWords ) %]
                                             <div class="highlight_controls noprint">
                                                 <a href="#" class="btn btn-link btn-sm highlight_toggle" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Unhighlight</a>
                                                 <a href="#" class="btn btn-link btn-sm highlight_toggle" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Highlight</a>
                                             </div>
-                                            <span class="sep">|</span>
                                         [% END %]
-                                        <!-- checkall, clearall are now needed for placehold -->
-                                        <span class="checkall"></span>
-                                        <span class="clearall"></span> <span class="sep">|</span>
 
-                                            <span class="links">
-                                                [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                    <span class="addto"></span>
-                                                [% END %]
-                                                <span id="placehold"></span>
+                                        <div class="check_control">
+                                            <!-- checkall, clearall are now needed for placehold -->
+                                            <span class="clearall">
+                                                <a id="CheckAll" class="btn btn-link btn-sm" href="#">Select all</a>
+                                            </span>
+                                            <span class="checkall">
+                                                <a id="CheckNone" class="btn btn-link btn-sm" href="#">Clear all</a>
+                                            </span>
+                                        </div>
 
-                                                [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                                    <span id="tagsel_span">
-                                                        <button id="tagsel_tag" class="btn btn-link btn-sm disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</button>
-                                                    </span>
-                                                    <div id="tagsel_form" style="display:none">
-                                                        <label for="tagsel_new">New tag:</label>
-                                                        <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                                        <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-sm btn-primary" title="Add" type="submit" value="Add" />
-                                                        <a href="#" id="tagsel_cancel">(done)</a>
-                                                    </div>
-                                                    <div id="tagsel_status" class="tagsel_tatus" style="display:none;">
-                                                        Tag status here.
-                                                    </div>
-                                                [% END %]
-                                            </span> <!-- / .links -->
-                                    </div> <!-- / #selections-toolbar -->
+                                        <div class="links">
+                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) || loggedinusername ) %]
+                                                <span class="selections">Select titles to:</span>
+                                            [% END %]
+                                            [% IF Koha.Preference( 'opacbookbag' ) == 1 OR Koha.Preference('virtualshelves') %]
+                                                <span class="addto">
+                                                    <select class="disabled form-control form-control-sm" name="addto" id="addto">
+                                                        <option>Add to...</option>
+                                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
+                                                            <option value="addtocart">Cart</option>
+                                                        [% END %]
+                                                        [% IF Koha.Preference('virtualshelves') %]
+                                                            [% IF loggedinusername AND add_to_some_private_shelves.count %]
+                                                                <optgroup label="Your lists:">
+                                                                [% SET number_of_private_shelves = 0 %]
+                                                                [% FOREACH s IN add_to_some_private_shelves %]
+                                                                    [% IF shelfnumber != s.shelfnumber %]
+                                                                        <option id="s[% s.shelfnumber | html %]" value="addtolist">[% s.shelfname | html %]</option>
+                                                                        [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                                                                        [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                                                                    [% END %]
+                                                                [% END %]
+                                                                </optgroup>
+                                                            [% END %]
+                                                            [% IF add_to_some_public_shelves.count %]
+                                                                <optgroup label="Public lists:">
+                                                                [% SET number_of_public_shelves = 0 %]
+                                                                [% FOREACH s IN add_to_some_public_shelves %]
+                                                                    [% IF shelfnumber != s.shelfnumber %]
+                                                                        <option id="s[% s.shelfnumber | html %]" value="addtolist">[% s.shelfname | html %]</option>
+                                                                        [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                                                                        [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                                                                    [% END %]
+                                                                [% END %]
+                                                                </optgroup>
+                                                            [% END %]
+                                                            [% IF ( add_to_some_private_shelves and add_to_some_private_shelves.count > 10 ) or ( add_to_some_public_shelves and add_to_some_public_shelves.count > 10 ) %]
+                                                                <option value="morelists">[ More lists ]</option>
+                                                            [% END %]
+                                                            <option value="newlist">[ New list ]</option>"
+                                                        [% END # /IF virtualshelves %]
+                                                    </select>
+                                                    <input type="submit" class="btn btn-sm btn-primary" value="Save" />
+                                                </span>
+                                            [% END # /IF opacbookbag || virtualshelves %]
+
+                                            [% IF ( ( Koha.Preference( 'RequestOnOpac' ) == 1 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) && DisplayMultiPlaceHold ) %]
+                                                <button class="btn btn-link btn-sm hold disabled" type="button">
+                                                    <i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold
+                                                </button>
+                                            [% END %]
+
+                                            [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                                <span id="tagsel_span">
+                                                    <button id="tagsel_tag" class="btn btn-link btn-sm disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</button>
+                                                </span>
+                                            [% END %]
+                                        </div> <!-- / .links -->
+                                        [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                            <div id="tagsel_form" style="display:none">
+                                                <label for="tagsel_new">New tag:</label>
+                                                <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
+                                                <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-sm btn-primary" title="Add" type="submit" value="Add" />
+                                                <a href="#" id="tagsel_cancel">(done)</a>
+                                            </div>
+                                            <div id="tagsel_status" class="tagsel_tatus" style="display:none;">
+                                                Tag status here.
+                                            </div>
+                                        [% END %]
+                                    </div> <!-- / .selections-toolbar -->
                                 </div> <!-- /#floating -->
 
                                 <!-- TABLE RESULTS START -->
@@ -714,13 +768,13 @@
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
             var checkedBoxes = $(".cb:checked");
-            var controls = $("#selections-toolbar .links a, #selections-toolbar .links input, #selections-toolbar .links select, #selections-toolbar .links label, #selections-toolbar .links button");
+            var controls = $(".selections-toolbar .links a, .selections-toolbar .links input, .selections-toolbar .links select, .selections-toolbar .links label, .selections-toolbar .links button");
             if ($(checkedBoxes).size()) {
-            $("#selections").html(_("With selected titles: "));
-            $(controls).removeClass("disabled");
+                $(".selections").html(_("With selected titles: "));
+                $(controls).removeClass("disabled");
             } else {
-            $("#selections").html(_("Select titles to: "));
-            $(controls).addClass("disabled");
+                $(".selections").html(_("Select titles to: "));
+                $(controls).addClass("disabled");
             }
         }
 
@@ -771,50 +825,6 @@
                 e.preventDefault();
             });
 
-            var param1 = "";
-            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) || loggedinusername ) %]
-                param1 += "<span id=\"selections\">"+_("Select titles to: ")+"</span>";
-            [% END %]
-
-            [% IF Koha.Preference( 'opacbookbag' ) == 1 OR Koha.Preference('virtualshelves') %]
-                param1 += "<select class=\"disabled\" name=\"addto\" id=\"addto\"><option>"+_("Add to...")+"</option>";
-
-                [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                    param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
-                [% END %]
-                [% IF Koha.Preference('virtualshelves') %]
-                    [% IF loggedinusername AND add_to_some_private_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Your lists:")+"\">";
-                        [% SET number_of_private_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_private_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF add_to_some_public_shelves.count %]
-                        param1 += "<optgroup label=\""+_("Public lists:")+"\">";
-                        [% SET number_of_public_shelves = 0 %]
-                        [% FOREACH s IN add_to_some_public_shelves %]
-                            [% IF shelfnumber != s.shelfnumber %]
-                                param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
-                                [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
-                            [% END %]
-                        [% END %]
-                        param1 += "<\/optgroup>";
-                    [% END %]
-                    [% IF ( add_to_some_private_shelves and add_to_some_private_shelves.count > 10 ) or ( add_to_some_public_shelves and add_to_some_public_shelves.count > 10 ) %]
-                        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
-                    [% END %]
-                    param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
-                [% END # /IF virtualshelves %]
-                param1 += "<\/select> <input type=\"submit\" class=\"btn btn-sm btn-primary\" value=\""+_("Save")+"\" />";
-            [% END # /IF opacbookbag || virtualshelves %]
-
             $('.resort').change(function() {
                 $('#bookbag_form').submit();
             });
@@ -822,17 +832,6 @@
             $('#results_per_page').change(function() {
                 $('#bookbag_form').submit();
             });
-
-            $("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm \" href=\"#\">"+_("Clear all")+"<\/a>");
-            $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm \" href=\"#\">"+_("Select all")+"<\/a>");
-
-            [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                $("span.addto").html(param1);
-            [% ELSE %]
-                [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                    $("span.addto").html(param1);
-                [% END %]
-            [% END %]
 
             [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
                 [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
@@ -893,13 +892,10 @@
                 enableCheckboxActions();
             });
 
-            [% IF ( ( Koha.Preference( 'RequestOnOpac' ) == 1 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) && DisplayMultiPlaceHold ) %]
-                $("#placehold").html("<button class=\"btn btn-link btn-sm hold disabled\" type=\"submit\"><i class=\"fa fa-fw fa-bookmark\" aria-hidden=\"true\"></i>" + _("Place hold") + "</button>");
-                $("#placehold").find("button.hold").click(function(){
-                    holdMultiple();
-                    return false;
-                });
-            [% END %]
+            $(".hold").on("click", function(e){
+                e.preventDefault();
+                holdMultiple();
+            });
 
             [% IF ( query_desc ) %]
                 [% IF ( OpacHighlightedWords ) %]
@@ -910,8 +906,14 @@
                         q_array = q_array.splice(0,-1);
                     }
                     highlightOn();
-                    $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
-                    $("#highlight_toggle_off").show().click(function() {highlightOff();});
+                    $("#highlight_toggle_on" ).hide().click(function(e) {
+                        e.preventDefault();
+                        highlightOn();
+                    });
+                    $("#highlight_toggle_off").show().click(function(e) {
+                        e.preventDefault();
+                        highlightOff();
+                    });
                 [% END # /IF OpacHighlightedWords %]
                 [% IF ( OverDriveEnabled ) %]
                     var $overdrive_results = $( '<div id="overdrive-results">' + MSG_SEARCHING.format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
