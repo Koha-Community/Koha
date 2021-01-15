@@ -27,7 +27,7 @@
             [% END %]
             <ul id="cart-list-nav" class="navbar-nav">
                 [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
-                    <li class="nav-item">
+                    <li class="nav-item js-show">
                         <a href="#" class="nav-link" title="Collect items you are interested in" id="cartmenulink" role="button">
                             <i id="carticon" class="fa fa-shopping-cart fa-icon-black" aria-hidden="true"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
                         </a>
@@ -36,7 +36,7 @@
                 <li class="divider-vertical"></li>
                 [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                     <li class="nav-item dropdown">
-                        <a href="#" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                        <a href="/cgi-bin/koha/opac-shelves.pl" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             ><i class="fa fa-list fa-icon-black" aria-hidden="true"></i> <span class="listslabel">Lists</span>
                         </a>
                         <div aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
@@ -89,7 +89,7 @@
                     <li class="nav-item dropdown">
                         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                             [% IF ( loggedinusername ) %]
-                                <a href="#" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button">
+                                <a href="/cgi-bin/koha/opac-user.pl" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button">
                                     <i class="fa fa-user fa-icon-black fa-fw" aria-hidden="true"></i>
                                     <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
                                 </a>
