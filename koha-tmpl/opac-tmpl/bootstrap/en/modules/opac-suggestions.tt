@@ -288,10 +288,6 @@
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
                                     <div class="form-row">
-                                        <div class="col-auto my-1">
-                                            <label class="sr-only" for="title">Search for:</label>
-                                            <input class="form-control form-control-sm" type="text" name="title" placeholder="Search suggestions" id="title" value="[% title | html %]" />
-                                        </div>
                                         [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                             [% IF loggedinusername %]
                                                 <div class="col-auto my-1">
@@ -484,6 +480,7 @@
     $(function() {
         $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "order": [[ 1, "asc" ]],
+            "dom": '<"top"<"table_entries"><"table_controls"f>>t',
             "autoWidth": false,
             "columnDefs": [
               [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %]
