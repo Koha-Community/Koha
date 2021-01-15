@@ -189,7 +189,7 @@ subtest 'pickup_locations' => sub {
 
     $schema->storage->txn_begin;
 
-    my $nb_libraries = Koha::Libraries->count;
+    my $nb_libraries = Koha::Libraries->search({ pickup_location => 1 })->count;
     Koha::CirculationRules->search->delete;
     Koha::CirculationRules->set_rules(
         {
