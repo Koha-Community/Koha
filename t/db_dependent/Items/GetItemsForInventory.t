@@ -46,7 +46,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'Skip items with waiting holds' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -98,6 +98,11 @@ subtest 'Skip items with waiting holds' => sub {
     my ( $items_2, $second_items_count ) = GetItemsForInventory();
     is( scalar @{$items_2},     $second_items_count, 'Results and count match' );
     is( $first_items_count + 2, $second_items_count, 'Two items added, count makes sense' );
+
+    my $real_itemtype_count = Koha::Items->search({ itype => $itemtype->itemtype })->count;
+    my $itype_str = "'" . $itemtype->itemtype . "'"; # manipulate string for db query
+    my ( $items_3, $itemtype_count ) = GetItemsForInventory({ itemtypes => [ $itype_str ] });
+    is( $itemtype_count, $real_itemtype_count, 'Itemtype filter gets correct number of inventory items' );
 
     # Add 2 waiting holds
     C4::Reserves::AddReserve(

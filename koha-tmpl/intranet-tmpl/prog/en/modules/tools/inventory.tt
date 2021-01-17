@@ -157,7 +157,27 @@
             <label for="ignore_waiting_holds">Skip items on hold awaiting pickup: </label>
             <input type="checkbox" id="ignore_waiting_holds" name="ignore_waiting_holds" />
         </li>
+        <li>
+            <label>Item types: </label>
+            <div class="branchselector">
+                <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-remove"></i> Clear all</a></p>
+                <div class="branchgridrow">
+                    [% FOREACH itemtype IN itemtypes %]
+                        <div class="branchgriditem">
+                            <input id="itemtype-[% itemtype.itemtype | html %]" class="branch_select" type="checkbox" name="itemtype-[% itemtype.itemtype | html %]" value="[% itemtype.itemtype | html %]" />
+                            <label for="itemtype-[% itemtype.itemtype | html %]">[% itemtype.description | html %]</label>
+                        </div>
+                        [% IF loop.count() % 4 == 0 && !loop.last() %]
+                            </div>
+                            <div class="branchgridrow">
+                        [% END %]
+                    [% END %]
+                </div>
+            </div>
+        </li>
+
         </ol>
+
     </fieldset>
 
         <fieldset class="rows">
@@ -431,6 +451,15 @@
                     $("#ignoreissued").attr('checked',false);
                     $("fieldset#optionalfilters").hide();
                 }
+            });
+
+            $("#checkallitemtypes").on("click",function(e){
+                e.preventDefault();
+                $(".branch_select").prop("checked",1);
+            });
+            $("#checknoneitemtypes").on("click",function(e){
+                e.preventDefault();
+                $(".branch_select").prop("checked",0);
             });
         });
     </script>

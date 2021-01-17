@@ -482,7 +482,6 @@ lists of authorized values for certain item fields.
   minlocation  => $minlocation,
   maxlocation  => $maxlocation,
   location     => $location,
-  itemtype     => $itemtype,
   ignoreissued => $ignoreissued,
   datelastseen => $datelastseen,
   branchcode   => $branchcode,
@@ -490,6 +489,7 @@ lists of authorized values for certain item fields.
   offset       => $offset,
   size         => $size,
   statushash   => $statushash,
+  itemtypes    => @itemsarray,
 } );
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
@@ -522,6 +522,7 @@ sub GetItemsForInventory {
     my $size         = $parameters->{'size'}         // '';
     my $statushash   = $parameters->{'statushash'}   // '';
     my $ignore_waiting_holds = $parameters->{'ignore_waiting_holds'} // '';
+    my $items        = $parameters->{'itemtypes'}    // '';
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
@@ -581,7 +582,6 @@ sub GetItemsForInventory {
         push @where_strings, 'biblioitems.itemtype = ?';
         push @bind_params, $itemtype;
     }
-
     if ( $ignoreissued) {
         $query .= "LEFT JOIN issues ON items.itemnumber = issues.itemnumber ";
         push @where_strings, 'issues.date_due IS NULL';
@@ -590,6 +590,14 @@ sub GetItemsForInventory {
     if ( $ignore_waiting_holds ) {
         $query .= "LEFT JOIN reserves ON items.itemnumber = reserves.itemnumber ";
         push( @where_strings, q{(reserves.found != 'W' OR reserves.found IS NULL)} );
+    }
+
+    if ( $items and @{$items} > 0 ){
+        my $joinedvals;
+        for my $itemtype (@{$items}){
+            $joinedvals = join(',', @{$items});
+        }
+        push @where_strings, "( biblioitems.itemtype IN (" . $joinedvals . ") OR items.itype IN (" . $joinedvals . ") )";
     }
 
     if ( @where_strings ) {

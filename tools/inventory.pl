@@ -126,6 +126,13 @@ for my $authvfield (@$statuses) {
 my @class_sources = Koha::ClassSources->search({ used => 1 });
 my $pref_class = C4::Context->preference("DefaultClassificationSource");
 
+my @itemtypes = Koha::ItemTypes->search;
+my @selected_itemtypes;
+foreach my $itemtype ( @itemtypes ) {
+    if ( defined $input->param('itemtype-' . $itemtype->itemtype) ) {
+        push @selected_itemtypes, "'" . $itemtype->itemtype . "'";
+    }
+}
 
 $template->param(
     authorised_values        => \@authorised_value_list,
@@ -141,7 +148,8 @@ $template->param(
     uploadedbarcodesflag     => ($uploadbarcodes || $barcodelist) ? 1 : 0,
     ignore_waiting_holds     => $ignore_waiting_holds,
     class_sources            => \@class_sources,
-    pref_class               => $pref_class
+    pref_class               => $pref_class,
+    itemtypes                => \@itemtypes,
 );
 
 # Walk through uploaded barcodes, report errors, mark as seen, check in
@@ -251,6 +259,7 @@ if ( $op && ( !$uploadbarcodes || $compareinv2barcd )) {
       offset       => 0,
       statushash   => $staton,
       ignore_waiting_holds => $ignore_waiting_holds,
+      itemtypes    => \@selected_itemtypes,
     });
 }
 # Build rightplacelist used to check if a scanned item is in the right place.
@@ -267,6 +276,7 @@ if( @scanned_items ) {
       offset       => 0,
       statushash   => undef,
       ignore_waiting_holds => $ignore_waiting_holds,
+      itemtypes    => \@selected_itemtypes,
     });
     # Convert the structure to a hash on barcode
     $rightplacelist = {
