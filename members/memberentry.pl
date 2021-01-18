@@ -953,12 +953,12 @@ sub patron_attributes_form {
             push @{$items_by_class{$attr_type->class()}}, $newentry;
         }
     }
-    while ( my ($class, @items) = each %items_by_class ) {
+    for my $class ( sort keys %items_by_class ) {
         my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
         my $lib = $av->count ? $av->next->lib : $class;
         push @attribute_loop, {
             class => $class,
-            items => @items,
+            items => @{$items_by_class{$class}},
             lib   => $lib,
         }
     }
