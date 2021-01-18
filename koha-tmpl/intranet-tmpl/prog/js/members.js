@@ -68,6 +68,12 @@ function update_category_code(category_code) {
     $(mytables).find("li").hide();
     $(mytables).find(" li[data-category_code='"+category_code+"']").show();
     $(mytables).find(" li[data-category_code='']").show();
+
+    //Change password length hint
+    var hint = $("#password").siblings(".hint").first();
+    var min_length = $('select'+category_selector+' option:selected').data('pwdLength');
+    var hint_string = MSG_PASSWORD_LENGTH.format(min_length);
+    hint.html(hint_string);
 }
 
 function select_user(borrowernumber, borrower, relationship) {
