@@ -159,7 +159,7 @@
         <th>Category</th>
         [% IF !plugin %]<th>Public</th>[% END %]
         [% IF !plugin %]<th>Temporary</th>[% END %]
-        <th class="nosort">Actions</th>
+        <th class="NoSort noExport">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -256,6 +256,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/file-upload.js") | $raw %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;
@@ -382,12 +383,11 @@
             window.close();
         }
         $(document).ready(function() {
-            $("#uploadresults").dataTable($.extend(true, {}, dataTablesDefaults, {
+            KohaTable("uploadresults",{
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 'nosort' ] }
+                    { 'bSortable': false, 'aTargets': [ 'NoSort' ] }
                 ],
-                "sPaginationType": "full"
-            }));
+            });
             [% IF msg %]
                 ShowAlerts( [% msg | html %] );
             [% END %]

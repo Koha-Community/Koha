@@ -45,14 +45,6 @@ $(document).ready(function() {
         "autoWidth": false,
         "paging": false,
         "aaSorting": [[ 3, "asc" ]],
-        "columnDefs": [
-            { "bSortable": false, "aTargets": [ "nosort" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string"] }
-        ],
-        "oLanguage": {
-            "sZeroRecords": MSG_NO_NOTICE_FOUND
-        },
-        "exportColumns": [0,1,2,3],
     }, columns_settings);
 
     if( no_op_set ){

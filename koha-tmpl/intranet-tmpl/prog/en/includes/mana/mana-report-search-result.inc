@@ -41,7 +41,7 @@
                                     <th class="title-string" title="Last time a library used this pattern">Last import</th>
                                     <th> Comments </th>
                                     [% UNLESS search_only %]
-                                        <th class="NoSort">Actions</th>
+                                        <th class="NoSort noExport">Actions</th>
                                     [% END %]
                                 </tr>
                             </thead>
