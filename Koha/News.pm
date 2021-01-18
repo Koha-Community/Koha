@@ -78,7 +78,7 @@ sub search_for_display {
         } elsif ( $params->{lang} ) {
             $search_params->{lang} = $params->{location} . '_' . $params->{lang};
         } else {
-            Koha::Exceptions::BadParameter->throw("The location and lang parameters combination is not valid");
+            Koha::Exceptions::BadParameter->throw("The location ($params->{location}) and lang ($params->{lang}) parameters combination is not valid");
         }
     }
 
