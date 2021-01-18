@@ -589,7 +589,7 @@ sub IssueSlip {
             };
         }
         my $news = Koha::News->search_for_display({
-                type => 'slip',
+                location => 'slip',
                 library_id => $branch,
             });
         my @news;

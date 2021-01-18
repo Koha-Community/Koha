@@ -40,14 +40,14 @@ Koha::News - Koha News object set class
 =head3 search_for_display
 
 my $news = Koha::News->search_for_display({
-    type => 'slip',
+    location => 'slip',
     lang => 'en',
     library_id => $branchcode
 })
 
 Return Koha::News set for display to user
 
-You can limit the results by type(lang) and library by optional params
+You can limit the results by location, language and library by optional params
 
 library_id should be valid branchcode of defined library
 
@@ -62,7 +62,7 @@ type is one of this:
 - opacheader
 - opaccredits
 
-lang is language code - it is used only when type is opac or OpacNavRight
+lang is language code - it is used only when type is opac or any of OPAC locations
 
 =cut
 
@@ -70,15 +70,15 @@ sub search_for_display {
     my ( $self, $params ) = @_;
 
     my $search_params;
-    if ($params->{type} ) {
-        if ( $params->{type} eq 'slip' || $params->{type} eq 'koha') {
-            $search_params->{lang} = [ $params->{type}, '' ];
-        } elsif ( $params->{type} eq 'opac' && $params->{lang} ) {
+    if ($params->{location} ) {
+        if ( $params->{location} eq 'slip' || $params->{location} eq 'koha') {
+            $search_params->{lang} = [ $params->{location}, '' ];
+        } elsif ( $params->{location} eq 'opac' && $params->{lang} ) {
             $search_params->{lang} = [ $params->{lang}, '' ];
         } elsif ( $params->{lang} ) {
-            $search_params->{lang} = $params->{type} . '_' . $params->{lang};
+            $search_params->{lang} = $params->{location} . '_' . $params->{lang};
         } else {
-            Koha::Exceptions::BadParameter->throw("The type and lang parameters combination is not valid");
+            Koha::Exceptions::BadParameter->throw("The location and lang parameters combination is not valid");
         }
     }
 

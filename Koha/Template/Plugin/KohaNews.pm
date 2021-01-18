@@ -37,7 +37,7 @@ sub get {
     my $library = $params->{library};
 
     my $content = Koha::News->search_for_display({
-            type => $display_location,
+            location => $display_location,
             lang => $lang,
             library_id => $library,
     });

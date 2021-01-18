@@ -50,7 +50,7 @@ if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
 my $koha_news = Koha::News->search_for_display({
-        type => 'koha',
+        location => 'koha',
         library_id => $homebranch
     });
 

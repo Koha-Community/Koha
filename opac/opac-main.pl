@@ -71,7 +71,7 @@ if (defined $news_id){
     }
 } else {
     $koha_news = Koha::News->search_for_display({
-            type => 'opac',
+            location => 'opac',
             lang => $template->lang,
             library_id => $homebranch,
         });

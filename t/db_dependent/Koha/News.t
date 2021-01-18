@@ -220,22 +220,22 @@ subtest '->search_for_display' => sub {
     is($news->count, 4, 'Active and not expired news');
     is($news->next->number, 2, 'News items are returned in correct order');
 
-    $news = Koha::News->search_for_display({ type => 'slip'});
-    is($news->count, 2, 'Slip and all type returned');
+    $news = Koha::News->search_for_display({ location => 'slip'});
+    is($news->count, 2, 'Slip and "all" locations returned');
 
-    $news = Koha::News->search_for_display({ type => 'koha'});
-    is($news->count, 3, 'Intranet and all');
+    $news = Koha::News->search_for_display({ location => 'koha'});
+    is($news->count, 3, 'Intranet and "all"');
 
     $new_not_expired->lang('OpacNavRight_en')->store;
-    $news = Koha::News->search_for_display({ type => 'OpacNavRight', lang => 'en'});
+    $news = Koha::News->search_for_display({ location => 'OpacNavRight', lang => 'en'});
     is($news->count, 1, 'OpacNavRight');
     is($news->next->idnew, $new_not_expired->idnew, 'Returned the right new item');
 
     $new_intra->lang('')->store;
-    $news = Koha::News->search_for_display({ type => 'opac', lang => 'en'});
-    is($news->count, 1, 'Only all type is returned');
+    $news = Koha::News->search_for_display({ location => 'opac', lang => 'en'});
+    is($news->count, 1, 'Only opac news are returned');
     $new_not_expired->lang('en')->store;
-    $news = Koha::News->search_for_display({ type => 'opac', lang => 'en'});
+    $news = Koha::News->search_for_display({ location => 'opac', lang => 'en'});
     is($news->count, 2, 'Opac en and all is returned');
 
     $news = Koha::News->search_for_display({ library_id => $library1->branchcode });
@@ -248,11 +248,11 @@ subtest '->search_for_display' => sub {
     $news = Koha::News->search_for_display({ library_id => $library2->branchcode});
     is($news->count, 2, 'Filtering by library returns right number of news items');
 
-    $news = Koha::News->search_for_display({ type => 'NonExistantType', lang => 'en'});
-    is($news->count, 0, 'Non-existant type is searched, but should not find any item');
+    $news = Koha::News->search_for_display({ location => 'NonExistantType', lang => 'en'});
+    is($news->count, 0, 'Non-existant location is searched, but should not find any item');
 
-    throws_ok { Koha::News->search_for_display({type => 'opac'}) } 'Koha::Exceptions::BadParameter',
-        'Exception raised when type is opac and no language given';
+    throws_ok { Koha::News->search_for_display({ location => 'opac'}) } 'Koha::Exceptions::BadParameter',
+        'Exception raised when location is opac and no language given';
 
     $schema->storage->txn_rollback;
 };

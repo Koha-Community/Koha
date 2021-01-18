@@ -44,7 +44,7 @@ my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Con
 my $branchcode = $input->param('branchcode');
 
 my $koha_news = Koha::News->search_for_display({
-        type => 'opac',
+        location => 'opac',
         lang => $news_lang,
         library_id => $branchcode,
     });
