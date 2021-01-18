@@ -178,7 +178,8 @@
                         "orderable": true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        "data": "displayed_on",
+                        "render": function(data, type, row, meta) {
                             return $datetime(row.displayed_on);
                         },
                         "searchable": true,
