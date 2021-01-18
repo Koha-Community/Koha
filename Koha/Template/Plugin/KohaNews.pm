@@ -33,7 +33,7 @@ sub get {
 
     my $display_location = $params->{location};
     my $blocktitle = $params->{blocktitle};
-    my $lang = $params->{lang};
+    my $lang = $params->{lang} || 'en';
     my $library = $params->{library};
 
     my $content = Koha::News->search_for_display({
