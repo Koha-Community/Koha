@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
+[% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
     [% IF op =='add_form' %]
@@ -210,8 +211,10 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
 
+        var columns_settings = [% TablesSettings.GetColumns( 'admin', 'cities', 'table_cities', 'json' ) | $raw %];
         $(document).ready(function() {
             var cities_table_url = '/api/v1/cities?';
 
@@ -276,7 +279,7 @@
                         "orderable": false
                     }
                 ]
-            }, [], 1);
+            }, columns_settings, 1);
 
         });
     </script>
