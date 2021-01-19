@@ -796,7 +796,7 @@ OPAC:
                   yes: Allow
                   no: "Don't allow"
             - "library patrons to register for an account via the OPAC."
-            - <br><strong>NOTE:</strong> This needs <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a> to be set to a valid patron category code.'
+            - "<br><strong>NOTE:</strong> This needs <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory'>PatronSelfRegistrationDefaultCategory</a> to be set to a valid patron category code."
         -
             - pref: PatronSelfRegistrationVerifyByEmail
               choices:
@@ -809,8 +809,9 @@ OPAC:
             - pref: PatronSelfRegistrationDefaultCategory
               class: short
             - "as the default patron category for patrons registered via the OPAC."
+            - "<br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationExpireTemporaryAccountsDelay'>PatronSelfRegistrationExpireTemporaryAccountsDelay</a> days ago."
         -
-            - Delete patrons still in the category indicated by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a>'
+            - Delete patrons still in the category indicated by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=PatronSelfRegistrationDefaultCategory">PatronSelfRegistrationDefaultCategory</a>
             - pref: PatronSelfRegistrationExpireTemporaryAccountsDelay
               class: integer
             - "days after account creation."
