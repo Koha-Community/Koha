@@ -474,7 +474,7 @@
                                 [% IF remaining_holds_for_record > 1 %]
                                     <li>
                                         <label for="holds_to_place_count">Holds to place (count)</label>
-                                        <input id="holds_to_place_count" type="number" name="holds_to_place_count" min="1" max="[% remaining_holds_for_record | html %]" step="1" value="1" />
+                                        <input type="text" inputmode="numeric" pattern="[0-9]*" id="holds_to_place_count" name="holds_to_place_count" maxlength="[% remaining_holds_for_record | html %]" value="1" />
                                     </li>
                                 [% ELSE %]
                                     <input type="hidden" name="holds_to_place_count" value="1" />
