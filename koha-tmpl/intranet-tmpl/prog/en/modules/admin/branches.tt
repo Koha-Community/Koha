@@ -327,6 +327,8 @@ Libraries &rsaquo; Administration &rsaquo; Koha
         var columns_settings = [% TablesSettings.GetColumns( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         $(document).ready(function() {
 
+            $("#branchcode").focus();
+
             var libraries_url = '/api/v1/libraries';
             var libraries = $("#libraries").api({
                 "ajax": {
