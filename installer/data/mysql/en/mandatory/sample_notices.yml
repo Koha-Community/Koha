@@ -579,7 +579,13 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "You have <<count>> items due soon"
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item(s) will be due soon:"
+            - ""
+            - "<<items.content>>"
+            - ""
+            - "Thank you."
 
         - module: circulation
           code: RENEWAL
