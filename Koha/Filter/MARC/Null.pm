@@ -52,3 +52,5 @@ sub filter {
 
     return $record;
 }
+
+1;

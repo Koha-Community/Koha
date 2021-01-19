@@ -311,3 +311,5 @@ sub intranet_catalog_biblio_tab {
 sub _private_sub {
     return "";
 }
+
+1;

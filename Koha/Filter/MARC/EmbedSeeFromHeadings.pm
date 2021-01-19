@@ -105,3 +105,5 @@ sub _processrecord {
     }
     return $record;
 }
+
+1;
