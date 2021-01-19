@@ -181,7 +181,7 @@
                             <td data-order="[% opac_new.published_on | html %]">[% opac_new.published_on | $KohaDates %]</td>
                             <td data-order="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
                             <td>[% opac_new.title | html %]</td>
-                            <td>[% IF ( opac_new.author) %][% INCLUDE 'patron-title.inc' patron=opac_new.author hide_patron_infos_if_needed=1 %][% END %]</td>
+                            <td>[% IF ( opac_new.author) %][% INCLUDE 'patron-title.inc' patron=opac_new.author %][% END %]</td>
                             <td>
                                 <div class="btn-group">
                                     <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>

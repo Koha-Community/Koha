@@ -109,8 +109,8 @@
                             <div class="newsbody">[% koha_new.content | $raw %]</div>
                             <div class="newsfooter">
                                 Published on [% koha_new.published_on | $KohaDates %]
-                                [% IF ( show_author && koha_new.borrowernumber ) %]
-                                    by <span class="newsauthor_title">[% koha_new.author.title | html %] </span>[% koha_new.author.firstname | html %] [% koha_new.author.surname | html %]
+                                [% IF ( show_author && koha_new.author ) %]
+                                    by <span class="newsauthor">[% INCLUDE 'patron-title.inc' patron=koha_new.author %]</span>
                                 [% END %]
                                 [% IF ( news_item ) %]
                                     &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
