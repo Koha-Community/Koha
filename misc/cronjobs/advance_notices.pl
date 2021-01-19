@@ -19,14 +19,11 @@
 
 =head1 NAME
 
-advance_notices.pl - cron script to put item due reminders into message queue
+advance_notices.pl - prepare messages to be sent to patrons for nearly due, or due, items
 
 =head1 SYNOPSIS
-
-./advance_notices.pl -c
-
-or, in crontab:
-0 1 * * * advance_notices.pl -c
+       advance_notices.pl
+         [ -n ][ -m <number of days> ][ --itemscontent <comma separated field list> ][ -c ]
 
 =head1 DESCRIPTION
 
@@ -61,15 +58,6 @@ use C4::Log;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
-
-=head1 NAME
-
-advance_notices.pl - prepare messages to be sent to patrons for nearly due, or due, items
-
-=head1 SYNOPSIS
-
-advance_notices.pl
-  [ -n ][ -m <number of days> ][ --itemscontent <comma separated field list> ][ -c ]
 
 =head1 OPTIONS
 
@@ -138,10 +126,6 @@ Set the from address for the notice to one of 'item-homebranch' or 'item-issuebr
 Defaults to 'item-issuebranch'
 
 =back
-
-=head1 DESCRIPTION
-
-This script is designed to alert patrons when items are due, or coming due
 
 =head2 Configuration
 
