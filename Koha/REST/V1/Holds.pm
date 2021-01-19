@@ -35,7 +35,7 @@ use Try::Tiny;
 
 =head3 list
 
-Mehtod that handles listing Koha::Hold objects
+Method that handles listing Koha::Hold objects
 
 =cut
 
