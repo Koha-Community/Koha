@@ -202,7 +202,7 @@
                             [% IF ( OPACFinesTab ) %]
                             [% IF ( amountoutstanding > 0 ) %]<li><a href="#opac-user-fines">Charges ([% amountoutstanding | $Price %])</a></li>[% END %]
                                 [% IF ( amountoutstanding < 0 ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding * -1 | $Price %])</a></li>[% END %]
-                                [% IF relatives_with_fines %]<li><a href="#opac-user-relative-fines">Relatives' fines</a></li>[% END %]
+                                [% IF relatives_with_fines %]<li><a href="#opac-user-relative-fines">Relatives' charges</a></li>[% END %]
                             [% END %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
