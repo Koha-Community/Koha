@@ -57,7 +57,7 @@ sub calculate_dropbox_date {
     );
     my $calendar     = Koha::Calendar->new( branchcode => $branchcode, days_mode => $daysmode );
     my $today        = dt_from_string;
-    my $dropbox_date = $calendar->addDate( $today, -1 );
+    my $dropbox_date = $calendar->addDuration( $today, -1 );
 
     return $dropbox_date;
 }

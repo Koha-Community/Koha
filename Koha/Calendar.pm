@@ -90,11 +90,11 @@ sub _holidays {
     return $holidays // {};
 }
 
-sub addDate {
+sub addDuration {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
 
 
-    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addDate: days_mode")
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addDuration: days_mode")
         unless exists $self->{days_mode};
 
     # Default to days duration (legacy support I guess)
@@ -392,7 +392,7 @@ Koha::Calendar - Object containing a branches calendar
   # are we open
   $open = $c->is_holiday($dt);
   # when will item be due if loan period = $dur (a DateTime::Duration object)
-  $duedate = $c->addDate($dt,$dur,'days');
+  $duedate = $c->addDuration($dt,$dur,'days');
 
 
 =head1 DESCRIPTION
@@ -408,9 +408,9 @@ my $calendar = Koha::Calendar->new( branchcode => 'MAIN' );
 The option branchcode is required
 
 
-=head2 addDate
+=head2 addDuration
 
-    my $dt = $calendar->addDate($date, $dur, $unit)
+    my $dt = $calendar->addDuration($date, $dur, $unit)
 
 C<$date> is a DateTime object representing the starting date of the interval.
 

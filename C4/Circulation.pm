@@ -1345,7 +1345,7 @@ sub checkHighHolds {
         } else {
             $duration = C4::Context->preference('decreaseLoanHighHoldsDuration');
         }
-        my $reduced_datedue = $calendar->addDate( $issuedate, $duration );
+        my $reduced_datedue = $calendar->addDuration( $issuedate, $duration );
         $reduced_datedue->set_hour($orig_due->hour);
         $reduced_datedue->set_minute($orig_due->minute);
         $reduced_datedue->truncate( to => 'minute' );
@@ -2466,7 +2466,7 @@ sub _calculate_new_debar_dt {
                 branchcode => $branchcode,
                 days_mode  => 'Calendar'
             );
-            $new_debar_dt = $calendar->addDate( $return_date, $suspension_days );
+            $new_debar_dt = $calendar->addDuration( $return_date, $suspension_days );
         }
         else {
             $new_debar_dt = $return_date->clone()->add_duration($suspension_days);
@@ -3651,7 +3651,7 @@ sub CalcDateDue {
             $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
         }
         my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $daysmode );
-        $datedue = $calendar->addDate( $datedue, $dur, $loanlength->{lengthunit} );
+        $datedue = $calendar->addDuration( $datedue, $dur, $loanlength->{lengthunit} );
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
             $datedue->set_minute(59);

@@ -133,7 +133,7 @@ my $day_after_christmas = DateTime->new(
     year    => 2012,
     month   => 12,
     day     => 26
-);  # for testing negative addDate
+);  # for testing negative addDuration
 
 my $holiday_for_another_branch = DateTime->new(
     year => 2012,
@@ -218,23 +218,23 @@ my $holiday_excepted = DateTime->new(
 
     $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Datedue' );
 
-    is($cal->addDate( $dt, $one_day_dur, 'days' ), # tuesday
+    is($cal->addDuration( $dt, $one_day_dur, 'days' ), # tuesday
         dt_from_string('2012-07-05','iso'),
         'Single day add (Datedue, matches holiday, shift)' );
 
-    is($cal->addDate( $dt, $two_day_dur, 'days' ),
+    is($cal->addDuration( $dt, $two_day_dur, 'days' ),
         dt_from_string('2012-07-05','iso'),
         'Two days add, skips holiday (Datedue)' );
 
-    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
+    cmp_ok($cal->addDuration( $test_dt, $seven_day_dur, 'days' ), 'eq',
         '2012-07-30T11:53:00',
         'Add 7 days (Datedue)' );
 
-    is( $cal->addDate( $saturday, $one_day_dur, 'days' )->day_of_week, 1,
-        'addDate skips closed Sunday (Datedue)' );
+    is( $cal->addDuration( $saturday, $one_day_dur, 'days' )->day_of_week, 1,
+        'addDuration skips closed Sunday (Datedue)' );
 
-    is( $cal->addDate($day_after_christmas, -1, 'days')->ymd(), '2012-12-24',
-        'Negative call to addDate (Datedue)' );
+    is( $cal->addDuration($day_after_christmas, -1, 'days')->ymd(), '2012-12-24',
+        'Negative call to addDuration (Datedue)' );
 
     ## Note that the days_between API says closed days are not considered.
     ## This tests are here as an API test.
@@ -251,19 +251,19 @@ my $holiday_excepted = DateTime->new(
 
     $dt = dt_from_string('2012-07-03','iso');
 
-    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+    is($cal->addDuration( $dt, $one_day_dur, 'days' ),
         dt_from_string('2012-07-05','iso'),
         'Single day add (Calendar)' );
 
-    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ), 'eq',
+    cmp_ok($cal->addDuration( $test_dt, $seven_day_dur, 'days' ), 'eq',
        '2012-08-01T11:53:00',
        'Add 7 days (Calendar)' );
 
-    is( $cal->addDate( $saturday, $one_day_dur, 'days' )->day_of_week, 1,
-            'addDate skips closed Sunday (Calendar)' );
+    is( $cal->addDuration( $saturday, $one_day_dur, 'days' )->day_of_week, 1,
+            'addDuration skips closed Sunday (Calendar)' );
 
-    is( $cal->addDate($day_after_christmas, -1, 'days')->ymd(), '2012-12-24',
-            'Negative call to addDate (Calendar)' );
+    is( $cal->addDuration($day_after_christmas, -1, 'days')->ymd(), '2012-12-24',
+            'Negative call to addDuration (Calendar)' );
 
     cmp_ok( $cal->days_between( $test_dt, $later_dt )->in_units('days'),
                 '==', 40, 'days_between calculates correctly (Calendar)' );
@@ -279,19 +279,19 @@ my $holiday_excepted = DateTime->new(
 
     $dt = dt_from_string('2012-07-03','iso');
 
-    is($cal->addDate( $dt, $one_day_dur, 'days' ),
+    is($cal->addDuration( $dt, $one_day_dur, 'days' ),
         dt_from_string('2012-07-04','iso'),
         'Single day add (Days)' );
 
-    cmp_ok($cal->addDate( $test_dt, $seven_day_dur, 'days' ),'eq',
+    cmp_ok($cal->addDuration( $test_dt, $seven_day_dur, 'days' ),'eq',
         '2012-07-30T11:53:00',
         'Add 7 days (Days)' );
 
-    is( $cal->addDate( $saturday, $one_day_dur, 'days' )->day_of_week, 7,
-        'addDate doesn\'t skip closed Sunday (Days)' );
+    is( $cal->addDuration( $saturday, $one_day_dur, 'days' )->day_of_week, 7,
+        'addDuration doesn\'t skip closed Sunday (Days)' );
 
-    is( $cal->addDate($day_after_christmas, -1, 'days')->ymd(), '2012-12-25',
-        'Negative call to addDate (Days)' );
+    is( $cal->addDuration($day_after_christmas, -1, 'days')->ymd(), '2012-12-25',
+        'Negative call to addDuration (Days)' );
 
     ## Note that the days_between API says closed days are not considered.
     ## This tests are here as an API test.
