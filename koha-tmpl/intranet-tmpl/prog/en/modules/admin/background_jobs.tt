@@ -55,9 +55,9 @@
             <li><label for="job_status">Status: </label>[% job.status | html %]</li>
             <li><label for="job_progress">Progress: </label>[% job.progress || 0 | html %] / [% job.size | html %]</li>
             <li><label for="job_type">Type: </label>[% job.type | html %]</li>
-            <li><label for="job_enqueued_on">Enqueued on: </label>[% job.enqueued_on | html %]</li>
-            <li><label for="job_started_on">Started on: </label>[% job.started_on | html %]</li>
-            <li><label for="job_ended_on">Ended on: </label>[% job.ended_on | html %]</li>
+            <li><label for="job_enqueued_on">Queued: </label>[% job.enqueued_on | html %]</li>
+            <li><label for="job_started_on">Started: </label>[% job.started_on | html %]</li>
+            <li><label for="job_ended_on">Ended: </label>[% job.ended_on | html %]</li>
             <li><label for="job_data">Report: </label>
                 [% SWITCH job.type %]
                 [% CASE 'batch_biblio_record_modification' %]
