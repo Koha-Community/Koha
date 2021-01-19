@@ -27,7 +27,7 @@ use Try::Tiny;
 
 =head3 get
 
-Mehtod that gets file contents
+Method that gets file contents
 
 =cut
 
