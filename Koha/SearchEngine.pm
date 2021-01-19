@@ -44,3 +44,5 @@ indicate that you want to be working with the authorities index.
 # may be used for, e.g., directory names.
 Readonly our $BIBLIOS_INDEX     => 'biblios';
 Readonly our $AUTHORITIES_INDEX => 'authorities';
+
+1;
