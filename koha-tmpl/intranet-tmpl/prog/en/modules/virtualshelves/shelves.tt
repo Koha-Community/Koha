@@ -561,7 +561,7 @@
                 });
                 $(".addtocart").show();
                 var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-                [% IF ( intranetbookbag ) %]
+                [% IF (Koha.Preference("intranetbookbag")) %]
                      param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
                 [% END %]
                 [% IF Koha.Preference('virtualshelves') %]

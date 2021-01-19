@@ -100,7 +100,7 @@ CAN_user_serials_create_subscription ) %]
     </ul>
     </div>
 
-    [% IF ( intranetbookbag ) %]
+    [% IF (Koha.Preference("intranetbookbag")) %]
         [% IF ( incart ) %]
             <div class="btn-group">
                 <a id="cart[% biblionumber | html %]" class="btn btn-default addtocart incart" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</a>
