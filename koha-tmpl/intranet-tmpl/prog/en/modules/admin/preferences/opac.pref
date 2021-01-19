@@ -800,6 +800,7 @@ OPAC:
             - pref: PatronSelfRegistrationDefaultCategory
               class: short
             - "as the default patron category for patrons registered via the OPAC."
+            - "<br><strong>WARNING: Do not use a regular patron category for self registration.</strong> If the <code>misc/cronjobs/cleanup_database.pl</code> cronjob is setup to delete unverified and unfinished OPAC self registrations, it will permanently and unrecoverably delete all patrons that have registered more than PatronSelfRegistrationExpireTemporaryAccountsDelay days ago."
         -
             - "Delete patrons still in the category indicated by PatronSelfRegistrationDefaultCategory"
             - pref: PatronSelfRegistrationExpireTemporaryAccountsDelay
