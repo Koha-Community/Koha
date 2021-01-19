@@ -161,14 +161,12 @@ if ( $query->param('reserve_id') ) {
     my ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
 
     my $patron = Koha::Patrons->find( $nextreservinfo );
-    my $name   = $patron ? $patron->surname . ", " . $patron->title . " " . $patron->firstname : '';
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $biblio->title,
             itemnumber     => $item->itemnumber,
             itembiblionumber => $biblio->biblionumber,
             iteminfo       => $biblio->author,
-            name           => $name,
             patron         => $patron,
             diffbranch     => 1,
         );
@@ -391,7 +389,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     my $reserve    = $messages->{'ResFound'};
     if ( $reserve ) {
         my $patron = Koha::Patrons->find( $reserve->{'borrowernumber'} );
-        my $name = $patron->surname . ", " . $patron->title . " " . $patron->firstname;
         $template->param(
             patron => $patron,
         );
