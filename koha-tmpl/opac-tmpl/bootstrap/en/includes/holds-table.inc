@@ -58,6 +58,11 @@
                                 </strong>
                             [% END %]
                             [% HOLD.biblio.author | html %]
+                            [% IF HOLD.item_level_hold %]
+                                Only item [% HOLD.item.barcode %]
+                            [% ELSE %]
+                                Next available item
+                            [% END %]
                         </td>
                         <td class="reservedate">
                             <span title="[% HOLD.reservedate | html %]">
