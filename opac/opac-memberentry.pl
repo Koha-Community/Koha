@@ -391,7 +391,8 @@ sub GetMandatoryFields {
 
     my %mandatory_fields;
 
-    my $BorrowerMandatoryField =
+    my $BorrowerMandatoryField = $action eq 'edit' || $action eq 'update' ?
+      C4::Context->preference("PatronSelfModificationMandatoryField") :
       C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
 
     my @fields = split( /\|/, $BorrowerMandatoryField );
