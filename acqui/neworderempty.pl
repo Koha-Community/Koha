@@ -405,10 +405,10 @@ if ( defined $from_subscriptionid ) {
 my (undef, $barcode_subfield) = GetMarcFromKohaField( 'items.barcode' );
 
 
-# get option values for gist syspref
+# get option values for TaxRates syspref
 my @gst_values = map {
     option => $_ + 0.0
-}, split( '\|', C4::Context->preference("gist") );
+}, split( '\|', C4::Context->preference("TaxRates") );
 
 my $quantity = $input->param('rr_quantity_to_order') ?
       $input->param('rr_quantity_to_order') :

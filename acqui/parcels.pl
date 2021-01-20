@@ -201,7 +201,7 @@ $template->param(
     name                     => $bookseller->name,
     shipmentdate_today       => dt_from_string,
     booksellerid             => $booksellerid,
-    GST                      => C4::Context->preference('gist'),
+    GST                      => C4::Context->preference('TaxRates'),
     budgets                  => $budget_loop,
 );
 

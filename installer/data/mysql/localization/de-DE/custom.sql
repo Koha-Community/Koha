@@ -33,7 +33,7 @@ UPDATE systempreferences SET value =
     WHERE variable = 'OPACSearchForTitleIn';
 -- Sunday = 0, Monday = 1, etc.
 UPDATE systempreferences SET value = '1' WHERE variable = 'CalendarFirstDayOfWeek';
-UPDATE systempreferences SET value = '0.07|0.19|0.00' WHERE variable = 'gist';
+UPDATE systempreferences SET value = '0.07|0.19|0.00' WHERE variable = 'TaxRates';
 UPDATE systempreferences SET value = 'Dieser Text wird über den Systemparameter <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutingListNote</a> konfiguriert.' where variable = 'RoutingListNote';
 UPDATE systempreferences SET value = 'barcode stocknumber' WHERE variable = 'uniqueitemfields';
 UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'language';

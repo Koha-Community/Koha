@@ -124,10 +124,10 @@ my $budget = GetBudget( $order->budget_id );
 
 my $datereceived = $order->datereceived ? dt_from_string( $order->datereceived ) : dt_from_string;
 
-# get option values for gist syspref
+# get option values for TaxRates syspref
 my @gst_values = map {
     option => $_ + 0.0
-}, split( '\|', C4::Context->preference("gist") );
+}, split( '\|', C4::Context->preference("TaxRates") );
 
 my $order_internalnote = $order->order_internalnote;
 my $order_vendornote   = $order->order_vendornote;

@@ -18,7 +18,7 @@ use_ok('C4::Acquisition');
 use_ok('C4::Context');
 use_ok('Koha::Number::Price');
 
-t::lib::Mocks::mock_preference( 'gist', '0.02|0.05|0.196' );
+t::lib::Mocks::mock_preference( 'TaxRates', '0.02|0.05|0.196' );
 
 use Test::DBIx::Class;
 

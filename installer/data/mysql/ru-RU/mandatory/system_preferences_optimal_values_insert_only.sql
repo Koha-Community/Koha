@@ -6,7 +6,7 @@ UPDATE systempreferences SET value='OPENOFFICE.ORG' WHERE variable='MIME';
 
 -- Acquisitions - Поступления
 
-UPDATE systempreferences SET value='0.20' WHERE variable='gist';
+UPDATE systempreferences SET value='0.20' WHERE variable='TaxRates';
 
 -- EnhancedContent - Расширенное содержимое
 
