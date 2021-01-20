@@ -72,7 +72,7 @@
                     <input type="hidden" name="unique_id" value="[% loop.count | html %]" /> <!-- FIXME on update, the unique_id should be filled -->
                     <div class="age">
                       <h5>Age in days</h5>
-                      <input class="age" type="number" value="[% rule.age | html %]" name="age_[% id | html %]" />
+                      <input class="age" type="text" inputmode="numeric" pattern="[0-9]*"  value="[% rule.age | html %]" name="age_[% id | html %]" />
                     </div>
                     <div class="blocks">
                       <h5>Conditions</h5>
@@ -133,7 +133,7 @@
             <input type="hidden" name="unique_id" />
             <div class="age">
               <h5>Age in days</h5>
-              <input class="age" type="number" value="" name="age" />
+              <input class="age" type="text" inputmode="numeric" pattern="[0-9]*" value="" name="age" />
             </div>
             <div class="blocks">
               <h5>Conditions</h5>
