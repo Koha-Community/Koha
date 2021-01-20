@@ -161,7 +161,7 @@
                 <option value=""></option>
                 [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => attribute_type.authorised_value_category ) %]
             </select>
-            <div class="hint">Authorized value category; if one is selected, the patron record input page will only allow values to be chosen from the authorized value list.  However, an authorized value list is not enforced during batch patron import.</div>
+            <div class="hint">If one is selected, the patron record input page will only allow values to be chosen from the authorized value list.  However, an authorized value list is not enforced during batch patron import.</div>
         </li>
         <li><label for="branches">Library limitation: </label>
             <select id="branches" name="branches" multiple size="10">
