@@ -617,7 +617,7 @@
 
                     <div id="holdings">
                         [% IF too_many_items %]
-                            <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">Click here to view them all.</a></p>
+                            <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">View all the physical items.</a></p>
                         [% ELSIF ( itemloop.size ) %]
                             [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
                             [% IF specific_item %]
