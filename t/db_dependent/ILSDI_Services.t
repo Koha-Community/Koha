@@ -448,14 +448,14 @@ subtest 'Holds test' => sub {
     my $item5 = $builder->build({
         source => 'Item',
         value => {
-            biblionumber => $biblio_with_no_item->{biblionumber},
+            biblionumber => $biblio_with_no_item->biblionumber,
             damaged => 0,
         }
     });
 
     $query = new CGI;
     $query->param( 'patron_id', $expired_borrowernumber);
-    $query->param( 'bib_id', $biblio_with_no_item->{biblionumber});
+    $query->param( 'bib_id', $biblio_with_no_item->biblionumber);
     $query->param( 'item_id', $item5->{itemnumber});
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
