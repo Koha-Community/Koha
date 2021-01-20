@@ -231,7 +231,14 @@
         </li>
         [% END %]
 
-      [% ELSE %]
+        [% IF t.accessibility_advocate %]
+        <li><strong>Accessibility advocate:</strong>
+           [% INCLUDE person p=t.accessibility_advocate %]
+        </li>
+        [% END %]
+
+
+        [% ELSE %]
         <li><strong>Release maintainers:</strong>
             <ul>
                 [% FOREACH m IN t.maintainer %]
