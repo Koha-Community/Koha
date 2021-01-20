@@ -101,7 +101,7 @@
             <tr>
               <th scope="row">[% value.line | html %]</th>
               <td>
-              <input type="number" min="1" name="delay[% tab.number | html %]-[% value.overduename | html %]" value="[% value.delay | html %]" />
+              <input type="text" inputmode="numeric" pattern="[0-9]*" name="delay[% tab.number | html %]-[% value.overduename | html %]" value="[% value.delay | html %]" />
               </td>
               <td>
                 <select name="letter[% tab.number | html %]-[% value.overduename | html %]">
