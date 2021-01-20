@@ -92,7 +92,7 @@
                                     </div>
                                 [% ELSE %]
                                     <h3>Shibboleth Login</h3>
-                                    <p><a href="[% shibbolethLoginUrl | $raw %]">If you have a Shibboleth account, please click here to log in.</a></p>
+                                    <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account.</a></p>
                                 [% END # /IF invalidShibLogin %]
                                 [% IF ( casAuthentication ) %]
                                     <h3>CAS login</h3>
@@ -106,7 +106,7 @@
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
-                                    <p><a href="[% casServerUrl | $raw %]">Please click here to log in.</a><p>
+                                    <p><a href="[% casServerUrl | $raw %]">Log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
@@ -126,7 +126,7 @@
                                 [% END %]
 
                                 [% IF ( casServerUrl ) %]
-                                   <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to log in.</a><p>
+                                   <p><a href="[% casServerUrl | $raw %]">Log in using a CAS account.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
