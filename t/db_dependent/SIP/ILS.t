@@ -126,7 +126,7 @@ subtest cancel_hold => sub {
 };
 
 subtest checkout => sub {
-    plan tests => 1;
+    plan tests => 4;
 
     my $library = $builder->build_object ({ class => 'Koha::Libraries' });
     my $patron = $builder->build_object(
@@ -170,6 +170,7 @@ subtest checkout => sub {
 
     is( $transaction->{screen_msg},"Item already checked out to you: renewing item.","We get a success message when issue is renewed");
 
+    $checkout->discard_changes();
     is( $checkout->renewals, 1, "Renewals has been reduced");
 };
 
