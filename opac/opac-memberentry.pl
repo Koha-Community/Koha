@@ -250,7 +250,7 @@ elsif ( $action eq 'update' ) {
     my %borrower = ParseCgiForBorrower($cgi);
     $borrower{borrowernumber} = $borrowernumber;
 
-    my @empty_mandatory_fields =
+    my @empty_mandatory_fields = grep { $_ ne 'password' } # password is not required when editing personal details
       CheckMandatoryFields( \%borrower, $action );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
