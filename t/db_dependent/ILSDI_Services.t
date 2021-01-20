@@ -453,7 +453,7 @@ subtest 'Holds test' => sub {
         }
     });
 
-    $query = new CGI;
+    $query = CGI->new;
     $query->param( 'patron_id', $expired_borrowernumber);
     $query->param( 'bib_id', $biblio_with_no_item->biblionumber);
     $query->param( 'item_id', $item5->{itemnumber});
