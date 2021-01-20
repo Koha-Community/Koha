@@ -354,7 +354,7 @@
                                             [% FOREACH suggestions_loo IN suggestions_loop %]
                                                 <tr>
                                                     [% IF ( loggedinusername ) %]
-                                                        <td>
+                                                        <td class="select selectcol">
                                                             [% IF ( suggestions_loo.showcheckbox ) %]
                                                                 [% SET can_delete_suggestion = 1 %]
                                                                 <input type="checkbox" class="cb" id="id[% suggestions_loo.suggestionid | html %]" name="delete_field" data-title="[% suggestions_loo.title | html %]" value="[% suggestions_loo.suggestionid | html %]" />

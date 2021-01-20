@@ -80,7 +80,7 @@
                                             <tbody>
                                                 [% FOREACH s IN current_biblio_searches %]
                                                     <tr>
-                                                        <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                        <td class="select selectcol"><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                         <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                                                         <td>
                                                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" aria-label="Subscribe to this search" class="rsssearchlink">
@@ -125,7 +125,7 @@
                                             <tbody>
                                             [% FOREACH s IN previous_biblio_searches %]
                                                 <tr>
-                                                    <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                    <td class="select selectcol"><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                                                     <td>
                                                         <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" aria-label="Subscribe to this search" class="rsssearchlink">
@@ -177,7 +177,7 @@
                                             <tbody>
                                                 [% FOREACH s IN current_authority_searches %]
                                                     <tr>
-                                                        <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                        <td class="select selectcol"><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                         <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                                                         <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                         <td>[% s.total | html %]</td>
@@ -214,7 +214,7 @@
                                             <tbody>
                                                 [% FOREACH s IN previous_authority_searches %]
                                                     <tr>
-                                                        <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
+                                                        <td class="select selectcol"><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                         <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                                                         <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                         <td>[% s.total | html %]</td>

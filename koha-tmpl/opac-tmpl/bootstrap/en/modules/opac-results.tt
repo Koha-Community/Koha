@@ -271,7 +271,7 @@
                                             </td>
 
                                             [% # Cell 2: Show result number if OpacHiddenItems is empty %]
-                                            <td class="select selectcol">
+                                            <td class="numcol[%- IF suppress_result_number -%] hidden[%- END -%]">
                                                 [% UNLESS suppress_result_number %]
                                                     [% SEARCH_RESULT.result_number | html %].
                                                 [% END %]
