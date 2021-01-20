@@ -18,6 +18,7 @@
 use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
+use Encode qw( encode_utf8 );
 
 use Koha::Script;
 use Koha::Caches;
@@ -54,6 +55,6 @@ while  (my $pref = $prefs->next) {
     my $var = lc $pref->variable;
     my $cached_var = $syspref_cache->get_from_cache("syspref_$var");
     next unless defined $cached_var; #If not defined in cache we will fetch from DB so this case is OK
-    say sprintf( "%s: value in cache is '%s' and value in db is '%s'", $var, $cached_var, $pref->value )
+    say encode_utf8( sprintf( "%s: value in cache is '%s' and value in db is '%s'", $var, $cached_var, $pref->value ) )
       unless $cached_var eq $pref->value;
 }
