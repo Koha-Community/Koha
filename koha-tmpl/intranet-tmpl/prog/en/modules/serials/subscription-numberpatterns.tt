@@ -179,9 +179,9 @@
                 <li>
                   <label for="sublength">Subscription length:</label>
                   <select id="subtype">
-                    [% FOREACH subtype IN subtypes_loop %]
-                      <option value="[% subtype.value | html %]">[% subtype.value | html %]</option>
-                    [% END %]
+                    <option value="issues">issues</option>
+                    <option value="weeks">weeks</option>
+                    <option value="months">months</option>
                   </select>
                   <input type="text" id="sublength" size="3" />
                 </li>

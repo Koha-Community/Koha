@@ -102,9 +102,6 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
         }
     }
     my @frequencies = GetSubscriptionFrequencies();
-    my @subtypes;
-    push @subtypes, { value => $_ } for (qw/ issues weeks months /);
-
     my $languages = [ map {
         {
             language => $_->{iso639_2_code},
@@ -115,7 +112,6 @@ if($op && ($op eq 'new' || $op eq 'modify')) {
     $template->param(
         $op => 1,
         frequencies_loop => \@frequencies,
-        subtypes_loop => \@subtypes,
         locales => $languages,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
