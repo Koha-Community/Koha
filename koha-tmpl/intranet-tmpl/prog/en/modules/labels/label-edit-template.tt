@@ -134,8 +134,10 @@
                                         </option>
                                         [% END %]
                                         </select>
-                                        [% ELSE %]
-                                        <a href="/cgi-bin/koha/labels/label-edit-profile.pl?op=new">Click here to define a printer profile.</a>
+                                        [% END %]
+                                        [% IF ( profile_list.size == 1 ) %]
+                                        <br>
+                                        <a href="/cgi-bin/koha/labels/label-edit-profile.pl?op=new">Make a new printer profile.</a>
                                         [% END %]
                                     </li>
                                 </ol>
