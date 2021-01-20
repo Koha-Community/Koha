@@ -25,6 +25,7 @@
     [%- CASE 'vm'                    -%]Virtual machine maintainer
     [%- CASE 'database'              -%]Documentation specialist
     [%- CASE 'live_cd'               -%]Live CD maintainer
+    [%- CASE 'accessibility_advocate'-%]Accessibility advocate
   [%- END -%]
 [%- END -%]
 
@@ -214,6 +215,13 @@
             [% INCLUDE person p=t.manager_assistant %]
         </li>
         [% END %]
+
+        [% IF t.accessibility_advocate %]
+        <li><strong>Accessibility advocate:</strong>
+           [% INCLUDE person p=t.accessibility_advocate %]
+        </li>
+        [% END %]
+
 
         [% ELSE %]
         <li><strong>Release maintainers:</strong>
