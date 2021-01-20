@@ -119,14 +119,15 @@
             </tbody>
           </table>
           [% IF CAN_user_acquisition_merge_invoices %]
-              <a class="btn btn-default submit merge" id="merge" href="#merge_invoices"><i class="fa fa-compress"></i> Merge selected invoices</a>
               [% IF tab == 'closed' %]
-                <a class="btn btn-default" id="open_sel" href="#reopen_selected" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen selected invoices</a>
+                <a class="btn btn-default merge" id="merge" href="#merge_invoices" data-table="closedresultst"><i class="fa fa-compress"></i> Merge selected invoices</a>
+                <a class="btn btn-default" id="open_sel" href="#reopen_selected" data-table="closedresultst" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen selected invoices</a>
               [% ELSE  %]
-                <a class="btn btn-default" id="close_sel" href="#close_selected" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close selected invoices</a>
+                <a class="btn btn-default merge" id="merge" href="#merge_invoices" data-status="openedresultst"><i class="fa fa-compress"></i> Merge selected invoices</a>
+                <a class="btn btn-default" id="close_sel" href="#close_selected" data-table="openedresultst" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close selected invoices</a>
               [% END %]
-
           [% END %] <!-- invoices_table -->
+        [% END %]
               <div id="invoicestabs" class="toptabs" style="clear:both;">
                   <ul class="ui-tabs-nav">
                       <li><a href="#opened">Open invoices ([% openedinvoices.size || 0 | html %])</a></li>
@@ -192,7 +193,6 @@
                   </fieldset>
                   </form>
               </div>
-          [% END %]
         [% ELSE %]
           <p>Sorry, but there are no results for your search.</p>
           <p>Search was:
@@ -388,9 +388,10 @@
             $('#open_sel,#close_sel').click(function () {
                 var referer = $(this).attr("data-referer");
                 var op = $(this).attr("data-op");
+                var table = $(this).data('table');
                 var invoice_link = "invoice.pl?op="+op;
-                if ($('.select-invoice:checked').length) {
-                    $('.select-invoice:checked').each(function () {
+                if ($('#' + table + ' .select-invoice:checked').length) {
+                    $('#' + table + ' .select-invoice:checked').each(function () {
                             var row = $(this).parents('tr');
                             invoice_link = invoice_link + "&amp;invoiceid="+$(row).attr('data-invoiceid');
                     });
@@ -404,11 +405,12 @@
                 var booksellerid;
                 var mismatch;
                 var invoices = [ ];
-                if ($('.select-invoice:checked').size() < 2) {
+                var table = $(this).data('table');
+                if ($('#' + table + ' .select-invoice:checked').size() < 2) {
                     alert(_("You must select at least two invoices to merge."));
                     return false;
                 }
-                $('.select-invoice:checked').each(function () {
+                $('#' + table + ' .select-invoice:checked').each(function () {
                     var row = $(this).parents('tr');
                     booksellerid = booksellerid || $(row).attr('data-booksellerid');
                     if (booksellerid !== $(row).attr('data-booksellerid')) {
