@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;">]>
+<!DOCTYPE stylesheet>
 <xsl:stylesheet
  xmlns:marc="http://www.loc.gov/MARC21/slim"
  xmlns:srw_dc="info:srw/schema/1/dc-schema"
