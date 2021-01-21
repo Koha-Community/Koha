@@ -21,7 +21,7 @@ UPDATE systempreferences SET value = 'M|Mme|Mlle' WHERE variable = 'BorrowersTit
 UPDATE systempreferences SET value = '676a' WHERE variable = 'itemcallnumber';
 UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'language';
 UPDATE systempreferences SET value = 'Ma bibliothèque' WHERE variable = 'LibraryName';
-UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = 1 WHERE variable = 'opaclanguagesdisplay';
 UPDATE systempreferences SET value = 'Bienvenue dans Koha...\r\n<hr>' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = 'bibtex,dc,marcxml,marc8,utf8,marcstd,ris' WHERE variable = 'OpacExportOptions';

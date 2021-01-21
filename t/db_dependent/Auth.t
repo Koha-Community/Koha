@@ -207,7 +207,7 @@ subtest 'checkpw lockout tests' => sub {
     # Make sure 'EnableOpacSearchHistory' is set
     t::lib::Mocks::mock_preference('EnableOpacSearchHistory',1);
     # Enable es-ES for the OPAC and staff interfaces
-    t::lib::Mocks::mock_preference('opaclanguages','en,es-ES');
+    t::lib::Mocks::mock_preference('OPACLanguages','en,es-ES');
     t::lib::Mocks::mock_preference('language','en,es-ES');
 
     # we need a session cookie

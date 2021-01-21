@@ -47,7 +47,7 @@ UPDATE systempreferences SET value = '5' WHERE variable = 'maxreserves';
 UPDATE systempreferences SET value = '0' WHERE variable = 'OpacAuthorities';
 UPDATE systempreferences SET value = 'title' WHERE variable = 'OPACdefaultSortField';
 UPDATE systempreferences SET value = 'asc' WHERE variable = 'OPACdefaultSortOrder';
-UPDATE systempreferences SET value = 'en,it-IT' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = 'en,it-IT' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = '1' WHERE variable = 'opaclanguagesdisplay';
 UPDATE systempreferences SET value = '<h3>Benvenuto !!</h3>' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = 'Links importanti qui.' WHERE variable = 'OpacNav';

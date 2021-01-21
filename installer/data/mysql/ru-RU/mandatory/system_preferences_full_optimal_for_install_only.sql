@@ -25,7 +25,7 @@ UPDATE systempreferences SET value = '1' WHERE variable = 'ExtendedPatronAttribu
 UPDATE systempreferences SET value = '0.20' WHERE variable = 'TaxRates';
 UPDATE systempreferences SET value = '942hv' WHERE variable = 'itemcallnumber';
 UPDATE systempreferences SET value = 'ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable = 'language';
-UPDATE systempreferences SET value = 'ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = 'ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = 'Добро пожаловать в АБИС Koha...\r\n<hr>' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = 'Здесь будут важные ссылки.' WHERE variable = 'OpacNav';
 UPDATE systempreferences SET value = '1' WHERE variable = 'patronimages';

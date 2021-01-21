@@ -37,5 +37,5 @@ UPDATE systempreferences SET value = '0.07|0.19|0.00' WHERE variable = 'TaxRates
 UPDATE systempreferences SET value = 'Dieser Text wird über den Systemparameter <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped">RoutingListNote</a> konfiguriert.' where variable = 'RoutingListNote';
 UPDATE systempreferences SET value = 'barcode stocknumber' WHERE variable = 'uniqueitemfields';
 UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'language';
-UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = 'de-DE,en' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = '1' WHERE variable = 'opaclanguagesdisplay';

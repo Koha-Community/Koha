@@ -22,7 +22,7 @@ UPDATE systempreferences SET value = 'Fru|Frøken|Herr' WHERE variable = 'Borrow
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurrencyFormat';
 UPDATE systempreferences SET value = 'metric' WHERE variable = 'dateformat';
 UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'language';
-UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'opaclanguages';
+UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = '<p>Velkommen til Koha...</p><hr />' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = '<p>Viktige lenker kan plasseres her</p>' WHERE variable = 'OpacNav';
 UPDATE systempreferences SET value = '<a href="https://worldcat.org/search?q={TITLE}" target="_blank">Andre bibliotek (WorldCat)</a><a href="https://scholar.google.com/scholar?q={TITLE}" target="_blank">Andre databaser (Google Scholar)</a><a href="https://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Nettbutikker (Bookfinder.com)</a>' WHERE variable = 'OPACSearchForTitleIn';

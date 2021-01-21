@@ -412,7 +412,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACItemsResultsDisplay','0','','If OFF : show only the status of items in result list.If ON : show full location of items (branch+location+callnumber) as in staff interface','YesNo'),
 ('OpacKohaUrl','1',NULL,'Show \'Powered by Koha\' text on OPAC footer.',NULL),
 ('OpacLangSelectorMode','both','top|both|footer','Select the location to display the language selector in OPAC','Choice'),
-('opaclanguages','en',NULL,'Set the default language in the OPAC.','Languages'),
+('OPACLanguages','en',NULL,'Set the default language in the OPAC.','Languages'),
 ('opaclanguagesdisplay','0','','If ON, enables display of Change Language feature on OPAC','YesNo'),
 ('opaclayoutstylesheet','opac.css','','Enter the name of the layout CSS stylesheet to use in the OPAC','free'),
 ('OPACLocalCoverImages','0','1','Display local cover images on OPAC search and details pages.','YesNo'),

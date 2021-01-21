@@ -137,7 +137,7 @@ $contextmodule->mock('preference', sub {
         return '';
     } elsif ($pref eq 'opacthemes') {
         return 'bootstrap';
-    } elsif ($pref eq 'opaclanguages') {
+    } elsif ($pref eq 'OPACLanguages') {
         return 'en';
     } elsif ($pref eq 'AlternateHoldingsField') {
         return '490av';

@@ -55,7 +55,7 @@ UPDATE systempreferences SET value='metric' WHERE variable='dateformat';
 
 UPDATE systempreferences SET value='ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable='language';
 
-UPDATE systempreferences SET value='ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable='opaclanguages';
+UPDATE systempreferences SET value='ru-RU,uk-UA,en,fr-FR,de-DE' WHERE variable='OPACLanguages';
 
 -- Logs - Протоколы
 

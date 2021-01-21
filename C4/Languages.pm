@@ -116,7 +116,7 @@ sub getTranslatedLanguages {
     my @enabled_languages =
       ( $interface && $interface eq 'intranet' )
       ? split ",", C4::Context->preference('language')
-      : split ",", C4::Context->preference('opaclanguages');
+      : split ",", C4::Context->preference('OPACLanguages');
 
     my $cache = Koha::Caches->get_instance;
     my $cache_key = "languages_${interface}_${theme}";
@@ -609,7 +609,7 @@ sub getlanguage {
     my $language;
 
     my $preference_to_check =
-      $interface eq 'intranet' ? 'language' : 'opaclanguages';
+      $interface eq 'intranet' ? 'language' : 'OPACLanguages';
     # Get the available/valid languages list
     my @languages;
     my $preference_value = C4::Context->preference($preference_to_check);

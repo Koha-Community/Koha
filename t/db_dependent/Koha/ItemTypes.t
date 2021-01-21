@@ -102,7 +102,7 @@ ok( defined($type), 'second result' );
 is_deeply( $type->unblessed, $child2->unblessed, "We got back the same object" );
 
 t::lib::Mocks::mock_preference('language', 'en');
-t::lib::Mocks::mock_preference('opaclanguages', 'en');
+t::lib::Mocks::mock_preference('OPACLanguages', 'en');
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 is( $itemtypes->count, $initial_count + 4, 'We added 4 item types' );
 my $first_itemtype = $itemtypes->next;

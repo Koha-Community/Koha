@@ -474,7 +474,7 @@ sub set_version_syspref {
 
   $installer->set_languages_syspref();
 
-Add the installation language to 'language' and 'opaclanguages' system preferences
+Add the installation language to 'language' and 'OPACLanguages' system preferences
 if different from 'en'
 
 =cut
@@ -490,7 +490,7 @@ sub set_languages_syspref {
     my $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='language'");
     $pref->execute("en,$language");
     # opac
-    $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='opaclanguages'");
+    $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='OPACLanguages'");
     $pref->execute("en,$language");
 
     C4::Context->clear_syspref_cache();
