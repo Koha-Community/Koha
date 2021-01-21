@@ -61,7 +61,7 @@ my ($template, $borrowernumber, $cookie)
                 flagsrequired => {reports => '*'},
                 debug => 1,
                 });
-our $sep     = $input->param("sep") || C4::Context->preference('delimiter') || ',';
+our $sep     = $input->param("sep") || C4::Context->preference('CSVDelimiter') || ',';
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
         );

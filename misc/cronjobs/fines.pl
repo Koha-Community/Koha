@@ -99,7 +99,7 @@ my @other_fields = qw(days_overdue fine);
 my $libname      = C4::Context->preference('LibraryName');
 my $control      = C4::Context->preference('CircControl');
 my $mode         = C4::Context->preference('finesMode');
-my $delim = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
+my $delim = "\t";    # ?  C4::Context->preference('CSVDelimiter') || "\t";
 
 my $today = dt_from_string();
 my $filename;

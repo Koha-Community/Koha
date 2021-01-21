@@ -209,7 +209,7 @@ else {
     $template->param(   budgetsloop   => \@{$budgetloop},
         outputFormatloop => \@outputFormats,
         delimiterloop => \@CSVdelimiters,
-        delimiterPreference => C4::Context->preference('delimiter')
+        delimiterPreference => C4::Context->preference('CSVDelimiter')
     );
 }
 

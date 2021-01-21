@@ -74,7 +74,7 @@ is($basket_csv1, 'autor,title,quantity
 ', 'CSV should be generated with user profile');
 
 # Use default template
-t::lib::Mocks::mock_preference('delimiter', ',');
+t::lib::Mocks::mock_preference('CSVDelimiter', ',');
 my $basket_csv2 = C4::Acquisition::GetBasketAsCSV($basketno, $query);
 is($basket_csv2, 'Contract name,Order number,Entry date,ISBN,Author,Title,Publication year,Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,Billing place
 "",' . $order->ordernumber  . ',2016-01-02,,"King, Stephen","Test Record",,"","","",3,,"",""

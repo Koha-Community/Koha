@@ -1,4 +1,4 @@
-[% SWITCH Koha.Preference('delimiter') %]
+[% SWITCH Koha.Preference('CSVDelimiter') %]
     [% CASE '#' %]<span>Pound (#) separated text (.csv)</span>
     [% CASE ',' %]<span>Comma separated text (.csv)</span>
     [% CASE '/' %]<span>Slash separated text (.csv)</span>

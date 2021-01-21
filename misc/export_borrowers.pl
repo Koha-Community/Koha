@@ -48,7 +48,7 @@ $0 -h
     -s, --separator=CHAR    This character will be used to separate fields.
                             Some characters like | or ; will need to be escaped
                             in the parameter setting, like -s=\\| or -s=\\;
-                            If no separator is specified, the delimiter pref
+                            If no separator is specified, the CSVDelimiter pref
                             will be used (or a comma, if the pref is empty)
     -H, --show-header       Print field names on first row
     -w, --where=CONDITION   Condition to filter borrowers to export
@@ -91,7 +91,7 @@ my $sth   = $dbh->prepare($query);
 $sth->execute;
 
 unless ( $separator ) {
-    $separator = C4::Context->preference('delimiter') || ',';
+    $separator = C4::Context->preference('CSVDelimiter') || ',';
     $separator = "\t" if ($separator eq 'tabulation');
 }
 

@@ -904,7 +904,7 @@ elsif ($phase eq 'Export'){
                 $content .= join("\t", map { $_ // '' } @$row) . "\n";
             }
         } else {
-            my $delimiter = C4::Context->preference('delimiter') || ',';
+            my $delimiter = C4::Context->preference('CSVDelimiter') || ',';
             if ( $format eq 'csv' ) {
                 $delimiter = "\t" if $delimiter eq 'tabulation';
                 $type = 'application/csv';

@@ -56,7 +56,7 @@ sub GetDelimiterChoices {
     my $sth = $dbh->prepare("
       SELECT options, value
       FROM systempreferences
-      WHERE variable = 'delimiter'
+      WHERE variable = 'CSVDelimiter'
     ");
 
     $sth->execute();
