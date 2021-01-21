@@ -3420,6 +3420,7 @@ subtest 'Cancel transfers on lost items' => sub {
         from_branch => $library_1->{branchcode},
         to_branch => $library_2->{branchcode},
         barcode   => $item->barcode,
+        trigger   => 'Reserve',
     });
     my $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, 'T', 'Hold is in transit' );
@@ -4682,7 +4683,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
 
     my $do_transfer = 1;
     ModItemTransfer( $item->itemnumber, $library_1->branchcode,
-        $library_2->branchcode );
+        $library_2->branchcode, 'Manual' );
     ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
     GetOtherReserves( $item->itemnumber )
       ;    # To put the Reason, it's what does returns.pl...

@@ -643,7 +643,7 @@ subtest 'GetRecords' => sub {
         }
     });
 
-    ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode});
+    ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode}, 'Manual');
 
     my $cgi = CGI->new;
     $cgi->param(service => 'GetRecords');
