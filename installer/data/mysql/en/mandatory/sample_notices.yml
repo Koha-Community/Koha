@@ -401,7 +401,11 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "You have <<count>> items due"
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item(s) are now due:"
+            - ""
+            - "<<items.content>>"
 
         - module: circulation
           code: HOLD_SLIP
