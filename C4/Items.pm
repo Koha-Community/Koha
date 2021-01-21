@@ -321,10 +321,15 @@ sub ModItemFromMarc {
     }
 
     $item->{cn_source} = delete $item->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
-    $item->{cn_sort}   = delete $item->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
+    delete $item->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
     $item->{itemnumber} = $itemnumber;
     $item->{biblionumber} = $biblionumber;
+
+    my $existing_cn_sort = $item_object->cn_sort; # set_or_blank will reset cn_sort to undef as we are not passing it
+                                                  # We rely on Koha::Item->store to modify it if itemcallnumber or cn_source is modified
     $item_object = $item_object->set_or_blank($item);
+    $item_object->cn_sort($existing_cn_sort); # Resetting to the existing value
+
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields));
     $item_object->store({ skip_record_index => $params->{skip_record_index} });
