@@ -984,7 +984,7 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
 };
 
 subtest 'ModItemFromMarc' => sub {
-    plan tests => 4;
+    plan tests => 5;
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
@@ -1023,6 +1023,22 @@ subtest 'ModItemFromMarc' => sub {
     is( $updated_item->{itemlost}, 0, 'itemlost should have been reset to the default value in DB' );
     is( $updated_item->{paidfor}, "this is something", "Non mapped field has not been reset" );
     is( Koha::Items->find($itemnumber)->paidfor, "this is something" );
+
+    subtest 'cn_sort' => sub {
+        plan tests => 3;
+
+        my $item = $builder->build_sample_item;
+        $item->set({ cn_source => 'ddc', itemcallnumber => 'xxx' })->store;
+        is( $item->cn_sort, 'XXX', 'init values set are expected' );
+
+        my $marc = C4::Items::Item2Marc( $item->get_from_storage->unblessed, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        is( $item->get_from_storage->cn_sort, 'XXX', 'cn_sort has not been updated' );
+
+        $marc = C4::Items::Item2Marc( { %{$item->unblessed}, itemcallnumber => 'yyy' }, $item->biblionumber );
+        ModItemFromMarc( $marc, $item->biblionumber, $item->itemnumber );
+        is( $item->get_from_storage->cn_sort, 'YYY', 'cn_sort has been updated' );
+    };
 
     $schema->storage->txn_rollback;
 };
