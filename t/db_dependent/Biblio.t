@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 14;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -610,13 +610,6 @@ subtest 'UNIMARC' => sub {
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
 
     run_tests('UNIMARC');
-    $schema->storage->txn_rollback;
-    $schema->storage->txn_begin;
-};
-
-subtest 'NORMARC' => sub {
-    plan tests => 47;
-    run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };

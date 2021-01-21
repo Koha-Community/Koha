@@ -829,7 +829,7 @@ function PopupMARCFieldDoc(field) {
                             [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
                                 <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
                             [% END %]
-                            [% IF marcflavour != 'NORMARC' AND NOT advancedMARCEditor %]
+                            [% UNLESS advancedMARCEditor %]
                                 <li>
                                     <a href="#" id="marcDocsSelect"><i class="fa fa-check-square-o"></i> Show MARC tag documentation links</a>
                                 <li>
@@ -966,7 +966,7 @@ function PopupMARCFieldDoc(field) {
                                                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
                                             [% ELSE %]
                                                 <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
-                                                [% IF marcflavour != 'NORMARC' %]<a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag | html %]'); return false;">&nbsp;?</a>[% END %]
+                                                <a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag | html %]'); return false;">&nbsp;?</a>
                                             [% END %]
 
                                             [% IF ( innerloo.fixedfield ) %]

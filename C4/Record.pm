@@ -231,7 +231,7 @@ EXAMPLE
 Convert MARC or MARCXML to Dublin Core metadata (XSLT Transformation),
 optionally can get an XML directly from biblio_metadata
 without item information. This method take into consideration the syspref
-'marcflavour' (UNIMARC, MARC21 and NORMARC).
+'marcflavour' (UNIMARC or MARC21).
 Return an XML file with the format defined in C<$format>
 
 C<$marc> - an ISO-2709 scalar or MARC::Record object
@@ -265,23 +265,12 @@ sub marc2dcxml {
         $marcxml = $xml;
     }
 
-    # only proceed if MARC21 or UNIMARC; else clause is executed if marcflavour set it to NORMARC
-    # generate MARC::Record object to see if not a marcxml record
-    unless ( C4::Context->preference('marcflavour') eq 'NORMARC' ) {
-        eval { $record = MARC::Record->new_from_xml(
-                         $marcxml,
-                         'UTF-8',
-                         C4::Context->preference('marcflavour')
-               );
-        };
-    } else {
-        eval { $record = MARC::Record->new_from_xml(
-                         $marcxml,
-                        'UTF-8',
-                        'MARC21'
-               );
-        };
-    }
+    eval { $record = MARC::Record->new_from_xml(
+                     $marcxml,
+                     'UTF-8',
+                     C4::Context->preference('marcflavour')
+           );
+    };
 
     # conversion to MARC::Record object failed
     if ( $@ ) {

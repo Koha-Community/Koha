@@ -1741,7 +1741,7 @@ sub searchResults {
         # adding linked items that belong to host records
         if ( C4::Context->preference('EasyAnalyticalRecords') ) {
             my $analyticsfield = '773';
-            if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
+            if ($marcflavor eq 'MARC21') {
                 $analyticsfield = '773';
             } elsif ($marcflavor eq 'UNIMARC') {
                 $analyticsfield = '461';

@@ -245,7 +245,6 @@ depending on the selected MARC flavour.
 
 sub _marc_format_handler {
     my $marcflavour = uc shift;
-    $marcflavour = 'MARC21' if ( $marcflavour eq 'NORMARC' );
     my $pname = "C4::Heading::$marcflavour";
     load $pname;
     return $pname->new();

@@ -61,7 +61,7 @@ sub gethtml5media {
             $HTML5Media{protocol} = 'http';
         }
         elsif ( $HTML5Media_field->indicator(1) eq '7' ) {
-            if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC') {
+            if ($marcflavour eq 'MARC21') {
                 $HTML5Media{protocol} = $HTML5Media_field->subfield('2');
             }
             elsif ($marcflavour eq 'UNIMARC') {

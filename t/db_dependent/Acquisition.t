@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 67;
+use Test::More tests => 66;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);
@@ -618,11 +618,6 @@ subtest 'MARC21' => sub {
 subtest 'UNIMARC' => sub {
     plan tests => 2;
     run_flavoured_tests('UNIMARC');
-};
-
-subtest 'NORMARC' => sub {
-    plan tests => 2;
-    run_flavoured_tests('NORMARC');
 };
 
 ### Functions required for "flavoured" tests

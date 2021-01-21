@@ -1265,7 +1265,7 @@ sub GetMarcPrice {
     my @listtags;
     my $subfield;
     
-    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+    if ( $marcflavour eq "MARC21" ) {
         @listtags = ('345', '020');
         $subfield="c";
     } elsif ( $marcflavour eq "UNIMARC" ) {
@@ -1461,9 +1461,9 @@ sub GetMarcControlnumber {
         return;
     }
     my $controlnumber = "";
-    # Control number or Record identifier are the same field in MARC21, UNIMARC and NORMARC
+    # Control number or Record identifier are the same field in MARC21 and UNIMARC
     # Keep $marcflavour for possible later use
-    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC" || $marcflavour eq "NORMARC") {
+    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC" ) {
         my $controlnumberField = $record->field('001');
         if ($controlnumberField) {
             $controlnumber = $controlnumberField->data();
@@ -1525,7 +1525,7 @@ sub GetMarcISSN {
     if ( $marcflavour eq "UNIMARC" ) {
         $scope = '011';
     }
-    else {    # assume MARC21 or NORMARC
+    else {    # assume MARC21
         $scope = '022';
     }
     my @marcissns;
@@ -1556,7 +1556,7 @@ sub GetMarcSubjects {
         $mintag = "600";
         $maxtag = "611";
         $fields_filter = '6..';
-    } else { # marc21/normarc
+    } else { # marc21
         $mintag = "600";
         $maxtag = "699";
         $fields_filter = '6..';
@@ -1650,7 +1650,7 @@ sub GetMarcAuthors {
         $mintag = "700";
         $maxtag = "712";
         $fields_filter = '7..';
-    } else { # marc21/normarc
+    } else { # marc21
         $mintag = "700";
         $maxtag = "720";
         $fields_filter = '7..';
@@ -1805,7 +1805,7 @@ sub GetMarcSeries {
         $mintag = "225";
         $maxtag = "225";
         $fields_filter = '2..';
-    } else {    # marc21/normarc
+    } else {    # marc21
         $mintag = "440";
         $maxtag = "490";
         $fields_filter = '4..';
@@ -2001,7 +2001,7 @@ sub PrepHostMarcField {
     my $item = Koha::Items->find($hostitemnumber);
 
 	my $hostmarcfield;
-    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+    if ( $marcflavour eq "MARC21" ) {
 	
         #main entry
         my $mainentry;
@@ -3019,7 +3019,7 @@ sub prepare_host_field {
     my %sfd;
     my $field;
     my $host_field;
-    if ( $marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC' ) {
+    if ( $marcflavour eq 'MARC21' ) {
         if ( $field = $host->field('100') || $host->field('110') || $host->field('11') ) {
             my $s = $field->as_string('ab');
             if ($s) {

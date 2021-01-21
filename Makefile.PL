@@ -83,7 +83,7 @@ Makefile.PL - Koha packager and installer
     --db_name                    Database name (e.g. koha)
     --db_user                    Database user (e.g. kohaadmin)
     --db_pass                    Database password (e.g. katikoan)
-    --zebra_marc_format          Zebra MARC format (marc21, normarc, unimarc)
+    --zebra_marc_format          Zebra MARC format (marc21, unimarc)
     --zebra_language             Zebra language (e.g. en)
     --zebra_tokenizer            Zebra tokenizer (chr, icu)
     --zebra_user                 Zebra user (e.g. kohauser)
@@ -565,7 +565,7 @@ my %valid_config_values = (
   'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
   'DB_USE_TLS' => {'yes', 'no'},
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
-  'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
+  'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'cs' => 1, 'el' => 1, 'en' => 1, 'es' => 1, 'fr' => 1, 'nb' => 1, 'ru' => 1, 'uk' => 1 }, # FIXME should generate from contents of distribution
   'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
@@ -1151,7 +1151,7 @@ You must specify the primary MARC format of the
 records to be indexed by Zebra.
 
 Koha provides Zebra configuration files for MARC21,
-NORMARC and UNIMARC.
+and UNIMARC.
 
 MARC format for Zebra indexing);
     $msg .= _add_valid_values_disp('ZEBRA_MARC_FORMAT', $valid_values);

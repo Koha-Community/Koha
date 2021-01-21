@@ -45,7 +45,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 my $biblio = GetMarcBiblio({ biblionumber => $biblionumber });
 my $marcflavour = C4::Context->preference("marcflavour");
 $marcflavour ||="MARC21";
-if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC') {
+if ($marcflavour eq 'MARC21') {
     $template->param(bibliotitle => $biblio->subfield('245','a'));
 } elsif ($marcflavour eq 'UNIMARC') {
     $template->param(bibliotitle => $biblio->subfield('200','a'));

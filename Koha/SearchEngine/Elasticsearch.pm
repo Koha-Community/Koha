@@ -241,7 +241,7 @@ sub get_elasticsearch_mappings {
 =head2 raw_elasticsearch_mappings
 
 Return elasticsearch mapping as it is in database.
-marc_type: marc21|unimarc|normarc
+marc_type: marc21|unimarc
 
 $raw_mappings = raw_elasticsearch_mappings( $marc_type )
 
@@ -1145,7 +1145,7 @@ to be included in that sort.
 =item C<$marc_type>
 
 A string that indicates the MARC type that this mapping is for, e.g. 'marc21',
-'unimarc', 'normarc'.
+'unimarc'.
 
 =item C<$marc_field>
 

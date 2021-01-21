@@ -894,8 +894,7 @@ sub GetHostItemsInfo {
     }
 
     my @fields;
-    if( C4::Context->preference('marcflavour') eq 'MARC21' ||
-      C4::Context->preference('marcflavour') eq 'NORMARC') {
+    if( C4::Context->preference('marcflavour') eq 'MARC21' ) {
         @fields = $record->field('773');
     } elsif( C4::Context->preference('marcflavour') eq 'UNIMARC') {
         @fields = $record->field('461');
@@ -940,7 +939,7 @@ sub get_hostitemnumbers_of {
     my ( @returnhostitemnumbers, $tag, $biblio_s, $item_s );
 
     my $marcflavor = C4::Context->preference('marcflavour');
-    if ( $marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC' ) {
+    if ( $marcflavor eq 'MARC21' ) {
         $tag      = '773';
         $biblio_s = '0';
         $item_s   = '9';

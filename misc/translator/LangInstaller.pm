@@ -93,7 +93,7 @@ sub new {
     }
 
     # MARC flavours (hardcoded list)
-    for ( "MARC21", "UNIMARC", "NORMARC" ) {
+    for ( "MARC21", "UNIMARC" ) {
         # search for strings on staff & opac marc files
         my $dirs = C4::Context->config('intrahtdocs') . '/prog';
         opendir $fh, C4::Context->config('opachtdocs');
@@ -280,7 +280,7 @@ sub install_tmpl {
             # if installing MARC po file, only touch corresponding files
             my $marc     = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
             # if not installing MARC po file, ignore all MARC files
-            @nomarc      = ( 'marc21', 'unimarc', 'normarc' ) if ( $trans->{name} !~ /MARC/ ); # hardcoded MARC variants
+            @nomarc      = ( 'marc21', 'unimarc' ) if ( $trans->{name} !~ /MARC/ ); # hardcoded MARC variants
 
             system
                 "$self->{process} install " .

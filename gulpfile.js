@@ -91,11 +91,6 @@ const poTasks = {
         create: po_create_marc_marc21,
         update: po_update_marc_marc21,
     },
-    'marc-NORMARC': {
-        extract: po_extract_marc_normarc,
-        create: po_create_marc_normarc,
-        update: po_update_marc_normarc,
-    },
     'marc-UNIMARC': {
         extract: po_extract_marc_unimarc,
         create: po_create_marc_unimarc,
@@ -147,7 +142,6 @@ function po_extract_marc (type) {
 }
 
 function po_extract_marc_marc21 ()  { return po_extract_marc('MARC21') }
-function po_extract_marc_normarc () { return po_extract_marc('NORMARC') }
 function po_extract_marc_unimarc () { return po_extract_marc('UNIMARC') }
 
 function po_extract_staff () {
@@ -157,10 +151,8 @@ function po_extract_staff () {
         'koha-tmpl/intranet-tmpl/prog/en/xslt/*.xsl',
         'koha-tmpl/intranet-tmpl/prog/en/columns.def',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*MARC21*',
-        '!koha-tmpl/intranet-tmpl/prog/en/**/*NORMARC*',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*UNIMARC*',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*marc21*',
-        '!koha-tmpl/intranet-tmpl/prog/en/**/*normarc*',
         '!koha-tmpl/intranet-tmpl/prog/en/**/*unimarc*',
     ];
 
@@ -175,10 +167,8 @@ function po_extract_opac () {
         'koha-tmpl/opac-tmpl/bootstrap/en/**/*.inc',
         'koha-tmpl/opac-tmpl/bootstrap/en/xslt/*.xsl',
         '!koha-tmpl/opac-tmpl/bootstrap/en/**/*MARC21*',
-        '!koha-tmpl/opac-tmpl/bootstrap/en/**/*NORMARC*',
         '!koha-tmpl/opac-tmpl/bootstrap/en/**/*UNIMARC*',
         '!koha-tmpl/opac-tmpl/bootstrap/en/**/*marc21*',
-        '!koha-tmpl/opac-tmpl/bootstrap/en/**/*normarc*',
         '!koha-tmpl/opac-tmpl/bootstrap/en/**/*unimarc*',
     ];
 
@@ -272,7 +262,6 @@ function po_create_type (type) {
 }
 
 function po_create_marc_marc21 ()       { return po_create_type('marc-MARC21') }
-function po_create_marc_normarc ()      { return po_create_type('marc-NORMARC') }
 function po_create_marc_unimarc ()      { return po_create_type('marc-UNIMARC') }
 function po_create_staff ()             { return po_create_type('staff-prog') }
 function po_create_opac ()              { return po_create_type('opac-bootstrap') }
@@ -294,7 +283,6 @@ function po_update_type (type) {
 }
 
 function po_update_marc_marc21 ()       { return po_update_type('marc-MARC21') }
-function po_update_marc_normarc ()      { return po_update_type('marc-NORMARC') }
 function po_update_marc_unimarc ()      { return po_update_type('marc-UNIMARC') }
 function po_update_staff ()             { return po_update_type('staff-prog') }
 function po_update_opac ()              { return po_update_type('opac-bootstrap') }

@@ -549,7 +549,7 @@ $template->param(
 if ( C4::Context->preference('EasyAnalyticalRecords') ) {
     # adding items linked via host biblios
     my $analyticfield = '773';
-    if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
+    if ($marcflavour eq 'MARC21'){
         $analyticfield = '773';
     } elsif ($marcflavour eq 'UNIMARC') {
         $analyticfield = '461';

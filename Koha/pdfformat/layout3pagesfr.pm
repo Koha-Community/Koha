@@ -104,7 +104,7 @@ sub printorders {
                     ( $line->{publishercode} ? ' publié par '. $line->{publishercode} : '') .
                     ( $line->{publicationyear} ? ', '. $line->{publicationyear} : '');
             }
-            else { # MARC21, NORMARC
+            else { # MARC21
                 $titleinfo =  $line->{title} . " " . $line->{author} .
                     ( $line->{isbn} ? " ISBN : " . $line->{isbn} : '' ) .
                     ( $line->{en} ? " EN : " . $line->{en} : '' ) .

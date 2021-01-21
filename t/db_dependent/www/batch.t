@@ -35,7 +35,6 @@ my $xml       = XMLin($koha_conf);
 use C4::Context;
 my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
 
-# For the purpose of this test, we can reasonably take MARC21 and NORMARC to be the same
 my $file =
   $marcflavour eq 'UNIMARC'
   ? "$testdir/data/unimarcrecord.mrc"
