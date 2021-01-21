@@ -366,7 +366,7 @@ if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
     my $idx = "ms_".$indexes[0];
     $idx =~ s/\,/comma/g;  # template toolkit doesn't like variables with a , in it
     $idx =~ s/-/dash/g;  # template toolkit doesn't like variables with a dash in it
-    $template->param($idx => 1);
+    $template->param(header_pulldown => $idx);
 }
 
 # an operand can be a single term, a phrase, or a complete ccl query
