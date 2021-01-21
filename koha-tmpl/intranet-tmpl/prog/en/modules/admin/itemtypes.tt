@@ -459,7 +459,7 @@ Item types administration
             <td>
                 [% itemtype.parent_type | html %]
             </td>
-            <td>[% itemtype.searchcategory | html %]</td>
+            <td>[% AuthorisedValues.GetByCode( 'ITEMTYPECAT', itemtype.searchcategory ) | html %]</td>
             <td>[% IF ( itemtype.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td>[% IF ( itemtype.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td>
