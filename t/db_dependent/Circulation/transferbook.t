@@ -38,11 +38,13 @@ subtest 'transfer a non-existant item' => sub {
     my $badbc = $item->barcode;
     $item->delete;
 
+    my $trigger = "Manual";
     my ( $dotransfer, $messages ) =
       C4::Circulation::transferbook({
           from_branch => $item->homebranch,
           to_branch => $library->{branchcode},
-          barcode => $badbc
+          barcode => $badbc,
+          trigger => $trigger
       });
     is( $dotransfer, 0, "Can't transfer a bad barcode" );
     is_deeply(
@@ -120,7 +122,8 @@ subtest 'transfer already at destination' => sub {
     my ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
-        barcode => $item->barcode
+        barcode => $item->barcode,
+        trigger => "Manual"
     });
     is( $dotransfer, 0, 'Transfer of item failed when destination equals holding branch' );
     is_deeply(
@@ -142,7 +145,8 @@ subtest 'transfer already at destination' => sub {
     ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
-        barcode => $item->barcode
+        barcode => $item->barcode,
+        trigger => "Manual"
     });
     is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
@@ -177,7 +181,8 @@ subtest 'transfer an issued item' => sub {
     my ($dotransfer, $messages) = transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
-        barcode => $item->barcode
+        barcode => $item->barcode,
+        trigger => "Manual"
     });
     is( $messages->{WasReturned}, $patron->borrowernumber, 'transferbook should have return a WasReturned flag is the item was issued before the transferbook call');
 
@@ -197,7 +202,8 @@ subtest 'transfer an issued item' => sub {
     ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
-        barcode => $item->barcode
+        barcode => $item->barcode,
+        trigger => "Manual"
     });
     is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
@@ -236,7 +242,8 @@ subtest 'ignore_reserves flag' => sub {
     my ($dotransfer, $messages ) = transferbook({
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
-        barcode => $item->barcode
+        barcode => $item->barcode,
+        trigger => "Manual"
     });
     is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
@@ -247,7 +254,8 @@ subtest 'ignore_reserves flag' => sub {
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
         barcode => $item->barcode,
-        ignore_reserves => $ignore_reserves
+        ignore_reserves => $ignore_reserves,
+        trigger => "Manual"
     });
     is( $dotransfer, 1, 'Transfer of reserved item succeeded with ignore reserves: false' );
     is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
@@ -258,7 +266,8 @@ subtest 'ignore_reserves flag' => sub {
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
         barcode => $item->barcode,
-        ignore_reserves => $ignore_reserves
+        ignore_reserves => $ignore_reserves,
+        trigger => "Manual"
     });
     is( $dotransfer, 0, 'Transfer of reserved item failed with ignore reserves: true' );
     is_deeply(
@@ -280,6 +289,7 @@ subtest 'transferbook test from branch' => sub {
         from_branch => $library->branchcode,
         to_branch => $item->homebranch,
         barcode   => $item->barcode,
+        trigger => "Manual"
     });
     my ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
     is( $from_branch, $library->branchcode, 'The transfer is initiated from the specified branch, not the items home or holdingbranch');
@@ -288,6 +298,7 @@ subtest 'transferbook test from branch' => sub {
         from_branch => $item->homebranch,
         to_branch => $library->branchcode,
         barcode   => $item->barcode,
+        trigger => "Manual"
     });
     ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
     is( $from_branch, $item->homebranch, 'The transfer is initiated from the specified branch');
