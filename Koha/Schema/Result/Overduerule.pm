@@ -29,12 +29,16 @@ __PACKAGE__->table("overduerules");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier for the overduerules
+
 =head2 branchcode
 
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
   size: 10
+
+foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
 
 =head2 categorycode
 
@@ -43,16 +47,22 @@ __PACKAGE__->table("overduerules");
   is_nullable: 0
   size: 10
 
+foreign key from the categories table to define which patron category this rule is for
+
 =head2 delay1
 
   data_type: 'integer'
   is_nullable: 1
+
+number of days after the item is overdue that the first notice is sent
 
 =head2 letter1
 
   data_type: 'varchar'
   is_nullable: 1
   size: 20
+
+foreign key from the letter table to define which notice should be sent as the first notice
 
 =head2 debarred1
 
@@ -61,10 +71,14 @@ __PACKAGE__->table("overduerules");
   is_nullable: 1
   size: 1
 
+is the patron restricted when the first notice is sent (1 for yes, 0 for no)
+
 =head2 delay2
 
   data_type: 'integer'
   is_nullable: 1
+
+number of days after the item is overdue that the second notice is sent
 
 =head2 debarred2
 
@@ -73,16 +87,22 @@ __PACKAGE__->table("overduerules");
   is_nullable: 1
   size: 1
 
+is the patron restricted when the second notice is sent (1 for yes, 0 for no)
+
 =head2 letter2
 
   data_type: 'varchar'
   is_nullable: 1
   size: 20
 
+foreign key from the letter table to define which notice should be sent as the second notice
+
 =head2 delay3
 
   data_type: 'integer'
   is_nullable: 1
+
+number of days after the item is overdue that the third notice is sent
 
 =head2 letter3
 
@@ -90,11 +110,15 @@ __PACKAGE__->table("overduerules");
   is_nullable: 1
   size: 20
 
+foreign key from the letter table to define which notice should be sent as the third notice
+
 =head2 debarred3
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 1
+
+is the patron restricted when the third notice is sent (1 for yes, 0 for no)
 
 =cut
 
@@ -171,8 +195,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Opfa1YZ3IeQRRbyrbKAkNQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pORigxtC5qztZWHI29mZ/g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -29,16 +29,22 @@ __PACKAGE__->table("import_record_matches");
   is_foreign_key: 1
   is_nullable: 0
 
+the id given to the imported bib record (import_records.import_record_id)
+
 =head2 candidate_match_id
 
   data_type: 'integer'
   is_nullable: 0
+
+the biblio the imported record matches (biblio.biblionumber)
 
 =head2 score
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 0
+
+the match score
 
 =cut
 
@@ -69,8 +75,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hJW36EeP+H8+0/Ij3iuIFw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kWU/SGWvZBBvVwEvDysrtA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

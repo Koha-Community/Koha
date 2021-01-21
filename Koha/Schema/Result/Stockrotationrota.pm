@@ -29,16 +29,22 @@ __PACKAGE__->table("stockrotationrotas");
   is_auto_increment: 1
   is_nullable: 0
 
+Stockrotation rota ID
+
 =head2 title
 
   data_type: 'varchar'
   is_nullable: 0
   size: 100
 
+Title for this rota
+
 =head2 description
 
   data_type: 'text'
   is_nullable: 0
+
+Description for this rota
 
 =head2 cyclical
 
@@ -46,11 +52,15 @@ __PACKAGE__->table("stockrotationrotas");
   default_value: 0
   is_nullable: 0
 
+Should items on this rota keep cycling?
+
 =head2 active
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+Is this rota currently active?
 
 =cut
 
@@ -97,8 +107,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 15:50:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lTIDZ+w+46Kniub5Tqpqlg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BpWsKESjapNKXaj2bZ1sjg
 
 __PACKAGE__->add_columns(
   '+cyclical' => { is_boolean => 1 },

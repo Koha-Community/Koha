@@ -29,10 +29,14 @@ __PACKAGE__->table("aqbudgets");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key and unique number assigned to each fund by Koha
+
 =head2 budget_parent_id
 
   data_type: 'integer'
   is_nullable: 1
+
+if this fund is a child of another this will include the parent id (aqbudgets.budget_id)
 
 =head2 budget_code
 
@@ -40,17 +44,23 @@ __PACKAGE__->table("aqbudgets");
   is_nullable: 1
   size: 30
 
+code assigned to the fund by the user
+
 =head2 budget_name
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
 
+name assigned to the fund by the user
+
 =head2 budget_branchcode
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+branch that this fund belongs to (branches.branchcode)
 
 =head2 budget_amount
 
@@ -59,12 +69,16 @@ __PACKAGE__->table("aqbudgets");
   is_nullable: 1
   size: [28,6]
 
+total amount for this fund
+
 =head2 budget_encumb
 
   data_type: 'decimal'
   default_value: 0.000000
   is_nullable: 1
   size: [28,6]
+
+budget warning at percentage
 
 =head2 budget_expend
 
@@ -73,10 +87,14 @@ __PACKAGE__->table("aqbudgets");
   is_nullable: 1
   size: [28,6]
 
+budget warning at amount
+
 =head2 budget_notes
 
   data_type: 'longtext'
   is_nullable: 1
+
+notes related to this fund
 
 =head2 timestamp
 
@@ -85,11 +103,15 @@ __PACKAGE__->table("aqbudgets");
   default_value: current_timestamp
   is_nullable: 0
 
+date and time this fund was last touched (created or modified)
+
 =head2 budget_period_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
 
 =head2 sort1_authcat
 
@@ -97,22 +119,30 @@ __PACKAGE__->table("aqbudgets");
   is_nullable: 1
   size: 80
 
+statistical category for this fund
+
 =head2 sort2_authcat
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
 
+second statistical category for this fund
+
 =head2 budget_owner_id
 
   data_type: 'integer'
   is_nullable: 1
+
+borrowernumber of the person who owns this fund (borrowers.borrowernumber)
 
 =head2 budget_permission
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 1
+
+level of permission for this fund (used only by the owner, only by the library, or anyone)
 
 =cut
 
@@ -319,8 +349,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-09-13 23:03:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kmzXRyD6aNqPr5C6u9GBHA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sl+TGQXY85UWwS+Ld/vvyQ
 
 __PACKAGE__->belongs_to(
   "budget",

@@ -29,11 +29,15 @@ __PACKAGE__->table("issues");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key for issues table
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+foreign key, linking this to the borrowers table for the patron this item was checked out to
 
 =head2 issuer_id
 
@@ -41,11 +45,15 @@ __PACKAGE__->table("issues");
   is_foreign_key: 1
   is_nullable: 1
 
+foreign key, linking this to the borrowers table for the user who checked out this item
+
 =head2 itemnumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+foreign key, linking this to the items table for the item that was checked out
 
 =head2 date_due
 
@@ -53,11 +61,15 @@ __PACKAGE__->table("issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+datetime the item is due (yyyy-mm-dd hh:mm::ss)
+
 =head2 branchcode
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+foreign key, linking to the branches table for the location the item was checked out
 
 =head2 returndate
 
@@ -65,11 +77,15 @@ __PACKAGE__->table("issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date the item was returned, will be NULL until moved to old_issues
+
 =head2 lastreneweddate
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+date the item was last renewed
 
 =head2 renewals
 
@@ -77,11 +93,15 @@ __PACKAGE__->table("issues");
   default_value: 0
   is_nullable: 0
 
+lists the number of times the item was renewed
+
 =head2 unseen_renewals
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+lists the number of consecutive times the item was renewed without being seen
 
 =head2 auto_renew
 
@@ -89,11 +109,15 @@ __PACKAGE__->table("issues");
   default_value: 0
   is_nullable: 1
 
+automatic renewal
+
 =head2 auto_renew_error
 
   data_type: 'varchar'
   is_nullable: 1
   size: 32
+
+automatic renewal error
 
 =head2 timestamp
 
@@ -102,11 +126,15 @@ __PACKAGE__->table("issues");
   default_value: current_timestamp
   is_nullable: 0
 
+the date and time this record was last touched
+
 =head2 issuedate
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+date the item was checked out or issued
 
 =head2 onsite_checkout
 
@@ -114,10 +142,14 @@ __PACKAGE__->table("issues");
   default_value: 0
   is_nullable: 0
 
+in house use flag
+
 =head2 note
 
   data_type: 'longtext'
   is_nullable: 1
+
+issue note text
 
 =head2 notedate
 
@@ -125,10 +157,14 @@ __PACKAGE__->table("issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+datetime of issue note (yyyy-mm-dd hh:mm::ss)
+
 =head2 noteseen
 
   data_type: 'integer'
   is_nullable: 1
+
+describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null
 
 =cut
 
@@ -300,8 +336,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-11-11 14:23:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SbeR9Pgvk2sMd+dYPAiCeA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CthteyTlda7sJnOS/TI2Eg
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },

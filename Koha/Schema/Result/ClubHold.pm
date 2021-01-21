@@ -35,11 +35,15 @@ __PACKAGE__->table("club_holds");
   is_foreign_key: 1
   is_nullable: 0
 
+id for the club the hold was generated for
+
 =head2 biblio_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+id for the bibliographic record the hold has been placed against
 
 =head2 item_id
 
@@ -47,12 +51,16 @@ __PACKAGE__->table("club_holds");
   is_foreign_key: 1
   is_nullable: 1
 
+If item-level, the id for the item the hold has been placed agains
+
 =head2 date_created
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+Timestamp for the placed hold
 
 =cut
 
@@ -154,8 +162,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FYGXVx1P2R+dGbeP1xshPA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dGkIYbw9CX0LqiH8XmuGAQ
 
 sub koha_objects_class {
     'Koha::Club::Holds';

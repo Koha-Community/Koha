@@ -29,17 +29,23 @@ __PACKAGE__->table("housebound_role");
   is_foreign_key: 1
   is_nullable: 0
 
+borrowernumber link
+
 =head2 housebound_chooser
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
+set to 1 to indicate this patron is a housebound chooser volunteer
+
 =head2 housebound_deliverer
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+set to 1 to indicate this patron is a housebound deliverer volunteer
 
 =cut
 
@@ -82,8 +88,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-21 18:20:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SU7khVgiUf1OVvaFpKaFPA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BocU8VE+5j4lYlxNU6Lofw
 
 sub koha_object_class {
     'Koha::Patron::HouseboundRole';

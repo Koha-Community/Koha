@@ -112,6 +112,8 @@ __PACKAGE__->table("article_requests");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+Be careful with two timestamps in one table not allowing NULL
+
 =head2 updated_on
 
   data_type: 'timestamp'
@@ -257,8 +259,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-02 09:44:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Dhz1mVI7Z/6ibqaBZkPvUA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5V0gW/nMkgDImbKMlIa2BA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

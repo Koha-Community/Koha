@@ -30,12 +30,16 @@ __PACKAGE__->table("virtualshelfcontents");
   is_foreign_key: 1
   is_nullable: 0
 
+foreign key linking to the virtualshelves table, defines the list that this record has been added to
+
 =head2 biblionumber
 
   data_type: 'integer'
   default_value: 0
   is_foreign_key: 1
   is_nullable: 0
+
+foreign key linking to the biblio table, defines the bib record that has been added to the list
 
 =head2 flags
 
@@ -49,11 +53,15 @@ __PACKAGE__->table("virtualshelfcontents");
   default_value: current_timestamp
   is_nullable: 0
 
+date and time this bib record was added to the list
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+borrower number that created this list entry (only the first one is saved: no need for use in/as key)
 
 =cut
 
@@ -138,8 +146,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ie3Gx+/HthZQ/4fHjcPF0w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4c7f4juRHZXLlSgNwOohrA
 
 #TODO See BZ 14544: Should be resolved by db revision
 __PACKAGE__->set_primary_key("shelfnumber","biblionumber");

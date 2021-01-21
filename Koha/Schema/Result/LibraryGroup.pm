@@ -29,11 +29,15 @@ __PACKAGE__->table("library_groups");
   is_auto_increment: 1
   is_nullable: 0
 
+unique id for each group
+
 =head2 parent_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+if this is a child group, the id of the parent group
 
 =head2 branchcode
 
@@ -42,16 +46,22 @@ __PACKAGE__->table("library_groups");
   is_nullable: 1
   size: 10
 
+The branchcode of a branch belonging to the parent group
+
 =head2 title
 
   data_type: 'varchar'
   is_nullable: 1
   size: 100
 
+Short description of the goup
+
 =head2 description
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+Longer explanation of the group, if necessary
 
 =head2 ft_hide_patron_info
 
@@ -59,11 +69,15 @@ __PACKAGE__->table("library_groups");
   default_value: 0
   is_nullable: 0
 
+Turn on the feature 'Hide patron's info' for this group
+
 =head2 ft_search_groups_opac
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+Use this group for staff side search groups
 
 =head2 ft_search_groups_staff
 
@@ -71,11 +85,15 @@ __PACKAGE__->table("library_groups");
   default_value: 0
   is_nullable: 0
 
+Use this group for opac side search groups
+
 =head2 ft_local_hold_group
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+Use this group to identify libraries as pick up location for holds
 
 =head2 created_on
 
@@ -83,12 +101,16 @@ __PACKAGE__->table("library_groups");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+Date and time of creation
+
 =head2 updated_on
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+Date and time of last
 
 =cut
 
@@ -224,8 +246,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-30 15:43:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qg0Ckj0ZBRjSaQgEcvxSZA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WOqjMuJNt1Sh2FUvt3NGxA
 
 sub koha_object_class {
     'Koha::Library::Group';

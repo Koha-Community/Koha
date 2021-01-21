@@ -29,16 +29,22 @@ __PACKAGE__->table("z3950servers");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier assigned by Koha
+
 =head2 host
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
 
+target's host name
+
 =head2 port
 
   data_type: 'integer'
   is_nullable: 1
+
+port number used to connect to target
 
 =head2 db
 
@@ -46,11 +52,15 @@ __PACKAGE__->table("z3950servers");
   is_nullable: 1
   size: 255
 
+target's database name
+
 =head2 userid
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+username needed to log in to target
 
 =head2 password
 
@@ -58,20 +68,28 @@ __PACKAGE__->table("z3950servers");
   is_nullable: 1
   size: 255
 
+password needed to log in to target
+
 =head2 servername
 
   data_type: 'longtext'
   is_nullable: 0
+
+name given to the target by the library
 
 =head2 checked
 
   data_type: 'smallint'
   is_nullable: 1
 
+whether this target is checked by default  (1 for yes, 0 for no)
+
 =head2 rank
 
   data_type: 'integer'
   is_nullable: 1
+
+where this target appears in the list of targets
 
 =head2 syntax
 
@@ -79,11 +97,15 @@ __PACKAGE__->table("z3950servers");
   is_nullable: 1
   size: 80
 
+marc format provided by this target
+
 =head2 timeout
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 0
+
+number of seconds before Koha stops trying to access this server
 
 =head2 servertype
 
@@ -92,10 +114,14 @@ __PACKAGE__->table("z3950servers");
   extra: {list => ["zed","sru"]}
   is_nullable: 0
 
+zed means z39.50 server
+
 =head2 encoding
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+characters encoding provided by this target
 
 =head2 recordtype
 
@@ -104,27 +130,37 @@ __PACKAGE__->table("z3950servers");
   extra: {list => ["authority","biblio"]}
   is_nullable: 0
 
+server contains bibliographic or authority records
+
 =head2 sru_options
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
 
+options like sru=get, sru_version=1.1; will be passed to the server via ZOOM
+
 =head2 sru_fields
 
   data_type: 'longtext'
   is_nullable: 1
+
+contains the mapping between the Z3950 search fields and the specific SRU server indexes
 
 =head2 add_xslt
 
   data_type: 'longtext'
   is_nullable: 1
 
+zero or more paths to XSLT files to be processed on the search results
+
 =head2 attributes
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+additional attributes passed to PQF queries
 
 =cut
 
@@ -190,8 +226,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 01:04:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YUp6TnDwq7/oLaSmSdVE3A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6X1cn33CRBtk/lMZF8QY2Q
 
 sub koha_object_class {
     'Koha::Z3950Server';

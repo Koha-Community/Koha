@@ -29,11 +29,15 @@ __PACKAGE__->table("virtualshelfshares");
   is_auto_increment: 1
   is_nullable: 0
 
+unique key
+
 =head2 shelfnumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+foreign key for virtualshelves
 
 =head2 borrowernumber
 
@@ -41,17 +45,23 @@ __PACKAGE__->table("virtualshelfshares");
   is_foreign_key: 1
   is_nullable: 1
 
+borrower that accepted access to this list
+
 =head2 invitekey
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
 
+temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
+
 =head2 sharedate
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+date of invitation or acceptance of invitation
 
 =cut
 
@@ -122,8 +132,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gle9hUqefRoNSilv0gFc1w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Aovcx4icmIsaRskB9qUSlA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

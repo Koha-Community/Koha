@@ -29,6 +29,8 @@ __PACKAGE__->table("biblio");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier assigned to each bibliographic record
+
 =head2 frameworkcode
 
   data_type: 'varchar'
@@ -36,50 +38,70 @@ __PACKAGE__->table("biblio");
   is_nullable: 0
   size: 4
 
+foreign key from the biblio_framework table to identify which framework was used in cataloging this record
+
 =head2 author
 
   data_type: 'longtext'
   is_nullable: 1
+
+statement of responsibility from MARC record (100$a in MARC21)
 
 =head2 title
 
   data_type: 'longtext'
   is_nullable: 1
 
+title (without the subtitle) from the MARC record (245$a in MARC21)
+
 =head2 medium
 
   data_type: 'longtext'
   is_nullable: 1
+
+medium from the MARC record (245$h in MARC21)
 
 =head2 subtitle
 
   data_type: 'longtext'
   is_nullable: 1
 
+remainder of the title from the MARC record (245$b in MARC21)
+
 =head2 part_number
 
   data_type: 'longtext'
   is_nullable: 1
+
+part number from the MARC record (245$n in MARC21)
 
 =head2 part_name
 
   data_type: 'longtext'
   is_nullable: 1
 
+part name from the MARC record (245$p in MARC21)
+
 =head2 unititle
 
   data_type: 'longtext'
   is_nullable: 1
+
+uniform title (without the subtitle) from the MARC record (240$a in MARC21)
 
 =head2 notes
 
   data_type: 'longtext'
   is_nullable: 1
 
+values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
+
 =head2 serial
 
   data_type: 'tinyint'
   is_nullable: 1
+
+Boolean indicating whether biblio is for a serial
 
 =head2 seriestitle
 
@@ -91,6 +113,8 @@ __PACKAGE__->table("biblio");
   data_type: 'smallint'
   is_nullable: 1
 
+publication or copyright date from the MARC record
+
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -98,16 +122,22 @@ __PACKAGE__->table("biblio");
   default_value: current_timestamp
   is_nullable: 0
 
+date and time this record was last touched
+
 =head2 datecreated
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 0
 
+the date this record was added to Koha
+
 =head2 abstract
 
   data_type: 'longtext'
   is_nullable: 1
+
+summary from the MARC record (520$a in MARC21)
 
 =cut
 
@@ -451,8 +481,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-10-12 09:13:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R4PNOXHa9cRIx/up7HWz4Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nmmsZusHYNAMimE9sImSNg
 
 
 __PACKAGE__->has_one(

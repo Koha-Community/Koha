@@ -41,11 +41,15 @@ __PACKAGE__->table("account_debit_types");
   default_value: 1
   is_nullable: 0
 
+boolean flag to denote if this debit type is available for manual invoicing
+
 =head2 can_be_sold
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+boolean flag to denote if this debit type is available at point of sale
 
 =head2 default_amount
 
@@ -64,6 +68,8 @@ __PACKAGE__->table("account_debit_types");
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+boolean flag to denote if this till is archived or not
 
 =cut
 
@@ -129,8 +135,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-17 12:22:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8FIMJZ+JAmqa+Dx7oymBjw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ulpJRbi7H40EXr1QG+URKg
 
 __PACKAGE__->add_columns(
     '+is_system' => { is_boolean => 1 }

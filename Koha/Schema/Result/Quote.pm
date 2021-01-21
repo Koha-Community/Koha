@@ -29,21 +29,29 @@ __PACKAGE__->table("quotes");
   is_auto_increment: 1
   is_nullable: 0
 
+unique id for the quote
+
 =head2 source
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+source/credit for the quote
 
 =head2 text
 
   data_type: 'longtext'
   is_nullable: 0
 
+text of the quote
+
 =head2 timestamp
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+date and time that the quote last appeared in the opac
 
 =cut
 
@@ -75,8 +83,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-19 11:09:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CdcbCjhjmsLLDQ1AAOja7Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AsjlfoqGCpt8DKeRpizVjA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

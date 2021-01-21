@@ -29,6 +29,8 @@ __PACKAGE__->table("cities");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier added by Koha
+
 =head2 city_name
 
   data_type: 'varchar'
@@ -36,11 +38,15 @@ __PACKAGE__->table("cities");
   is_nullable: 0
   size: 100
 
+name of the city
+
 =head2 city_state
 
   data_type: 'varchar'
   is_nullable: 1
   size: 100
+
+name of the state/province
 
 =head2 city_country
 
@@ -48,11 +54,15 @@ __PACKAGE__->table("cities");
   is_nullable: 1
   size: 100
 
+name of the country
+
 =head2 city_zipcode
 
   data_type: 'varchar'
   is_nullable: 1
   size: 20
+
+zip or postal code
 
 =cut
 
@@ -82,8 +92,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("cityid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zEjfS65sp13yF7dH8/ojZQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PF0pi+dNbKvxVDSpvHgB1Q
 
 sub koha_objects_class {
     'Koha::Cities';

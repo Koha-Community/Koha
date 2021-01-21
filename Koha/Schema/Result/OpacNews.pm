@@ -30,12 +30,16 @@ __PACKAGE__->table("opac_news");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier for the news article
+
 =head2 branchcode
 
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 1
   size: 10
+
+branch code users to create branch specific news, NULL is every branch.
 
 =head2 title
 
@@ -44,10 +48,14 @@ __PACKAGE__->table("opac_news");
   is_nullable: 0
   size: 250
 
+title of the news article
+
 =head2 content
 
   data_type: 'mediumtext'
   is_nullable: 0
+
+the body of your news article
 
 =head2 lang
 
@@ -56,11 +64,15 @@ __PACKAGE__->table("opac_news");
   is_nullable: 0
   size: 50
 
+location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
+
 =head2 published_on
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+publication date
 
 =head2 updated_on
 
@@ -69,22 +81,30 @@ __PACKAGE__->table("opac_news");
   default_value: current_timestamp
   is_nullable: 0
 
+last modification
+
 =head2 expirationdate
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date the article is set to expire or no longer be visible
+
 =head2 number
 
   data_type: 'integer'
   is_nullable: 1
+
+the order in which this article appears in that specific location
 
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+The user who created the news article
 
 =cut
 
@@ -176,8 +196,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-02 12:50:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IKAwgZM6jqOTbksraZb21w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Edd8K7ANL49fG7FKjwyRVQ
 
 sub koha_object_class {
     'Koha::NewsItem';

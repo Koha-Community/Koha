@@ -29,11 +29,15 @@ __PACKAGE__->table("statistics");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date and time of the transaction
+
 =head2 branch
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+foreign key, branch where the transaction occurred
 
 =head2 value
 
@@ -41,21 +45,29 @@ __PACKAGE__->table("statistics");
   is_nullable: 1
   size: [16,4]
 
+monetary value associated with the transaction
+
 =head2 type
 
   data_type: 'varchar'
   is_nullable: 1
   size: 16
 
+transaction type (localuse, issue, return, renew, writeoff, payment)
+
 =head2 other
 
   data_type: 'longtext'
   is_nullable: 1
 
+used by SIP
+
 =head2 itemnumber
 
   data_type: 'integer'
   is_nullable: 1
+
+foreign key from the items table, links transaction to a specific item
 
 =head2 itemtype
 
@@ -63,22 +75,30 @@ __PACKAGE__->table("statistics");
   is_nullable: 1
   size: 10
 
+foreign key from the itemtypes table, links transaction to a specific item type
+
 =head2 location
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
 
+authorized value for the shelving location for this item (MARC21 952$c)
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_nullable: 1
+
+foreign key from the borrowers table, links transaction to a specific borrower
 
 =head2 ccode
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
+
+foreign key from the items table, links transaction to a specific collection code
 
 =cut
 
@@ -110,8 +130,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-18 10:07:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dzoFXsATo16GZERh8LYT2A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OjX7bnPQw0SjrCRB2oVr1w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

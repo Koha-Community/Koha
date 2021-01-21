@@ -29,17 +29,23 @@ __PACKAGE__->table("serial");
   is_auto_increment: 1
   is_nullable: 0
 
+unique key for the issue
+
 =head2 biblionumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
+foreign key for the biblio.biblionumber that this issue is attached to
+
 =head2 subscriptionid
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+foreign key to the subscription.subscriptionid that this issue is part of
 
 =head2 serialseq
 
@@ -48,11 +54,15 @@ __PACKAGE__->table("serial");
   is_nullable: 0
   size: 100
 
+issue information (volume, number, etc)
+
 =head2 serialseq_x
 
   data_type: 'varchar'
   is_nullable: 1
   size: 100
+
+first part of issue information
 
 =head2 serialseq_y
 
@@ -60,11 +70,15 @@ __PACKAGE__->table("serial");
   is_nullable: 1
   size: 100
 
+second part of issue information
+
 =head2 serialseq_z
 
   data_type: 'varchar'
   is_nullable: 1
   size: 100
+
+third part of issue information
 
 =head2 status
 
@@ -72,16 +86,22 @@ __PACKAGE__->table("serial");
   default_value: 0
   is_nullable: 0
 
+status code for this issue (see manual for full descriptions)
+
 =head2 planneddate
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date expected
+
 =head2 notes
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+notes
 
 =head2 publisheddate
 
@@ -89,11 +109,15 @@ __PACKAGE__->table("serial");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date published
+
 =head2 publisheddatetext
 
   data_type: 'varchar'
   is_nullable: 1
   size: 100
+
+date published (descriptive)
 
 =head2 claimdate
 
@@ -101,16 +125,22 @@ __PACKAGE__->table("serial");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date claimed
+
 =head2 claims_count
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 1
 
+number of claims made related to this issue
+
 =head2 routingnotes
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+notes from the routing list
 
 =cut
 
@@ -207,8 +237,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 09:15:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ktCCJzkgRUFpYu857WQONA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SD7llCvCO+/67cXetzRKPQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

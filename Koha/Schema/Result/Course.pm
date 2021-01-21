@@ -29,11 +29,15 @@ __PACKAGE__->table("courses");
   is_auto_increment: 1
   is_nullable: 0
 
+unique id for the course
+
 =head2 department
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
+
+the authorised value for the DEPARTMENT
 
 =head2 course_number
 
@@ -41,11 +45,15 @@ __PACKAGE__->table("courses");
   is_nullable: 1
   size: 255
 
+the 'course number' assigned to a course
+
 =head2 section
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+the 'section' of a course
 
 =head2 course_name
 
@@ -53,21 +61,29 @@ __PACKAGE__->table("courses");
   is_nullable: 1
   size: 255
 
+the name of the course
+
 =head2 term
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
 
+the authorised value for the TERM
+
 =head2 staff_note
 
   data_type: 'longtext'
   is_nullable: 1
 
+the text of the staff only note
+
 =head2 public_note
 
   data_type: 'longtext'
   is_nullable: 1
+
+the text of the public / opac note
 
 =head2 students_count
 
@@ -75,12 +91,16 @@ __PACKAGE__->table("courses");
   is_nullable: 1
   size: 20
 
+how many students will be taking this course/section
+
 =head2 enabled
 
   data_type: 'enum'
   default_value: 'yes'
   extra: {list => ["yes","no"]}
   is_nullable: 0
+
+determines whether the course is active
 
 =head2 timestamp
 
@@ -181,8 +201,8 @@ Composing rels: L</course_instructors> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "course_instructors", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o0EBOuJCHxH5IG/PgsJfxg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Yoy4Un1rFmPk2EJW7Rf5/g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

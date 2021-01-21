@@ -35,11 +35,15 @@ __PACKAGE__->table("language_subtag_registry");
   is_nullable: 1
   size: 25
 
+language-script-region-variant-extension-privateuse
+
 =head2 description
 
   data_type: 'varchar'
   is_nullable: 1
   size: 25
+
+only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
 
 =head2 added
 
@@ -81,8 +85,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rauj/sMGM6sskKuMC/XRcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M4QL1kgte1o/Wz+XjSduWA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

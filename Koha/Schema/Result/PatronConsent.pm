@@ -41,6 +41,8 @@ __PACKAGE__->table("patron_consent");
   extra: {list => ["GDPR_PROCESSING"]}
   is_nullable: 1
 
+allows for future extension
+
 =head2 given_on
 
   data_type: 'datetime'
@@ -110,8 +112,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-20 13:00:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:as3b13eS31zkIPr9uxP7+A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rkn/K2jtHPFkGoG4QCmLsw
 
 sub koha_object_class {
     'Koha::Patron::Consent';

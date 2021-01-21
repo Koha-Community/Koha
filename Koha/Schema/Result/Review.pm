@@ -29,11 +29,15 @@ __PACKAGE__->table("reviews");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier for this comment
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+foreign key from the borrowers table defining which patron left this comment
 
 =head2 biblionumber
 
@@ -41,10 +45,14 @@ __PACKAGE__->table("reviews");
   is_foreign_key: 1
   is_nullable: 1
 
+foreign key from the biblio table defining which bibliographic record this comment is for
+
 =head2 review
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+the body of the comment
 
 =head2 approved
 
@@ -52,11 +60,15 @@ __PACKAGE__->table("reviews");
   default_value: 0
   is_nullable: 1
 
+whether this comment has been approved by a librarian (1 for yes, 0 for no)
+
 =head2 datereviewed
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+the date the comment was left
 
 =cut
 
@@ -134,8 +146,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gEngecP849wzHprYW7H2tw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1Am1qqe4ETom7ylth3Tvpg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -29,11 +29,15 @@ __PACKAGE__->table("aqinvoice_adjustments");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key for adjustments
+
 =head2 invoiceid
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+foreign key to link an adjustment to an invoice
 
 =head2 adjustment
 
@@ -41,16 +45,22 @@ __PACKAGE__->table("aqinvoice_adjustments");
   is_nullable: 1
   size: [28,6]
 
+amount of adjustment
+
 =head2 reason
 
   data_type: 'varchar'
   is_nullable: 1
   size: 80
 
+reason for adjustment defined by authorised values in ADJ_REASON category
+
 =head2 note
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+text to explain adjustment
 
 =head2 budget_id
 
@@ -58,11 +68,15 @@ __PACKAGE__->table("aqinvoice_adjustments");
   is_foreign_key: 1
   is_nullable: 1
 
+optional link to budget to apply adjustment to
+
 =head2 encumber_open
 
   data_type: 'smallint'
   default_value: 1
   is_nullable: 0
+
+whether or not to encumber the funds when invoice is still open, 1 = yes, 0 = no
 
 =head2 timestamp
 
@@ -70,6 +84,8 @@ __PACKAGE__->table("aqinvoice_adjustments");
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+timestamp  of last adjustment to adjustment
 
 =cut
 
@@ -147,8 +163,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-19 17:32:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jl0qxkZWVs2D1pi3kaRjpg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gy1vtvgPtZgUtWhwPWqlWA
 
 sub koha_object_class {
     'Koha::Acquisition::Invoice::Adjustment';

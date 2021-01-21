@@ -29,16 +29,22 @@ __PACKAGE__->table("ratings");
   is_foreign_key: 1
   is_nullable: 0
 
+the borrowernumber of the patron who left this rating (borrowers.borrowernumber)
+
 =head2 biblionumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
+the biblio this rating is for (biblio.biblionumber)
+
 =head2 rating_value
 
   data_type: 'tinyint'
   is_nullable: 0
+
+the rating, from 1 to 5
 
 =head2 timestamp
 
@@ -112,8 +118,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YT3jPQbA2TBuOuUXfEt7gQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wUwI/h1WR8kVGMNCrv/tUQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

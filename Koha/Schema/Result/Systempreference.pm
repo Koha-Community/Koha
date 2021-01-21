@@ -30,26 +30,36 @@ __PACKAGE__->table("systempreferences");
   is_nullable: 0
   size: 50
 
+system preference name
+
 =head2 value
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+system preference values
 
 =head2 options
 
   data_type: 'longtext'
   is_nullable: 1
 
+options for multiple choice system preferences
+
 =head2 explanation
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+descriptive text for the system preference
 
 =head2 type
 
   data_type: 'varchar'
   is_nullable: 1
   size: 20
+
+type of question this preference asks (multiple choice, plain text, yes or no, etc)
 
 =cut
 
@@ -79,8 +89,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("variable");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QI7OL4VHrXe8FridIOCZ4A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d9V4/gPRw1ucbd/TzEzNUQ
 
 sub koha_object_class {
     'Koha::Config::SysPref';

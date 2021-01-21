@@ -29,11 +29,15 @@ __PACKAGE__->table("suggestions");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier assigned automatically by Koha
+
 =head2 suggestedby
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
 
 =head2 suggesteddate
 
@@ -41,11 +45,15 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 0
 
+date the suggestion was submitted
+
 =head2 managedby
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
 
 =head2 manageddate
 
@@ -53,11 +61,15 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date the suggestion was updated
+
 =head2 acceptedby
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table
 
 =head2 accepteddate
 
@@ -65,11 +77,15 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date the suggestion was marked as accepted
+
 =head2 rejectedby
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
 
 =head2 rejecteddate
 
@@ -77,17 +93,23 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+date the suggestion was marked as rejected
+
 =head2 lastmodificationby
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
+borrowernumber for the librarian who edit the suggestion for the last time
+
 =head2 lastmodificationdate
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+date of the last modification
 
 =head2 STATUS
 
@@ -97,16 +119,22 @@ __PACKAGE__->table("suggestions");
   is_nullable: 0
   size: 10
 
+suggestion status (ASKED, CHECKED, ACCEPTED, REJECTED, ORDERED, AVAILABLE or a value from the SUGGEST_STATUS authorised value category)
+
 =head2 archived
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
+is the suggestion archived?
+
 =head2 note
 
   data_type: 'longtext'
   is_nullable: 1
+
+note entered on the suggestion
 
 =head2 author
 
@@ -114,16 +142,22 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 80
 
+author of the suggested item
+
 =head2 title
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
 
+title of the suggested item
+
 =head2 copyrightdate
 
   data_type: 'smallint'
   is_nullable: 1
+
+copyright date of the suggested item
 
 =head2 publishercode
 
@@ -131,12 +165,16 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 255
 
+publisher of the suggested item
+
 =head2 date
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+date and time the suggestion was updated
 
 =head2 volumedesc
 
@@ -156,11 +194,15 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 255
 
+publication place of the suggested item
+
 =head2 isbn
 
   data_type: 'varchar'
   is_nullable: 1
   size: 30
+
+isbn of the suggested item
 
 =head2 biblionumber
 
@@ -168,21 +210,29 @@ __PACKAGE__->table("suggestions");
   is_foreign_key: 1
   is_nullable: 1
 
+foreign key linking the suggestion to the biblio table after the suggestion has been ordered
+
 =head2 reason
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+reason for accepting or rejecting the suggestion
 
 =head2 patronreason
 
   data_type: 'mediumtext'
   is_nullable: 1
 
+reason for making the suggestion
+
 =head2 budgetid
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+foreign key linking the suggested budget to the aqbudgets table
 
 =head2 branchcode
 
@@ -191,10 +241,14 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 10
 
+foreign key linking the suggested branch to the branches table
+
 =head2 collectiontitle
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+collection name for the suggested item
 
 =head2 itemtype
 
@@ -202,10 +256,14 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 30
 
+suggested item type
+
 =head2 quantity
 
   data_type: 'smallint'
   is_nullable: 1
+
+suggested quantity to be purchased
 
 =head2 currency
 
@@ -213,17 +271,23 @@ __PACKAGE__->table("suggestions");
   is_nullable: 1
   size: 10
 
+suggested currency for the suggested price
+
 =head2 price
 
   data_type: 'decimal'
   is_nullable: 1
   size: [28,6]
 
+suggested price
+
 =head2 total
 
   data_type: 'decimal'
   is_nullable: 1
   size: [28,6]
+
+suggested total cost (price*quantity updated for currency)
 
 =cut
 
@@ -484,8 +548,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-14 20:04:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BrvQGdgqpODl23IfwbqdUw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3hkIGEbrTi7MUug0zjvyFg
 
 __PACKAGE__->belongs_to(
   "suggester",

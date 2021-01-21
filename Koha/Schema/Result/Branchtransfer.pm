@@ -29,12 +29,16 @@ __PACKAGE__->table("branchtransfers");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key
+
 =head2 itemnumber
 
   data_type: 'integer'
   default_value: 0
   is_foreign_key: 1
   is_nullable: 0
+
+the itemnumber that it is in transit (items.itemnumber)
 
 =head2 daterequested
 
@@ -43,11 +47,15 @@ __PACKAGE__->table("branchtransfers");
   default_value: current_timestamp
   is_nullable: 0
 
+the date the transfer was requested
+
 =head2 datesent
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+the date the transfer was initialized
 
 =head2 frombranch
 
@@ -57,11 +65,15 @@ __PACKAGE__->table("branchtransfers");
   is_nullable: 0
   size: 10
 
+the branch the transfer is coming from
+
 =head2 datearrived
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
   is_nullable: 1
+
+the date the transfer arrived at its destination
 
 =head2 tobranch
 
@@ -71,16 +83,22 @@ __PACKAGE__->table("branchtransfers");
   is_nullable: 0
   size: 10
 
+the branch the transfer was going to
+
 =head2 comments
 
   data_type: 'longtext'
   is_nullable: 1
+
+any comments related to the transfer
 
 =head2 reason
 
   data_type: 'enum'
   extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation","ReturnToHome","ReturnToHolding","RotatingCollection","Reserve","LostReserve","CancelReserve"]}
   is_nullable: 1
+
+what triggered the transfer
 
 =cut
 
@@ -211,8 +229,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-20 12:30:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G5GZTxF8X/mcIKXmuGVWIQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rseS0EldT7FjkmfRkgasBg
 
 sub koha_object_class {
     'Koha::Item::Transfer';

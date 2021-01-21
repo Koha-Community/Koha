@@ -29,6 +29,8 @@ __PACKAGE__->table("illcomments");
   is_auto_increment: 1
   is_nullable: 0
 
+Unique ID of the comment
+
 =head2 illrequest_id
 
   data_type: 'bigint'
@@ -36,16 +38,22 @@ __PACKAGE__->table("illcomments");
   is_foreign_key: 1
   is_nullable: 0
 
+ILL request number
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
 
+Link to the user who made the comment (could be librarian, patron or ILL partner library)
+
 =head2 comment
 
   data_type: 'text'
   is_nullable: 1
+
+The text of the comment
 
 =head2 timestamp
 
@@ -53,6 +61,8 @@ __PACKAGE__->table("illcomments");
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+Date and time when the comment was made
 
 =cut
 
@@ -129,8 +139,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-26 19:57:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JJC9ohn0V61+WzMppDKUJw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z5Y6mVTLtrYxmqmyAc/E7A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

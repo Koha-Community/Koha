@@ -29,11 +29,15 @@ __PACKAGE__->table("aqbudgetperiods");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key and unique number assigned by Koha
+
 =head2 budget_period_startdate
 
   data_type: 'date'
   datetime_undef_if_invalid: 1
   is_nullable: 0
+
+date when the budget starts
 
 =head2 budget_period_enddate
 
@@ -41,16 +45,22 @@ __PACKAGE__->table("aqbudgetperiods");
   datetime_undef_if_invalid: 1
   is_nullable: 0
 
+date when the budget ends
+
 =head2 budget_period_active
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 1
 
+whether this budget is active or not (1 for yes, 0 for no)
+
 =head2 budget_period_description
 
   data_type: 'longtext'
   is_nullable: 1
+
+description assigned to this budget
 
 =head2 budget_period_total
 
@@ -58,10 +68,14 @@ __PACKAGE__->table("aqbudgetperiods");
   is_nullable: 1
   size: [28,6]
 
+total amount available in this budget
+
 =head2 budget_period_locked
 
   data_type: 'tinyint'
   is_nullable: 1
+
+whether this budget is locked or not (1 for yes, 0 for no)
 
 =head2 sort1_authcat
 
@@ -69,11 +83,15 @@ __PACKAGE__->table("aqbudgetperiods");
   is_nullable: 1
   size: 10
 
+statistical category for this budget
+
 =head2 sort2_authcat
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+second statistical category for this budget
 
 =cut
 
@@ -128,8 +146,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-09-13 23:03:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0xS/Pc8hoKlNKfW9zDd4Gg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/ipbU/Wrqy3pDInlmLOTw
 
 sub koha_object_class {
     'Koha::Acquisition::Budget';

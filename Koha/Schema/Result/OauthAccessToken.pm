@@ -29,16 +29,22 @@ __PACKAGE__->table("oauth_access_tokens");
   is_nullable: 0
   size: 191
 
+generarated access token
+
 =head2 client_id
 
   data_type: 'varchar'
   is_nullable: 0
   size: 191
 
+the client id the access token belongs to
+
 =head2 expires
 
   data_type: 'integer'
   is_nullable: 0
+
+expiration time in seconds
 
 =cut
 
@@ -64,8 +70,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("access_token");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-09 12:50:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M6tueO6jmJwgmwMrqO1L0Q
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3mL1s811AK45Nn5yPSJSaA
 
 sub koha_object_class {
     'Koha::OAuthAccessToken';

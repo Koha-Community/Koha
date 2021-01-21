@@ -29,16 +29,22 @@ __PACKAGE__->table("cash_registers");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier for each account register
+
 =head2 name
 
   data_type: 'varchar'
   is_nullable: 0
   size: 24
 
+the user friendly identifier for each account register
+
 =head2 description
 
   data_type: 'longtext'
   is_nullable: 0
+
+the user friendly description for each account register
 
 =head2 branch
 
@@ -47,11 +53,15 @@ __PACKAGE__->table("cash_registers");
   is_nullable: 0
   size: 10
 
+the foreign key the library this account register belongs
+
 =head2 branch_default
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+boolean flag to denote that this till is the branch default
 
 =head2 starting_float
 
@@ -59,11 +69,15 @@ __PACKAGE__->table("cash_registers");
   is_nullable: 1
   size: [28,6]
 
+the starting float this account register should be assigned
+
 =head2 archived
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+boolean flag to denote if this till is archived or not
 
 =cut
 
@@ -160,8 +174,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:21:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zP8my0Zp5bSARTBfws4n1A
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NNSzc20vEH34dmEsTb5K0Q
 
 __PACKAGE__->add_columns(
     '+archived'       => { is_boolean => 1 },

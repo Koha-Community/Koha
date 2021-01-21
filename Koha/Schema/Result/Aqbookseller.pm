@@ -29,30 +29,42 @@ __PACKAGE__->table("aqbooksellers");
   is_auto_increment: 1
   is_nullable: 0
 
+primary key and unique identifier assigned by Koha
+
 =head2 name
 
   data_type: 'longtext'
   is_nullable: 0
+
+vendor name
 
 =head2 address1
 
   data_type: 'longtext'
   is_nullable: 1
 
+first line of vendor physical address
+
 =head2 address2
 
   data_type: 'longtext'
   is_nullable: 1
+
+second line of vendor physical address
 
 =head2 address3
 
   data_type: 'longtext'
   is_nullable: 1
 
+third line of vendor physical address
+
 =head2 address4
 
   data_type: 'longtext'
   is_nullable: 1
+
+fourth line of vendor physical address
 
 =head2 phone
 
@@ -60,20 +72,28 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: 30
 
+vendor phone number
+
 =head2 accountnumber
 
   data_type: 'longtext'
   is_nullable: 1
+
+vendor account number
 
 =head2 notes
 
   data_type: 'longtext'
   is_nullable: 1
 
+order notes
+
 =head2 postal
 
   data_type: 'longtext'
   is_nullable: 1
+
+vendor postal address (all lines)
 
 =head2 url
 
@@ -81,10 +101,14 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: 255
 
+vendor web address
+
 =head2 active
 
   data_type: 'tinyint'
   is_nullable: 1
+
+is this vendor active (1 for yes, 0 for no)
 
 =head2 listprice
 
@@ -93,6 +117,8 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: 10
 
+currency code for list prices
+
 =head2 invoiceprice
 
   data_type: 'varchar'
@@ -100,20 +126,28 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: 10
 
+currency code for invoice prices
+
 =head2 gstreg
 
   data_type: 'tinyint'
   is_nullable: 1
+
+is your library charged tax (1 for yes, 0 for no)
 
 =head2 listincgst
 
   data_type: 'tinyint'
   is_nullable: 1
 
+is tax included in list prices (1 for yes, 0 for no)
+
 =head2 invoiceincgst
 
   data_type: 'tinyint'
   is_nullable: 1
+
+is tax included in invoice prices (1 for yes, 0 for no)
 
 =head2 tax_rate
 
@@ -121,11 +155,15 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: [6,4]
 
+the tax rate the library is charged
+
 =head2 discount
 
   data_type: 'float'
   is_nullable: 1
   size: [6,4]
+
+discount offered on all items ordered from this vendor
 
 =head2 fax
 
@@ -133,10 +171,14 @@ __PACKAGE__->table("aqbooksellers");
   is_nullable: 1
   size: 50
 
+vendor fax number
+
 =head2 deliverytime
 
   data_type: 'integer'
   is_nullable: 1
+
+vendor delivery time
 
 =cut
 
@@ -345,8 +387,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-17 08:54:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1lSFcy25po9EBzkNkjL5UA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qu4OqSCsEKEeJD9VtOEd4g
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },

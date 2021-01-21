@@ -29,17 +29,23 @@ __PACKAGE__->table("patron_list_patrons");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier
+
 =head2 patron_list_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
+the list this entry is part of
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+the borrower that is part of this list
 
 =cut
 
@@ -97,8 +103,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 21:34:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0gmBJbxnHkobBAazvKnY7g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WEOKHfprX7+detNjQ3pV/g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

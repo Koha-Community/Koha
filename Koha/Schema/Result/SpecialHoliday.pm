@@ -29,6 +29,8 @@ __PACKAGE__->table("special_holidays");
   is_auto_increment: 1
   is_nullable: 0
 
+unique identifier assigned by Koha
+
 =head2 branchcode
 
   data_type: 'varchar'
@@ -36,11 +38,15 @@ __PACKAGE__->table("special_holidays");
   is_nullable: 0
   size: 10
 
+foreign key from the branches table, defines which branch this closing is for
+
 =head2 day
 
   data_type: 'smallint'
   default_value: 0
   is_nullable: 0
+
+day of the month this closing is on
 
 =head2 month
 
@@ -48,17 +54,23 @@ __PACKAGE__->table("special_holidays");
   default_value: 0
   is_nullable: 0
 
+month this closing is in
+
 =head2 year
 
   data_type: 'smallint'
   default_value: 0
   is_nullable: 0
 
+year this closing is in
+
 =head2 isexception
 
   data_type: 'smallint'
   default_value: 1
   is_nullable: 0
+
+is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
 
 =head2 title
 
@@ -67,10 +79,14 @@ __PACKAGE__->table("special_holidays");
   is_nullable: 0
   size: 50
 
+title for this closing
+
 =head2 description
 
   data_type: 'mediumtext'
   is_nullable: 0
+
+description of this closing
 
 =cut
 
@@ -123,8 +139,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-20 13:57:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cj8Oveni0l6kAR/azmw4SA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H3PUa5HiJKKfdndKXbmJ6A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

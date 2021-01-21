@@ -29,16 +29,22 @@ __PACKAGE__->table("advanced_editor_macros");
   is_auto_increment: 1
   is_nullable: 0
 
+Unique ID of the macro
+
 =head2 name
 
   data_type: 'varchar'
   is_nullable: 0
   size: 80
 
+Name of the macro
+
 =head2 macro
 
   data_type: 'longtext'
   is_nullable: 1
+
+The macro code itself
 
 =head2 borrowernumber
 
@@ -46,11 +52,15 @@ __PACKAGE__->table("advanced_editor_macros");
   is_foreign_key: 1
   is_nullable: 1
 
+ID of the borrower who created this macro
+
 =head2 shared
 
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 1
+
+Bit to define if shared or private macro
 
 =cut
 
@@ -102,8 +112,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-02 15:01:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wx556VlgXYqdP2XyQ87Jzg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:abYuKrQLDx8KB3ZdEGBlqA
 
 __PACKAGE__->add_columns(
             '+shared' => { is_boolean => 1 },

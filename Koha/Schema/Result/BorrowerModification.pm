@@ -421,6 +421,8 @@ __PACKAGE__->table("borrower_modifications");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+data processing consent
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -610,8 +612,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 08:12:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eK1U1HkJyF1dL9WpcrkxdA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:be+U0NZYRzthZMeOPcg0jA
 
 sub koha_object_class {
     'Koha::Patron::Modification';

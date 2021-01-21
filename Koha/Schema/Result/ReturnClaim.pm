@@ -29,11 +29,15 @@ __PACKAGE__->table("return_claims");
   is_auto_increment: 1
   is_nullable: 0
 
+Unique ID of the return claim
+
 =head2 itemnumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+ID of the item
 
 =head2 issue_id
 
@@ -41,16 +45,22 @@ __PACKAGE__->table("return_claims");
   is_foreign_key: 1
   is_nullable: 1
 
+ID of the checkout that triggered the claim
+
 =head2 borrowernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
+ID of the patron
+
 =head2 notes
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+Notes about the claim
 
 =head2 created_on
 
@@ -58,11 +68,15 @@ __PACKAGE__->table("return_claims");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+Time and date the claim was created
+
 =head2 created_by
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+ID of the staff member that registered the claim
 
 =head2 updated_on
 
@@ -70,11 +84,15 @@ __PACKAGE__->table("return_claims");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+Time and date of the latest change on the claim (notes)
+
 =head2 updated_by
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+ID of the staff member that updated the claim
 
 =head2 resolution
 
@@ -82,17 +100,23 @@ __PACKAGE__->table("return_claims");
   is_nullable: 1
   size: 80
 
+Resolution code (RETURN_CLAIM_RESOLUTION AVs)
+
 =head2 resolved_on
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+Time and date the claim was resolved
+
 =head2 resolved_by
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 1
+
+ID of the staff member that resolved the claim
 
 =cut
 
@@ -274,8 +298,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-31 12:18:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1MJxAPCP8yuYvzkXp5q8w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qcgfUNzvsOB0UMm/94mZMQ
 
 sub koha_objects_class {
     'Koha::Checkouts::ReturnClaims';

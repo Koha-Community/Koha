@@ -29,11 +29,15 @@ __PACKAGE__->table("aqorders_claims");
   is_auto_increment: 1
   is_nullable: 0
 
+ID of the claims
+
 =head2 ordernumber
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+order linked to this claim
 
 =head2 claimed_on
 
@@ -41,6 +45,8 @@ __PACKAGE__->table("aqorders_claims");
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
+
+Date of the claims
 
 =cut
 
@@ -88,8 +94,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-05-04 08:25:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YHD9b6rUAPUM5HzFg4k9Wg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4/GYhhysSbrh67vIq67xZw
 
 sub koha_object_class {
     'Koha::Acquisition::Order::Claim';

@@ -29,11 +29,15 @@ __PACKAGE__->table("deletedbiblioitems");
   default_value: 0
   is_nullable: 0
 
+primary key, unique identifier assigned by Koha
+
 =head2 biblionumber
 
   data_type: 'integer'
   default_value: 0
   is_nullable: 0
+
+foreign key linking this table to the biblio table
 
 =head2 volume
 
@@ -51,15 +55,21 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 10
 
+biblio level item type (MARC21 942$c)
+
 =head2 isbn
 
   data_type: 'longtext'
   is_nullable: 1
 
+ISBN (MARC21 020$a)
+
 =head2 issn
 
   data_type: 'longtext'
   is_nullable: 1
+
+ISSN (MARC21 022$a)
 
 =head2 ean
 
@@ -77,6 +87,8 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 255
 
+publisher (MARC21 260$b)
+
 =head2 volumedate
 
   data_type: 'date'
@@ -87,6 +99,8 @@ __PACKAGE__->table("deletedbiblioitems");
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+volume information (MARC21 362$a)
 
 =head2 collectiontitle
 
@@ -126,11 +140,15 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 255
 
+illustrations (MARC21 300$b)
+
 =head2 pages
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+number of pages (MARC21 300$c)
 
 =head2 notes
 
@@ -143,11 +161,15 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 255
 
+material size (MARC21 300$c)
+
 =head2 place
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+publication place (MARC21 260$a)
 
 =head2 lccn
 
@@ -155,16 +177,22 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 25
 
+library of congress control number (MARC21 010$a)
+
 =head2 url
 
   data_type: 'mediumtext'
   is_nullable: 1
+
+url (MARC21 856$u)
 
 =head2 cn_source
 
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+classification source (MARC21 942$2)
 
 =head2 cn_class
 
@@ -190,11 +218,15 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 255
 
+normalized version of the call number used for sorting
+
 =head2 agerestriction
 
   data_type: 'varchar'
   is_nullable: 1
   size: 255
+
+target audience/age restriction from the bib record (MARC21 521$a)
 
 =head2 totalissues
 
@@ -288,8 +320,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QLYBa1Ea8Jau2Wy6U+wyQw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rGXNjpclQJ3+na+MYa4YFA
 
 sub koha_objects_class {
     'Koha::Old::Biblioitems';
