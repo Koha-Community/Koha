@@ -570,7 +570,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ReturnBeforeExpiry','0',NULL,'If ON, checkout will be prevented if returndate is after patron card expiry','YesNo'),
 ('ReturnLog','1',NULL,'If ON, enables the circulation (returns) log','YesNo'),
 ('ReturnpathDefault','',NULL,'Use this email address as return path or bounce address for undeliverable emails','Free'),
-('reviewson','1','','If ON, enables patron reviews of bibliographic records in the OPAC','YesNo'),
+('OPACComments','1','','If ON, enables patron reviews of bibliographic records in the OPAC','YesNo'),
 ('RisExportAdditionalFields',  '', NULL ,  'Define additional RIS tags to export from MARC records in YAML format as an associative array with either a marc tag/subfield combination as the value, or a list of tag/subfield combinations.',  'textarea'),
 ('RoundFinesAtPayment','0', NULL,'If enabled any fines with fractions of a cent will be rounded to the nearest cent when payments are coll    ected. e.g. 1.004 will be paid off by a 1.00 payment','YesNo'),
 ('RoutingListAddReserves','0','','If ON the patrons on routing lists are automatically added to holds on the issue.','YesNo'),

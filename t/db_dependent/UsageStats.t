@@ -522,7 +522,7 @@ sub mocking_systempreferences_to_a_set_value {
         opacuserlogin
         QuoteOfTheDay
         RequestOnOpac
-        reviewson
+        OPACComments
         ShowReviewer
         ShowReviewerPhoto
         SocialNetworks

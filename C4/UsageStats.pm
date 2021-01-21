@@ -261,7 +261,7 @@ sub BuildReport {
         opacuserlogin
         QuoteOfTheDay
         RequestOnOpac
-        reviewson
+        OPACComments
         ShowReviewer
         ShowReviewerPhoto
         SocialNetworks

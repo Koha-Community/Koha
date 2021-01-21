@@ -310,7 +310,7 @@
                             <a href="/cgi-bin/koha/opac-authorities-home.pl">Authority search</a>
                         </li>
                     [% END %]
-                    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'reviewson' ) == 1 ) && ( Koha.Preference( 'OpacShowRecentComments' ) == 1 ) ) %]
+                    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACComments' ) == 1 ) && ( Koha.Preference( 'OpacShowRecentComments' ) == 1 ) ) %]
                         <li class="nav-item">
                             <a href="/cgi-bin/koha/opac-showreviews.pl">Recent comments</a>
                         </li>

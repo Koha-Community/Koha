@@ -900,7 +900,7 @@ my $coins = eval { $biblio->get_coins };
 $template->param( ocoins => $coins );
 
 my ( $loggedincommenter, $reviews );
-if ( C4::Context->preference('reviewson') ) {
+if ( C4::Context->preference('OPACComments') ) {
     $reviews = Koha::Reviews->search(
         {
             biblionumber => $biblionumber,

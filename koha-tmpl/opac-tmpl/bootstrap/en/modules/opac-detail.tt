@@ -561,7 +561,7 @@
                             </li>
                         [% END %]
 
-                        [% IF Koha.Preference( 'reviewson' ) == 1 %]
+                        [% IF Koha.Preference( 'OPACComments' ) == 1 %]
                             <li id="tab_comments"><a href="#comments">Comments[% ' ( ' _ (reviews.size || 0) _ ' )' | html %]</a></li>
                         [% END %]
 
@@ -881,7 +881,7 @@
                         </div>
                     [% END # / IF LibraryThingForLibrariesID && LibraryThingForLibrariesTabbedView %]
 
-                    [% IF Koha.Preference( 'reviewson' ) == 1 %]
+                    [% IF Koha.Preference( 'OPACComments' ) == 1 %]
                         <div id="comments">
                             <div id="newcomment"></div>
                                 [% IF ( reviews ) %]
@@ -954,7 +954,7 @@
                                     </div>
                                 [% END # / IF loggedinusername %]
                             </div> <!-- / #comments -->
-                        [% END # / IF reviewson %]
+                        [% END # / IF OPACComments %]
 
                         [% IF ( OPACFRBRizeEditions && XISBNS ) %]
                             <div id="editions">
