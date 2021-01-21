@@ -59,7 +59,7 @@
                             [% END %]
                             [% HOLD.biblio.author | html %]
                             [% IF HOLD.item_level_hold %]
-                                Only item [% HOLD.item.barcode %]
+                                Only item [% HOLD.item.barcode | html %]
                             [% ELSE %]
                                 Next available item
                             [% END %]
