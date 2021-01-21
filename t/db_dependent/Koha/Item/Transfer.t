@@ -208,7 +208,7 @@ subtest 'in_transit tests' => sub {
 };
 
 subtest 'cancel tests' => sub {
-    plan tests => 6;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -256,7 +256,6 @@ subtest 'cancel tests' => sub {
     $transfer->cancel($cancellation_reason);
     ok( $transfer->datecancelled, 'Cancellation date set upon call to cancel' );
     is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set');
-    is( $transfer->reason, 'Manual', 'Reason is not updated by cancelling the transfer' );
 
     $schema->storage->txn_rollback;
 };
