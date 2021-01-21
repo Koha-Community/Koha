@@ -78,6 +78,18 @@ builder {
     enable "+Koha::Middleware::RealIP";
 
     mount '/opac'          => builder {
+        #NOTE: it is important that these are relative links
+        enable 'ErrorDocument',
+            400 => 'errors/400.pl',
+            401 => 'errors/401.pl',
+            402 => 'errors/402.pl',
+            403 => 'errors/403.pl',
+            404 => 'errors/404.pl',
+            500 => 'errors/500.pl',
+            subrequest => 1;
+        #NOTE: Without this middleware to catch fatal errors, ErrorDocument won't be able to render a 500 document
+        #NOTE: This middleware must be closer to the PSGI app than ErrorDocument
+        enable "HTTPExceptions";
         if ( Log::Log4perl->get_logger('plack-opac')->has_appenders ){
             enable 'Log4perl', category => 'plack-opac';
             enable 'LogWarn';
@@ -85,6 +97,18 @@ builder {
         $opac;
     };
     mount '/intranet'      => builder {
+        #NOTE: it is important that these are relative links
+        enable 'ErrorDocument',
+            400 => 'errors/400.pl',
+            401 => 'errors/401.pl',
+            402 => 'errors/402.pl',
+            403 => 'errors/403.pl',
+            404 => 'errors/404.pl',
+            500 => 'errors/500.pl',
+            subrequest => 1;
+        #NOTE: Without this middleware to catch fatal errors, ErrorDocument won't be able to render a 500 document
+        #NOTE: This middleware must be closer to the PSGI app than ErrorDocument
+        enable "HTTPExceptions";
         if ( Log::Log4perl->get_logger('plack-intranet')->has_appenders ){
             enable 'Log4perl', category => 'plack-intranet';
             enable 'LogWarn';

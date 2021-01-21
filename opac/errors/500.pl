@@ -21,6 +21,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
+use List::MoreUtils qw(any);
 
 my $query = CGI->new;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
@@ -37,4 +38,8 @@ $template->param (
     admin => $admin,
     errno => 500,
 );
-output_with_http_headers $query, $cookie, $template->output, 'html', '500 Internal Server Error';
+my $status = '500 Internal Server Error';
+if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+    $status = '200 OK';
+}
+output_with_http_headers $query, $cookie, $template->output, 'html', $status;

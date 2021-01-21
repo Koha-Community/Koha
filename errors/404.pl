@@ -18,7 +18,28 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use C4::Auth;
 use C4::Output;
+use C4::Context;
+use List::MoreUtils qw(any);
 
 my $query = CGI->new;
-output_error( $query, '404' );
+my $admin = C4::Context->preference('KohaAdminEmailAddress');
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => 'errors/errorpage.tt',
+        query           => $query,
+        type            => 'intranet',
+        authnotrequired => 1,
+        debug           => 1,
+    }
+);
+$template->param (
+    admin => $admin,
+    errno => 404,
+);
+my $status = '404 Not Found';
+if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+    $status = '200 OK';
+}
+output_with_http_headers $query, $cookie, $template->output, 'html', $status;

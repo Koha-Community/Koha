@@ -21,6 +21,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
+use List::MoreUtils qw(any);
 
 my $query = CGI->new;
 my $admin = C4::Context->preference('KohaAdminEmailAddress');
@@ -37,4 +38,8 @@ $template->param (
     admin => $admin,
     errno => 401,
 );
-output_with_http_headers $query, $cookie, $template->output, 'html', '401 Unauthorized';
+my $status = '401 Unauthorized';
+if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
+    $status = '200 OK';
+}
+output_with_http_headers $query, $cookie, $template->output, 'html', $status;
