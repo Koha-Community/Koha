@@ -230,8 +230,13 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 }
             }
             // when cloning a subfield, re set its label too.
-            var labels = divs[i].getElementsByTagName('label');
-            labels[0].setAttribute('for', id_input);
+            try {
+                var labels = divs[i].getElementsByTagName('label');
+                labels[0].setAttribute('for', id_input);
+            }
+            catch(e) {
+                // do nothing if label does not exist.
+            }
 
             // setting its '+' and '-' buttons
             try {
