@@ -21,7 +21,7 @@
 
 [% INCLUDE 'members-toolbar.inc' %]
 
-<form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+<form id="flag_form" method="post" action="/cgi-bin/koha/members/member-flags.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
     <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="newflags" value="1" />
@@ -33,6 +33,12 @@
             <a class="btn btn-default" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-remove"></i> Cancel</a>
             <a class="toggleall toggleall_on btn btn-link" href="#"><i class="fa fa-plus-square-o"></i> Show all</a>
             <a class="toggleall toggleall_off btn btn-link" href="#"><i class="fa fa-minus-square-o"></i> Hide all</a>
+            <a id="CheckAllFlags" class="btn btn-link" href="#">
+                <i class="fa fa-check"></i> Select all
+            </a>
+            <a id="UncheckAllFlags" class="btn btn-link" href="#">
+                <i class="fa fa-remove"></i> Clear all
+            </a>
             <div class="btn-group pull-right">
                 Filter: <input type="text" name="permissions_filter" id="permissions_filter" size="20" />
                 <a href="#" id="clear_filter" style="display:none"><i class="fa fa-remove"></i></a>
@@ -105,6 +111,22 @@
         var Sticky;
         $(document).ready(function() {
 
+            $("#CheckAllFlags").on("click",function(){
+                $(".flag").attr("disabled", false);
+                $(".flag").prop("checked", true);
+                return false;
+            });
+            $("#UncheckAllFlags").on("click",function(){
+                $(".flag").attr("disabled", false);
+                $(".flag").prop("checked", false);
+                return false;
+            });
+            $(".flag").change(function(){
+                if(!$(this).is(':checked')){
+                    $("input#flag-0").prop("checked", false);
+                }
+            });
+
             Sticky = $("#permissions_toolbar");
             Sticky.hcSticky({
                 stickTo: "#permissionstree",
@@ -144,12 +166,7 @@
                     alert(_("Inconsistency detected!") + "\n\n" + _("The superlibrarian privilege is mutually exclusive of other privileges, as it includes them all.") + "\n\n" + _("This patron's privileges will now be reset to include only superlibrarian."));
                 }
 
-                $('input[name="flag"]').each(function() {
-                    if($(this).attr('id') != "flag-0" && !$(this).hasClass('superlib') ){
-                        $(this).prop('disabled', true);
-                        $(this).prop('checked', false);
-                    }
-                });
+                setLibrarian();
             }
 
             $('input#flag-0').click(function() {
@@ -222,8 +239,17 @@
                     }
                 }
             });
-
         });
+
+        function setLibrarian(){
+            $('input[name="flag"]').each(function() {
+                if($(this).attr('id') != "flag-0" && !$(this).hasClass('superlib') ){
+                    $(this).prop('disabled', true);
+                    $(this).prop('checked', false);
+                }
+            });
+        }
+
     </script>
 [% END %]
 
