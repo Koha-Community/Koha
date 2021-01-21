@@ -69,7 +69,7 @@
                             <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode | html %]" /></li>
                             <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc | html %]" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note | html %]" /></li>
-                            <li><label for="amount">Amount: </label><input type="text" inputmode="numeric" pattern="[0-9]*" name="amount" id="amount" required="required" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
+                            <li><label for="amount">Amount: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="amount" id="amount" required="required" value="[% amount | $Price on_editing => 1 %]" /> Example: 5.00</li>
                         </ol>
                     </fieldset>
                     <fieldset class="action">
