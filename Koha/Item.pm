@@ -462,6 +462,10 @@ Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
 whereby the most recently sent, but not received, transfer will be returned
 if it exists, otherwise the oldest unsatisfied transfer will be returned.
 
+This allows for transfers to queue, which is the case for stock rotation and
+rotating collections where a manual transfer may need to take precedence but
+we still expect the item to end up at a final location eventually.
+
 =cut
 
 sub get_transfer {
