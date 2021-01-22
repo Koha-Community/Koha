@@ -2086,7 +2086,7 @@ sub TransformHtmlToXml {
 
     my $xml = MARC::File::XML::header('UTF-8');
     $xml .= "<record>\n";
-    $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
+    $auth_type = C4::Context->preference('marcflavour') unless $auth_type; # FIXME auth_type must be removed
     MARC::File::XML->default_record_format($auth_type);
 
     # in UNIMARC, field 100 contains the encoding

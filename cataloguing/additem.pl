@@ -127,6 +127,7 @@ sub generate_subfield_form {
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
         $subfield_data{maxlength}  = $subfieldlib->{maxlength};
         $subfield_data{display_order} = $subfieldlib->{display_order};
+        $subfield_data{kohafield}  = $subfieldlib->{kohafield} || 'items.more_subfields_xml';
         
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
@@ -741,33 +742,49 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
-    # rebuild
-    my @tags      = $input->multi_param('tag');
-    my @subfields = $input->multi_param('subfield');
-    my @values    = $input->multi_param('field_value');
-    # build indicator hash.
-    my @ind_tag   = $input->multi_param('ind_tag');
-    my @indicator = $input->multi_param('indicator');
-    # my $itemnumber = $input->param('itemnumber');
-    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
-    my $itemtosave=MARC::Record::new_from_xml($xml, 'UTF-8');
-    # MARC::Record builded => now, record in DB
-    # warn "R: ".$record->as_formatted;
-    # check that the barcode don't exist already
-    my $addedolditem = TransformMarcToKoha($itemtosave);
-    my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
-    if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
-        push @errors,"barcode_not_unique";
-    } else {
-        my $item = Koha::Items->find($itemnumber );
-        my $newitem = ModItemFromMarc($itemtosave, $biblionumber, $itemnumber);
-        $itemnumber = q{};
-        my $olditemlost = $item->itemlost;
-        my $newitemlost = $newitem->{itemlost};
-        if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
-            LostItem( $item->itemnumber, 'additem' )
+
+    my $itemnumber = $input->param('itemnumber');
+    my $item = Koha::Items->find($itemnumber);
+    # FIXME Handle non existent item
+    my $olditemlost = $item->itemlost;
+    my @columns = Koha::Items->columns;
+    for my $c ( @columns ) {
+        if ( $c eq 'more_subfields_xml' ) {
+            my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
+            my @unlinked_item_subfields;
+            for my $subfield ( @more_subfields_xml ) {
+                my $v = $input->param('items.more_subfields_xml_' . $subfield);
+                push @unlinked_item_subfields, $subfield, $v;
+            }
+            if ( @unlinked_item_subfields ) {
+                my $marc = MARC::Record->new();
+                # use of tag 999 is arbitrary, and doesn't need to match the item tag
+                # used in the framework
+                $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
+                $marc->encoding("UTF-8");
+                $item->more_subfields_xml($marc->as_xml("USMARC"));
+                next;
+            }
+            $item->more_subfields_xml(undef);
+        } else {
+            my $v = $input->param("items.".$c);
+            next unless defined $v;
+            $item->$c($v);
         }
     }
+
+    # check that the barcode don't exist already
+    if ( Koha::Items->search({ barcode => $item->barcode, itemnumber => { '!=' => $item->itemnumber } })->count ) {
+        # FIXME We shouldn't need that, ->store would explode as there is a unique constraint on items.barcode
+        push @errors,"barcode_not_unique";
+    } else {
+        my $newitemlost = $item->itemlost;
+        if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
+            LostItem( $item->itemnumber, 'additem' );
+        }
+        $item->store;
+    }
+
     $nextop="additem";
 } elsif ($op eq "delinkitem"){
 

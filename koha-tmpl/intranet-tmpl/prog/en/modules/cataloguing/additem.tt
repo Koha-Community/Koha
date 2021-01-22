@@ -160,6 +160,13 @@
 	<fieldset class="rows">
 	<ol>
         [% FOREACH ite IN item %]
+
+                [% IF ite.kohafield == 'items.more_subfields_xml' %]
+                    [% SET kohafield = 'items.more_subfields_xml_' _ ite.subfield %]
+                [% ELSE %]
+                    [% SET kohafield = ite.kohafield %]
+                [% END %]
+
                <li><div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
                 [% IF ( ite.mandatory ) %]
                <label class="required">[% ite.subfield | html %] - [% ite.marc_lib | $raw %]</label>
@@ -169,12 +176,12 @@
 
                 [% SET mv = ite.marc_value %]
                 [% IF ( mv.type == 'hidden' ) %]
-                    <input type="hidden" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
+                    <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
                     [% IF ( mv.readonly || ite.IS_RETURN_CLAIM ) %]
-                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled" data-width="50%">
+                        <select name="[% kohafield %]" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled" data-width="50%">
                     [% ELSE %]
-                        <select name="field_value" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]"  data-width="50%">
+                        <select name="[% kohafield %]" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]" data-width="50%">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]
@@ -190,17 +197,17 @@
                     </select>
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
                         <a href="#" class="buttonDot"  onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_plugin' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% IF ( mv.nopopup ) %]
                             <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="No popup">...</a>
                         [% ELSE  %]
@@ -210,18 +217,21 @@
                     [% END %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                     [% END %]
                 [% ELSIF ( mv.type == 'textarea' ) %]
                     [% IF mv.readonly %]
-                        <textarea id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
                     [% ELSE %]
-                        <textarea id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" rows="5" cols="64" >[% mv.value | html %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" rows="5" cols="64" >[% mv.value | html %]</textarea>
                     [% END %]
                 [% END %]
 
+                [% IF ite.kohafield == 'items.more_subfields_xml' %]
+                    <input type="hidden" name="items.more_subfields_xml" value="[% ite.subfield %]" />
+                [% END %]
                 <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
                 <input type="hidden" name="subfield"  value="[% ite.subfield | html %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
@@ -265,7 +275,7 @@
     [% ELSE %]
     <input type="hidden" name="tag" value="[% itemtagfield | html %]" />
     <input type="hidden" name="subfield" value="[% itemtagsubfield | html %]" />
-    <input type="hidden" name="field_value" value="[% itemnumber | html %]" />
+    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
     <input type="submit" value="Save changes" onclick="return Check(this.form)">
     <input type="button" id="addnewitem" value="Add a new item">
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Cancel</a>
