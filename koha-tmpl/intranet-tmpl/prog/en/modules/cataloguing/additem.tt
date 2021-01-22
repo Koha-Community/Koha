@@ -250,7 +250,9 @@
     </fieldset>
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
-    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+    [% IF op != 'add_item' %]
+        <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+    [% END %]
 
 <fieldset class="action">    [% IF op != 'saveitem' %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
@@ -275,7 +277,9 @@
     [% ELSE %]
     <input type="hidden" name="tag" value="[% itemtagfield | html %]" />
     <input type="hidden" name="subfield" value="[% itemtagsubfield | html %]" />
-    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+    [% IF op != 'add_item' %]
+        <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+    [% END %]
     <input type="submit" value="Save changes" onclick="return Check(this.form)">
     <input type="button" id="addnewitem" value="Add a new item">
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Cancel</a>

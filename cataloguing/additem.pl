@@ -40,6 +40,8 @@ use C4::Context;
 use C4::Circulation qw( LostItem );
 use C4::Koha qw( GetAuthorisedValues );
 use C4::ClassSource qw( GetClassSources GetClassSource );
+use C4::Barcodes;
+use C4::Barcodes::ValueBuilder;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::ItemTypes;
@@ -486,20 +488,9 @@ if ($prefillitem) {
 }
 
 #-------------------------------------------------------------------------------
+my $current_item;
 if ($op eq "additem") {
 
-    #-------------------------------------------------------------------------------
-    # rebuild
-    my @tags      = $input->multi_param('tag');
-    my @subfields = $input->multi_param('subfield');
-    my @values    = $input->multi_param('field_value');
-    # build indicator hash.
-    my @ind_tag   = $input->multi_param('ind_tag');
-    my @indicator = $input->multi_param('indicator');
-    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-    my $record = MARC::Record::new_from_xml($xml, 'UTF-8');
-
-    # type of add
     my $add_submit                 = $input->param('add_submit');
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
@@ -513,141 +504,178 @@ if ($op eq "additem") {
     $add_duplicate_submit = 1 if ($prefillitem);
     $justaddeditem = 1;
 
-    # if autoBarcode is set to 'incremental', calculate barcode...
-    if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
-        $record = _increment_barcode($record, $frameworkcode);
+    my @columns = Koha::Items->columns;
+    my $biblio = Koha::Biblios->find($biblionumber);
+    my $item = Koha::Item->new;
+    $item->biblionumber($biblio->biblionumber);
+    for my $c ( @columns ) {
+        if ( $c eq 'more_subfields_xml' ) {
+            my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
+            my @unlinked_item_subfields;
+            for my $subfield ( @more_subfields_xml ) {
+                my $v = $input->param('items.more_subfields_xml_' . $subfield);
+                push @unlinked_item_subfields, $subfield, $v;
+            }
+            if ( @unlinked_item_subfields ) {
+                my $marc = MARC::Record->new();
+                # use of tag 999 is arbitrary, and doesn't need to match the item tag
+                # used in the framework
+                $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
+                $marc->encoding("UTF-8");
+                $item->more_subfields_xml($marc->as_xml("USMARC"));
+                next;
+            }
+            $item->more_subfields_xml(undef);
+        } else {
+            my $v = $input->param("items.".$c);
+            next unless defined $v;
+            $item->$c($v);
+        }
     }
 
-    my $addedolditem = TransformMarcToKoha( $record );
+    # if autoBarcode is set to 'incremental', calculate barcode...
+    if ( not $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
+        my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+        $item->barcode($barcode);
+    }
 
     # If we have to add or add & duplicate, we add the item
     if ( $add_submit || $add_duplicate_submit ) {
 
         # check for item barcode # being unique
-        my $exist_itemnumber = get_item_from_barcode( $addedolditem->{'barcode'} );
-        push @errors, "barcode_not_unique" if ($exist_itemnumber);
+        if ( Koha::Items->search({ barcode => $item->barcode })->count ) {
+            # if barcode exists, don't create, but report The problem.
+            push @errors, "barcode_not_unique";
+        }
+        else {
+            $item->store->discard_changes;
 
-        # if barcode exists, don't create, but report The problem.
-        unless ($exist_itemnumber) {
-            my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) = AddItemFromMarc( $record, $biblionumber );
+            # FIXME This need to be rewritten, we must store $item->unblessed instead
+            ## Pushing the last created item cookie back
+            #if ($prefillitem && defined $record) {
+            #    my $itemcookie = $input->cookie(
+            #        -name => 'LastCreatedItem',
+            #        # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
+            #        -value   => encode_base64url( freeze( $record ) ),
+            #        -HttpOnly => 1,
+            #        -expires => ''
+            #    );
 
-            # Pushing the last created item cookie back
-            if ($prefillitem && defined $record) {
-                my $itemcookie = $input->cookie(
-                    -name => 'LastCreatedItem',
-                    # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
-                    -value   => encode_base64url( freeze( $record ) ),
-                    -HttpOnly => 1,
-                    -expires => ''
-                );
-
-                $cookie = [ $cookie, $itemcookie ];
-            }
+            #    $cookie = [ $cookie, $itemcookie ];
+            #}
 
         }
         $nextop = "additem";
-        if ($exist_itemnumber) {
-            $itemrecord = $record;
-        }
+
+
+        # FIXME reset item to the item we were editing
+        #if ($exist_itemnumber) {
+
+        #    $itemrecord = $record;
+        #}
+        $current_item = $item->unblessed;
     }
 
     # If we have to add & duplicate
     if ($add_duplicate_submit) {
-        $itemrecord = $record;
         if (C4::Context->preference('autoBarcode') eq 'incremental') {
-            $itemrecord = _increment_barcode($itemrecord, $frameworkcode);
+            my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+            $current_item->{barcode} = $barcode;
         }
         else {
             # we have to clear the barcode field in the duplicate item record to make way for the new one generated by the javascript plugin
-            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField( "items.barcode" );
-            my $fieldItem = $itemrecord->field($tagfield);
-            $itemrecord->delete_field($fieldItem);
-            $fieldItem->delete_subfields($tagsubfield);
-            $itemrecord->insert_fields_ordered($fieldItem);
+            $current_item->{barcode} = undef; # FIXME or delete?
         }
-    $itemrecord = removeFieldsForPrefill($itemrecord) if ($prefillitem);
+        # FIXME This subroutine needs to be adjusted
+        # We want to pass $item
+        # $itemrecord = removeFieldsForPrefill($itemrecord) if ($prefillitem);
     }
 
     # If we have to add multiple copies
     if ($add_multiple_copies_submit) {
 
-        use C4::Barcodes;
+        my $copynumber = $current_item->{copynumber};
+        my $oldbarcode = $current_item->{barcode};
+
+        # If there is a barcode and we can't find their new values, we can't add multiple copies
+        my $testbarcode;
         my $barcodeobj = C4::Barcodes->new;
-        my $copynumber = $addedolditem->{'copynumber'};
-        my $oldbarcode = $addedolditem->{'barcode'};
-        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField( "items.barcode" );
-        my ($copytagfield,$copytagsubfield) = &GetMarcFromKohaField( "items.copynumber" );
-
-    # If there is a barcode and we can't find their new values, we can't add multiple copies
-	my $testbarcode;
         $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
-	if ($oldbarcode && !$testbarcode) {
+        if ( $oldbarcode && !$testbarcode ) {
 
-	    push @errors, "no_next_barcode";
-	    $itemrecord = $record;
+            push @errors, "no_next_barcode";
+            $itemrecord = $record;
 
-	} else {
-	# We add each item
+        }
+        else {
+            # We add each item
 
-	    # For the first iteration
-	    my $barcodevalue = $oldbarcode;
-	    my $exist_itemnumber;
+            # For the first iteration
+            my $barcodevalue = $oldbarcode;
+            my $exist_itemnumber;
 
+            for ( my $i = 0 ; $i < $number_of_copies ; ) {
 
-	    for (my $i = 0; $i < $number_of_copies;) {
+                # If there is a barcode
+                if ($barcodevalue) {
 
-		# If there is a barcode
-		if ($barcodevalue) {
+# Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
+                    $barcodevalue = $barcodeobj->next_value($oldbarcode)
+                      if ( $i > 0 || $exist_itemnumber );
 
-		    # Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
-		    $barcodevalue = $barcodeobj->next_value($oldbarcode) if ($i > 0 || $exist_itemnumber);
+                    # Putting it into the record
+                    if ($barcodevalue) {
+                        if ( C4::Context->preference("autoBarcode") eq
+                            'hbyymmincr' && $i > 0 )
+                        { # The first copy already contains the homebranch prefix
+                             # This is terribly hacky but the easiest way to fix the way hbyymmincr is working
+                             # Contrary to what one might think, the barcode plugin does not prefix the returned string with the homebranch
+                             # For a single item, it is handled with some JS code (see cataloguing/value_builder/barcode.pl)
+                             # But when adding multiple copies we need to prefix it here,
+                             # so we retrieve the homebranch from the item and prefix the barcode with it.
+                            my $homebranch = $current_item->{homebranch};
+                            $barcodevalue = $homebranch . $barcodevalue;
+                        }
+                        $current_item->{barcode} = $barcodevalue;
+                    }
 
-		    # Putting it into the record
-		    if ($barcodevalue) {
-                if ( C4::Context->preference("autoBarcode") eq 'hbyymmincr' && $i > 0 ) { # The first copy already contains the homebranch prefix
-                    # This is terribly hacky but the easiest way to fix the way hbyymmincr is working
-                    # Contrary to what one might think, the barcode plugin does not prefix the returned string with the homebranch
-                    # For a single item, it is handled with some JS code (see cataloguing/value_builder/barcode.pl)
-                    # But when adding multiple copies we need to prefix it here,
-                    # so we retrieve the homebranch from the item and prefix the barcode with it.
-                    my ($hb_field, $hb_subfield) = GetMarcFromKohaField( "items.homebranch" );
-                    my $homebranch = $record->subfield($hb_field, $hb_subfield);
-                    $barcodevalue = $homebranch . $barcodevalue;
+                    # Checking if the barcode already exists
+                    $exist_itemnumber = Koha::Items->search({ barcode => $barcodevalue })->count;
                 }
-                $record->field($tagfield)->update($tagsubfield => $barcodevalue);
-		    }
 
-		    # Checking if the barcode already exists
-		    $exist_itemnumber = get_item_from_barcode($barcodevalue);
-		}
-        # Updating record with the new copynumber
-        if ( $copynumber  ){
-            $record->field($copytagfield)->update($copytagsubfield => $copynumber);
+                # Updating record with the new copynumber
+                if ($copynumber) {
+                    $current_item->{copynumber} = $copynumber;
+                }
+
+                # Adding the item
+                if ( !$exist_itemnumber ) {
+                    delete $current_item->{itemnumber};
+                    $current_item = Koha::Item->new($current_item)->store(
+                        { skip_record_index => 1 } )->discard_changes->unblessed;
+                    set_item_default_location($current_item->{itemnumber});
+
+# We count the item only if it was really added
+# That way, all items are added, even if there was some already existing barcodes
+# FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
+                    $i++;
+
+                    # Only increment copynumber if item was really added
+                    $copynumber++ if ( $copynumber && $copynumber =~ m/^\d+$/ );
+                }
+
+                # Preparing the next iteration
+                $oldbarcode = $barcodevalue;
+            }
+
+            my $indexer = Koha::SearchEngine::Indexer->new(
+                { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $biblionumber, "specialUpdate",
+                "biblioserver" );
+
+            undef($current_item);
         }
-
-		# Adding the item
-        if (!$exist_itemnumber) {
-            my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) =
-                AddItemFromMarc( $record, $biblionumber, { skip_record_index => 1 } );
-
-            # We count the item only if it was really added
-            # That way, all items are added, even if there was some already existing barcodes
-            # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
-            $i++;
-            # Only increment copynumber if item was really added
-            $copynumber++  if ( $copynumber && $copynumber =~ m/^\d+$/ );
-        }
-
-		# Preparing the next iteration
-		$oldbarcode = $barcodevalue;
-	    }
-
-        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
-        $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
-
-	    undef($itemrecord);
-	}
-    }	
+    }
     if ($frameworkcode eq 'FA' && $fa_circborrowernumber){
         print $input->redirect(
            '/cgi-bin/koha/circ/circulation.pl?'
