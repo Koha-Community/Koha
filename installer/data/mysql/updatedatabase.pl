@@ -23443,6 +23443,12 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27349, "Update type for Mana system preference to Choice");
 }
 
+$DBversion = '20.12.00.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{UPDATE systempreferences set variable="TaxRates" WHERE variable="gist"});
+    NewVersion( $DBversion, 27485, "Rename system preference 'gist' to 'TaxRates'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
