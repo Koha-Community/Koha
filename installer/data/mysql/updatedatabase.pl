@@ -22541,6 +22541,12 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27349, "Update type for Mana sytem preference to Choice");
 }
 
+$DBversion = "20.05.08.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (20.05.08 release)\n";
+    SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
