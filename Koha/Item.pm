@@ -164,8 +164,6 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        $self->_after_item_action_hooks({ action => 'modify' });
-
     }
 
     unless ( $self->dateaccessioned ) {
@@ -181,7 +179,7 @@ sub store {
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
-
+    $self->get_from_storage->_after_item_action_hooks({ action => $action });
     return $result;
 }
 
