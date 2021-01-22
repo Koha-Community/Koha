@@ -22,6 +22,7 @@
 advance_notices.pl - prepare messages to be sent to patrons for nearly due, or due, items
 
 =head1 SYNOPSIS
+
        advance_notices.pl
          [ -n ][ -m <number of days> ][ --itemscontent <comma separated field list> ][ -c ]
 
