@@ -173,7 +173,7 @@ is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
 my @transfers = GetTransfers($item_id1);
 cmp_deeply(
     \@transfers,
-    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*'), re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), undef ],
+    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2, re('[0-9]*'), re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), 'Manual' ],
     "Transfers of the item1"
 );    #NOTE: Only the first transfer is returned
 @transfers = GetTransfers;
@@ -255,8 +255,8 @@ ModItemTransfer(
     $trigger
 );
 $transfer->{_result}->discard_changes;
-ok( $transfer->datearrived, 'Date arrived is set when new transfer is initiated' );
-is( $transfer->comments, "Canceled, new transfer from $branchcode_1 to $branchcode_2 created", 'Transfer comment is set as expected when new transfer is initiated' );
+ok( $transfer->datecancelled, 'Date cancelled is set when new transfer is initiated' );
+is( $transfer->cancellation_reason, "Manual", 'Cancellation reason is set correctly when new transfer is initiated' );
 
 $schema->storage->txn_rollback;
 

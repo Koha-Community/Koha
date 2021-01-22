@@ -447,7 +447,7 @@ sub request_transfer {
     Koha::Exceptions::Item::Transfer::Found->throw( transfer => $request )
       if ( $request && !$params->{enqueue} && !$params->{replace} );
 
-    $request->cancel( $params->{reason} )
+    $request->cancel( { reason => $params->{reason}, force => 1 } )
       if ( defined($request) && $params->{replace} );
 
     my $transfer = Koha::Item::Transfer->new(

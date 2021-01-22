@@ -208,7 +208,7 @@ subtest 'in_transit tests' => sub {
 };
 
 subtest 'cancel tests' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -245,15 +245,21 @@ subtest 'cancel tests' => sub {
       'Exception thrown if a reason is not passed to cancel';
 
     # Item in transit should result in failure
-    throws_ok { $transfer->cancel($cancellation_reason) }
+    throws_ok { $transfer->cancel({ reason => $cancellation_reason }) }
     'Koha::Exceptions::Item::Transfer::Transit',
       'Exception thrown if item is in transit';
 
-    $transfer->datesent(undef)->store();
+    $transfer->cancel({ reason => $cancellation_reason, force => 1});
+    ok( $transfer->datecancelled, 'Forced cancellation, cancellation date set' );
+    is( $transfer->cancellation_reason, 'Manual', 'Forced cancellation, cancellation reason is set');
+
+    $transfer->datecancelled(undef);
+    $transfer->cancellation_reason(undef);
+    $transfer->datesent(undef);
 
     # Transit state unset
-    $transfer->discard_changes;
-    $transfer->cancel($cancellation_reason);
+    $transfer->store()->discard_changes;
+    $transfer->cancel({ reason => $cancellation_reason });
     ok( $transfer->datecancelled, 'Cancellation date set upon call to cancel' );
     is( $transfer->cancellation_reason, 'Manual', 'Cancellation reason is set');
 

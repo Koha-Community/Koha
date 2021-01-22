@@ -118,25 +118,25 @@ sub receive {
 
 =head3 cancel
 
-  $transfer->cancel($reason);
+  $transfer->cancel({ reason => $reason, [force => 1]});
 
 Cancel the transfer by setting the datecancelled time and recording the reason.
 
 =cut
 
 sub cancel {
-    my ( $self, $reason ) = @_;
+    my ( $self, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw(
         error => "The 'reason' parameter is mandatory" )
-      unless defined($reason);
+      unless defined($params->{reason});
 
     # Throw exception if item is in transit already
-    Koha::Exceptions::Item::Transfer::Transit->throw() if ( $self->in_transit );
+    Koha::Exceptions::Item::Transfer::Transit->throw() if ( !$params->{force} && $self->in_transit );
 
     # Update the cancelled date
     $self->set(
-        { datecancelled => dt_from_string, cancellation_reason => $reason } )
+        { datecancelled => dt_from_string, cancellation_reason => $params->{reason} } )
       ->store;
 
     return $self;
