@@ -173,7 +173,7 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
     my $checkout2 = Koha::Checkouts->find( $checkout->id );
     is( $checkout2, undef, "Checkout is not longer in the issues table");
     $checkout2 = Koha::Old::Checkouts->find( $checkout->id );
-    is( $checkout2->id, $checkout->id, "Checkout was foudn in the old_issues table");
+    is( $checkout2->id, $checkout->id, "Checkout was found in the old_issues table");
 };
 
 $schema->storage->txn_rollback;
