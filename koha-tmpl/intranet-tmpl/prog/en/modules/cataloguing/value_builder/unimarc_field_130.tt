@@ -329,7 +329,7 @@ value="[% f5 | html %]" /></td>
 </form>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript">
+    <script>
         var dateformat = "[% Koha.Preference('dateformat') | html %]";
         function report() {
             document.f_pop.f5.value=document.f_pop.f5.value+'   ';
