@@ -127,7 +127,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% IF ( fillinput ) %]
-        <script type="text/javascript">
+        <script>
             function go() {
 
                 var index_start = "[% index | html %]";
@@ -207,7 +207,7 @@
             window.close();
         </script>
     [% ELSE %]
-        <script type="text/javascript">
+        <script>
             function report(value2report) {
                 if (document.f_pop.result.value.length == 0) {
                     document.f_pop.result.value = value2report;
@@ -224,7 +224,7 @@
             }
         </script>
     [% END %]
-    <script type="text/javascript">
+    <script>
         function jumpfull(page){
             window.open(page,'','width=100,height=100,toolbar=false,scrollbars=yes');
         }
