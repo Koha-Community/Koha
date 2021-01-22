@@ -356,6 +356,8 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 menubar : "file edit view insert format tools table",
                 mode : "specific_textareas",
                 plugins : "autoresize table hr link image charmap lists code emoticons",
+                extended_valid_elements:"style,link[href|rel]",
+                custom_elements:"style,link,~link",
                 toolbar : [
                     "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
                     "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
