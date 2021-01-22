@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-25 12:42-0300\n"
-"PO-Revision-Date: 2020-11-30 03:43+0000\n"
+"POT-Creation-Date: 2021-01-15 10:26-0300\n"
+"PO-Revision-Date: 2021-01-20 08:29+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1606707832.786852\n"
+"X-POOTLE-MTIME: 1611131354.266592\n"
 "X-Pootle-Path: /zh_TW/20.05/zh-Hans-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -42,7 +42,7 @@ msgstr "%s %s %s %s 您要求此期刊到館後，以 E-Mail 通報 "
 #. %2$s:  END 
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:396
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
 #, c-format
 msgid "%s %s %s %s by "
 msgstr "%s %s %s %s by "
@@ -129,9 +129,10 @@ msgid ""
 "%sForgiven %sCredit %sLost item fee refund %sOverpayment refund %sRefund "
 "%sCancelled charge %s%s %s %s %s %s %s"
 msgstr ""
-"%s %s %s %s新增帳號費用 %s續借費用 %s遺失館藏 %s人工費用 %s新增借書證 %s罰款 %s遺失館藏處理費 %s租金 %s日租金 %"
-"s續借館藏費用 %s續借日租館藏 %s預約費用 %s預約等待過久 %s支付 %s%s %s %s %s %s %s款項 %s註銷 %s豁免 %s額度 %"
-"s遺失館藏費還款 %s溢付款退款 %s退款 %s取消費用%s%s %s %s %s %s %s"
+"%s %s %s %s新增帳號費用 %s續借費用 %s遺失館藏 %s人工費用 %s新增借書證 %s罰款 "
+"%s遺失館藏處理費 %s租金 %s日租金 %s續借館藏費用 %s續借日租館藏 %s預約費用 %s"
+"預約等待過久 %s支付 %s%s %s %s %s %s %s款項 %s註銷 %s豁免 %s額度 %s遺失館藏費"
+"還款 %s溢付款退款 %s退款 %s取消費用%s%s %s %s %s %s %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -221,6 +222,14 @@ msgstr ""
 "%s %s %s 您的問題報告已寄給Koha系統管理者。%s 您的問題報告已寄給圖書館。 %s "
 "%s 未知問題產生導致無法寄出報告，請聯絡圖書館。%s "
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:111
+#, c-format
+msgid "%s %s %s by "
+msgstr "%s %s %s by "
+
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
 #. %3$s:  ITEM_RESULT.itemcallnumber | html 
@@ -231,7 +240,7 @@ msgstr ""
 #. %8$s:  END 
 #. %9$s:  ELSE 
 #. %10$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, c-format
 msgid "%s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr "%s %s (%s) %s.%s,%s %s %s %s 此紀錄無館藏。%s "
@@ -250,7 +259,7 @@ msgstr "%s %s (尚未核可) %s "
 #. %4$s:  HTML5MediaSet.child | html 
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1003
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1006
 #, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
 msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
@@ -317,7 +326,7 @@ msgstr "%s %s 未找到結果。 %s"
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:127
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -385,6 +394,9 @@ msgid ""
 "0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
 "size > 0 and not expanded_options ) %%] "
 msgstr ""
+"%s %s [%% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > "
+"0 and expanded_options ) or ( OpacAdvSearchOptions and OpacAdvSearchOptions."
+"size > 0 and not expanded_options ) %%] "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -404,7 +416,7 @@ msgstr "%s %s by %s %s "
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:521
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:524
 #, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
 msgstr "%s %s 您還有待付罰款："
@@ -480,7 +492,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
 #, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
 msgstr "%s %s共享%s私人%s %s 公共 %s "
@@ -527,7 +539,7 @@ msgstr "%s <?xml version=\"1.0\"?> "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:666
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:669
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s 帳號凍結 %s %s "
@@ -585,13 +597,13 @@ msgid ""
 msgstr "%s 製作 pdf 檔時發生錯誤。請連繫館員解決此錯誤。%s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s 自動續借 "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "%s 自動續借失敗，帳號失效。"
@@ -655,7 +667,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:473
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:476
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -700,7 +712,7 @@ msgstr "%s 刪除 %s 剛除清單 %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:140
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
-msgstr ""
+msgstr "%s 填滿 %s 取消 %s 等待 %s 轉移中 %s 延後 %s "
 
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
@@ -710,7 +722,7 @@ msgid "%s Holds (%s) "
 msgstr "%s 預約 (%s) "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:500
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s 網際網路使用者的批評"
@@ -750,7 +762,7 @@ msgstr "%s 圖書館 %s 圖書館 %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
 #, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -758,7 +770,7 @@ msgstr "%s 不能續借 %s 自動續借失敗，尚有未付罰款。"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s 在 %s 之前無可預約 "
@@ -788,13 +800,13 @@ msgid "%s No title %s %s%s,%s "
 msgstr "%s 無題名 %s %s%s，%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:678
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:681
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s 不允許"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:376
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
 #, c-format
 msgid "%s Not renewable "
 msgstr "%s 未自動更新 "
@@ -803,17 +815,17 @@ msgstr "%s 未自動更新 "
 #. %2$s:  ELSIF ( ISSUE.too_unseen ) 
 #. %3$s:  ISSUE.renewsleft | html 
 #. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, c-format
 msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
 "remaining %s Not allowed "
-msgstr ""
+msgstr "%s 無法續借 %s 館藏必借經由館員同意續借. %s 續借剩下 %s 未經同意 "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:683
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s 預約中 %s 無法續借 %s "
@@ -848,13 +860,13 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s 待決 %s 處理 %s 完成 %s 取消 %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:500
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:503
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s 專業的批評"
@@ -873,14 +885,14 @@ msgid ""
 msgstr "%s 採訪建議 %s %s 您的採訪建議 %s 採訪建議%s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:506
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #, c-format
 msgid "%s Quotations"
 msgstr "%s 引句"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:418
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s 不能續借 %s "
@@ -904,7 +916,7 @@ msgstr "%s 以逾期程序限制新增 %s %s %s %s "
 #. %5$s:  IF ( limit_desc ) 
 #. %6$s:  limit_desc | html 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:98
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s 搜尋 %s對象 '%s'%s%s&nbsp;限制是:&nbsp;'%s'%s"
@@ -930,19 +942,19 @@ msgstr "%s 自助借出系統"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users: %s Tags to show: %s "
 msgstr "%s 標籤來自其他讀者 %s 標籤顯示 %s："
 
 #. %1$s:  ELSIF (errLinkNotValid) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
 #, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
 msgstr "%s 勾選的連結不正確、或失效。"
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "%s The passwords do not match. %s "
 msgstr "%s 密碼不符。%s "
@@ -1002,7 +1014,7 @@ msgid "%s This record has no items. %s "
 msgstr "%s 此書目記錄沒有館藏紀錄。%s "
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:506
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s 片斷影片"
@@ -1032,7 +1044,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:693
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s 是 %s 否 %s "
@@ -1041,7 +1053,7 @@ msgstr "%s 是 %s 否 %s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr "%s 是的 (館藏逾期或遺失) %s 是的 (租金) %s 不是 %s "
@@ -1076,7 +1088,7 @@ msgstr "%s 您未曾從本館借出任何館藏。%s "
 #. %1$s:  IF !holds 
 #. %2$s:  ELSE 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "%s You have never placed a hold from this library. %s "
 msgstr "%s 您未曾從本館借出任何館藏。%s "
 
@@ -1102,7 +1114,7 @@ msgstr "%s 書目記錄"
 
 #. For the first occurrence,
 #. %1$s:  IF ( itemsloo.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
 #, c-format
 msgid "%s by "
@@ -1119,15 +1131,15 @@ msgid "%s by %s %s %s %s "
 msgstr "%s 由 %s %s %s %s "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
 #, c-format
 msgid "%s holdings"
 msgstr "%s 館藏"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:627
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:630
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:659
 #, c-format
 msgid "%s items are on order."
 msgstr "%s 館藏已訂購。"
@@ -1140,13 +1152,13 @@ msgid "%s of %s results loaded, refine your search to view other records"
 msgstr "載入 %s 的 %s 筆紀錄，篩選您的搜尋以檢視其他紀錄"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:369
 #, c-format
 msgid "%s per day"
 msgstr "每天 %s"
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:372
 #, c-format
 msgid "%s per hour"
 msgstr "每小時 %s"
@@ -1199,7 +1211,7 @@ msgstr "%s%s %s較早標題%s較晚標題%s縮寫%s樂譜%s較廣標題%s較窄�
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:740
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %s館藏%s館藏%s%s空白%s"
@@ -1586,9 +1598,9 @@ msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 下載虛擬書架 %s"
 #. %4$s:  END 
 #. %5$s:  title | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Editing issue note for %s"
-msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 詳情：%s"
+msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 編輯借出註記由：%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1826,9 +1838,9 @@ msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 您的同意"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your holds history"
-msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 您的借出記錄"
+msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 您的預約記錄"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1903,7 +1915,7 @@ msgstr "%s%s%s所有欄位%s"
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1393
 #, c-format
 msgid "%s%s%sLink to resource%s"
 msgstr "%s%s%s連結資源%s"
@@ -1920,7 +1932,7 @@ msgstr "%s%s%s連結資源%s"
 #. %10$s:  SEARCH_RESULT.biblionumber | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:124
 #, c-format
 msgid ""
 "%s%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s%s%s%s/cgi-bin/koha/opac-"
@@ -1987,8 +1999,8 @@ msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:52
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:87
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:18
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -2004,7 +2016,7 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s#comments"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  review.biblionumber | html 
 #. %3$s:  review.reviewid | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:40
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:43
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
@@ -2025,7 +2037,7 @@ msgstr "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:97
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
@@ -2140,8 +2152,8 @@ msgid ""
 "%s %s Item checkout and renewal %s Item checkout %s %sInterlibrary loan "
 "ready %sInterlibrary loan unavailable %sUnknown %s"
 msgstr ""
-"%s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s %s借出館藏及續借 %s 館藏借出 %s %s館際互助 %s不提供館際互助 %"
-"s不明 %s"
+"%s到期日 %s提早通知 %s活動通知 %s預約可取 %s還入館藏 %s %s借出館藏及續借 %s "
+"館藏借出 %s %s館際互助 %s不提供館際互助 %s不明 %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2236,14 +2248,14 @@ msgstr "%s一個虛擬書架：%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
-#, fuzzy, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#, c-format
 msgid "%sby %s%s "
 msgstr "%s作者 %s%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:173
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:179
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; 上一頁"
@@ -2788,7 +2800,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:494
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
 #, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (依 %s 比率)"
@@ -2864,7 +2876,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 題名描述"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:571
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:574
 #, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s 投票)"
@@ -2876,17 +2888,19 @@ msgstr "&nbsp;&nbsp;(%s 投票)"
 #. %4$s:  ISSUE.unseenleft | html 
 #. %5$s:  ISSUE.unseenallowed | html 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:371
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:673
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:416
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:676
 #, c-format
 msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
 "must be seen by the library %s )"
 msgstr ""
+"( %s 的 %s 續借剩餘 %s / %s 的 %s 續借 left before the item must be seen by "
+"the library %s )"
 
 #. %1$s:  LEVEL_LOO.number | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browser.tt:63
@@ -2896,8 +2910,8 @@ msgstr "(%s 書目記錄)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:580
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:711
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:290
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, c-format
@@ -2922,9 +2936,9 @@ msgid ""
 msgstr "(在資料庫找不到該條碼，請找館員協助)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:55
-#, fuzzy, c-format
+#, c-format
 msgid "(Cancelled)"
-msgstr "CancelHold"
+msgstr "(取消)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:179
 #, c-format
@@ -2937,9 +2951,9 @@ msgid "(Forgiven)"
 msgstr "(豁免)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "(Hides shelf browser)"
-msgstr "關閉書架瀏覽器"
+msgstr "(隱藏書架瀏覽)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:14
 #, c-format
@@ -2967,16 +2981,16 @@ msgstr "(Koha 不支援)"
 msgid "(Not supported yet)"
 msgstr "(還不支援)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:313
 #, c-format
 msgid "(On-site checkout)"
 msgstr "(現場借出)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, c-format
 msgid "(Opens below)"
-msgstr ""
+msgstr "(在下開啟)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
@@ -3017,7 +3031,7 @@ msgstr "(請注意：將延遲恢復線上申請重建的帳號。)"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:51
 #, c-format
 msgid "(Refunded)"
-msgstr ""
+msgstr "(已退款)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:50
 #, c-format
@@ -3062,21 +3076,21 @@ msgid ""
 msgstr "(目前無法借出此書，請洽館員協助)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(The item cannot be checked in at a self service terminal, please see "
 "library staff for assistance)"
-msgstr "(此館藏不能還入此圖書館，請洽館員協助)"
+msgstr "(此館藏在自助還入機執行無法還入，請洽館員協助)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(The item cannot be checked in at this library, please see library staff for "
 "assistance)"
-msgstr "(此館藏不能還入此圖書館，請洽館員協助)"
+msgstr "(此館藏無法還入此圖書館，請洽館員協助)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(There was a problem checking in this item, please see library staff for "
 "assistance)"
@@ -3106,7 +3120,7 @@ msgstr "(使用 SRU)"
 msgid "(Voided)"
 msgstr "(無效)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:382
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:385
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
 #, c-format
@@ -3121,32 +3135,32 @@ msgstr "(篩選自 _MAX_ total 款目)"
 #. For the first occurrence,
 #. %1$s:  GROUP_RESULT.timestamp | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:422
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:425
 #, c-format
 msgid "(modified on %s)"
 msgstr "(在 %s修改)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, c-format
 msgid "(on hold)"
 msgstr "(預約中)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:741
 #, c-format
 msgid "(only %s)"
 msgstr "(祗有 %s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:683
 #, c-format
 msgid "(overdue)"
 msgstr "(逾期)"
 
 #. For the first occurrence,
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:637
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1405
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:640
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1408
 #, c-format
 msgid "(priority %s)"
 msgstr "(優先 %s)"
@@ -3243,8 +3257,8 @@ msgstr "000 "
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:625
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:654
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:628
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:657
 #, c-format
 msgid "1 item is on order."
 msgstr "1 個館藏已訂購。"
@@ -3350,7 +3364,7 @@ msgstr "為帳號 '%s' 支付的費用己經入帳。"
 msgid "A specific item"
 msgstr "特定的館藏"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:549
 #, c-format
 msgid "About the author"
 msgstr "關於作者"
@@ -3399,7 +3413,7 @@ msgstr "採訪時間：最舊到最新"
 
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:384
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:233
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
@@ -3423,7 +3437,7 @@ msgstr "新增另一個欄位"
 msgid "Add tag"
 msgstr "新增標籤"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:350
 #, c-format
 msgid "Add tag(s)"
 msgstr "新增標籤"
@@ -3460,7 +3474,7 @@ msgid "Add to your cart"
 msgstr "新增到您的書目清單"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "Add to..."
 msgstr "新增至..."
 
@@ -3469,7 +3483,7 @@ msgstr "新增至..."
 msgid "Add to: "
 msgstr "新增至："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:155
 #, c-format
 msgid "Additional authors:"
 msgstr "其他作者："
@@ -3510,7 +3524,7 @@ msgstr "地址："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:394
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:269
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:604
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:607
 msgid "Adlibris cover image"
 msgstr "Adlibris 提供的封面"
 
@@ -3553,12 +3567,12 @@ msgid "All collections"
 msgstr "所有館藏"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "All holds will be suspended."
 msgstr "所有預約將被暫停。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "All holds will resume."
 msgstr "所有預約將恢復"
 
@@ -3620,13 +3634,12 @@ msgstr "其他連絡"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#, fuzzy
 msgid "Always available"
-msgstr "可借的館藏："
+msgstr "永遠可使用"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:486
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:518
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:12
 #, c-format
 msgid "Amount"
@@ -3669,9 +3682,9 @@ msgstr "更新此虛擬書架時發生錯誤。"
 msgid "An error occurred while processing your request."
 msgstr "處理您的請求時發生錯誤。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:61
-#, c-format
-msgid "An error occurred, please try again."
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:86
+#, fuzzy, c-format
+msgid "An error occurred, please try again. "
 msgstr "發生錯誤，請再重試。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:58
@@ -3735,7 +3748,7 @@ msgstr "任何人都以看到這個虛擬書架"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:136
 #, c-format
 msgid "Apply field weights to search "
-msgstr ""
+msgstr "適用欄位加重來搜尋"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -3748,13 +3761,13 @@ msgid "April"
 msgstr "四月"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Are you sure you want to cancel this article request?"
 msgstr "您確定取消此論文請求？"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 msgid "Are you sure you want to cancel this hold?"
 msgstr "確定您要取消新增此館藏？"
@@ -3781,7 +3794,7 @@ msgstr "您確定刪除這些建議嗎？"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to delete this list?"
 msgstr "確定刪除此虛擬書架嗎？"
 
@@ -3796,29 +3809,29 @@ msgid "Are you sure you want to delete your search history?"
 msgstr "確定刪除您的搜尋記錄嗎？"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid ""
 "Are you sure you want to remove sharing? You will no longer have access to "
 "the list."
 msgstr "您確定要移除共享嗎？您將無法訪問此清單。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "您確定要從虛擬書架移除這些館藏嗎？"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "確定刪除這個虛擬書架裡的館藏嗎？"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to remove this share?"
 msgstr "確定移除此共享嗎？"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "確定取消預約嗎？"
 
@@ -3828,16 +3841,16 @@ msgid "Are you sure you want to return this item?"
 msgstr "確定還入此館藏嗎？"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Are you sure you want to suspend all holds?"
 msgstr "確定取消預約嗎？"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:837
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
 #, c-format
 msgid "Arrived"
 msgstr "送抵"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:711
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, c-format
 msgid "Article requests "
 msgstr "論文請求 "
@@ -3872,8 +3885,8 @@ msgstr "本館至少有一個館藏可供使用"
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( subscription.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:779
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:782
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:785
 #, c-format
 msgid "At library: %s"
 msgstr "在圖書館：%s"
@@ -3883,7 +3896,7 @@ msgstr "在圖書館：%s"
 msgid "Audience"
 msgstr "預期讀者"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:404
 #, c-format
 msgid "Audiovisual profile:"
 msgstr "視聽資料設定檔："
@@ -3914,16 +3927,16 @@ msgstr "認證使用者的登入，然後送回辨識碼。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:65
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:717
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:720
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:188
@@ -3948,7 +3961,7 @@ msgstr "著者(A-Z)"
 msgid "Author (Z-A)"
 msgstr "著者(Z-A)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:756
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:759
 #, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "Syndetics 提供的著者說明"
@@ -4031,7 +4044,7 @@ msgstr "可取得"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:439
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:442
 #, c-format
 msgid "Availability:"
 msgstr "可取得："
@@ -4042,7 +4055,7 @@ msgid "Availability: "
 msgstr "可取得："
 
 #. %1$s:  IF restrictedvalueopac 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:100
 #, c-format
 msgid "Available %s"
 msgstr "可借 %s"
@@ -4055,16 +4068,16 @@ msgstr "在館內的刊期"
 #. For the first occurrence,
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr "平均評分：%s (%s 票數)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:415
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:418
 #, c-format
 msgid "Awards:"
 msgstr "獲獎："
@@ -4085,38 +4098,38 @@ msgstr "BT"
 msgid "Back to lists"
 msgstr "返回虛擬書架"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Back to results"
 msgstr "返回結果"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 msgid "Back to the results search list"
 msgstr "返回搜尋結果清單"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:112
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1253
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:247
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:538
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:587
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:541
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:132
 #, c-format
 msgid "Barcode"
 msgstr "條碼"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:343
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:651
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:654
 #, c-format
 msgid "Barcode:"
 msgstr "條碼號："
 
 #. %1$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #, c-format
 msgid ""
 "Be sure you used the link from the email, or contact library staff for "
@@ -4152,7 +4165,7 @@ msgid "Blocked"
 msgstr "封鎖"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-blocked.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Blocked record "
 msgstr "封鎖記錄"
 
@@ -4188,8 +4201,8 @@ msgstr "依照階層瀏覽"
 msgid "Browse our catalog"
 msgstr "瀏覽我們的目錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1060
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1061
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1063
 #, c-format
 msgid "Browse results"
 msgstr "瀏覽結果"
@@ -4201,9 +4214,9 @@ msgstr "瀏覽結果"
 msgid "Browse search"
 msgstr "欄位搜尋"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
-#, fuzzy, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
+#, c-format
 msgid "Browse shelf "
 msgstr "瀏覽書架"
 
@@ -4240,15 +4253,15 @@ msgstr "CSV - %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:249
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:542
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
 #, c-format
 msgid "Call no."
 msgstr "索書號"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:348
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, c-format
 msgid "Call no.:"
 msgstr "索書號："
@@ -4256,12 +4269,12 @@ msgstr "索書號："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:78
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1232
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1235
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:145
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:289
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:643
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:212
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:214
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:218
@@ -4301,7 +4314,7 @@ msgid "Call number:"
 msgstr "索書號："
 
 #. %1$s:  subscription.callnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:792
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
 #, c-format
 msgid "Call number: %s"
 msgstr "索書號：%s"
@@ -4310,7 +4323,7 @@ msgstr "索書號：%s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:238
@@ -4322,10 +4335,10 @@ msgstr "索書號：%s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:681
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:683
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:684
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:250
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:797
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:154
@@ -4339,7 +4352,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:805
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:155
 #, c-format
 msgid "Cancel email notification"
@@ -4355,15 +4368,15 @@ msgstr "取消電子郵件通知 "
 msgid "Cancel enrollment "
 msgstr "取消註冊 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:458
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:461
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:464
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:45
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:49
 #, c-format
 msgid "Cancel rating"
 msgstr "取消審核"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:794
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:797
 #, c-format
 msgid "Cancel:"
 msgstr "取消："
@@ -4381,14 +4394,14 @@ msgid "CancelRecall "
 msgstr "CancelRecall "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Cancellation date"
-msgstr "出版日期"
+msgstr "取消日期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Cancelled charge"
-msgstr "取消審核"
+msgstr "取消收費"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
 #, c-format
@@ -4428,7 +4441,7 @@ msgstr "讀者證號碼："
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:32
 #, c-format
 msgid "Cart"
@@ -4451,7 +4464,7 @@ msgstr "目錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:262
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
 #, c-format
 msgid "Category:"
 msgstr "類型："
@@ -4471,7 +4484,7 @@ msgstr "變更您的密碼"
 msgid "Change your password "
 msgstr "變更您的密碼 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:722
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
 #, c-format
 msgid "Chapters"
 msgstr "章節"
@@ -4483,7 +4496,7 @@ msgid "Chapters:"
 msgstr "章節："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:484
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, c-format
 msgid "Charges"
 msgstr "待付費用"
@@ -4524,7 +4537,7 @@ msgstr "還入館藏"
 
 #. SPAN
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:39
 #, c-format
 msgid "Checked out"
 msgstr "借出"
@@ -4545,7 +4558,7 @@ msgstr "借出"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:36
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:37
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "借出給 %s %s %s(%s)%s"
@@ -4612,7 +4625,7 @@ msgstr "引用"
 msgid "City:"
 msgstr "縣市："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
 #, c-format
 msgid "Claimed"
 msgstr "催缺"
@@ -4641,12 +4654,12 @@ msgstr "清除"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:160
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:197
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
 #, c-format
 msgid "Clear all"
@@ -4666,9 +4679,8 @@ msgstr "無限延擱清除曰期"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
-#, fuzzy
 msgid "Clear filter"
-msgstr "清除日期"
+msgstr "清除篩選器"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:58
@@ -4676,7 +4688,7 @@ msgstr "清除日期"
 msgid "Click here if you're not %s"
 msgstr "請點選，若您不是 %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:178
 #, c-format
 msgid "Click here to login."
 msgstr "從這裡登入。"
@@ -4686,12 +4698,12 @@ msgstr "從這裡登入。"
 msgid "Click here to view"
 msgstr "從這裡檢視"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:617
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
 #, c-format
 msgid "Click here to view them all."
 msgstr "點選這裡，檢視全部。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1018
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1021
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "勾選圖片，在圖片檢視視器裡檢視圖片"
@@ -4711,23 +4723,23 @@ msgstr "點選，新增到書目清單"
 msgid "Click to expand this role"
 msgstr "勾選以展開此區塊"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:396
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:416
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:419
 #, c-format
 msgid "Click to open in new window"
 msgstr "點選，打開新的視窗"
 
 #. DIV
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:281
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:616
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 msgid "Click to view in Google Books"
 msgstr "點選，檢視谷歌圖書的內容"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1065
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:167
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:181
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:154
@@ -4738,7 +4750,7 @@ msgid "Close"
 msgstr "關閉"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "Close shelf browser "
 msgstr "關閉書架瀏覽器"
 
@@ -4781,7 +4793,7 @@ msgstr "您有興趣的館藏"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
 #, c-format
@@ -4799,7 +4811,7 @@ msgstr "典藏圖書館："
 msgid "Collection title:"
 msgstr "館藏題名："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:221
 #, c-format
 msgid "Collection: "
 msgstr "館藏："
@@ -4824,16 +4836,16 @@ msgstr "欄位可見度"
 
 #. For the first occurrence,
 #. %1$s:  review.patron.firstname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:915
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:917
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:918
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:920
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
 #, c-format
 msgid "Comment by %s"
 msgstr "來自 %s 的評論"
 
 #. %1$s:  review.patron.firstname | html 
 #. %2$s:  review.patron.surname|truncate(2,'.') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:919
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:922
 #, c-format
 msgid "Comment by %s %s"
 msgstr "來自 %s %s 的評論"
@@ -4841,7 +4853,7 @@ msgstr "來自 %s %s 的評論"
 #. %1$s:  review.patron.title | html 
 #. %2$s:  review.patron.firstname | html 
 #. %3$s:  review.patron.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:913
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:916
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "來自 %s %s %s 的評論"
@@ -4858,7 +4870,7 @@ msgid "Comments on "
 msgstr "評論 "
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:562
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:565
 #, c-format
 msgid "Comments%s"
 msgstr "評論%s"
@@ -4875,7 +4887,7 @@ msgstr "確認預約"
 msgid "Confirm holds for:%s (%s)"
 msgstr "確認以下的預約：%s (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:154
 #, c-format
 msgid "Confirm new password:"
 msgstr "確認新密碼："
@@ -4919,33 +4931,33 @@ msgstr "連絡說明："
 msgid "Content"
 msgstr "內容"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:475
 #, c-format
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:730
 #, c-format
 msgid "Contents"
 msgstr "內容"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Contents of &nbsp;"
-msgstr "內容 "
+msgstr "內容 &nbsp;"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied %d rows to clipboard"
-msgstr ""
+msgstr "複製 %d 列至剪貼簿"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copied one row to clipboard"
-msgstr ""
+msgstr "複製 1 列至剪貼簿"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1246
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #, c-format
 msgid "Copy number"
@@ -4954,7 +4966,7 @@ msgstr "複本號"
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "複製至剪貼簿"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:154
 #, c-format
@@ -5024,7 +5036,7 @@ msgstr "課程代號："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:300
 #, c-format
 msgid "Course reserves"
@@ -5036,9 +5048,9 @@ msgid "Course reserves for "
 msgstr "指定參考書課程 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Course reserves for &nbsp;"
-msgstr "指定參考書課程 "
+msgstr "指定參考書課程 &nbsp;"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:34
 #, c-format
@@ -5048,20 +5060,20 @@ msgstr "課程"
 #. IMG
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:82
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:117
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1215
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:377
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:163
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
 msgid "Cover image"
 msgstr "封面圖片"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
 #, c-format
 msgid "Create a new list"
 msgstr "新增虛擬書架"
@@ -5073,7 +5085,7 @@ msgid "Create a new request "
 msgstr "新增請求 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Create new list "
 msgstr "新增虛擬書架"
 
@@ -5092,11 +5104,11 @@ msgid ""
 msgstr "為讀者新增館藏層次的書目資料。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:62
-#, fuzzy, c-format
+#, c-format
 msgid "Credit applied"
-msgstr "Payment 應用："
+msgstr "適用的值"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #, c-format
 msgid "Credits"
 msgstr "額度"
@@ -5107,10 +5119,10 @@ msgstr "額度"
 msgid "Credits (%s)"
 msgstr "額度(%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
-#, fuzzy, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1224
+#, c-format
 msgid "Current library"
-msgstr "所屬圖書館"
+msgstr "現行圖書館"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:18
@@ -5129,7 +5141,7 @@ msgstr "目前密碼："
 msgid "Current session"
 msgstr "現在的作業"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:32
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:33
 #, c-format
 msgid "Currently in local use"
 msgstr "目前在本地使用"
@@ -5139,7 +5151,7 @@ msgstr "目前在本地使用"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:30
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "目前在本地被使用 %s %s %s(%s)%s"
@@ -5160,7 +5172,7 @@ msgstr "DVD / 影碟"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:120
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:172
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:9
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
@@ -5170,8 +5182,8 @@ msgstr "日期"
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:313
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #, c-format
 msgid "Date added"
@@ -5195,14 +5207,14 @@ msgid "Date added:"
 msgstr "新增日期："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1252
 #, c-format
 msgid "Date due"
 msgstr "到期日"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:321
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:328
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:661
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:324
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #, c-format
 msgid "Date due:"
 msgstr "到期日："
@@ -5225,7 +5237,7 @@ msgstr "收到日期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:433
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:436
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:84
 #, c-format
 msgid "Date:"
@@ -5264,13 +5276,14 @@ msgid "Default sorting"
 msgstr "預設排序方式"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Default: keep my checkout history according to local laws. This is the "
 "default option : the library will keep your checkout history for the "
 "duration permitted by local laws."
 msgstr ""
-"預設：依法保留您的借出記錄。這是預設選項：圖書館依法保留相當期間的借出記錄。"
+"預設：依法保留我的借出記錄。這是預設選項：圖書館依法保留您的借出歷史一段期"
+"間。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:191
 #, c-format
@@ -5279,7 +5292,7 @@ msgid ""
 "values: "
 msgstr "記錄還回後的可能值，設定後設資料架構："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:848
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:164
@@ -5300,7 +5313,7 @@ msgid "Delete selected tags"
 msgstr "刪除選定的標籤"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:599
 msgid "Delete this list"
 msgstr "刪除這個虛擬書架"
 
@@ -5420,9 +5433,9 @@ msgid "Displaying availability results"
 msgstr "顯示可取得的結果"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:168
-#, fuzzy, c-format
+#, c-format
 msgid "Do not suspend"
-msgstr "找不到記錄"
+msgstr "請勿暫緩"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:24
 #, c-format
@@ -5441,7 +5454,7 @@ msgstr "沒有讀者證嗎？"
 msgid "Don't have a password yet?"
 msgstr "沒有密碼嗎？"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:401
 #, c-format
@@ -5464,7 +5477,7 @@ msgstr "下載"
 msgid "Download "
 msgstr "下載"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr "下載為 iCal/.ics 檔案"
@@ -5491,8 +5504,8 @@ msgid "Dublin Core"
 msgstr "Dublin Core"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:537
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:592
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:297
 #, c-format
 msgid "Due"
@@ -5520,29 +5533,29 @@ msgstr "錯誤: 找不到對應書目號碼 %s 的書目記錄。"
 msgid "ERROR: No record id specified. "
 msgstr "錯誤: 沒有收到書目號碼。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:901
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #, c-format
 msgid "Edit"
 msgstr "編輯"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:446
 #, c-format
 msgid "Edit / Create note"
 msgstr "編輯 / 新增通知"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:237
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
 #, c-format
 msgid "Edit list"
 msgstr "編輯虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "Edit list &nbsp;"
-msgstr "編輯虛擬書架 "
+msgstr "編輯虛擬書架 &nbsp;"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
 #, c-format
 msgid "Editing "
 msgstr "編輯 "
@@ -5556,12 +5569,12 @@ msgstr "編輯 "
 msgid "Editing issue note for %s %s"
 msgstr "編輯給 %s %s 的流通說明"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:194
 #, c-format
 msgid "Edition statement:"
 msgstr "版本敘述："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
 #, c-format
 msgid "Editions"
 msgstr "版本"
@@ -5581,7 +5594,7 @@ msgstr "電子郵件地址："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:734
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:736
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:129
 #, c-format
 msgid "Email:"
 msgstr "電子郵件："
@@ -5606,12 +5619,12 @@ msgstr "百科全書 "
 msgid "End session"
 msgstr "結束作業階段"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:474
 #, c-format
 msgid "Enhanced content: "
 msgstr "更多的內容："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:684
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:687
 #, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr "來自 Syndetics 的強化描述："
@@ -5733,9 +5746,9 @@ msgstr "錯誤：找不到這筆書目記錄。"
 msgid "Errors: "
 msgstr "錯誤："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
-#, c-format
-msgid "Exact"
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:63
+#, fuzzy, c-format
+msgid "Exact "
 msgstr "精確"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:199
@@ -5778,17 +5791,17 @@ msgstr "範例呼叫"
 msgid "Example response"
 msgstr "範例回應"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:534
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:537
 #, c-format
 msgid "Excerpt"
 msgstr "摘要"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:730
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr "Syndetics 提供的摘要"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:836
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
 #, c-format
 msgid "Expected"
 msgstr "預期"
@@ -5799,9 +5812,9 @@ msgid "Expecting a specific item selection."
 msgstr "等待選擇特定館藏。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Expiration date"
-msgstr "到期日："
+msgstr "到期日"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:235
 #, c-format
@@ -5862,7 +5875,7 @@ msgstr "二月"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:366
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr "館藏類型的費用 '%s'：%s"
@@ -5882,7 +5895,7 @@ msgstr "較少選項"
 msgid "Fiction"
 msgstr "小說"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:411
 #, c-format
 msgid "Fiction notes:"
 msgstr "小說說明："
@@ -5903,19 +5916,19 @@ msgid "Fine amount"
 msgstr "罰款金額"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "Fines"
 msgstr "罰款"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:514
 #, c-format
 msgid "Fines and charges"
 msgstr "罰款和收費"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:693
 #, c-format
 msgid "Fines:"
 msgstr "罰款："
@@ -5978,14 +5991,14 @@ msgid "Forever"
 msgstr "永遠"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Forever: keep my checkout history without limit. This is the option for "
 "users who want to keep track of what they are reading."
-msgstr "永久有效：永久保留您的閱讀記錄。這是讀者自己的選擇。"
+msgstr "永久有效：永久保留我的閱讀記錄。這是讀者想要保留追踪閱讀記錄的選項。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:396
 #, c-format
 msgid "Forgot your password?"
@@ -6018,9 +6031,9 @@ msgid "Found %s results in the library's %s collection"
 msgstr "在圖書館的 %s 館藏內找到 %s 結果"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Found in Open Library:"
-msgstr "Open Library："
+msgstr "在開放圖書館(Open Library)發現："
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -6059,9 +6072,9 @@ msgstr "完整的訂閱記錄"
 msgid "Full subscription history for %s"
 msgstr "有關 %s 的訂閱記錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:55
-#, c-format
-msgid "Fuzzy"
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:68
+#, fuzzy, c-format
+msgid "Fuzzy "
 msgstr "模糊"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1009
@@ -6079,7 +6092,7 @@ msgstr "符合歐盟一般資料保護規範"
 msgid "General"
 msgstr "一般"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "Get new password recovery link"
 msgstr "取得新的密碼的連結"
@@ -6179,8 +6192,8 @@ msgid "Go"
 msgstr "搜尋"
 
 #. LI
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
 msgid "Go to detail"
 msgstr "聯絡詳情"
 
@@ -6323,9 +6336,9 @@ msgid "Highlight"
 msgstr "重點"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Hold date"
-msgstr "預約日期："
+msgstr "預約日期"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:64
 #, c-format
@@ -6367,13 +6380,13 @@ msgid "Holding libraries"
 msgstr "館藏圖書館"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:513
 #, c-format
 msgid "Holdings"
 msgstr "館藏"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:649
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:512
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:652
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:515
 #, c-format
 msgid "Holdings:"
 msgstr "館藏："
@@ -6395,9 +6408,9 @@ msgid "Holds (%s)"
 msgstr "預約 (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "完整記錄"
+msgstr "預約記錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:39
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:15
@@ -6468,7 +6481,7 @@ msgstr "首頁"
 msgid "Home libraries"
 msgstr "所屬圖書館"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1227
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #, c-format
@@ -6535,7 +6548,7 @@ msgstr "ISBD"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:138
 #, c-format
 msgid "ISBD view"
 msgstr "ISBD檢視"
@@ -6550,12 +6563,12 @@ msgstr "ISBD檢視"
 msgid "ISBN"
 msgstr "ISBN"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:209
 #, c-format
 msgid "ISBN:"
 msgstr "ISBN："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:212
 #, c-format
 msgid "ISBN: "
 msgstr "ISBN："
@@ -6590,13 +6603,13 @@ msgstr "ISBN: %s"
 msgid "ISSN"
 msgstr "ISSN"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:214
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:217
 #, c-format
 msgid "ISSN:"
 msgstr "ISSN："
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:170
 #, c-format
 msgid "IdRef"
 msgstr "IdRef"
@@ -6631,7 +6644,7 @@ msgstr "第一次使用自助借出系統，或操作不順手，可參考此手
 msgid "If you can't find what you are looking for, you can "
 msgstr "如果您找不到您要的，您可以"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "If you did not receive this email, you can request a new one: "
 msgstr "若未收到此電子郵件，您可要求一個新的："
@@ -6728,7 +6741,7 @@ msgstr "已有在地帳號，請登入。"
 msgid "If you want to, you can try to "
 msgstr "若您喜歡，可以試著 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:582
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:585
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:56
 #, c-format
 msgid "Images"
@@ -6770,7 +6783,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( itemLoo.transfertto ) | html 
 #. %3$s:  itemLoo.transfertwhen | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:45
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:46
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "轉移從 %s 至 %s 自從 %s"
@@ -6818,7 +6831,7 @@ msgid "Interlibrary loan item availability"
 msgstr "館際互借可用性"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #, c-format
 msgid "Interlibrary loan request"
 msgstr "館際互借請求"
@@ -6830,7 +6843,7 @@ msgid "Interlibrary loan requests"
 msgstr "館際互借請求"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Interlibrary loan requests "
 msgstr "館際互借請求"
 
@@ -6839,12 +6852,12 @@ msgstr "館際互借請求"
 msgid "Invalid shelf number."
 msgstr "無效的排架號。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:719
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:722
 #, c-format
 msgid "Issue"
 msgstr "期"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:822
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
 #, c-format
 msgid "Issue #"
 msgstr "期 #"
@@ -6876,7 +6889,7 @@ msgstr "太接近借出日期，不能續借。"
 msgid "Item URI"
 msgstr "館藏 URI"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:598
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:601
 #, c-format
 msgid "Item call number"
 msgstr "館藏索書號"
@@ -6901,27 +6914,27 @@ msgstr "館藏還入"
 msgid "Item checked out"
 msgstr "館藏被借出"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:84
 #, c-format
 msgid "Item damaged"
 msgstr "館藏毀損"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
 #, c-format
 msgid "Item details"
 msgstr "館藏詳情"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1254
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
 #, c-format
 msgid "Item hold queue priority"
 msgstr "館藏預約優先順序"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1255
 #, c-format
 msgid "Item holds"
 msgstr "館藏預約"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, c-format
 msgid "Item lost"
 msgstr "館藏遺失"
@@ -6942,13 +6955,13 @@ msgid "Item renewed"
 msgstr "館藏續借。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:244
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
 #, c-format
 msgid "Item type"
 msgstr "館藏類型"
@@ -6956,12 +6969,12 @@ msgstr "館藏類型"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:338
 #, c-format
 msgid "Item type:"
 msgstr "館藏類型："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:295
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:298
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:221
 #, c-format
 msgid "Item type: "
@@ -6972,7 +6985,7 @@ msgstr "館藏類型："
 msgid "Item types"
 msgstr "館藏類型"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:60
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Item withdrawn"
 msgstr "館藏撤銷"
@@ -6985,13 +6998,13 @@ msgstr "可以取得的館藏在："
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:441
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:444
 #, c-format
 msgid "Items available:"
 msgstr "可借的館藏："
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Items on this list:"
 msgstr "在此清單的物件"
 
@@ -7102,9 +7115,9 @@ msgid "Languages"
 msgstr "語言"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:60
-#, fuzzy, c-format
+#, c-format
 msgid "Languages:"
-msgstr "語言"
+msgstr "語言:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:365
 #, c-format
@@ -7136,7 +7149,7 @@ msgstr "上次更新"
 msgid "Last updated:"
 msgstr "上次更新："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:838
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
 #, c-format
 msgid "Late"
 msgstr "晚到"
@@ -7188,7 +7201,7 @@ msgstr "第 4 層：強化/在地特定發掘平台"
 msgid "Libraries"
 msgstr "圖書館"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:596
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:599
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:200
@@ -7233,7 +7246,7 @@ msgid "Limit to any of the following:"
 msgstr "限於下列之一："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to currently available items"
 msgstr "限縮目前在館的館藏"
 
@@ -7273,7 +7286,7 @@ msgstr "新增虛擬書架。"
 msgid "List deleted."
 msgstr "成功刪除虛擬書架。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
 #, c-format
 msgid "List name"
 msgstr "虛擬書架名稱"
@@ -7284,7 +7297,7 @@ msgstr "虛擬書架名稱"
 msgid "List name:"
 msgstr "虛擬書架名稱："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:618
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:621
 #, c-format
 msgid "List name: "
 msgstr "虛擬書架名稱："
@@ -7294,28 +7307,28 @@ msgstr "虛擬書架名稱："
 msgid "List updated."
 msgstr "更新虛擬書架。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:322
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:325
 #, c-format
 msgid "List(s) this item appears in: "
 msgstr "列出收錄此館藏的虛擬書架："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:689
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:40
 #, c-format
 msgid "Lists"
 msgstr "虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Lists "
 msgstr "虛擬書架"
 
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:534
 #, c-format
 msgid "Lists:"
 msgstr "虛擬書架："
@@ -7323,25 +7336,20 @@ msgstr "虛擬書架："
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:93
 #, c-format
 msgid "Loading"
 msgstr "載入中"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:75
-#, c-format
-msgid "Loading "
-msgstr "載入中 "
-
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "載入中..."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:479
 #, c-format
 msgid "Loading... "
 msgstr "載入中... "
@@ -7368,7 +7376,7 @@ msgid "Location (Status)"
 msgstr "位置(狀態)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "Location and availability:"
 msgstr "位置與可及性："
 
@@ -7380,7 +7388,7 @@ msgstr "位置(狀態)"
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html 
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:789
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:792
 #, c-format
 msgid "Location: %s %s %s "
 msgstr "館藏位置： %s %s %s"
@@ -7392,7 +7400,7 @@ msgstr "位置"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:393
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
@@ -7405,14 +7413,14 @@ msgstr "登入"
 msgid "Log in to add tags"
 msgstr "登入才能新增標籤"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:352
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:354
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:357
 #, c-format
 msgid "Log in to add tags."
 msgstr "登入才能新增標籤。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:787
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:790
 #, c-format
 msgid "Log in to create a new list"
 msgstr "登入以新增清單"
@@ -7434,7 +7442,7 @@ msgid "Log in to your OverDrive account"
 msgstr "以您的 OverDrive 帳號登入"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:53
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:387
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:101
@@ -7444,7 +7452,7 @@ msgstr "以您的 OverDrive 帳號登入"
 msgid "Log in to your account"
 msgstr "以您的帳號登入"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #, c-format
 msgid "Log in to your account:"
@@ -7461,7 +7469,7 @@ msgid "Log out"
 msgstr "登出"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead-sci.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "Log out "
 msgstr "登出"
 
@@ -7493,8 +7501,8 @@ msgstr "登入"
 msgid "Login page"
 msgstr "登入首頁面"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:388
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:387
@@ -7519,9 +7527,9 @@ msgid "LookupPatron"
 msgstr "LookupPatron"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "Lost item returned"
-msgstr "館藏續借。"
+msgstr "還入遺失館藏"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7545,7 +7553,7 @@ msgstr "MARC 檢視"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:46
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:2
 #, c-format
 msgid "MARC view"
@@ -7570,14 +7578,14 @@ msgstr "主要地址"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:605
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #, c-format
 msgid "Make a "
 msgstr "做一個 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #, c-format
 msgid "Make an "
 msgstr "做一個 "
@@ -7605,12 +7613,12 @@ msgstr "管理者："
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:64
 #, c-format
 msgid "Manual credit"
-msgstr ""
+msgstr "人工額度"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:65
 #, c-format
 msgid "Manual invoice"
-msgstr ""
+msgstr "人工收據"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7622,12 +7630,12 @@ msgstr "三月"
 msgid "March"
 msgstr "三月"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:545
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:548
 #, c-format
 msgid "Match:"
 msgstr "對應："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1237
 #, c-format
 msgid "Materials specified"
 msgstr "指定的資料。"
@@ -7659,33 +7667,33 @@ msgstr "給您的訊息"
 msgid "Minimum amount needed by this service is %s"
 msgstr "此服務的最低收費金額是 %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
 #, c-format
 msgid "Missing"
 msgstr "遺失"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
 #, c-format
 msgid "Missing (damaged)"
 msgstr "遺失(損壞)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
 #, c-format
 msgid "Missing (lost)"
 msgstr "遺失(不見)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
 #, c-format
 msgid "Missing (never received)"
 msgstr "遺失(未曾收到過)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:844
 #, c-format
 msgid "Missing (sold out)"
 msgstr "遺失(絕版)"
 
 #. %1$s:  subscription.missinglist | html | html_line_break 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:812
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
 #, c-format
 msgid "Missing issues: %s "
 msgstr "遺失期數：%s "
@@ -7711,13 +7719,13 @@ msgid "Monday"
 msgstr "星期一"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:856
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:859
 #, c-format
 msgid "More details"
 msgstr "更多詳情"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "More lists"
 msgstr "更多清單"
 
@@ -7789,11 +7797,11 @@ msgid "Never expires "
 msgstr "永遠有效 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Never: Delete my checkout history immediately. This will delete all record "
 "of the item that was checked-out upon check-in."
-msgstr "絕不：立即刪除我的閱讀記錄。將在還入時，刪除所有借出與還入的記錄。"
+msgstr "絕不：立即刪除我的借出記錄。將在還入時，刪除所有借出記錄。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:986
 #, c-format
@@ -7812,20 +7820,20 @@ msgid "New interlibrary loan request"
 msgstr "新增館際互借請求"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "New interlibrary loan request "
 msgstr "新增館際互借請求"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:567
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:74
 #, c-format
 msgid "New list"
 msgstr "新增虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:149
 #, c-format
 msgid "New password:"
 msgstr "新密碼："
@@ -7841,7 +7849,7 @@ msgstr "新增採訪建議"
 msgid "New search"
 msgstr "新的搜尋"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:370
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:30
 #, c-format
@@ -7863,7 +7871,7 @@ msgstr "新標籤"
 msgid "News from %s%s%sthe library%s"
 msgstr "來自 %s%s%s此圖書館%s 的最新消息"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7874,14 +7882,14 @@ msgid "Next"
 msgstr "下一頁"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1079
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
 #, c-format
 msgid "Next "
 msgstr "下一頁 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:187
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:190
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "下一頁&gt;&gt;"
@@ -7921,9 +7929,9 @@ msgid "No changes were made."
 msgstr "沒有做任何變更。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "No checkout history to delete"
-msgstr "無閱讀記錄可刪除"
+msgstr "無借出記錄可刪除"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -7932,7 +7940,7 @@ msgid "No checkouts"
 msgstr "借出"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:89
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:974
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:122
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
@@ -7955,9 +7963,9 @@ msgstr "借出"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:283
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:292
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:610
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:618
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:627
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:621
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:257
@@ -7993,7 +8001,7 @@ msgid "No items available."
 msgstr "無可借的館藏。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:227
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:472
 #, c-format
 msgid "No items available:"
 msgstr "無可借的館藏："
@@ -8010,7 +8018,7 @@ msgstr "無限制"
 msgid "No matching records found"
 msgstr "未找到匹配的紀錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:152
 #, c-format
 msgid "No news to display."
 msgstr "無最新消息可顯示。"
@@ -8020,12 +8028,12 @@ msgstr "無最新消息可顯示。"
 msgid "No operation parameter has been passed."
 msgstr "未審核通過作業參數。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:673
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:676
 #, c-format
 msgid "No other items."
 msgstr "無其他館藏。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:659
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:662
 #, c-format
 msgid "No physical items for this record"
 msgstr "此紀錄無實體館藏"
@@ -8035,12 +8043,12 @@ msgstr "此紀錄無實體館藏"
 msgid "No private lists"
 msgstr "無私人虛擬書架"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:781
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:784
 #, c-format
 msgid "No private lists."
 msgstr "無私人虛擬書架。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:779
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:782
 #, c-format
 msgid "No public lists."
 msgstr "無公共虛擬書架。"
@@ -8059,11 +8067,6 @@ msgstr "不允許續借"
 #, c-format
 msgid "No reserves have been selected for this course."
 msgstr "無指定參考書。"
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:78
-#, c-format
-msgid "No results"
-msgstr "沒有結果"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -8090,7 +8093,7 @@ msgstr "未選定建議"
 msgid "No tag was specified."
 msgstr "未指定標籤。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:343
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:346
 #, c-format
 msgid "No tags from this library for this title."
 msgstr "此圖書館未指定標籤給這個題名。"
@@ -8101,17 +8104,17 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr "不，我不同意。請在合理時間內移除我的帳號。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "No, do not cancel article request"
 msgstr "不，請勿取消此論文申請"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "No, do not cancel hold"
 msgstr "不，無法取消預約。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "No, do not delete"
 msgstr "不，請勿刪除"
 
@@ -8126,12 +8129,12 @@ msgid "No, do not delete suggestions"
 msgstr "不，請勿刪除建議"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "No, do not remove sharing"
 msgstr "不，不要移除分享。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "No, do not resume holds"
 msgstr "不，無法恢復預約。"
 
@@ -8161,7 +8164,7 @@ msgid "None of the libraries are available for pickup location. "
 msgstr "無圖書館可做為提領位置。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:411
-#, fuzzy, c-format
+#, c-format
 msgid "None specified:"
 msgstr "未指定："
 
@@ -8169,7 +8172,7 @@ msgstr "未指定："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:48
 #, c-format
@@ -8183,15 +8186,15 @@ msgid "Not checked in %s"
 msgstr "未借出於 %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:268
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:600
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:603
 #, c-format
 msgid "Not finding what you're looking for? "
 msgstr "找不到您要的嗎？"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedvalueopac ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:75
 #, c-format
 msgid "Not for loan %s"
 msgstr "不外借 %s"
@@ -8202,7 +8205,7 @@ msgstr "不外借 %s"
 msgid "Not for loan (%s)"
 msgstr "不外借(%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:844
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
 #, c-format
 msgid "Not issued"
 msgstr "尚未出刊"
@@ -8217,7 +8220,7 @@ msgstr "可被預約"
 msgid "Not what you expected? Check for "
 msgstr "不是您預期的嗎？請查 "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:346
 #, c-format
 msgid "Note"
@@ -8292,10 +8295,10 @@ msgstr "說明：您的標籤包括標示語法，已被刪除。此標籤新增
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1247
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:726
 #, c-format
 msgid "Notes"
 msgstr "說明"
@@ -8328,7 +8331,7 @@ msgid "Nothing"
 msgstr "沒有"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr "未選資料。勾選館藏旁的盒子以備續借"
@@ -8344,14 +8347,14 @@ msgstr "通知："
 msgid "Nov"
 msgstr "十一月"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:567
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #, c-format
 msgid "Novelist Select"
 msgstr "Novelist Select"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:479
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
 #, c-format
 msgid "Novelist Select: "
 msgstr "Novelist Select："
@@ -8405,13 +8408,13 @@ msgstr "十月"
 msgid "October"
 msgstr "十月"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #, c-format
 msgid "On hold"
 msgstr "預約中"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:89
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:90
 #, c-format
 msgid "On order"
 msgstr "訂購中"
@@ -8435,7 +8438,7 @@ msgid "One or more holds were not placed due to existing holds."
 msgstr "因為已被預約所以不能再預約。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:122
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:261
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:264
 #, c-format
 msgid "Online resources:"
 msgstr "線上資源"
@@ -8480,7 +8483,7 @@ msgstr "依題名排序"
 msgid "Order by: "
 msgstr "訂閱者："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:958
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
 #, c-format
 msgid "Other editions of this work"
 msgstr "此作品的其他版本"
@@ -8491,7 +8494,7 @@ msgid "Other forms:"
 msgstr "其他類型："
 
 #. %1$s:  ' ( ' _ (otheritemloop.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:517
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:520
 #, c-format
 msgid "Other holdings %s"
 msgstr "其他館藏 %s"
@@ -8509,7 +8512,7 @@ msgid "Other phone:"
 msgstr "其他電話："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
-#, fuzzy, c-format
+#, c-format
 msgid "Other:"
 msgstr "其他類型："
 
@@ -8542,7 +8545,7 @@ msgid "OverDrive search for '%s'"
 msgstr "OverDrive 搜尋於 '%s'"
 
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:639
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "Overall queue priority: %s"
 msgstr "優先順序：%s"
@@ -8553,7 +8556,7 @@ msgstr "優先順序：%s"
 msgid "Overdue (%s)"
 msgstr "逾期 (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:580
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
 #, c-format
 msgid "Overdues "
 msgstr "逾期 "
@@ -8564,7 +8567,7 @@ msgstr "逾期 "
 msgid "Owner only"
 msgstr "祗限擁有者"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:724
 #, c-format
 msgid "Pages"
 msgstr "頁面"
@@ -8607,7 +8610,7 @@ msgstr "密碼前後有空格"
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:101
 #, c-format
 msgid "Password must be at least %s characters long."
 msgstr "密碼長度至少應有 %s 字元。"
@@ -8629,14 +8632,14 @@ msgid ""
 msgstr "密碼長度至少應有 %s 字元，包括大寫、小寫及數字"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:98
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
 msgstr "密碼長度至少應有一個數字、一個小寫及一個大寫。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:101
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
 #, c-format
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr "密碼前後不能有空格。"
@@ -8646,7 +8649,7 @@ msgstr "密碼前後不能有空格。"
 msgid "Password updated"
 msgstr "更新密碼"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:390
@@ -8667,7 +8670,7 @@ msgid "Patent document"
 msgstr "專利文件"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:926
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
 #, c-format
 msgid "Patron comment on %s"
 msgstr "讀者對 %s 的評論"
@@ -8683,7 +8686,7 @@ msgid "PayPal Acceptance Mark"
 msgstr "PayPal 接受標記"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:63
-#, fuzzy, c-format
+#, c-format
 msgid "Payment"
 msgstr "支付方式"
 
@@ -8697,7 +8700,7 @@ msgstr "Payment 應用："
 msgid "Payment method"
 msgstr "支付方式"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:95
 #, c-format
 msgid "Pending hold"
 msgstr "預約中"
@@ -8721,7 +8724,7 @@ msgstr "電話："
 msgid "Phone: "
 msgstr "電話："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:202
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:205
 #, c-format
 msgid "Physical details:"
 msgstr "詳情："
@@ -8737,7 +8740,7 @@ msgstr "提取地點"
 msgid "Pick up location:"
 msgstr "提取地點："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:728
 #, c-format
 msgid "Pickup library"
 msgstr "提取圖書館"
@@ -8770,8 +8773,8 @@ msgstr "請求論文 %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:8
@@ -8787,7 +8790,7 @@ msgstr "預約"
 msgid "Place request"
 msgstr "請求"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:715
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:17
 #, c-format
@@ -8804,7 +8807,7 @@ msgstr "主題(地理名稱)"
 msgid "Placing a hold"
 msgstr "預約"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:586
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:589
 #, c-format
 msgid "Play media"
 msgstr "播放媒體"
@@ -8838,7 +8841,7 @@ msgstr "請選擇您的隱私規則："
 msgid "Please click here to log in."
 msgstr "從這裡登入。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:168
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:170
 #, c-format
 msgid ""
 "Please click the link in this email to finish the process of resetting your "
@@ -8881,7 +8884,7 @@ msgid ""
 "service provider, or you do not see your provider in this list."
 msgstr "若不確定電信服務商或未在清單看到您的服務商，請與圖書館員連繫。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, c-format
 msgid "Please contact the library if you need further assistance."
 msgstr "若需進一步協助請與圖書館連繫。"
@@ -8913,7 +8916,7 @@ msgstr "請鍵入與此申請有關的其他資訊："
 msgid ""
 "Please enter numbers only. Prefix the number with + if including the country "
 "code."
-msgstr ""
+msgstr "請僅輸入數字。如果包含國碼, 請在數字前方加上「+」。"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/password_check.inc:2
@@ -9027,14 +9030,16 @@ msgstr "請以純文字再試。%s無法辨識的錯誤。%s "
 msgid "Please type the following characters into the preceding box: "
 msgstr "在輸入盒內鍵入以下字元："
 
-#. %1$s:  ELSIF (errAlreadyStartRecovery) 
-#. %2$s:  IF username 
+#. %1$s:  ELSIF (errNoBorrowerEmail) 
+#. %2$s:  ELSIF (errAlreadyStartRecovery) 
+#. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
 #, c-format
 msgid ""
-"Please use the field 'Login' as well. %s The process of password recovery "
-"has already been started for this account %s (\""
-msgstr "請使用 '登入' 欄位。%s 此恢復密碼程序已經被此帳號使用 %s (\""
+"Please use the field 'Login' as well. %s This account has no email address "
+"we can send the email to. %s The process of password recovery has already "
+"been started for this account %s (\""
+msgstr "請使用 '登入' 欄位。%s 此帳號沒有電子信箱可寄送通知。 %s 此帳號恢復密碼程序已啟動 %s (\""
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -9053,7 +9058,7 @@ msgstr "熱門程度(最少至最多)"
 msgid "Popularity (most to least)"
 msgstr "熱門程度(最多至最少)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:943
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format
 msgid "Post your comments on this title. "
 msgstr "張貼對這個館藏的評論。"
@@ -9090,14 +9095,16 @@ msgid ""
 "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your "
 "system clipboard.<br><br>To cancel, click this message or press escape."
 msgstr ""
+"按<i>ctrl</i>或<i>⌘</i> + <i>C</i> 就能複製表格資料<br>到系統的剪貼簿。"
+"<br><br>點選此訊息或按 ESC 鍵，就能取消。"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Prev"
 msgstr "上一頁"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -9108,7 +9115,7 @@ msgid "Previous"
 msgstr "上一頁"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Previous "
 msgstr "上一頁"
 
@@ -9167,8 +9174,8 @@ msgid "Privacy"
 msgstr "私人"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:658
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:659
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #, c-format
 msgid "Private"
 msgstr "私人"
@@ -9204,8 +9211,8 @@ msgid "Provider:"
 msgstr "供應商："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:664
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, c-format
 msgid "Public"
 msgstr "公開"
@@ -9214,24 +9221,24 @@ msgstr "公開"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:94
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:700
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:703
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:44
 #, c-format
 msgid "Public lists"
 msgstr "公開虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "Public lists "
 msgstr "公開虛擬書架"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "Public lists:"
 msgstr "公開虛擬書架："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:823
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #, c-format
 msgid "Publication date"
 msgstr "出版日期"
@@ -9259,14 +9266,14 @@ msgstr "出版年/著作權年：最新到最舊"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "出版年/著作權年：最舊到最新"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:63
 #, c-format
 msgid "Publication:"
 msgstr "出版："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:197
 #, c-format
 msgid "Published by :"
 msgstr "出版者："
@@ -9290,10 +9297,12 @@ msgstr "出版者：%s %s 在 %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.published_on | $KohaDates 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:106
 #, c-format
-msgid "Published on %s %s by "
-msgstr "(出版日期 %s %s 出版社 "
+msgid "Published on %s %s %s %s by "
+msgstr "出版日 %s %s %s %s 由 "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:122
@@ -9324,7 +9333,7 @@ msgstr "新書推薦"
 msgid "Quantity:"
 msgstr "數量："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:163
 #, c-format
 msgid "Quote of the day"
 msgstr "今日引句"
@@ -9349,7 +9358,7 @@ msgid "RT"
 msgstr "RT"
 
 #. INPUT type=submit name=rate_button
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:457
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:40
 msgid "Rate me"
 msgstr "評鑑我"
@@ -9359,9 +9368,9 @@ msgstr "評鑑我"
 msgid "Re-type new password:"
 msgstr "再輸入新密碼："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:56
-#, c-format
-msgid "Really fuzzy"
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:73
+#, fuzzy, c-format
+msgid "Really fuzzy "
 msgstr "非常模糊"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:197
@@ -9375,7 +9384,7 @@ msgstr "採訪建議的理由："
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:824
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
 #, c-format
 msgid "Received date"
 msgstr "簽收日期"
@@ -9401,7 +9410,7 @@ msgstr "記錄 URL"
 msgid "Record not found"
 msgstr "找不到記錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, c-format
 msgid "Record title"
 msgstr "著錄題名"
@@ -9433,7 +9442,7 @@ msgstr "縮小您的搜尋"
 msgid "Register a new account"
 msgstr "註冊新帳號"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:401
 #, c-format
@@ -9446,9 +9455,9 @@ msgid "Registration complete"
 msgstr "註冊完成"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Registration complete!"
-msgstr "註冊完成"
+msgstr "註冊完成！"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:36
 #, c-format
@@ -9465,7 +9474,7 @@ msgstr "正常列印"
 msgid "Related Term"
 msgstr "相關詞"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:543
 #, c-format
 msgid "Relative"
 msgstr "相關"
@@ -9501,7 +9510,7 @@ msgid "Remove field"
 msgstr "移除欄位"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Remove from list"
 msgstr "從虛擬書架移除"
 
@@ -9511,7 +9520,7 @@ msgid "Remove from this list"
 msgstr "從此虛擬書架移除"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:564
 msgid "Remove selected items"
 msgstr "移除指定的館藏"
 
@@ -9523,28 +9532,28 @@ msgstr "移除指定的館藏"
 msgid "Remove selected searches"
 msgstr "移除選定的搜尋"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:768
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:771
 #, c-format
 msgid "Remove share"
 msgstr "移除共享"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:252
-#, fuzzy, c-format
+#, c-format
 msgid "Remove share "
 msgstr "移除共享"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:360
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:591
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:671
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, c-format
 msgid "Renew"
 msgstr "續借"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Renew all"
 msgstr "全部續借"
 
@@ -9557,8 +9566,8 @@ msgid "Renew item"
 msgstr "續借館藏"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:451
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Renew selected"
 msgstr "續借選定的部份"
 
@@ -9569,7 +9578,7 @@ msgstr "續借選定的部份"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:360
 #, c-format
 msgid "Renewed!"
 msgstr "續借！"
@@ -9651,9 +9660,9 @@ msgid "Requested from:"
 msgstr "請求來自："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:97
-#, fuzzy, c-format
+#, c-format
 msgid "Requested item type"
-msgstr "請求類型："
+msgstr "要求館藏類型"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:186
 #, c-format
@@ -9706,7 +9715,7 @@ msgstr "請求類型："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:921
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:982
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:623
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
@@ -9729,6 +9738,7 @@ msgid "Resort list"
 msgstr "重新排序虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:122
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:174
@@ -9815,7 +9825,7 @@ msgstr "回到目錄首頁。"
 msgid "Return to the last advanced search"
 msgstr "回到上次的進階搜尋"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:171
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:173
 #, c-format
 msgid "Return to the main page"
 msgstr "回至首頁"
@@ -9854,17 +9864,17 @@ msgstr ""
 "預約資訊與訊息。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:537
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #, c-format
 msgid "Reviews"
 msgstr "審核"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:315
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:318
 #, c-format
 msgid "Reviews from LibraryThing.com:"
 msgstr "來自 LibraryThing.com 的評論："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:736
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr "Syndetics 提供的評論"
@@ -9922,8 +9932,8 @@ msgstr "星期六"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
 #, c-format
 msgid "Save"
 msgstr "儲存"
@@ -9992,8 +10002,8 @@ msgstr "掃瞄館藏或輸入其條碼："
 
 #. INPUT type=submit name=do
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:58
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:173
@@ -10029,14 +10039,14 @@ msgstr "以此題名搜尋："
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:198
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:403
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:490
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:58
 msgid "Search for works by this author"
 msgstr "以此著者搜尋作品"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:44
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:292
 #, c-format
 msgid "Search for:"
@@ -10087,7 +10097,7 @@ msgstr "搜尋建議"
 msgid "Search the %s%s%sKoha library%s catalog"
 msgstr "搜尋 %s%s%s圖書館%s 目錄"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
 #, c-format
 msgid "Search type:"
 msgstr "搜尋類型:"
@@ -10145,7 +10155,7 @@ msgstr "地點："
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:290
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:625
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:628
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
 msgid "See Baker & Taylor"
 msgstr "見 Baker & Taylor"
@@ -10156,12 +10166,12 @@ msgid "See also:"
 msgstr "參見："
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1079
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
 msgid "See: %s%s%snext biblio%s"
 msgstr "見：%s%s%snext biblio%s"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
 msgid "See: %s%s%sprevious biblio%s"
 msgstr "見：%s%s%sprevious biblio%s"
 
@@ -10177,20 +10187,20 @@ msgid "Select a specific item:"
 msgstr "選擇特定的館藏："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:52
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:159
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:196
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
 #, c-format
 msgid "Select all"
 msgstr "全選"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1195
 #, c-format
 msgid "Select none"
 msgstr "不可選取"
@@ -10217,16 +10227,16 @@ msgstr "選擇搜尋至："
 msgid "Select suggestions to: "
 msgstr "選擇建議至："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, c-format
 msgid "Select the item(s) to search"
 msgstr "選擇搜尋的館藏"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:335
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, c-format
 msgid "Select titles to: "
 msgstr "選擇題名至："
@@ -10294,8 +10304,8 @@ msgstr "九月"
 msgid "Serial"
 msgstr "期刊"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:577
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:597
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:580
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:600
 #, c-format
 msgid "Serial collection"
 msgstr "期刊館藏"
@@ -10321,7 +10331,7 @@ msgstr "集叢"
 msgid "Series Title"
 msgstr "集叢題名"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:398
 #, c-format
 msgid "Series information:"
 msgstr "集叢資訊："
@@ -10331,7 +10341,7 @@ msgstr "集叢資訊："
 msgid "Series title"
 msgstr "集叢題名"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:178
 #, c-format
 msgid "Series:"
 msgstr "集叢："
@@ -10347,16 +10357,16 @@ msgstr "作業遺失"
 msgid "Settings updated"
 msgstr "更新設定"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:759
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
 #, c-format
 msgid "Share"
 msgstr "分享"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Share a list "
-msgstr "選擇虛擬書架"
+msgstr "分享虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:44
 #, c-format
@@ -10364,7 +10374,7 @@ msgid "Share a list with another patron"
 msgstr "與另位讀者共享虛擬書架"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 msgid "Share by email"
 msgstr "經由電子郵件分享"
 
@@ -10374,21 +10384,21 @@ msgid "Share list"
 msgstr "共享虛擬書架"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
 msgid "Share on Facebook"
 msgstr "經由臉書分享"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 msgid "Share on LinkedIn"
 msgstr "經由 LinkedIn 分享"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 msgid "Share on Twitter"
 msgstr "經由 Twitter 分享"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1233
 #, c-format
 msgid "Shelving location"
 msgstr "排架位置"
@@ -10409,16 +10419,16 @@ msgid "Show"
 msgstr "顯示"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Show 50 items"
-msgstr "顯示最新的50筆館藏"
+msgstr "顯示50筆館藏"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Show _MENU_ entries"
 msgstr "顯示_MENU_ 課程"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:621
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:624
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
@@ -10426,7 +10436,7 @@ msgstr "顯示_MENU_ 課程"
 msgid "Show all items"
 msgstr "顯示所有館藏"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, c-format
 msgid "Show all news"
 msgstr "顯示所有新聞"
@@ -10480,9 +10490,9 @@ msgid "Showing %s of about %s results"
 msgstr "顯示 %s 有關 %s 的結果"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Showing 50 items. "
-msgstr "顯示最新的50筆館藏。"
+msgstr "顯示50筆館藏。"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -10510,7 +10520,7 @@ msgstr "只顯示可取得的館藏"
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr "登入後才能檢視館藏的可及性與借出或預約"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:551
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:554
 #, c-format
 msgid "Similar items"
 msgstr "相似館藏"
@@ -10526,7 +10536,7 @@ msgid "Skip to main content"
 msgstr "跳至主要款目"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:173
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
 "Please check with your mobile service provider if you have questions. "
@@ -10542,7 +10552,7 @@ msgstr "處理以下地址時出了錯誤。請檢查他們。他們是：%s"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Something went wrong. The note has not been saved"
 msgstr "出錯了。未儲存此通知"
 
@@ -10616,9 +10626,9 @@ msgid ""
 "Sorry, the system doesn't think you have permission to access this page. "
 msgstr "抱歉，您無權限近用此頁面。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:68
-#, c-format
-msgid "Sorry, there are no results, try a different search term."
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:94
+#, fuzzy, c-format
+msgid "Sorry, there are no results. Try a different search term."
 msgstr "抱歉，查無內容，試試別的搜索詞。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
@@ -10685,7 +10695,7 @@ msgid "Sorry, your session has timed out. Please log in again."
 msgstr "抱歉，您的作業時間已過。請重新登入。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Sort"
 msgstr "排序"
 
@@ -10699,7 +10709,7 @@ msgstr "排序："
 msgid "Sort by: "
 msgstr "排序："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:622
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
 #, c-format
 msgid "Sort this list by: "
 msgstr "排序此虛擬書架："
@@ -10742,13 +10752,13 @@ msgid "Statistics"
 msgstr "統計"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:349
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:724
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
 #, c-format
@@ -10779,7 +10789,7 @@ msgstr "步驟三：點選 '完成' 鈕"
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "步驟二：掃瞄館藏的條碼，每次一個"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:850
 #, c-format
 msgid "Stopped"
 msgstr "已停止"
@@ -10796,7 +10806,7 @@ msgid "Su"
 msgstr "星期日"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:191
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:193
@@ -10821,8 +10831,8 @@ msgstr "主題片語"
 msgid "Subject(s)"
 msgstr "主題"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:236
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:255
 #, c-format
 msgid "Subject(s):"
 msgstr "主題："
@@ -10843,8 +10853,8 @@ msgstr "主題：%s "
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1054
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:159
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:134
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:246
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:404
@@ -10854,7 +10864,7 @@ msgid "Submit"
 msgstr "送出"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:122
-#, fuzzy, c-format
+#, c-format
 msgid "Submit "
 msgstr "送出"
 
@@ -10865,7 +10875,7 @@ msgstr "送出並關閉此視窗"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:229
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Submit changes"
 msgstr "送出改變"
 
@@ -10876,8 +10886,8 @@ msgstr "送出修改"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:442
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:445
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, c-format
 msgid "Submit note"
 msgstr "送出通知"
@@ -10899,7 +10909,7 @@ msgid "Subscribe to a subscription alert"
 msgstr "訂閱警示"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:804
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:807
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:159
 #, c-format
 msgid "Subscribe to email notification on new issues"
@@ -10943,7 +10953,7 @@ msgstr "訂閱"
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:797
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "取得訂閱資訊：%s 至：%s %s %s 現在 (現刊)%s"
@@ -10965,7 +10975,7 @@ msgid "Subscription: "
 msgstr "訂閱："
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:560
 #, c-format
 msgid "Subscriptions ( %s )"
 msgstr "訂閱 ( %s )"
@@ -10983,15 +10993,15 @@ msgstr "採購建議"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:302
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:305
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested by anyone"
-msgstr "建議"
+msgstr "任何人皆可建議"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:301
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:304
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested by me"
-msgstr "建議者："
+msgstr "由我建議"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:298
 #, c-format
@@ -11086,12 +11096,12 @@ msgstr "系統維護"
 msgid "System-wide only"
 msgstr "只限本系統"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:530
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:533
 #, c-format
 msgid "TOC"
 msgstr "目次"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:717
 #, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "Syndetics提供的目次"
@@ -11103,7 +11113,7 @@ msgstr "Syndetics提供的目次"
 msgid "Tag"
 msgstr "欄號"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:552
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:555
 #, c-format
 msgid "Tag browser"
 msgstr "瀏覽標籤"
@@ -11118,7 +11128,7 @@ msgstr "標籤雲"
 msgid "Tag status here."
 msgstr "標籤狀態在此。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:383
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:236
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
 #, c-format
@@ -11141,14 +11151,14 @@ msgstr "標籤"
 msgid "Tags added: "
 msgstr "新增標籤："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:333
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:336
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:345
 #, c-format
 msgid "Tags from this library:"
 msgstr "來自此圖書館的標籤："
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:517
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:520
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
 #, c-format
 msgid "Tags:"
 msgstr "標籤"
@@ -11196,14 +11206,14 @@ msgid "Thank you!"
 msgstr "謝謝您！"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The \"Anyone\" permission has no actual effect while this list is strictly "
 "private."
 msgstr "任何人權限沒有影響，因為此虛擬書架屬性為純私人。"
 
 #. %1$s:  subscription.opacdisplaycount | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:818
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "此訂閱 %s 的最新一期："
@@ -11220,7 +11230,7 @@ msgstr "此訂閱 %s 的最新一期："
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
 "all time %s "
@@ -11328,7 +11338,7 @@ msgstr ""
 "%s 期%s %s%s 週%s %s%s 月%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The deletion of your checkout history failed, because there is a problem "
 "with the configuration of this feature. Please help to fix the system by "
@@ -11385,7 +11395,7 @@ msgid ""
 "the list."
 msgstr "此館藏尚未加入此虛擬書架。請確認此事。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:670
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
@@ -11422,7 +11432,7 @@ msgid "The operation results will be displayed for each entered barcode."
 msgstr "鍵入條碼後顯示作業的結果。"
 
 #. %1$s:  username | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:177
 #, c-format
 msgid "The password has been changed for user \"%s\"."
 msgstr "密碼已被使用者 \"%s\" 變更。"
@@ -11469,12 +11479,12 @@ msgid "The userid "
 msgstr "使用者帳號 "
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:776
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:779
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "此題名有 %s 個相關的訂閱。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:937
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:940
 #, c-format
 msgid "There are no comments on this title."
 msgstr "此館藏沒有評論。"
@@ -11562,7 +11572,7 @@ msgstr ""
 msgid "This email address already exists in our database."
 msgstr "此電子郵件信箱已經在資料庫內。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:111
 #, c-format
 msgid "This feature is not enabled"
 msgstr "這項功能尚未啟用。"
@@ -11572,7 +11582,7 @@ msgstr "這項功能尚未啟用。"
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr "此為館內借出，不能續借。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:775
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:778
 #, c-format
 msgid "This is a serial"
 msgstr "這是期刊"
@@ -11599,11 +11609,11 @@ msgid "This item is on hold for another borrower."
 msgstr "此館藏已被另個讀者預約。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:107
-#, fuzzy, c-format
+#, c-format
 msgid "This item is scheduled for auto renewal."
 msgstr "此館藏已經自動續借不能再續借"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:169
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:171
 #, c-format
 msgid "This link is valid for 2 days starting now. "
 msgstr "此連結僅從現在起兩天內有效。"
@@ -11620,14 +11630,14 @@ msgid "This list does not exist."
 msgstr "無此題名。"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:584
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
 msgstr "此虛擬書架是空的。%s 可將搜尋結果加入您的虛擬書架 "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "This list is shared. Other users will lose access to it."
 msgstr "此清單是共享的。其他使用者會失去訪問權限。"
 
@@ -11641,8 +11651,8 @@ msgstr "基於以下的理由出現此訊息："
 msgid "This news item does not exist. "
 msgstr "此新聞項目不存在。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:544
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1169
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11650,12 +11660,12 @@ msgid ""
 msgstr "此頁面含有強化內容，當啟用 JavaScript 或點選 "
 
 #. %1$s:  items_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:617
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
 #, c-format
 msgid "This record has many physical items (%s). "
 msgstr "此書目記錄有多個實體館藏(%s)。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:786
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:789
 #, c-format
 msgid "This subscription is closed."
 msgstr "此訂閱已關閉。"
@@ -11688,21 +11698,21 @@ msgstr "星期四"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:64
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:277
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:240
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:536
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:585
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:719
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
@@ -11730,7 +11740,7 @@ msgid "Title (Z-A)"
 msgstr "題名 (Z-A)"
 
 #. %1$s:  title_notes_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:527
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:530
 #, c-format
 msgid "Title notes ( %s )"
 msgstr "題名附註 ( %s )"
@@ -11779,7 +11789,7 @@ msgstr "請與 Koha 管理者連繫，報告此錯誤。"
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "報告此錯誤，應電子郵件給 Koha 管理者。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:121
 #, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr "重設密碼時，請登入或電子郵件地址。"
@@ -11811,7 +11821,7 @@ msgid "Total due if credit(s) applied:"
 msgstr "應付總額："
 
 #. %1$s:  holds_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:633
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:636
 #, c-format
 msgid "Total holds: %s"
 msgstr "所有預約: %s"
@@ -11837,7 +11847,7 @@ msgid "Tuesday"
 msgstr "星期二"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:87
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:728
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #, c-format
@@ -11865,7 +11875,7 @@ msgstr "類型："
 msgid "UF"
 msgstr "UF"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -11951,7 +11961,7 @@ msgstr "劃一題名"
 msgid "Unified title: %s "
 msgstr "劃一題名：%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:230
 #, c-format
 msgid "Uniform titles:"
 msgstr "劃一題名："
@@ -11985,7 +11995,7 @@ msgstr "更新您的記錄"
 #. TH
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:260
 msgid "Use this to report any problems with your currently checked out items"
-msgstr ""
+msgstr "請用此功能反應任何目前借出館藏的問題"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:217
 #, c-format
@@ -12072,12 +12082,12 @@ msgstr "查看所有建議"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:185
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:190
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:391
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:394
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:396
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:397
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:479
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:480
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:52
@@ -12093,18 +12103,18 @@ msgid "View interlibrary loan request"
 msgstr "檢視館際互借請求"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "View interlibrary loan request "
 msgstr "檢視館際互借請求"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:273
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:611
 msgid "View on Amazon.com"
 msgstr "檢視 Amazon.com"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
 msgid "View record \"%s\""
 msgstr "檢視記錄 \"%s\""
 
@@ -12115,17 +12125,17 @@ msgid "View your search history"
 msgstr "檢視您的搜尋記錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Void payment"
-msgstr "您的付款"
+msgstr "無效的付款"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1237
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1240
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #, c-format
 msgid "Vol info"
 msgstr "卷期資訊"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
 #, c-format
 msgid "Volume"
 msgstr "卷"
@@ -12137,9 +12147,9 @@ msgid "Volume:"
 msgstr "卷："
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Waiting date"
-msgstr "到期日："
+msgstr "等待日數"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-discharge.tt:52
 #, c-format
@@ -12157,7 +12167,7 @@ msgid "We"
 msgstr "星期三"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "We take great care in protecting your privacy. On this screen, you can "
 "define how long we keep your checkout history."
@@ -12178,7 +12188,7 @@ msgstr "星期三"
 msgid "Wednesday"
 msgstr "星期三"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "Welcome, "
 msgstr "歡迎， "
@@ -12200,7 +12210,7 @@ msgid "What's next?"
 msgstr "下一個是什麼？"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Whatever your privacy rule you choose, you can delete all your checkout "
 "history immediately by clicking here. "
@@ -12224,8 +12234,8 @@ msgstr "含選定的採訪建議："
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "With selected titles: "
 msgstr "含選擇的題名："
 
@@ -12242,7 +12252,7 @@ msgstr "列印收條嗎？"
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/accounts.inc:67
 #, c-format
 msgid "Writeoff"
-msgstr ""
+msgstr "註銷"
 
 #. %1$s:  message.message_date | $KohaDates 
 #. %2$s:  Branches.GetName(message.branchcode) | html 
@@ -12252,13 +12262,13 @@ msgid "Written on %s by %s"
 msgstr "書寫尺寸 %s 乘 %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:637
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
 #, c-format
 msgid "Year"
 msgstr "Year"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:257
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:260
 #, c-format
 msgid "Year: "
 msgstr "年："
@@ -12291,17 +12301,17 @@ msgid "Yes, I agree."
 msgstr "是的，我同意。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Yes, cancel article request"
 msgstr "是的, 取消論文申請"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Yes, cancel hold"
 msgstr "是的，取消預約"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Yes, delete"
 msgstr "是的，刪除"
 
@@ -12316,17 +12326,17 @@ msgid "Yes, delete suggestions"
 msgstr "是的，刪除建議"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Yes, remove sharing"
 msgstr "是的，移除共享"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Yes, resume all holds"
 msgstr "是的，恢復所有預約"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Yes, suspend all holds"
 msgstr "是的，暫停所有預約"
 
@@ -12425,7 +12435,7 @@ msgstr "您可使用此頁面上端的選單與連結"
 msgid "You can't change your password."
 msgstr "不能修改您的密碼。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:115
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:117
 #, c-format
 msgid "You can't reset your password."
 msgstr "不能修改您的密碼。"
@@ -12465,7 +12475,7 @@ msgstr "目前，您未有暫停的預約。"
 msgid "You currently have nothing checked out."
 msgstr "目前，您未借出任何館藏。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:492
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "您還有待付罰款："
@@ -12533,7 +12543,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr "您從搜尋引擎或書籤取得過時的連結。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:506
 #, c-format
 msgid "You have a credit of:"
 msgstr "您的額度是："
@@ -12543,7 +12553,7 @@ msgstr "您的額度是："
 msgid "You have already requested this title."
 msgstr "您已預約此題名。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:806
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:809
 #, c-format
 msgid "You have no article requests currently."
 msgstr "目前您沒有申請論文。"
@@ -12570,7 +12580,7 @@ msgid ""
 "fields and resubmit."
 msgstr "未填入所有的必備欄位。請填入再送出。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:473
 #, c-format
 msgid "You have nothing checked out"
 msgstr "您沒有借出館藏"
@@ -12599,7 +12609,7 @@ msgstr "您目前的建議額度已滿。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have renewed this item the maximum number of consecutive times without "
 "it being seen by the library."
@@ -12610,7 +12620,7 @@ msgstr "您已續借此館藏至最高次數。"
 msgid "You have renewed this item the maximum number of times allowed."
 msgstr "您已續借此館藏至最高次數。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:805
 #, c-format
 msgid "You have subscribed to email notification on new issues. "
 msgstr "您要求此期刊到館後以 E-Mail 通報。"
@@ -12668,7 +12678,7 @@ msgstr "您必須登入才能新增虛擬書架"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "You must be logged in to create or add to lists"
 msgstr "您必須登入才能新增虛擬書架"
 
@@ -12677,7 +12687,7 @@ msgstr "您必須登入才能新增虛擬書架"
 msgid "You must have an email address to enroll"
 msgstr "必須登入電子郵件信箱才能註冊"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:807
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:810
 #, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
@@ -12699,7 +12709,7 @@ msgstr "您必須選擇至少一個館藏。"
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
 msgstr "您搜尋 %s 供 '%s'%s%s 限制是：'%s'%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
 msgstr "您應收到含有重設密碼連結的電子郵件。"
@@ -12717,13 +12727,13 @@ msgid ""
 msgstr "鍵入錯誤的字元。請重新鍵入。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:108
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You will receive an email notification if someone accepts your share before "
 "it expires."
 msgstr "若有人在兩週內接受您的共享邀請，將以電子郵件通知您。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:168
 #, c-format
 msgid "You will receive an email shortly. "
 msgstr "您即將收到電子郵件。"
@@ -12817,16 +12827,16 @@ msgid "Your checkout history"
 msgstr "您的借出記錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Your checkout history has been deleted."
-msgstr "您的閱讀記錄已經被刪除。"
+msgstr "您的借出記錄已經被刪除。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:892
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:895
 #, c-format
 msgid "Your comment"
 msgstr "您的評論"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:894
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:897
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr "您的評論(待審核)"
@@ -12868,9 +12878,9 @@ msgid "Your download should begin automatically."
 msgstr "您的下載將自動開始。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "Your holds history"
-msgstr "您的借出記錄"
+msgstr "您的預約記錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
 #, c-format
@@ -12897,20 +12907,20 @@ msgstr "您的虛擬書架：%s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:696
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:699
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:59
 #, c-format
 msgid "Your lists"
 msgstr "您的虛擬書架"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Your lists "
 msgstr "您的虛擬書架"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "Your lists:"
 msgstr "您的清單"
 
@@ -12926,17 +12936,17 @@ msgid "Your messaging settings"
 msgstr "您的訊息設定"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s could not be saved."
 msgstr "未儲存對%s 的說明。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "對 %s 的說明未儲存也未送給圖書館。"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s was removed."
 msgstr "未移除對 %s 的說明。"
 
@@ -12954,7 +12964,7 @@ msgstr "您已變更密碼 "
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:903
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:144
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:146
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "您的密碼長度至少應有 %s 字元。"
@@ -12963,7 +12973,7 @@ msgstr "您的密碼長度至少應有 %s 字元。"
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:901
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:144
 #, c-format
 msgid ""
 "Your password must contain at least %s characters, including UPPERCASE, "
@@ -13009,15 +13019,15 @@ msgstr "您的採訪建議"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your rating: %s, "
 msgstr "您的評分：%s, "
 
 #. For the first occurrence,
 #. %1$s:  my_rating.rating_value | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:460
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:44
 #, c-format
 msgid "Your rating: %s."
@@ -13069,10 +13079,10 @@ msgid "Your tags"
 msgstr "您的標籤"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your updates have been submitted and your patron account has been modified."
-msgstr "已送出您的更新。圖書館員將審閱您的更新。"
+msgstr "您的更新已送出，您的讀者帳戶資訊已修改。"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:39
 #, c-format
@@ -13099,7 +13109,7 @@ msgstr "郵遞區號："
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "[ New list ]"
 msgstr "[新增虛擬書架]"
 
@@ -13109,7 +13119,7 @@ msgid "[% limit or"
 msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1008
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1011
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr "[%s 標籤不支援您的瀏覽器。]"
@@ -13225,7 +13235,7 @@ msgstr "讀者證號碼"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:10
 msgid "breadcrumb"
-msgstr ""
+msgstr "頁面路徑"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13234,8 +13244,8 @@ msgstr ""
 msgid "by"
 msgstr "著者"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #, c-format
 msgid "by "
 msgstr "著者 "
@@ -13255,7 +13265,7 @@ msgstr "讀者證號碼："
 msgid "change your password"
 msgstr "修改您的密碼"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, c-format
 msgid "checkout(s)"
 msgstr "借出"
@@ -13316,7 +13326,7 @@ msgstr "設定搜尋用的記錄辨識碼類型，可能的值是："
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:233
 #, c-format
 msgid "due in fines and charges"
 msgstr "罰款和費用"
@@ -13347,18 +13357,18 @@ msgstr "名"
 msgid "for more information on what it does and how to configure it."
 msgstr "有關內容及組態的更多資訊。"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:544
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #, c-format
 msgid "here"
 msgstr "這裡"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:227
 #, c-format
 msgid "hold(s) pending"
 msgstr "預約暫停"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:230
 #, c-format
 msgid "hold(s) waiting"
 msgstr "預約停止"
@@ -13483,7 +13493,7 @@ msgid "item_id"
 msgstr "item_id"
 
 #. ABBR
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:127
 msgid "koha:biblionumber:%s"
 msgstr "koha:biblionumber:%s"
 
@@ -13532,7 +13542,7 @@ msgstr "或"
 msgid "out of"
 msgstr "out of"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:219
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, c-format
 msgid "overdue(s)"
 msgstr "逾期"
@@ -13573,8 +13583,8 @@ msgstr "隱私政策"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:605
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #, c-format
 msgid "purchase suggestion"
 msgstr "採訪建議"
@@ -13617,7 +13627,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "架構"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #, c-format
 msgid "search"
 msgstr "搜尋"
@@ -13793,8 +13803,8 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "處理您的支付有問題"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
-#, fuzzy, c-format
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
+#, c-format
 msgid "to post a comment. "
 msgstr "張貼評論。"
 
@@ -13910,7 +13920,7 @@ msgid "your charges"
 msgstr "您的待付費用"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:66
-#, fuzzy, c-format
+#, c-format
 msgid "your checkout history"
 msgstr "您的借出記錄"
 
@@ -13920,9 +13930,9 @@ msgid "your consents"
 msgstr "您的同意"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:83
-#, fuzzy, c-format
+#, c-format
 msgid "your holds history"
-msgstr "您的借出記錄"
+msgstr "您的預約記錄"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/usermenu.inc:139
 #, c-format
@@ -13991,6 +14001,12 @@ msgstr "×"
 
 #~ msgid "(%s of %s renewals remaining)"
 #~ msgstr "(%s 屬於 %s 續借中)"
+
+#~ msgid "Loading "
+#~ msgstr "載入中 "
+
+#~ msgid "No results"
+#~ msgstr "沒有結果"
 
 #~ msgid "Preview"
 #~ msgstr "預視"

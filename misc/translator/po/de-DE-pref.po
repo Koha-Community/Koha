@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2021-01-03 12:16+0000\n"
+"PO-Revision-Date: 2021-01-18 15:02+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1609676167.491290\n"
+"X-POOTLE-MTIME: 1610982156.147928\n"
 "X-Pootle-Path: /de/20.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2129,7 +2129,7 @@ msgid ""
 "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the "
 "merge_authority cron job will merge them.)"
 msgstr ""
-"Datensätze. (Über dieser Limite werden Änderungen durch den Cronjob "
+"Datensätze. (Über diesem Limit werden Änderungen durch den Cronjob "
 "merge_authority durchgeführt.)"
 
 # Authorities > General
@@ -2613,8 +2613,7 @@ msgstr "Keine Zusammenfassung"
 msgid ""
 "cataloguing.pref#LabelMARCView# collapse repeated tags of the same type into "
 "one tag entry on the display."
-msgstr ""
-"wiederholter Tags der gleichen Art zu einem Tag-Eintrag in der Anzeige."
+msgstr "wiederholter Felder zu einem Eintrag in der Anzeige."
 
 # Cataloging > Record structure
 msgid ""
@@ -12014,6 +12013,32 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "Heimbibliothek"
 
 # Searching > Features
+msgid "searching.pref#ElasticsearchCrossFields# Disable"
+msgstr "Deaktiviere"
+
+# Searching > Features
+msgid "searching.pref#ElasticsearchCrossFields# Enable"
+msgstr "Aktiviere"
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# See documentation at https://www."
+"elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
+"query.html#type-cross-fields"
+msgstr ""
+"Dokumentation unter "
+"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-"
+"multi-match-query.html#type-cross-fields"
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# the cross_fields option for "
+"Elasticsearch searches, supported in Elasticsearch 6.X and above."
+msgstr ""
+"die cross_fields-Option für Elasticsearch-Suchen, unterstützt von "
+"Elasticsearch 6.X und später."
+
+# Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
 msgstr "Protokolliere nicht "
 
@@ -12316,11 +12341,13 @@ msgstr "Versuche"
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
-"cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
+"cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
+"Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
 "auch ähnlich geschriebene Worte in einer Suche zu finden (z. Bsp. für eine "
 "Suche nach <cite>flang</cite> auch <cite>flange</cite> und <cite>fang</cite> "
-"finden; ERFORDERT ZEBRA)."
+"finden; Dies gilt nur für Zebra. In Elasticsearch kann jeder Suchbegriff "
+"durch hinzufügen von ~ nach dem Begriff ungenau gesucht werden.)"
 
 # Searching > Features
 msgid "searching.pref#QueryRegexEscapeOptions# Don't escape"

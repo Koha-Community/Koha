@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
-"POT-Creation-Date: 2020-12-28 07:15-0300\n"
-"PO-Revision-Date: 2020-09-26 13:04+0000\n"
+"POT-Creation-Date: 2021-01-15 10:25-0300\n"
+"PO-Revision-Date: 2021-01-06 16:40+0000\n"
 "Last-Translator: vudoquynh <quynhvd@thanglong.edu.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1601125498.385133\n"
+"X-POOTLE-MTIME: 1609951254.362917\n"
 "X-Pootle-Path: /vi/20.05/vi-VN-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -42,7 +42,7 @@ msgstr "%s %s %s %s Bạn đã đăng ký để nhận thư thông báo khi có 
 #. %2$s:  END 
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:396
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
 #, fuzzy, c-format
 msgid "%s %s %s %s by "
 msgstr "%s %s Tác giả: %s%s"
@@ -219,6 +219,14 @@ msgid ""
 "happened when sending the report. Please contact your library. %s "
 msgstr ""
 
+#. %1$s:  author.firstname | html 
+#. %2$s:  author.surname | html 
+#. %3$s:  ELSE 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:111
+#, fuzzy, c-format
+msgid "%s %s %s by "
+msgstr "%s %s Tác giả: %s%s"
+
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
 #. %3$s:  ITEM_RESULT.itemcallnumber | html 
@@ -229,7 +237,7 @@ msgstr ""
 #. %8$s:  END 
 #. %9$s:  ELSE 
 #. %10$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, c-format
 msgid "%s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr ""
@@ -249,7 +257,7 @@ msgstr "%s %s (không được chấp nhận) %s"
 #. %4$s:  HTML5MediaSet.child | html 
 #. %5$s:  HTML5MediaSet.srcblock | url 
 #. %6$s:  HTML5MediaSet.typeblock | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1003
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1006
 #, c-format
 msgid "%s %s <%s > <%s src=\"%s\" %s /> "
 msgstr "%s %s <%s > <%s src=\"%s\" %s /> "
@@ -313,7 +321,7 @@ msgstr "%s %s Không tìm thấy dữ liệu. %s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:127
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -398,7 +406,7 @@ msgstr "%s %s Tác giả: %s%s"
 
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:521
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:524
 #, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
 msgstr "%s %s đang nợ tiền phạt và các khoản phí lên tới::"
@@ -478,7 +486,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
 #, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
 msgstr "%s %sĐược chia sẻ%sRiêng tư%s %s Công khai %s "
@@ -525,7 +533,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:666
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:669
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Tài khoản bị khóa %s %s "
@@ -585,13 +593,13 @@ msgstr ""
 "để sửa lỗi này. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Tự động gia hạn "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "%s Thất bại khi tự động gia hạn, tài khoản của bạn đã quá hạn. "
@@ -655,7 +663,7 @@ msgstr ""
 #. %21$s:  IF ( SEARCH_RESULT.intransitcount ) 
 #. %22$s:  SEARCH_RESULT.intransitcount | html 
 #. %23$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:473
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:476
 #, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
@@ -711,7 +719,7 @@ msgid "%s Holds (%s) "
 msgstr "%s Đặt mượn (%s)"
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:500
 #, c-format
 msgid "%s Internet user critics"
 msgstr "%s Đánh giá của người dùng"
@@ -751,7 +759,7 @@ msgstr "%s Thư viện %s Các thư viện %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
 #, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -760,7 +768,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:402
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Không thể gia hạn trước %s "
@@ -791,13 +799,13 @@ msgid "%s No title %s %s%s,%s "
 msgstr "%s Không có tựa đề %s %s%s,%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:678
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:681
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s Không được phép"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:376
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:379
 #, c-format
 msgid "%s Not renewable "
 msgstr "%s Không thể gia hạn"
@@ -806,7 +814,7 @@ msgstr "%s Không thể gia hạn"
 #. %2$s:  ELSIF ( ISSUE.too_unseen ) 
 #. %3$s:  ISSUE.renewsleft | html 
 #. %4$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, c-format
 msgid ""
 "%s Not renewable %s Item must be renewed at the library. %s renewals "
@@ -816,7 +824,7 @@ msgstr ""
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:683
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Được đặt mượn %s Không thể gia hạn %s "
@@ -854,13 +862,13 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
-msgstr ""
+msgstr "%s Đang chờ xử lý %s Đang xử lý %s Đã hoàn thành %s Bị hủy bỏ %s "
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:500
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:503
 #, c-format
 msgid "%s Professional critics"
 msgstr "%s Đánh giá chuyên môn"
@@ -879,14 +887,14 @@ msgid ""
 msgstr "%s Đề xuất mua %s %s Đề xuất mua của bạn %s Đề xuất mua %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:506
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:509
 #, c-format
 msgid "%s Quotations"
 msgstr "%s Trích dẫn"
 
 #. %1$s:  ELSIF ( ISSUE.item_denied_renewal ) 
 #. %2$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:418
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #, c-format
 msgid "%s Renewal not allowed %s "
 msgstr "%s Không được phép gia hạn %s "
@@ -910,7 +918,7 @@ msgstr ""
 #. %5$s:  IF ( limit_desc ) 
 #. %6$s:  limit_desc | html 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:98
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Tìm kiếm %scho '%s'%s%s&nbsp;với giới hạn:&nbsp;'%s'%s"
@@ -942,14 +950,14 @@ msgid "%s Tags to show from other users: %s Tags to show: %s "
 msgstr "%s Từ khóa của các bạn đọc khác %s Từ khóa để hiển thị %s: "
 
 #. %1$s:  ELSIF (errLinkNotValid) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
 #, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
 msgstr "%s Liên kết bạn đã nhấn không hợp lệ hoặc đã hết hạn"
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "%s The passwords do not match. %s "
 msgstr "%s Mật khẩu không đúng. %s "
@@ -1003,7 +1011,7 @@ msgid "%s This record has no items. %s "
 msgstr "%s Biểu ghi này không có tài liệu đính kèm. %s"
 
 #. %1$s:  SEARCH_RESULT.num_videos | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:506
 #, c-format
 msgid "%s Video extracts"
 msgstr "%s Trích đoạn phim"
@@ -1034,7 +1042,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:693
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Có %s Không %s"
@@ -1043,7 +1051,7 @@ msgstr "%s Có %s Không %s"
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
@@ -1100,7 +1108,7 @@ msgstr "%s biểu ghi"
 
 #. For the first occurrence,
 #. %1$s:  IF ( itemsloo.author ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
 #, c-format
 msgid "%s by "
@@ -1117,15 +1125,15 @@ msgid "%s by %s %s %s %s "
 msgstr "%s tác giả %s %s %s %s "
 
 #. %1$s:  Branches.GetLoggedInBranchname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
 #, c-format
 msgid "%s holdings"
 msgstr "%s Bản tài liệu"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:627
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:630
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:659
 #, c-format
 msgid "%s items are on order."
 msgstr ""
@@ -1138,13 +1146,13 @@ msgid "%s of %s results loaded, refine your search to view other records"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_daily | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:369
 #, c-format
 msgid "%s per day"
 msgstr ""
 
 #. %1$s:  ISSUE.itemtype_object.rentalcharge_hourly | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:372
 #, c-format
 msgid "%s per hour"
 msgstr ""
@@ -1200,7 +1208,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:737
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:740
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr ""
@@ -1934,7 +1942,7 @@ msgstr "%s%s%sBiên mục thư viện%s"
 #. %2$s:  Koha.Preference('URLLinkText') | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1390
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1393
 #, c-format
 msgid "%s%s%sLink to resource%s"
 msgstr "%s%s%sLiên kết tới tài nguyên%s "
@@ -1951,7 +1959,7 @@ msgstr "%s%s%sLiên kết tới tài nguyên%s "
 #. %10$s:  SEARCH_RESULT.biblionumber | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:124
 #, fuzzy, c-format
 msgid ""
 "%s%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s%s%s%s/cgi-bin/koha/opac-"
@@ -2018,8 +2026,8 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:52
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:87
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:18
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -2035,7 +2043,7 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s#comments"
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  review.biblionumber | html 
 #. %3$s:  review.reviewid | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:40
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:43
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
@@ -2056,7 +2064,7 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:97
 #, fuzzy, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
@@ -2269,14 +2277,14 @@ msgstr "%sgiá sách ảo:%s"
 #. %1$s:  IF ( author ) 
 #. %2$s:  author | html 
 #. %3$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1107
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 #, fuzzy, c-format
 msgid "%sby %s%s "
 msgstr "%s, Tác giả: %s%s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:173
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:179
 #, c-format
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Trang trước"
@@ -2816,7 +2824,7 @@ msgstr ""
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:494
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:497
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
 msgstr "&nbsp;&nbsp; %s / 5 (trong %s đánh giá)"
@@ -2892,7 +2900,7 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Cụm từ nhan đề"
 
 #. %1$s:  SEARCH_RESULT.ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:571
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:574
 #, fuzzy, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
 msgstr "&nbsp;&nbsp;(%s phiếu)"
@@ -2904,12 +2912,12 @@ msgstr "&nbsp;&nbsp;(%s phiếu)"
 #. %4$s:  ISSUE.unseenleft | html 
 #. %5$s:  ISSUE.unseenallowed | html 
 #. %6$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:371
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:389
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:397
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:405
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:673
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:416
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:676
 #, c-format
 msgid ""
 "( %s of %s renewals remaining %s / %s of %s renewals left before the item "
@@ -2924,8 +2932,8 @@ msgstr "(%s biểu ghi)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:580
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:711
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:290
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:9
 #, fuzzy, c-format
@@ -2996,13 +3004,13 @@ msgstr "(Không được hỗ trợ bởi Koha)"
 msgid "(Not supported yet)"
 msgstr "(Không được hỗ trợ)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:310
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:313
 #, fuzzy, c-format
 msgid "(On-site checkout)"
 msgstr "Tổng số ghi mượn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, c-format
 msgid "(Opens below)"
 msgstr ""
@@ -3140,7 +3148,7 @@ msgstr "(Use SRU instead)"
 msgid "(Voided)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:382
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:385
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:234
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:33
 #, c-format
@@ -3155,32 +3163,32 @@ msgstr "(Lọc từ _MAX_)"
 #. For the first occurrence,
 #. %1$s:  GROUP_RESULT.timestamp | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:422
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:425
 #, c-format
 msgid "(modified on %s)"
 msgstr "(được chỉnh sửa ngày %s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, fuzzy, c-format
 msgid "(on hold)"
 msgstr "(Được đặt mượn)"
 
 #. %1$s:  ar.item.barcode | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:738
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:741
 #, c-format
 msgid "(only %s)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:384
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:387
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:683
 #, c-format
 msgid "(overdue)"
 msgstr "(quá hạn)"
 
 #. For the first occurrence,
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:637
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1405
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:640
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1408
 #, c-format
 msgid "(priority %s)"
 msgstr "(ưu tiên đặt mượn %s) "
@@ -3277,8 +3285,8 @@ msgstr ""
 msgid "0000-00-00"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:625
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:654
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:628
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:657
 #, c-format
 msgid "1 item is on order."
 msgstr ""
@@ -3382,7 +3390,7 @@ msgstr ""
 msgid "A specific item"
 msgstr "Đặt mượn bản tài liệu cụ thể"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:549
 #, c-format
 msgid "About the author"
 msgstr "Thông tin tác giả"
@@ -3393,8 +3401,8 @@ msgid "Abstracts/summaries"
 msgstr "Tóm tắt / Tổng quát"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:41
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:163
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:65
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:163
 #, c-format
 msgid "Access denied"
 msgstr "Xác định truy cập"
@@ -3434,7 +3442,7 @@ msgstr "Ngày bổ sung: Cũ nhất - Mới nhất"
 
 #. INPUT type=submit name=tagsel_button
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:74
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:381
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:384
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:233
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:346
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:32
@@ -3458,7 +3466,7 @@ msgstr "Thêm trường tìm kiếm"
 msgid "Add tag"
 msgstr "Thêm từ khóa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:350
 #, fuzzy, c-format
 msgid "Add tag(s)"
 msgstr "Thêm từ khóa"
@@ -3495,7 +3503,7 @@ msgid "Add to your cart"
 msgstr "Thêm vào giỏ tài liệu"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #, fuzzy
 msgid "Add to..."
 msgstr "Thêm vào..."
@@ -3505,7 +3513,7 @@ msgstr "Thêm vào..."
 msgid "Add to: "
 msgstr "Thêm vào:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:155
 #, c-format
 msgid "Additional authors:"
 msgstr "Đồng tác giả:"
@@ -3546,7 +3554,7 @@ msgstr "Địa chỉ:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:394
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:269
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:604
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:607
 #, fuzzy
 msgid "Adlibris cover image"
 msgstr "Ảnh bìa"
@@ -3590,12 +3598,12 @@ msgid "All collections"
 msgstr "Tất cả bộ sưu tập"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "All holds will be suspended."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "All holds will resume."
 msgstr ""
 
@@ -3663,9 +3671,9 @@ msgstr "Thông tin liên hệ thay thế"
 msgid "Always available"
 msgstr "Tài liệu sẵn sàng:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:486
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:518
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:12
 #, c-format
 msgid "Amount"
@@ -3708,9 +3716,9 @@ msgstr "Lỗi xảy ra khi hệ thống xử lý yêu cầu của bạn."
 msgid "An error occurred while processing your request."
 msgstr "Lỗi xảy ra khi hệ thống xử lý yêu cầu của bạn."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:61
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:86
 #, fuzzy, c-format
-msgid "An error occurred, please try again."
+msgid "An error occurred, please try again. "
 msgstr "Lỗi xảy ra khi hệ thống xử lý yêu cầu của bạn."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:58
@@ -3787,14 +3795,14 @@ msgid "April"
 msgstr "Tháng 4"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
@@ -3825,7 +3833,7 @@ msgstr "Bạn chắc chắn muốn xóa giá sách ảo này?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to delete this list?"
 msgstr "Bạn chắc chắn muốn xóa giá sách ảo này?"
 
@@ -3841,7 +3849,7 @@ msgid "Are you sure you want to delete your search history?"
 msgstr "Bạn chắc chắn muốn xóa lịch sử tìm kiếm của mình?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid ""
 "Are you sure you want to remove sharing? You will no longer have access to "
@@ -3849,24 +3857,24 @@ msgid ""
 msgstr "Bạn chắc chắn muốn loại bỏ những tài liệu này khỏi giá sách ảo?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Bạn chắc chắn muốn loại bỏ những tài liệu này khỏi giá sách ảo?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Bạn chắc chắn muốn loại bỏ tài liệu này khỏi giá sách ảo?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Are you sure you want to remove this share?"
 msgstr "Bạn chắc chắn muốn loại bỏ chia sẻ này?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Bạn chắc chắn muốn khôi phục lại các yêu cầu đặt mượn đã bị tạm dừng?"
@@ -3878,17 +3886,17 @@ msgid "Are you sure you want to return this item?"
 msgstr "Bạn chắc chắn muốn xóa giá sách ảo này?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Bạn chắc chắn muốn dừng tất cả các yêu cầu đặt mượn?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:837
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
 #, c-format
 msgid "Arrived"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:711
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, c-format
 msgid "Article requests "
 msgstr ""
@@ -3925,8 +3933,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( subscription.branchcode ) | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:779
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:782
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:785
 #, c-format
 msgid "At library: %s"
 msgstr "Tại thư viện: %s"
@@ -3936,7 +3944,7 @@ msgstr "Tại thư viện: %s"
 msgid "Audience"
 msgstr "Bạn đọc"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:401
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:404
 #, fuzzy, c-format
 msgid "Audiovisual profile:"
 msgstr "Tài liệu âm thanh:"
@@ -3969,16 +3977,16 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:48
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:65
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:717
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:720
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:186
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:188
@@ -4003,7 +4011,7 @@ msgstr "Tác giả (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Tác giả (Z-A)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:756
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:759
 #, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "Ghi chú tác giả của Syndetics"
@@ -4086,7 +4094,7 @@ msgstr "Sẵn sàng "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:439
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:442
 #, c-format
 msgid "Availability:"
 msgstr "Sẵn sàng:"
@@ -4097,7 +4105,7 @@ msgid "Availability: "
 msgstr "Sẵn sàng:"
 
 #. %1$s:  IF restrictedvalueopac 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:100
 #, c-format
 msgid "Available %s"
 msgstr "Ấn phẩm có sẵn %s"
@@ -4110,16 +4118,16 @@ msgstr "Ấn phẩm sẵn sàng"
 #. For the first occurrence,
 #. %1$s:  rating_avg | html 
 #. %2$s:  ratings.count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:52
 #, fuzzy, c-format
 msgid "Average rating: %s (%s votes)"
 msgstr "Đánh giá trung bình: %s (%s phiếu)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:415
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:418
 #, c-format
 msgid "Awards:"
 msgstr "Giải thưởng:"
@@ -4140,38 +4148,38 @@ msgstr ""
 msgid "Back to lists"
 msgstr "Quay lại"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Back to results"
 msgstr "Kết quả tìm kiếm"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 msgid "Back to the results search list"
 msgstr "Quay lại kết quả tìm kiếm"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:112
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1253
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:143
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:247
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:538
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:587
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:541
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:590
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:132
 #, c-format
 msgid "Barcode"
 msgstr "Đăng ký cá biệt"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:343
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:651
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:654
 #, c-format
 msgid "Barcode:"
 msgstr "Đăng ký cá biệt:"
 
 #. %1$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #, c-format
 msgid ""
 "Be sure you used the link from the email, or contact library staff for "
@@ -4243,8 +4251,8 @@ msgstr "Tìm kiếm phân cấp"
 msgid "Browse our catalog"
 msgstr "Liệt kê kiểu phân cấp"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1060
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1061
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1063
 #, c-format
 msgid "Browse results"
 msgstr "Kết quả tìm kiếm"
@@ -4256,8 +4264,8 @@ msgstr "Kết quả tìm kiếm"
 msgid "Browse search"
 msgstr "Tìm kiếm phân cấp"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1347
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1348
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 #, fuzzy, c-format
 msgid "Browse shelf "
 msgstr "Xem kệ sách"
@@ -4295,15 +4303,15 @@ msgstr "CSV - %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:249
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:542
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
 #, c-format
 msgid "Call no."
 msgstr "Ký hiệu phân loại"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:348
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:351
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, fuzzy, c-format
 msgid "Call no.:"
 msgstr "Ký hiệu phân loại"
@@ -4311,12 +4319,12 @@ msgstr "Ký hiệu phân loại"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:78
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:80
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1232
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1235
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:145
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:359
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:289
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:642
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:643
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:212
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:214
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:218
@@ -4356,7 +4364,7 @@ msgid "Call number:"
 msgstr "Ký hiệu phân loại:"
 
 #. %1$s:  subscription.callnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:792
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
 #, fuzzy, c-format
 msgid "Call number: %s"
 msgstr "Ký hiệu phân loại: %s"
@@ -4365,7 +4373,7 @@ msgstr "Ký hiệu phân loại: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:95
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:75
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:238
@@ -4377,13 +4385,13 @@ msgstr "Ký hiệu phân loại: %s"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:94
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:681
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:683
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:684
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:686
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:250
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:797
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:800
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:144
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:16
@@ -4394,7 +4402,7 @@ msgid "Cancel"
 msgstr "Hủy bỏ"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:805
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:155
 #, c-format
 msgid "Cancel email notification"
@@ -4410,15 +4418,15 @@ msgstr "Hủy nhận thông báo "
 msgid "Cancel enrollment "
 msgstr "Không thể thêm từ khóa nữa."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:458
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:461
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:464
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:45
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:49
 #, fuzzy, c-format
 msgid "Cancel rating"
 msgstr "Hủy bỏ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:794
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:797
 #, fuzzy, c-format
 msgid "Cancel:"
 msgstr "Hủy bỏ"
@@ -4483,7 +4491,7 @@ msgstr "Số thẻ"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:32
 #, c-format
 msgid "Cart"
@@ -4506,7 +4514,7 @@ msgstr "Catalogs"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:262
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
 #, c-format
 msgid "Category:"
 msgstr "Kiểu:"
@@ -4527,7 +4535,7 @@ msgstr "Đổi mật khẩu đăng nhập"
 msgid "Change your password "
 msgstr "Đổi mật khẩu đăng nhập "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:722
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
 #, c-format
 msgid "Chapters"
 msgstr ""
@@ -4539,7 +4547,7 @@ msgid "Chapters:"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-account.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:484
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, fuzzy, c-format
 msgid "Charges"
 msgstr "Phí"
@@ -4581,7 +4589,7 @@ msgstr "Được ghi mượn"
 
 #. SPAN
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:38
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:39
 #, c-format
 msgid "Checked out"
 msgstr "Được ghi mượn"
@@ -4602,7 +4610,7 @@ msgstr "Được ghi mượn"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:36
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:37
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Được ghi mượn cho %s %s %s(%s)%s"
@@ -4670,7 +4678,7 @@ msgstr "Trích dẫn"
 msgid "City:"
 msgstr "Thành phố: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
 #, c-format
 msgid "Claimed"
 msgstr ""
@@ -4699,12 +4707,12 @@ msgstr "Xóa"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:107
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:160
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:197
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
 #, c-format
 msgid "Clear all"
@@ -4734,7 +4742,7 @@ msgstr "Xóa"
 msgid "Click here if you're not %s"
 msgstr "Bấm vào đây nếu bạn không phải là %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:176
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:178
 #, fuzzy, c-format
 msgid "Click here to login."
 msgstr "hãy bấm vào đây để đăng nhập"
@@ -4744,12 +4752,12 @@ msgstr "hãy bấm vào đây để đăng nhập"
 msgid "Click here to view"
 msgstr "hãy bấm vào đây để đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:617
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
 #, c-format
 msgid "Click here to view them all."
 msgstr "Xem toàn bộ bản tài liệu."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1018
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1021
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Click vào ảnh bìa để xem rõ hơn."
@@ -4770,23 +4778,23 @@ msgstr "Thêm vào giỏ tài liệu"
 msgid "Click to expand this role"
 msgstr "Chọn vào đây để mở rộng phần này"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:396
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:416
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:399
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:405
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:419
 #, c-format
 msgid "Click to open in new window"
 msgstr "Mở trong cửa sổ mới"
 
 #. DIV
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:281
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:616
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 msgid "Click to view in Google Books"
 msgstr "Kích để xem trong Google Books"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1062
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1065
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:167
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:181
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:154
@@ -4841,7 +4849,7 @@ msgstr "Thông tin tài kiệu kiểm kê"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:137
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:68
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:109
 #, c-format
@@ -4859,7 +4867,7 @@ msgstr "Nhan đề bộ sưu tập:"
 msgid "Collection title:"
 msgstr "Nhan đề bộ sưu tập:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:221
 #, c-format
 msgid "Collection: "
 msgstr "Bộ sưu tập: "
@@ -4884,16 +4892,16 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  review.patron.firstname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:915
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:917
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:921
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:918
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:920
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
 #, c-format
 msgid "Comment by %s"
 msgstr "Bình luận bởi %s"
 
 #. %1$s:  review.patron.firstname | html 
 #. %2$s:  review.patron.surname|truncate(2,'.') | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:919
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:922
 #, c-format
 msgid "Comment by %s %s"
 msgstr "Bình luận bởi %s %s"
@@ -4901,7 +4909,7 @@ msgstr "Bình luận bởi %s %s"
 #. %1$s:  review.patron.title | html 
 #. %2$s:  review.patron.firstname | html 
 #. %3$s:  review.patron.surname | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:913
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:916
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Bình luận bởi %s %s %s"
@@ -4918,7 +4926,7 @@ msgid "Comments on "
 msgstr "Bình luận trên "
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:562
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:565
 #, fuzzy, c-format
 msgid "Comments%s"
 msgstr "Bình luận ( %s )"
@@ -4936,7 +4944,7 @@ msgstr "Đổi mật khẩu đăng nhập"
 msgid "Confirm holds for:%s (%s)"
 msgstr "Xác nhận đặt mượn cho:%s (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:152
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:154
 #, fuzzy, c-format
 msgid "Confirm new password:"
 msgstr "Mật khẩu (mới):"
@@ -4981,12 +4989,12 @@ msgstr "Ghi chú liên hệ:"
 msgid "Content"
 msgstr "Nội dung"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:472
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:475
 #, c-format
 msgid "Content Cafe"
 msgstr "Nội dung bổ sung"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:730
 #, c-format
 msgid "Contents"
 msgstr "Nội dung"
@@ -5007,7 +5015,7 @@ msgid "Copied one row to clipboard"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1246
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #, c-format
 msgid "Copy number"
@@ -5087,7 +5095,7 @@ msgstr "Số khóa học:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:300
 #, c-format
 msgid "Course reserves"
@@ -5111,20 +5119,20 @@ msgstr "Khóa học"
 #. IMG
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:82
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:117
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1215
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:375
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:121
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:377
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:75
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:379
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:163
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:299
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:77
 #, c-format
 msgid "Cover image"
 msgstr "Ảnh bìa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
 #, c-format
 msgid "Create a new list"
 msgstr "Tạo giá sách ảo"
@@ -5163,7 +5171,7 @@ msgstr ""
 msgid "Credit applied"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #, c-format
 msgid "Credits"
 msgstr "Tài khoản trả trước"
@@ -5174,7 +5182,7 @@ msgstr "Tài khoản trả trước"
 msgid "Credits (%s)"
 msgstr "Tài khoản trả trước (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1224
 #, fuzzy, c-format
 msgid "Current library"
 msgstr "Thư viện chính"
@@ -5196,7 +5204,7 @@ msgstr "Mật khẩu cũ:"
 msgid "Current session"
 msgstr "Phiên truy cập hiện tại"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:32
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:33
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "Phiên truy cập hiện tại"
@@ -5206,7 +5214,7 @@ msgstr "Phiên truy cập hiện tại"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:30
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #, fuzzy, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Xác nhận đặt mượn: %s %s %s (%s) %s "
@@ -5227,7 +5235,7 @@ msgstr "Đĩa DVD"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:120
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:172
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:9
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:11
@@ -5237,8 +5245,8 @@ msgstr "Thời gian"
 
 #. OPTGROUP
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:313
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:645
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #, c-format
 msgid "Date added"
@@ -5262,14 +5270,14 @@ msgid "Date added:"
 msgstr "Ngày tạo:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:72
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1249
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1252
 #, c-format
 msgid "Date due"
 msgstr "Ngày hết hạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:321
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:328
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:661
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:324
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:331
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #, c-format
 msgid "Date due:"
 msgstr "Ngày hết hạn:"
@@ -5292,7 +5300,7 @@ msgstr "Ngày nhận"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:91
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:433
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:436
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:84
 #, c-format
 msgid "Date:"
@@ -5350,7 +5358,7 @@ msgstr ""
 "Defines the metadata schema in which the records are returned, possible "
 "values: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:848
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:111
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:164
@@ -5372,7 +5380,7 @@ msgid "Delete selected tags"
 msgstr "Xóa đề xuất mua"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:599
 msgid "Delete this list"
 msgstr "Xóa"
 
@@ -5513,7 +5521,7 @@ msgstr "Bạn chưa có thẻ thư viện?"
 msgid "Don't have a password yet?"
 msgstr "Quên mật khẩu đăng nhập?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:401
 #, fuzzy, c-format
@@ -5536,7 +5544,7 @@ msgstr "Tải báo cáo"
 msgid "Download "
 msgstr "Tải báo cáo"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
 #, fuzzy, c-format
 msgid "Download as iCal/.ics file"
 msgstr "Tải giá sách ảo "
@@ -5564,8 +5572,8 @@ msgid "Dublin Core"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:537
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:592
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:297
 #, c-format
 msgid "Due"
@@ -5593,19 +5601,19 @@ msgstr "Lỗi: Không tìm thấy biểu ghi số: %s."
 msgid "ERROR: No record id specified. "
 msgstr "Lỗi: Không nhận được số biểu ghi."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:901
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:904
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:755
 #, c-format
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:443
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:446
 #, c-format
 msgid "Edit / Create note"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:237
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
 #, c-format
 msgid "Edit list"
 msgstr "Sửa giá sách ảo"
@@ -5615,7 +5623,7 @@ msgstr "Sửa giá sách ảo"
 msgid "Edit list &nbsp;"
 msgstr "Chỉnh sửa giá sách ảo "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:610
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
 #, fuzzy, c-format
 msgid "Editing "
 msgstr "Chỉnh sửa "
@@ -5629,12 +5637,12 @@ msgstr "Chỉnh sửa "
 msgid "Editing issue note for %s %s"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:194
 #, c-format
 msgid "Edition statement:"
 msgstr "Lần xuất bản:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
 #, c-format
 msgid "Editions"
 msgstr "Ấn bảo"
@@ -5654,7 +5662,7 @@ msgstr "Địa chỉ Email:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:734
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:736
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:127
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:129
 #, fuzzy, c-format
 msgid "Email:"
 msgstr "Thư điện tử"
@@ -5680,12 +5688,12 @@ msgstr "Bách khoa toàn thư "
 msgid "End session"
 msgstr "Phiên truy cập hiện tại"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:471
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:474
 #, c-format
 msgid "Enhanced content: "
 msgstr "Nội dung nâng cao: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:684
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:687
 #, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr "Nội dung mô tả từ Syndetics:"
@@ -5815,9 +5823,9 @@ msgstr ""
 msgid "Errors: "
 msgstr "Lỗi: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:63
 #, c-format
-msgid "Exact"
+msgid "Exact "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/ilsdi.tt:199
@@ -5860,17 +5868,17 @@ msgstr "Mẫu cuộc gọi"
 msgid "Example response"
 msgstr "Mẫu đáp ứng"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:534
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:537
 #, c-format
 msgid "Excerpt"
 msgstr "Trích dẫn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:727
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:730
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr "Trích dẫn của Syndetics"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:836
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
 #, c-format
 msgid "Expected"
 msgstr ""
@@ -5945,7 +5953,7 @@ msgstr "Tháng 2"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:366
 #, c-format
 msgid "Fee for item type '%s': %s"
 msgstr ""
@@ -5965,7 +5973,7 @@ msgstr "[Bớt tùy chọn]"
 msgid "Fiction"
 msgstr "Viễn tưởng"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:408
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:411
 #, c-format
 msgid "Fiction notes:"
 msgstr "Truyện viễn tưởng:"
@@ -5986,25 +5994,25 @@ msgid "Fine amount"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:254
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "Fines"
 msgstr "Tiền phạt"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:511
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:514
 #, c-format
 msgid "Fines and charges"
 msgstr "Tiền phạt và phí"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:426
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:429
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:693
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "Tiền phạt:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:249
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:249
 #, c-format
 msgid "Finish"
 msgstr "Hoàn thành"
@@ -6074,7 +6082,7 @@ msgstr ""
 "phép bạn đọc lưu giữ tất cả lịch sử ghi mượn của bạn."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:198
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:396
 #, fuzzy, c-format
 msgid "Forgot your password?"
@@ -6148,9 +6156,9 @@ msgstr "Hiển thị đầy đủ lịch sử ÂPĐK"
 msgid "Full subscription history for %s"
 msgstr "Hiển thị đầy đủ lịch sử của ÂPĐK: %s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:55
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:68
 #, c-format
-msgid "Fuzzy"
+msgid "Fuzzy "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1009
@@ -6168,7 +6176,7 @@ msgstr ""
 msgid "General"
 msgstr "Tổng hợp"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "Get new password recovery link"
 msgstr ""
@@ -6273,8 +6281,8 @@ msgid "Go"
 msgstr "Tìm kiếm"
 
 #. LI
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1108
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
 #, fuzzy
 msgid "Go to detail"
 msgstr "Tới trang chi tiết"
@@ -6467,13 +6475,13 @@ msgid "Holding libraries"
 msgstr "Thư viện sở hữu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:145
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:510
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:513
 #, c-format
 msgid "Holdings"
 msgstr "Bản tài liệu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:649
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:512
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:652
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:515
 #, c-format
 msgid "Holdings:"
 msgstr "Bản tài liệu:"
@@ -6569,7 +6577,7 @@ msgstr "Trang chủ"
 msgid "Home libraries"
 msgstr "Thư viện chính"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1224
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1227
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:144
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:353
 #, c-format
@@ -6636,7 +6644,7 @@ msgstr "Số ISBD"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:18
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:32
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:138
 #, c-format
 msgid "ISBD view"
 msgstr "Hiển thị ISBD"
@@ -6651,12 +6659,12 @@ msgstr "Hiển thị ISBD"
 msgid "ISBN"
 msgstr "Số ISBN"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:206
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:209
 #, c-format
 msgid "ISBN:"
 msgstr "Số ISBN:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:209
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:212
 #, c-format
 msgid "ISBN: "
 msgstr "Số ISBN: "
@@ -6691,13 +6699,13 @@ msgstr "Số ISBN: %s "
 msgid "ISSN"
 msgstr "Số ISSN"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:214
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:217
 #, c-format
 msgid "ISSN:"
 msgstr "Số ISSN:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:170
 #, c-format
 msgid "IdRef"
 msgstr ""
@@ -6735,7 +6743,7 @@ msgstr ""
 msgid "If you can't find what you are looking for, you can "
 msgstr "Không tìm thấy tài liệu bạn cần?"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:97
 #, c-format
 msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
@@ -6841,7 +6849,7 @@ msgstr "Nếu bạn có một tài khoản, bạn có thể dùng tài khoản �
 msgid "If you want to, you can try to "
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:582
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:585
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:56
 #, c-format
 msgid "Images"
@@ -6881,7 +6889,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( itemLoo.transfertto ) | html 
 #. %3$s:  itemLoo.transfertwhen | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:45
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:46
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "Đang chuyển từ thư viện %s tới thư viện %s từ ngày %s"
@@ -6929,7 +6937,7 @@ msgid "Interlibrary loan item availability"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #, c-format
 msgid "Interlibrary loan request"
 msgstr ""
@@ -6950,12 +6958,12 @@ msgstr ""
 msgid "Invalid shelf number."
 msgstr "Số giá sách không phù hợp."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:719
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:722
 #, fuzzy, c-format
 msgid "Issue"
 msgstr "Số phát hành"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:822
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
 #, c-format
 msgid "Issue #"
 msgstr "Số phát hành"
@@ -6987,7 +6995,7 @@ msgstr "Không thể đặt mượn tài liệu này."
 msgid "Item URI"
 msgstr "Tài liệu: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:598
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:601
 #, c-format
 msgid "Item call number"
 msgstr "Ký hiệu phân loại"
@@ -7013,27 +7021,27 @@ msgstr "Được ghi trả"
 msgid "Item checked out"
 msgstr "Tài liệu được ghi mượn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:83
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:84
 #, c-format
 msgid "Item damaged"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:508
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:511
 #, fuzzy, c-format
 msgid "Item details"
 msgstr "Xem chi tiết"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1254
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1257
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Thứ tự đặt mượn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1255
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "Đặt mượn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:15
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:16
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "Đặt mượn"
@@ -7055,13 +7063,13 @@ msgid "Item renewed"
 msgstr "Không được phép gia hạn"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1221
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:90
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-request-article.tt:142
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:112
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:244
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:589
 #, c-format
 msgid "Item type"
 msgstr "Kiểu tài liệu"
@@ -7069,12 +7077,12 @@ msgstr "Kiểu tài liệu"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:168
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:172
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:338
 #, c-format
 msgid "Item type:"
 msgstr "Kiểu tài liệu:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:295
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:298
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:221
 #, c-format
 msgid "Item type: "
@@ -7085,7 +7093,7 @@ msgstr "Kiểu tài liệu: "
 msgid "Item types"
 msgstr "Kiểu tài liệu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:60
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "Loại khỏi lưu thông ("
@@ -7098,13 +7106,13 @@ msgstr "Tài liệu sẵn sàng tại:"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:441
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:444
 #, fuzzy, c-format
 msgid "Items available:"
 msgstr "Tài liệu sẵn sàng:"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Items on this list:"
 msgstr "Loại bỏ khỏi giá sách"
@@ -7163,9 +7171,9 @@ msgstr "Từ khóa"
 msgid "Koha"
 msgstr "Koha"
 
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:8
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
 msgid "Koha %s"
 msgstr "Koha %s"
@@ -7250,7 +7258,7 @@ msgstr "Thiết lập thông báo của bạn đã được cập nhật"
 msgid "Last updated:"
 msgstr "Thiết lập thông báo của bạn đã được cập nhật"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:838
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
 #, c-format
 msgid "Late"
 msgstr ""
@@ -7302,7 +7310,7 @@ msgstr "Level 4: Robust/domain specific discovery platforms"
 msgid "Libraries"
 msgstr "Thư viện"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:596
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:599
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:127
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:200
@@ -7388,7 +7396,7 @@ msgstr "Tên giá sách ảo:"
 msgid "List deleted."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
 #, c-format
 msgid "List name"
 msgstr "Tên giá sách ảo:"
@@ -7399,7 +7407,7 @@ msgstr "Tên giá sách ảo:"
 msgid "List name:"
 msgstr "Tên giá sách ảo:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:618
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:621
 #, c-format
 msgid "List name: "
 msgstr "Tên giá sách ảo: "
@@ -7409,14 +7417,14 @@ msgstr "Tên giá sách ảo: "
 msgid "List updated."
 msgstr "Thiết lập thông báo của bạn đã được cập nhật"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:322
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:325
 #, c-format
 msgid "List(s) this item appears in: "
 msgstr "Giá sách ảo chứa tài liệu: "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:73
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:689
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:692
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:40
 #, c-format
 msgid "Lists"
@@ -7430,7 +7438,7 @@ msgstr "Giá sách ảo"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:531
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:534
 #, fuzzy, c-format
 msgid "Lists:"
 msgstr "Giá sách ảo"
@@ -7438,25 +7446,20 @@ msgstr "Giá sách ảo"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:179
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:66
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:93
 #, c-format
 msgid "Loading"
 msgstr "Đang tải"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:75
-#, fuzzy, c-format
-msgid "Loading "
-msgstr "Đang tải..."
-
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Loading..."
 msgstr "Đang tải..."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:479
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "Đang tải..."
@@ -7495,7 +7498,7 @@ msgstr "Kho tài liệu (trạng thái)"
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html 
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:789
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:792
 #, c-format
 msgid "Location: %s %s %s "
 msgstr "Địa điểm: %s %s %s "
@@ -7507,7 +7510,7 @@ msgstr "Kho tài liệu"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:27
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:185
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:194
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:100
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:393
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:407
@@ -7520,14 +7523,14 @@ msgstr "Đăng nhập"
 msgid "Log in to add tags"
 msgstr "Đăng nhập để thêm từ khóa."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:352
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:354
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:355
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:357
 #, c-format
 msgid "Log in to add tags."
 msgstr "Đăng nhập để thêm từ khóa."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:787
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:720
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:790
 #, fuzzy, c-format
 msgid "Log in to create a new list"
 msgstr "Đăng nhập để tạo giá sách của bạn"
@@ -7550,7 +7553,7 @@ msgid "Log in to your OverDrive account"
 msgstr "Đăng nhập"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth.tt:53
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:387
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:101
@@ -7560,7 +7563,7 @@ msgstr "Đăng nhập"
 msgid "Log in to your account"
 msgstr "Đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:183
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #, c-format
 msgid "Log in to your account:"
@@ -7610,8 +7613,8 @@ msgstr "Đăng nhập"
 msgid "Login page"
 msgstr "Trang chủ"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:184
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:122
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:189
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:388
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:387
@@ -7662,7 +7665,7 @@ msgstr "Hiển thị thẻ MARC"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:31
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:46
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:132
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:2
 #, c-format
 msgid "MARC view"
@@ -7687,14 +7690,14 @@ msgstr "Địa chỉ chính"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:605
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #, c-format
 msgid "Make a "
 msgstr "Tạo "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:279
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:611
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:614
 #, fuzzy, c-format
 msgid "Make an "
 msgstr "Tạo "
@@ -7739,12 +7742,12 @@ msgstr "Mar"
 msgid "March"
 msgstr "Tháng 3"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:545
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:548
 #, c-format
 msgid "Match:"
 msgstr "Phù hợp:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1234
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1237
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "Không có từ khóa nào được khai báo."
@@ -7776,33 +7779,33 @@ msgstr "Tin nhắn của bạn"
 msgid "Minimum amount needed by this service is %s"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
 #, c-format
 msgid "Missing"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:845
 #, c-format
 msgid "Missing (damaged)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
 #, fuzzy, c-format
 msgid "Missing (lost)"
 msgstr "Lỗi đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
 #, c-format
 msgid "Missing (never received)"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:844
 #, c-format
 msgid "Missing (sold out)"
 msgstr ""
 
 #. %1$s:  subscription.missinglist | html | html_line_break 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:812
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
 #, c-format
 msgid "Missing issues: %s "
 msgstr "Kỳ ấn phẩm thiếu: %s "
@@ -7828,13 +7831,13 @@ msgid "Monday"
 msgstr "Thứ 2"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:25
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:856
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:859
 #, c-format
 msgid "More details"
 msgstr "Xem chi tiết"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "More lists"
 msgstr "Thêm giá sách ảo"
 
@@ -7937,15 +7940,15 @@ msgid "New interlibrary loan request "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:209
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:567
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:74
 #, c-format
 msgid "New list"
 msgstr "Tạo giá sách ảo"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:76
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:149
 #, c-format
 msgid "New password:"
 msgstr "Mật khẩu (mới):"
@@ -7961,7 +7964,7 @@ msgstr "Tạo đề xuất mua"
 msgid "New search"
 msgstr "[Tìm kiếm mới]"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:367
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:370
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:30
 #, c-format
@@ -7983,7 +7986,7 @@ msgstr "Tạo từ khóa mới:"
 msgid "News from %s%s%sthe library%s"
 msgstr "Tin tức từ %s%s%sthư viện%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7994,14 +7997,14 @@ msgid "Next"
 msgstr "Tiếp tục"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:28
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1079
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/page-numbers.inc:29
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:86
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:89
 #, fuzzy, c-format
 msgid "Next "
 msgstr "Tiếp tục"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:187
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:190
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Trang sau &gt;&gt;"
@@ -8053,7 +8056,7 @@ msgid "No checkouts"
 msgstr "Ghi mượn"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:89
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:974
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:122
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
@@ -8076,9 +8079,9 @@ msgstr "Ghi mượn"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:275
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:283
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:292
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:610
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:618
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:627
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:613
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:621
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:630
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:147
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:257
@@ -8115,7 +8118,7 @@ msgid "No items available."
 msgstr "Không có tài liệu sẵn sàng."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:227
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:469
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:472
 #, c-format
 msgid "No items available:"
 msgstr "Tài liệu không sẵn sàng:"
@@ -8132,7 +8135,7 @@ msgstr "Tất cả"
 msgid "No matching records found"
 msgstr "Không tìm thấy biểu ghi phù hợp"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:152
 #, c-format
 msgid "No news to display."
 msgstr ""
@@ -8142,12 +8145,12 @@ msgstr ""
 msgid "No operation parameter has been passed."
 msgstr "Không có thông số hoạt động nào được thông qua."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:673
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:676
 #, c-format
 msgid "No other items."
 msgstr "Không có tài liệu khác."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:659
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:662
 #, c-format
 msgid "No physical items for this record"
 msgstr "Hiện tại biểu ghi chưa có bản tài liệu nào."
@@ -8157,12 +8160,12 @@ msgstr "Hiện tại biểu ghi chưa có bản tài liệu nào."
 msgid "No private lists"
 msgstr "Không có giá sách ảo cá nhận"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:781
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:784
 #, c-format
 msgid "No private lists."
 msgstr "Hiện tại chưa có giá sách cá nhân."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:779
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:782
 #, c-format
 msgid "No public lists."
 msgstr "Hiện tại chưa có giá sách cộng đồng."
@@ -8181,11 +8184,6 @@ msgstr "Không được phép gia hạn"
 #, c-format
 msgid "No reserves have been selected for this course."
 msgstr "Không có tài liệu dữ trữ cho khóa học này."
-
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:78
-#, fuzzy, c-format
-msgid "No results"
-msgstr "Kết quả tìm kiếm"
 
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -8214,7 +8212,7 @@ msgstr "Bạn chưa chọn đề xuất mua"
 msgid "No tag was specified."
 msgstr "Không có từ khóa nào được khai báo."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:343
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:346
 #, c-format
 msgid "No tags from this library for this title."
 msgstr "Chưa có bạn đọc nào thêm từ khóa mới cho nhan để trên."
@@ -8225,18 +8223,18 @@ msgid "No, I do not agree. Please remove my account within a reasonable time."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "No, do not cancel article request"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "No, do not cancel hold"
 msgstr "Không, đừng hủy đặt mượn tài liệu"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "No, do not delete"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
@@ -8254,12 +8252,12 @@ msgid "No, do not delete suggestions"
 msgstr "Với đề xuất mua được chọn: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "No, do not remove sharing"
 msgstr "Không, đừng bỏ sự chia sẻ "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "No, do not resume holds"
 msgstr "Không, đừng tiếp tục đặt mượn tài liệu"
 
@@ -8297,7 +8295,7 @@ msgstr "Không có từ khóa nào được khai báo."
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:30
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:43
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:43
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:133
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:48
 #, c-format
@@ -8311,15 +8309,15 @@ msgid "Not checked in %s"
 msgstr "Được ghi mượn (%s)"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:268
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:600
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:603
 #, fuzzy, c-format
 msgid "Not finding what you're looking for? "
 msgstr "Không tìm thấy tài liệu bạn cần?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedvalueopac ) 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:70
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:74
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:75
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr "Không cho mượn (%s)"
@@ -8330,7 +8328,7 @@ msgstr "Không cho mượn (%s)"
 msgid "Not for loan (%s)"
 msgstr "Không cho mượn (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:844
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
 #, c-format
 msgid "Not issued"
 msgstr ""
@@ -8345,7 +8343,7 @@ msgstr "Không có đặt mượn"
 msgid "Not what you expected? Check for "
 msgstr "Kết quả không đúng? Kiểm tra lại "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:346
 #, c-format
 msgid "Note"
@@ -8428,10 +8426,10 @@ msgstr ""
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:45
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1247
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1250
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:128
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:90
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:723
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:726
 #, c-format
 msgid "Notes"
 msgstr "Ghi chú"
@@ -8464,7 +8462,7 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -8482,14 +8480,14 @@ msgstr ""
 msgid "Nov"
 msgstr "Nov"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:567
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1029
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:570
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
 #, c-format
 msgid "Novelist Select"
 msgstr "Chọn tác giả"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:479
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:482
 #, c-format
 msgid "Novelist Select: "
 msgstr "Chọn nhà văn: "
@@ -8543,13 +8541,13 @@ msgstr "Oct"
 msgid "October"
 msgstr "Tháng 10"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:52
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #, c-format
 msgid "On hold"
 msgstr "Đặt mượn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:89
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:90
 #, fuzzy, c-format
 msgid "On order"
 msgstr "Đang đặt hàng ("
@@ -8573,7 +8571,7 @@ msgid "One or more holds were not placed due to existing holds."
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:122
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:261
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:264
 #, c-format
 msgid "Online resources:"
 msgstr "Nguồn trực tuyến:"
@@ -8620,7 +8618,7 @@ msgstr "Sắp xếp theo nhan đề"
 msgid "Order by: "
 msgstr "Sắp xếp theo: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:958
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
 #, c-format
 msgid "Other editions of this work"
 msgstr "Ấn bản khác"
@@ -8631,7 +8629,7 @@ msgid "Other forms:"
 msgstr "Các mẫu khác:"
 
 #. %1$s:  ' ( ' _ (otheritemloop.size || 0) _ ' )' | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:517
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:520
 #, fuzzy, c-format
 msgid "Other holdings %s"
 msgstr "Thư viện khác ( %s )"
@@ -8683,7 +8681,7 @@ msgid "OverDrive search for '%s'"
 msgstr "Tìm kiếm OverDrive của '%s'"
 
 #. %1$s:  priority | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:639
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "Overall queue priority: %s"
 msgstr "Thứ tự ưu tiên xếp hàng: %s"
@@ -8694,7 +8692,7 @@ msgstr "Thứ tự ưu tiên xếp hàng: %s"
 msgid "Overdue (%s)"
 msgstr "Quá hạn (%s)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:580
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:583
 #, c-format
 msgid "Overdues "
 msgstr "Quá hạn "
@@ -8705,7 +8703,7 @@ msgstr "Quá hạn "
 msgid "Owner only"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:724
 #, fuzzy, c-format
 msgid "Pages"
 msgstr "Ảnh bìa"
@@ -8748,7 +8746,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:95
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:99
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:101
 #, fuzzy, c-format
 msgid "Password must be at least %s characters long."
 msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
@@ -8772,7 +8770,7 @@ msgid ""
 msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:98
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:101
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
@@ -8781,7 +8779,7 @@ msgstr ""
 "hoa."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:101
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:105
 #, c-format
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr ""
@@ -8791,7 +8789,7 @@ msgstr ""
 msgid "Password updated"
 msgstr "Mật khẩu đăng nhập được cập nhật"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:186
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:191
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:55
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:93
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:390
@@ -8812,7 +8810,7 @@ msgid "Patent document"
 msgstr "Tài liệu sáng chế"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:926
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
 #, c-format
 msgid "Patron comment on %s"
 msgstr "Ngày bình luận: %s"
@@ -8842,7 +8840,7 @@ msgstr ""
 msgid "Payment method"
 msgstr "Tài liệu sáng chế"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/includes/item-status.inc:95
 #, fuzzy, c-format
 msgid "Pending hold"
 msgstr "Đặt mượn tài liệu"
@@ -8866,7 +8864,7 @@ msgstr "Điện thoại"
 msgid "Phone: "
 msgstr "Điện thoại"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:202
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:205
 #, c-format
 msgid "Physical details:"
 msgstr "Thông tin vật lý:"
@@ -8882,7 +8880,7 @@ msgstr "Thư viện nhận"
 msgid "Pick up location:"
 msgstr "Thư viện nhận:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:728
 #, fuzzy, c-format
 msgid "Pickup library"
 msgstr "Thư viện chính"
@@ -8917,8 +8915,8 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:242
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:124
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:8
@@ -8935,7 +8933,7 @@ msgstr "Đặt mượn"
 msgid "Place request"
 msgstr "Đặt"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:715
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:15
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:17
 #, c-format
@@ -8952,7 +8950,7 @@ msgstr "Đặt"
 msgid "Placing a hold"
 msgstr "Đặt mượn tài liệu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:586
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:589
 #, c-format
 msgid "Play media"
 msgstr "Đa phương tiện"
@@ -8988,7 +8986,7 @@ msgstr "Chọn chính sách cá nhân:"
 msgid "Please click here to log in."
 msgstr "hãy bấm vào đây để đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:168
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:170
 #, c-format
 msgid ""
 "Please click the link in this email to finish the process of resetting your "
@@ -9033,7 +9031,7 @@ msgid ""
 "service provider, or you do not see your provider in this list."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, fuzzy, c-format
 msgid "Please contact the library if you need further assistance."
 msgstr ". Xin vui lòng liên hệ với thư viện để biết thêm thông tin."
@@ -9185,13 +9183,15 @@ msgstr "Thử nhập lại dưới dạng văn bản. %sLỗi không xác địn
 msgid "Please type the following characters into the preceding box: "
 msgstr "Vui lòng nhập các ký tự sau đây vào hộp thoại: "
 
-#. %1$s:  ELSIF (errAlreadyStartRecovery) 
-#. %2$s:  IF username 
+#. %1$s:  ELSIF (errNoBorrowerEmail) 
+#. %2$s:  ELSIF (errAlreadyStartRecovery) 
+#. %3$s:  IF username 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:86
 #, c-format
 msgid ""
-"Please use the field 'Login' as well. %s The process of password recovery "
-"has already been started for this account %s (\""
+"Please use the field 'Login' as well. %s This account has no email address "
+"we can send the email to. %s The process of password recovery has already "
+"been started for this account %s (\""
 msgstr ""
 
 #. OPTGROUP
@@ -9211,7 +9211,7 @@ msgstr "Tần suất sử dụng (Ít - Nhiều )"
 msgid "Popularity (most to least)"
 msgstr "Tần suất sử dụng (Nhiều - Ít)"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:943
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, fuzzy, c-format
 msgid "Post your comments on this title. "
 msgstr "Gửi hoặc chỉnh sửa bình luận của bạn về tài liệu này. "
@@ -9254,8 +9254,8 @@ msgstr ""
 msgid "Prev"
 msgstr "Trước"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:70
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
@@ -9325,8 +9325,8 @@ msgid "Privacy"
 msgstr "Cá nhân"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:658
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:659
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #, c-format
 msgid "Private"
 msgstr "Cá nhân"
@@ -9363,8 +9363,8 @@ msgid "Provider:"
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:664
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #, c-format
 msgid "Public"
 msgstr "Cộng đồng"
@@ -9373,8 +9373,8 @@ msgstr "Cộng đồng"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:22
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:94
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:700
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:703
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:44
 #, c-format
 msgid "Public lists"
@@ -9386,11 +9386,11 @@ msgid "Public lists "
 msgstr "Giá sách ảo cộng đồng"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "Public lists:"
 msgstr "Giá sách ảo cộng đồng:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:823
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #, fuzzy, c-format
 msgid "Publication date"
 msgstr "Giới hạn thời gian xuất bản:"
@@ -9418,14 +9418,14 @@ msgstr "Năm xuất bản/Phát hành: Mới nhất - Cũ nhất"
 msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Năm xuất bản/Phát hành: Cũ nhất - Mới nhất"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:409
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:493
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:412
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:496
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:63
 #, c-format
 msgid "Publication:"
 msgstr "Xuất bản:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:194
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:197
 #, c-format
 msgid "Published by :"
 msgstr "Nhà xuất bản :"
@@ -9449,9 +9449,11 @@ msgstr "Nhà xuất bản: %s %s vào %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.published_on | $KohaDates 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
+#. %3$s:  IF news_item 
+#. %4$s:  SET author = koha_new.author 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:106
-#, c-format
-msgid "Published on %s %s by "
+#, fuzzy, c-format
+msgid "Published on %s %s %s %s by "
 msgstr "Xuất bản ngày %s %s bởi"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:99
@@ -9483,7 +9485,7 @@ msgstr "Purchase suggestions"
 msgid "Quantity:"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:158
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:163
 #, fuzzy, c-format
 msgid "Quote of the day"
 msgstr "Trích dẫn trong ngày"
@@ -9508,7 +9510,7 @@ msgid "RT"
 msgstr ""
 
 #. INPUT type=submit name=rate_button
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:457
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:40
 msgid "Rate me"
 msgstr "Đánh giá của bạn:"
@@ -9518,9 +9520,9 @@ msgstr "Đánh giá của bạn:"
 msgid "Re-type new password:"
 msgstr "Nhập lại mật khẩu mới:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:56
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:73
 #, c-format
-msgid "Really fuzzy"
+msgid "Really fuzzy "
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:197
@@ -9534,7 +9536,7 @@ msgstr "Lý do đề xuất: "
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:824
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
 #, fuzzy, c-format
 msgid "Received date"
 msgstr "Bài phê bình"
@@ -9560,7 +9562,7 @@ msgstr "GetRecords"
 msgid "Record not found"
 msgstr "Lỗi đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, fuzzy, c-format
 msgid "Record title"
 msgstr "Nhan đề tùng thư"
@@ -9592,7 +9594,7 @@ msgstr "Giới hạn kết quả tìm kiếm"
 msgid "Register a new account"
 msgstr "Đăng ký tài khoản"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:208
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:102
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:401
 #, fuzzy, c-format
@@ -9624,7 +9626,7 @@ msgstr "In thường"
 msgid "Related Term"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:543
 #, c-format
 msgid "Relative"
 msgstr ""
@@ -9661,7 +9663,7 @@ msgid "Remove field"
 msgstr "Loại bỏ trường tìm kiếm"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "Remove from list"
 msgstr "Loại bỏ"
 
@@ -9671,7 +9673,7 @@ msgid "Remove from this list"
 msgstr "Loại bỏ khỏi giá sách"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:564
 msgid "Remove selected items"
 msgstr "Loại bỏ tài liệu được chọn"
 
@@ -9684,7 +9686,7 @@ msgstr "Loại bỏ tài liệu được chọn"
 msgid "Remove selected searches"
 msgstr "Loại bỏ bạn đọc được lựa chọn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:768
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:771
 #, fuzzy, c-format
 msgid "Remove share"
 msgstr "Loại bỏ chia sẻ"
@@ -9695,17 +9697,17 @@ msgid "Remove share "
 msgstr "Loại bỏ chia sẻ"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:251
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:360
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:591
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:671
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:674
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, c-format
 msgid "Renew"
 msgstr "Gia hạn"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:464
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:467
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Renew all"
 msgstr "Gia hạn tất cả"
 
@@ -9718,8 +9720,8 @@ msgid "Renew item"
 msgstr "Gia hạn tài liệu"
 
 #. INPUT type=submit
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:451
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:454
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Renew selected"
 msgstr "Gia hạn"
 
@@ -9730,7 +9732,7 @@ msgstr "Gia hạn"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:357
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:360
 #, fuzzy, c-format
 msgid "Renewed!"
 msgstr "Gia hạn"
@@ -9867,7 +9869,7 @@ msgstr "Chọn bản tài liệu bạn muốn đặt mượn:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:921
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:982
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1012
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:623
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:97
@@ -9891,6 +9893,7 @@ msgid "Resort list"
 msgstr "Sắp xếp"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:54
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:91
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:122
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:174
@@ -9978,7 +9981,7 @@ msgstr "Trang chủ"
 msgid "Return to the last advanced search"
 msgstr "Tìm kiếm nâng cao"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:171
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:173
 #, fuzzy, c-format
 msgid "Return to the main page"
 msgstr "Quay lại "
@@ -10020,17 +10023,17 @@ msgstr ""
 "fine information, hold request information, loan information, and messages."
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:537
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #, c-format
 msgid "Reviews"
 msgstr "Bài phê bình"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:315
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:318
 #, c-format
 msgid "Reviews from LibraryThing.com:"
 msgstr "Nhận xét từ LibraryThing.com:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:736
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:739
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr "Nhận xét từ Syndetics"
@@ -10088,8 +10091,8 @@ msgstr "Thứ 7"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:63
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-privacy.tt:130
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:679
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
 #, c-format
 msgid "Save"
 msgstr "Lưu"
@@ -10159,8 +10162,8 @@ msgstr "Quét hoặc nhập ĐKCB tài liệu:"
 
 #. INPUT type=submit name=do
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:440
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:58
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:81
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:76
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:121
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:173
@@ -10196,14 +10199,14 @@ msgstr "Tìm kiếm nhan đề trong:"
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:198
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:403
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:487
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:406
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:490
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:58
 msgid "Search for works by this author"
 msgstr "Tìm kiếm theo tác giả"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:32
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:44
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:46
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:292
 #, c-format
 msgid "Search for:"
@@ -10255,7 +10258,7 @@ msgstr "Tìm đề xuất mua"
 msgid "Search the %s%s%sKoha library%s catalog"
 msgstr "%s%s%sDanh mục trực tuyến%s Koha"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:46
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
 #, fuzzy, c-format
 msgid "Search type:"
 msgstr "Tìm kiếm "
@@ -10313,7 +10316,7 @@ msgstr "Thành phần:"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:154
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:290
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:625
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:628
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:68
 msgid "See Baker & Taylor"
 msgstr "Xem thêm tại Baker & Taylor"
@@ -10324,12 +10327,12 @@ msgid "See also:"
 msgstr "Xem thêm:"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1079
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
 msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1071
 msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
@@ -10345,20 +10348,20 @@ msgid "Select a specific item:"
 msgstr "Chọn bản tài liệu bạn muốn đặt mượn:"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:52
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:106
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:159
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-search-history.tt:196
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:469
 #, c-format
 msgid "Select all"
 msgstr "Chọn tất cả"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1192
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1195
 #, fuzzy, c-format
 msgid "Select none"
 msgstr "Chọn tất cả"
@@ -10385,16 +10388,16 @@ msgstr "Chọn nhan đề để: "
 msgid "Select suggestions to: "
 msgstr "Chọn đề xuất mua để: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
 msgstr "Chọn tài liệu để tìm kiếm"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:56
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:335
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, c-format
 msgid "Select titles to: "
 msgstr "Chọn nhan đề để: "
@@ -10462,8 +10465,8 @@ msgstr "Tháng 9"
 msgid "Serial"
 msgstr "ÂPĐK"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:577
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:597
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:580
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:600
 #, c-format
 msgid "Serial collection"
 msgstr "Bộ sưu tập APĐK"
@@ -10489,7 +10492,7 @@ msgstr "Tùng thư"
 msgid "Series Title"
 msgstr "Nhan đề ÂPĐK"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:395
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:398
 #, c-format
 msgid "Series information:"
 msgstr "Thông tin ÂPĐK:"
@@ -10499,13 +10502,13 @@ msgstr "Thông tin ÂPĐK:"
 msgid "Series title"
 msgstr "Nhan đề tùng thư"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:178
 #, c-format
 msgid "Series:"
 msgstr "Tùng thư:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:172
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:71
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:172
 #, c-format
 msgid "Session lost"
 msgstr "Lỗi đăng nhập"
@@ -10515,8 +10518,8 @@ msgstr "Lỗi đăng nhập"
 msgid "Settings updated"
 msgstr "Thiết lập thông báo của bạn đã được cập nhật"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:759
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1147
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:762
 #, c-format
 msgid "Share"
 msgstr "Chia sẻ"
@@ -10532,7 +10535,7 @@ msgid "Share a list with another patron"
 msgstr "Chia sẻ giá sách ảo cho bạn đọc khác"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 msgid "Share by email"
 msgstr "Chia sẻ qua hòm thư"
 
@@ -10542,22 +10545,22 @@ msgid "Share list"
 msgstr "Chia sẻ giá sách ảo"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
 msgid "Share on Facebook"
 msgstr "Chia sẻ trên Facebook"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 msgid "Share on LinkedIn"
 msgstr "Chia sẻ trên LinkedIn"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, fuzzy
 msgid "Share on Twitter"
 msgstr "Chia sẻ trên LinkedIn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1230
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1233
 #, fuzzy, c-format
 msgid "Shelving location"
 msgstr "Thư viện hiện tại"
@@ -10587,7 +10590,7 @@ msgstr "Hiển thị 50 tài liệu cuối cùng"
 msgid "Show _MENU_ entries"
 msgstr "Hiển thị trang _MENU_"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:621
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:624
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:77
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:67
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
@@ -10595,7 +10598,7 @@ msgstr "Hiển thị trang _MENU_"
 msgid "Show all items"
 msgstr "Hiển thị toàn bộ tài liệu"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:112
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:117
 #, fuzzy, c-format
 msgid "Show all news"
 msgstr "Hiển thị toàn bộ tài liệu"
@@ -10681,7 +10684,7 @@ msgstr "Nhan đề này không có bản tài liệu đính kèm."
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:551
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:554
 #, c-format
 msgid "Similar items"
 msgstr "Tài liệu tương tự"
@@ -10715,7 +10718,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -10792,9 +10795,9 @@ msgid ""
 "Sorry, the system doesn't think you have permission to access this page. "
 msgstr "Xin lỗi! Bạn không được phân quyền để truy cập vào trang này. "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:68
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:94
 #, c-format
-msgid "Sorry, there are no results, try a different search term."
+msgid "Sorry, there are no results. Try a different search term."
 msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
@@ -10865,7 +10868,7 @@ msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Xin lỗi! Phiên làm việc của bạn đã hết hạn. Bạn hãy đăng nhập lại."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Sort"
 msgstr "Sắp xếp theo:"
@@ -10880,7 +10883,7 @@ msgstr "Sắp xếp theo:"
 msgid "Sort by: "
 msgstr "Sắp xếp theo: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:622
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
 #, c-format
 msgid "Sort this list by: "
 msgstr "Sắp xếp theo: "
@@ -10923,13 +10926,13 @@ msgid "Statistics"
 msgstr "Thống kê"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:71
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1245
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1248
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:131
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:99
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:349
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:724
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:727
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:82
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:26
 #, c-format
@@ -10961,7 +10964,7 @@ msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr ""
 "Bước 2: Quét ĐKCB cho từng tài liệu, bạn có thể quét nhiều ĐKCB cùng một lúc"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:850
 #, c-format
 msgid "Stopped"
 msgstr ""
@@ -10978,7 +10981,7 @@ msgid "Su"
 msgstr "Su"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:49
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:53
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:191
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:193
@@ -11003,8 +11006,8 @@ msgstr "Cụm từ chủ đề"
 msgid "Subject(s)"
 msgstr "Chủ đề"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:236
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:252
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:239
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:255
 #, c-format
 msgid "Subject(s):"
 msgstr "Chủ đề:"
@@ -11025,8 +11028,8 @@ msgstr "Chủ đề: %s "
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:86
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:1054
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:132
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:159
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:134
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:161
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reportproblem.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:246
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:404
@@ -11047,7 +11050,7 @@ msgstr "Gửi bình luận và thoát"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-messaging.tt:229
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Submit changes"
 msgstr "Đổi mật khẩu"
 
@@ -11059,8 +11062,8 @@ msgstr "Đổi mật khẩu"
 
 #. INPUT type=submit
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:50
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:442
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:445
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "Đổi mật khẩu"
@@ -11082,7 +11085,7 @@ msgid "Subscribe to a subscription alert"
 msgstr "Đăng ký nhận thông báo ÂPĐK"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:804
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:807
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:159
 #, c-format
 msgid "Subscribe to email notification on new issues"
@@ -11128,7 +11131,7 @@ msgstr "Kỳ ÂPĐK"
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:797
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:800
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Kỳ ÂPĐK từ: %s tới:%s %s %s kỳ hiện tại %s"
@@ -11150,7 +11153,7 @@ msgid "Subscription: "
 msgstr "Kỳ ÂPĐK : "
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:557
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:560
 #, c-format
 msgid "Subscriptions ( %s )"
 msgstr "Ấn phẩm đăng ký ( %s )"
@@ -11271,12 +11274,12 @@ msgstr "Hệ thống đang trong giai đoạn bảo trì. Bạn vui lòng quay l
 msgid "System-wide only"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:530
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:533
 #, c-format
 msgid "TOC"
 msgstr "TOC"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:714
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:717
 #, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "Bảng nội dung được cung cấp bởi Syndetics"
@@ -11288,7 +11291,7 @@ msgstr "Bảng nội dung được cung cấp bởi Syndetics"
 msgid "Tag"
 msgstr "Trường"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:552
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:555
 #, c-format
 msgid "Tag browser"
 msgstr "Từ khóa"
@@ -11303,7 +11306,7 @@ msgstr "Mây Tag"
 msgid "Tag status here."
 msgstr "Trạng thái từ khóa."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:383
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:386
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:236
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/title-actions-menu.inc:35
 #, c-format
@@ -11326,14 +11329,14 @@ msgstr "Từ khóa"
 msgid "Tags added: "
 msgstr "Từ khóa đã nhập: "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:333
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:342
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:336
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:345
 #, c-format
 msgid "Tags from this library:"
 msgstr "Từ khóa:"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:517
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:532
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:520
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:535
 #, c-format
 msgid "Tags:"
 msgstr "Từ khóa:"
@@ -11388,7 +11391,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  subscription.opacdisplaycount | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:818
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr " %s kỳ ấn phẩm thư viện nhận về trong thời gian gần đây:"
@@ -11572,7 +11575,7 @@ msgid ""
 "the list."
 msgstr "Tài liệu được thêm vào giỏ tài liệu của bạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:670
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
@@ -11610,7 +11613,7 @@ msgid "The operation results will be displayed for each entered barcode."
 msgstr ""
 
 #. %1$s:  username | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:175
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:177
 #, c-format
 msgid "The password has been changed for user \"%s\"."
 msgstr "Mật khẩu cho người dùng \"%s\" đã được thay đổi."
@@ -11659,12 +11662,12 @@ msgid "The userid "
 msgstr "Tài khoản "
 
 #. %1$s:  subscriptionsnumber | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:776
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:779
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "Hiện tại có %s kỳ ấn phẩm liên quan đến nhan đề này."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:937
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:940
 #, fuzzy, c-format
 msgid "There are no comments on this title."
 msgstr "Hiện tại chưa có bình luận nào về tài liệu này."
@@ -11752,7 +11755,7 @@ msgstr ""
 msgid "This email address already exists in our database."
 msgstr "Tài liệu đã có trong giỏ tài liệu của bạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:85
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:111
 #, fuzzy, c-format
 msgid "This feature is not enabled"
 msgstr "Tính năng mây ISBD không được kích hoạt."
@@ -11762,7 +11765,7 @@ msgstr "Tính năng mây ISBD không được kích hoạt."
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr "Không thể đặt mượn tài liệu này."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:775
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:778
 #, c-format
 msgid "This is a serial"
 msgstr "ẤN PHẨM ĐỊNH KỲ"
@@ -11793,7 +11796,7 @@ msgstr ""
 msgid "This item is scheduled for auto renewal."
 msgstr "Tài liệu này được ghi mượn thành công tới tài khoản của bạn."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:169
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:171
 #, c-format
 msgid "This link is valid for 2 days starting now. "
 msgstr ""
@@ -11810,7 +11813,7 @@ msgid "This list does not exist."
 msgstr "Không thể đặt mượn tài liệu này."
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:584
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -11819,7 +11822,7 @@ msgstr ""
 "sách ảo của bạn từ bất kỳ kết quả "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "This list is shared. Other users will lose access to it."
 msgstr ""
 
@@ -11833,8 +11836,8 @@ msgstr ""
 msgid "This news item does not exist. "
 msgstr "Tin tức này không tồn tại."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:544
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1169
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -11844,12 +11847,12 @@ msgstr ""
 "vào "
 
 #. %1$s:  items_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:617
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
 #, fuzzy, c-format
 msgid "This record has many physical items (%s). "
 msgstr "Biểu ghi này có quá nhiều bản tài liệu đính kèm (%s). "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:786
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:789
 #, c-format
 msgid "This subscription is closed."
 msgstr "Ấn phẩm định kỳ này đã đóng."
@@ -11884,21 +11887,21 @@ msgstr "Thứ 5"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:73
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:50
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-browse.tt:54
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-course-details.tt:64
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-holdshistory.tt:88
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:132
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:89
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:277
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-tags.tt:136
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-topissues.tt:84
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:240
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:536
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:585
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:716
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:539
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:719
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:295
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/holds-table.inc:13
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/ill-availability-table.inc:7
@@ -11926,7 +11929,7 @@ msgid "Title (Z-A)"
 msgstr "Nhan đề (Z-A)"
 
 #. %1$s:  title_notes_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:527
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:530
 #, c-format
 msgid "Title notes ( %s )"
 msgstr "Ghi chú nhan đề ( %s )"
@@ -11977,7 +11980,7 @@ msgstr "Để thay đổi thông tin cá nhân hãy liên hệ với thư viện
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Để thay đổi thông tin cá nhân hãy liên hệ với thư viện."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:121
 #, fuzzy, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr "Xin lỗi, Thông tin thư điện tử của bạn không hợp lệ."
@@ -12009,7 +12012,7 @@ msgid "Total due if credit(s) applied:"
 msgstr ""
 
 #. %1$s:  holds_count | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:633
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:636
 #, c-format
 msgid "Total holds: %s"
 msgstr ""
@@ -12035,7 +12038,7 @@ msgid "Tuesday"
 msgstr "Thứ 3"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:87
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:728
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/account-table.inc:10
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/opac-bottom.inc:154
 #, c-format
@@ -12064,7 +12067,7 @@ msgstr "Kiểu:"
 msgid "UF"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1240
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1243
 #, fuzzy, c-format
 msgid "URL"
 msgstr "URL"
@@ -12153,7 +12156,7 @@ msgstr "Nhan đề đồng nhất"
 msgid "Unified title: %s "
 msgstr "Nhan đề đồng nhất: %s "
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:227
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:230
 #, c-format
 msgid "Uniform titles:"
 msgstr "Nhan đề đồng nhất:"
@@ -12278,12 +12281,12 @@ msgstr "Tìm đề xuất mua"
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:185
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:188
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:190
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:391
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:394
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:396
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:397
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:399
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:477
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:479
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:480
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:482
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:47
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:50
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:52
@@ -12305,13 +12308,13 @@ msgstr ""
 
 #. A
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:273
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:611
 #, fuzzy
 msgid "View on Amazon.com"
 msgstr "Xem thêm tại  Amazon.com"
 
 #. A
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1096
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
 msgid "View record \"%s\""
 msgstr "Xem biểu ghi \"%s\""
 
@@ -12326,13 +12329,13 @@ msgstr "Xem lịch sử tìm kiếm của bạn"
 msgid "Void payment"
 msgstr "Bình luận của bạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1237
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1240
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-reserve.tt:361
 #, c-format
 msgid "Vol info"
 msgstr "Thông tin tập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:721
 #, c-format
 msgid "Volume"
 msgstr ""
@@ -12389,7 +12392,7 @@ msgstr "Wed"
 msgid "Wednesday"
 msgstr "Thứ 4"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:213
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:218
 #, c-format
 msgid "Welcome, "
 msgstr "Xin chào, "
@@ -12439,8 +12442,8 @@ msgstr "Với đề xuất mua được chọn: "
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:327
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 msgid "With selected titles: "
 msgstr "Với nhan đề được chọn: "
 
@@ -12467,13 +12470,13 @@ msgid "Written on %s by %s"
 msgstr "Được gửi vào ngày %s từ %s"
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:637
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:640
 #, c-format
 msgid "Year"
 msgstr "Năm"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:257
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:260
 #, c-format
 msgid "Year: "
 msgstr "Năm xuất bản: "
@@ -12506,19 +12509,19 @@ msgid "Yes, I agree."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Yes, cancel article request"
 msgstr "Bạn chắc chắn muốn hủy bỏ đặt mượn này?"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Yes, cancel hold"
 msgstr "CancelHold"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Yes, delete"
 msgstr "Với đề xuất mua được chọn: "
@@ -12536,19 +12539,19 @@ msgid "Yes, delete suggestions"
 msgstr "Với đề xuất mua được chọn: "
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:811
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:814
 #, fuzzy
 msgid "Yes, remove sharing"
 msgstr "Loại bỏ chia sẻ"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Yes, resume all holds"
 msgstr "Khôi phục tất cả"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Yes, suspend all holds"
 msgstr "Tạm dừng tất cả"
@@ -12655,7 +12658,7 @@ msgstr ""
 msgid "You can't change your password."
 msgstr "Bạn không thể thay đổi mật khẩu đăng nhập."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:115
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:117
 #, fuzzy, c-format
 msgid "You can't reset your password."
 msgstr "Bạn không thể thay đổi mật khẩu đăng nhập."
@@ -12697,7 +12700,7 @@ msgstr "Hiện tại bạn không ghi mượn tài liệu nào."
 msgid "You currently have nothing checked out."
 msgstr "Hiện tại bạn không ghi mượn tài liệu nào."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:489
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:492
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Bạn đang nợ tiền phạt và các khoản phí lên tới:"
@@ -12763,7 +12766,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:503
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:506
 #, c-format
 msgid "You have a credit of:"
 msgstr "Tài khoản trả trước của bạn đọc:"
@@ -12773,7 +12776,7 @@ msgstr "Tài khoản trả trước của bạn đọc:"
 msgid "You have already requested this title."
 msgstr "Bạn đã có yêu cầu đặt mượn với nhan đề này."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:806
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:809
 #, fuzzy, c-format
 msgid "You have no article requests currently."
 msgstr "Bạn đã có yêu cầu đặt mượn với nhan đề này."
@@ -12800,7 +12803,7 @@ msgid ""
 "fields and resubmit."
 msgstr "Khai báo thông tin còn thiếu vào các trường bắt buộc."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:473
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Bạn chưa mượn tài liệu nào của thư viện!"
@@ -12839,7 +12842,7 @@ msgstr ""
 msgid "You have renewed this item the maximum number of times allowed."
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:805
 #, c-format
 msgid "You have subscribed to email notification on new issues. "
 msgstr "Bạn đã đăng ký nhận thông báo về bản tin cập nhật."
@@ -12899,7 +12902,7 @@ msgstr "Bạn phải đăng nhập để tạo và thêm tài liệu vào giá s
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "You must be logged in to create or add to lists"
 msgstr "Bạn phải đăng nhập để tạo và thêm tài liệu vào giá sách ảo"
 
@@ -12908,7 +12911,7 @@ msgstr "Bạn phải đăng nhập để tạo và thêm tài liệu vào giá s
 msgid "You must have an email address to enroll"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:807
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:810
 #, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
@@ -12930,7 +12933,7 @@ msgstr "Bạn phải chọn tài liệu đặt mượn. "
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
 msgstr "Bạn đã tìm %s cho '%s'%s%s với giới hạn: '%s'%s"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:94
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
 msgstr ""
@@ -12956,7 +12959,7 @@ msgstr ""
 "Bạn sẽ nhận được thư thông báo nếu bạn đọc khác chấp nhận lời mời chia sẻ "
 "của bạn trong 02 tuần."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:166
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:168
 #, c-format
 msgid "You will receive an email shortly. "
 msgstr ""
@@ -13058,12 +13061,12 @@ msgstr "Lịch sử ghi mượn"
 msgid "Your checkout history has been deleted."
 msgstr "Lịch sử ghi mượn của bạn đã bị xóa."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:892
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:895
 #, fuzzy, c-format
 msgid "Your comment"
 msgstr "Bình luận của bạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:894
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:897
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr "Bình luận của bạn (xem trước, chờ duyệt)"
@@ -13138,8 +13141,8 @@ msgstr "Giá ảo của bạn : %s "
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:20
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:84
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:696
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:699
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/masthead.inc:59
 #, c-format
 msgid "Your lists"
@@ -13151,7 +13154,7 @@ msgid "Your lists "
 msgstr "Giá sách ảo của bạn"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 msgid "Your lists:"
 msgstr "Giá sách ảo của bạn:"
 
@@ -13167,17 +13170,17 @@ msgid "Your messaging settings"
 msgstr "Thiết lập thông báo"
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Ghi chú của bạn về %s đã được lưu và gửi đến thư viện."
 
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 msgid "Your note about %s was removed."
 msgstr "Ghi chú của bạn về %s đã bị hủy."
 
@@ -13195,7 +13198,7 @@ msgstr "Bạn đã đổi thành công mật khẩu đăng nhập vào tài kho�
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:903
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:69
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:144
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:146
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
@@ -13204,7 +13207,7 @@ msgstr "Mật khẩu mới phải có tối thiểu %s ký tự."
 #. %1$s:  patron.category.effective_min_password_length | html 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:901
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:142
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:144
 #, fuzzy, c-format
 msgid ""
 "Your password must contain at least %s characters, including UPPERCASE, "
@@ -13250,16 +13253,16 @@ msgstr "Đề xuất mua của bạn"
 
 #. For the first occurrence,
 #. SCRIPT
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1459
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1462
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:204
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:833
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt:836
 #, fuzzy
 msgid "Your rating: %s, "
 msgstr "Đánh giá của bạn: %s, "
 
 #. For the first occurrence,
 #. %1$s:  my_rating.rating_value | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:457
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:460
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/user-star-ratings.inc:44
 #, fuzzy, c-format
 msgid "Your rating: %s."
@@ -13348,7 +13351,7 @@ msgstr "Mã bưu chính:"
 #. For the first occurrence,
 #. SCRIPT
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:293
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:638
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:641
 #, fuzzy
 msgid "[ New list ]"
 msgstr "Tạo giá sách ảo"
@@ -13359,7 +13362,7 @@ msgid "[% limit or"
 msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1008
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1011
 #, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr "[trình duyệt của bạn không hỗ trợ thẻ %s.]"
@@ -13485,8 +13488,8 @@ msgstr ""
 msgid "by"
 msgstr "Người liên quan"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:143
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:146
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:984
 #, c-format
 msgid "by "
 msgstr "Tác giả "
@@ -13506,7 +13509,7 @@ msgstr "cardnumber"
 msgid "change your password"
 msgstr "Đổi mật khẩu đăng nhập"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:216
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:221
 #, fuzzy, c-format
 msgid "checkout(s)"
 msgstr "Ghi mượn"
@@ -13566,7 +13569,7 @@ msgstr ""
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:228
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:233
 #, fuzzy, c-format
 msgid "due in fines and charges"
 msgstr "Tiền phạt của bạn"
@@ -13597,18 +13600,18 @@ msgstr "tên"
 msgid "for more information on what it does and how to configure it."
 msgstr "để có thêm thông tin cho việc thiết lập tính năng này."
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:541
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:544
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #, c-format
 msgid "here"
 msgstr "tại đây"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:222
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:227
 #, c-format
 msgid "hold(s) pending"
 msgstr ""
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:225
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:230
 #, c-format
 msgid "hold(s) waiting"
 msgstr ""
@@ -13733,7 +13736,7 @@ msgid "item_id"
 msgstr "item_id"
 
 #. ABBR
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:124
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:127
 #, fuzzy
 msgid "koha:biblionumber:%s"
 msgstr "Ký hiệu phân loại: %s"
@@ -13783,7 +13786,7 @@ msgstr "Hoặc"
 msgid "out of"
 msgstr "ra khỏi"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:219
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-main.tt:224
 #, c-format
 msgid "overdue(s)"
 msgstr "quá hạn"
@@ -13824,8 +13827,8 @@ msgstr ""
 
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:272
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:605
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:607
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:608
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-results.tt:610
 #, c-format
 msgid "purchase suggestion"
 msgstr "đề xuất mua"
@@ -13871,7 +13874,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "schema"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #, c-format
 msgid "search"
 msgstr "Tìm kiếm"
@@ -13992,10 +13995,10 @@ msgstr "tagsel_button"
 #. META http-equiv=Content-Type
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 #: koha-tmpl/opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:29
 #: koha-tmpl/opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
@@ -14051,7 +14054,7 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "Phát hiện lỗi với yêu cầu đổi mật khẩu của bạn"
 
-#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
 #, fuzzy, c-format
 msgid "to post a comment. "
 msgstr "để gửi bình luận."
@@ -14252,6 +14255,14 @@ msgstr "×"
 #, fuzzy
 #~ msgid "(%s of %s renewals remaining)"
 #~ msgstr "(%s còn %s  lần)"
+
+#, fuzzy
+#~ msgid "Loading "
+#~ msgstr "Đang tải..."
+
+#, fuzzy
+#~ msgid "No results"
+#~ msgstr "Kết quả tìm kiếm"
 
 #~ msgid "Preview"
 #~ msgstr "Xem trước"
