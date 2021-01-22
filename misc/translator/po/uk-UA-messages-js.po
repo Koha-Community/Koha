@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-21 07:51-0300\n"
-"PO-Revision-Date: 2021-01-05 15:15+0000\n"
+"PO-Revision-Date: 2021-01-21 02:34+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: none\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1609859750.697576\n"
+"X-POOTLE-MTIME: 1611196479.552512\n"
 "X-Pootle-Path: /uk/20.11/uk-UA-messages-js.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -42,7 +42,7 @@ msgstr "%s вже є у Вашому кошику"
 msgid ""
 "%s deleted order(s) are using this record. Are you sure you want to delete "
 "this record?"
-msgstr "Чи Ви справді хочете вилучити відібрані одиниці?"
+msgstr "%sЧи Ви справді хочете вилучити відібрані одиниці?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:40
 #, javascript-format
@@ -62,7 +62,7 @@ msgstr ""
 #, fuzzy, javascript-format
 msgid ""
 "%s holds(s) for this record. Are you sure you want to delete this record?"
-msgstr "Чи Ви справді хочете вилучити відібрані одиниці?"
+msgstr "%sЧи Ви справді хочете вилучити відібрані одиниці?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/tags-review.js:53
 #, javascript-format
@@ -83,7 +83,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:210
 #, fuzzy, javascript-format
 msgid "%s item(s) added to your cart"
-msgstr " запис(и) додано у Ваш кошик записів"
+msgstr "%s запис(и) додано у Ваш кошик записів"
 
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:29
 #, javascript-format
@@ -221,7 +221,7 @@ msgstr "Чи Ви справді хочете вилучити %s? %s корис
 #: koha-tmpl/intranet-tmpl/prog/js/catalog.js:63
 #, fuzzy, javascript-format
 msgid "Are you sure you want to delete the %s attached items?"
-msgstr "Чи Ви справді хочете вилучити відібрані одиниці?"
+msgstr "Чи Ви справді хочете вилучити %sвідібрані одиниці?"
 
 #: koha-tmpl/intranet-tmpl/prog/js/audio_alerts.js:64
 #, fuzzy
@@ -348,7 +348,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:118
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:120
 msgid "Checked in"
-msgstr ""
+msgstr "Повернуто"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:592
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:594
@@ -387,7 +387,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:694
 msgid "Columns"
-msgstr ""
+msgstr "Стовпці"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:693
 msgid "Columns settings"
@@ -502,11 +502,11 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:709
 msgid "Export"
-msgstr ""
+msgstr "Експорт"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:708
 msgid "Export or print"
-msgstr ""
+msgstr "Експорт або друк"
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
 msgid "Feb"
@@ -585,7 +585,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/basket.js:417
 #, fuzzy, javascript-format
 msgid "Items in your cart: %s"
-msgstr "У Вашому кошику"
+msgstr "У Вашому кошику%s"
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:116
 msgid "Jan"
@@ -808,12 +808,12 @@ msgstr "жовтень"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:446
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:575
 msgid "On hold"
-msgstr ""
+msgstr "Замовлено"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:348
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:739
 msgid "On-site checkout"
-msgstr ""
+msgstr "Видача на місці"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:234
 msgid "One or more selected items cannot be placed on hold."
@@ -821,7 +821,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:122
 msgid "Patron note"
-msgstr ""
+msgstr "Примітка користувача"
 
 #: koha-tmpl/intranet-tmpl/prog/js/cart.js:86
 #: koha-tmpl/intranet-tmpl/prog/js/pages/results.js:252
@@ -893,9 +893,8 @@ msgstr "Попереднє"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:272
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:640
-#, fuzzy
 msgid "Previous checkouts"
-msgstr "Попереднє"
+msgstr "Попередні видачі"
 
 #: koha-tmpl/intranet-tmpl/prog/js/datatables.js:664
 #: koha-tmpl/opac-tmpl/bootstrap/js/datatables.js:31
@@ -962,7 +961,7 @@ msgstr "субота"
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:41
 #, javascript-format
 msgid "Saved preference %s"
-msgstr ""
+msgstr "Збережено параметр „%s“"
 
 #: koha-tmpl/intranet-tmpl/prog/js/pages/preferences.js:28
 #, fuzzy
@@ -1170,7 +1169,7 @@ msgstr "Сьогодні"
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:270
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:638
 msgid "Today's checkouts"
-msgstr ""
+msgstr "Сьогоднішні видачі"
 
 #: koha-tmpl/intranet-tmpl/prog/js/calendar.js:121
 msgid "Tu"
@@ -1186,7 +1185,7 @@ msgstr "вівторок"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:125
 msgid "Unable to check in"
-msgstr ""
+msgstr "Неможливо повернути"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:908
 msgid "Unable to claim as returned"
@@ -1315,7 +1314,7 @@ msgstr ""
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:718
 #: koha-tmpl/intranet-tmpl/prog/js/holds.js:42
 msgid "by _AUTHOR_"
-msgstr ""
+msgstr " / _AUTHOR_"
 
 #: koha-tmpl/intranet-tmpl/prog/js/additem.js:274
 msgid "is duplicated"
@@ -1327,11 +1326,11 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:183
 msgid "not checked out"
-msgstr ""
+msgstr "не видано"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:189
 msgid "on hold"
-msgstr ""
+msgstr "замовлено"
 
 #: koha-tmpl/intranet-tmpl/prog/js/addorderiso2709.js:64
 msgid "quantity values are not filled in or are not numbers"
@@ -1339,7 +1338,7 @@ msgstr ""
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:197
 msgid "reason unknown"
-msgstr ""
+msgstr "причина невідома"
 
 #: koha-tmpl/intranet-tmpl/prog/js/checkouts.js:187
 msgid "too many consecutive renewals without being seen by the library"

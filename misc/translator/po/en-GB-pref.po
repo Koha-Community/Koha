@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2020-08-19 10:40+0000\n"
+"PO-Revision-Date: 2021-01-06 13:33+0000\n"
 "Last-Translator: Jon McGowan <jon.mcgowan@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /en_GB/20.05/en-GB-pref.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1597833634.954483\n"
+"X-POOTLE-MTIME: 1609940010.220989\n"
 
 # Accounting
 msgid "accounting.pref"
@@ -3033,11 +3033,11 @@ msgstr ""
 
 # Circulation > Self check-in module
 msgid "circulation.pref Self check-in module"
-msgstr ""
+msgstr " Self return module"
 
 # Circulation > Self check-out module
 msgid "circulation.pref Self check-out module"
-msgstr ""
+msgstr " Self issue module"
 
 # Circulation > Stock rotation module
 msgid "circulation.pref Stock rotation module"
@@ -3130,6 +3130,8 @@ msgid ""
 "items to patrons who have more in fines than set in the noissuescharge "
 "system preference."
 msgstr ""
+" staff to manually override and check out items to users who have more in "
+"fines than set in the noissuescharge system preference."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldDateInFuture# Allow"
@@ -3159,7 +3161,7 @@ msgstr ""
 msgid ""
 "circulation.pref#AllowHoldItemTypeSelection# hold fulfillment to be limited "
 "by item type."
-msgstr ""
+msgstr " reservation fulfillment to be limited by item type."
 
 # Circulation > Holds policy
 msgid "circulation.pref#AllowHoldPolicyOverride# Allow"
@@ -3244,6 +3246,9 @@ msgid ""
 "those items. If using the holds queue items with pending holds will be "
 "marked as \"unavailable\" if this set to \"Don't allow\"."
 msgstr ""
+" This allows self issues for those items. If using the reservations queue "
+"items with pending reservations will be marked as \"unavailable\" if this "
+"set to \"Don't allow\"."
 
 # Circulation > Checkout policy
 msgid ""
@@ -3265,6 +3270,8 @@ msgid ""
 "items from the same record. (<strong>NOTE:</strong> This will only affect "
 "records without a subscription attached.)"
 msgstr ""
+" users to check out multiple items from the same record. (<strong>NOTE:</"
+"strong> This will only affect records without a subscription attached.)"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -3326,6 +3333,9 @@ msgid ""
 "or be premature for the \"No renewal before\" setting in the circulation "
 "policy or has been scheduled for automatic renewal."
 msgstr ""
+" staff to manually override renewal blocks and renew a loan when it would go "
+"over the renewal limit or be premature for the \"No renewal before\" setting "
+"in the circulation policy or has been scheduled for automatic renewal."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowRenewalOnHoldOverride# Allow"
@@ -3340,10 +3350,11 @@ msgid ""
 "circulation.pref#AllowRenewalOnHoldOverride# staff to renew items that are "
 "on hold by manually specifying a due date."
 msgstr ""
+" staff to renew items that are reserved by manually specifying a due date."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowReturnToBranch# Allow items to be checked in"
-msgstr ""
+msgstr " Allow items to be returned"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowReturnToBranch# at any library."
@@ -3354,6 +3365,7 @@ msgid ""
 "circulation.pref#AllowReturnToBranch# either at the library the item is from "
 "or the library it was checked out from."
 msgstr ""
+" either at the library the item is from or the library it was borrowed from."
 
 # Circulation > Checkout policy
 msgid ""
@@ -3364,7 +3376,7 @@ msgstr ""
 msgid ""
 "circulation.pref#AllowReturnToBranch# only at the library the item was "
 "checked out from."
-msgstr ""
+msgstr " only at the library the item was borrowed from."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#AllowTooManyOverride# Allow"
@@ -3582,7 +3594,7 @@ msgstr ""
 msgid ""
 "circulation.pref#AutoSelfCheckAllowed# Note: Any patron entered here will be "
 "unable to log into the OPAC."
-msgstr ""
+msgstr " Note: Any user entered here will be unable to log into the OPAC."
 
 # Circulation > Self check-out module
 msgid "circulation.pref#AutoSelfCheckAllowed# and this password"
@@ -3593,6 +3605,8 @@ msgid ""
 "circulation.pref#AutoSelfCheckAllowed# the web-based self checkout system to "
 "automatically log in with this staff login"
 msgstr ""
+" the web-based self issue system to automatically log in with this staff "
+"login"
 
 # Circulation > Interface
 msgid "circulation.pref#AutoSwitchPatron# Don't enable"
@@ -3630,6 +3644,7 @@ msgid ""
 "circulation.pref#AutomaticItemReturn# automatically transfer items to their "
 "home library when they are checked in."
 msgstr ""
+" automatically transfer items to their home library when they are returned."
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Allow"
@@ -3641,19 +3656,19 @@ msgstr ""
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# batch checkouts."
-msgstr ""
+msgstr " batch loans."
 
 # Circulation > Batch checkout
 msgid ""
 "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories "
 "separated with a pipe '|')."
-msgstr ""
+msgstr " (list of user categories separated with a pipe '|')."
 
 # Circulation > Batch checkout
 msgid ""
 "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to "
 "checkout in a batch:"
-msgstr ""
+msgstr " User categories allowed to borrow in a batch:"
 
 # Circulation > Checkin policy
 msgid "circulation.pref#BlockReturnOfLostItems# Block"
@@ -3743,6 +3758,8 @@ msgid ""
 "circulation.pref#CanMarkHoldsToPullAsLost# from the 'Holds to pull' page. "
 "Values to be applied must be defined in UpdateItemWhenLostFromHoldList."
 msgstr ""
+" from the 'Reservations to pull' page. Values to be applied must be defined "
+"in UpdateItemWhenLostFromHoldList."
 
 # Circulation > Interface
 msgid "circulation.pref#CircAutoPrintQuickSlip# ."
@@ -3779,6 +3796,7 @@ msgid ""
 "circulation.pref#CircConfirmItemParts# staff to confirm that all parts of an "
 "item are present at checkin/checkout."
 msgstr ""
+" staff to confirm that all parts of an item are present at issue/return."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
@@ -3830,7 +3848,7 @@ msgstr ""
 msgid ""
 "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims "
 "returned\","
-msgstr ""
+msgstr " When marking a issue as \"claims returned\","
 
 # Circulation > Return claims
 msgid ""
@@ -3880,6 +3898,9 @@ msgid ""
 "date for the Holds to pull-report. But it does not interfere with issuing, "
 "renewing or transferring items."
 msgstr ""
+" days from now) at return time. Note that this number of days will be used "
+"too in calculating the default end date for the Reservations to pull-report. "
+"But it does not interfere with issuing, renewing or transferring items."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
@@ -3902,6 +3923,8 @@ msgid ""
 "site checkouts will count toward the checkout limit for regular checkouts. "
 "The on-site limit will still apply for on-site checkouts."
 msgstr ""
+" If enabled, on-site loans will count toward the borrowing limit for regular "
+"loans. The on-site limit will still apply for on-site loans."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4052,7 +4075,7 @@ msgstr ""
 msgid ""
 "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the "
 "period for a hold's max pickup delay."
-msgstr ""
+msgstr " when calculating the period for a reservations max pickup delay."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4071,6 +4094,11 @@ msgid ""
 "cancel_expired_holds.pl</code> cronjob. Ask your system administrator to "
 "schedule it."
 msgstr ""
+" reservations to expire automatically if they have not been picked by within "
+"the time period specified in the ReservesMaxPickUpDelay system preference."
+"<br><strong>NOTE:</strong> This system preference requires the <code>misc/"
+"cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system "
+"administrator to schedule it."
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# ."
@@ -4082,6 +4110,8 @@ msgid ""
 "ExpireReservesMaxPickUpDelay, charge a patron who allows their waiting hold "
 "to expire a fee of"
 msgstr ""
+" If using ExpireReservesMaxPickUpDelay, charge a user who allows their "
+"waiting reservation to expire a fee of"
 
 # Circulation > Holds policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -4122,6 +4152,8 @@ msgid ""
 "circulation.pref#ExportRemoveFields# The following fields should be excluded "
 "from the patron checkout history CSV or MARC (ISO 2709) export:"
 msgstr ""
+" The following fields should be excluded from the user borrowing history CSV "
+"or MARC (ISO 2709) export:"
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -4243,6 +4275,8 @@ msgid ""
 "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges "
 "for limit set in the noissuescharge system preference."
 msgstr ""
+" reservation charges when summing up charges for limit set in the "
+"noissuescharge system preference."
 
 # Circulation > Checkin policy
 msgid "circulation.pref#HoldsNeedProcessingSIP# Don't fulfill"
@@ -4257,6 +4291,7 @@ msgid ""
 "circulation.pref#HoldsNeedProcessingSIP# holds automatically if matching "
 "item is returned via SIP protocol."
 msgstr ""
+" reservations automatically if matching item is returned via SIP protocol."
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# ."
@@ -4267,6 +4302,7 @@ msgid ""
 "circulation.pref#HoldsSplitQueue# In the staff interface, split the holds "
 "queue into separate tables by"
 msgstr ""
+" In the staff interface, split the reservations queue into separate tables by"
 
 # Circulation > Holds policy
 msgid "circulation.pref#HoldsSplitQueue# hold item type"
@@ -4616,6 +4652,8 @@ msgid ""
 "from checking out if the patron has guarantors and those guarantor's "
 "guarantees owing in total more than"
 msgstr ""
+" Prevent a user from borrowing if the user has guarantors and those "
+"guarantor's guarantees owing in total more than"
 
 # Circulation > Checkout policy
 msgid ""
@@ -4627,7 +4665,7 @@ msgstr ""
 msgid ""
 "circulation.pref#NoRefundOnLostReturnedItemsAge# Don't refund lost fees if a "
 "lost item is checked in more than"
-msgstr ""
+msgstr " Don't refund lost fees if a lost item is returned more than"
 
 # Circulation > Fines Policy
 msgid ""
@@ -4731,7 +4769,7 @@ msgstr ""
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup holds at libraries "
 "where the item is available."
-msgstr ""
+msgstr " to pickup reservations at libraries where the item is available."
 
 # Circulation > Holds policy
 msgid ""
@@ -4743,7 +4781,7 @@ msgstr " (list of user categories separated with a pipe '|')"
 msgid ""
 "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories "
 "not affected by OPACHoldsIfAvailableAtPickup:"
-msgstr ""
+msgstr "User categories not affected by OPACHoldsIfAvailableAtPickup:"
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckoutAutoCheck# Don't enable"
@@ -4757,7 +4795,7 @@ msgstr ""
 msgid ""
 "circulation.pref#OnSiteCheckoutAutoCheck# on-site checkout by default if "
 "last checkout was an on-site one."
-msgstr ""
+msgstr " on-site issue by default if last issue was an on-site one."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -4783,7 +4821,7 @@ msgstr ""
 msgid ""
 "circulation.pref#OnSiteCheckoutsForce# the on-site checkout for all cases "
 "(even if a patron is debarred, etc.)."
-msgstr ""
+msgstr " the on-site issue for all cases (even if a user is debarred, etc.)."
 
 # Circulation > Checkout policy
 msgid "circulation.pref#OverdueNoticeCalendar# Ignore calendar"
@@ -4815,7 +4853,7 @@ msgstr ""
 msgid ""
 "circulation.pref#OverduesBlockCirc# when checking out to a patron that has "
 "overdues outstanding."
-msgstr ""
+msgstr " when checking out to a user that has overdues outstanding."
 
 # Circulation > Checkout policy
 msgid ""
@@ -4872,6 +4910,10 @@ msgid ""
 "full list of overdue items. Set to 0 to include all overdue items in the "
 "notice, no matter how many there are."
 msgstr ""
+" item lines in a printed overdue notice. If the number of items is greater "
+"than this number, the notice will end with a warning asking the user to "
+"check their online account for a full list of overdue items. Set to 0 to "
+"include all overdue items in the notice, no matter how many there are."
 
 # Circulation > Fines Policy
 msgid ""
@@ -5003,6 +5045,7 @@ msgid ""
 "circulation.pref#RenewalSendNotice# a renewal notice according to patron's "
 "messaging preferences for 'Item checkout'."
 msgstr ""
+" a renewal notice according to users messaging preferences for 'Item issue'."
 
 # Circulation > Checkout policy
 msgid ""
@@ -5130,7 +5173,7 @@ msgstr " users to return items through web-based self issue system."
 msgid ""
 "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-"
 "based self checkout screen:"
-msgstr " Include the following HTML on the the web-based self issue screen:"
+msgstr " Include the following HTML on the web-based self issue screen:"
 
 # Circulation > Self check-out module
 msgid ""
@@ -5156,7 +5199,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckAllowByIPRanges# Allow access to the self check "
 "from the following IP addresses:"
-msgstr ""
+msgstr " Allow access to the self issue from the following IP addresses:"
 
 # Circulation > Self check-out module
 msgid ""
@@ -5170,7 +5213,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckInMainUserBlock# Include the following HTML on the "
 "self check-in screen:"
-msgstr ""
+msgstr " Include the following HTML on the self return screen:"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# Don't enable"
@@ -5185,12 +5228,14 @@ msgid ""
 "circulation.pref#SelfCheckInModule# the standalone self check-in module "
 "(available at: /cgi-bin/koha/sci/sci-main.pl)."
 msgstr ""
+" the standalone self return module (available at: /cgi-bin/koha/sci/sci-main."
+"pl)."
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInTimeout# Reset the current self check-in screen "
 "after"
-msgstr ""
+msgstr " Reset the current self return screen after"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInTimeout# seconds."
@@ -5200,13 +5245,13 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckInUserCSS# Include the following CSS on all the "
 "self check-in screens:"
-msgstr ""
+msgstr " Include the following CSS on all the self return screens:"
 
 # Circulation > Self check-in module
 msgid ""
 "circulation.pref#SelfCheckInUserJS# Include the following JavaScript on all "
 "the self check-in screens:"
-msgstr ""
+msgstr " Include the following JavaScript on all the self return screens:"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckReceiptPrompt# Don't show"
@@ -5220,7 +5265,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckReceiptPrompt# the print receipt popup dialog when "
 "self checkout is finished."
-msgstr ""
+msgstr " the print receipt popup dialog when self issue is finished."
 
 # Circulation > Self check-out module
 msgid ""
@@ -5240,7 +5285,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SelfCheckoutByLogin# Have patrons log into the web-based "
 "self checkout system with their"
-msgstr ""
+msgstr " Have users log into the web-based self issue system with their"
 
 # Circulation > Self check-out module
 msgid "circulation.pref#SelfCheckoutByLogin# cardnumber"
@@ -5420,7 +5465,7 @@ msgstr ""
 msgid ""
 "circulation.pref#SuspendHoldsIntranet# holds to be suspended from the staff "
 "interface."
-msgstr ""
+msgstr " reservations to be suspended from the staff interface."
 
 # Circulation > Holds policy
 msgid "circulation.pref#SuspendHoldsOpac# Allow"
@@ -5513,6 +5558,8 @@ msgid ""
 "circulation.pref#TrapHoldsOnOrder# items that are not for loan but holdable "
 "( notforloan < 0 ) to fill holds."
 msgstr ""
+" items that are not for loan but reserveable ( notforloan < 0 ) to fill "
+"reservations."
 
 # Circulation > Holds policy
 #, fuzzy
@@ -5566,6 +5613,10 @@ msgid ""
 "differ, in all other cases an update will affect both. Items in the CART "
 "location will be returned to their permanent location on checkout.<br/>"
 msgstr ""
+" Note: PROC and CART are special values, for these locations only can "
+"location and permanent_location differ, in all other cases an update will "
+"affect both. Items in the CART location will be returned to their permanent "
+"location on issue.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -5573,6 +5624,8 @@ msgid ""
 "the Processing Center location to be updated into the Fiction location on "
 "check in.<br/>"
 msgstr ""
+" PROC: FIC - causes an item in the Processing Center location to be updated "
+"into the Fiction location on return.<br/>"
 
 # Circulation > Checkin policy
 msgid ""
@@ -5621,6 +5674,8 @@ msgid ""
 "an item's values with when it is marked as lost from the 'Holds to pull' "
 "page."
 msgstr ""
+" A list of values to update an item's values with when it is marked as lost "
+"from the 'Reservations to pull' page."
 
 # Circulation > Holds policy
 msgid ""
@@ -5730,6 +5785,8 @@ msgid ""
 "circulation.pref#UseTransportCostMatrix# the transport cost matrix for "
 "calculating optimal holds filling between libraries."
 msgstr ""
+" the transport cost matrix for calculating optimal reservations filling "
+"between libraries."
 
 # Circulation > Interface
 msgid "circulation.pref#WaitingNotifyAtCheckin# Don't notify"
@@ -7778,6 +7835,9 @@ msgid ""
 "such as placing a hold or renewing. Note that the setting for a patron "
 "category takes priority over this system preference."
 msgstr ""
+" expired users from OPAC actions such as placing a reservation or renewing. "
+"Note that the setting for a user category takes priority over this system "
+"preference."
 
 # OPAC > Appearance
 msgid ""
@@ -8077,11 +8137,11 @@ msgid "opac.pref#OPACHoldsHistory# Don't allow"
 msgstr " Don't show any reservation details"
 
 # OPAC > Privacy
-#, fuzzy
 msgid ""
 "opac.pref#OPACHoldsHistory# patrons to see what books they have place holds "
 "in the past."
-msgstr " users to see what books they have issued in the past."
+msgstr ""
+" users to see which books they have placed reservations on in the past."
 
 # OPAC > Features
 msgid "opac.pref#OPACISBD# Use the following as the OPAC ISBD template:"
@@ -8509,6 +8569,8 @@ msgid ""
 "opac.pref#OPACUserSummary# a summary of a logged in patron's checkouts, "
 "overdues, holds and charges on the OPAC start page."
 msgstr ""
+" a summary of a logged in user's loans, overdues, reservations and charges "
+"on the OPAC start page."
 
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
@@ -8880,7 +8942,7 @@ msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacHoldNotes# patrons to add a note when placing a hold."
-msgstr ""
+msgstr " users to add a note when placing a reservation."
 
 # OPAC > Features
 msgid "opac.pref#OpacItemLocation# Show"
@@ -9198,6 +9260,8 @@ msgid ""
 "opac.pref#OpacSeparateHoldings# is the logged in patrons's library. The "
 "second tab will contain all other items."
 msgstr ""
+" is the logged in user's library. The second tab will contain all other "
+"items."
 
 # OPAC > Appearance
 msgid ""
@@ -11086,6 +11150,29 @@ msgstr ""
 msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr ""
 
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Disable"
+msgstr " class number"
+
+# Searching > Results display
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Enable"
+msgstr " class number"
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# See documentation at https://www."
+"elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
+"query.html#type-cross-fields"
+msgstr ""
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# the cross_fields option for "
+"Elasticsearch searches, supported in Elasticsearch 6.X and above."
+msgstr ""
+
 # Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
 msgstr ""
@@ -11365,11 +11452,12 @@ msgstr ""
 msgid "searching.pref#QueryFuzzy# Try"
 msgstr ""
 
-# Searching > Features
+# Searching > Features > QueryFuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
-"cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
+"cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
+"Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
 
 # Searching > Features

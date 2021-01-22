@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 20.11\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-01-04 20:15+0000\n"
+"PO-Revision-Date: 2021-01-21 21:03+0000\n"
 "Last-Translator: rysiek_d <rysiek_d@o2.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1609791309.583814\n"
+"X-POOTLE-MTIME: 1611263030.277171\n"
 "X-Pootle-Path: /pl/20.05/pl-PL-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -51,8 +51,8 @@ msgid ""
 "\">Configure credit types</a>)"
 msgstr ""
 "Automatyczne generowanie musi być również włączone dla każdego typu kredytu "
-"(<a href=\"/cgi-bin/koha/admin/credit_types.pl\">Konfiguruj typy "
-"kredytów</a>)"
+"(<a href=\"/cgi-bin/koha/admin/credit_types.pl\">Konfiguruj typy kredytów</"
+"a>)"
 
 # Accounting > Features
 msgid ""
@@ -11301,6 +11301,29 @@ msgid "searching.pref#DisplayLibraryFacets# home library"
 msgstr "biblioteki głównej"
 
 # Searching > Features
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Disable"
+msgstr "Wyłącz"
+
+# Searching > Features
+#, fuzzy
+msgid "searching.pref#ElasticsearchCrossFields# Enable"
+msgstr "Włącz"
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# See documentation at https://www."
+"elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-"
+"query.html#type-cross-fields"
+msgstr ""
+
+# Searching > Features > ElasticsearchCrossFields
+msgid ""
+"searching.pref#ElasticsearchCrossFields# the cross_fields option for "
+"Elasticsearch searches, supported in Elasticsearch 6.X and above."
+msgstr ""
+
+# Searching > Features
 msgid "searching.pref#EnableSearchHistory# Don't keep"
 msgstr "Nie przechowuj"
 
@@ -11591,10 +11614,12 @@ msgid "searching.pref#QueryFuzzy# Try"
 msgstr "Próbuj"
 
 # Searching > Features
+#, fuzzy
 msgid ""
 "searching.pref#QueryFuzzy# to match similarly spelled words in a search (for "
 "example, a search for <cite>flang</cite> would also match <cite>flange</"
-"cite> and <cite>fang</cite>; REQUIRES ZEBRA)."
+"cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any "
+"Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)."
 msgstr ""
 "podczas wyszukiwania dopasować podobne/-ych słowa/słowa (przy wyszukiwaniu "
 "np. <cite>plan</cite> można dopasować też <cite>plon</cite> i <cite>pan</"
@@ -12501,11 +12526,11 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# staff interface only"
-msgstr ""
+msgstr "tylko w Interfejsie bibliotekarza"
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# ."
-msgstr ""
+msgstr "."
 
 # Tools > News
 msgid "tools.pref#NewsToolEditor# By default edit news items with"
@@ -12645,11 +12670,11 @@ msgstr ""
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Disable"
-msgstr ""
+msgstr "Wyłącz"
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# Enable"
-msgstr ""
+msgstr "Włącz"
 
 # Web services > Mana KB
 msgid "web_services.pref#Mana# No, let me think about"
@@ -12681,6 +12706,8 @@ msgid ""
 "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-"
 "PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)"
 msgstr ""
+"<a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server. (dostępny "
+"pod adresem: /cgi-bin/koha/oai.pl?verb=Identify)"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# Disable"
@@ -12716,11 +12743,11 @@ msgstr ""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Disable"
-msgstr ""
+msgstr "Wyłącz"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:AutoUpdateSetsEmbedItemData# Enable"
-msgstr ""
+msgstr "Włącz"
 
 # Web services > OAI-PMH
 msgid ""
@@ -12816,11 +12843,11 @@ msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Disable"
-msgstr ""
+msgstr "Wyłącz"
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Enable"
-msgstr ""
+msgstr "Włącz"
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Disable"
