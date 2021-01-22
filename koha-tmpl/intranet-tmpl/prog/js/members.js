@@ -34,11 +34,6 @@ function check_form_borrowers(nav){
     }
 }
 
-function Dopop(link) {
-// //   var searchstring=document.form.value[i].value;
-    var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=no,top');
-}
-
 function clear_entry(node) {
     var original = $(node).parent();
     $("textarea", original).attr('value', '');
@@ -195,7 +190,7 @@ $(document).ready(function(){
 
     $('body').on('click', '#guarantor_search', function(e) {
         e.preventDefault();
-        var newin = window.open('guarantor_search.pl','popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
+        var newin = window.open('guarantor_search.pl','popup','width=800,height=600,resizable=no,toolbar=false,scrollbars=yes,top');
     });
 
     $('#guarantor_relationships').on('click', '.guarantor_cancel', function(e) {
