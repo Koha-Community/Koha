@@ -145,7 +145,17 @@ sub to_api_mapping {
 
 =head3 claim_returned
 
-my $return_claim = $checkout->claim_returned();
+  my $return_claim = $checkout->claim_returned();
+
+This method sets the checkout as claimed return.  It will:
+
+1.  Add a new row to the `return_claims` table
+2.  Set the item as lost using the 'ClaimReturnedLostValue'
+3.  Charge a fee depending on the value of ClaimReturnedChargeFee
+3a. If set to charge, then accruing overdues will be halted
+3b. If set to charge, then any existing transfers will be cancelled
+    and the holding branch will be set back to 'frombranch'.
+4.  The issue will be marked as returned as per the 'MarkLostItemsAsReturned' preference
 
 =cut
 
