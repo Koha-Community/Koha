@@ -19,7 +19,7 @@ Installation instructions can be found at:
 
 Koha 19.11.14 is a bugfix/maintenance release.
 
-It includes 13 bugfixes.
+It includes 12 bugfixes.
 
 ### System requirements
 
@@ -75,10 +75,6 @@ Perl:
 ### Patrons
 
 - [[27004]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=27004) Deleting a staff account who have created claims returned causes problem in the return_claims table because of a NULL value in return_claims.created_by.
-
-### SIP2
-
-- [[27196]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=27196) Waiting title level hold checked in at wrong location via SIP leaves hold in a broken state and drops connection
 
 ### Searching - Elasticsearch
 
