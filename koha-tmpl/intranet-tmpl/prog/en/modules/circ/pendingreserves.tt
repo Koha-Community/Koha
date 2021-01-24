@@ -191,9 +191,10 @@
         <td><input type="text" class="filter" data-column_num="3" placeholder="Patron name" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="4" placeholder="Title" style="width:95%"/></td>
         <td id="homebranchfilter"></td>
-        <td><input type="text" class="filter" data-column_num="6" placeholder="Call number" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="7" placeholder="Available copy" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="8" placeholder="Available enumeration" style="width:95%"/></td>
+        <td></td>
+        <td><input type="text" class="filter" data-column_num="7" placeholder="Call number" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="8" placeholder="Available copy" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="9" placeholder="Available enumeration" style="width:95%"/></td>
         <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
         <td></td>
@@ -299,15 +300,15 @@
               });
           });
           $("#itemtype-filter").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
-              $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 9 );
-              });
-          });
-          $("#locationfilter").each( function () {
               $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
               $('select', this).change( function () {
                   holdst.fnFilter( $(this).val(), 10 );
+              });
+          });
+          $("#locationfilter").each( function () {
+              $(this).html( createSelect( holdst.fnGetColumnData(11) ) );
+              $('select', this).change( function () {
+                  holdst.fnFilter( $(this).val(), 11 );
               });
           });
         });
