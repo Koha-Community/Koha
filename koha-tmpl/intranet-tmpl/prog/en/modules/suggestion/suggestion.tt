@@ -816,9 +816,9 @@
                                 <h2 style="padding-left:1em;">Change selected suggestions</h2>
                                 <div class="col-sm-4">
                                     <fieldset>
-                                        <div id="select-reason[% loop.index %]">
-                                            <label for="STATUSreason[% loop.index %]">Mark selected as: </label>
-                                            <select name="STATUS" id="STATUSreason[% loop.index %]">
+                                        <div id="select-reason[% loop.index | html %]">
+                                            <label for="STATUSreason[% loop.index | html %]">Mark selected as: </label>
+                                            <select name="STATUS" id="STATUSreason[% loop.index | html %]">
                                                 <option value=""> -- Choose a status --</option>
 
                                                 [% IF (statusselected_ASKED ) %]
@@ -856,8 +856,8 @@
                                                 [% END %]
                                             </select>
 
-                                            <label for="choosereason[% loop.index %]">with this reason:</label>
-                                            <select name="reason" id="choosereason[% loop.index %]">
+                                            <label for="choosereason[% loop.index | html %]">with this reason:</label>
+                                            <select name="reason" id="choosereason[% loop.index | html %]">
                                                 <option value=""> -- Choose a reason -- </option>
                                                 [% FOREACH reasonsloo IN suggestion.reasonsloop %]
                                                     <option value="[% reasonsloo.lib | html %]">[% reasonsloo.lib | html %]</option>
@@ -1019,8 +1019,8 @@
                                             [% END %]
                                         </li>
                                         <li>
-                                            <label for="STATUS[% loop.index %]"> Status:</label>
-                                            <select name="STATUS" id="STATUS[% loop.index %]">
+                                            <label for="STATUS[% loop.index | html %]"> Status:</label>
+                                            <select name="STATUS" id="STATUS[% loop.index | html %]">
                                                 <option value="">Any</option>
                                                 [% IF (statusselected_ASKED ) %]
                                                     <option value="ASKED" selected="selected">Pending</option>
