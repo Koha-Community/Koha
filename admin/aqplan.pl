@@ -302,7 +302,7 @@ foreach my $n (@names) {
 #         DEFAULT DISPLAY BEGINS
 
 my $CGIextChoice = ( 'CSV' ); # FIXME translation
-my $CGIsepChoice = ( C4::Context->preference("delimiter") );
+my $CGIsepChoice = ( C4::Context->preference("CSVDelimiter") );
 
 my ( @budget_lines, %cell_hash );
 
