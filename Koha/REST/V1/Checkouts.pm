@@ -45,7 +45,7 @@ List Koha::Checkout objects
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $checked_in = $c->validation->param('checked_in');
+    my $checked_in = delete $c->validation->output->{checked_in};
 
     try {
         my $checkouts_set;
@@ -56,49 +56,12 @@ sub list {
             $checkouts_set = Koha::Checkouts->new;
         }
 
-        my $args = $c->validation->output;
-        my $attributes = {};
+        my $checkouts = $c->objects->search( $checkouts_set );
 
-        # Extract reserved params
-        my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
-
-        # Merge sorting into query attributes
-        $c->dbic_merge_sorting(
-            {
-                attributes => $attributes,
-                params     => $reserved_params,
-                result_set => $checkouts_set
-            }
+        return $c->render(
+            status  => 200,
+            openapi => $checkouts
         );
-
-        # Merge pagination into query attributes
-        $c->dbic_merge_pagination(
-            {
-                filter => $attributes,
-                params => $reserved_params
-            }
-        );
-
-        # Call the to_model function by reference, if defined
-        if ( defined $filtered_params ) {
-            # remove checked_in
-            delete $filtered_params->{checked_in};
-            # Apply the mapping function to the passed params
-            $filtered_params = $checkouts_set->attributes_from_api($filtered_params);
-            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
-        }
-
-        # Perform search
-        my $checkouts = $checkouts_set->search( $filtered_params, $attributes );
-
-        if ($checkouts->is_paged) {
-            $c->add_pagination_headers({
-                total => $checkouts->pager->total_entries,
-                params => $args,
-            });
-        }
-
-        return $c->render( status => 200, openapi => $checkouts->to_api );
     } catch {
         $c->unhandled_exception($_);
     };
