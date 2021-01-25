@@ -100,8 +100,9 @@ sub store {
         }
 
         my $default_location = C4::Context->preference('NewItemsDefaultLocation');
-        if ( $default_location ) {
-            $self->permanent_location( $self->location ); # FIXME To confirm - even if passed?
+        unless ( $self->location || !$default_location ) {
+            $self->permanent_location( $self->location || $default_location )
+              unless $self->permanent_location;
             $self->location($default_location);
         }
 
