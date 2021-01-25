@@ -246,8 +246,10 @@ if ( $query->param('place_reserve') ) {
             my $type = $item->effective_itemtype;
             my $rule = GetBranchItemRule( $patron->branchcode, $type );
 
-            if ( $rule->{hold_fulfillment_policy} eq 'any' ) {
+            if ( $rule->{hold_fulfillment_policy} eq 'any' || $rule->{hold_fulfillment_policy} eq 'patrongroup' ) {
                 $branch = $patron->branchcode;
+            } elsif ( $rule->{hold_fulfillment_policy} eq 'holdgroup' ){
+                $branch = $item->homebranch;
             } else {
                 my $policy = $rule->{hold_fulfillment_policy};
                 $branch = $item->$policy;
