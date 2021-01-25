@@ -74,20 +74,6 @@ sub get_item_from_barcode {
     return($result);
 }
 
-sub set_item_default_location {
-    my $itemnumber = shift;
-    my $item       = Koha::Items->find($itemnumber);
-    if ( C4::Context->preference('NewItemsDefaultLocation') ) {
-        $item->permanent_location($item->location);
-        $item->location(C4::Context->preference('NewItemsDefaultLocation'));
-    }
-    else {
-        # It seems that we are dealing with that in too many places
-        $item->permanent_location($item->location) unless defined $item->permanent_location;
-    }
-    $item->store;
-}
-
 # NOTE: This code is subject to change in the future with the implemenation of ajax based autobarcode code
 # NOTE: 'incremental' is the ONLY autoBarcode option available to those not using javascript
 sub _increment_barcode {
@@ -164,6 +150,11 @@ sub generate_subfield_form {
                 $value = $temp2->as_string( $CNsubfields, ' ' );
                 last if $value;
             }
+        }
+
+        my $default_location = C4::Context->preference('NewItemsDefaultLocation');
+        if ( !$value && $subfieldlib->{kohafield} eq 'items.location' && $default_location ) {
+            $value = $default_location;
         }
 
         if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode' && !$value){
@@ -528,7 +519,6 @@ if ($op eq "additem") {
         # if barcode exists, don't create, but report The problem.
         unless ($exist_itemnumber) {
             my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) = AddItemFromMarc( $record, $biblionumber );
-            set_item_default_location($oldbibitemnum);
 
             # Pushing the last created item cookie back
             if ($prefillitem && defined $record) {
@@ -628,7 +618,6 @@ if ($op eq "additem") {
         if (!$exist_itemnumber) {
             my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) =
                 AddItemFromMarc( $record, $biblionumber, { skip_record_index => 1 } );
-            set_item_default_location($oldbibitemnum);
 
             # We count the item only if it was really added
             # That way, all items are added, even if there was some already existing barcodes

@@ -1602,6 +1602,12 @@ sub PrepareItemrecordDisplay {
     # its contents. See also GetMarcStructure.
     my $tagslib = GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
 
+    # Pick the default location from NewItemsDefaultLocation
+    if ( C4::Context->preference('NewItemsDefaultLocation') ) {
+        $defaultvalues //= {};
+        $defaultvalues->{location} //= C4::Context->preference('NewItemsDefaultLocation');
+    }
+
     # return nothing if we don't have found an existing framework.
     return q{} unless $tagslib;
     my $itemrecord;

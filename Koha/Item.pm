@@ -94,9 +94,17 @@ sub store {
     my $action = 'create';
 
     unless ( $self->in_storage ) { #AddItem
+
         unless ( $self->permanent_location ) {
             $self->permanent_location($self->location);
         }
+
+        my $default_location = C4::Context->preference('NewItemsDefaultLocation');
+        if ( $default_location ) {
+            $self->permanent_location( $self->location ); # FIXME To confirm - even if passed?
+            $self->location($default_location);
+        }
+
         unless ( $self->replacementpricedate ) {
             $self->replacementpricedate($today);
         }

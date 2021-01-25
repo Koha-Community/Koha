@@ -89,9 +89,68 @@ subtest 'store' => sub {
         $biblio->biblioitem->itemtype,
         'items.itype must have been set to biblioitem.itemtype is not given'
     );
-    is( $item->permanent_location, $item->location,
-        'permanent_location must have been set to location if not given' );
     $item->delete;
+
+    subtest 'permanent_location' => sub {
+        plan tests => 7;
+
+        my $location = 'my_loc';
+        my $attributes = {
+            homebranch    => $library->{branchcode},
+            holdingbranch => $library->{branchcode},
+            biblionumber  => $biblio->biblionumber,
+            location      => $location,
+        };
+
+        {
+            # NewItemsDefaultLocation not set
+            t::lib::Mocks::mock_preference( 'NewItemsDefaultLocation', '' );
+
+            # Not passing permanent_location on creating the item
+            my $item = Koha::Item->new($attributes)->store->get_from_storage;
+            is( $item->location, $location,
+                'location must have been set to location if given' );
+            is( $item->permanent_location, $item->location,
+                'permanent_location must have been set to location if not given' );
+            $item->delete;
+
+            # Passing permanent_location on creating the item
+            $item = Koha::Item->new(
+                { %$attributes, permanent_location => 'perm_loc' } )
+              ->store->get_from_storage;
+            is( $item->permanent_location, 'perm_loc',
+                'permanent_location must have been kept if given' );
+            $item->delete;
+        }
+
+        {
+            # NewItemsDefaultLocation set
+            my $default_location = 'default_location';
+            t::lib::Mocks::mock_preference( 'NewItemsDefaultLocation', $default_location );
+
+            # Not passing permanent_location on creating the item
+            my $item = Koha::Item->new($attributes)->store->get_from_storage;
+            is( $item->location, $default_location,
+                'location must have been set to default_location even if given' # FIXME this sounds wrong! Must be done in any cases?
+            );
+            is( $item->permanent_location, $location,
+                'permanent_location must have been set to the location given' );
+            $item->delete;
+
+            # Passing permanent_location on creating the item
+            $item = Koha::Item->new(
+                { %$attributes, permanent_location => 'perm_loc' } )
+              ->store->get_from_storage;
+            is( $item->location, $default_location,
+                'location must have been set to default_location even if given' # FIXME this sounds wrong! Must be done in any cases?
+            );
+            is( $item->permanent_location, $location,
+                'permanent_location must have been set to the location given'
+            );
+            $item->delete;
+        }
+
+    };
 
     subtest '*_on updates' => sub {
         plan tests => 9;
