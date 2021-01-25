@@ -38,7 +38,7 @@ $module_context->mock(
         my ($self, $pref) = @_;
         if ($return_undef) {
             return;
-        } elsif ($pref =~ /language/) {
+        } elsif ($pref eq 'language' || $pref eq 'OPACLanguages') {
             return join ',', @languages;
         } else {
             return 'XXX';
