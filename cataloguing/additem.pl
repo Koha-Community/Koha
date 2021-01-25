@@ -48,7 +48,6 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::SearchEngine::Indexer;
-use List::MoreUtils qw( any );
 use C4::Search qw( enabled_staff_search_views );
 use Storable qw( freeze thaw );
 use URI::Escape qw( uri_escape_utf8 );
@@ -57,59 +56,17 @@ use C4::Members;
 use MARC::File::XML;
 use URI::Escape qw( uri_escape_utf8 );
 use MIME::Base64 qw( decode_base64url encode_base64url );
+use List::Util qw( first );
+use List::MoreUtils qw( any uniq );
 
 our $dbh = C4::Context->dbh;
 
-sub find_value {
-    my ($tagfield,$insubfield,$record) = @_;
-    my $result;
-    my $indicator;
-    foreach my $field ($record->field($tagfield)) {
-        my @subfields = $field->subfields();
-        foreach my $subfield (@subfields) {
-            if (@$subfield[0] eq $insubfield) {
-                $result .= @$subfield[1];
-                $indicator = $field->indicator(1).$field->indicator(2);
-            }
-        }
-    }
-    return($indicator,$result);
-}
-
-sub get_item_from_barcode {
-    my ($barcode)=@_;
-    my $dbh=C4::Context->dbh;
-    my $result;
-    my $rq=$dbh->prepare("SELECT itemnumber from items where items.barcode=?");
-    $rq->execute($barcode);
-    ($result)=$rq->fetchrow;
-    return($result);
-}
-
-# NOTE: This code is subject to change in the future with the implemenation of ajax based autobarcode code
-# NOTE: 'incremental' is the ONLY autoBarcode option available to those not using javascript
-sub _increment_barcode {
-    my ($record, $frameworkcode) = @_;
-    my ($tagfield,$tagsubfield) = &GetMarcFromKohaField( "items.barcode" );
-    unless ($record->field($tagfield)->subfield($tagsubfield)) {
-        my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
-        $sth_barcode->execute;
-        my ($newbarcode) = $sth_barcode->fetchrow;
-        $newbarcode++;
-        # OK, we have the new barcode, now create the entry in MARC record
-        my $fieldItem = $record->field($tagfield);
-        $record->delete_field($fieldItem);
-        $fieldItem->add_subfields($tagsubfield => $newbarcode);
-        $record->insert_fields_ordered($fieldItem);
-    }
-    return $record;
-}
-
-
 sub generate_subfield_form {
-        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $loop_data, $i, $restrictededition, $item) = @_;
+        my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $biblionumber, $temp, $subfields, $i, $restrictededition, $item) = @_;
   
         my $frameworkcode = &GetFrameworkCode($biblionumber);
+
+        $item //= {};
 
         my %subfield_data;
         my $dbh = C4::Context->dbh;
@@ -182,7 +139,7 @@ sub generate_subfield_form {
             # builds list, depending on authorised value...
             if ( $subfieldlib->{authorised_value} eq "LOST" ) {
                 my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
-                my $item_is_return_claim = $ClaimReturnedLostValue && $item && $item->itemlost && $ClaimReturnedLostValue eq $item->itemlost;
+                my $item_is_return_claim = $ClaimReturnedLostValue && exists $item->{itemlost} && $ClaimReturnedLostValue eq $item->{itemlost};
                 $subfield_data{IS_RETURN_CLAIM} = $item_is_return_claim;
 
                 $subfield_data{IS_LOST_AV} = 1;
@@ -287,7 +244,7 @@ sub generate_subfield_form {
                 item_style => 1,
             });
             my $pars=  { dbh => $dbh, record => $temp, tagslib =>$tagslib,
-                id => $subfield_data{id}, tabloop => $loop_data };
+                id => $subfield_data{id}, tabloop => $subfields };
             $plugin->build( $pars );
             if( !$plugin->errstr ) {
                 my $class= 'buttonDot'. ( $plugin->noclick? ' disabled': '' );
@@ -374,34 +331,6 @@ sub generate_subfield_form {
         return \%subfield_data;
 }
 
-# Removes some subfields when prefilling items
-# This function will remove any subfield that is not in the SubfieldsToUseWhenPrefill syspref
-sub removeFieldsForPrefill {
-
-    my $item = shift;
-
-    # Getting item tag
-    my ($tag, $subtag) = GetMarcFromKohaField( "items.barcode" );
-
-    # Getting list of subfields to keep
-    my $subfieldsToUseWhenPrefill = C4::Context->preference('SubfieldsToUseWhenPrefill');
-
-    # Removing subfields that are not in the syspref
-    if ($tag && $subfieldsToUseWhenPrefill) {
-        my $field = $item->field($tag);
-        my @subfieldsToUse= split(/ /,$subfieldsToUseWhenPrefill);
-        foreach my $subfield ($field->subfields()) {
-            if (!grep { $subfield->[0] eq $_ } @subfieldsToUse) {
-                $field->delete_subfield(code => $subfield->[0]);
-            }
-
-        }
-    }
-
-    return $item;
-
-}
-
 my $input        = CGI->new;
 my $error        = $input->param('error');
 
@@ -416,6 +345,8 @@ if( $input->param('itemnumber') && !$input->param('biblionumber') ){
     $itemnumber = $input->param('itemnumber');
 }
 
+my $biblio = Koha::Biblios->find($biblionumber);
+
 my $op           = $input->param('op') || q{};
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
@@ -427,7 +358,7 @@ my $fa_branch             = $input->param('branch');
 my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
-my $frameworkcode = &GetFrameworkCode($biblionumber);
+our $frameworkcode = &GetFrameworkCode($biblionumber);
 
 # Defining which userflag is needing according to the framework currently used
 my $userflags;
@@ -455,29 +386,27 @@ $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibra
 # In case user has fast cataloging permission (and we're in fast cataloging), editing is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
-my $tagslib = &GetMarcStructure(1,$frameworkcode);
+our $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 
 output_and_exit_if_error( $input, $cookie, $template,
     { module => 'cataloguing', record => $record } );
 
 my $oldrecord = TransformMarcToKoha($record);
-my $itemrecord;
+my $current_item;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
 
 # Getting last created item cookie
 my $prefillitem = C4::Context->preference('PrefillItem');
-my $justaddeditem;
-my $cookieitemrecord;
+my $item_from_cookie;
 if ($prefillitem) {
     my $lastitemcookie = $input->cookie('LastCreatedItem');
     if ($lastitemcookie) {
         $lastitemcookie = decode_base64url($lastitemcookie);
         eval {
             if ( thaw($lastitemcookie) ) {
-                $cookieitemrecord = thaw($lastitemcookie);
-                $cookieitemrecord = removeFieldsForPrefill($cookieitemrecord);
+                $item_from_cookie = thaw($lastitemcookie);
             }
         };
         if ($@) {
@@ -488,24 +417,13 @@ if ($prefillitem) {
 }
 
 #-------------------------------------------------------------------------------
-my $current_item;
 if ($op eq "additem") {
 
     my $add_submit                 = $input->param('add_submit');
-    my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
     my $number_of_copies           = $input->param('number_of_copies');
 
-    # This is a bit tricky : if there is a cookie for the last created item and
-    # we just added an item, the cookie value is not correct yet (it will be updated
-    # next page). To prevent the form from being filled with outdated values, we
-    # force the use of "add and duplicate" feature, so the form will be filled with
-    # correct values.
-    $add_duplicate_submit = 1 if ($prefillitem);
-    $justaddeditem = 1;
-
     my @columns = Koha::Items->columns;
-    my $biblio = Koha::Biblios->find($biblionumber);
     my $item = Koha::Item->new;
     $item->biblionumber($biblio->biblionumber);
     for my $c ( @columns ) {
@@ -527,9 +445,9 @@ if ($op eq "additem") {
             }
             $item->more_subfields_xml(undef);
         } else {
-            my $v = $input->param("items.".$c);
-            next unless defined $v;
-            $item->$c($v);
+            my @v = $input->multi_param("items.".$c);
+            next unless @v;
+            $item->$c(join ' | ', uniq @v);
         }
     }
 
@@ -540,44 +458,45 @@ if ($op eq "additem") {
     }
 
     # If we have to add or add & duplicate, we add the item
-    if ( $add_submit || $add_duplicate_submit ) {
+    if ( $add_submit || $prefillitem) {
 
         # check for item barcode # being unique
         if ( Koha::Items->search({ barcode => $item->barcode })->count ) {
             # if barcode exists, don't create, but report The problem.
             push @errors, "barcode_not_unique";
+
+            $current_item = $item->unblessed; # Restore edit form for the same item
         }
         else {
             $item->store->discard_changes;
 
-            # FIXME This need to be rewritten, we must store $item->unblessed instead
-            ## Pushing the last created item cookie back
-            #if ($prefillitem && defined $record) {
-            #    my $itemcookie = $input->cookie(
-            #        -name => 'LastCreatedItem',
-            #        # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
-            #        -value   => encode_base64url( freeze( $record ) ),
-            #        -HttpOnly => 1,
-            #        -expires => ''
-            #    );
+            # This is a bit tricky : if there is a cookie for the last created item and
+            # we just added an item, the cookie value is not correct yet (it will be updated
+            # next page). To prevent the form from being filled with outdated values, we
+            # force the use of "add and duplicate" feature, so the form will be filled with
+            # correct values.
 
-            #    $cookie = [ $cookie, $itemcookie ];
-            #}
+            # FIXME This need to be rewritten, we must store $item->unblessed instead
+            # Pushing the last created item cookie back
+            if ( $prefillitem ) {
+                $item_from_cookie = $input->cookie(
+                    -name => 'LastCreatedItem',
+                    # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
+                    -value   => encode_base64url( freeze( { %{$item->unblessed}, itemnumber => undef } ) ),
+                    -HttpOnly => 1,
+                    -expires => ''
+                );
+
+                $cookie = [ $cookie, $item_from_cookie ];
+            }
 
         }
         $nextop = "additem";
 
-
-        # FIXME reset item to the item we were editing
-        #if ($exist_itemnumber) {
-
-        #    $itemrecord = $record;
-        #}
-        $current_item = $item->unblessed;
     }
 
     # If we have to add & duplicate
-    if ($add_duplicate_submit) {
+    if ($prefillitem) {
         if (C4::Context->preference('autoBarcode') eq 'incremental') {
             my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
             $current_item->{barcode} = $barcode;
@@ -586,13 +505,12 @@ if ($op eq "additem") {
             # we have to clear the barcode field in the duplicate item record to make way for the new one generated by the javascript plugin
             $current_item->{barcode} = undef; # FIXME or delete?
         }
-        # FIXME This subroutine needs to be adjusted
-        # We want to pass $item
-        # $itemrecord = removeFieldsForPrefill($itemrecord) if ($prefillitem);
     }
 
     # If we have to add multiple copies
     if ($add_multiple_copies_submit) {
+
+        $current_item = $item->unblessed;
 
         my $copynumber = $current_item->{copynumber};
         my $oldbarcode = $current_item->{barcode};
@@ -604,7 +522,6 @@ if ($op eq "additem") {
         if ( $oldbarcode && !$testbarcode ) {
 
             push @errors, "no_next_barcode";
-            $itemrecord = $record;
 
         }
         else {
@@ -652,7 +569,9 @@ if ($op eq "additem") {
                 if ( !$exist_itemnumber ) {
                     delete $current_item->{itemnumber};
                     $current_item = Koha::Item->new($current_item)->store(
-                        { skip_record_index => 1 } )->discard_changes->unblessed;
+                        { skip_record_index => 1 } );
+                    $current_item->discard_changes; # Cannot chain discard_changes
+                    $current_item = $current_item->unblessed;
                     set_item_default_location($current_item->{itemnumber});
 
 # We count the item only if it was really added
@@ -692,41 +611,23 @@ if ($op eq "additem") {
 } elsif ($op eq "edititem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-    $itemrecord = C4::Items::GetMarcItem($biblionumber,$itemnumber);
+    $current_item = Koha::Items->find($itemnumber)->unblessed;
+    # FIXME Handle non existent item
     $nextop = "saveitem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "dupeitem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-    $itemrecord = C4::Items::GetMarcItem($biblionumber,$itemnumber);
+    my $item = Koha::Items->find($itemnumber);
+    # FIXME Handle non existent item
     if (C4::Context->preference('autoBarcode') eq 'incremental') {
-        $itemrecord = _increment_barcode($itemrecord, $frameworkcode);
+        my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+        $item->barcode($barcode);
     }
     else {
-        # we have to clear the barcode field in the duplicate item record to make way for the new one generated by the javascript plugin
-        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField( "items.barcode" );
-        my $fieldItem = $itemrecord->field($tagfield);
-        $itemrecord->delete_field($fieldItem);
-        $fieldItem->delete_subfields($tagsubfield);
-        $itemrecord->insert_fields_ordered($fieldItem);
+        $item->barcode(undef); # Don't save it!
     }
 
-    #check for hidden subfield and remove them for the duplicated item
-    foreach my $field ($itemrecord->fields()){
-        my $tag = $field->{_tag};
-        foreach my $subfield ($field->subfields()){
-            my $subfieldtag = $subfield->[0];
-            if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10"
-            ||  abs($tagslib->{$tag}->{$subfieldtag}->{hidden})>4 ){
-                my $fieldItem = $itemrecord->field($tag);
-                $itemrecord->delete_field($fieldItem);
-                $fieldItem->delete_subfields($subfieldtag);
-                $itemrecord->insert_fields_ordered($fieldItem);
-            }
-        }
-    }
-
-    $itemrecord = removeFieldsForPrefill($itemrecord) if ($prefillitem);
     $nextop = "additem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
@@ -795,9 +696,9 @@ if ($op eq "additem") {
             }
             $item->more_subfields_xml(undef);
         } else {
-            my $v = $input->param("items.".$c);
-            next unless defined $v;
-            $item->$c($v);
+            my @v = $input->multi_param("items.".$c);
+            next unless @v;
+            $item->$c(join ' | ', uniq @v);
         }
     }
 
@@ -805,6 +706,7 @@ if ($op eq "additem") {
     if ( Koha::Items->search({ barcode => $item->barcode, itemnumber => { '!=' => $item->itemnumber } })->count ) {
         # FIXME We shouldn't need that, ->store would explode as there is a unique constraint on items.barcode
         push @errors,"barcode_not_unique";
+        $current_item = $item->unblessed; # Restore edit form for the same item
     } else {
         my $newitemlost = $item->itemlost;
         if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
@@ -844,213 +746,142 @@ if ($op) {
 #-------------------------------------------------------------------------------
 
 # now, build existiing item list
-my $temp = GetMarcBiblio({ biblionumber => $biblionumber });
-#my @fields = $record->fields();
 
-
-my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
-my @big_array;
-#---- finds where items.itemnumber is stored
-my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
-my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField( "items.homebranch" );
-C4::Biblio::EmbedItemsInMarcBiblio({
-    marc_record  => $temp,
-    biblionumber => $biblionumber });
-my @fields = $temp->fields();
-
-
-my @hostitemnumbers;
-if ( C4::Context->preference('EasyAnalyticalRecords') ) {
-    my $analyticfield = '773';
-    if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC') {
-        $analyticfield = '773';
-    } elsif ($marcflavour eq 'UNIMARC') {
-        $analyticfield = '461';
-    }
-    foreach my $hostfield ($temp->field($analyticfield)){
-        my $hostbiblionumber = $hostfield->subfield('0');
-        if ($hostbiblionumber){
-            my $hostrecord = GetMarcBiblio({
-                biblionumber => $hostbiblionumber,
-                embed_items  => 1 });
-            if ($hostrecord) {
-                my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber' );
-                foreach my $hostitem ($hostrecord->field($itemfield)){
-                    if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
-                        push (@fields, $hostitem);
-                        push (@hostitemnumbers, $hostfield->subfield('9'));
-                    }
-                }
-            }
-        }
-    }
+my @items;
+for my $item ( $biblio->items->as_list, $biblio->host_items->as_list ) {
+    push @items, $item->columns_to_str;
 }
 
-foreach my $field (@fields) {
-    next if ( $field->tag() < 10 );
+my @witness_attributes = uniq map {
+    my $item = $_;
+    map { defined $item->{$_} && $item->{$_} ne "" ? $_ : () } keys %$item
+} @items;
 
-    my @subf = $field->subfields or ();    # don't use ||, as that forces $field->subfelds to be interpreted in scalar context
-    my %this_row;
-    # loop through each subfield
-    my $i = 0;
-    foreach my $subfield (@subf){
-        my $subfieldcode = $subfield->[0];
-        my $subfieldvalue= $subfield->[1];
+our ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField("items.itemnumber");
 
-        next if ($tagslib->{$field->tag()}->{$subfieldcode}->{tab} ne 10 
-                && ($field->tag() ne $itemtagfield 
-                && $subfieldcode   ne $itemtagsubfield));
-        $witness{$subfieldcode} = $tagslib->{$field->tag()}->{$subfieldcode}->{lib} if ($tagslib->{$field->tag()}->{$subfieldcode}->{tab}  eq 10);
-		if ($tagslib->{$field->tag()}->{$subfieldcode}->{tab}  eq 10) {
-		    $this_row{$subfieldcode} .= " | " if($this_row{$subfieldcode});
-        	$this_row{$subfieldcode} .= GetAuthorisedValueDesc( $field->tag(),
-                        $subfieldcode, $subfieldvalue, '', $tagslib) 
-						|| $subfieldvalue;
-        }
+my $subfieldcode_attribute_mappings;
+for my $subfield_code ( keys %{ $tagslib->{$itemtagfield} } ) {
 
-        if (($field->tag eq $branchtagfield) && ($subfieldcode eq $branchtagsubfield) && C4::Context->preference("IndependentBranches")) {
-            #verifying rights
-            my $userenv = C4::Context->userenv();
-            unless (C4::Context->IsSuperLibrarian() or (($userenv->{'branch'} eq $subfieldvalue))){
-                $this_row{'nomod'} = 1;
-            }
-        }
-        $this_row{itemnumber} = $subfieldvalue if ($field->tag() eq $itemtagfield && $subfieldcode eq $itemtagsubfield);
+    my $subfield = $tagslib->{$itemtagfield}->{$subfield_code};
 
-        if ( C4::Context->preference('EasyAnalyticalRecords') ) {
-            foreach my $hostitemnumber (@hostitemnumbers) {
-                my $item = Koha::Items->find( $hostitemnumber );
-                if ($this_row{itemnumber} eq $hostitemnumber) {
-                    $this_row{hostitemflag} = 1;
-                    $this_row{hostbiblionumber}= $item->biblio->biblionumber;
-                    last;
-                }
-            }
-        }
+    next if IsMarcStructureInternal( $subfield );
+    next unless $subfield->{tab} eq 10; # Is this really needed?
+
+    my $attribute;
+    if ( $subfield->{kohafield} ) {
+        ( $attribute = $subfield->{kohafield} ) =~ s|^items\.||;
+    } else {
+        $attribute = $subfield_code; # It's in more_subfields_xml
     }
-    if (%this_row) {
-        push(@big_array, \%this_row);
-    }
+    next unless grep { $attribute eq $_ } @witness_attributes;
+    $subfieldcode_attribute_mappings->{$subfield_code} = $attribute;
 }
 
-my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField( "items.holdingbranch" );
-@big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
-
-# now, construct template !
-# First, the existing items for display
-my @item_value_loop;
-my @header_value_loop;
-for my $row ( @big_array ) {
-    my %row_data;
-    my @item_fields;
-    foreach my $key (sort keys %witness){
-        my $item_field;
-        if ( $row->{$key} ){
-            $item_field->{field} = $row->{$key};
-        } else {
-            $item_field->{field} = '';
-        }
-
-        for my $kohafield (
-            qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate )
-          )
-        {
-            my ( undef, $subfield ) = GetMarcFromKohaField($kohafield);
-            next unless $key eq $subfield;
-            $item_field->{datatype} = 'date';
-        }
-
-        push @item_fields, $item_field;
+my @header_value_loop = map {
+    {
+        header_value  => $tagslib->{$itemtagfield}->{$_}->{lib},
+        attribute     => $subfieldcode_attribute_mappings->{$_},
+        subfield_code => $_,
     }
-    $row_data{item_value} = [ @item_fields ];
-    $row_data{itemnumber} = $row->{itemnumber};
-    #reporting this_row values
-    $row_data{'nomod'} = $row->{'nomod'};
-    $row_data{'hostitemflag'} = $row->{'hostitemflag'};
-    $row_data{'hostbiblionumber'} = $row->{'hostbiblionumber'};
-#	$row_data{'countanalytics'} = $row->{'countanalytics'};
-    push(@item_value_loop,\%row_data);
-}
-foreach my $subfield_code (sort keys(%witness)) {
-    my %header_value;
-    $header_value{header_value} = $witness{$subfield_code};
-
-    my $subfieldlib = $tagslib->{$itemtagfield}->{$subfield_code};
-    my $kohafield = $subfieldlib->{kohafield};
-    if ( $kohafield && $kohafield =~ /items.(.+)/ ) {
-        $header_value{column_name} = $1;
-    }
-
-    push(@header_value_loop, \%header_value);
-}
+} sort keys %$subfieldcode_attribute_mappings;
 
 # now, build the item form for entering a new item
-my @loop_data =();
-my $i=0;
-
 my $branch = $input->param('branch') || C4::Context->userenv->{branch};
 my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
 for my $library ( @$libraries ) {
     $library->{selected} = 1 if $library->{branchcode} eq $branch
 }
 
-my $item = Koha::Items->find($itemnumber);
-
-# We generate form, from actuel record
-@fields = ();
-if($itemrecord){
-    foreach my $field ($itemrecord->fields()){
-        my $tag = $field->{_tag};
-        foreach my $subfield ( $field->subfields() ){
-
-            my $subfieldtag = $subfield->[0];
-            my $value       = $subfield->[1];
-            my $subfieldlib = $tagslib->{$tag}->{$subfieldtag};
-
-            next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
-
-            my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition, $item);
-            push @fields, "$tag$subfieldtag";
-            push (@loop_data, $subfield_data);
-            $i++;
-                    }
-
-                }
-            }
-    # and now we add fields that are empty
 
 # Using last created item if it exists
+$current_item = $item_from_cookie
+  if $item_from_cookie
+  && $prefillitem
+  && $op ne "additem"
+  && $op ne "edititem";
 
-$itemrecord = $cookieitemrecord if ($prefillitem and not $justaddeditem and $op ne "edititem");
+my @subfields_to_prefill = split ' ', C4::Context->preference('SubfieldsToUseWhenPrefill');
+
+if ( $current_item->{more_subfields_xml} ) {
+    $current_item->{marc_more_subfields_xml} = MARC::Record->new_from_xml($current_item->{more_subfields_xml}, 'UTF-8');
+}
 
 # We generate form, and fill with values if defined
-foreach my $tag ( keys %{$tagslib}){
-    foreach my $subtag (keys %{$tagslib->{$tag}}){
-        next if IsMarcStructureInternal($tagslib->{$tag}{$subtag});
-        next if ($tagslib->{$tag}->{$subtag}->{'tab'} ne "10");
-        next if any { /^$tag$subtag$/ }  @fields;
+my $temp = GetMarcBiblio({ biblionumber => $biblionumber });
+my $i = 0;
+my @subfields;
+foreach my $tag ( keys %{$tagslib} ) {
+    foreach my $subtag ( keys %{ $tagslib->{$tag} } ) {
 
-        my @values = (undef);
-        @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)) && defined($itemrecord->field($tag)->subfield($subtag)));
-        for my $value (@values){
-            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $libraries, $biblionumber, $temp, \@loop_data, $i, $restrictededition, $item);
-            push (@loop_data, $subfield_data);
+        my $subfield = $tagslib->{$tag}{$subtag};
+
+        next if IsMarcStructureInternal( $subfield );
+        next if ( $subfield->{tab} ne "10" );
+
+        my @values = ();
+
+        my $subfield_data;
+
+        # If we are not adding a new item
+        # OR
+        # If the subfield must be prefilled with last catalogued item
+        if (
+            $nextop ne 'additem'
+            || (
+                !$prefillitem
+                || ( $prefillitem && grep { $_ eq $subtag }
+                    @subfields_to_prefill )
+            )
+          )
+        {
+            my $kohafield = $subfield->{kohafield};
+            if ($kohafield) {
+
+                # This is a mapped field
+                ( my $attribute = $kohafield ) =~ s|^items\.||;
+                push @values, $subfield->{repeatable}
+                    ? split '\s\|\s', $current_item->{$attribute}
+                    : $current_item->{$attribute}
+                  if defined $current_item->{$attribute};
+            } else {
+                # Not mapped, picked the values from more_subfields_xml's MARC
+                my $marc_more = $current_item->{marc_more_subfields_xml};
+                if ( $marc_more ) {
+                    for my $f ( $marc_more->fields($tag) ) {
+                        push @values, $f->subfield($subtag);
+                    }
+                }
+            }
+        }
+
+        @values = ('') unless @values;
+
+        for my $value (@values) {
+            my $subfield_data = generate_subfield_form(
+                $tag,                        $subtag,
+                $value,                      $tagslib,
+                $subfield,                   $libraries,
+                $biblionumber,               $temp,
+                \@subfields,                 $i,
+                $restrictededition,          $current_item,
+            );
+            push @subfields, $subfield_data;
             $i++;
         }
-  }
+    }
 }
-@loop_data = sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} } @loop_data;
+@subfields = sort { $a->{display_order} <=> $b->{display_order} || $a->{subfield} cmp $b->{subfield} } @subfields;
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
     biblionumber => $biblionumber,
     title        => $oldrecord->{title},
     author       => $oldrecord->{author},
-    item_loop        => \@item_value_loop,
+    items        => \@items,
     item_header_loop => \@header_value_loop,
-    item             => \@loop_data,
+    subfields    => \@subfields,
     itemnumber       => $itemnumber,
-    barcode          => $item ? $item->barcode : undef,
+    barcode          => $current_item->{barcode},
     itemtagfield     => $itemtagfield,
     itemtagsubfield  => $itemtagsubfield,
     op      => $nextop,

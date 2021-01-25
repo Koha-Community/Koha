@@ -421,6 +421,29 @@ sub items {
     return Koha::Items->_new_from_dbic( $items_rs );
 }
 
+sub host_items {
+    my ($self) = @_;
+
+    return Koha::Items->new->empty
+      unless C4::Context->preference('EasyAnalyticalRecords');
+
+    my $marcflavour = C4::Context->preference("marcflavour");
+    my $analyticfield = '773';
+    if ( $marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC' ) {
+        $analyticfield = '773';
+    }
+    elsif ( $marcflavour eq 'UNIMARC' ) {
+        $analyticfield = '461';
+    }
+    my $marc_record = $self->metadata->record;
+    my @itemnumbers;
+    foreach my $field ( $marc_record->field($analyticfield) ) {
+        push @itemnumbers, $field->subfield('9');
+    }
+
+    return Koha::Items->search( { itemnumber => { -in => \@itemnumbers } } );
+}
+
 =head3 itemtype
 
 my $itemtype = $biblio->itemtype();

@@ -23,7 +23,7 @@ use List::MoreUtils qw( any );
 use Data::Dumper qw( Dumper );
 
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use C4::Context;
 use C4::Circulation qw( GetBranchItemRule );
@@ -938,6 +938,77 @@ sub cover_images {
     my $cover_image_rs = $self->_result->cover_images;
     return unless $cover_image_rs;
     return Koha::CoverImages->_new_from_dbic($cover_image_rs);
+}
+
+sub columns_to_str {
+    my ( $self ) = @_;
+
+    my $frameworkcode = $self->biblio->frameworkcode;
+    my $tagslib = C4::Biblio::GetMarcStructure(1, $frameworkcode);
+    my ( $itemtagfield, $itemtagsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
+
+    my $columns_info = $self->_result->result_source->columns_info;
+
+    my $mss = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode, { unsafe => 1 } );
+    my $values = {};
+    for my $column ( keys %$columns_info ) {
+
+        next if $column eq 'more_subfields_xml';
+
+        my $value;
+        if ( Koha::Object::_datetime_column_type( $columns_info->{$column}->{data_type} ) ) {
+            $value = output_pref({ dateformat => 'rfc3339', dt => dt_from_string($value, 'sql')});
+        } else {
+            $value = $self->$column;
+        }
+
+        if ( not defined $value or $value eq "" ) {
+            $values->{$column} = $value;
+            next;
+        }
+
+        my $subfield =
+          exists $mss->{"items.$column"}
+          ? @{ $mss->{"items.$column"} }[0] # Should we deal with several subfields??
+          : undef;
+
+        $values->{$column} =
+            $subfield
+          ? $subfield->{authorised_value}
+              ? C4::Biblio::GetAuthorisedValueDesc( $itemtagfield,
+                  $subfield->{tagsubfield}, $value, '', $tagslib )
+              : $value
+          : $value;
+    }
+
+    my $marc_more=
+      $self->more_subfields_xml
+      ? MARC::Record->new_from_xml( $self->more_subfields_xml, 'UTF-8' )
+      : undef;
+
+    my $more_values;
+    if ( $marc_more ) {
+        my ( $field ) = $marc_more->fields;
+        for my $sf ( $field->subfields ) {
+            my $subfield_code = $sf->[0];
+            my $value = $sf->[1];
+            my $subfield = $tagslib->{$itemtagfield}->{$subfield_code};
+            next unless $subfield; # We have the value but it's not mapped, data lose! No regression however.
+            $value =
+              $subfield->{authorised_value}
+              ? C4::Biblio::GetAuthorisedValueDesc( $itemtagfield,
+                $subfield->{tagsubfield}, $value, '', $tagslib )
+              : $value;
+
+            push @{$more_values->{$subfield_code}}, $value;
+        }
+
+        while ( my ( $k, $v ) = each %$more_values ) {
+            $values->{$k} = join ' | ', @$v;
+        }
+    }
+
+    return $values;
 }
 
 =head3 _set_found_trigger

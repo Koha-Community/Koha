@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -63,7 +64,7 @@
 [% IF last_item_for_hold %]<div class="dialog alert"><strong>Cannot delete</strong>: Last item for bibliographic record with biblio-level hold on it.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
-    [% IF ( item_loop ) %]
+    [% IF items %]
         [% SET date_fields = [ 'dateaccessioned', 'onloan', 'datelastseen', 'datelastborrowed', 'replacementpricedate' ] %]
         <div>
         <table id="itemst">
@@ -82,54 +83,52 @@
             </tr>
           </thead>
           <tbody>
-                [% FOREACH item_loo IN item_loop %]
-                    [% IF ( item_loo.itemnumber == itemnumber) %]
-                        [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber | html %]" class="active">
+                [% FOREACH item IN items %]
+                    [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchcode() ) %]
+                    [% IF item.itemnumber == itemnumber%]
+                        [% UNLESS can_be_edited %]
+                           <tr id="row[% item.itemnumber | html %]" class="active">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber | html %]" class="active editable">
+                            <tr id="row[% item.itemnumber | html %]" class="active editable">
                         [% END %]
                     [% ELSE %]
-                        [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber | html %]">
+                        [% UNLESS can_be_edited %]
+                           <tr id="row[% item.itemnumber | html %]">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber | html %]" class="editable">
+                            <tr id="row[% item.itemnumber | html %]" class="editable">
                         [% END %]
                     [% END %]
-                    [% IF ( item_loo.nomod ) %]
+                    [% UNLESS can_be_edited %]
                       <td>&nbsp;</td>
                     [% ELSE %]
                       <td>
                           <div class="btn-group dropup">
-                          <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item_loo.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
+                          <a class="btn btn-default btn-xs dropdown-toggle" id="itemactions[% item.itemnumber | html %]" role="button" data-toggle="dropdown" href="#">
                               Actions <b class="caret"></b>
                           </a>
-                          <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item_loo.itemnumber | html %]">
+                          <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item.itemnumber | html %]">
 
-                        [% IF ( item_loo.hostitemflag ) %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber | html %]&amp;hostitemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
+                        [% IF item.biblionumber != biblionumber %] [%# Host item %]
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
                         [% ELSE %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
-                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
-                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber | uri %]" target="_blank" >Print label</a></li>
-                          [% IF ( item_loo.countanalytics ) %]
-                              <li><a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a></li>
-                          [% ELSE %]
-                              <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
-                          [% END %]
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
+                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
+                              <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
                         [% END %]
                             [% IF ( OPACBaseURL ) %]
-                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">OPAC view</a></li>
+                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
                             [% END %]
                           </ul>
                           </div>
                       </td>
                     [% END %]
-                [% FOREACH item_valu IN item_loo.item_value %]
-                    [% IF item_valu.datatype == 'date' %]
-                        <td data-order="[% item_valu.field | html %]">[% item_valu.field | $KohaDates %]</td>
+                [% FOREACH header IN item_header_loop %]
+                    [% SET attribute = header.attribute %]
+                    [% IF header.attribute AND date_fields.grep(attribute).size %]
+                        <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
                     [% ELSE %]
-                        <td>[% item_valu.field | html %]</td>
+                        <td>[% item.$attribute | html %]</td>
                     [% END %]
                 [% END %]
                 </tr>
@@ -159,35 +158,35 @@
     [% END %]
 	<fieldset class="rows">
 	<ol>
-        [% FOREACH ite IN item %]
+        [% FOREACH subfield IN subfields %]
 
-                [% IF ite.kohafield == 'items.more_subfields_xml' %]
-                    [% SET kohafield = 'items.more_subfields_xml_' _ ite.subfield %]
+                [% IF subfield.kohafield == 'items.more_subfields_xml' %]
+                    [% SET kohafield = 'items.more_subfields_xml_' _ subfield.subfield %]
                 [% ELSE %]
-                    [% SET kohafield = ite.kohafield %]
+                    [% SET kohafield = subfield.kohafield %]
                 [% END %]
 
-               <li><div class="subfield_line" style="[% ite.visibility | html %]" id="subfield[% ite.tag | html %][% ite.subfield | html %][% ite.random | html %]">
-                [% IF ( ite.mandatory ) %]
-               <label class="required">[% ite.subfield | html %] - [% ite.marc_lib | $raw %]</label>
+               <li><div class="subfield_line" style="[% subfield.visibility | html %]" id="subfield[% subfield.tag | html %][% subfield.subfield | html %][% subfield.random | html %]">
+                [% IF ( subfield.mandatory ) %]
+               <label class="required">[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
                [% ELSE %]
-               <label>[% ite.subfield | html %] - [% ite.marc_lib | $raw %]</label>
+               <label>[% subfield.subfield | html %] - [% subfield.marc_lib | $raw %]</label>
                [% END %]
 
-                [% SET mv = ite.marc_value %]
+                [% SET mv = subfield.marc_value %]
                 [% IF ( mv.type == 'hidden' ) %]
-                    <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
+                    <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                 [% ELSIF ( mv.type == 'select' ) %]
-                    [% IF ( mv.readonly || ite.IS_RETURN_CLAIM ) %]
-                        <select name="[% kohafield %]" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled" data-width="50%">
+                    [% IF ( mv.readonly || subfield.IS_RETURN_CLAIM ) %]
+                        <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor" readonly="readonly" disabled="disabled" data-width="50%">
                     [% ELSE %]
-                        <select name="[% kohafield %]" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]" data-width="50%">
+                        <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor" data-category="[% mv.category | html %]" data-width="50%">
                     [% END %]
                     [% FOREACH aval IN mv.values %]
                         [% IF aval == mv.default %]
                         <option value="[%- aval | html -%]" selected="selected">[%- mv.labels.$aval | html -%]</option>
                         [% ELSE %]
-                            [% IF ite.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
+                            [% IF subfield.IS_LOST_AV && Koha.Preference("ClaimReturnedLostValue") && aval == Koha.Preference("ClaimReturnedLostValue") %]
                                 <option disabled="disabled" value="[%- aval | html -%]" title="Return claims must be processed from the patron details page">[%- mv.labels.$aval | html -%]</option>
                             [%  ELSE %]
                                 <option value="[%- aval | html -%]">[%- mv.labels.$aval | html -%]</option>
@@ -197,17 +196,17 @@
                     </select>
                 [% ELSIF ( mv.type == 'text_auth' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% SET dopop = "Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=\"${mv.authtypecode}\"&index=${mv.id}','${mv.id}')" %]
                         <a href="#" class="buttonDot"  onclick="[%- dopop | html -%]; return false;" title="Tag editor">...</a>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_plugin' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                         [% IF ( mv.nopopup ) %]
                             <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="No popup">...</a>
                         [% ELSE  %]
@@ -217,32 +216,32 @@
                     [% END %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     [% IF mv.readonly %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" readonly="readonly" />
                     [% ELSE %]
-                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                        <input type="text" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                     [% END %]
                 [% ELSIF ( mv.type == 'textarea' ) %]
                     [% IF mv.readonly %]
-                        <textarea id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" rows="5" cols="64" readonly="readonly" >[% mv.value | html %]</textarea>
                     [% ELSE %]
-                        <textarea id="[%- mv.id | html -%]" name="[% kohafield %]" class="input_marceditor" rows="5" cols="64" >[% mv.value | html %]</textarea>
+                        <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor" rows="5" cols="64" >[% mv.value | html %]</textarea>
                     [% END %]
                 [% END %]
 
-                [% IF ite.kohafield == 'items.more_subfields_xml' %]
-                    <input type="hidden" name="items.more_subfields_xml" value="[% ite.subfield %]" />
+                [% IF subfield.kohafield == 'items.more_subfields_xml' %]
+                    <input type="hidden" name="items.more_subfields_xml" value="[% subfield.subfield | html %]" />
                 [% END %]
-                <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
-                <input type="hidden" name="subfield"  value="[% ite.subfield | html %]" />
-                <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
-                <input type="hidden" name="important" value="[% ite.important | html %]" />
-                [% IF ( ite.repeatable ) %]
+                <input type="hidden" name="tag"       value="[% subfield.tag | html %]" />
+                <input type="hidden" name="subfield"  value="[% subfield.subfield | html %]" />
+                <input type="hidden" name="mandatory" value="[% subfield.mandatory | html %]" />
+                <input type="hidden" name="important" value="[% subfield.important | html %]" />
+                [% IF ( subfield.repeatable ) %]
                     <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
                         <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
-                [% IF ( ite.mandatory ) %] <span class="required">Required</span>
-                [% ELSIF ( ite.important ) %] <span class="important">Important</span>
+                [% IF ( subfield.mandatory ) %] <span class="required">Required</span>
+                [% ELSIF ( subfield.important ) %] <span class="important">Important</span>
                 [% END %]
             </div></li>
         [% END %]
