@@ -42,7 +42,7 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
 
 my $schema = Koha::Database->new()->schema();
 
-my $barcode        = $cgi->param('barcode');
+my $barcode        = $cgi->param('barcode') // '';
 my $unseen         = $cgi->param('unseen') || 0;
 $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespae
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
