@@ -77,7 +77,7 @@ get '/biblios' => sub {
 
 
 # The tests
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Mojo;
 
 use t::lib::Mocks;
