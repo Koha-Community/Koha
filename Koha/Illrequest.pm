@@ -530,11 +530,11 @@ sub _core_status_graph {
             name           => 'Requested from partners',
             ui_method_name => 'Place request with partners',
             method         => 'generic_confirm',
-            next_actions   => [ 'COMP', 'CHK' ],
+            next_actions   => [ 'COMP', 'CHK', 'REQREV' ],
             ui_method_icon => 'fa-send-o',
         },
         REQREV => {
-            prev_actions   => [ 'REQ' ],
+            prev_actions   => [ 'REQ', 'GENREQ' ],
             id             => 'REQREV',
             name           => 'Request reverted',
             ui_method_name => 'Revert Request',
