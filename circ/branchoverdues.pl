@@ -69,7 +69,7 @@ my ($tag,$subfield) = GetMarcFromKohaField( 'items.location' );
 my $tagslib = &GetMarcStructure(1,'');
 if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
     my $values= GetAuthorisedValues($tagslib->{$tag}->{$subfield}->{authorised_value});
-    for (@$values) { $_->{selected} = 1 if $location eq $_->{authorised_value} }
+    for (@$values) { $_->{selected} = 1 if defined $location && $location eq $_->{authorised_value} }
     $template->param(locationsloop => $values);
 }
 # now display infos
