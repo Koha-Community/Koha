@@ -278,13 +278,19 @@
                                   <li>
                                       <label for="budget_id_new">Fund: </label>
                                       <select id="budget_id_new" name="budget_id">
-                                          <option selected="selected" value="">No fund</option>
+                                          <option value="">No fund</option>
                                           [% FOREACH budget IN budgets %]
-                                              <option value="[% budget.b_id | html %]">
-                                              [% budget.b_txt | html %]
-                                              </option>
+                                              [% IF ( budget.selected ) %]
+                                                  <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
+                                              [% ELSIF ( budget.b_active ) %]
+                                                  <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
+                                              [% ELSE %]
+                                                  <option value="[% budget.b_id | html %]" class="ab_inactive">[% budget.b_txt | html %] (inactive)</option>
+                                              [% END %]
                                           [% END %]
                                       </select>
+                                      <label for="showallfunds_adj" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+                                      <input type="checkbox" id="showallfunds_adj" />
                                   </li>
                                   <li>
                                       <label for="encumber_new">Encumber while invoice open? </label>
@@ -514,6 +520,18 @@
                 }
                 else {
                     $('.b_inactive').remove();
+                }
+            });
+            // same effort for the adjustments
+            var adjBudgetId = $("#budget_id_new");
+            var disabledAdjBudgetsCopy = adjBudgetId.html();
+            $('.ab_inactive').remove();
+            $('#showallfunds_adj').click(function() {
+                if ($(this).is(":checked")) {
+                    adjBudgetId.html(disabledAdjBudgetsCopy); //Puts back all the funds
+                }
+                else {
+                    $('.ab_inactive').remove();
                 }
             });
         });
