@@ -2424,3 +2424,6 @@ tables:
           flags: ~
           sort1: 0.91641750830823
           sort2: 0.27291712562825
+
+sql_statements:
+  - "UPDATE borrowers SET dateofbirth=DATE_SUB(CAST(NOW() AS DATE), INTERVAL 15 YEAR) WHERE categorycode IN ('B', 'J', 'K', 'YA');"
