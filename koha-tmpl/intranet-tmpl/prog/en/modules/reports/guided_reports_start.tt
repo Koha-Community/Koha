@@ -329,7 +329,12 @@
                                                                class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
                                                                href="#"><b class="caret"></b></a>
                                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                                                                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
+                                                                <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> View</a></li>
+                                                                <li>
+                                                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&phase=Show%20SQL" class="preview_sql" data-reportid="[% savedreport.id | html %]">
+                                                                        <i class="fa fa-eye"></i> Preview SQL
+                                                                    </a>
+                                                                </li>
                                                                 [% IF ( CAN_user_reports_create_reports ) %]
                                                                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
                                                                     <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=[% savedreport.id | uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
@@ -343,6 +348,7 @@
                                                                 [% END %]
                                                             </ul>
                                                         </div>
+                                                        <input type="hidden" id="previewSql[% savedreport.id | html %]" value="[% savedreport.savedsql | html %]" data-title="[% savedreport.report_name | html %]" />
                                                     </td>
                                                 </tr>
                                             [% END %]
@@ -1800,6 +1806,12 @@
                 e.preventDefault();
                 addToList();
             });
+
+            $("body").on("click", ".preview_sql", function(e){
+                e.preventDefault();
+                var reportid = $(this).data("reportid");
+                previewSql( reportid );
+            });
         });
 
         function tabsInit( ui, rtable ){
@@ -1926,6 +1938,46 @@
             var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
             window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
             return false;
+        }
+
+        // Adapted from https://gist.github.com/jnormore/7418776
+        function previewSql(reportid) {
+            var yes_label = "";
+            var no_label = "";
+            var message = $("#previewSql" + reportid ).val();
+            var title = $("#previewSql" + reportid ).data("title");
+            if( $("#preview-sql-modal").length > 0) {
+                $("#preview-sql-modal").remove();
+            }
+            $("body").append('<div id="preview-sql-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal">\
+                <div class="modal-dialog">\
+                    <div class="modal-content">\
+                        <div class="modal-header" style="min-height:40px;">\
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">\
+                                <span aria-hidden="true">×</span>\
+                            </button>\
+                            <h4 class="modal-title">' + title + '</h4>\
+                        </div>\
+                        <div class="modal-body"><textarea id="code' + reportid + '">' + message + '</textarea>\
+                        <div class="modal-footer">\
+                            <a id="preview-modal-editreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from existing&amp;report_id=' + reportid + '"><i class="fa fa-copy"></i> Duplicate</a>\
+                            <a id="preview-modal-duplicate" class="btn btn-default" href="/cgi-bin/koha/tools/scheduler.pl?id=' + reportid + '"><i class="fa fa-clock-o"></i> Schedule</a>\
+                            <a id="preview-modal-delete" class="delete btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a>\
+                            <a id="preview-modal-runreport" class="btn btn-default" href="/cgi-bin/koha/reports/guided_reports.pl?reports=' + reportid + '&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> Run report</a>\
+                            <a href="#" id="preview-sql-modal-cancel" data-dismiss="modal" class="btn btn-default"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>');
+
+            $("#preview-sql-modal").modal('show');
+            CodeMirror.fromTextArea( document.getElementById("code" + reportid ), {
+                lineNumbers: false,
+                mode: "text/x-sql",
+                lineWrapping: true,
+                readOnly: true
+            });
         }
     </script>
 [% END %]
