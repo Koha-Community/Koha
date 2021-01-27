@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 
 use C4::Context;
@@ -72,6 +72,23 @@ subtest 'OPAC - borrowernumber, branchcode and categorycode as html attributes' 
     );
     push @cleanup, $patron, $patron->category, $patron->library;
 };
+
+subtest 'OPAC - Bibliographic record detail page must contain the data-biblionumber' => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $biblio = Koha::Biblios->find($biblionumber);
+
+    $driver->get( $opac_base_url . "opac-detail.pl?biblionumber=$biblionumber" );
+
+    my $elt = $driver->find_element('//div[@id="catalogue_detail_biblio"]');
+    is( $elt->get_attribute( 'data-biblionumber', 1 ),
+        $biblionumber, "#catalogue_detail_biblio contains data-biblionumber" );
+
+    push @cleanup, $biblio;
+  };
 
 subtest 'OPAC - Remove from cart' => sub {
     plan tests => 4;
