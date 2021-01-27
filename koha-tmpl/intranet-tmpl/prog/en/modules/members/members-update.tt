@@ -191,7 +191,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(function() {
             $( "#pending_updates" ).accordion();
         });

@@ -299,7 +299,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/pages/batchMod.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         // Prepare array of all column headers, incrementing each index by
         // two to accommodate control and title columns
         var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count | html %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);

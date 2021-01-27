@@ -51,7 +51,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
 
         $(document).ready(function() {
             $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -65,7 +65,7 @@
         });
     </script>
     [% IF ( SUCCESS ) %]
-        <script type="text/javascript">
+        <script>
             self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]';
             window.close();
         </script>

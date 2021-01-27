@@ -64,7 +64,7 @@
 [% END %]
 
 [% IF CAN_user_clubs_enroll %]
-<script type="text/javascript">
+<script>
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
     $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-enroll.pl?borrowernumber=[% borrowernumber | html %]&id=' + id, function() {
