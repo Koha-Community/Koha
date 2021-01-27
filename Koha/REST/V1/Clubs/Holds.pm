@@ -132,7 +132,7 @@ sub add {
         if ( blessed $_ ) {
             if ($_->isa('Koha::Exceptions::ClubHold::NoPatrons')) {
                 return $c->render(
-                    status  => 403,
+                    status  => 409,
                     openapi => { error => $_->description }
                 );
             }
