@@ -290,7 +290,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript">
+    <script>
         function checkForm() {
             if ( $('#uploadbarcodes').val() && $('#barcodelist').val() ) {
                 alert(_("You have uploaded a barcode file and scanned barcodes at the same time. Please choose one of the two options."));
