@@ -8305,7 +8305,7 @@ if ( CheckVersion($DBversion) ) {
     } );
 
     $dbh->do( q{
-        ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type);
+        ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
     } );
 
     $dbh->do( q{
@@ -23173,6 +23173,16 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '20.06.00.058';
 if( CheckVersion( $DBversion ) ) {
+
+    # Adding the ON DELETE CASCASE ON UPDATE CASCADE, in case it's missing (from 9016 - 3.15.00.039)
+    $dbh->do( q{
+        ALTER TABLE letter DROP FOREIGN KEY message_transport_type_fk
+    } );
+
+    $dbh->do( q{
+        ALTER TABLE letter ADD CONSTRAINT message_transport_type_fk FOREIGN KEY (message_transport_type) REFERENCES message_transport_types(message_transport_type) ON DELETE CASCADE ON UPDATE CASCADE
+    } );
+
     $dbh->do(q{
         UPDATE message_transport_types SET message_transport_type = "itiva" WHERE message_transport_type = "phone"
     });
