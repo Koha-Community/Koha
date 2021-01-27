@@ -129,6 +129,9 @@ sub dt_from_string {
         /xms;
 
         # Default to UTC (when 'Z' is passed) for inbound timezone.
+        # The regex above succeeds for both 'z', 'Z' and '+/-' offset.
+        # We set tz as though Z was passed by default and then correct it later if an offset is detected
+        # by the presence fo the <offset> variable.
         $tz = DateTime::TimeZone->new( name => 'UTC' );
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
