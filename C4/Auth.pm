@@ -442,11 +442,21 @@ sub get_template_and_user {
 
     # Sysprefs disabled via URL param
     # Note that value must be defined in order to override via ENV
-    foreach my $syspref ( qw( OPACUserCSS OPACUserJS IntranetUserCSS IntranetUserJS ) ) {
-        $ENV{"OVERRIDE_SYSPREF_$syspref"} = q{ } if $in->{'query'}->param("DISABLE_SYSPREF_$syspref");
-    }
-    foreach my $syspref ( qw( OpacAdditionalStylesheet opaclayoutstylesheet intranetcolorstylesheet intranetstylesheet ) ) {
-        $ENV{"OVERRIDE_SYSPREF_$syspref"} = 0 if $in->{'query'}->param("DISABLE_SYSPREF_$syspref");
+    foreach my $syspref (
+        qw(
+            OPACUserCSS
+            OPACUserJS
+            IntranetUserCSS
+            IntranetUserJS
+            OpacAdditionalStylesheet
+            opaclayoutstylesheet
+            intranetcolorstylesheet
+            intranetstylesheet
+        )
+      )
+    {
+        $ENV{"OVERRIDE_SYSPREF_$syspref"} = q{}
+          if $in->{'query'}->param("DISABLE_SYSPREF_$syspref");
     }
 
     # Anonymous opac search history
