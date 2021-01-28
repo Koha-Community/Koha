@@ -127,8 +127,9 @@ sub list {
             # Instead we need a better and global solution in a Koha::*Biblio method
             for my $q ( qw( q query x-koha-query ) ) {
                 next unless $reserved_params->{$q};
-                $reserved_params->{$q} =~ s|"biblio.isbn":|"biblio.biblioitem.isbn":|g;
-                $reserved_params->{$q} =~ s|"biblio.ean":|"biblio.biblioitem.ean":|g;
+                for my $f ( qw( isbn ean publisher ) ) {
+                    $reserved_params->{$q} =~ s|"biblio.$f":|"biblio.biblioitem.$f":|g;
+                }
                 push @query_params_array, $reserved_params->{$q};
             }
 
