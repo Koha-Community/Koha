@@ -295,7 +295,7 @@ if ($op eq "show"){
     my $max_display_items = $del
         ? C4::Context->preference("MaxItemsToDisplayForBatchDel")
         : C4::Context->preference("MaxItemsToDisplayForBatchMod");
-    $template->param("too_many_items_process" => scalar(@itemnumbers)) if !$del && scalar(@itemnumbers) >= C4::Context->preference("MaxItemsToProcessForBatchMod");
+    $template->param("too_many_items_process" => scalar(@itemnumbers)) if !$del && scalar(@itemnumbers) > C4::Context->preference("MaxItemsToProcessForBatchMod");
     if (scalar(@itemnumbers) <= ( $max_display_items // 1000 ) ) {
         $items_display_hashref=BuildItemsData(@itemnumbers);
     } else {
