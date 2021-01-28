@@ -85,7 +85,7 @@
                                             [% END %]
                                             [% IF ( SMSSendDriver ) %]
                                                 [% IF ( messaging_preference.transport_sms ) %]
-                                                    <td class="select selectcol">
+                                                    <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_sms ) %]
                                                         <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                         [% ELSE %]
@@ -98,7 +98,7 @@
                                             [% END %]
                                             [% IF Koha.Preference('PhoneNotification') %]
                                                 [% IF ( messaging_preference.transport_phone ) %]
-                                                    <td class="select selectcol">
+                                                    <td class="selectcol">
                                                         [% IF ( messaging_preference.transports_phone ) %]
                                                             <input type="checkbox"
                                                                    id="phone[% messaging_preference.message_attribute_id | html %]"
@@ -117,7 +117,7 @@
                                             [% END %]
                                             [% IF ( TalkingTechItivaPhone ) %]
                                                 [% IF ( messaging_preference.transport_itiva ) %]
-                                                <td class="select selectcol">
+                                                <td class="selectcol">
                                                 [% IF ( messaging_preference.transports_itiva ) %]
                                                 <input type="checkbox"
                                                             id="itiva[% messaging_preference.message_attribute_id | html %]"
@@ -136,7 +136,7 @@
                                             [% END %]
 
                                             [% IF ( messaging_preference.transport_email ) %]
-                                                <td class="select selectcol">
+                                                <td class="selectcol">
                                                     [% IF ( messaging_preference.transports_email ) %]
                                                         <input type="checkbox" id="email[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="email" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]
@@ -148,7 +148,7 @@
                                             [% END %]
 
                                             [% IF ( messaging_preference.has_digest ) %]
-                                                <td class="select selectcol">
+                                                <td class="selectcol">
                                                     [% IF ( messaging_preference.digest ) %]
                                                         <input type="checkbox" id="digest[% messaging_preference.message_attribute_id | html %]" value="[% messaging_preference.message_attribute_id | html %]" name="digest" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
                                                     [% ELSE %]

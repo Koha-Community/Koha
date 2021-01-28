@@ -253,7 +253,7 @@
                                             [% ELSE %]
                                                 [% check_title = SEARCH_RESULT.biblionumber %]
                                             [% END %]
-                                            <td class="select selectcol">
+                                            <td class="selectcol">
                                                 [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                     <input type="checkbox" class="cb" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" aria-label="Select search result: [% check_title | html %]" /> <label for="bib[% SEARCH_RESULT.biblionumber | html %]"></label>
                                                 [% ELSE %]
