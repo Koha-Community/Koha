@@ -69,14 +69,14 @@ my $default = $input->param('default');
 $default = C4::Charset::NormalizeString($default);
 my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
 
-my $avs = Koha::AuthorisedValues->search(
+my $avs = Koha::AuthorisedValues->search_with_library_limits(
     {
-        branchcode => $branch_limit,
         category => $category,
     },
     {
         order_by => [ 'category', 'lib', 'lib_opac' ],
-    }
+    },
+    $branch_limit
 );
 my $html = qq|<select id="$name" name="$name">|;
 while ( my $av = $avs->next ) {

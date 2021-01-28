@@ -42,14 +42,14 @@ sub Get {
 sub GetAuthValueDropbox {
     my ( $self, $category ) = @_;
     my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    return Koha::AuthorisedValues->search(
+    return Koha::AuthorisedValues->search_with_library_limits(
         {
-            branchcode => $branch_limit,
             category => $category,
         },
         {
             order_by => [ 'category', 'lib', 'lib_opac' ],
-        }
+        },
+        $branch_limit
     );
 }
 

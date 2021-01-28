@@ -523,7 +523,13 @@ foreach my $tag (sort keys %{$tagslib}) {
       else {
           push @authorised_values, ""; # unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
 
-          my @avs = Koha::AuthorisedValues->search({ category => $tagslib->{$tag}->{$subfield}->{authorised_value}, branchcode => $branch_limit },{order_by=>'lib'});
+          my @avs = Koha::AuthorisedValues->search_with_library_limits(
+              {
+                  category   => $tagslib->{$tag}->{$subfield}->{authorised_value}
+              },
+              { order_by => 'lib' },
+              $branch_limit
+          );
           for my $av ( @avs ) {
               push @authorised_values, $av->authorised_value;
               $authorised_lib{$av->authorised_value} = $av->lib;

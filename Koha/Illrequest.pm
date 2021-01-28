@@ -136,11 +136,14 @@ sub statusalias {
     # We can't know which result is the right one if there are multiple
     # ILLSTATUS authorised values with the same authorised_value column value
     # so we just use the first
-    return Koha::AuthorisedValues->search({
-        branchcode => $self->branchcode,
-        category => 'ILLSTATUS',
-        authorised_value => $self->SUPER::status_alias
-    })->next;
+    return Koha::AuthorisedValues->search(
+        {
+            category         => 'ILLSTATUS',
+            authorised_value => $self->SUPER::status_alias
+        },
+        {},
+        $self->branchcode
+    )->next;
 }
 
 =head3 illrequestattributes
@@ -231,11 +234,15 @@ sub status_alias {
     # We can't know which result is the right one if there are multiple
     # ILLSTATUS authorised values with the same authorised_value column value
     # so we just use the first
-    my $alias = Koha::AuthorisedValues->search({
-        branchcode => $self->branchcode,
-        category => 'ILLSTATUS',
-        authorised_value => $self->SUPER::status_alias
-    })->next;
+    my $alias = Koha::AuthorisedValues->search(
+        {
+            category         => 'ILLSTATUS',
+            authorised_value => $self->SUPER::status_alias
+        },
+        {},
+        $self->branchcode
+    )->next;
+
     if ($alias) {
         return $alias->authorised_value;
     } else {

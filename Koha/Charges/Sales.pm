@@ -105,11 +105,12 @@ sub _get_valid_payments {
     my $self = shift;
 
     $self->{valid_payments} //= {
-        map { $_ => 1 } Koha::AuthorisedValues->search(
+        map { $_ => 1 } Koha::AuthorisedValues->search_with_library_limits(
             {
-                category   => 'PAYMENT_TYPE',
-                branchcode => $self->{cash_register}->branch
-            }
+                category => 'PAYMENT_TYPE'
+            },
+            {},
+            $self->{cash_register}->branch # filter by cash_register branch
         )->get_column('authorised_value')
     };
 
