@@ -521,14 +521,20 @@
                         "searchable": false
                     },
                     {
-                        "data": "replacement_price"
+                        "data": "replacement_price",
+                        "render": function(data, type, row, meta) {
+                            return (row.replacement_price).format_price();
+                        },
                     },
                     {
                         "data": "quantity",
                         "orderable": true
                     },
                     {
-                        "data": "ecost"
+                        "data": "ecost",
+                        "render": function(data, type, row, meta) {
+                            return (row.ecost).format_price();
+                        },
                     },
                     {
                         "data": "",
