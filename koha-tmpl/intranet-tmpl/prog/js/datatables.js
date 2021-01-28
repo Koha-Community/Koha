@@ -748,7 +748,7 @@ jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
                 var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
                 if ( is_searchable ) {
                     var title = $(this).text();
-                    var search_title = _("Search %s").format(title);
+                    var search_title = _("%s search").format(title);
                     $(this).html( '<input type="text" placeholder="%s" />'.format(search_title) );
 
                     $( 'input', this ).on( 'keyup change', function () {
