@@ -27,7 +27,7 @@ use Koha::AuthorisedValue;
 use Koha::MarcSubfieldStructures;
 use Koha::Cache::Memory::Lite;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 
@@ -38,33 +38,6 @@ Koha::AuthorisedValues - Koha Authorised value Object set class
 =head2 Class Methods
 
 =cut
-
-=head3 Koha::AuthorisedValues->search();
-
-my @objects = Koha::AuthorisedValues->search($params);
-
-=cut
-
-sub search {
-    my ( $self, $params, $attributes ) = @_;
-
-    my $branchcode = $params->{branchcode};
-    delete( $params->{branchcode} );
-
-    my $or =
-      $branchcode
-      ? {
-        '-or' => [
-            'authorised_values_branches.branchcode' => undef,
-            'authorised_values_branches.branchcode' => $branchcode,
-        ]
-      }
-      : {};
-    my $join = $branchcode ? { join => 'authorised_values_branches' } : {};
-    $attributes //= {};
-    $attributes = { %$attributes, %$join };
-    return $self->SUPER::search( { %$params, %$or, }, $attributes );
-}
 
 sub search_by_marc_field {
     my ( $self, $params ) = @_;
