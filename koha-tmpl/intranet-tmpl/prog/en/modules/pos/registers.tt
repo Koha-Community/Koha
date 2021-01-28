@@ -79,7 +79,7 @@
                                 <td>[% register.description | html %]</td>
                                 <td>
                                     [%- IF register.last_cashup -%]
-                                    [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %] ([% register.last_cashup.amount | $Price %])
+                                    [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %] (<a data-toggle="modal" data-cashup="[% register.last_cashup.id | html %]" data-register="[% register.description | html %]" href="#cashupSummaryModal" class="button">Summary</a>)
                                     [%- ELSE -%]
                                     No last cashup
                                     [%- END -%]
@@ -181,8 +181,11 @@
             </div> <!-- /.modal-dialog -->
         </div> <!-- /#confirmCashupAllModal -->
 
+        [% INCLUDE 'modals/cashup_summary.inc' %]
+
         [% MACRO jsinclude BLOCK %]
         [% INCLUDE 'datatables.inc' %]
+        [% Asset.js("js/cashup_modal.js") | $raw %]
         <script>
             $(document).ready(function () {
 
