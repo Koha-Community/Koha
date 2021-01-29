@@ -78,8 +78,9 @@ sub filter_by_visible_in_opac {
         my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
 
         my $rules_params;
-        foreach my $field (keys %$rules){
-            $rules_params->{$field}->{'-not_in'} = $rules->{$field};
+        foreach my $field ( keys %$rules ) {
+            $rules_params->{$field} =
+              [ { '-not_in' => $rules->{$field} }, undef ];
         }
 
         $result = $result->search( $rules_params );
