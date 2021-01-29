@@ -268,7 +268,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => -1,
             itype        => $itype_1->itemtype,
-            withdrawn    => 1
+            withdrawn    => 1,
+            copynumber   => undef
         }
     );
     my $item_2 = $builder->build_sample_item(
@@ -276,7 +277,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => 0,
             itype        => $itype_2->itemtype,
-            withdrawn    => 2
+            withdrawn    => 2,
+            copynumber   => undef
         }
     );
     my $item_3 = $builder->build_sample_item(
@@ -284,7 +286,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => 1,
             itype        => $itype_1->itemtype,
-            withdrawn    => 3
+            withdrawn    => 3,
+            copynumber   => undef
         }
     );
     my $item_4 = $builder->build_sample_item(
@@ -292,7 +295,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => 0,
             itype        => $itype_2->itemtype,
-            withdrawn    => 4
+            withdrawn    => 4,
+            copynumber   => undef
         }
     );
     my $item_5 = $builder->build_sample_item(
@@ -300,7 +304,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => 0,
             itype        => $itype_1->itemtype,
-            withdrawn    => 5
+            withdrawn    => 5,
+            copynumber   => undef
         }
     );
     my $item_6 = $builder->build_sample_item(
@@ -308,7 +313,8 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
             biblionumber => $biblio->biblionumber,
             itemlost     => 2,
             itype        => $itype_1->itemtype,
-            withdrawn    => 5
+            withdrawn    => 5,
+            copynumber   => undef
         }
     );
 
@@ -326,7 +332,7 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
     is( $biblio->items->filter_by_visible_in_opac({ patron => $patron })->count,
         6, 'No rules passed, hidelostitems unset, patron exception changes nothing' );
 
-    $rules = {};
+    $rules = { copynumber => [ 2 ] };
 
     t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
     is(
@@ -341,7 +347,7 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         'No rules passed, hidelostitems set, patron exception changes nothing'
     );
 
-    $rules = { withdrawn => [ 1, 2 ] };
+    $rules = { withdrawn => [ 1, 2 ], copynumber => [ 2 ] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         2,
@@ -354,14 +360,14 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         'hidelostitems set, rules on withdrawn but patron override passed'
     );
 
-    $rules = { itype => [ $itype_1->itemtype ] };
+    $rules = { itype => [ $itype_1->itemtype ], copynumber => [ 2 ] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         2,
         'Rules on itype, hidelostitems set'
     );
 
-    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ] };
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_1->itemtype ], copynumber => [ 2 ] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         1,
@@ -374,7 +380,7 @@ subtest 'filter_by_visible_in_opac() tests' => sub {
         'The right item is returned'
     );
 
-    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ] };
+    $rules = { withdrawn => [ 1, 2 ], itype => [ $itype_2->itemtype ], copynumber => [ 2 ] };
     is(
         $biblio->items->filter_by_visible_in_opac->count,
         1,
