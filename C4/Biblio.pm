@@ -211,10 +211,6 @@ sub AddBiblio {
     try {
         $schema->txn_do(sub {
 
-            if (C4::Context->preference('BiblioAddsAuthorities')) {
-                BiblioAutoLink( $record, $frameworkcode );
-            }
-
             # transform the data into koha-table style data
             SetUTF8Flag($record);
             my $olddata = TransformMarcToKoha( $record, $frameworkcode );
@@ -283,6 +279,10 @@ sub AddBiblio {
 
             # update MARC subfield that stores biblioitems.cn_sort
             _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
+
+            if (C4::Context->preference('BiblioAddsAuthorities')) {
+                BiblioAutoLink( $record, $frameworkcode );
+            }
 
             # now add the record
             ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
