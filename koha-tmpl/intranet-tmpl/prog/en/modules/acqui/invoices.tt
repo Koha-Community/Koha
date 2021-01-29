@@ -44,8 +44,8 @@
             [% ELSE %]
                 [% SET tab = 'opened' %]
             [% END %]
-          <input type="checkbox" style="vertical-align: middle;" id="show_only_subscription" class="show_only_subscription" data-tableid="[% tab | html %]resultst"/>
-          <label for="show_only_subscription">
+          <input type="checkbox" style="vertical-align: middle;" id="show_only_subscription_[% tab | html %]" class="show_only_subscription" data-tableid="[% tab | html %]resultst"/>
+          <label for="show_only_subscription_[% tab | html %]">
             Show only subscriptions
           </label>
           <table id="[% tab | html %]resultst" class="result">
