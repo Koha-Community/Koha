@@ -270,9 +270,16 @@
   </div>
     <div class="row">
         <div class="col-md-12">
-      <div id="results-wrapper"></div>
+            <div id="results-wrapper">
+
+            </div>
         </div>
       </div>
+
+        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
+            <input type="hidden" name="op" value="show" />
+            <input type="hidden" id="batch_mod_del" name="del" value="0" />
+        </form>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -280,6 +287,20 @@
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script>
         var authorised_values = [% authorised_values_json | $raw %];
+
+        function showItemSelections( number ){
+            let caret = ' <span class="caret">';
+            if( number > 0 ){
+                $("#table_search_selections").show().find("span").text(_("Items selected: " + number ) );
+                $("#batch_mod_menu").removeClass("disabled").prop("disabled", false);
+                $("#export-button").html(_("Export selected results (%s) to").format  ( number ) + caret);
+            } else {
+                $("#table_search_selections").hide();
+                $("#batch_mod_menu").prop("disabled", true).addClass("disabled");
+                $("#batch_item_operations").empty();
+                $("#export-button").html(_("Export all results to") + caret);
+            }
+        }
 
         function loadAuthorisedValuesSelect(select) {
             var selected = select.find('option:selected');
@@ -305,7 +326,7 @@
             }
         }
 
-    function addNewField( link ) {
+        function addNewField( link ) {
             var form_field = $('div.form-field-select-text').last();
             var copy = form_field.clone(true);
             copy.find('input,select').not('[type="hidden"]').each(function() {
@@ -313,8 +334,34 @@
             });
             copy.find('.form-field-conjunction').prop('disabled', false).val('and');
             form_field.after(copy);
-      link.remove();
+            link.remove();
             copy.find('select.form-field-column').change();
+        }
+
+        function exportItems(format) {
+            let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
+            if (item_search_selections.length > 0) {
+            var href = '/cgi-bin/koha/catalogue/item-export.pl?format=' + format;
+                href += '&itemnumber=' + Array.from( item_search_selections ).join('&itemnumber=');
+                location = href;
+            } else {
+                $('#format-' + format).prop('checked', true);
+                $('#itemsearchform').submit();
+                $('#format-html').prop('checked', true);
+            }
+        }
+
+        function prepSelections(){
+            let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
+            if( item_search_selections.length > 0 ){
+                showItemSelections( item_search_selections.length );
+                $("#results input[type='checkbox']").each(function(){
+                    var itemnumber = $(this).val();
+                    if( item_search_selections.indexOf( itemnumber ) >= 0 ){
+                        $(this).prop("checked", true );
+                    }
+                });
+            }
         }
 
         function submitForm($form) {
@@ -339,108 +386,72 @@
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
                 + '      <th id="items_date_due">' + _("Due date") + '</th>'
                 + '      <th id=""></th>'
-                + '    </tr>'
+                + '    </tr>';
+
             var table = ''
                 + '<div class="page-section">'
-                + '<table id="results">'
-                + '  <thead>' + tr + tr + '</thead>'
-                + '  <tbody></tbody>'
-                + '</table>'
+                + '    <div id="searchheader" class="searchheader">'
+                + '        <a href="#" id="select_all" class="btn btn-link"><i class="fa fa-check"></i> '
+                +              _("Select visible rows")
+                + '        </a> | '
+                + '        <a href="#" id="clear_all" class="btn btn-link"><i class="fa fa-times"></i> '
+                +              _("Clear selection")
+                + '        </a>'
+                + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle" id="export-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + _("Export all results to") + '<span class="caret"></span></button>'
+                + '            <ul class="dropdown-menu">'
+                + '                <li><a href="#" id="csvExportLink">' + _("CSV") + '</a></li>'
+                + '                <li><a href="#" id="barcodesExportLink">' + _("Barcode file") + '</a></li>'
+                + '            </ul>'
+                + '        </div>';
+            [% IF ( CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) %]
+                table += ''
+                    + '        <div class="btn-group"><button class="btn btn-default btn-sm dropdown-toggle disabled" disabled="disabled" type="button" id="batch_mod_menu"data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"> ' + _("Batch operations") + ' <span class="caret"></span> </button>'
+                    + '            <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">';
+                [% IF ( CAN_user_tools_items_batchmod ) %]
+                    table += ''
+                        + '                <li> <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="' + _("Send selected items to batch item modification") + '" class="batch_op send_to_item_mod">' + _("Batch item modification") + '</a> </li>';
+                [% END %]
+                [% IF ( CAN_user_tools_items_batchdel ) %]
+                    table += ''
+                        + '                <li> <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="' + _("Send selected items to batch item deletion") + '" class="batch_op send_to_item_del">' + _("Batch item deletion") + '</a> </li>';
+                [% END %]
+                table += ''
+                    + '            </ul>'
+                    + '        </div>';
+            [% END # /IF CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel %]
+            table += ''
+                + '        <div id="table_search_selections" class="btn-group" style="display:none;">'
+                + '            <span></span>'
+                + '            <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>'
+                + '        </div>'
+                + '    </div>'
+                + '    <table id="results">'
+                + '      <thead>' + tr + tr + '</thead>'
+                + '      <tbody></tbody>'
+                + '    </table>'
                 + '</div>';
+
             var advSearchLink = $('<a>')
                 .attr('href', '/cgi-bin/koha/catalogue/search.pl')
                 .html(_("Go to advanced search"));
+
             var editSearchLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Edit search"))
-                .addClass('btn btn-default btn-xs')
+                .html("<i class='fa fa-pencil'></i> " + _("Edit search") )
+                .addClass('btn btn-default')
                 .on('click', function(e) {
                     e.preventDefault();
                     $('#item-search-block').show();
                 });
 
-            function getCheckedItemnumbers () {
-                var itemnumbers;
-                try {
-                    itemnumbers = JSON.parse(sessionStorage.getItem('itemsearch_itemnumbers') || '[]');
-                } catch (e) {
-                    itemnumbers = [];
-                }
-
-                return new Set(itemnumbers);
-            }
-
-            function exportItems(format) {
-              var itemnumbers = getCheckedItemnumbers();
-              if (itemnumbers.size > 0) {
-                var href = '/cgi-bin/koha/catalogue/item-export.pl?format=' + format;
-                href += '&itemnumber=' + Array.from(itemnumbers).join('&itemnumber=');
-                location = href;
-              } else {
-                $('#format-' + format).prop('checked', true);
-                $('#itemsearchform').submit();
-                $('#format-html').prop('checked', true);
-              }
-            }
-
-            var csvExportLink = $('<a>')
-                .attr('href', '#')
-                .html("CSV")
-                .on('click', function(e) {
-                    e.preventDefault();
-                    exportItems('csv');
-                });
-            var barcodesExportLink = $('<a>')
-                .attr('href', '#')
-                .html(_("Barcodes file"))
-                .on('click', function(e) {
-                    e.preventDefault();
-                    exportItems('barcodes');
-              });
-
-            var exportButton = $('<div>')
-              .addClass('btn-group')
-              .append($('<button>')
-                  .addClass('btn btn-default btn-xs dropdown-toggle')
-                  .attr('id', 'export-button')
-                  .attr('data-toggle', 'dropdown')
-                  .attr('aria-haspopup', 'true')
-                  .attr('aria-expanded', 'false')
-                  .html(_("Export all results to") + ' <span class="caret"></span>'))
-              .append($('<ul>')
-                  .addClass('dropdown-menu')
-                  .append($('<li>').append(csvExportLink))
-                  .append($('<li>').append(barcodesExportLink)));
-
-            var selectVisibleRows = $('<a>')
-              .attr('href', '#')
-              .append('<i class="fa fa-check"></i> ')
-              .append(_("Select visible rows"))
-              .on('click', function(e) {
-                  e.preventDefault();
-                  $('#results input[type="checkbox"]').prop('checked', true).change();
-              });
-            var clearSelection = $('<a>')
-              .attr('href', '#')
-              .append('<i class="fa fa-times"></i> ')
-              .append(_("Clear selection"))
-              .on('click', function(e) {
-                  e.preventDefault();
-                  sessionStorage.setItem('itemsearch_itemnumbers', '[]');
-                  $('#results input[type="checkbox"]').prop('checked', false).change();
-              });
-            var exportLinks = $('<p>')
-              .append(selectVisibleRows)
-              .append(' ')
-              .append(clearSelection)
-              .append(' | ')
-              .append(exportButton);
-
             var results_heading = $('<div>').addClass('results-heading')
                 .append("<h1>" + _("Item search results") + "</h1>")
                 .append($('<p>').append(advSearchLink))
-                .append($('<p>').append(editSearchLink))
-                .append(exportLinks);
+                .append($('<div>')
+                    .addClass("btn-toolbar")
+                    .attr("id","toolbar")
+                    .append(editSearchLink)
+                );
             $('#results-wrapper').empty()
                 .append(results_heading)
                 .append(table);
@@ -500,6 +511,9 @@
                     { 'sName': 'actions', 'bSortable': false }
                 ],
                 "sPaginationType": "full_numbers",
+                "drawCallback": function( settings ) {
+                    prepSelections();
+                },
                 fixedHeader: false // There is a bug on this view
             })).columnFilter({
                 'sPlaceHolder': 'head:after',
@@ -550,51 +564,25 @@
                 ]
             });
             $('#results').on('draw.dt', function (e, settings) {
-                var itemnumbers = getCheckedItemnumbers();
-                $(this).find('input[type="checkbox"][name="itemnumber"]').each(function () {
-                    var itemnumber = this.value;
-                    if (itemnumbers.has(itemnumber)) {
-                        this.checked = true;
-                    }
+                prepSelections();
+                var Sticky = $("#searchheader");
+                Sticky.hcSticky({
+                    stickTo: "#results-wrapper .page-section",
+                    stickyClass: "floating"
                 });
             });
-
-            sessionStorage.setItem('itemsearch_itemnumbers', '[]');
-
-            $('#results').on('change', 'input[type="checkbox"]', function() {
-              var itemnumber = this.value;
-              var itemnumbers = getCheckedItemnumbers();
-              if (this.checked) {
-                  itemnumbers.add(itemnumber);
-              } else {
-                  itemnumbers.delete(itemnumber);
-              }
-              sessionStorage.setItem('itemsearch_itemnumbers', JSON.stringify(Array.from(itemnumbers)));
-
-              var caret = ' <span class="caret">';
-              if (itemnumbers.size > 0) {
-                $('#export-button').html(_("Export selected results (%s) to").format(itemnumbers.size) + caret);
-              } else {
-                $('#export-button').html(_("Export all results to") + caret);
-              }
-            });
         }
-        var Sticky;
+
         $(document).ready(function () {
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: "#item-search-block",
-                stickyClass: "floating"
-            });
             // Add the "New field" link.
             var form_field = $('div.form-field-select-text').last()
             var NEW_FIELD = _("New field");
-      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
-      button_field_new.click(function(e) {
-          e.preventDefault();
-          addNewField( $(this) );
+            var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
+            button_field_new.click(function(e) {
+                e.preventDefault();
+                addNewField( $(this) );
             });
-      form_field.append(button_field_new);
+            form_field.append(button_field_new);
 
             // If a field is linked to an authorised values list, display the list.
             $('div.form-field-select-text select[name="f"]').change(function() {
@@ -622,6 +610,104 @@
                     submitForm(searchform);
                     $("#item-search-block").hide();
                     return false;
+                }
+            });
+
+            $("body").on("click", "#select_all", function(e) {
+                e.preventDefault();
+                $("#results input[type='checkbox']").each(function(){
+                    if( $(this).prop("checked") == false ){
+                        $(this).prop( "checked", true ).change();
+                    }
+                });
+            });
+
+            $("body").on("click", "#clear_all", function(e) {
+                e.preventDefault();
+                $("#results input[type='checkbox']").each(function(){
+                    if( $(this).prop("checked") == true ){
+                        $(this).prop( "checked", false ).change();
+                    }
+                });
+            });
+
+            $("body").on("click", "#clear-row-selection", function(e){
+                e.preventDefault();
+                $("#results input[type='checkbox']").prop("checked" ,false ).change();
+                localStorage.removeItem("item_search_selections");
+                showItemSelections( 0 );
+            });
+
+            $("body").on('change', '#results input[type="checkbox"]', function() {
+                let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
+                var itemnumber = $(this).val();
+                if( $(this).prop("checked") ){
+                    item_search_selections.push( $(this).val() );
+                    localStorage.setItem('item_search_selections', JSON.stringify( item_search_selections ));
+                    showItemSelections( item_search_selections.length );
+                } else {
+                    var filtered = item_search_selections.filter(function( value ){
+                        return value !== itemnumber;
+                    });
+                    if( filtered.length > 0 ){
+                        localStorage.setItem('item_search_selections', JSON.stringify( filtered ));
+                        item_search_selections = filtered;
+                        showItemSelections( filtered.length );
+                    } else {
+                        item_search_selections = [];
+                        localStorage.removeItem('item_search_selections');
+                        showItemSelections( 0 );
+                    }
+                }
+            });
+
+            $("body").on("click", "#csvExportLink", function(e){
+                e.preventDefault();
+                exportItems('csv');
+            });
+
+            $("body").on("click", "#barcodesExportLink", function(e){
+                e.preventDefault();
+                exportItems('barcodes');
+            });
+
+            $("body").on("click", ".batch_op", function(e){
+                e.preventDefault();
+                let batch_mod_form = $("#batch_item_operations");
+                batch_mod_form.empty();
+                batch_mod_form.append(
+                    $("<input>").attr("type","hidden")
+                    .attr("name", "op")
+                    .val("show")
+                );
+                batch_mod_form.append(
+                    $("<input>").attr("type","hidden")
+                    .attr("name", "del")
+                    .attr("id", "batch_mod_del")
+                );
+                let item_search_selections = JSON.parse( localStorage.getItem("item_search_selections") ) || [];
+                // Populate batch forms with itemnumbers in local storage
+                for (let item of item_search_selections){
+                    var field = $("<input>").attr("type","hidden")
+                        .attr("name","itemnumber")
+                        .val( item );
+                    batch_mod_form.append( field );
+                }
+                if( $(this).hasClass("send_to_item_mod") ){
+                    $("#batch_mod_del").val(0);
+                } else if ( $(this).hasClass("send_to_item_del") ){
+                    $("#batch_mod_del").val(1);
+                } else {
+                    return false;
+                }
+                batch_mod_form.submit();
+            });
+
+            $("body").on('click','#results tbody td',function(e){
+                var checkbox = $(this).find("input[type=checkbox]");
+                if (e.target.type != "checkbox") {
+                    checkbox.prop('checked', !checkbox.prop("checked"));
+                    checkbox.change();
                 }
             });
         });

@@ -98,9 +98,9 @@
                         </div>
                     [% END %]
 
-                    <div id="patron_search_selected" class="btn-group" style="display:none;">
+                    <div id="table_search_selections" class="btn-group" style="display:none;">
                         <span></span>
-                        <a href="#" id="clear-patron-selection"><i class="fa fa-times"></i> Clear</a>
+                        <a href="#" id="clear-row-selection"><i class="fa fa-times"></i> Clear</a>
                     </div>
                   </div>
                 </div>
@@ -169,7 +169,7 @@
     [% INCLUDE 'select2.inc' %]
     <script>
         function showPatronSelections( number ){
-            $("#patron_search_selected").show().find("span").text(_("Patrons selected: " + number ) );
+            $("#table_search_selections").show().find("span").text(_("Patrons selected: " + number ) );
         }
 
         $(document).ready(function() {
@@ -192,7 +192,7 @@
                     } else {
                         patron_search_selections = [];
                         localStorage.removeItem('patron_search_selections');
-                        $("#patron_search_selected").hide();
+                        $("#table_search_selections").hide();
                     }
                 }
                 if ( patron_search_selections.length > 1 ) {
@@ -215,11 +215,11 @@
                 window.location.href = merge_patrons_url;
             });
 
-            $("#clear-patron-selection").on("click", function(e){
+            $("#clear-row-selection").on("click", function(e){
                 e.preventDefault();
                 $("input.selection").prop("checked", false).change();
                 localStorage.removeItem("patron_search_selections");
-                $("#patron_search_selected").hide();
+                $("#table_search_selections").hide();
                 $('#merge-patrons, #patronlist-menu, #batch-mod-patrons').prop('disabled', true).addClass("disabled");
                 $("#borrowernumberlist").val("");
             });

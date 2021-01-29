@@ -282,6 +282,7 @@ function logOut(){
     localStorage.removeItem("searches");
     localStorage.removeItem("bibs_selected");
     localStorage.removeItem("patron_search_selections");
+    localStorage.removeItem("item_search_selections");
 }
 
 function openHelp(){
