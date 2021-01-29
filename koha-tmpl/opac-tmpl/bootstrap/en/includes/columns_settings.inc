@@ -47,7 +47,7 @@ function KohaTable(selector, dt_parameters, columns_settings) {
             className: "dt_button_clear_filter",
             titleAttr: _("Clear filter"),
             enabled: false,
-            text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+            text: '<i class="fa fa-lg fa-remove" aria-hidden="true"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
             action: function ( e, dt, node, config ) {
                 dt.search( "" ).draw("page");
                 node.addClass("disabled");
@@ -87,7 +87,7 @@ function KohaTable(selector, dt_parameters, columns_settings) {
                 columns: included_ids,
                 className: "columns_controls",
                 titleAttr: _("Columns settings"),
-                text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
+                text: '<i class="fa fa-lg fa-gear" aria-hidden="true"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
                 exportOptions: {
                     columns: exportColumns
                 }
