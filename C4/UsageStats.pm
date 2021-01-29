@@ -298,7 +298,7 @@ sub BuildReport {
         QueryWeightFields
         TraceCompleteSubfields
         TraceSubjectSubdivisions
-        UseICU
+        UseICUStyleQuotes
         defaultSortField
         displayFacetCount
         OPACdefaultSortField

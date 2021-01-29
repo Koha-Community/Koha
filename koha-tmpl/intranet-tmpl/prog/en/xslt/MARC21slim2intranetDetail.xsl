@@ -30,13 +30,13 @@
         <xsl:variable name="OpacSuppression" select="marc:sysprefs/marc:syspref[@name='OpacSuppression']"/>
         <xsl:variable name="TracingQuotesLeft">
            <xsl:choose>
-             <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
+             <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICUStyleQuotes']='1'">{</xsl:when>
              <xsl:otherwise>"</xsl:otherwise>
            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="TracingQuotesRight">
           <xsl:choose>
-            <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">}</xsl:when>
+            <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICUStyleQuotes']='1'">}</xsl:when>
             <xsl:otherwise>"</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
