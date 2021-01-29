@@ -44,6 +44,9 @@
         <xsl:if test="starts-with(@tag, '24') and not(/marc:record/marc:datafield[@tag='100'])">
           <span class="titlemain"><xsl:value-of select="."/></span><br/>
         </xsl:if>
+        <xsl:if test="@tag='250'">
+          <xsl:value-of select="."/>
+        </xsl:if>
         <xsl:if test="@tag='260'">
           <xsl:value-of select="."/>
         </xsl:if>
