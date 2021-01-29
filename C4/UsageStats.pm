@@ -98,7 +98,7 @@ sub BuildReport {
         casLogout
         AllowPKIAuth
         DebugLevel
-        delimiter
+        CSVDelimiter
         noItemTypeImages
         OpacNoItemTypeImages
         virtualshelves
