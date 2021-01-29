@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 54;
+use Test::More tests => 55;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -1372,6 +1372,137 @@ sub test_queue {
     }
 
 }
+
+subtest "Test _checkHoldPolicy" => sub {
+    plan tests => 25;
+
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_nongroup = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => {exclude_from_local_holds_priority => 0} });
+    my $patron  = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $library1->branchcode,
+                categorycode => $category->categorycode,
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item1  = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library1->branchcode,
+            exclude_from_local_holds_priority => 0,
+        }
+    );
+
+    $reserve_id = AddReserve(
+        {
+            branchcode     => $item1->homebranch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->id,
+            priority       => 1
+        }
+    );
+    ok( $reserve_id, "Hold was created");
+    my $requests = C4::HoldsQueue::GetPendingHoldRequestsForBib($biblio->biblionumber);
+    is( @$requests, 1, "Got correct number of holds");
+
+    my $request = $requests->[0];
+    is( $request->{biblionumber}, $biblio->id, "Hold has correct biblio");
+    is( $request->{borrowernumber}, $patron->id, "Hold has correct borrower");
+    is( $request->{borrowerbranch}, $patron->branchcode, "Hold has correct borrowerbranch");
+
+    my $hold = Koha::Holds->find( $reserve_id );
+    ok( $hold, "Found hold" );
+
+    my $item = {
+        holdallowed              => 1,
+        homebranch               => $request->{borrowerbranch}, # library1
+        hold_fulfillment_policy  => 'any'
+    };
+
+    # Base case should work
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true" );
+
+    # Test holdallowed = 0
+    $item->{holdallowed} = 0;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = 0" );
+
+    # Test holdallowed = 1
+    $item->{holdallowed} = 1;
+    $item->{homebranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if holdallowed = 1 and branches do not match" );
+
+    $item->{homebranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = 1 and branches do match" );
+
+    # Test holdallowed = 3
+    $item->{holdallowed} = 3;
+    $item->{homebranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if branchode doesn't match, holdallowed = 3 and no group branches exist" );
+    $item->{homebranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if branchode matches, holdallowed = 3 and no group branches exist" );
+
+    # Create library groups hierarchy
+    my $rootgroup = $builder->build_object( { class => 'Koha::Library::Groups', value => {ft_local_hold_group => 1} } );
+    my $group1 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
+    my $group2 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library2->branchcode}} );
+
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if holdallowed = 3 and no group branches exist" );
+
+    $group1->delete;
+
+    # Test hold_fulfillment_policy = holdgroup
+    $item->{hold_fulfillment_policy} = 'holdgroup';
+    $item->{homebranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns true if library is not part of hold group, branches don't match and hfp = holdgroup" );
+    $item->{homebranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is not part of hold group, branches match and hfp = holdgroup" );
+
+    $group1 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is part of hold group with hfp = holdgroup" );
+
+    $item->{homebranch} = $library2->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is part of hold group with hfp = holdgroup" );
+    $item->{homebranch} = $library1->id;
+
+    $group1->delete;
+
+    # Test hold_fulfillment_policy = homebranch
+    $item->{hold_fulfillment_policy} = 'homebranch';
+    $item->{homebranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if hfp = homebranch and pickup branch != item homebranch" );
+
+    $item->{homebranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if hfp = homebranch and pickup branch = item homebranch" );
+
+    # Test hold_fulfillment_policy = holdingbranch
+    $item->{hold_fulfillment_policy} = 'holdingbranch';
+    $item->{holdingbranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if hfp = holdingbranch and pickup branch != item holdingbranch" );
+
+    $item->{holdingbranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if hfp = holdingbranch and pickup branch = item holdingbranch" );
+
+    # Test hold_fulfillment_policy = patrongroup
+    $item->{hold_fulfillment_policy} = 'patrongroup';
+    $item->{borrowerbranch} = $library1->id;
+
+    $item->{homebranch} = $library_nongroup->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 0, "_checkHoldPolicy returns false if library is not part of hold group, branches don't match, hfp = patrongroup" );
+    $item->{homebranch} = $request->{borrowerbranch};
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns false if library is not part of hold group, branches match, hfp = patrongroup" );
+
+    $group1 = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is part of hold group with hfp = holdgroup" );
+
+    $item->{borrowerbranch} = $library2->id;
+    is( C4::HoldsQueue::_checkHoldPolicy( $item, $request ), 1, "_checkHoldPolicy returns true if library is part of hold group with hfp = holdgroup" );
+    $item->{borrowerbranch} = $library1->id;
+};
 
 sub dump_records {
     my ($tablename) = @_;
