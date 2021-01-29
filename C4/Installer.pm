@@ -19,10 +19,12 @@ package C4::Installer;
 
 use Modern::Perl;
 
-use Encode;
+use Try::Tiny;
+use Encode qw( encode is_utf8 );
 use DBIx::RunSQL;
 use YAML::XS;
 use C4::Context;
+use Koha::Schema;
 use DBI;
 use Koha;
 
@@ -30,7 +32,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list);
+    push @EXPORT, qw( primary_key_exists unique_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list TransformToNum CheckVersion sanitize_zero_date update get_db_entries );
 };
 
 =head1 NAME
@@ -690,6 +692,235 @@ sub TableExists { # Could be renamed table_exists for consistency
     return 0;
 }
 
+sub version_from_file {
+    my $file = shift;
+    return unless $file =~ m|(^\|/)(\d{2})(\d{2})(\d{2})(\d{3}).pl$|;
+    return sprintf "%s.%s.%s.%s", $2, $3, $4, $5;
+}
+
+sub get_db_entries {
+    my $db_revs_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/db_revs';
+    opendir my $dh, $db_revs_dir or die "Cannot open $db_revs_dir dir ($!)";
+    my @files = sort grep { m|\.pl$| && ! m|skeleton\.pl$| } readdir $dh;
+    my @need_update;
+    for my $file ( @files ) {
+        my $version = version_from_file( $file );
+
+        unless ( $version ) {
+            warn "Invalid db_rev found: " . $file;
+            next
+        }
+
+        next unless CheckVersion( $version );
+
+        push @need_update, sprintf( "%s/%s", $db_revs_dir, $file );
+    }
+    return \@need_update;
+}
+
+sub update {
+    my ( $files, $params ) = @_;
+
+    my $force = $params->{force} || 0;
+
+    my $schema = Koha::Database->new->schema;
+    my ( @done, @errors );
+    for my $file ( @$files ) {
+
+        my $db_rev = do $file;
+
+        my $error;
+
+        try {
+            $schema->txn_do(
+                sub {
+                    $db_rev->{up}->();
+                }
+            );
+        } catch {
+            $error = $_;
+        };
+
+        my $db_entry = {
+            bug_number  => $db_rev->{bug_number},
+            description => ( ref $db_rev->{description} eq 'CODE' )
+              ? $db_rev->{description}->()
+              : $db_rev->{description},
+            version     => version_from_file($file),
+            time        => POSIX::strftime( "%H:%M:%S", localtime ),
+        };
+        $db_entry->{output} = output_version( { %$db_entry, done => !$error } );
+
+        if ( $error ) {
+            push @errors, { %$db_entry, error => $error };
+            $force ? next : last ;
+                # We stop the update if an error occurred!
+        }
+
+        SetVersion($db_entry->{version});
+        push @done, $db_entry;
+    }
+    return { success => \@done, error => \@errors };
+}
+
+sub output_version {
+    my ( $db_entry ) = @_;
+
+    my $descriptions = $db_entry->{description};
+    my $DBversion = $db_entry->{version};
+    my $bug_number = $db_entry->{bug_number};
+    my $time = $db_entry->{time};
+    my $done = $db_entry->{done} ? "done" : "failed";
+
+    unless ( ref($descriptions) ) {
+        $descriptions = [ $descriptions ];
+    }
+
+    my $first = 1;
+    my @output;
+    for my $description ( @$descriptions ) {
+        if ( @$descriptions > 1 ) {
+            if ( $first ) {
+                unless ( $bug_number ) {
+                    push @output, sprintf "Upgrade to %s %s [%s]:", $DBversion, $done, $time;
+                } else {
+                    push @output, sprintf "Upgrade to %s %s [%s]: Bug %5s", $DBversion, $done, $time, $bug_number;
+                }
+            }
+            push @output, sprintf "\t\t\t\t\t\t   - %s", $description;
+        } else {
+            unless ( $bug_number ) {
+                push @output, sprintf "Upgrade to %s %s [%s]: %s", $DBversion, $done, $time, $description;
+            } else {
+                push @output, sprintf "Upgrade to %s %s [%s]: Bug %5s - %s", $DBversion, $done, $time, $bug_number, $description;
+            }
+        }
+        $first = 0;
+    }
+    return \@output;
+}
+
+=head2 DropAllForeignKeys($table)
+
+Drop all foreign keys of the table $table
+
+=cut
+
+sub DropAllForeignKeys {
+    my ($table) = @_;
+    # get the table description
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SHOW CREATE TABLE $table");
+    $sth->execute;
+    my $vsc_structure = $sth->fetchrow;
+    # split on CONSTRAINT keyword
+    my @fks = split /CONSTRAINT /,$vsc_structure;
+    # parse each entry
+    foreach (@fks) {
+        # isolate what is before FOREIGN KEY, if there is something, it's a foreign key to drop
+        $_ = /(.*) FOREIGN KEY.*/;
+        my $id = $1;
+        if ($id) {
+            # we have found 1 foreign, drop it
+            $dbh->do("ALTER TABLE $table DROP FOREIGN KEY $id");
+            $id="";
+        }
+    }
+}
+
+
+=head2 TransformToNum
+
+Transform the Koha version from a 4 parts string
+to a number, with just 1 .
+
+=cut
+
+sub TransformToNum {
+    my $version = shift;
+    # remove the 3 last . to have a Perl number
+    $version =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    # three X's at the end indicate that you are testing patch with dbrev
+    # change it into 999
+    # prevents error on a < comparison between strings (should be: lt)
+    $version =~ s/XXX$/999/;
+    return $version;
+}
+
+=head2 SetVersion
+
+set the DBversion in the systempreferences
+
+=cut
+
+sub SetVersion {
+    return if $_[0]=~ /XXX$/;
+      #you are testing a patch with a db revision; do not change version
+    my $kohaversion = TransformToNum($_[0]);
+    my $dbh = C4::Context->dbh;
+    if (C4::Context->preference('Version')) {
+      my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+      $finish->execute($kohaversion);
+    } else {
+      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
+      $finish->execute($kohaversion);
+    }
+    C4::Context::clear_syspref_cache(); # invalidate cached preferences
+}
+
+sub NewVersion {
+    # void FIXME replace me
+}
+
+=head2 CheckVersion
+
+Check whether a given update should be run when passed the proposed version
+number. The update will always be run if the proposed version is greater
+than the current database version and less than or equal to the version in
+kohaversion.pl. The update is also run if the version contains XXX, though
+this behavior will be changed following the adoption of non-linear updates
+as implemented in bug 7167.
+
+=cut
+
+sub CheckVersion {
+    my ($proposed_version) = @_;
+    my $version_number = TransformToNum($proposed_version);
+
+    # The following line should be deleted when bug 7167 is pushed
+    return 1 if ( $proposed_version =~ m/XXX/ );
+
+    if ( C4::Context->preference("Version") < $version_number
+        && $version_number <= TransformToNum( $Koha::VERSION ) )
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
+sub sanitize_zero_date {
+    my ( $table_name, $column_name ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my (undef, $datatype) = $dbh->selectrow_array(qq|
+        SHOW COLUMNS FROM $table_name WHERE Field = ?|, undef, $column_name);
+
+    if ( $datatype eq 'date' ) {
+        $dbh->do(qq|
+            UPDATE $table_name
+            SET $column_name = NULL
+            WHERE CAST($column_name AS CHAR(10)) = '0000-00-00';
+        |);
+    } else {
+        $dbh->do(qq|
+            UPDATE $table_name
+            SET $column_name = NULL
+            WHERE CAST($column_name AS CHAR(19)) = '0000-00-00 00:00:00';
+        |);
+    }
+}
 
 =head1 AUTHOR
 
