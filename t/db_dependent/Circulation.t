@@ -329,7 +329,7 @@ subtest "GetIssuingCharges tests" => sub {
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 89;
+    plan tests => 95;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -464,6 +464,15 @@ subtest "CanBookBeRenewed tests" => sub {
             rule_value   => '1',
         }
     );
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'renewalsallowed',
+            rule_value   => '5',
+        }
+    );
     t::lib::Mocks::mock_preference('AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
@@ -567,6 +576,7 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 1, '(Bug 8236), Can renew, user is not restricted');
     ( $renewokay, $error ) = CanBookBeRenewed($restricted_borrowernumber, $item_5->itemnumber);
     is( $renewokay, 0, '(Bug 8236), Cannot renew, user is restricted');
+    is( $error, 'restriction', "Correct error returned");
 
     # Users cannot renew an overdue item
     my $item_6 = $builder->build_sample_item(
@@ -643,6 +653,27 @@ subtest "CanBookBeRenewed tests" => sub {
     isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
     $fines->delete();
 
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','allow');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is overdue but not pref does not block');
+
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','block');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is not overdue but patron has overdues');
+    is( $error, 'overdue', "Correct error returned");
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue so patron has overdues');
+    is( $error, 'overdue', "Correct error returned");
+
+    t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
+    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
+    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
+    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
+    is( $error, 'overdue', "Correct error returned");
+
 
     my $old_issue_log_size = Koha::ActionLogs->count( \%params_issue );
     my $old_renew_log_size = Koha::ActionLogs->count( \%params_renewal );
@@ -654,13 +685,6 @@ subtest "CanBookBeRenewed tests" => sub {
 
     $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
     $fines->delete();
-
-    t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
-    is( $renewokay, 1, '(Bug 8236), Can renew, this item is not overdue');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
-
 
     $hold = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $reserving_borrowernumber })->next;
     $hold->cancel;
@@ -1315,13 +1339,6 @@ subtest "CanBookBeRenewed tests" => sub {
     $future->add( days => 7 );
     my $units = C4::Overdues::get_chargeable_units('days', $future, $now, $library2->{branchcode});
     ok( $units == 0, '_get_chargeable_units returns 0 for items not past due date (Bug 12596)' );
-
-    # Users cannot renew any item if there is an overdue item
-    t::lib::Mocks::mock_preference('OverduesBlockRenewing','block');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_6->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
-    ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
-    is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
 
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
     t::lib::Mocks::mock_userenv({ patron => $manager,branchcode => $manager->branchcode });
