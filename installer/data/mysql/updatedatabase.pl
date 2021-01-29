@@ -23461,6 +23461,12 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27487, "Rename system preference 'reviewson' to 'OPACComments");
 }
 
+$DBversion = '20.12.00.007';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{UPDATE systempreferences set variable="CSVDelimiter" WHERE variable="delimiter"});
+    NewVersion( $DBversion, 27486, "Renaming system preference 'delimiter' to 'CSVDelimiter'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
