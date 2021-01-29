@@ -223,9 +223,9 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         window.print();
         return false;
     });
-    $("#ulactioncontainer > ul > li > a.addtoshelf").on("click",function(){
-        Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber | uri %]');
-        return false;
+    $(".addtoshelf").on("click",function(e){
+        e.preventDefault();
+        Dopop( this.href );
     });
     $("body").on("click", ".addtocart", function(e){
         e.preventDefault();
