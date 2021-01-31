@@ -98,7 +98,7 @@ if ( $print eq 'checkinslip' ) {
     });
 
     my %loops = (
-        old_issues => [ map { $_->issue_id } @todays_checkins ],
+        old_issues => [ map { $_->itemnumber } @todays_checkins ],
     );
 
     my $letter = C4::Letters::GetPreparedLetter(
