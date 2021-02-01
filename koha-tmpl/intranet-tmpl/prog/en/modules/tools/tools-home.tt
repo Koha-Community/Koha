@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% USE Branches %]
+[% USE Registers %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Tools &rsaquo; Koha</title>
@@ -153,17 +155,26 @@
     <dd>Access files stored on the server, like log files or reports</dd>
     [% END %]
 
-    [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_cashup ) %]
-        <dt><a href="/cgi-bin/koha/pos/registers.pl">Cashup registers</a></dt>
-        <dd>Perform cashup actions on cash registers</dd>
-    [% END %]
-
     [% IF ( Koha.Preference('OPACReportProblem') && CAN_user_problem_reports ) %]
         <dt><a href="/cgi-bin/koha/tools/problem-reports.pl">OPAC problem reports</a></dt>
         <dd>Manage OPAC problem reports submitted by patrons</dd>
     [% END %]
 
 </dl>
+
+[% IF ( Koha.Preference('UseCashRegisters') && ( CAN_user_cash_management_cashup || CAN_user_cash_management_anonymous_refund ) ) %]
+<h3>Cash management</h3>
+<dl>
+
+    <dt><a href="/cgi-bin/koha/pos/registers.pl">Cash summary for [% Branches.GetLoggedInBranchname | html %]</a></dt>
+    <dd>View cash takings for the current library</dd>
+
+    <dt><a href="/cgi-bin/koha/pos/register.pl">Transaction history for [% Registers.session_register_name | html %]</a></dt>
+    <dd>View transaction history for the current cash register</dd>
+
+</dl>
+[% END %]
+
 </div>
 
 <div class="col-sm-4 col-sm-pull-4">

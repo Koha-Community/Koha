@@ -22,11 +22,11 @@
             <a href="/cgi-bin/koha/mainpage.pl">Home</a>
         </li>
         <li>
-            <a href="/cgi-bin/koha/pos/pay.pl">Point of sale</a>
+            <a href="/cgi-bin/koha/pos/pay.pl">Cash management</a>
         </li>
         <li>
             <a href="#" aria-current="page">
-                Register details
+                Transaction history for [% register.name | html %]
             </a>
         </li>
     </ol>
@@ -68,7 +68,7 @@
             </div>
             [% END %]
 
-            <h1>Register transaction details for [% register.name | html %]</h1>
+            <h1>Transaction history for [% register.name | html %]</h1>
 
             <h2>Summary</h2>
             <ul>

@@ -19,11 +19,11 @@
                 <a href="/cgi-bin/koha/mainpage.pl">Home</a>
             </li>
             <li>
-                <a href="/cgi-bin/koha/pos/pay.pl">Point of sale</a>
+                <a href="/cgi-bin/koha/pos/pay.pl">Cash management</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
-                    Library details
+                    Cash summary for [% library.branchname | html %]
                 </a>
             </li>
         </ol>
@@ -59,7 +59,7 @@
                     </div>
                     [% END %]
 
-                    <h1>Library transaction details for [% library.branchname | html %]</h1>
+                    <h1>Cash summary for [% library.branchname | html %]</h1>
 
                     <h2>Summary</h2>
                     <ul>
