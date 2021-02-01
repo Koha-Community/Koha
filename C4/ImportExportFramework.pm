@@ -23,6 +23,8 @@ use XML::LibXML;
 use XML::LibXML::XPathContext;
 use Digest::MD5 qw();
 use POSIX qw(strftime);
+use Text::CSV_XS;
+use List::MoreUtils qw(indexes);
 
 use C4::Context;
 use C4::Debug;
@@ -927,70 +929,63 @@ sub _import_table_csv
     my $numFields = @$fields;
     my $fieldsNameRead = 0;
     my @arrData;
-    my ($fieldsStr, $dataStr, $updateStr);
+    my ($fieldsStr, $dataStr, $updateStr, @empty_indexes);
     my @fieldsPK = @$PKArray;
     shift @fieldsPK;
     my $ok = 0;
-    my $numRow = 0;
     my $pos = 0;
-    while (<$dom>) {
-        $row = $_;
-        # Check whether the line has an unfinished field, i.e., a field with CR/LF in its data
-        if ($row =~ /,"[^"]*[\r\n]+$/ || $row =~ /^[^"]+[\r\n]+$/) {
-            $row =~ s/[\r\n]+$//;
-            $partialRow .= $row;
-            next;
-        }
-        if ($partialRow) {
-            $row = $partialRow . $row;
-            $partialRow = '';
-        }
-        # Line OK, process it
-        if ($row =~ /(?:".*?",?)+/) {
-            @arrData = split('","', $row);
-            $arrData[0] = substr($arrData[0], 1) if ($arrData[0] =~ /^"/);
-            $arrData[$#arrData] =~ s/[\r\n]+$//;
-            chop $arrData[$#arrData] if ($arrData[$#arrData] =~ /"$/);
-            if (@arrData) {
-                if ($arrData[0] eq '#-#' && $arrData[$#arrData] eq '#-#') {
-                    # Change of table with separators #-#
-                    return 1;
-                } elsif ($fieldsNameRead && $arrData[0] eq 'tagfield') {
-                    # Change of table because we begin with field name with former field names read
-                    seek($dom, $pos, 0);
-                    return 1;
-                }
-                if (!$fieldsNameRead) {
-                    # New table, we read the field names
-                    $fieldsNameRead = 1;
-                    $fields = [@arrData];
-                    $fieldsStr = join(',', @$fields);
-                    $dataStr = '';
-                    map { $dataStr .= '?,';} @$fields;
-                    chop($dataStr) if ($dataStr);
-                    $updateStr = '';
-                    map { $updateStr .= $_ . '=?,';} @$fields;
-                    chop($updateStr) if ($updateStr);
-                } else {
-                    # Read data
-                    my $j = 0;
-                    my %dataFields = ();
-                    for (@arrData) {
-                        if ($fields->[$j] eq 'frameworkcode' && $_ ne $frameworkcode) {
-                            $dataFields{$fields->[$j]} = $frameworkcode;
-                            $arrData[$j] = $frameworkcode;
-                        } else {
-                            $dataFields{$fields->[$j]} = $_;
-                        }
-                        $j++
-                    }
-                    $ok = _processRow_DB($dbh, $table, $fieldsStr, $dataStr, $updateStr, \@arrData, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
-                }
-                $pos = tell($dom);
+    my $csv = Text::CSV_XS->new ({ binary => 1 });
+    while ( my $row = $csv->getline($dom) ) {
+        my @fields = @$row;
+        @arrData = @fields;
+        next if scalar @arrData == grep { $_ eq '' } @arrData; # Emtpy lines
+        #$arrData[0] = substr($arrData[0], 1) if ($arrData[0] =~ /^"/);
+        #$arrData[$#arrData] =~ s/[\r\n]+$//;
+        #chop $arrData[$#arrData] if ($arrData[$#arrData] =~ /"$/);
+        if (@arrData) {
+            if ($arrData[0] eq '#-#' && $arrData[$#arrData] eq '#-#') {
+                # Change of table with separators #-#
+                return 1;
+            } elsif ($fieldsNameRead && $arrData[0] eq 'tagfield') {
+                # Change of table because we begin with field name with former field names read
+                seek($dom, $pos, 0);
+                return 1;
             }
-            @arrData = ();
+            if (!$fieldsNameRead) {
+                # New table, we read the field names
+                $fieldsNameRead = 1;
+                $fields = [@arrData];
+                my $non_empty_fields = [ grep { $_ ne '' } @$fields ];
+                @empty_indexes = indexes { $_ eq '' } @$fields;
+                $fieldsStr = join(',', @$non_empty_fields);
+                $dataStr = '';
+                map { $dataStr .= '?,';} @$non_empty_fields;
+                chop($dataStr) if ($dataStr);
+                $updateStr = '';
+                map { $updateStr .= $_ . '=?,';} @$non_empty_fields;
+                chop($updateStr) if ($updateStr);
+            } else {
+                # Read data
+                my $j = 0;
+                my %dataFields = ();
+                my @values;
+                for my $value (@arrData) {
+                    if ( grep { $_ == $j } @empty_indexes ) {
+                        # empty field
+                    } elsif ($fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode) {
+                        $dataFields{$fields->[$j]} = $frameworkcode;
+                        push @values, $frameworkcode;
+                    } else {
+                        $dataFields{$fields->[$j]} = $value;
+                        push @values, $value;
+                    }
+                    $j++
+                }
+                $ok = _processRow_DB($dbh, $table, $fieldsStr, $dataStr, $updateStr, \@values, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+            }
+            $pos = tell($dom);
         }
-        $numRow++;
+        @arrData = ();
     }
     return $ok;
 }#_import_table_csv
