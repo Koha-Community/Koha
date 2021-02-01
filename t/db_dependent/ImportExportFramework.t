@@ -44,9 +44,11 @@ subtest 'ImportFramework() tests' => sub {
     };
 
     subtest 'ODS tests' => sub {
-        plan tests => 9;
+        plan tests => 15;
 
         run_tests('ods');
+
+        run_ods_new();
     };
 
     subtest 'XML tests' => sub {
@@ -128,6 +130,40 @@ sub run_csv_no_quoted {
 
     $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_2->id })->count;
     is( $nb_subfields, 0, "0 subfields should have been imported" );
+
+    $schema->storage->txn_rollback;
+};
+
+sub run_ods_new {
+
+    my ($format) = @_;
+
+    $schema->storage->txn_begin;
+
+    my $data_filepath = dirname(__FILE__) . "/data/frameworks/biblio_framework_new.ods";
+    my $fw_1 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+
+    my $result = C4::ImportExportFramework::ImportFramework( $data_filepath, $fw_1->id );
+    is( $result, 0, 'Import successful, no tags removed' );
+
+    my $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_1->id })->count;
+    is( $nb_tags, 5, "5 tags should have been imported" );
+
+    my $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_1->id })->count;
+    is( $nb_subfields, 16, "16 subfields should have been imported" );
+
+    # bad file tests
+    my $fw_2 = $builder->build_object({ class => 'Koha::BiblioFrameworks' });
+    $result = C4::ImportExportFramework::ImportFramework( '', $fw_2->id );
+
+    is( $result, -1, 'Bad file makes it return -1' );
+
+    $nb_tags = $schema->resultset('MarcTagStructure')->search({ frameworkcode => $fw_2->id })->count;
+    is( $nb_tags, 0, "0 tags should have been imported" );
+
+    $nb_subfields = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw_2->id })->count;
+    is( $nb_subfields, 0, "0 subfields should have been imported" );
+
 
     $schema->storage->txn_rollback;
 };
