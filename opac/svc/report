@@ -60,7 +60,6 @@ if ($cache_active) {
 unless ($json_text) {
     my $offset = 0;
     my $limit = C4::Context->preference("SvcMaxReportRows") || 10;
-    my $sql = $report_rec->savedsql;
 
     my ( $sql, undef ) = $report_rec->prep_report( \@param_names, \@sql_params );
 
