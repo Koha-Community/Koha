@@ -65,6 +65,7 @@ my $return = $Import->import_patrons(
         overwrite_cardnumber         => $overwrite_cardnumber,
         overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
+        dry_run                      => !$confirm,
     }
 );
 
