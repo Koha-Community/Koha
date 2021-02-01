@@ -358,7 +358,7 @@ sub mocking_systempreferences_to_a_set_value {
         casLogout
         AllowPKIAuth
         DebugLevel
-        delimiter
+        CSVDelimiter
         noItemTypeImages
         OpacNoItemTypeImages
         virtualshelves
