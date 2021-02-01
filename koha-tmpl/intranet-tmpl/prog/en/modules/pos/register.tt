@@ -223,6 +223,17 @@
             </table>
             [% END %]
 
+            <hr/>
+            <h2>Cashup history</h2>
+            <table id="table_cashups">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th data-class-name="actions">Actions</th>
+                    </tr>
+                </thead>
+            </table>
             [% END %]
         </div>
 
@@ -389,6 +400,45 @@
         $('.printModal').click(function() {
             window.print();
         });
+
+
+        var cashups_table_url = "/api/v1/cash_registers/[% register.id | html %]/cashups?";
+        var cashups_table = $("#table_cashups").api({
+            "ajax": {
+                "url": cashups_table_url
+            },
+            "order": [[ 1, "asc" ]],
+            "columnDefs": [ {
+                "targets": [0,1],
+                "render": function (data, type, row, meta) {
+                    if ( type == 'display' ) {
+                        return data.escapeHtml();
+                    }
+                    return data;
+                }
+            } ],
+            "columns": [
+                {
+                    "data": "timestamp",
+                    "searchable": true,
+                    "orderable": true
+                },
+                {
+                    "data": "amount",
+                    "searchable": true,
+                    "orderable": true
+                },
+                {
+                    "data": function( row, type, val, meta ) {
+                        var result = '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-cashup="'+encodeURIComponent(row.cashup_id)+'" data-register="[% register.description | html %]" href="#cashupSummaryModal"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Summary")+'</a>\n';
+                        return result;
+
+                    },
+                    "searchable": false,
+                    "orderable": false
+                }
+            ]
+        }, [], 1);
 
         $(document).ready(function() {
             // http://jqueryui.com/demos/datepicker/#date-range
