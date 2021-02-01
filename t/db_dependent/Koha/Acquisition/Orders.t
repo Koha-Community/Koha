@@ -121,7 +121,7 @@ subtest 'filter_by_active() tests' => sub {
 
 subtest 'filter_by_id_including_transfers() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -149,9 +149,7 @@ subtest 'filter_by_id_including_transfers() tests' => sub {
 
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_1->ordernumber });
 
-    is( $orders_rs->count, 2, 'The two referenced orders are returned' );
-    is( $orders_rs->next->ordernumber, $order_1->ordernumber, 'The right order is returned' );
-    is( $orders_rs->next->ordernumber, $order_2->ordernumber, 'The right order is returned' );
+    is_deeply( [ sort $orders_rs->get_column('ordernumber') ], [$order_1->ordernumber, $order_2->ordernumber ], 'The 2 orders are returned' );
 
     $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_2->ordernumber });
 
