@@ -848,36 +848,16 @@ sub _import_table
 # Insert/Update the row from the spreadsheet in the database
 sub _processRow_DB
 {
-    my ($dbh, $db_scheme, $table, $fields, $dataStr, $updateStr, $dataFields, $dataFieldsHash, $PKArray, $fieldsPK, $fields2Delete) = @_;
+    my ($dbh, $table, $fields, $dataStr, $updateStr, $dataFields, $dataFieldsHash, $PKArray, $fieldsPK, $fields2Delete) = @_;
 
     my $ok = 0;
     my $query;
-    if ($db_scheme eq 'mysql') {
-        $query = 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $dataStr . ') ON DUPLICATE KEY UPDATE ' . $updateStr;
-    } else {
-        $query = 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $dataStr . ')';
-    }
+    $query = 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $dataStr . ') ON DUPLICATE KEY UPDATE ' . $updateStr;
     eval {
         my $sth = $dbh->prepare($query);
-        if ($db_scheme eq 'mysql') {
-            $sth->execute((@$dataFields, @$dataFields));
-        } else {
-            $sth->execute(@$dataFields);
-        }
+        $sth->execute((@$dataFields, @$dataFields));
     };
     if ($@) {
-        unless ($db_scheme eq 'mysql') {
-            $query = 'UPDATE ' . $table . ' SET ' . $updateStr . ' WHERE ';
-            map {$query .= $_ . '=? AND ';} @$PKArray;
-            $query = substr($query, 0, -4);
-            eval {
-                my $sth2 = $dbh->prepare($query);
-                my @dataPK = ();
-                map {push @dataPK, $dataFieldsHash->{$_};} @$PKArray;
-                $sth2->execute((@$dataFields, @dataPK));
-            };
-            $ok = 1 unless ($@);
-        }
         $debug and warn "Error _processRows_Table $@\n";
     } else {
         $ok = 1;
@@ -903,7 +883,6 @@ sub _processRows_Table
     my $dataStr = '';
     my $updateStr = '';
     my $j = 0;
-    my $db_scheme = C4::Context->config("db_scheme");
     my $ok = 0;
     my @fieldsPK = @$PKArray;
     shift @fieldsPK;
@@ -924,7 +903,7 @@ sub _processRows_Table
                 # Get data from row
                 my ($dataFields, $dataFieldsR) = _getDataFields($frameworkcode, $nodeR, \@fields, $format);
                 if (scalar(@fields) == scalar(@$dataFieldsR)) {
-                    $ok = _processRow_DB($dbh, $db_scheme, $table, $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                    $ok = _processRow_DB($dbh, $table, $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields, $PKArray, \@fieldsPK, $fields2Delete);
                 }
             }
             $j++;
@@ -948,7 +927,6 @@ sub _import_table_csv
     my $fieldsNameRead = 0;
     my @arrData;
     my ($fieldsStr, $dataStr, $updateStr);
-    my $db_scheme = C4::Context->config("db_scheme");
     my @fieldsPK = @$PKArray;
     shift @fieldsPK;
     my $ok = 0;
@@ -1005,7 +983,7 @@ sub _import_table_csv
                         }
                         $j++
                     }
-                    $ok = _processRow_DB($dbh, $db_scheme, $table, $fieldsStr, $dataStr, $updateStr, \@arrData, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                    $ok = _processRow_DB($dbh, $table, $fieldsStr, $dataStr, $updateStr, \@arrData, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
                 }
                 $pos = tell($dom);
             }
