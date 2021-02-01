@@ -1,6 +1,6 @@
 # Copyright Tamil s.a.r.l. 2008-2015
 # Copyright Biblibre 2008-2015
-# Copyright The National Library of Finland, University of Helsinki 2016-2017
+# Copyright The National Library of Finland, University of Helsinki 2016-2021
 #
 # This file is part of Koha.
 #
@@ -31,49 +31,50 @@ use base ("HTTP::OAI::ResumptionToken");
 # - metadataPrefix
 # - from
 # - until
-# - offset
+# - cursor
 # - deleted
+# - deleted count (not used anymore, but preserved for back-compatibility)
+# - nextId
 
 sub new {
     my ($class, %args) = @_;
 
     my $self = $class->SUPER::new(%args);
 
-    my ($metadata_prefix, $offset, $from, $until, $set, $deleted, $deleted_count);
+    my ($metadata_prefix, $cursor, $from, $until, $set, $deleted, $next_id);
     if ( $args{ resumptionToken } ) {
-        ($metadata_prefix, $offset, $from, $until, $set, $deleted, $deleted_count)
+        # Note: undef in place of deleted record count for back-compatibility
+        ($metadata_prefix, $cursor, $from, $until, $set, $deleted, undef, $next_id)
             = split( '/', $args{resumptionToken} );
+        $next_id = 0 unless $next_id;
     }
     else {
         $metadata_prefix = $args{ metadataPrefix };
-        $from = $args{ from } || '1970-01-01';
-        $until = $args{ until };
-        unless ( $until) {
-            my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday) = gmtime( time );
-            $until = sprintf( "%.4d-%.2d-%.2d", $year+1900, $mon+1,$mday );
-        }
-        #Add times to the arguments, when necessary, so they correctly match against the DB timestamps
+        $from = $args{ from } || '';
+        $until = $args{ until } || '';
+        # Add times to the arguments, when necessary, so they correctly match against the DB timestamps
         $from .= 'T00:00:00Z' if length($from) == 10;
         $until .= 'T23:59:59Z' if length($until) == 10;
-        $offset = $args{ offset } || 0;
+        $cursor = $args{ cursor } // 0;
         $set = $args{ set } || '';
         $deleted = defined $args{ deleted } ? $args{ deleted } : 1;
-        $deleted_count = defined $args{ deleted_count } ? $args{ deleted_count } : 0;
+        $next_id = $args{ next_id } // 0;
     }
 
     $self->{ metadata_prefix } = $metadata_prefix;
-    $self->{ offset          } = $offset;
+    $self->{ cursor          } = $cursor;
     $self->{ from            } = $from;
     $self->{ until           } = $until;
     $self->{ set             } = $set;
     $self->{ from_arg        } = _strip_UTC_designators($from);
     $self->{ until_arg       } = _strip_UTC_designators($until);
     $self->{ deleted         } = $deleted;
-    $self->{ deleted_count   } = $deleted_count;
+    $self->{ next_id         } = $next_id;
 
+    # Note: put zero where deleted record count used to be for back-compatibility
     $self->resumptionToken(
-        join( '/', $metadata_prefix, $offset, $from, $until, $set, $deleted, $deleted_count ) );
-    $self->cursor( $offset );
+        join( '/', $metadata_prefix, $cursor, $from, $until, $set, $deleted, 0, $next_id ) );
+    $self->cursor( $cursor );
 
     return $self;
 }

@@ -45,13 +45,14 @@ sub GetRecords {
     if ( defined $token->{'set'} ) {
         $set = GetOAISetBySpec($token->{'set'});
     }
-    my $offset = $token->{offset};
     my $deleted = defined $token->{deleted} ? $token->{deleted} : 0;
-    my $deleted_count = defined $token->{deleted_count} ? $token->{deleted_count} : 0;
     my $max = $repository->{koha_max_count};
     my $count = 0;
     my $format = $args{metadataPrefix} || $token->{metadata_prefix};
     my $include_items = $repository->items_included( $format );
+    my $from = $token->{from_arg};
+    my $until = $token->{until_arg};
+    my $next_id = $token->{next_id};
 
     # Since creating a union of normal and deleted record tables would be a heavy
     # operation in a large database, build results in two stages:
@@ -59,71 +60,80 @@ sub GetRecords {
     STAGELOOP:
     for ( ; $deleted >= 0; $deleted-- ) {
         my $table = $deleted ? 'deletedbiblio_metadata' : 'biblio_metadata';
+
+        my @part_bind_params = ($next_id);
+
+        my $where = "biblionumber >= ?";
+        if ( $from ) {
+            $where .= " AND timestamp >= ?";
+            push @part_bind_params, $from;
+        }
+        if ( $until ) {
+            $where .= " AND timestamp <= ?";
+            push @part_bind_params, $until;
+        }
+        if ( defined $set ) {
+            $where .= " AND biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)";
+            push @part_bind_params, $set->{'id'};
+        }
+
+        my @bind_params = @part_bind_params;
+
+        my $criteria = "WHERE $where ORDER BY biblionumber LIMIT " . ($max + 1);
+
         my $sql = "
             SELECT biblionumber
             FROM $table
-            WHERE (timestamp >= ? AND timestamp <= ?)
+            $criteria
         ";
-        my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
 
-        if ($include_items) {
-            $sql .= "
-                OR biblionumber IN (SELECT biblionumber from deleteditems WHERE timestamp >= ? AND timestamp <= ?)
-            ";
-            push @bind_params, ($token->{'from_arg'}, $token->{'until_arg'});
+        # If items are included, fetch a set of potential biblionumbers from items tables as well.
+        # Then merge them, sort them and take the required number of them from the resulting list.
+        # This may seem counter-intuitive as in worst case we fetch 3 times the biblionumbers needed,
+        # but avoiding joins or subqueries makes this so much faster that it does not matter.
+        if ( $include_items )  {
+            $sql = "($sql) UNION (SELECT DISTINCT(biblionumber) FROM deleteditems $criteria)";
+            push @bind_params, @part_bind_params;
             if (!$deleted) {
-                $sql .= "
-                    OR biblionumber IN (SELECT biblionumber from items WHERE timestamp >= ? AND timestamp <= ?)
-                ";
-                push @bind_params, ($token->{'from_arg'}, $token->{'until_arg'});
+                $sql .= " UNION (SELECT DISTINCT(biblionumber) FROM items $criteria)";
+                push @bind_params, @part_bind_params;
             }
+            $sql = "SELECT biblionumber FROM ($sql) bibnos ORDER BY biblionumber LIMIT " . ($max + 1);
         }
-
-        $sql .= "
-            ORDER BY biblionumber
-        ";
-
-        # Use a subquery for sets since it allows us to use an index in
-        # biblioitems table and is quite a bit faster than a join.
-        if (defined $set) {
-            $sql = "
-                SELECT bi.* FROM ($sql) bi
-                  WHERE bi.biblionumber in (SELECT osb.biblionumber FROM oai_sets_biblios osb WHERE osb.set_id = ?)
-            ";
-            push @bind_params, $set->{'id'};
-        }
-
-        $sql .= "
-            LIMIT " . ($max + 1) . "
-            OFFSET " . ($offset - $deleted_count);
 
         my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
-
-        if ( $deleted ) {
-            $sql = "
-                SELECT MAX(timestamp)
-                FROM (
-                    SELECT timestamp FROM deletedbiblio_metadata WHERE biblionumber = ?
-                    UNION
-                    SELECT timestamp FROM deleteditems WHERE biblionumber = ?
-                ) bis
-            ";
-        } else {
-            $sql = "
-                SELECT MAX(timestamp)
-                FROM (
-                    SELECT timestamp FROM biblio_metadata WHERE biblionumber = ?
-                    UNION
-                    SELECT timestamp FROM deleteditems WHERE biblionumber = ?
-                    UNION
-                    SELECT timestamp FROM items WHERE biblionumber = ?
-                ) bi
-            ";
-        }
-        my $record_sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
-
         $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
-        while ( my ($biblionumber) = $sth->fetchrow ) {
+
+        my $ts_sql;
+        if ( $include_items ) {
+            if ( $deleted ) {
+                $ts_sql = "
+                    SELECT MAX(timestamp)
+                    FROM (
+                        SELECT timestamp FROM deletedbiblio_metadata WHERE biblionumber = ?
+                        UNION
+                        SELECT timestamp FROM deleteditems WHERE biblionumber = ?
+                    ) bis
+                ";
+            } else {
+                $ts_sql = "
+                    SELECT MAX(timestamp)
+                    FROM (
+                        SELECT timestamp FROM biblio_metadata WHERE biblionumber = ?
+                        UNION
+                        SELECT timestamp FROM deleteditems WHERE biblionumber = ?
+                        UNION
+                        SELECT timestamp FROM items WHERE biblionumber = ?
+                    ) bi
+                ";
+            }
+        } else {
+            $ts_sql = "SELECT timestamp FROM $table WHERE biblionumber = ?";
+        }
+        my $ts_sth = $dbh->prepare( $ts_sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
+
+        foreach my $row (@{ $sth->fetchall_arrayref() }) {
+            my $biblionumber = $row->[0];
             $count++;
             if ( $count > $max ) {
                 $self->resumptionToken(
@@ -131,18 +141,21 @@ sub GetRecords {
                         metadataPrefix  => $token->{metadata_prefix},
                         from            => $token->{from},
                         until           => $token->{until},
-                        offset          => $token->{offset} + $max,
+                        cursor          => $token->{cursor} + $max,
                         set             => $token->{set},
                         deleted         => $deleted,
-                        deleted_count   => $deleted_count
+                        next_id         => $biblionumber
                     )
                 );
                 last STAGELOOP;
             }
-            my @params = $deleted ? ( $biblionumber, $biblionumber ) : ( $biblionumber, $biblionumber, $biblionumber );
-            $record_sth->execute( @params ) || die( 'Could not execute statement: ' . $sth->errstr );
+            my @params = ($biblionumber);
+            if ( $include_items ) {
+                push @params, $deleted ? ( $biblionumber ) : ( $biblionumber, $biblionumber );
+            }
+            $ts_sth->execute( @params ) || die( 'Could not execute statement: ' . $ts_sth->errstr );
 
-            my ($timestamp) = $record_sth->fetchrow;
+            my ($timestamp) = $ts_sth->fetchrow;
 
             my $oai_sets = GetOAISetsBiblio($biblionumber);
             my @setSpecs;
@@ -172,9 +185,8 @@ sub GetRecords {
                 ) );
             }
         }
-        # Store offset and deleted record count
-        $offset += $count;
-        $deleted_count = $offset if ($deleted);
+        # Reset $next_id for the next stage
+        $next_id = 0;
     }
     return $count;
 }
