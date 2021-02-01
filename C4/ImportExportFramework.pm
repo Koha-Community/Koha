@@ -858,7 +858,8 @@ sub _processRow_DB
         $sth->execute((@$dataFields, @$dataFields));
     };
     if ($@) {
-        $debug and warn "Error _processRows_Table $@\n";
+        warn $@;
+        $debug and warn "Error _processRow_DB $@\n";
     } else {
         $ok = 1;
     }
