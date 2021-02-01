@@ -907,6 +907,8 @@ sub _processRows_Table
                 my ($dataFields, $dataFieldsR) = _getDataFields($frameworkcode, $nodeR, \@fields, $format);
                 if (scalar(@fields) == scalar(@$dataFieldsR)) {
                     $ok = _processRow_DB($dbh, $table, $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                } else {
+                    warn "$j don't match number of fields " . scalar(@fields) . ' vs ' . scalar(@$dataFieldsR) . "($dataStr)";
                 }
             }
             $j++;
@@ -1079,7 +1081,7 @@ sub _getDataFields
             if ($format && $format eq 'ods') {
                 ($data, $repeated) = _getDataNodeODS($node2) if ($repeated <= 0);
                 $repeated--;
-                $ok = 1 if (defined($data));
+                $ok = 1;
             } else {
                 if ($node2->nodeType == 1 && $node2->nodeName  =~ /(?:ss:)?Cell/) {
                     my @nodes3 = $node2->getElementsByTagNameNS('urn:schemas-microsoft-com:office:spreadsheet', 'Data');
@@ -1090,6 +1092,7 @@ sub _getDataFields
                 }
             }
             if ($ok) {
+                $data //= '';
                 $data = '' if ($data eq '#');
                 $data = $frameworkcode if ($fields->[$i] eq 'frameworkcode');
                 $dataFields->{$fields->[$i]} = $data;
