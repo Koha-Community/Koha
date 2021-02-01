@@ -141,18 +141,7 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
 
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{claim_returned} );
-    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
-    my $item   = $builder->build_object(
-        {
-            class => 'Koha::Items',
-            value => {
-                biblionumber => $biblio->biblionumber,
-                notforloan   => 0,
-                itemlost     => 0,
-                withdrawn    => 0,
-            }
-        }
-    );
+    my $item     = $builder->build_sample_item;
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
