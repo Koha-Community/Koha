@@ -62,6 +62,7 @@ my $return = $Import->import_patrons(
         matchpoint                   => $matchpoint,
         overwrite_cardnumber         => $overwrite_cardnumber,
         preserve_extended_attributes => $ext_preserve,
+        dry_run                      => !$confirm,
     }
 );
 

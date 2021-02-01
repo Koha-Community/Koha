@@ -73,8 +73,12 @@ sub import_patrons {
     my $defaults             = $params->{defaults};
     my $ext_preserve         = $params->{preserve_extended_attributes};
     my $overwrite_cardnumber = $params->{overwrite_cardnumber};
+    my $dry_run              = $params->{dry_run};
     my $extended             = C4::Context->preference('ExtendedPatronAttributes');
     my $set_messaging_prefs  = C4::Context->preference('EnhancedMessagingPreferences');
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin if $dry_run;
 
     my @columnkeys = $self->set_column_keys($extended);
     my @feedback;
@@ -389,6 +393,8 @@ sub import_patrons {
         invalid       => $invalid,
         imported_borrowers => \@imported_borrowers,
     };
+
+    $schema->storage->txn_rollback if $dry_run;
 }
 
 =head2 prepare_columns
