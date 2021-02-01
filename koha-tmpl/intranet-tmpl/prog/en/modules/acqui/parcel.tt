@@ -432,7 +432,7 @@
                     {
                         [% SET summary_fields = "biblio.author:biblio.title:biblio.isbn:biblio.publisher:me.internal_note:me.vendor_note" %]
                         [% IF Koha.Preference('marcflavour')=='UNIMARC' %][% SET summary_fields = summary_fields _ ":biblio.ean" %][% END %]
-                        "data": "[% summary_fields %]",
+                        "data": "[% summary_fields | html %]",
                         "render": function(data, type, row, meta) {
                             var result = '';
                             if ( row && row.biblio_id != null ) {
