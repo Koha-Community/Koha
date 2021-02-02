@@ -20,7 +20,6 @@ use Modern::Perl;
 use Test::More tests => 2;
 
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -30,12 +29,9 @@ use Koha::Patrons;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-my $remote_address = '127.0.0.1';
-my $t              = Test::Mojo->new('Koha::REST::V1');
+my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'set() (authorized user tests)' => sub {
 
@@ -43,80 +39,78 @@ subtest 'set() (authorized user tests)' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron, $session ) = create_user_and_session({ authorized => 1 });
+    my $privileged_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $privileged_patron->set_password(
+        { password => $password, skip_validation => 1 } );
+    my $userid = $privileged_patron->userid;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     t::lib::Mocks::mock_preference( 'minPasswordLength',     3 );
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
 
     my $new_password = 'abc';
 
-    my $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(200)->json_is('');
 
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is( '' );
-
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => 'cde' } );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => 'Passwords don\'t match' });
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => 'cde' } )->status_is(400)
+      ->json_is( { error => 'Passwords don\'t match' } );
 
     t::lib::Mocks::mock_preference( 'minPasswordLength', 5 );
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
 
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => 'Password length (3) is shorter than required (5)' });
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(400)
+      ->json_is(
+        { error => 'Password length (3) is shorter than required (5)' } );
 
     $new_password = 'abc   ';
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => '[Password contains leading/trailing whitespace character(s)]' });
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(400)->json_is(
+        {
+            error =>
+              '[Password contains leading/trailing whitespace character(s)]'
+        }
+      );
 
     $new_password = 'abcdefg';
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(200)->json_is('');
 
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is('');
-
-    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 1);
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => '[Password is too weak]' });
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 1 );
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(400)->json_is( { error => '[Password is too weak]' } );
 
     $new_password = 'ABcde123%&';
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/patrons/"
-            . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password } );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is('');
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/"
+          . $patron->id
+          . "/password" => json =>
+          { password => $new_password, password_2 => $new_password } )
+      ->status_is(200)->json_is('');
 
     $schema->storage->txn_rollback;
 };
@@ -127,8 +121,11 @@ subtest 'set_public() (unprivileged user tests)' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron, $session ) = create_user_and_session({ authorized => 0 });
-    my $other_patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid       = $patron->userid;
+    my $other_patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # Enable the public API
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
@@ -139,118 +136,72 @@ subtest 'set_public() (unprivileged user tests)' => sub {
 
     my $new_password = 'abc';
 
-    my $tx = $t->ua->build_tx(
-              POST => "/api/v1/public/patrons/"
-            . $patron->id
-            . "/password" => json => {
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $patron->id
+          . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
             old_password      => 'blah'
-            }
-    );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)
-      ->status_is(403)
-      ->json_is({
-          error => 'Configuration prevents password changes by unprivileged users'
-        });
-
-    t::lib::Mocks::mock_preference( 'OpacPasswordChange', 1 );
-
-    my $password = 'holapassword';
-    $patron->set_password({ password => $password });
-    $tx = $t->ua->build_tx(
-              POST => "/api/v1/public/patrons/"
-            . $other_patron->id
-            . "/password" => json => {
-            password          => $new_password,
-            password_repeated => $new_password,
-            old_password      => $password
-            }
-    );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)
-      ->status_is(403)
-      ->json_is('/error', "Authorization failure. Missing required permission(s).");
-
-    $tx = $t->ua->build_tx(
-              POST => "/api/v1/public/patrons/"
-            . $patron->id
-            . "/password" => json => {
-            password          => $new_password,
-            password_repeated => 'wrong_password',
-            old_password      => $password
-            }
-    );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)
-      ->status_is(400)
-      ->json_is({
-          error => "Passwords don't match"
-        });
-
-    $tx = $t->ua->build_tx(
-              POST => "/api/v1/public/patrons/"
-            . $patron->id
-            . "/password" => json => {
-            password          => $new_password,
-            password_repeated => $new_password,
-            old_password      => 'badpassword'
-            }
-    );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)
-      ->status_is(400)
-      ->json_is({
-          error => "Invalid password"
-        });
-
-    $tx = $t->ua->build_tx(
-              POST => "/api/v1/public/patrons/"
-            . $patron->id
-            . "/password" => json => {
-            password          => $new_password,
-            password_repeated => $new_password,
-            old_password      => $password
-            }
-    );
-
-    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)
-      ->status_is(200)
-      ->json_is('');
-
-    $schema->storage->txn_rollback;
-};
-
-sub create_user_and_session {
-
-    my ( $args ) = @_;
-    my $flags = ( $args->{authorized} ) ? 16 : 0;
-
-    my $user = $builder->build_object(
+          }
+    )->status_is(403)->json_is(
         {
-            class => 'Koha::Patrons',
-            value => { flags => $flags }
+            error =>
+              'Configuration prevents password changes by unprivileged users'
         }
     );
 
-    # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->borrowernumber );
-    $session->param( 'id',       $user->userid );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
+    t::lib::Mocks::mock_preference( 'OpacPasswordChange', 1 );
 
-    return ( $user, $session );
-}
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $other_patron->id
+          . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => $password
+          }
+    )->status_is(403)
+      ->json_is( '/error',
+        "Authorization failure. Missing required permission(s)." );
+
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $patron->id
+          . "/password" => json => {
+            password          => $new_password,
+            password_repeated => 'wrong_password',
+            old_password      => $password
+          }
+    )->status_is(400)->json_is(
+        {
+            error => "Passwords don't match"
+        }
+    );
+
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $patron->id
+          . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => 'badpassword'
+          }
+    )->status_is(400)->json_is(
+        {
+            error => "Invalid password"
+        }
+    );
+
+    $t->post_ok(
+            "//$userid:$password@/api/v1/public/patrons/"
+          . $patron->id
+          . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => $password
+          }
+    )->status_is(200)->json_is('');
+
+    $schema->storage->txn_rollback;
+};
