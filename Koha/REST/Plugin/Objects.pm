@@ -64,6 +64,8 @@ the requested object. It passes through any embeds if specified.
 
             my $object = $result_set->find( $id, $attributes );
 
+            return unless $object;
+
             return $object->to_api({ embed => $embed });
         }
     );
