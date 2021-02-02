@@ -2030,7 +2030,8 @@ DROP TABLE IF EXISTS `course_items`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `course_items` (
   `ci_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'course item id',
-  `itemnumber` int(11) NOT NULL COMMENT 'items.itemnumber for the item on reserve',
+  `itemnumber` int(11) DEFAULT NULL COMMENT 'items.itemnumber for the item on reserve',
+  `biblionumber` int(11) NOT NULL COMMENT 'biblio.biblionumber for the bibliographic record on reserve',
   `itype` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'new itemtype for the item to have while on reserve (optional)',
   `itype_enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'indicates if itype should be changed while on course reserve',
   `itype_storage` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'a place to store the itype when item is on course reserve',
@@ -2053,10 +2054,12 @@ CREATE TABLE `course_items` (
   KEY `holdingbranch` (`holdingbranch`),
   KEY `fk_course_items_homebranch` (`homebranch`),
   KEY `fk_course_items_homebranch_storage` (`homebranch_storage`),
+  KEY `fk_course_items_biblionumber` (`biblionumber`),
   CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `course_items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_course_items_homebranch` FOREIGN KEY (`homebranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_course_items_homebranch_storage` FOREIGN KEY (`homebranch_storage`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_course_items_homebranch_storage` FOREIGN KEY (`homebranch_storage`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_course_items_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
