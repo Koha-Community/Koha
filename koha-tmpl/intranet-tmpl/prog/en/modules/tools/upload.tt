@@ -170,7 +170,13 @@
         <td>[% record.hashvalue | html %]</td>
         <td>[% record.uploadcategorycode | html %]</td>
         [% IF !plugin %]
-            <td>[% IF record.public %]Yes[% ELSE %]No[% END %]</td>
+            <td>
+                [% IF record.public %]
+                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-toggle="tooltip" title="Copy link to this file"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
+                [% ELSE %]
+                    No
+                [% END %]
+            </td>
             <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
         [% END %]
         <td class="actions">
@@ -424,6 +430,20 @@
             $("#new_search").on("click",function(e){
                 e.preventDefault();
                 SubmitMe('new');
+            });
+
+            $(".get-file").on("click", function(e){
+                e.preventDefault();
+                if( navigator.clipboard ){
+                    navigator.clipboard.writeText( $(this).attr("href") );
+                }
+                $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
+                    .tooltip("show");
+            });
+            $(".get-file").tooltip({
+                delay: { "show": 100, "hide": 500 }
+            }).on("hidden.bs.tooltip", function(){
+                $(this).attr("data-original-title", _( "Copy link to this file" ) );
             });
         });
     </script>
