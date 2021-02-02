@@ -61,7 +61,7 @@ subtest 'add() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 8;
+        plan tests => 20;
 
         $schema->storage->txn_begin;
 
@@ -71,12 +71,67 @@ subtest 'add() tests' => sub {
         my $librarian = $builder->build_object(
             {
                 class => 'Koha::Patrons',
-                value => { flags => 2**6 }    # reserveforothers flag = 6
+                value => { flags => 2 ** 6 }    # reserveforothers flag = 6
             }
         );
         my $password = 'thePassword123';
         $librarian->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $librarian->userid;
+
+        my $non_existent_item   = $builder->build_sample_item;
+        my $non_existent_biblio = $non_existent_item->biblio;
+
+        my $non_existent_item_id   = $non_existent_item->id;
+        my $non_existent_biblio_id = $non_existent_biblio->id;
+        my $non_existent_item_homebranch =
+          $non_existent_item->home_branch->branchcode;
+
+        $non_existent_item->delete;
+        $non_existent_biblio->delete;
+
+        my $biblio = $builder->build_sample_biblio;
+
+        $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/"
+              . $club_with_enrollments->id
+              . "/holds" => json => {
+                biblio_id         => $biblio->id,
+                item_id           => $item->id,
+                pickup_library_id => $item->home_branch->branchcode
+              }
+        )->status_is(400)
+          ->json_is( '/error' => "Item "
+              . $item->id
+              . " doesn't belong to biblio "
+              . $biblio->id );
+
+        $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/"
+              . $club_with_enrollments->id
+              . "/holds" => json => {
+                pickup_library_id => $non_existent_item_homebranch
+              }
+        )->status_is(400)
+          ->json_is(
+            '/error' => 'At least one of biblio_id, item_id should be given' );
+
+        $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/"
+              . $club_with_enrollments->id
+              . "/holds" => json => {
+                biblio_id         => $non_existent_biblio_id,
+                pickup_library_id => $non_existent_item_homebranch
+              }
+        )->status_is(404)->json_is( '/error' => 'Biblio not found' );
+
+        $t->post_ok(
+                "//$userid:$password@/api/v1/clubs/"
+              . $club_with_enrollments->id
+              . "/holds" => json => {
+                item_id           => $non_existent_item_id,
+                pickup_library_id => $non_existent_item_homebranch
+              }
+        )->status_is(404)->json_is( '/error' => 'Item not found' );
 
         my $data = {
             biblio_id         => $item->biblionumber,
