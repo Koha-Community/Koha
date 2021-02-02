@@ -29,20 +29,22 @@ Koha::REST::Plugin::Objects
 
 =head2 Helper methods
 
-=head3 objects.search
-
-    my $patrons_rs = Koha::Patrons->new;
-    my $patrons = $c->objects->search( $patrons_rs );
-
-Performs a database search using given Koha::Objects object and query parameters.
-
-Returns an arrayref of the hashrefs representing the resulting objects
-for API rendering.
-
 =cut
 
 sub register {
     my ( $self, $app ) = @_;
+
+=head3 objects.find
+
+    my $patrons_rs = Koha::Patrons->new;
+    my $patrons = $c->objects->find( $patrons_rs, $id );
+
+Performs a database search using given Koha::Objects object and the $id.
+
+Returns I<undef> if no object is found Returns the I<API representation> of
+the requested object. It passes through any embeds if specified.
+
+=cut
 
     $app->helper(
         'objects.find' => sub {
@@ -65,6 +67,18 @@ sub register {
             return $object->to_api({ embed => $embed });
         }
     );
+
+=head3 objects.search
+
+    my $patrons_rs = Koha::Patrons->new;
+    my $patrons = $c->objects->search( $patrons_rs );
+
+Performs a database search using given Koha::Objects object and query parameters.
+
+Returns an arrayref of the hashrefs representing the resulting objects
+for API rendering.
+
+=cut
 
     $app->helper(
         'objects.search' => sub {
