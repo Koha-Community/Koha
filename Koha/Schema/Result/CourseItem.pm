@@ -35,9 +35,13 @@ course item id
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
+  is_nullable: 1
 
-items.itemnumber for the item on reserve
+=head2 biblionumber
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
 
 =head2 itype
 
@@ -184,6 +188,8 @@ __PACKAGE__->add_columns(
   "ci_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "itemnumber",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "itype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
@@ -258,6 +264,21 @@ __PACKAGE__->set_primary_key("ci_id");
 __PACKAGE__->add_unique_constraint("itemnumber", ["itemnumber"]);
 
 =head1 RELATIONS
+
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 =head2 course_reserves
 
@@ -346,12 +367,17 @@ __PACKAGE__->belongs_to(
   "itemnumber",
   "Koha::Schema::Result::Item",
   { itemnumber => "itemnumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g97N0MosrfgL6Jg3NVJUFA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-02-03 10:03:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kImBuor/tqSbLlPDt+d2fg
 
 __PACKAGE__->add_columns(
     '+itype_enabled'         => { is_boolean => 1 },
