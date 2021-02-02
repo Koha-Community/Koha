@@ -18,25 +18,23 @@
 use Modern::Perl;
 
 use Test::More tests => 1;
+
 use Test::MockModule;
 use Test::MockObject;
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Auth;
 use Koha::Illrequests;
 use Koha::DateUtils qw( format_sqldatetime );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-my $remote_address = '127.0.0.1';
-my $t              = Test::Mojo->new('Koha::REST::V1');
+my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
@@ -70,19 +68,25 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_begin;
 
     Koha::Illrequests->search->delete;
-    # ill => 22 (userflags.sql)
-    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 22 });
+
+    # create an authorized user
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 22 } # 22 => ill
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
 
     ## Authorized user tests
     # No requests, so empty array should be returned
-    my $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [] );
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
+      ->status_is(200)
+      ->json_is( [] );
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron_1  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $patron_2  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # Create an ILL request
     my $illrequest = $builder->build_object(
@@ -104,24 +108,20 @@ subtest 'list() tests' => sub {
     my $req_formatted = add_formatted($response);
 
     # One illrequest created, should get returned
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [ $req_formatted ] );
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
+      ->status_is(200)
+      ->json_is( [ $req_formatted ] );
 
     # One illrequest created, returned with augmented data
-    $tx = $t->ua->build_tx( GET =>
-          '/api/v1/illrequests?embed=patron,library,capabilities,metadata,requested_partners' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)
-        ->json_has( '/0/patron', 'patron embedded' )
-        ->json_is( '/0/patron/patron_id', $patron_1->borrowernumber, 'The right patron is embeded')
-        ->json_has( '/0/requested_partners', 'requested_partners embedded' )
-        ->json_has( '/0/capabilities', 'capabilities embedded' )
-        ->json_has( '/0/library', 'library embedded'  )
-        ->json_has( '/0/metadata', 'metadata embedded'  )
-        ->json_hasnt( '/1', 'Only one request was created' );
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests?embed=patron,library,capabilities,metadata,requested_partners" )
+      ->status_is(200)
+      ->json_has( '/0/patron', 'patron embedded' )
+      ->json_is( '/0/patron/patron_id', $patron_1->borrowernumber, 'The right patron is embeded')
+      ->json_has( '/0/requested_partners', 'requested_partners embedded' )
+      ->json_has( '/0/capabilities', 'capabilities embedded' )
+      ->json_has( '/0/library', 'library embedded'  )
+      ->json_has( '/0/metadata', 'metadata embedded'  )
+      ->json_hasnt( '/1', 'Only one request was created' );
 
     # Create another ILL request
     my $illrequest2 = $builder->build_object(
@@ -143,40 +143,31 @@ subtest 'list() tests' => sub {
     my $req2_formatted = add_formatted($response2);
 
     # Two illrequest created, should get returned
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
+      ->status_is(200)
       ->json_is( [ $req_formatted, $req2_formatted ] );
 
     # Warn on unsupported query parameter
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?request_blah=blah' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)->json_is(
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests?request_blah=blah" )
+      ->status_is(400)
+      ->json_is(
         [{ path => '/query/request_blah', message => 'Malformed query string'}]
     );
 
     # Test the borrowernumber parameter
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?borrowernumber=' .
-        $patron_2->borrowernumber );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [ $response2 ] );
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests?borrowernumber=" . $patron_2->borrowernumber )
+      ->status_is(200)
+      ->json_is( [ $response2 ] );
 
     # Test the ILLHiddenRequestStatuses syspref
     t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'STATUS1' );
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
+      ->status_is(200)
       ->json_is( [ $req2_formatted ] );
 
     t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'STATUS2' );
-    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)
+    $t->get_ok( "//$userid:$password@/api/v1/illrequests" )
+      ->status_is(200)
       ->json_is( [ $req_formatted ] );
 
     $schema->storage->txn_rollback;
@@ -201,32 +192,3 @@ sub add_formatted {
     }
     return $req;
 }
-
-sub create_user_and_session {
-
-    my $args = shift;
-    my $dbh  = C4::Context->dbh;
-
-    my $flags = ( $args->{authorized} ) ? 2**$args->{authorized} : 0;
-
-    my $user = $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                flags => $flags
-            }
-        }
-    );
-
-    # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->{borrowernumber} );
-    $session->param( 'id',       $user->{userid} );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
-
-    return ( $user->{borrowernumber}, $session->id );
-}
-
-1;
