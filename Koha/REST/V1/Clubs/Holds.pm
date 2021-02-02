@@ -81,7 +81,7 @@ sub add {
             unless ($item) {
                 return $c->render(
                     status  => 404,
-                    openapi => { error => "item_id not found." }
+                    openapi => { error => "Item not found" }
                 );
             }
             else {
@@ -100,8 +100,8 @@ sub add {
 
         unless ($biblio) {
             return $c->render(
-                status  => 400,
-                openapi => "Biblio not found."
+                status  => 404,
+                openapi => { error => "Biblio not found" }
             );
         }
 
