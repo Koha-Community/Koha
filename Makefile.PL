@@ -94,7 +94,6 @@ Makefile.PL - Koha packager and installer
     --koha_user                  Koha Unix user (e.g. koha)
     --koha_group                 Koha Unix group (e.g. koha)
     --install_sru                Install the SRU server (yes, no)
-    --install_pazpar2            Install PazPar2 (yes, no)
     --use_memcached              Use Memcached (yes, no)
     --font_dir                   Location of fonts (e.g. /usr/share/fonts/truetype/dejavu)
     --run_database_tests         Run database dependent tests (yes, no)
@@ -280,10 +279,6 @@ Directory for backup files produced by Koha.
 
 Directory for external Koha plugins.
 
-=item PAZPAR2_CONF_DIR
-
-Directory for PazPar2 configuration files.
-
 =item FONT_DIR
 
 Directory where DejaVu fonts are installed.
@@ -328,7 +323,6 @@ my $target_map = {
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
   './etc/z3950'                 => { target => 'Z3950_CONF_DIR', trimdir => -1 },
-  './etc/pazpar2'               => { target => 'PAZPAR2_CONF_DIR', trimdir => -1 },
   './help.pl'                   => 'INTRANET_CGI_DIR',
   './ill'                       => 'INTRANET_CGI_DIR',
   './installer-CPAN.pl'         => 'NONE',
@@ -517,7 +511,6 @@ my %config_defaults = (
   'DB_TLS_CLIENT_CERTIFICATE'  => '/etc/mysql-ssl/client-cert.pem',
   'DB_TLS_CLIENT_KEY' => '/etc/mysql-ssl/client-key.pem',
   'INSTALL_SRU'       => 'yes',
-  'INSTALL_PAZPAR2'   => 'no',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_TOKENIZER'   => 'chr',
@@ -530,8 +523,6 @@ my %config_defaults = (
   'KOHA_GROUP'        => 'koha',
   'MERGE_SERVER_HOST' => 'localhost',
   'MERGE_SERVER_PORT' => '11001',
-  'PAZPAR2_HOST' => 'localhost',
-  'PAZPAR2_PORT' => '11002',
   'RUN_DATABASE_TESTS' => 'no',
   'PATH_TO_ZEBRA' => '',
   'USE_MEMCACHED'     => 'yes',
@@ -603,7 +594,6 @@ my $cli_zebra_sru_auth_port = "";
 my $cli_koha_user = "";
 my $cli_koha_group = "";
 my $cli_koha_install_sru = "";
-my $cli_koha_install_pazpar2 = "";
 my $cli_koha_use_memcached = "";
 my $cli_koha_font_dir = "";
 my $cli_koha_run_database_tests = "";
@@ -638,7 +628,6 @@ my $results = GetOptions(
     "koha_user=s"                  => \$cli_koha_user,
     "koha_group=s"                 => \$cli_koha_group,
     "install_sru=s"                => \$cli_koha_install_sru,
-    "install_pazpar2=s"            => \$cli_koha_install_pazpar2,
     "use_memcached=s"              => \$cli_koha_use_memcached,
     "font_dir=s"                   => \$cli_koha_font_dir,
     "run_database_tests=s"         => \$cli_koha_run_database_tests,
@@ -692,15 +681,8 @@ push @{ $pl_files->{'rewrite-config.PL'} }, (
 );
 push @{ $pl_files->{'rewrite-config.PL'} }, (
     'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
-    'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
     'blib/SCRIPT_DIR/koha-index-daemon-ctl.sh',
 );
-if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
-    push @{ $pl_files->{'rewrite-config.PL'} }, (
-        'blib/PAZPAR2_CONF_DIR/koha-biblios.xml',
-        'blib/PAZPAR2_CONF_DIR/pazpar2.xml'
-    );
-}
 $config{'ZEBRA_AUTH_CFG'} = 'zebra-authorities-dom.cfg';
 $config{'ZEBRA_BIB_CFG'}  = 'zebra-biblios-dom.cfg';
 $config{'AUTH_RETRIEVAL_CFG'} = 'retrieval-info-auth-dom.xml';
@@ -921,7 +903,6 @@ sub get_cli_values {
         KOHA_USER                  => $cli_koha_user,
         KOHA_GROUP                 => $cli_koha_group,
         INSTALL_SRU                => $cli_koha_install_sru,
-        INSTALL_PAZPAR2            => $cli_koha_install_pazpar2,
         USE_MEMCACHED              => $cli_koha_use_memcached,
         FONT_DIR                   => $cli_koha_font_dir,
         RUN_DATABASE_TESTS         => $cli_koha_run_database_tests,
@@ -1232,41 +1213,6 @@ SRU port for authority data?);
 
     }
 
-    $msg = q(
-Along with Zebra, you can also choose to install PazPar2,
-which is a metasearch tool.  With PazPar2,
-Koha can perform on-the-fly merging of bibliographic
-records during searching, allowing for FRBRization of
-the results list.
-
-Install the PazPar2 configuration files?);
-    $msg .= _add_valid_values_disp('INSTALL_PAZPAR2', $valid_values);
-    $config{'INSTALL_PAZPAR2'} = _get_value('INSTALL_PAZPAR2', $msg, $defaults->{'INSTALL_PAZPAR2'}, $valid_values, $install_log_values);
-
-    if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
-        $msg = q(
-Since you've chosen to configure PazPar2, you must
-specify the host and port(s) that PazPar2
-uses:
-);
-        $msg = q(
-Zebra bibliographic server host?);
-        $config{'MERGE_SERVER_HOST'} = _get_value('MERGE_SERVER_HOST', $msg, $defaults->{'MERGE_SERVER_HOST'}, $valid_values, $install_log_values);
-
-        $msg = q(
-Zebra bibliographic port for PazPar2 to use?);
-        $config{'MERGE_SERVER_PORT'} = _get_value('MERGE_SERVER_PORT', $msg, $defaults->{'MERGE_SERVER_PORT'}, $valid_values, $install_log_values);
-
-        $msg = q(
-PazPar2 host?);
-        $config{'PAZPAR2_HOST'} = _get_value('PAZPAR2_HOST', $msg, $defaults->{'PAZPAR2_HOST'}, $valid_values, $install_log_values);
-
-        $msg = q(
-PazPar2 port?);
-        $config{'PAZPAR2_PORT'} = _get_value('PAZPAR2_PORT', $msg, $defaults->{'PAZPAR2_PORT'}, $valid_values, $install_log_values);
-
-    }
-
   $msg = q(
 Use memcached to cache the results of some function calls?
 This provides a significant performance improvement.
@@ -1489,7 +1435,6 @@ sub get_target_directories {
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
-        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
@@ -1523,7 +1468,6 @@ sub get_target_directories {
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
-        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         #For dev install, point NONDEV_DIR to misc in current dir (not base)
@@ -1552,7 +1496,6 @@ sub get_target_directories {
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
         $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'z3950');
-        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
@@ -1782,8 +1725,6 @@ sub _update_zebra_conf_target {
     $target .= "\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR) \n";
     $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_ZEBRA_CONF_DIR)\n";
     $target .= "\tumask 022; \$(MOD_INSTALL) \\\n";
-    $target .= "\t\t\$(KOHA_INST_PAZPAR2_CONF_DIR) \$(KOHA_DEST_PAZPAR2_CONF_DIR) \n";
-    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_PAZPAR2_CONF_DIR)\n";
 
     return $target;
 }
@@ -1809,7 +1750,7 @@ make_upgrade_backup ::
 \t\$(NOECHO) umask 022; \$(MOD_BACKUP) \\
 /;
     foreach my $key (qw/KOHA_CONF_DIR INTRANET_TMPL_DIR INTRANET_WWW_DIR OPAC_TMPL_DIR OPAC_WWW_DIR
-                     PAZPAR2_CONF_DIR ZEBRA_CONF_DIR PLUGINS_DIR/) {
+                     ZEBRA_CONF_DIR PLUGINS_DIR/) {
     	$upgrade .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n"
             unless exists $skip_directories->{$key} or
                    not exists $target_directories->{$key};

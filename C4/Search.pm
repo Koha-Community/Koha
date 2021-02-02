@@ -23,7 +23,6 @@ use C4::Koha;      # getFacets
 use Koha::DateUtils;
 use Koha::Libraries;
 use Lingua::Stem;
-use C4::Search::PazPar2;
 use XML::Simple;
 use C4::XSLT;
 use C4::Reserves;    # GetReserveStatus
@@ -802,80 +801,6 @@ sub _get_facets_info {
     }
 
     return $facets_info;
-}
-
-sub pazGetRecords {
-    my (
-        $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $branches,       $query_type,
-        $scan
-    ) = @_;
-    #NOTE: Parameter $branches is not used here !
-
-    my $paz = C4::Search::PazPar2->new(C4::Context->config('pazpar2url'));
-    $paz->init();
-    $paz->search($simple_query);
-    sleep 1;   # FIXME: WHY?
-
-    # do results
-    my $results_hashref = {};
-    my $stats = XMLin($paz->stat);
-    my $results = XMLin($paz->show($offset, $results_per_page, 'work-title:1'), forcearray => 1);
-
-    # for a grouped search result, the number of hits
-    # is the number of groups returned; 'bib_hits' will have
-    # the total number of bibs.
-    $results_hashref->{'biblioserver'}->{'hits'} = $results->{'merged'}->[0];
-    $results_hashref->{'biblioserver'}->{'bib_hits'} = $stats->{'hits'};
-
-    HIT: foreach my $hit (@{ $results->{'hit'} }) {
-        my $recid = $hit->{recid}->[0];
-
-        my $work_title = $hit->{'md-work-title'}->[0];
-        my $work_author;
-        if (exists $hit->{'md-work-author'}) {
-            $work_author = $hit->{'md-work-author'}->[0];
-        }
-        my $group_label = (defined $work_author) ? "$work_title / $work_author" : $work_title;
-
-        my $result_group = {};
-        $result_group->{'group_label'} = $group_label;
-        $result_group->{'group_merge_key'} = $recid;
-
-        my $count = 1;
-        if (exists $hit->{count}) {
-            $count = $hit->{count}->[0];
-        }
-        $result_group->{'group_count'} = $count;
-
-        for (my $i = 0; $i < $count; $i++) {
-            # FIXME -- may need to worry about diacritics here
-            my $rec = $paz->record($recid, $i);
-            push @{ $result_group->{'RECORDS'} }, $rec;
-        }
-
-        push @{ $results_hashref->{'biblioserver'}->{'GROUPS'} }, $result_group;
-    }
-
-    # pass through facets
-    my $termlist_xml = $paz->termlist('author,subject');
-    my $terms = XMLin($termlist_xml, forcearray => 1);
-    my @facets_loop = ();
-    #die Dumper($results);
-#    foreach my $list (sort keys %{ $terms->{'list'} }) {
-#        my @facets = ();
-#        foreach my $facet (sort @{ $terms->{'list'}->{$list}->{'term'} } ) {
-#            push @facets, {
-#                facet_label_value => $facet->{'name'}->[0],
-#            };
-#        }
-#        push @facets_loop, ( {
-#            type_label => $list,
-#            facets => \@facets,
-#        } );
-#    }
-
-    return ( undef, $results_hashref, \@facets_loop );
 }
 
 # TRUNCATION

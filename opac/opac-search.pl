@@ -101,12 +101,8 @@ my @params = $cgi->multi_param("limit");
 my @searchCategories = $cgi->multi_param('searchcat');
 
 my $format = $cgi->param("format") || '';
-my $build_grouped_results = C4::Context->preference('OPACGroupResults');
 if ($format =~ /(rss|atom|opensearchdescription)/) {
     $template_name = 'opac-opensearch.tt';
-}
-elsif (@params && $build_grouped_results) {
-    $template_name = 'opac-results-grouped.tt';
 }
 elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) || @searchCategories ) {
     $template_name = 'opac-results.tt';
@@ -618,10 +614,6 @@ if ($tag) {
     # FIXME: Because search and standard search don't work together OpacHiddenItems
     #        displays search results which should be hidden.
     # FIXME: No facets for tags search.
-} elsif ($build_grouped_results) {
-    eval {
-        ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,undef,$query_type,$scan);
-    };
 } else {
     $pasarParams .= '&amp;query=' . uri_escape_utf8($query);
     $pasarParams .= '&amp;count=' . uri_escape_utf8($results_per_page);
@@ -667,20 +659,8 @@ for (my $i=0;$i<@servers;$i++) {
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults;
-        if ($build_grouped_results) {
-            foreach my $group (@{ $results_hashref->{$server}->{"GROUPS"} }) {
-                # because pazGetRecords handles retieving only the records
-                # we want as specified by $offset and $results_per_page,
-                # we need to set the offset parameter of searchResults to 0
-                my @group_results = searchResults( $search_context, $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
-                                                   $group->{"RECORDS"}, $variables);
-                push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
-            }
-        } else {
-            @newresults = searchResults( $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
+        my @newresults = searchResults( $search_context, $query_desc, $hits, $results_per_page, $offset, $scan,
                                         $results_hashref->{$server}->{"RECORDS"}, $variables);
-        }
         $hits = 0 unless @newresults;
 
         my $art_req_itypes;
@@ -799,23 +779,20 @@ for (my $i=0;$i<@servers;$i++) {
             exit;
         }
         if ($hits) {
-            if ( !$build_grouped_results ) {
-                # We build the encrypted list of first OPACnumSearchResults biblios to pass with the search criteria for paging on opac-detail
-                $pasarParams .= '&amp;listBiblios=';
-                my $j = 0;
-                foreach (@newresults) {
-                    my $bibnum = ($_->{biblionumber})?$_->{biblionumber}:0;
-                    $pasarParams .= uri_escape_utf8($bibnum) . ',';
-                    $j++;
-                    last if ($j == $results_per_page);
-                }
-                chop $pasarParams if ($pasarParams =~ /,$/);
-                $pasarParams .= '&amp;total=' . uri_escape_utf8( int($total) ) if ($pasarParams !~ /total=(?:[0-9]+)?/);
-                if ($pasarParams) {
-                    my $session = get_session($cgi->cookie("CGISESSID"));
-                    $session->param('busc' => $pasarParams);
-                }
-                #
+            # We build the encrypted list of first OPACnumSearchResults biblios to pass with the search criteria for paging on opac-detail
+            $pasarParams .= '&amp;listBiblios=';
+            my $j = 0;
+            foreach (@newresults) {
+                my $bibnum = ($_->{biblionumber})?$_->{biblionumber}:0;
+                $pasarParams .= uri_escape_utf8($bibnum) . ',';
+                $j++;
+                last if ($j == $results_per_page);
+            }
+            chop $pasarParams if ($pasarParams =~ /,$/);
+            $pasarParams .= '&amp;total=' . uri_escape_utf8( int($total) ) if ($pasarParams !~ /total=(?:[0-9]+)?/);
+            if ($pasarParams) {
+                my $session = get_session($cgi->cookie("CGISESSID"));
+                $session->param('busc' => $pasarParams);
             }
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;

@@ -10,19 +10,6 @@ __START_SRU_PUBLICSERVER__
 <listen id="publicserver" >tcp:@:__SRU_BIBLIOS_PORT__</listen>
 __END_SRU_PUBLICSERVER__
 
-<!-- Settings for special biblio server instance for PazPar2.
-     Because PazPar2 only connects to a Z39.50 server using TCP/IP,
-     it cannot use the Unix-domain socket that biblioserver uses.
-     Therefore, a custom server is defined. -->
-<!--
-<listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
-<server id="mergeserver"  listenref="mergeserver">
-    <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
-    <config>/etc/koha/sites/__KOHASITE__/zebra-biblios-dom.cfg</config>
-    <cql2rpn>/var/lib/koha/__KOHASITE__/pqf.properties</cql2rpn>
-</server>
--->
-
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
@@ -297,7 +284,6 @@ __END_SRU_PUBLICSERVER__
       tool -->
  <backup_db_via_tools>0</backup_db_via_tools>
  <backup_conf_via_tools>0</backup_conf_via_tools>
- <!-- <pazpar2url>http://__PAZPAR2_HOST__:__PAZPAR2_PORT__/search.pz2</pazpar2url> -->
  <install_log>/usr/share/koha/misc/koha-install-log</install_log>
  <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
  <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->

@@ -291,7 +291,6 @@ sub BuildReport {
         TalkingTechItivaPhoneNotification
         uppercasesurnames
         IncludeSeeFromInSearches
-        OpacGroupResults
         QueryAutoTruncate
         QueryFuzzy
         QueryStemming

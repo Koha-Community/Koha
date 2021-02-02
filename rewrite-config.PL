@@ -121,7 +121,6 @@ my %configuration = (
   '__PERL_MODULE_DIR__' =>  ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl5/site_perl/%vd",$^V))."/koha",
   '__KOHA_CONF_DIR__' => "$prefix/etc/koha",
   '__ZEBRA_CONF_DIR__' => "$prefix/etc/koha/zebradb",
-  '__PAZPAR2_CONF_DIR__' => "$prefix/etc/koha/pazpar2",
   '__MISC_DIR__' => "$prefix/misc",
   '__SCRIPT_DIR__' => "$prefix/bin",
   '__SCRIPT_NONDEV_DIR__' => "$prefix/bin",
@@ -140,15 +139,9 @@ my %configuration = (
   '__ZEBRA_AUTH_CFG__' => 'zebra-authorities-dom.cfg',
   '__ZEBRA_BIB_CFG__' => 'zebra-biblios-dom.cfg',
   "__MERGE_SERVER_HOST__" => $myhost,
-  "__MERGE_SERVER_PORT__" => '11001',
-  "__PAZPAR2_HOST__" => $myhost,
-  "__PAZPAR2_PORT__" => '11002',
   "__INSTALL_MODE__" => 'standard',
   "__INSTALL_BASE__" => '/usr/share/koha',
   "__INSTALL_SRU__" => 'yes',
-  "__INSTALL_PAZPAR2__" => 'no',
-  "__PAZPAR2_TOGGLE_XML_PRE__" => '<!--',
-  "__PAZPAR2_TOGGLE_XML_POST__" => '-->',
   "__RUN_DATABASE_TESTS__" => 'no',
   "__PATH_TO_ZEBRA__" => "",
   "__USE_MEMCACHED__" => 'yes',
@@ -173,13 +166,6 @@ foreach my $key (keys %configuration) {
   if (defined($ENV{$key})) {
     $configuration{$key} = $ENV{$key};
   }
-}
-
-# munge commenting out the PazPar2 mergeserver
-# entry in koha-conf.xml if necessary
-if ($configuration{'__INSTALL_PAZPAR2__'} eq 'yes') {
-    $configuration{'__PAZPAR2_TOGGLE_XML_PRE__'} = '';
-    $configuration{'__PAZPAR2_TOGGLE_XML_POST__'} = '';
 }
 
 my $fname = $ARGV[0];

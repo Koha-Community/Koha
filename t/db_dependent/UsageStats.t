@@ -553,7 +553,6 @@ sub mocking_systempreferences_to_a_set_value {
         TalkingTechItivaPhoneNotification
         uppercasesurnames
         IncludeSeeFromInSearches
-        OpacGroupResults
         QueryAutoTruncate
         QueryFuzzy
         QueryStemming
