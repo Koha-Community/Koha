@@ -75,8 +75,12 @@
                     <h3>Audio alerts</h3>
                     [%IF !( Koha.Preference('AudioAlerts') ) %]
                         <div class="dialog alert">
-                            <p><strong>Note: </strong></p>
-                            <p>Please enable system preference 'AudioAlerts' to activate sounds.</p>
+                            <h3>Audio alerts are disabled</h3>
+                            [% IF ( CAN_user_parameters_manage_sysprefs ) %]
+                                <p>Please enable system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AudioAlerts">AudioAlerts</a> to activate sounds.</p>
+                            [% ELSE %]
+                                <p>The system preference <strong>AudioAlerts</strong> must be enabled to activate sounds.</p>
+                            [% END %]
                         </div>
                     [% END %]
                     <table id="audio-alerts-table">
