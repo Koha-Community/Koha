@@ -18,25 +18,21 @@
 use Modern::Perl;
 
 use Test::More tests => 5;
+
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Auth;
 use Koha::Acquisition::Booksellers;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-my $remote_address = '127.0.0.1';
-my $t              = Test::Mojo->new('Koha::REST::V1');
+my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() and delete() tests | authorized user' => sub {
 
@@ -46,15 +42,18 @@ subtest 'list() and delete() tests | authorized user' => sub {
 
     $schema->resultset('Aqbasket')->search->delete;
     Koha::Acquisition::Booksellers->search->delete;
-    my ( $borrowernumber, $session_id )
-        = create_user_and_session( { authorized => 1 } );
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 11 } ## 11 => acquisitions
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
 
     ## Authorized user tests
     # No vendors, so empty array should be returned
-    my $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
       ->status_is(200)
       ->json_is( [] );
 
@@ -62,10 +61,7 @@ subtest 'list() and delete() tests | authorized user' => sub {
     my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers', value => { name => $vendor_name } });
 
     # One vendor created, should get returned
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
       ->status_is(200)
       ->json_like( '/0/name' => qr/$vendor_name/ );
 
@@ -73,68 +69,42 @@ subtest 'list() and delete() tests | authorized user' => sub {
     my $other_vendor
         = $builder->build_object({ class => 'Koha::Acquisition::Booksellers', value => { name => $other_vendor_name } });
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Ruben/ )
       ->json_like( '/1/name' => qr/Amerindia/ );
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors?name=' . $vendor_name );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?name=$vendor_name" )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Ruben/ );
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors?name=' . $other_vendor_name );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?name=$other_vendor_name" )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Amerindia/ );
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors?accountnumber=' . $vendor->accountnumber );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?accountnumber=" . $vendor->accountnumber )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Ruben/ );
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors?accountnumber=' . $other_vendor->accountnumber );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors?accountnumber=" . $other_vendor->accountnumber )
       ->status_is(200)
       ->json_like( '/0/name' => qr/Amerindia/ );
 
-    $tx = $t->ua->build_tx( DELETE => '/api/v1/acquisitions/vendors/' . $vendor->id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
       ->status_is(200)
       ->json_like( '/0/name' => qr/$other_vendor_name/ )
       ->json_hasnt( '/1', 'Only one vendor' );
 
-    $tx = $t->ua->build_tx( DELETE => '/api/v1/acquisitions/vendors/' . $other_vendor->id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $other_vendor->id )
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
-    $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" )
       ->status_is(200)
       ->json_is( [] );
 
@@ -148,30 +118,30 @@ subtest 'get() test' => sub {
     $schema->storage->txn_begin;
 
     my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
-    my ( $borrowernumber, $session_id )
-        = create_user_and_session( { authorized => 1 } );
+    my $nonexistent_vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
+    my $non_existent_id = $nonexistent_vendor->id;
+    $nonexistent_vendor->delete;
 
-    my $tx = $t->ua->build_tx( GET => "/api/v1/acquisitions/vendors/" . $vendor->id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 11 } ## 11 => acquisitions
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(200)
       ->json_is( $vendor->to_api );
 
-    my $non_existent_id = $vendor->id + 1;
-    $tx = $t->ua->build_tx( GET => "/api/v1/acquisitions/vendors/" . $non_existent_id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $non_existent_id )
       ->status_is(404)
       ->json_is( '/error' => 'Vendor not found' );
 
-    my ( $unauthorized_borrowernumber, $unauthorized_session_id )
-        = create_user_and_session( { authorized => 0 } );
-    $tx = $t->ua->build_tx( GET => "/api/v1/acquisitions/vendors/" . $vendor->id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    # remove permissions
+    $patron->set({ flags => 0 })->store;
+
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(403)
       ->json_is( '/error', 'Authorization failure. Missing required permission(s).' );
 
@@ -184,17 +154,25 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $unauthorized_borrowernumber, $unauthorized_session_id )
-        = create_user_and_session( { authorized => 0 } );
-    my ( $authorized_borrowernumber, $authorized_session_id )
-        = create_user_and_session( { authorized => 1 } );
+    my $authorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 11 }
+    });
+    my $password = 'thePassword123';
+    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $auth_userid = $authorized_patron->userid;
+
+    my $unauthorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 0 }
+    });
+    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauth_userid = $unauthorized_patron->userid;
+
     my $vendor = { name => 'Ruben libros' };
 
     # Unauthorized attempt to write
-    my $tx = $t->ua->build_tx( POST => "/api/v1/acquisitions/vendors" => json => $vendor );
-    $tx->req->cookies( { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
       ->status_is(403);
 
     # Authorized attempt to write invalid data
@@ -203,11 +181,7 @@ subtest 'add() tests' => sub {
         address5 => 'An address'
     };
 
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/acquisitions/vendors" => json => $vendor_with_invalid_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor_with_invalid_field )
       ->status_is(400)
       ->json_is(
         "/errors" => [
@@ -218,31 +192,24 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    $tx = $t->ua->build_tx( POST => "/api/v1/acquisitions/vendors" => json => $vendor );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    my $vendor_id = $t->request_ok($tx)
-                      ->status_is( 201, 'SWAGGER3 .2.1' )
-                      ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'SWAGGER3.4.1')
-                      ->json_is( '/name' => $vendor->{name} )
-                      ->json_is( '/address1' => $vendor->{address1} )->tx->res->json('/id')
-        ;    # read the response vendor id for later use
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
+      ->status_is( 201, 'SWAGGER3 .2.1' )
+      ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'SWAGGER3.4.1')
+      ->json_is( '/name' => $vendor->{name} )
+      ->json_is( '/address1' => $vendor->{address1} );
+
+    # read the response vendor id for later use
+    my $vendor_id = $t->tx->res->json('/id');
 
     # Authorized attempt to create with null id
     $vendor->{id} = undef;
-    $tx = $t->ua->build_tx( POST => "/api/v1/acquisitions/vendors" => json => $vendor );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
       ->status_is(400)
       ->json_has('/errors');
 
     # Authorized attempt to create with existing id
     $vendor->{id} = $vendor_id;
-    $tx = $t->ua->build_tx( POST => "/api/v1/acquisitions/vendors" => json => $vendor );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors" => json => $vendor )
       ->status_is(400)
       ->json_is(
         "/errors" => [
@@ -261,40 +228,42 @@ subtest 'update() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $unauthorized_borrowernumber, $unauthorized_session_id )
-        = create_user_and_session( { authorized => 0 } );
-    my ( $authorized_borrowernumber, $authorized_session_id )
-        = create_user_and_session( { authorized => 1 } );
+    my $authorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 11 }
+    });
+    my $password = 'thePassword123';
+    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $auth_userid = $authorized_patron->userid;
 
-    my $vendor_id = $builder->build( { source => 'Aqbookseller' } )->{id};
+    my $unauthorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 0 }
+    });
+    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauth_userid = $unauthorized_patron->userid;
+
+    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
 
     # Unauthorized attempt to update
-    my $tx = $t->ua->build_tx( PUT => "/api/v1/acquisitions/vendors/$vendor_id" => json =>
-            { city_name => 'New unauthorized name change' } );
-    $tx->req->cookies( { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $vendor->id => json =>
+          { city_name => 'New unauthorized name change' } )
       ->status_is(403);
 
     # Attempt partial update on a PUT
     my $vendor_without_mandatory_field = { address1 => 'New address' };
 
-    $tx = $t->ua->build_tx( PUT => "/api/v1/acquisitions/vendors/$vendor_id" => json =>
-            $vendor_without_mandatory_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $vendor->id => json => $vendor_without_mandatory_field )
       ->status_is(400)
       ->json_is( "/errors" => [ { message => "Missing property.", path => "/body/name" } ] );
 
     # Full object update on PUT
     my $vendor_with_updated_field = { name => "London books", };
 
-    $tx = $t->ua->build_tx(
-        PUT => "/api/v1/acquisitions/vendors/$vendor_id" => json => $vendor_with_updated_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $vendor->id => json => $vendor_with_updated_field )
       ->status_is(200)
       ->json_is( '/name' => 'London books' );
 
@@ -306,11 +275,8 @@ subtest 'update() tests' => sub {
         address3 => "Address 3"
     };
 
-    $tx = $t->ua->build_tx(
-        PUT => "/api/v1/acquisitions/vendors/$vendor_id" => json => $vendor_with_invalid_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $vendor->id => json => $vendor_with_invalid_field )
       ->status_is(400)
       ->json_is(
         "/errors" => [
@@ -320,23 +286,19 @@ subtest 'update() tests' => sub {
         ]
       );
 
-    my $non_existent_id = $vendor_id + 1;
-    $tx = $t->ua->build_tx( PUT => "/api/v1/acquisitions/vendors/$non_existent_id" => json =>
-            $vendor_with_updated_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(404);
+    my $nonexistent_vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
+    my $non_existent_id = $nonexistent_vendor->id;
+    $nonexistent_vendor->delete;
+
+    $t->put_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $non_existent_id => json => $vendor_with_updated_field )
+      ->status_is(404);
 
     $schema->storage->txn_rollback;
 
     # Wrong method (POST)
-    $vendor_with_updated_field->{id} = 2;
-
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/acquisitions/vendors/$vendor_id" => json => $vendor_with_updated_field );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/"
+          . $vendor->id => json => $vendor_with_updated_field )
       ->status_is(404);
 };
 
@@ -346,68 +308,33 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $unauthorized_borrowernumber, $unauthorized_session_id )
-        = create_user_and_session( { authorized => 0 } );
-    my ( $authorized_borrowernumber, $authorized_session_id )
-        = create_user_and_session( { authorized => 1 } );
+    my $authorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 2 ** 11 }
+    });
+    my $password = 'thePassword123';
+    $authorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $auth_userid = $authorized_patron->userid;
 
-    my $vendor_id = $builder->build( { source => 'Aqbookseller' } )->{id};
+    my $unauthorized_patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 0 }
+    });
+    $unauthorized_patron->set_password({ password => $password, skip_validation => 1 });
+    my $unauth_userid = $unauthorized_patron->userid;
 
-    # Unauthorized attempt to update
-    my $tx = $t->ua->build_tx( DELETE => "/api/v1/acquisitions/vendors/$vendor_id" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' } );
+
+    # Unauthorized attempt to delete
+    $t->delete_ok( "//$unauth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(403);
 
-    $tx = $t->ua->build_tx( DELETE => "/api/v1/acquisitions/vendors/$vendor_id" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(204, 'SWAGGER3.2.4')
       ->content_is('', 'SWAGGER3.3.4');
 
-    $tx = $t->ua->build_tx( DELETE => "/api/v1/acquisitions/vendors/$vendor_id" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(404);
 
     $schema->storage->txn_rollback;
 };
-
-sub create_user_and_session {
-
-    my $args = shift;
-    my $flags = ( $args->{authorized} ) ? 2052 : 0;
-
-    # my $flags = ( $args->{authorized} ) ? $args->{authorized} : 0;
-    my $dbh = C4::Context->dbh;
-
-    my $user = $builder->build(
-        {   source => 'Borrower',
-            value  => { flags => $flags }
-        }
-    );
-
-    # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->{borrowernumber} );
-    $session->param( 'id',       $user->{userid} );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
-
-    if ( $args->{authorized} ) {
-        $dbh->do(
-            q{
-            INSERT INTO user_permissions (borrowernumber,module_bit,code)
-            VALUES (?,11,'vendors_manage')},
-            undef, $user->{borrowernumber}
-        );
-    }
-
-    return ( $user->{borrowernumber}, $session->id );
-}
-
-1;
