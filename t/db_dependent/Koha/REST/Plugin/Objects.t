@@ -470,7 +470,7 @@ subtest 'object.search helper order by embedded columns' => sub {
 
 subtest 'objects.find helper' => sub {
 
-    plan tests => 6;
+    plan tests => 9;
 
     my $t = Test::Mojo->new;
 
@@ -486,6 +486,13 @@ subtest 'objects.find helper' => sub {
     $t->get_ok( '/cities/' . $city_2->id )
       ->status_is(200)
       ->json_is( $city_2->to_api );
+
+    # Remove the city
+    my $city_2_id = $city_2->id;
+    $city_2->delete;
+    $t->get_ok( '/cities/' . $city_2_id )
+      ->status_is(200)
+      ->json_is( undef );
 
     $schema->storage->txn_rollback;
 };
