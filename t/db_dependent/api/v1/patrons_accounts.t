@@ -20,23 +20,18 @@ use Modern::Perl;
 use Test::More tests => 2;
 
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Auth;
-use Koha::Account::Line;
+use Koha::Account::Lines;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-my $remote_address = '127.0.0.1';
-my $t              = Test::Mojo->new('Koha::REST::V1');
+my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get_balance() tests' => sub {
 
@@ -44,15 +39,21 @@ subtest 'get_balance() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron, $session_id ) = create_user_and_session({ authorized => 1 });
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
     my $library   = $builder->build_object({ class => 'Koha::Libraries' });
     my $patron_id = $patron->id;
     my $account   = $patron->account;
 
-    my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id/account");
-    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-    $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
-    $t->request_ok($tx)->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
+      ->status_is(200)
+      ->json_is(
         {   balance             => 0.00,
             outstanding_debits  => { total => 0, lines => [] },
             outstanding_credits => { total => 0, lines => [] }
@@ -89,10 +90,9 @@ subtest 'get_balance() tests' => sub {
     )->store();
     $account_line_2->discard_changes;
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
+      ->status_is(200)
+      ->json_is(
         {   balance            => 100.01,
             outstanding_debits => {
                 total => 100.01,
@@ -118,10 +118,9 @@ subtest 'get_balance() tests' => sub {
         }
     );
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
+      ->status_is(200)
+      ->json_is(
         {   balance             => 0,
             outstanding_debits  => { total => 0, lines => [] },
             outstanding_credits => { total => 0, lines => [] }
@@ -133,10 +132,10 @@ subtest 'get_balance() tests' => sub {
         { amount => 10, user_id => $patron->id, library_id => $library->id, interface => 'test' } );
     # re-read from the DB
     $credit_line->discard_changes;
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is(
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
+      ->status_is(200)
+      ->json_is(
         {   balance            => -10,
             outstanding_debits => {
                 total => 0,
@@ -165,10 +164,9 @@ subtest 'get_balance() tests' => sub {
     )->store();
     $account_line_3->discard_changes;
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
+      ->status_is(200)
+      ->json_is(
         {   balance            => 40.00,
             outstanding_debits => {
                 total => 50.00,
@@ -192,7 +190,14 @@ subtest 'add_credit() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron, $session_id ) = create_user_and_session( { authorized => 1 } );
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { flags => 1 }
+    });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+
     my $library   = $builder->build_object({ class => 'Koha::Libraries' });
     my $patron_id = $patron->id;
     my $account   = $patron->account;
@@ -202,11 +207,9 @@ subtest 'add_credit() tests' => sub {
 
     my $credit = { amount => 100 };
 
-    my $tx = $t->ua->build_tx(
-        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(200)
+      ->json_has('/account_line_id');
 
     my $outstanding_credits = $account->outstanding_credits;
     is( $outstanding_credits->count,             1 );
@@ -237,13 +240,12 @@ subtest 'add_credit() tests' => sub {
 
     is( $account->outstanding_debits->total_outstanding, 25 );
     $credit->{library_id} = $library->id;
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
 
-    my $account_line_id = $tx->res->json->{account_line_id};
+    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(200)
+      ->json_has('/account_line_id');
+
+    my $account_line_id = $t->tx->res->json->{account_line_id};
     is( Koha::Account::Lines->find($account_line_id)->branchcode,
         $library->id, 'Library id is sored correctly' );
 
@@ -267,11 +269,9 @@ subtest 'add_credit() tests' => sub {
         account_lines_ids => [ $debit_1->id, $debit_2->id, $debit_3->id ]
     };
 
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+    $t->post_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit)
+      ->status_is(200)
+      ->json_has('/account_line_id');
 
     my $outstanding_debits = $account->outstanding_debits;
     is( $outstanding_debits->total_outstanding, 65 );
@@ -279,28 +279,3 @@ subtest 'add_credit() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-sub create_user_and_session {
-
-    my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? 1 : 0;
-
-    my $patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-            value  => {
-                flags         => $flags
-            }
-        }
-    );
-
-    # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $patron->id );
-    $session->param( 'id',       $patron->userid );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
-
-    return ( $patron, $session->id );
-}
