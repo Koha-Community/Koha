@@ -379,33 +379,39 @@
                             [% ELSE %]
                                 <h3>Shibboleth login</h3>
                                 <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl | $raw %]">click here to login</a>.</p>
-                                <h3>Local Login</h3>
+                                [% UNLESS Koha.Preference('opacShibOnly') %]
+                                    <h3>Local Login</h3>
+                                [% END %]
                             [% END %]
                         [% END %]
-                        <input type="hidden" name="koha_login_context" value="opac" />
-                        <fieldset class="brief">
-                            <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
-                            <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
-                            [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
-                                <div id="nologininstructions-modal" class="nologininstructions">
-                                    [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
-                                </div>
-                            [% END %]
-                            [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
-                                <div id="forgotpassword-modal" class="forgotpassword">
-                                    <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
-                                </div>
-                            [% END %]
-                            [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
-                                <div id="patronregistration-modal" class="patronregistration">
-                                    <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
-                                </div>
-                            [% END %]
-                        </fieldset>
+                        [% UNLESS Koha.Preference('opacShibOnly') %]
+                            <input type="hidden" name="koha_login_context" value="opac" />
+                            <fieldset class="brief">
+                                <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
+                                <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
+                                [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
+                                    <div id="nologininstructions-modal" class="nologininstructions">
+                                        [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
+                                    </div>
+                                [% END %]
+                                [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
+                                    <div id="forgotpassword-modal" class="forgotpassword">
+                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
+                                    </div>
+                                [% END %]
+                                [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                                    <div id="patronregistration-modal" class="patronregistration">
+                                        <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
+                                    </div>
+                                [% END %]
+                            </fieldset>
+                        [% END %]
                     </div>
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" value="Log in" />
-                    </div>
+                    [% UNLESS Koha.Preference('opacShibOnly') %]
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Log in" />
+                        </div>
+                    [% END %]
                 </form> <!-- /#auth -->
             </div> <!-- /.modal-content -->
         </div> <!-- /.modal-dialog -->

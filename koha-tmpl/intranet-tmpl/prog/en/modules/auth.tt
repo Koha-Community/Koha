@@ -7,7 +7,7 @@
 [% USE Registers %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; 
+<title>Koha &rsaquo;
     [% IF ( nopermission ) %]Access denied[% END %]
     [% IF ( timed_out ) %]Session timed out[% END %]
     [% IF ( different_ip ) %]IP address change[% END %]
@@ -61,31 +61,32 @@
 <p>If you have a shibboleth account, please <a href="[% shibbolethLoginUrl | $raw %]">click here</a> to login.</p>
 [% END %]
 
-<!-- login prompt time-->
-<form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
-    <input type="hidden" name="koha_login_context" value="intranet" />
-[% FOREACH INPUT IN INPUTS %]
-    <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
-[% END %]
-<p><label for="userid">Username:</label>
-<input type="text" name="userid" id="userid" class="input focus" value="[% userid | html %]" size="20" tabindex="1" />
-</p>
-<p><label for="password">Password:</label>
-<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" />
-</p>
-
-[% UNLESS IndependentBranches %]
-    <p>
-        <label for="branch">Library:</label>
-        <select name="branch" id="branch" class="input" tabindex="3">
-            <option value="">My library</option>
-            [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
-                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-            [% END %]
-        </select>
+[% UNLESS Koha.Preference('staffShibOnly') %]
+    <!-- login prompt time-->
+    <form action="[% script_name | html %]" method="post" name="loginform" id="loginform">
+        <input type="hidden" name="koha_login_context" value="intranet" />
+    [% FOREACH INPUT IN INPUTS %]
+        <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
+    [% END %]
+    <p><label for="userid">Username:</label>
+    <input type="text" name="userid" id="userid" class="input focus" value="[% userid | html %]" size="20" tabindex="1" />
+    </p>
+    <p><label for="password">Password:</label>
+    <input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" />
     </p>
 
-    [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
+    [% UNLESS IndependentBranches %]
+        <p>
+            <label for="branch">Library:</label>
+            <select name="branch" id="branch" class="input" tabindex="3">
+                <option value="">My library</option>
+                [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
+                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                 [% END %]
+            </select>
+        </p>
+
+        [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
         <p>
             <label for="desk">Desk:</label>
             <select name="desk_id" id="desk_id" class="input" tabindex="3">
@@ -95,44 +96,45 @@
                     [% END %]
             </select>
         </p>
+        [% END %]
+
+        [% IF Koha.Preference('UseCashRegisters') && Registers.all().size %]
+        <p>
+            <label for="register_id">Cash register:</label>
+            <select name="register_id" id="register_id" class="input" tabindex="4">
+                <option id="noregister" value="" selected="selected">Library default</option>
+                [% PROCESS options_for_registers registers => Registers.all() %]
+            </select>
+        </p>
+        [% END %]
+
     [% END %]
 
-    [% IF Koha.Preference('UseCashRegisters') && Registers.all().size %]
-    <p>
-        <label for="register_id">Cash register:</label>
-        <select name="register_id" id="register_id" class="input" tabindex="4">
-            <option id="noregister" value="" selected="selected">Library default</option>
-            [% PROCESS options_for_registers registers => Registers.all() %]
-        </select>
-    </p>
+    <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
+
+    <p class="submit"><input id="submit-button" type="submit" value="Login" tabindex="4" /></p>
+    </form>
+
+    [% IF ( casAuthentication ) %]
+        <h4>Cas login</h4>
+
+        [% IF ( invalidCasLogin ) %]
+        <!-- This is what is displayed if cas login has failed -->
+        <p>Sorry, the CAS login failed.</p>
+        [% END %]
+
+        [% IF ( casServerUrl ) %]
+            <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to login</a>.<p>
+        [% END %]
+
+        [% IF ( casServersLoop ) %]
+            <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
+        <ul>
+            [% FOREACH casServer IN casServersLoop %]
+                <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
+            [% END %]
+        [% END %]
     [% END %]
-
-</fieldset>
-[% END %]
-
-<!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
-
-<p class="submit"><input id="submit-button" type="submit" value="Login" tabindex="4" /></p>
-</form>
-[% IF ( casAuthentication ) %]
-<h4>Cas login</h4>
-
-[% IF ( invalidCasLogin ) %]
-<!-- This is what is displayed if cas login has failed -->
-<p>Sorry, the CAS login failed.</p>
-[% END %]
-
-[% IF ( casServerUrl ) %]
-    <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to login</a>.<p>
-[% END %]
-
-[% IF ( casServersLoop ) %]
-    <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
-<ul>
-    [% FOREACH casServer IN casServersLoop %]
-        <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
-    [% END %]
-[% END %]
 [% END %]
 
 [% IF ( nopermission ) %]
