@@ -79,7 +79,7 @@
                                     <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
                                     <div class="alert alert-info">
                                         <p>Sorry, your Shibboleth identity does not match a valid library identity.</p>
-                                        [% UNLESS ( Koha.Preference('opacShibOnly') ) %]
+                                        [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                         [% IF ( casAuthentication ) %]
                                             [% IF ( invalidCasLogin ) %]
                                                 <!-- This is what is displayed if cas login has failed -->
@@ -96,7 +96,7 @@
                                     <h3>Shibboleth Login</h3>
                                     <p><a href="[% shibbolethLoginUrl | $raw %]">Log in using a Shibboleth account.</a></p>
                                 [% END # /IF invalidShibLogin %]
-                                [% UNLESS ( Koha.Preference('opacShibOnly') ) %]
+                                [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                                 [% IF ( casAuthentication ) %]
                                     <h3>CAS login</h3>
                                     <p>If you do not have a Shibboleth account, but you do have a CAS account, you can use CAS.</p>
@@ -107,7 +107,7 @@
                                 [% END %]
                             [% END # /IF shibbolethAuthentication %]
 
-                        [% UNLESS ( Koha.Preference('opacShibOnly') ) %]
+                        [% UNLESS ( Koha.Preference('OPACShibOnly') ) %]
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
@@ -163,9 +163,9 @@
                             <a href="/cgi-bin/koha/svc/auth/googleopenidconnect" class="btn btn-primary" id="openid_connect">Log in with Google</a>
                             <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
                         [% END # /IF GoogleOpenIDConnect %]
-                        [% END # /UNLESS opacShibOnly %]
+                        [% END # /UNLESS OPACShibOnly %]
 
-                        [% IF !Koha.Preference('opacShibOnly') or SCO_login or SCI_login %]
+                        [% IF !Koha.Preference('OPACShibOnly') or SCO_login or SCI_login %]
                         [% IF SCO_login %]
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="auth" id="auth" method="post" autocomplete="off">
                         [% ELSIF SCI_login %]
@@ -215,7 +215,7 @@
                                 [% END %]
                             </div>
                         </form>
-                        [% END # / IF !opacShibOnly or SCO_login or SCI_login %]
+                        [% END # / IF !OPACShibOnly or SCO_login or SCI_login %]
                     [% END # / IF loginprompt %]
 
                     [% ELSE %]
