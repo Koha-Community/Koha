@@ -181,7 +181,7 @@
             <div class="col-12 col-lg-3 order-md-2">
                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                     [% UNLESS ( loggedinusername ) %]
-                        [% UNLESS ( casAuthentication || shibbolethAuthentication ) %]
+                        [% UNLESS ( casAuthentication || shibbolethAuthentication || Koha.Preference('opacShibOnly') ) %]
                             <div id="login">
                                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
                                     <input type="hidden" name="koha_login_context" value="opac" />
