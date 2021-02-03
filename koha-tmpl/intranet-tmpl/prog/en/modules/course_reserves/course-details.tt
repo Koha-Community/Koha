@@ -116,106 +116,118 @@
                         <tr>
                             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=cr.biblio %]</a></td>
                             <td>[% cr.biblio.author | html %]</td>
-                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | uri %]&amp;biblionumber=[% cr.biblio.biblionumber | uri %]&amp;bi=[% cr.biblioitem.biblioitemnumber | uri %]">[% cr.item.barcode | html %]</a></td>
-                            <td>[% cr.item.itemcallnumber | html %]</td>
-                            [% IF item_level_itypes %]
-                            <td>
-                                [% IF cr.course_item.itype_enabled %]
-                                    [% IF cr.course_item.enabled == 'yes' %]
-                                        <strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype ) | html %]</strong>
-                                        ([% ItemTypes.GetDescription( cr.course_item.itype_storage ) | html %])
+
+                            [% IF cr.item %]
+                                <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | uri %]&amp;biblionumber=[% cr.biblio.biblionumber | uri %]&amp;bi=[% cr.biblioitem.biblioitemnumber | uri %]">[% cr.item.barcode | html %]</a></td>
+                                <td>[% cr.item.itemcallnumber | html %]</td>
+                                [% IF item_level_itypes %]
+                                <td>
+                                    [% IF cr.course_item.itype_enabled %]
+                                        [% IF cr.course_item.enabled == 'yes' %]
+                                            <strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype ) | html %]</strong>
+                                            ([% ItemTypes.GetDescription( cr.course_item.itype_storage ) | html %])
+                                        [% ELSE %]
+                                            [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
+                                            (<strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype) | html %]</strong>)
+                                        [% END %]
                                     [% ELSE %]
-                                        [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
-                                        (<strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype) | html %]</strong>)
+                                         <em>Unchanged</em>
+                                         [% IF cr.item.itype %]
+                                             ([% ItemTypes.GetDescription( cr.item.itype ) | html %])
+                                         [% END %]
                                     [% END %]
-                                [% ELSE %]
-                                     <em>Unchanged</em>
-                                     [% IF cr.item.itype %]
-                                         ([% ItemTypes.GetDescription( cr.item.itype ) | html %])
-                                     [% END %]
+                                </td>
                                 [% END %]
-                            </td>
+                                <td>
+                                     [% IF cr.course_item.ccode_enabled %]
+                                         [% IF cr.course_item.enabled == 'yes' %]
+                                         <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %]</strong>
+                                            [% IF cr.item.ccode %]
+                                                ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.course_item.ccode_storage ) | html %])
+                                            [% END %]
+                                         [% ELSE %]
+                                            [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.course_item.ccode ) | html %]
+                                            [% IF cr.item.ccode %]
+                                                (<strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %]</strong>)
+                                            [% END %]
+                                         [% END %]
+                                         [% ELSE %]
+                                             <em>Unchanged</em>
+                                             [% IF cr.item.ccode %]
+                                                 ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %])
+                                             [% END %]
+                                         [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF cr.course_item.location_enabled %]
+                                            [% IF cr.course_item.enabled == 'yes' %]
+                                                <strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>
+                                                [% IF cr.item.permanent_location %]
+                                                    ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location_storage ) | html %])
+                                                [% END %]
+                                        [% ELSE %]
+                                            [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %]
+                                            [% IF cr.item.permanent_location %]
+                                                (<strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>)
+                                            [% END %]
+                                        [% END %]
+                                    [% ELSE %]
+                                        <em>Unchanged</em>
+                                        [% IF cr.item.permanent_location %]
+                                            ([% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %])
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF cr.course_item.homebranch_enabled %]
+                                        [% IF cr.course_item.enabled == 'yes' %]
+                                            <strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>
+                                            [% IF cr.item.homebranch %]
+                                                ([% Branches.GetName( cr.course_item.homebranch_storage ) | html %])
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% Branches.GetName( cr.course_item.homebranch ) | html %]
+                                            [% IF cr.item.homebranch %]
+                                                (<strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>)
+                                            [% END %]
+                                        [% END %]
+                                    [% ELSE %]
+                                        <em>Unchanged</em>
+                                        [% IF cr.item.homebranch %]
+                                            ([% Branches.GetName( cr.item.homebranch ) | html %])
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                                <td>
+                                    [% IF cr.course_item.holdingbranch_enabled %]
+                                        [% IF cr.course_item.enabled == 'yes' %]
+                                            <strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>
+                                            [% IF cr.item.holdingbranch %]
+                                                ([% Branches.GetName( cr.course_item.holdingbranch_storage ) | html %])
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% Branches.GetName( cr.course_item.holdingbranch ) | html %]
+                                            [% IF cr.item.holdingbranch %]
+                                                (<strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>)
+                                            [% END %]
+                                        [% END %]
+                                    [% ELSE %]
+                                        <em>Unchanged</em>
+                                        [% IF cr.item.holdingbranch %]
+                                            ([% Branches.GetName( cr.item.holdingbranch ) | html %])
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                            [% ELSE # record-level course reserve %]
+                                [% IF ( item_level_itypes ) %]
+                                    <td colspan="7">
+                                [% ELSE %]
+                                    <td colspan="6">
+                                [% END %]
+                                        <em>Information not available for record-level course reserve</em>
+                                    </td>
                             [% END %]
-                            <td>
-                                 [% IF cr.course_item.ccode_enabled %]
-                                     [% IF cr.course_item.enabled == 'yes' %]
-                                     <strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %]</strong>
-                                        [% IF cr.item.ccode %]
-                                            ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.course_item.ccode_storage ) | html %])
-                                        [% END %]
-                                     [% ELSE %]
-                                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.course_item.ccode ) | html %]
-                                        [% IF cr.item.ccode %]
-                                            (<strong>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %]</strong>)
-                                        [% END %]
-                                     [% END %]
-                                 [% ELSE %]
-                                     <em>Unchanged</em>
-                                     [% IF cr.item.ccode %]
-                                         ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => cr.item.ccode ) | html %])
-                                     [% END %]
-                                 [% END %]
-                            </td>
-                            <td>
-                                [% IF cr.course_item.location_enabled %]
-                                    [% IF cr.course_item.enabled == 'yes' %]
-                                        <strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>
-                                        [% IF cr.item.permanent_location %]
-                                            ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location_storage ) | html %])
-                                        [% END %]
-                                    [% ELSE %]
-                                        [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %]
-                                        [% IF cr.item.permanent_location %]
-                                            (<strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>)
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                    <em>Unchanged</em>
-                                    [% IF cr.item.permanent_location %]
-                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %])
-                                    [% END %]
-                                [% END %]
-                            </td>
-                            <td>
-                                [% IF cr.course_item.homebranch_enabled %]
-                                    [% IF cr.course_item.enabled == 'yes' %]
-                                        <strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>
-                                        [% IF cr.item.homebranch %]
-                                            ([% Branches.GetName( cr.course_item.homebranch_storage ) | html %])
-                                        [% END %]
-                                    [% ELSE %]
-                                        [% Branches.GetName( cr.course_item.homebranch ) | html %]
-                                        [% IF cr.item.homebranch %]
-                                            (<strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>)
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                    <em>Unchanged</em>
-                                    [% IF cr.item.homebranch %]
-                                        ([% Branches.GetName( cr.item.homebranch ) | html %])
-                                    [% END %]
-                                [% END %]
-                            </td>
-                            <td>
-                                [% IF cr.course_item.holdingbranch_enabled %]
-                                    [% IF cr.course_item.enabled == 'yes' %]
-                                        <strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>
-                                        [% IF cr.item.holdingbranch %]
-                                            ([% Branches.GetName( cr.course_item.holdingbranch_storage ) | html %])
-                                        [% END %]
-                                    [% ELSE %]
-                                        [% Branches.GetName( cr.course_item.holdingbranch ) | html %]
-                                        [% IF cr.item.holdingbranch %]
-                                            (<strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>)
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                    <em>Unchanged</em>
-                                    [% IF cr.item.holdingbranch %]
-                                        ([% Branches.GetName( cr.item.holdingbranch ) | html %])
-                                    [% END %]
-                                [% END %]
-                            </td>
+
                             <td>[% IF (cr.staff_note) %]
                                     [% cr.staff_note | html %]
                                 [% ELSIF (cr.item.itemnotes_nonpublic) %]
@@ -264,7 +276,7 @@
                             [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                 <td class="actions">
                                     [% IF CAN_user_coursereserves_add_reserves %]
-                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id | html %]&amp;itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;action=lookup&amp;return=[% course.course_id | html %]&amp;is_edit=1"><i class="fa fa-pencil"></i> Edit</a>
                                     [% END %]
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]

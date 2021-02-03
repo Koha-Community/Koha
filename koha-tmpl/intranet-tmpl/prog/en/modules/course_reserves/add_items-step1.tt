@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Add items &rsaquo; Course reserves &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -30,8 +31,10 @@
         [% IF ERROR_ITEM_NOT_FOUND %]
             [% IF UNKNOWN_BARCODE %]
                 <div class="dialog alert">No item found with barcode [% UNKNOWN_BARCODE | html %]</div>
+            [% ELSIF UNKNOWN_BIBLIONUMBER %]
+                <div class="dialog alert">No bibliographic record found with biblionumber [% UNKNOWN_BIBLIONUMBER | html %]</div>
             [% ELSE %]
-                 <div class="dialog alert">No item found</div>
+                 <div class="dialog alert">No item or bibliographic record found</div>
             [% END %]
         [% END %]
 
@@ -49,6 +52,16 @@
                 </ol>
             </fieldset>
 
+            <fieldset class="rows">
+                <legend>Or use biblionumber of a bibliographic record</legend>
+                <ol>
+                    <li>
+                        <label class="required" for="biblionumber">Biblionumber:</label>
+                        <input id="biblionumber" name="biblionumber" type="text" />
+                    </li>
+                </ol>
+            </fieldset>
+
             <fieldset class="action">
                 <input type="submit" value="Submit" class="submit" />
 
@@ -57,5 +70,18 @@
         </form>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(document).ready(function(){
+            $("input[type='submit']").click(function(e){
+                if ( $("#biblionumber").val().length > 0 && $("#barcode").val().length > 0 ) {
+                    e.preventDefault();
+                    alert(__("Please enter only a barcode, or only a biblionumber."));
+                }
+            });
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

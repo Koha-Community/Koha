@@ -34,14 +34,13 @@ my $cgi = CGI->new;
 my $action    = $cgi->param('action')    || q{};
 my $course_id = $cgi->param('course_id') || q{};
 my $barcodes  = $cgi->param('barcodes')  || q{};
+my $biblionumbers = $cgi->param('biblionumbers') || q{};
 
 my $itype         = $cgi->param('itype');
 my $ccode         = $cgi->param('ccode');
 my $homebranch    = $cgi->param('homebranch');
 my $holdingbranch = $cgi->param('holdingbranch');
 my $location      = $cgi->param('location');
-my $staff_note    = $cgi->param('staff_note');
-my $public_note   = $cgi->param('public_note');
 
 my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
 my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
@@ -68,49 +67,104 @@ if ( $course_id && $course ) {
     }
     elsif ( $action eq 'add' ) {
         my @barcodes = uniq( split( /\s\n/, $barcodes ) );
+        my @biblionumbers = uniq( split( /\s\n/, $biblionumbers ) );
 
-        my @items;
-        my @invalid_barcodes;
-        for my $b (@barcodes) {
-            my $item = Koha::Items->find( { barcode => $b } );
+        if (@barcodes > 0) {
+            my @items;
+            my @invalid_barcodes;
+            for my $b (@barcodes) {
+                my $item = Koha::Items->find( { barcode => $b } );
 
-            if ($item) {
-                push( @items, $item );
+                if ($item) {
+                    push( @items, $item );
+                }
+                else {
+                    push( @invalid_barcodes, $b );
+                }
             }
-            else {
-                push( @invalid_barcodes, $b );
-            }
-        }
 
-        foreach my $item (@items) {
-            my $ci_id = ModCourseItem(
-                itemnumber            => $item->id,
-                itype                 => $itype,
-                ccode                 => $ccode,
-                holdingbranch         => $holdingbranch,
-                homebranch            => $homebranch,
-                location              => $location,
-                itype_enabled         => $itype_enabled,
-                ccode_enabled         => $ccode_enabled,
-                holdingbranch_enabled => $holdingbranch_enabled,
-                homebranch_enabled    => $homebranch_enabled,
-                location_enabled      => $location_enabled,
+            foreach my $item (@items) {
+                my $ci_id = ModCourseItem(
+                    itemnumber            => $item->id,
+                    biblionumber          => $item->biblionumber,
+                    itype                 => $itype,
+                    ccode                 => $ccode,
+                    holdingbranch         => $holdingbranch,
+                    homebranch            => $homebranch,
+                    location              => $location,
+                    itype_enabled         => $itype_enabled,
+                    ccode_enabled         => $ccode_enabled,
+                    holdingbranch_enabled => $holdingbranch_enabled,
+                    homebranch_enabled    => $homebranch_enabled,
+                    location_enabled      => $location_enabled,
+                );
+
+                my $staff_note  = $cgi->param('item_staff_note');
+                my $public_note = $cgi->param('item_public_note');
+                my $cr_id = ModCourseReserve(
+                    course_id   => $course_id,
+                    ci_id       => $ci_id,
+                    staff_note  => $staff_note,
+                    public_note => $public_note,
+                );
+            }
+
+            $template->param(
+                action           => 'display_results',
+                items_added      => \@items,
+                invalid_barcodes => \@invalid_barcodes,
+                course_id        => $course_id,
+                barcodes         => 1,
             );
 
-            my $cr_id = ModCourseReserve(
-                course_id   => $course_id,
-                ci_id       => $ci_id,
-                staff_note  => $staff_note,
-                public_note => $public_note,
+        } elsif (@biblionumbers > 0) {
+            my @biblios;
+            my @invalid_biblionumbers;
+            for my $b (@biblionumbers) {
+                my $biblio = Koha::Biblios->find( $b );
+
+                if ($biblio) {
+                    push( @biblios, $biblio );
+                }
+                else {
+                    push( @invalid_biblionumbers, $b );
+                }
+            }
+
+            foreach my $biblio (@biblios) {
+                my $ci_id = ModCourseItem(
+                    itemnumber            => undef,
+                    biblionumber          => $biblio->id,
+                    itype                 => $itype,
+                    ccode                 => $ccode,
+                    holdingbranch         => $holdingbranch,
+                    homebranch            => $homebranch,
+                    location              => $location,
+                    itype_enabled         => $itype_enabled,
+                    ccode_enabled         => $ccode_enabled,
+                    holdingbranch_enabled => $holdingbranch_enabled,
+                    homebranch_enabled    => $homebranch_enabled,
+                    location_enabled      => $location_enabled,
+                );
+
+                my $staff_note  = $cgi->param('biblio_staff_note');
+                my $public_note = $cgi->param('biblio_public_note');
+                my $cr_id = ModCourseReserve(
+                    course_id   => $course_id,
+                    ci_id       => $ci_id,
+                    staff_note  => $staff_note,
+                    public_note => $public_note,
+                );
+            }
+
+            $template->param(
+                action           => 'display_results',
+                biblios_added    => \@biblios,
+                invalid_biblionumbers => \@invalid_biblionumbers,
+                course_id        => $course_id,
+                biblionumbers    => 1,
             );
         }
-
-        $template->param(
-            action           => 'display_results',
-            items_added      => \@items,
-            invalid_barcodes => \@invalid_barcodes,
-            course_id        => $course_id,
-        );
     }
 } else {
     $template->param( action => 'invalid_course' );

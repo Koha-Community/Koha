@@ -589,6 +589,11 @@ if($query->cookie("intranet_bib_list")){
     }
 }
 
+if ( C4::Context->preference('UseCourseReserves') ) {
+    my $course_reserves = GetItemCourseReservesInfo( biblionumber => $biblionumber );
+    $template->param( course_reserves => $course_reserves );
+}
+
 $template->param(biblio => $biblio);
 
 output_html_with_http_headers $query, $cookie, $template->output;

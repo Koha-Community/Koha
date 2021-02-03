@@ -107,13 +107,13 @@
                         </li>
 
                         <li>
-                            <label for="staff_note">Staff note:</label>
-                            <textarea name="staff_note" id="staff_note">[% course_reserve.staff_note | html %]</textarea>
+                            <label for="item_staff_note">Staff note:</label>
+                            <textarea name="item_staff_note" id="item_staff_note">[% course_reserve.staff_note | html %]</textarea>
                         </li>
 
                         <li>
-                            <label for="public_note">Public note:</label>
-                            <textarea name="public_note" id="public_note">[% course_reserve.public_note | html %]</textarea>
+                            <label for="item_public_note">Public note:</label>
+                            <textarea name="item_public_note" id="item_public_note">[% course_reserve.public_note | html %]</textarea>
                         </li>
                     </ol>
                 </fieldset>
@@ -122,6 +122,26 @@
                     Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br>
                     Any items with existing course reserves will have their <em>on reserve</em> values updated.
                 </p>
+
+                <fieldset class="rows">
+                    <legend>Or use biblionumbers of bibliographic records</legend>
+                    <ol>
+                        <li>
+                            <label class="required" for="biblionumbers">Biblionumbers:</label>
+                            <textarea rows="20" cols="50" id="biblionumbers" name="biblionumbers"></textarea>
+                        </li>
+
+                        <li>
+                            <label for="biblio_staff_note">Staff note:</label>
+                            <textarea name="biblio_staff_note" id="biblio_staff_note">[% course_reserve.staff_note | html %]</textarea>
+                        </li>
+
+                        <li>
+                            <label for="biblio_public_note">Public note:</label>
+                            <textarea name="biblio_public_note" id="biblio_public_note">[% course_reserve.public_note | html %]</textarea>
+                        </li>
+                    </ol>
+                </fieldset>
 
                 <fieldset class="action">
                     <input type="submit" value="Submit" class="submit" />
@@ -134,27 +154,52 @@
         [% IF action == 'display_results' %]
             <h1>Results</h1>
 
-            <h3>Items added</h3>
-            [% IF items_added.size > 0 %]
-                <p>The following items were added or updated:</p>
-                <ul>
-                    [% FOREACH i IN items_added %]
-                        <li>[% i.biblio.title | html %] ( [% i.barcode | html %] )</li>
-                    [% END %]
-                </ul>
-            [% ELSE %]
-                No valid item barcodes found.
-            [% END %]
+            [% IF barcodes %]
+                <h3>Items added</h3>
+                [% IF items_added.size > 0 %]
+                    <p>The following items were added or updated:</p>
+                    <ul>
+                        [% FOREACH i IN items_added %]
+                            <li>[% i.biblio.title | html %] ( [% i.barcode | html %] )</li>
+                        [% END %]
+                    </ul>
+                [% ELSE %]
+                    No valid item barcodes found.
+                [% END %]
 
 
-            [% IF invalid_barcodes.size > 0 %]
-                <h3>Invalid barcodes</h3>
-                <p>The following invalid barcodes were skipped:</p>
-                <ul>
-                    [% FOREACH b IN invalid_barcodes %]
-                        <li>[% b | html %]</li>
-                    [% END %]
-                </ul>
+                [% IF invalid_barcodes.size > 0 %]
+                    <h3>Invalid barcodes</h3>
+                    <p>The following invalid barcodes were skipped:</p>
+                    <ul>
+                        [% FOREACH b IN invalid_barcodes %]
+                            <li>[% b | html %]</li>
+                        [% END %]
+                    </ul>
+                [% END %]
+            [% ELSIF biblionumbers %]
+                <h3>Bibliographic records added</h3>
+                [% IF biblios_added.size > 0 %]
+                    <p>The following bibliographic records were added or updated:</p>
+                    <ul>
+                        [% FOREACH b IN biblios_added %]
+                            <li>[% b.title | html %] ( [% b.biblionumber | html %] )</li>
+                        [% END %]
+                    </ul>
+                [% ELSE %]
+                    No valid biblionumbers found.
+                [% END %]
+
+
+                [% IF invalid_biblionumbers.size > 0 %]
+                    <h3>Invalid biblionumbers</h3>
+                    <p>The following invalid biblionumbers were skipped:</p>
+                    <ul>
+                        [% FOREACH b IN invalid_biblionumbers %]
+                            <li>[% b | html %]</li>
+                        [% END %]
+                    </ul>
+                [% END %]
             [% END %]
 
             <p>
@@ -174,6 +219,12 @@
                 } else {
                     $('#' + $(this).data('pulldown') ).val('');
                     $('#' + $(this).data('pulldown') ).attr('disabled', 'disabled');
+                }
+            });
+            $("input[type='submit']").click(function(e){
+                if ( $("#biblionumbers").val().length > 0 && $("#barcodes").val().length > 0 ) {
+                    e.preventDefault();
+                    alert(__("Please enter only barcodes, or only biblionumbers."));
                 }
             });
         });

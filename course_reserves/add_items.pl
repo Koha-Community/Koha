@@ -41,15 +41,29 @@ my $barcode      = $cgi->param('barcode')      || '';
 my $return       = $cgi->param('return')       || '';
 my $itemnumber   = $cgi->param('itemnumber')   || '';
 my $is_edit      = $cgi->param('is_edit')      || '';
+my $biblionumber = $cgi->param('biblionumber') || '';
 
 $barcode =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
+$biblionumber =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
 
-my $item = Koha::Items->find( { ( $itemnumber ? ( itemnumber => $itemnumber ) : ( barcode => $barcode ) ) } );
-$itemnumber = $item->id if $item;
+my ( $item, $biblio );
 
-my $title = ($item) ? $item->biblio->title : undef;
+if ( $barcode || $itemnumber ) {
+    # adding an item to course items
+    $item = $itemnumber ? Koha::Items->find( $itemnumber ) : Koha::Items->find({ barcode => $barcode });
+    if ( $item ) {
+        $itemnumber = $item->id;
+        $biblio = $item->biblio;
+        $biblionumber = $biblio->biblionumber;
+    }
+} else {
+    # adding a biblio to course items
+    $biblio = Koha::Biblios->find( $biblionumber );
+}
 
-my $step = ( $action eq 'lookup' && $item ) ? '2' : '1';
+my $title = $biblio->title if $biblio;
+
+my $step = ( $action eq 'lookup' && ( $item or $biblio ) ) ? '2' : '1';
 
 my $tmpl = ($course_id) ? "add_items-step$step.tt" : "invalid-course.tt";
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -60,9 +74,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( !$item && $action eq 'lookup' ){
+if ( !$item && !$biblio && $action eq 'lookup' ){
     $template->param( ERROR_ITEM_NOT_FOUND => 1 );
     $template->param( UNKNOWN_BARCODE => $barcode ) if $barcode;
+    $template->param( UNKNOWN_BIBLIONUMBER => $biblionumber ) if $biblionumber;
 }
 
 $template->param( course => GetCourse($course_id) );
@@ -80,7 +95,7 @@ if ( $action eq 'lookup' and $item ) {
     my $itemtypes = Koha::ItemTypes->search;
     $template->param(
         item           => $item,
-        biblio         => $item->biblio,
+        biblio         => $biblio,
         course_item    => $course_item,
         course_reserve => $course_reserve,
         is_edit        => $is_edit,
@@ -88,6 +103,26 @@ if ( $action eq 'lookup' and $item ) {
         ccodes    => GetAuthorisedValues('CCODE'),
         locations => GetAuthorisedValues('LOC'),
         itypes    => $itemtypes, # FIXME We certainly want to display the translated_description in the template
+        return    => $return,
+    );
+
+} elsif ( $action eq 'lookup' and $biblio ) {
+    my $course_item = Koha::Course::Items->find({ biblionumber => $biblio->biblionumber });
+    my $course_reserve =
+      ($course_item)
+      ? GetCourseReserve(
+        course_id => $course_id,
+        ci_id     => $course_item->ci_id,
+      )
+      : undef;
+
+    my $itemtypes = Koha::ItemTypes->search;
+    $template->param(
+        biblio         => $biblio,
+        course_item    => $course_item,
+        course_reserve => $course_reserve,
+        is_edit        => $is_edit,
+
         return    => $return,
     );
 
@@ -106,6 +141,7 @@ if ( $action eq 'lookup' and $item ) {
 
     my $ci_id = ModCourseItem(
             itemnumber    => $itemnumber,
+            biblionumber  => $biblionumber,
             itype         => $itype,
             ccode         => $ccode,
             homebranch    => $homebranch,

@@ -189,6 +189,15 @@
             </span>
         [% END %]
 
+        [% IF course_reserves %]
+            <span class="results_summary"><span class="label">Courses that have reserved this title: </span>
+            [% FOREACH c IN course_reserves %]
+                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% c.course_id | uri %]">[% c.course.course_name | html %]</a>
+                [% IF ( loop.last ) %][% ELSE %]|[% END %]
+            [% END %]
+            </span>
+        [% END %]
+
         [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
             </div>
             <div class="col-xs-3 bookcoverimg">

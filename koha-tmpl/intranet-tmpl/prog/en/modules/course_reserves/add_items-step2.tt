@@ -32,12 +32,20 @@
         <div class="col-md-8 col-md-offset-2">
 
         [% IF course_reserve && !is_edit%]<div class="dialog message" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
-        [% IF course_item %]<div class="dialog message" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.count | html %]</div>[% END %]
+        [% IF course_item %]
+            [% IF item %]
+                <div class="dialog message" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.count | html %]</div>
+            [% ELSE %]
+                <div class="dialog message" id="already_on_reserve">Number of courses reserving this bibliographic record: [% course_item.course_reserves.count | html %]</div>
+            [% END %]
+        [% END %]
 
         <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
             <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
             <input type="hidden" name="return" value="[% return | html %]" />
             <input type="hidden" name="action" value="add" />
+
+            [% IF item # adding an item to course items %]
 
             <fieldset class="rows">
                 [% IF is_edit || course_reserve %]
@@ -50,6 +58,7 @@
                         <span class="label">Barcode:</span>
                         <span id="barcode">[% item.barcode | html %]</span>
                         <input type="hidden" name="itemnumber" value="[% item.itemnumber | html %]" />
+                        <input type="hidden" name="biblionumber" value="[% item.biblionumber | html %]" />
                     </li>
 
                     [% IF item_level_itypes %]
@@ -200,6 +209,36 @@
                     Checking the box next to the field label will enable changes to that field. Leave boxes unchecked to make no change.<br>
                     Any items with existing course reserves will have their <em>on reserve</em> values updated.
                 </p>
+
+            [% ELSE # adding a biblio to course items %]
+
+            <fieldset class="rows">
+                [% IF is_edit || course_reserve %]
+                    <legend>Edit <em>[% biblio.title | html %]</em> in <em>[% course.course_name | html %]</em></legend>
+                [% ELSE %]
+                    <legend>Add <em>[% biblio.title | html %]</em> to <em>[% course.course_name | html %]</em></legend>
+                [% END %]
+                <ol>
+                    <li>
+                        <span class="label">Biblionumber:</span>
+                        <span id="biblionumber">[% biblio.biblionumber | html %]</span>
+                        <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />
+                    </li>
+
+                    <li>
+                        <label for="staff_note">Staff note:</label>
+                        <textarea name="staff_note" id="staff_note">[% course_reserve.staff_note | html %]</textarea>
+                    </li>
+
+                    <li>
+                        <label for="public_note">Public note:</label>
+                        <textarea name="public_note" id="public_note">[% course_reserve.public_note | html %]</textarea>
+                    </li>
+
+                </ol>
+            </fieldset>
+
+            [% END %]
             <fieldset class="action">
                 <input type="submit" id="submit" value="Save" class="submit focus" />
 
