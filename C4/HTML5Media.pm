@@ -105,7 +105,7 @@ sub gethtml5media {
                     next unless $url =~ m{^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*};
                     my $video_id = $2;
                     next unless length($video_id) == 11; # Youtube video ids are 11 chars length
-                    $HTML5Media{srcblock} = sprintf '%s://www.youtube.com/embed/%s', $HTML5Media{protocol}, $video_id;
+                    $HTML5Media{srcblock} = sprintf 'https://www.youtube.com/embed/%s', $video_id;
                     $HTML5Media{is_youtube} = 1;
                     $is_youtube = 1;
                 }
