@@ -46,11 +46,9 @@
           [% END %]
 
           <div id="searchresults">
-            <div id="searchheader">
-              <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember | html %]'[% END %]</span></h3>
-            </div>
+            <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember | html %]'[% END %]</span></h3>
             [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
-              <div id="searchheader">
+              <div class="searchheader" id="searchheader">
                   <div>
                       <a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
                       |
@@ -194,6 +192,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
@@ -312,6 +311,7 @@
                 clearFilters(true);
             });
             $("#searchform").on("submit", filter);
+
         });
 
         var dtMemberResults;
@@ -452,6 +452,13 @@
                 'sPaginationType': 'full_numbers',
                 "iDisplayLength": [% PatronsPerPage | html %],
                 "bProcessing": true,
+                "initComplete": function(settings, json) {
+                    Sticky = $("#searchheader");
+                    Sticky.hcSticky({
+                        stickTo: "#searchresults",
+                        stickyClass: "floating"
+                    });
+                }
             }, columns_settings);
             update_searched();
         });
