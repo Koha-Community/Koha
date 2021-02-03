@@ -486,8 +486,15 @@ function footer_column_sum( api, column_numbers ) {
 
         var total = 0;
         var cells = api.column( column_number, { page: 'current' } ).nodes().to$().find("span.total_amount");
+        var budgets_totaled = [];
+        $(cells).each(function(){ budgets_totaled.push( $(this).data('self_id') ); });
         $(cells).each(function(){
-            total += intVal( $(this).html() );
+            if( $(this).data('parent_id') && $.inArray( $(this).data('parent_id'), budgets_totaled) > -1 ){
+                return;
+            } else {
+                total += intVal( $(this).html() );
+            }
+
         });
         total /= 100; // Hard-coded decimal precision
 
