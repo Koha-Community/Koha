@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -172,6 +172,27 @@ subtest checkout => sub {
 
     $checkout->discard_changes();
     is( $checkout->renewals, 1, "Renewals has been reduced");
+};
+
+subtest renew_all => sub {
+    plan tests => 1;
+
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+
+    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+
+    # Send empty AD segments (i.e. empty string for patron_pwd)
+    my $transaction = $ils->renew_all( $patron->cardnumber, "", undef );
+    isnt( $transaction->{screen_msg}, 'Invalid patron password.', "Empty password succeeds" );
 };
 
 $schema->storage->txn_rollback;
