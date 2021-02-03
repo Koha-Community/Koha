@@ -511,14 +511,11 @@ sub renew_all {
         siplog("LOG_DEBUG", "ILS::renew_all: Invalid patron id: '%s'", $patron_id);
     }
 
-    if (!defined($patron)) {
+    if (!$patron) {
 		$trans->screen_msg("Invalid patron barcode.");
 		return $trans;
     } elsif (!$patron->renew_ok) {
 		$trans->screen_msg("Renewals not allowed.");
-		return $trans;
-    } elsif (defined($patron_pwd) && !$patron->check_password($patron_pwd)) {
-		$trans->screen_msg("Invalid patron password.");
 		return $trans;
     }
 
