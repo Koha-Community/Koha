@@ -134,11 +134,7 @@
                 </td>
                 <td>[% Branches.GetName( loop_budge.budget_branchcode ) | html %]</td>
                 <td class="data">
-                    [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_amount | $Price %]
-                    [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_amount | $Price %]</span>
-                    [% END %]
+                    <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_amount | $Price %]</span>
                 </td>
                 <td class="data">
                     <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
@@ -151,11 +147,7 @@
                     </a>
                 </td>
                 <td class="data">
-                    [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_avail | $Price %]
-                    [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_avail | $Price %]</span>
-                    [% END %]
+                    <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_avail | $Price %]</span>
                 </td>
             </tr>
         [% END %]
