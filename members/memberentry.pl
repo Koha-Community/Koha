@@ -962,7 +962,7 @@ sub patron_attributes_form {
         my $lib = $av->count ? $av->next->lib : $class;
         push @attribute_loop, {
             class => $class,
-            items => @{$items_by_class{$class}},
+            items => $items_by_class{$class},
             lib   => $lib,
         }
     }
