@@ -397,7 +397,7 @@
             <tr>
                 <th><label for="accepteddate">Accepted on:</label> </th>
                 <td><input type="text" id="accepteddate" name="accepteddate" class="datepicker" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a> [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])[% END %]</td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% acceptedby_patron.cardnumber | html %])</a> [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])[% END %]</td>
                 <td></td>
             </tr>
             <tr>
