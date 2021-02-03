@@ -103,11 +103,7 @@
     <td>[% budget.budget_code | html %]</td>
     <td>[% budget.budget_name | html %]</td>
     <td class="data">
-      [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_amount | $Price %]</span>
-      [% ELSE %]
-        <span class="total_amount">[% budget.budget_amount | $Price %]</span>
-      [% END %]
+        <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]">[% budget.budget_amount | $Price %]</span>
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
@@ -140,24 +136,14 @@
 
 
     [% BLOCK colorcellvalue %]
-        [% IF parent %]
-            [% IF (value > 0) %]
-                <span class="child_fund_amount" style="color: green;">
-            [% ELSIF (value < 0) %]
-                <span class="child_fund_amount" style="color: red;">
-            [% ELSE %]
-                <span class="child_fund_amount">
-            [% END %]
-         [% ELSE %]
-            [% IF (value > 0) %]
-                <span class="total_amount" style="color: green;">
-            [% ELSIF (value < 0) %]
-                <span class="total_amount" style="color: red;">
-            [% ELSE %]
-                <span class="totalamount">
-            [% END %]
+        [% IF (value > 0) %]
+            <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: green;">
+        [% ELSIF (value < 0) %]
+            <span class="total_amount" style="color: red;">
+        [% ELSE %]
+            <span class="totalamount">
         [% END %]
-            [% value | $Price %]
+        [% value | $Price %]
         </span>
     [% END %]
     <td class="data">
