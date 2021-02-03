@@ -13,15 +13,15 @@
     <div id="header-region" class="noprint">
         <nav class="navbar navbar-expand">
             <button id="scrolltocontent">Skip to main content</button>
-            <h1 id="logo">
-                <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
-                    [% IF ( LibraryNameTitle ) %]
-                        [% LibraryNameTitle | html %]
-                    [% ELSE %]
-                        Koha online
-                    [% END %]
-                </a>
-            </h1>
+            <div id="logo">
+            <a class="navbar-brand" href="/cgi-bin/koha/opac-main.pl">
+                [% IF ( LibraryNameTitle ) %]
+                    [% LibraryNameTitle | html %]
+                [% ELSE %]
+                    Koha online
+                [% END %]
+            </a>
+            </div>
             [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                 <div id="cartDetails" class="cart-message">Your cart is empty.</div>
             [% END %]
