@@ -15,6 +15,14 @@
             <ul>
                 <li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions statistics wizard</a></li>
                 <li><a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a></li>
+                [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                    <li><a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
+                [% END %]
+            </ul>
+        [% ELSIF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+            <h5>Reports</h5>
+            <ul>
+                <li><a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
             </ul>
         [% END %]
         [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_currencies_manage || CAN_user_acquisition_edi_manage || CAN_user_parameters_manage_additional_fields ) %]
