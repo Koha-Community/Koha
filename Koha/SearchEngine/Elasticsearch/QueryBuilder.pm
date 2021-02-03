@@ -943,6 +943,7 @@ sub _clean_search_term {
     # Remove unquoted colons that have whitespace on either side of them
     $term =~ s/(:+)(\s+)$lookahead/$2/g;
     $term =~ s/(\s+)(:+)$lookahead/$1/g;
+    $term =~ s/^://;
 
     $term = $self->_query_regex_escape_process($term);
 

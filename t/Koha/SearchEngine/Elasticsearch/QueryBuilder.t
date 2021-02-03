@@ -187,7 +187,7 @@ subtest '_split_query() tests' => sub {
 };
 
 subtest '_clean_search_term() tests' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     my $qb;
     ok(
@@ -224,6 +224,9 @@ subtest '_clean_search_term() tests' => sub {
 
     $res = $qb->_clean_search_term('ti:test AND kw:test');
     is($res, 'title:test AND test', 'ti converted to title, kw converted to empty string, dangling colon removed with space preserved');
+
+    $res = $qb->_clean_search_term('kw:test');
+    is($res, 'test', 'kw converted to empty string, dangling colon removed with space preserved');
 };
 
 subtest '_join_queries' => sub {
