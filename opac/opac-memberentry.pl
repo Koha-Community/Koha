@@ -75,10 +75,14 @@ if ( $action eq q{} ) {
 
 my $mandatory = GetMandatoryFields($action);
 
-my @libraries = Koha::Libraries->search;
-if ( my @libraries_to_display = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList') ) {
-    @libraries = map { my $b = $_; my $branchcode = $_->branchcode; grep( /^$branchcode$/, @libraries_to_display ) ? $b : () } @libraries;
+my $params = {};
+if ( $action eq 'create' || $action eq 'new' ) {
+    my @PatronSelfRegistrationLibraryList = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList');
+    $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
+      if @PatronSelfRegistrationLibraryList;
 }
+my @libraries = Koha::Libraries->search($params);
+
 my ( $min, $max ) = C4::Members::get_cardnumber_length();
 if ( defined $min ) {
      $template->param(
@@ -148,6 +152,8 @@ if ( $action eq 'create' ) {
             borrower       => \%borrower
         );
         $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
+    } elsif ( ! grep { $borrower{branchcode} eq $_->branchcode } @libraries ) {
+        die "Branchcode not allowed"; # They hack the form
     }
     else {
         if (
