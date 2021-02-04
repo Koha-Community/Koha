@@ -1220,7 +1220,7 @@ sub handle_item_information {
         $resp .= maybe_add( FID_ITEM_PROPS,   $item->sip_item_properties, $server );
 
         if ( my $CR = $server->{account}->{cr_item_field} ) {
-                $resp .= maybe_add( FID_COLLECTION_CODE, $item->$CR, $server );
+                $resp .= maybe_add( FID_COLLECTION_CODE, $item->{$CR}, $server );
         } else {
           $resp .= maybe_add( FID_COLLECTION_CODE, $item->collection_code, $server );
         }
