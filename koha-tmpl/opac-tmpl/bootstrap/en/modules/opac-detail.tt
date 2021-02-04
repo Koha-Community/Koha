@@ -349,7 +349,7 @@
                                 [% IF ( loggedinusername ) %]
                                     <a class="tag_add btn btn-sm btn-link" id="tag_add[% biblio.biblionumber | html %]" href="#"><i class="fa fa-tag" aria-hidden="true"></i> Add tag(s)</a>
                                 [% ELSE %]
-                                    <span id="login4tags">
+                                    <span class="login4tags">
                                         [% IF Koha.Preference('casAuthentication') %]
                                             [%# CAS authentication is too complicated for modal window %]
                                             <a href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
