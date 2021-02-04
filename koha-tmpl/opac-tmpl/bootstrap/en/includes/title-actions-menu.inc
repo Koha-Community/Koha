@@ -36,7 +36,11 @@
                 Tag status here.
             </span>
         [% ELSE %]
-            <span class="actions"><span id="login4tags"><a class="btn btn-link btn-sm loginModal-trigger" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-tag" aria-hidden="true"></i> Log in to add tags</a></span></span>
+            <span class="actions">
+                <span class="login4tags">
+                    <a class="btn btn-link btn-sm loginModal-trigger" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-tag" aria-hidden="true"></i> Log in to add tags</a>
+                </span>
+            </span>
         [% END # IF loggedinusername %]
     [% END # if TagsInputEnabled %]
 
