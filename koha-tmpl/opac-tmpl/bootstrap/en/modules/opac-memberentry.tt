@@ -239,21 +239,29 @@
 
                                             [% UNLESS hidden.defined('branchcode') %]
                                                 <li>
-                                                    [% IF mandatory.defined('branchcode') %]
-                                                        <label for="borrower_branchcode" class="required">Home library:</label>
-                                                    [% ELSE %]
-                                                        <label for="borrower_branchcode">Home library:</label>
-                                                    [% END %]
-
-                                                    <select id="borrower_branchcode" name="borrower_branchcode">
-                                                        [% FOREACH l IN libraries %]
-                                                            [% IF l.branchcode == borrower.branchcode %]
-                                                                <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
-                                                            [% ELSE %]
-                                                                <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
-                                                            [% END %]
+                                                    [% IF ( libraries.size > 1 ) %]
+                                                        [% IF mandatory.defined('branchcode') %]
+                                                            <label for="borrower_branchcode" class="required">Home library:</label>
+                                                        [% ELSE %]
+                                                            <label for="borrower_branchcode">Home library:</label>
                                                         [% END %]
-                                                    </select>
+
+                                                        <select id="borrower_branchcode" name="borrower_branchcode">
+                                                            [% FOREACH l IN libraries %]
+                                                                [% IF l.branchcode == borrower.branchcode %]
+                                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </select>
+                                                    [% ELSE %]
+                                                        <span class="label">Home library:</span>
+                                                        [% FOREACH l IN libraries %]
+                                                            [% l.branchname | html %]
+                                                            <input type="hidden" name="borrower_branchcode" value="[% l.branchcode | html %]" />
+                                                        [% END %]
+                                                    [% END %]
                                                 </li>
                                             [% END %]
 
