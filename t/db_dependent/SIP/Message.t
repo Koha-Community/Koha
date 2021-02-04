@@ -199,7 +199,7 @@ subtest "Test build_additional_item_fields_string" => sub {
 };
 
 subtest "Test cr_item_field" => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $builder = t::lib::TestBuilder->new();
     my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
@@ -253,6 +253,24 @@ subtest "Test cr_item_field" => sub {
 
     my $id = $item_object->id;
     ok( $response =~ m/CR$id/, "Found correct CR field in response");
+
+    $siprequest = ITEM_INFORMATION . 'YYYYMMDDZZZZHHMMSS' .
+        FID_INST_ID . $branchcode . '|'.
+        FID_ITEM_ID . $item_object->barcode . '|' .
+        FID_TERMINAL_PWD . 'ignored' . '|';
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    $mockILS->mock( 'find_item', sub {
+        return C4::SIP::ILS::Item->new( $item_object->barcode );
+    });
+
+    $server->{account}->{cr_item_field} = 'itype';
+
+    $msg->handle_item_information( $server );
+
+    my $itype = $item_object->itype;
+    ok( $response =~ m/CR$itype/, "Found correct CR field in response");
 };
 
 subtest 'Patron info summary > 5 should not crash server' => sub {
