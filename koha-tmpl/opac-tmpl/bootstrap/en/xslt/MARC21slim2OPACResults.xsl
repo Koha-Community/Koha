@@ -472,7 +472,7 @@
         </xsl:choose>
       </xsl:variable>
 
-      <span class="results_summary"><a>
+      <div class="results_summary"><a>
         <xsl:attribute name="href">
           <xsl:value-of select="$OpenURLResolverURL" />
         </xsl:attribute>
@@ -499,7 +499,7 @@
             <xsl:value-of select="$openurltext" />
           </xsl:otherwise>
         </xsl:choose>
-      </a></span>
+      </a></div>
     </xsl:if>
     <!-- End of OpenURL -->
 
@@ -647,29 +647,29 @@
     </xsl:call-template>
 
     <xsl:if test="marc:datafield[@tag=250]">
-    <span class="results_summary edition">
+    <div class="results_summary edition">
     <span class="label">Edition: </span>
             <xsl:for-each select="marc:datafield[@tag=250]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">ab</xsl:with-param>
                     </xsl:call-template>
             </xsl:for-each>
-	</span>
+	</div>
     </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=773]">
         <xsl:for-each select="marc:datafield[@tag=773]">
             <xsl:if test="marc:subfield[@code='t']">
-    <span class="results_summary source">
+    <div class="results_summary source">
     <span class="label">Source: </span>
             <xsl:value-of select="marc:subfield[@code='t']"/>
-    </span>
+    </div>
             </xsl:if>
         </xsl:for-each>
     </xsl:if>
 
 <xsl:if test="$DisplayOPACiconsXSLT!='0'">
-    <span class="results_summary type">
+    <div class="results_summary type">
     <xsl:if test="$typeOf008!=''">
     <span class="results_material_type">
         <span class="label">Material type: </span>
@@ -1030,7 +1030,7 @@
         </span>
     </xsl:if>
 <xsl:text> </xsl:text> <!-- added blank space to fix font display problem, see Bug 3671 -->
-	</span>
+</div>
 </xsl:if>
 
     <xsl:call-template name="show-lang-041"/>
@@ -1047,7 +1047,7 @@
 
     <!-- Publisher or Distributor Number -->
     <xsl:if test="marc:datafield[@tag=028]">
-         <span class="results_summary publisher_number ">
+         <div class="results_summary publisher_number ">
             <span class="label">Publisher number: </span>
             <ul class="resource_list">
                 <xsl:for-each select="marc:datafield[@tag=028]">
@@ -1058,7 +1058,7 @@
                     </li>
                 </xsl:for-each>
             </ul>
-        </span>
+        </div>
     </xsl:if>
 
     <!-- Publisher info and RDA related info from tags 260, 264 -->
@@ -1067,7 +1067,7 @@
             <xsl:call-template name="showRDAtag264"/>
         </xsl:when>
         <xsl:when test="marc:datafield[@tag=260]">
-            <span class="results_summary publisher"><span class="label">Publication details: </span>
+            <div class="results_summary publisher"><span class="label">Publication details: </span>
                 <xsl:for-each select="marc:datafield[@tag=260]">
                     <xsl:if test="marc:subfield[@code='a']">
                         <span class="publisher_place" property="location">
@@ -1100,13 +1100,13 @@
                     <xsl:text>; </xsl:text>
                     <xsl:call-template name="showRDAtag264"/>
                 </xsl:if>
-            </span>
+            </div>
         </xsl:when>
     </xsl:choose>
 
     <!-- Dissertation note -->
     <xsl:if test="marc:datafield[@tag=502]">
-        <span class="results_summary diss_note">
+        <div class="results_summary diss_note">
             <span class="label">Dissertation note: </span>
             <xsl:for-each select="marc:datafield[@tag=502]">
                 <xsl:call-template name="subfieldSelect">
@@ -1114,7 +1114,7 @@
                 </xsl:call-template>
             </xsl:for-each>
             <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text> </xsl:text></xsl:otherwise></xsl:choose>
-        </span>
+        </div>
     </xsl:if>
 
     <!-- Other Title  Statement: Alternate Graphic Representation (MARC 880) -->
@@ -1128,7 +1128,7 @@
     </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=246]">
-    <span class="results_summary other_title">
+    <div class="results_summary other_title">
     <span class="label">Other title: </span>
         <ul class="resource_list">
             <xsl:for-each select="marc:datafield[@tag=246]">
@@ -1139,10 +1139,10 @@
                 </li>
             </xsl:for-each>
         </ul>
-	</span>
+    </div>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=242]">
-    <span class="results_summary translated_title">
+    <div class="results_summary translated_title">
     <span class="label">Title translated: </span>
             <xsl:for-each select="marc:datafield[@tag=242]">
                     <xsl:call-template name="subfieldSelect">
@@ -1150,10 +1150,10 @@
                     </xsl:call-template>
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
-	</span>
+	</div>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=856]">
-         <span class="results_summary online_resources">
+         <div class="results_summary online_resources">
 			   <span class="label">Online access: </span>
                     <ul class="resource_list">
                             <xsl:for-each select="marc:datafield[@tag=856]">
@@ -1245,11 +1245,11 @@
                               </xsl:if>
                             </xsl:for-each>
                             </ul>
-                            </span>
+                            </div>
                         </xsl:if>
 
         <!-- Availability line -->
-        <span class="results_summary availability">
+        <div class="results_summary availability">
             <span class="label">Availability: </span>
 
             <xsl:choose>
@@ -1391,7 +1391,7 @@
 
                 </xsl:otherwise>
             </xsl:choose>
-        </span>
+        </div>
         <!-- End of Availability line -->
 
     </xsl:template>
