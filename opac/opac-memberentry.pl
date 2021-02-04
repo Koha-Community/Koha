@@ -119,6 +119,7 @@ if ( $action eq 'create' ) {
     my %borrower = ParseCgiForBorrower($cgi);
 
     %borrower = DelEmptyFields(%borrower);
+    $borrower{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
 
     my @empty_mandatory_fields = CheckMandatoryFields( \%borrower, $action );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
@@ -214,8 +215,7 @@ if ( $action eq 'create' ) {
                 }
             );
 
-            $borrower{categorycode}     ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-            $borrower{password}         ||= Koha::AuthUtils::generate_password;
+            $borrower{password}         ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode}));
             my $consent_dt = delete $borrower{gdpr_proc_consent};
             my $patron = Koha::Patron->new( \%borrower )->store;
             Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
