@@ -208,7 +208,7 @@ subtest 'summary' => sub {
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
-    diag("Cashup 1");
+    # Cashup 1
     my $cashup1 =
       $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
@@ -268,7 +268,7 @@ subtest 'summary' => sub {
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
-    diag("Cashup 2");
+    # Cashup 2
     my $cashup2 =
       $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
@@ -317,7 +317,7 @@ subtest 'summary' => sub {
     $payout2->date( \'NOW() - INTERVAL 3 MINUTE' )->store;
     $expected_payout_total += '1.00';
 
-    # Account fee of 1.00 fully refunded (Accross cashup boundary)
+    # Account fee of 1.00 fully refunded (Across cashup boundary)
     unshift @{$expected_payout_grouped},
       {
         'total'       => '1',
@@ -330,7 +330,7 @@ subtest 'summary' => sub {
     $expected_total += $expected_income_total;
     $expected_total -= $expected_payout_total;
 
-    diag("Cashup 3");
+    # Cashup 3
     my $cashup3 =
       $register->add_cashup( { manager_id => $manager->id, amount => '2.00' } );
 
