@@ -29,7 +29,7 @@
             <em>[ [% invoice | html %] ]</em>
         [% END %]
     [% ELSE %]
-        Receive orders from [% name | html %]
+        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a> &rsaquo; Receive orders from [% name | html %]
     [% END %]
 </div>
 
