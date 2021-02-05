@@ -593,6 +593,7 @@
         </script>
     [% ELSIF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
 
         <script>
@@ -600,7 +601,7 @@
             //
             $(document).ready(function() {
                 [% IF budgets %]
-                    var oTable = $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    var oTable = KohaTable("budgeth", {
                         "fnDrawCallback": function ( oSettings ) {
                             if ( oSettings.aiDisplay.length == 0 )
                             {
@@ -635,12 +636,11 @@
                             { "bVisible": false, "aTargets": [ 0, 1 ] },
                             { "bSortable": false, "aTargets": ["_all"] }
                         ],
-                        'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
                         'bSort': true,
                         'aaSortingFixed': [[ 1, 'asc' ]],
                         'bPaginate': false,
                         "bAutoWidth": false
-                    }));
+                    });
 
                     $(oTable).treetable({
                         expandable: true
