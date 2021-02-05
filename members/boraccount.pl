@@ -76,24 +76,41 @@ if ( $action eq 'void' ) {
 }
 
 if ( $action eq 'payout' ) {
-    my $payment_id        = scalar $input->param('accountlines_id');
-    my $payment           = Koha::Account::Lines->find($payment_id);
+    my $payment_id       = scalar $input->param('accountlines_id');
     my $amount           = scalar $input->param('amount');
     my $payout_type = scalar $input->param('payout_type');
-    $schema->txn_do(
-        sub {
-            my $payout = $payment->payout(
-                {
-                    payout_type   => $payout_type,
-                    branch        => $library_id,
-                    staff_id      => $logged_in_user->id,
-                    cash_register => $registerid,
-                    interface     => 'intranet',
-                    amount        => $amount
-                }
-            );
-        }
-    );
+    if ( $payment_id eq "" ) {
+        $schema->txn_do(
+            sub {
+                $patron->account->payout_amount(
+                     {
+                        payout_type   => $payout_type,
+                        branch        => $library_id,
+                        staff_id      => $logged_in_user->id,
+                        cash_register => $registerid,
+                        interface     => 'intranet',
+                        amount        => $amount
+                    }
+                );
+            }
+        );
+    } else {
+        my $payment = Koha::Account::Lines->find($payment_id);
+        $schema->txn_do(
+            sub {
+                my $payout = $payment->payout(
+                    {
+                        payout_type   => $payout_type,
+                        branch        => $library_id,
+                        staff_id      => $logged_in_user->id,
+                        cash_register => $registerid,
+                        interface     => 'intranet',
+                        amount        => $amount
+                    }
+                );
+            }
+        );
+    }
 }
 
 if ( $action eq 'refund' ) {

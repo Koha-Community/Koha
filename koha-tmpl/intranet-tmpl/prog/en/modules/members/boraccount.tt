@@ -143,10 +143,15 @@
     <td colspan="12">Total due</td>
     [% IF ( totalcredit ) %]
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
+        <td>
+          [% IF CAN_user_updatecharges_payout %]
+          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-amount="[% total | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Payout amount</button>
+        [% END %]
+        </td>
     [% ELSE %]
        <td class="debit"style="text-align: right;">[% total | $Price %]</td>
+       <td></td>
     [% END %]
-    <td></td>
   </tr>
   </tfoot>
 </table>
