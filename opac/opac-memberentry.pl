@@ -57,12 +57,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-unless ( C4::Context->preference('PatronSelfRegistration') || $borrowernumber )
-{
-    print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
-    exit;
-}
-
 my $action = $cgi->param('action') || q{};
 if ( $borrowernumber && ( $action eq 'create' || $action eq 'new' ) ) {
     print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
@@ -76,6 +70,16 @@ if ( $action eq q{} ) {
     else {
         $action = 'new';
     }
+}
+
+my $PatronSelfRegistrationDefaultCategory = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+my $defaultCategory = Koha::Patron::Categories->find($PatronSelfRegistrationDefaultCategory);
+# Having a valid PatronSelfRegistrationDefaultCategory is mandatory
+if ( !C4::Context->preference('PatronSelfRegistration') && !$borrowernumber
+    || ( ( $action eq 'new' || $action eq 'create' ) && !$defaultCategory ) )
+{
+    print $cgi->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
 }
 
 my $mandatory = GetMandatoryFields($action);
@@ -95,8 +99,6 @@ if ( defined $min ) {
          maxlength_cardnumber => $max
      );
  }
-
-my $defaultCategory = Koha::Patron::Categories->find(C4::Context->preference('PatronSelfRegistrationDefaultCategory'));
 
 $template->param(
     action            => $action,
@@ -128,7 +130,7 @@ if ( $action eq 'create' ) {
     my %borrower = ParseCgiForBorrower($cgi);
 
     %borrower = DelEmptyFields(%borrower);
-    $borrower{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+    $borrower{categorycode} ||= $PatronSelfRegistrationDefaultCategory;
 
     my @empty_mandatory_fields = (CheckMandatoryFields( \%borrower, $action ), CheckMandatoryAttributes( \%borrower, $attributes ) );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
@@ -251,7 +253,7 @@ if ( $action eq 'create' ) {
                         { borrowernumber => $patron->borrowernumber },
                         $template,
                         1,
-                        C4::Context->preference('PatronSelfRegistrationDefaultCategory')
+                        $PatronSelfRegistrationDefaultCategory
                     );
                 }
 
