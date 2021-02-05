@@ -627,6 +627,101 @@ sub add_debit {
     return $line;
 }
 
+=head3 payout_amount
+
+    my $debit = $account->payout_amount(
+        {
+            payout_type => $payout_type,
+            register_id => $register_id,
+            staff_id    => $staff_id,
+            interface   => 'intranet',
+            amount      => $amount,
+            credits     => $credit_lines
+        }
+    );
+
+This method allows an amount to be paid out from a patrons account against outstanding credits.
+
+$payout_type can be any of the defined payment_types:
+
+=cut
+
+sub payout_amount {
+    my ( $self, $params ) = @_;
+
+    # Check for mandatory parameters
+    my @mandatory =
+      ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # Check for mandatory register
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && ( $params->{payout_type} eq 'CASH' )
+        && !defined($params->{cash_register}) );
+
+    # Amount should always be passed as a positive value
+    my $amount = $params->{amount};
+    unless ( $amount > 0 ) {
+        Koha::Exceptions::Account::AmountNotPositive->throw(
+            error => 'Debit amount passed is not positive' );
+    }
+
+    # Amount should always be less than or equal to outstanding credit
+    my $outstanding = 0;
+    my $outstanding_credits =
+      exists( $params->{credits} )
+      ? $params->{credits}
+      : $self->outstanding_credits->as_list;
+    for my $credit ( @{$outstanding_credits} ) {
+        $outstanding += $credit->amountoutstanding;
+    }
+    $outstanding = $outstanding * -1;
+    Koha::Exceptions::ParameterTooHigh->throw( error =>
+"Amount to payout ($amount) is higher than amountoutstanding ($outstanding)"
+    ) unless ( $outstanding >= $amount );
+
+    my $payout;
+    my $schema = Koha::Database->new->schema;
+    $schema->txn_do(
+        sub {
+
+            # A 'payout' is a 'debit'
+            $payout = Koha::Account::Line->new(
+                {
+                    date              => \'NOW()',
+                    amount            => $amount,
+                    debit_type_code   => 'PAYOUT',
+                    payment_type      => $params->{payout_type},
+                    amountoutstanding => $amount,
+                    manager_id        => $params->{staff_id},
+                    borrowernumber    => $self->{patron_id},
+                    interface         => $params->{interface},
+                    branchcode        => $params->{branch},
+                    register_id       => $params->{cash_register}
+                }
+            )->store();
+
+            # Offset against credits
+            for my $credit ( @{$outstanding_credits} ) {
+                $credit->apply(
+                    { debits => [$payout], offset_type => 'PAYOUT' } );
+                $payout->discard_changes;
+            }
+
+            # Set payout as paid
+            $payout->status('PAID')->store;
+        }
+    );
+
+    return $payout;
+}
+
 =head3 balance
 
 my $balance = $self->balance
