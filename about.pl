@@ -470,6 +470,11 @@ if (  C4::Context->preference('WebBasedSelfCheck')
     );
 }
 
+if ( C4::Context->preference('PatronSelfRegistration') ) {
+    $template->param( warnPrefPatronSelfRegistrationDefaultCategory => 1 )
+        unless  Koha::Patron::Categories->find(C4::Context->preference('PatronSelfRegistrationDefaultCategory'));
+}
+
 # Test YAML system preferences
 # FIXME: This is list of current YAML formatted prefs, should by type of preference
 my @yaml_prefs = (
