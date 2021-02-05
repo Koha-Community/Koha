@@ -53,6 +53,9 @@
     .CodeMirror {
         resize:  vertical;
     }
+    .cm-sqlParams {
+        color: #11917B;
+    }
     #mana_search_errortext { font-family: monospace; font-weight: bold; }
 </style>
 [% Asset.css("css/reports.css") | $raw %]
@@ -1293,7 +1296,7 @@
                 [% INCLUDE 'guided-reports-view.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/charts.js") | $raw %]
@@ -1305,6 +1308,7 @@
         [% INCLUDE 'columns_settings.inc' %]
     [% END %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/overlay.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/sql.min.js" ) | $raw %]
     [% Asset.js( "js/mana.js" ) | $raw %]
     <script>
@@ -1337,6 +1341,25 @@
             }
         }
 
+        /* overlay a syntax-highlighting definition on top of the existing sql one */
+        CodeMirror.defineMode("sqlParams", function(config, parserConfig) {
+            var sqlParamsOverlay = {
+                token: function(stream, state) {
+                var ch;
+                if (stream.match("<<")) {
+                    while ((ch = stream.next()) != null)
+                    if (ch == ">" && stream.next() == ">") {
+                        stream.eat(">");
+                        return "sqlParams";
+                    }
+                }
+                while (stream.next() != null && !stream.match("<<", false)) {}
+                return null;
+                }
+            };
+            return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || "text/x-sql"), sqlParamsOverlay);
+        });
+
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
         var group_subgroups = {};
         [% FOREACH group IN groups_with_subgroups %]
@@ -1350,9 +1373,10 @@
         [% END %]
 
         [% IF ( create || editsql || save ) %]
+
             var editor = CodeMirror.fromTextArea(sql, {
                 lineNumbers: true,
-                mode: "text/x-sql",
+                mode: "sqlParams", /* text/x-sql plus custom sqlParams configuration */
                 lineWrapping: true,
                 smartIndent: false
             });
@@ -1374,7 +1398,7 @@
         [% IF ( showsql ) %]
             var editor = CodeMirror.fromTextArea(sql, {
                 lineNumbers: false,
-                mode: "text/x-sql",
+                mode: "sqlParams", /* text/x-sql plus custom sqlParams configuration */
                 lineWrapping: true,
                 readOnly: true
             });
