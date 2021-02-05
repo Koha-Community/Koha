@@ -170,12 +170,13 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         dt_overwrite_html_sorting_localeCompare();
 
         $(document).ready(function() {
 
-            var oTable = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var oTable = KohaTable("accounts", {
                 "fnDrawCallback": function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
                     {
@@ -210,12 +211,11 @@
                     { "bVisible": false, "aTargets": [ 0, 1 ] },
                     { "bSortable": false, "aTargets": ["_all"] }
                 ],
-                'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
                 'bSort': true,
                 'aaSortingFixed': [[ 1, 'asc' ]],
                 'bPaginate': false,
                 "bAutoWidth": false
-            }));
+            });
 
             $(oTable).treetable({
                 expandable: true
