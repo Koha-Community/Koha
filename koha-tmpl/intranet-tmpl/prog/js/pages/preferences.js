@@ -281,6 +281,7 @@ $( document ).ready( function () {
     $(".modalselect").on("click", function(){
         var datasource = $(this).data("source");
         var exclusions = $(this).data("exclusions").split('|');
+        var inclusions = $(this).data("inclusions").split('|');
         var required = $(this).data("required").split('|');
         var pref_name = this.id.replace(/pref_/, '');
         var pref_value = this.value;
@@ -305,10 +306,15 @@ $( document ).ready( function () {
                 style = "disabled";
                 disabled = ' disabled="disabled" ';
                 checked  = "";
+            } else if( inclusions.indexOf( key ) >= 0 ){
+                style = "disabled";
+                disabled = ' disabled="disabled" ';
+                checked  = ' checked="checked" ';
             } else {
                 style = "";
                 disabled = "";
             }
+
             items.push('<label class="' + style +'"><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + disabled + ' name="pref" value="' + key + '" /> ' + data[key]+ ' (' + key + ')</label>');
         });
         $("<div/>", {

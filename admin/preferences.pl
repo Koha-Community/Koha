@@ -63,6 +63,7 @@ sub _get_chunk {
         if ( $options{'type'} eq 'modalselect' ) {
             $chunk->{'source'}     = $options{'source'};
             $chunk->{'exclusions'} = $options{'exclusions'} // "";
+            $chunk->{'inclusions'} = $options{'inclusions'} // "";
             $chunk->{'required'}   = $options{'required'} // "";
             $chunk->{'type'}       = 'modalselect';
         } elsif ( $options{'type'} eq 'modaljs' ) {
