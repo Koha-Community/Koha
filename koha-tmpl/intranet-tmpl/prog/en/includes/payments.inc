@@ -7,17 +7,23 @@
     [% END %]
     [% IF payment_types.size > 0 %]
         <li>
-            <label for="payment_type">Payment type: </label>
             [% IF Koha.Preference('UseCashRegisters') %]
-            <select name="payment_type" id="payment_type" required>
-            [% ELSE %]
-            <select name="payment_type" id="payment_type">
-                <option value=""></option>
-            [% END %]
-                [% FOREACH pt IN payment_types %]
-                    <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                [% END %]
-            </select>
+                <label for="payment_type" class="required">Payment type: </label>
+                <select name="payment_type" id="payment_type" class="required" required="required">
+                    [% FOREACH pt IN payment_types %]
+                        <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
+                    [% END %]
+                </select>
+                <span class="required">Required</span>
+            [%- ELSE -%]
+                <label for="payment_type">Payment type: </label>
+                <select name="payment_type" id="payment_type">
+                    <option value=""></option>
+                    [% FOREACH pt IN payment_types %]
+                        <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
+                    [% END %]
+                </select>
+            [%- END -%]
         </li>
     [% END %]
 [%- END -%]
