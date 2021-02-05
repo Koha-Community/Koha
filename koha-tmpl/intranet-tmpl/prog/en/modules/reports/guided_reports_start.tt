@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Koha %]
 [% USE TablesSettings %]
@@ -1151,6 +1152,7 @@
                         <fieldset class="rows">
                             <legend>SQL:</legend>
                             <div style="margin:1em;">
+                                [% PROCESS insert_runtime_parameter  %]
                                 <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea>
                                 <span class="required">Required</span>
                             </div>
@@ -1260,10 +1262,9 @@
 
                         <fieldset class="rows">
                             <legend>SQL:</legend>
-                            <div style="margin:1em;">
+                                [% PROCESS insert_runtime_parameter  %]
                                 <textarea id="sql" name="sql" class="required" required="required" cols="50" rows="10">[% sql | html %]</textarea>
-                                <span class="required">Required</span>
-                            </div>
+                                <span class="required" style="margin-left:30px;">Required</span>
                         </fieldset>
 
                         <fieldset class="action">
@@ -1340,6 +1341,40 @@
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->
+
+    <!-- Runtime Parameters Modal -->
+    <div class="modal" id="runtime_parameters" tabindex="-1" role="dialog" aria-labelledby="runtime_parametersLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="runtime_parametersLabel">Runtime parameter options</h4>
+                </div>
+                <form id="send_runtime_parameter">
+                    <input type="hidden" name="param_category" id="param_category" />
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="paramLabel">Parameter label: </label>
+                            <input class="form-control" type="text" name="paramLabel" id="paramLabel">
+                            <div class="hint">Optional. The label for the field shown when the report is run, e.g. "Select a library."</div>
+                        </div>
+                        <div id="authorised_value_category" class="form-group" style="display:none">
+                            <label for="authorised_value">Authorized value category:</label>
+                            <select class="form-control" name="authorised_value" id="authorised_value" size="1">
+                                <option value=""></option>
+                                [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories() %]
+                            </select>
+                            <div class="hint">Select which authorized value category the user will choose from.</div>
+                        </div>
+                    </div> <!-- /.modal-body -->
+                    <div class="modal-footer">
+                        <button type="submit" id="sendParam" class="btn btn-default approve">Insert parameter</button>
+                        <button type="button" class="btn btn-default deny" data-dismiss="modal">Cancel</button>
+                    </div> <!-- /.modal-footer -->
+                </form> <!-- /#send_runtime_parameter -->
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#runtime_parameters -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/charts.js") | $raw %]
@@ -1446,6 +1481,46 @@
                 readOnly: true
             });
         [% END %]
+
+        function showParamModal( category ){
+            var modal = $("#runtime_parameters");
+            var modalTitle = $("#runtime_parametersLabel");
+            switch ( category ){
+                case "insertAuthVal":
+                    modalTitle.text( _("Insert authorized value parameter") );
+                    $("#paramLabel").val("Authorized value")
+                    $("#authorised_value_category").show();
+                    $("#authorised_value").prop("required", true ).attr("required", "required");
+                    break;
+                case "insertDate":
+                    modalTitle.text( _("Insert date parameter") );
+                    $("#paramLabel").val("Date")
+                    $("#param_category").val("date");
+                    break;
+                case "insertItemtypes":
+                    modalTitle.text( _("Insert item types parameter") );
+                    $("#paramLabel").val("Item type")
+                    $("#param_category").val("itemtypes");
+                    break;
+                case "insertBranches":
+                    modalTitle.text( _("Insert libraries parameter") );
+                    $("#paramLabel").val("Library")
+                    $("#param_category").val("branches");
+                    break;
+                case "insertCategorycode":
+                    modalTitle.text( _("Insert patron category parameter") );
+                    $("#paramLabel").val("Patron category")
+                    $("#param_category").val("categorycode");
+                    break;
+                case "insertText":
+                    modalTitle.text( _("Insert text parameter") );
+                    $("#paramLabel").val("Text")
+                    $("#param_category").val("");
+                    break;
+            }
+            $("#paramLabel").select();
+            modal.modal("show");
+        }
 
         function load_group_subgroups () {
             var group = $("#group_select").val();
@@ -1830,6 +1905,61 @@
                 $("#group_select").on("change",function(){
                     load_group_subgroups();
                 });
+
+                $(".insertParam").on("click", function(e){
+                    e.preventDefault();
+                    var category = this.id;
+                    showParamModal( category );
+                });
+
+                $("#runtime_parameters").on("shown.bs.modal", function(){
+                    $("#paramLabel").focus();
+                });
+
+                $("#runtime_parameters").on("hide.bs.modal", function(){
+                    $("#send_runtime_parameter")[0].reset();
+                    $("#authorised_value_category").val("").hide();
+                    $("#authorised_value").prop("required", false ).removeAttr("required");
+                });
+
+                $("#send_runtime_parameter").on("submit", function(e){
+                    e.preventDefault();
+                    /* Get form values */
+                    var paramLabel = $("#paramLabel").val();
+                    var param_category = $("#param_category").val();
+                    var categoryLabel = $("#authorised_value").val();
+                    // Get CodeMirror environment variables
+                    var selection = editor.getSelection();
+                    var doc = editor.getDoc();
+                    var cursor = doc.getCursor();
+                    var pos = {
+                        line: cursor.line,
+                        ch: cursor.ch
+                    }
+                    /* Build runtime parameter text string */
+                    var text = "";
+                    if( paramLabel && param_category ){
+                        text += paramLabel + "|" + param_category;
+                    } else if( paramLabel ) {
+                        text += paramLabel;
+                    } else if( param_category ){
+                        text += param_category;
+                    }
+                    if( text != "" ){
+                        text = " <<" + text + ">> ";
+                        if( selection.length > 0){
+                            editor.replaceSelection(text);
+                        } else {
+                            doc.replaceRange(text, pos);
+                        }
+                    }
+                    $("#runtime_parameters").modal("hide");
+                });
+
+                $("#authorised_value").on("change", function(){
+                    $("#param_category").val( $(this).val() );
+                });
+
             [% END %]
 
             $(".delete").on("click",function(){
@@ -2098,4 +2228,20 @@
         <input type="text" name="subgroup" id="subgroup_input" title="Subgroup code" placeholder="Code" />
         <input type="text" name="subgroupdesc" id="subgroupdesc_input" title="Subgroup name" placeholder="Name" />
     </li>
+[% END %]
+
+[% BLOCK insert_runtime_parameter %]
+    <div class="btn-group"  style="margin-left:30px;">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Insert runtime parameter <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#" class="insertParam" id="insertAuthVal">Authorized value</a></li>
+            <li><a href="#" class="insertParam" id="insertDate">Date</a></li>
+            <li><a href="#" class="insertParam" id="insertItemtypes">Item types</a></li>
+            <li><a href="#" class="insertParam" id="insertBranches">Libraries</a></li>
+            <li><a href="#" class="insertParam" id="insertCategorycode">Patron categories</a></li>
+            <li><a href="#" class="insertParam" id="insertText">Text field</a></li>
+        </ul>
+    </div>
 [% END %]
