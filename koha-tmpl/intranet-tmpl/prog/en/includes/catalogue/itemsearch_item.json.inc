@@ -1,5 +1,6 @@
 [%- USE Branches -%]
 [%- USE Koha -%]
+[%- USE KohaDates -%]
 [%- USE To -%]
 [%- USE ItemTypes -%]
 [%- USE AuthorisedValues -%]
@@ -28,6 +29,8 @@
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | html %]",
   "[% (item.issues || 0) | html %]",
+  "[% IF item.onloan %]Checked out[% ELSIF item.withdrawn || item.damaged || item.notforloan || item.itemlost %]Not available[% ELSE %]Available[% END %]",
+  "[% IF item.checkout %][% item.checkout.date_due | $KohaDates | html %][% END %]",
   "[% FILTER escape_quotes ~%]
     <div class="btn-group dropup"><button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-pencil"></i> Edit <span class="caret"></span> </button> <ul class="dropdown-menu pull-right"> <li><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | uri %]&itemnumber=[% item.itemnumber | uri %]">Edit item</a></li> <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% item.biblionumber | html %]">Edit record</a></li> </ul> </div>
   [%~ END %]"

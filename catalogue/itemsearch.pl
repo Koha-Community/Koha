@@ -62,7 +62,7 @@ if (defined $format and $format eq 'json') {
                 push @f, $columns[$i];
                 push @c, 'and';
 
-                if ( grep { $_ eq $columns[$i] } qw( ccode homebranch holdingbranch location itype notforloan itemlost ) ) {
+                if ( grep { $_ eq $columns[$i] } qw( ccode homebranch holdingbranch location itype notforloan itemlost onloan ) ) {
                     push @q, "$word";
                     push @op, '=';
                 } else {
@@ -185,6 +185,21 @@ if ( defined $format ) {
         }
     }
 
+    # null/is not null parameters
+    foreach my $p (qw( onloan )) {
+        my $v = $cgi->param($p) // '';
+        my $f = {
+            field => $p,
+            operator => "is",
+        };
+        if ( $v eq 'IS NOT NULL' ) {
+            $f->{query} = "not null";
+        } elsif ( $v eq 'IS NULL' ) {
+            $f->{query} = "null";
+        }
+        push @{ $filter->{filters} }, $f unless ( $v eq "" );
+    }
+
     if (my $itemcallnumber_from = scalar $cgi->param('itemcallnumber_from')) {
         push @{ $filter->{filters} }, {
             field => 'itemcallnumber',
@@ -230,6 +245,8 @@ if ( defined $format ) {
             my $biblio = Koha::Biblios->find( $item->{biblionumber} );
             $item->{biblio} = $biblio;
             $item->{biblioitem} = $biblio->biblioitem->unblessed;
+            my $checkout = Koha::Checkouts->find({ itemnumber => $item->{itemnumber} });
+            $item->{checkout} = $checkout;
         }
     }
 

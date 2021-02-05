@@ -1294,7 +1294,7 @@ sub _SearchItems_build_where_fragment {
         my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
-        my @operators = qw(= != > < >= <= like);
+        my @operators = qw(= != > < >= <= is like);
         push @operators, 'not like';
         my $field = $filter->{field} // q{};
         if ( (0 < grep { $_ eq $field } @columns) or (substr($field, 0, 5) eq 'marc:') ) {
@@ -1355,6 +1355,11 @@ sub _SearchItems_build_where_fragment {
                     str => "$column $op (" . join (',', ('?') x @$query) . ")",
                     args => $query,
                 };
+            } elsif ( $op eq 'is' ) {
+                $where_fragment = {
+                    str => "$column $op $query",
+                    args => [],
+                };
             } else {
                 $where_fragment = {
                     str => "$column $op ?",
@@ -1387,7 +1392,7 @@ A filter has the following keys:
 
 =item * query: the value to search in this column
 
-=item * operator: comparison operator. Can be one of = != > < >= <= like 'not like'
+=item * operator: comparison operator. Can be one of = != > < >= <= like 'not like' is
 
 =back
 

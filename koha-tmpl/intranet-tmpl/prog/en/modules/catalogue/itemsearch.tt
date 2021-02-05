@@ -173,6 +173,7 @@
 
     <div id="item-search-block">
       <h1>Item search</h1>
+
       <p><a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a></p>
       <form action="/cgi-bin/koha/catalogue/itemsearch.pl" method="get" id="itemsearchform">
           <div id="toolbar" class="btn-toolbar">
@@ -203,6 +204,15 @@
             [% IF withdrawns.size %]
                 [% INCLUDE form_field_select name="withdrawn" options = withdrawns empty_option = "All statuses" %]
             [% END %]
+            <div class="form-field">
+                <label class="form-field-label">Availability:</label>
+                <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked"/>
+                <label for="onloan_indifferent">Ignore</label>
+                <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" />
+                <label for="onloan_yes">Checked out</label>
+                <input type="radio" name="onloan" id="onloan_no" value="IS NULL" />
+                <label for="onloan_no">Available</label>
+            </div>
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text %]
@@ -326,6 +336,8 @@
                 + '      <th id="items_itemlost">' + _("Lost status") + '</th>'
                 + '      <th id="items_widthdrawn">' + _("Withdrawn status") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
+                + '      <th id="items_availability">' + _("Availability") + '</th>'
+                + '      <th id="items_duedate">' + _("Due date") + '</th>'
                 + '      <th id=""></th>'
                 + '    </tr>'
             var table = ''
@@ -482,6 +494,8 @@
                     { 'sName': 'itemlost' },
                     { 'sName': 'withdrawn' },
                     { 'sName': 'issues' },
+                    { 'sName': 'availability' },
+                    { 'sName': 'duedate' },
                     { 'sName': 'actions', 'bSortable': false }
                 ],
                 "sPaginationType": "full_numbers",
@@ -528,6 +542,8 @@
                     [% ELSE %]
                         null,
                     [% END %]
+                    { 'type': 'text' },
+                    { 'type': 'text' },
                     { 'type': 'text' },
                     null
                 ]
