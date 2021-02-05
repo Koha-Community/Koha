@@ -485,6 +485,95 @@ sub add_credit {
     return $line;
 }
 
+=head3 payin_amount
+
+    my $credit = $account->payin_amount(
+        {
+            amount          => $amount,
+            credit_type     => $credit_type,
+            payment_type    => $payment_type,
+            cash_register   => $register_id,
+            interface       => $interface,
+            library_id      => $branchcode,
+            user_id         => $staff_id,
+            debits          => $debit_lines,
+            description     => $description,
+            note            => $note
+        }
+    );
+
+This method allows an amount to be paid into a patrons account and immediately applied against debts.
+
+You can optionally pass a debts parameter which consists of an arrayref of Koha::Account::Line debit lines.
+
+$credit_type can be any of:
+  - 'PAYMENT'
+  - 'WRITEOFF'
+  - 'FORGIVEN'
+
+=cut
+
+sub payin_amount {
+    my ( $self, $params ) = @_;
+
+    # check for mandatory params
+    my @mandatory = ( 'interface', 'amount', 'type' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # Check for mandatory register
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && defined( $params->{payment_type} )
+        && ( $params->{payment_type} eq 'CASH' )
+        && !defined($params->{cash_register}) );
+
+    # amount should always be passed as a positive value
+    my $amount = $params->{amount};
+    unless ( $amount > 0 ) {
+        Koha::Exceptions::Account::AmountNotPositive->throw(
+            error => 'Payin amount passed is not positive' );
+    }
+
+    my $credit;
+    my $schema = Koha::Database->new->schema;
+    $schema->txn_do(
+        sub {
+
+            # Add payin credit
+            $credit = $self->add_credit($params);
+
+            # Offset debts passed first
+            if ( exists( $params->{debits} ) ) {
+                $credit = $credit->apply(
+                    {
+                        debits      => $params->{debits},
+                        offset_type => $params->{type}
+                    }
+                );
+            }
+
+            # Offset against remaining balance if AutoReconcile
+            if ( C4::Context->preference("AccountAutoReconcile")
+                && $credit->amountoutstanding != 0 )
+            {
+                $credit = $credit->apply(
+                    {
+                        debits      => [ $self->outstanding_debits->as_list ],
+                        offset_type => $params->{type}
+                    }
+                );
+            }
+        }
+    );
+
+    return $credit;
+}
+
 =head3 add_debit
 
 This method allows adding debits to a patron's account

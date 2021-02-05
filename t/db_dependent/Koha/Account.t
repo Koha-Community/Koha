@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use Test::Exception;
 
@@ -1300,6 +1300,133 @@ subtest 'Koha::Account::payout_amount() tests' => sub {
     is( $offset->credit_id, $credit_5->id, "Offset added against credit_5");
     is( $offset->type,       'PAYOUT', "PAYOUT used for offset_type" );
     is( $offset->amount * 1, -2.50,      'Correct amount offset against credit_5' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Koha::Account::payin_amount() tests' => sub {
+    plan tests => 36;
+
+    $schema->storage->txn_begin;
+
+    # delete logs and statistics
+    my $action_logs = $schema->resultset('ActionLog')->search()->count;
+    my $statistics  = $schema->resultset('Statistic')->search()->count;
+
+    my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $register =
+      $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account =
+      Koha::Account->new( { patron_id => $patron->borrowernumber } );
+
+    is( $account->balance, 0, 'Test patron has no balance' );
+
+    my $payin_params = {
+        type  => 'PAYMENT',
+        payment_type => 'CASH',
+        branch       => $library->id,
+        register_id  => $register->id,
+        staff_id     => $staff->id,
+        interface    => 'intranet',
+        amount       => -10,
+    };
+
+    my @required_fields =
+      ( 'interface', 'amount', 'type' );
+    for my $required_field (@required_fields) {
+        my $this_payin = { %{$payin_params} };
+        delete $this_payin->{$required_field};
+
+        throws_ok {
+            $account->payin_amount($this_payin);
+        }
+        'Koha::Exceptions::MissingParameter',
+          "Exception thrown if $required_field parameter missing";
+    }
+
+    throws_ok {
+        $account->payin_amount($payin_params);
+    }
+    'Koha::Exceptions::Account::AmountNotPositive',
+      'Expected validation exception thrown (amount not positive)';
+
+    $payin_params->{amount} = 10;
+
+    # Enable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    throws_ok {
+        $account->payin_amount($payin_params);
+    }
+    'Koha::Exceptions::Account::RegisterRequired',
+'Exception thrown for UseCashRegisters:1 + payment_type:CASH + cash_register:undef';
+
+    # Disable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+
+    # Enable AccountAutoReconcile
+    t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
+
+    # Add some outstanding debits
+    my $debit_1 = $account->add_debit( { amount => 2,  interface => 'commandline', type => 'OVERDUE' } );
+    my $debit_2 = $account->add_debit( { amount => 3,  interface => 'commandline', type => 'OVERDUE' } );
+    my $debit_3 = $account->add_debit( { amount => 5,  interface => 'commandline', type => 'OVERDUE' } );
+    my $debit_4 = $account->add_debit( { amount => 10, interface => 'commandline', type => 'OVERDUE' } );
+    my $debits = $account->outstanding_debits();
+    is( $debits->count, 4, "Found 4 debits with outstanding amounts" );
+    is( $debits->total_outstanding + 0, 20, "Total 20 outstanding debit" );
+
+    my $payin = $account->payin_amount($payin_params);
+    is(ref($payin), 'Koha::Account::Line', 'Return the Koha::Account::Line object for the payin');
+    is($payin->amount + 0, -10, "Payin amount recorded correctly");
+    is($payin->amountoutstanding + 0, 0, "Full amount was used to pay debts");
+    $debits = $account->outstanding_debits();
+    is($debits->count, 1, "Payin was applied against oldest outstanding debits first");
+    is($debits->total_outstanding + 0, 10, "Total of 10 outstanding debit remaining");
+
+    my $offsets = Koha::Account::Offsets->search( { credit_id => $payin->id } );
+    is( $offsets->count, 4, 'Four offsets generated' );
+    my $offset = $offsets->next;
+    is( $offset->type, 'Payment', 'Payment offset added for payin line' );
+    is( $offset->amount * 1, -10, 'Correct offset amount recorded' );
+    $offset = $offsets->next;
+    is( $offset->debit_id, $debit_1->id, "Offset added against debit_1");
+    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->amount * 1, -2,      'Correct amount offset against debit_1' );
+    $offset = $offsets->next;
+    is( $offset->debit_id, $debit_2->id, "Offset added against debit_2");
+    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->amount * 1, -3,      'Correct amount offset against debit_2' );
+    $offset = $offsets->next;
+    is( $offset->debit_id, $debit_3->id, "Offset added against debit_3");
+    is( $offset->type,       'PAYMENT', "Payment used for offset_type" );
+    is( $offset->amount * 1, -5,      'Correct amount offset against debit_3' );
+
+    my $debit_5 = $account->add_debit( { amount => 5, interface => 'commandline', type => 'OVERDUE' } );
+    $debits = $account->outstanding_debits();
+    is($debits->count, 2, "New debit added");
+    $payin_params->{amount} = 2.50;
+    $payin_params->{debits} = [$debit_5];
+    $payin = $account->payin_amount($payin_params);
+
+    $debits = $account->outstanding_debits();
+    is($debits->count, 2, "Second debit not fully paid off");
+    is($debits->total_outstanding + 0, 12.50, "12.50 outstanding debit remaining");
+    $debit_4->discard_changes;
+    $debit_5->discard_changes;
+    is($debit_4->amountoutstanding + 0, 10, "Debit 4 unaffected when debit_5 was passed to payin_amount");
+    is($debit_5->amountoutstanding + 0, 2.50, "Debit 5 correctly reduced when payin_amount called with debit_5 passed");
+
+    $offsets = Koha::Account::Offsets->search( { credit_id => $payin->id } );
+    is( $offsets->count, 2, 'Two offsets generated' );
+    $offset = $offsets->next;
+    is( $offset->type, 'Payment', 'Payment offset added for payin line' );
+    is( $offset->amount * 1, -2.50, 'Correct offset amount recorded' );
+    $offset = $offsets->next;
+    is( $offset->debit_id, $debit_5->id, "Offset added against debit_5");
+    is( $offset->type,       'PAYMENT', "PAYMENT used for offset_type" );
+    is( $offset->amount * 1, -2.50,      'Correct amount offset against debit_5' );
 
     $schema->storage->txn_rollback;
 };
