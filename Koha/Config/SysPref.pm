@@ -47,7 +47,9 @@ sub get_yaml_pref_hash {
     my ( $self ) = @_;
     return if !defined( $self );
 
-    my @lines = split /\n/, $self->value//'';
+    # We want to use C4::Context->preference in any cases
+    # It's cached, and mock_preference still works from tests
+    my @lines = split /\n/, C4::Context->preference($self->variable) // '';
     my $pref_as_hash;
     foreach my $line (@lines){
         my ($field,$array) = split /:/, $line;

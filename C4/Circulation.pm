@@ -56,7 +56,7 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
 use Koha::Charges::Fees;
-use Koha::Util::SystemPreferences;
+use Koha::Config::SysPref;
 use Koha::Checkouts::ReturnClaims;
 use Koha::SearchEngine::Indexer;
 use Carp;
@@ -1986,7 +1986,7 @@ sub AddReturn {
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
-    my $update_loc_rules = get_yaml_pref_hash('UpdateItemLocationOnCheckin');
+    my $update_loc_rules = Koha::Config::SysPrefs->find('UpdateItemLocationOnCheckin')->get_yaml_pref_hash();
     map { $update_loc_rules->{$_} = $update_loc_rules->{$_}[0] } keys %$update_loc_rules; #We can only move to one location so we flatten the arrays
     if ($update_loc_rules) {
         if (defined $update_loc_rules->{_ALL_}) {
