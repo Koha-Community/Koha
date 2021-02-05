@@ -384,6 +384,8 @@ sub import_patrons {
         }
     }
 
+    $schema->storage->txn_rollback if $dry_run;
+
     return {
         feedback      => \@feedback,
         errors        => \@errors,
@@ -393,8 +395,6 @@ sub import_patrons {
         invalid       => $invalid,
         imported_borrowers => \@imported_borrowers,
     };
-
-    $schema->storage->txn_rollback if $dry_run;
 }
 
 =head2 prepare_columns
