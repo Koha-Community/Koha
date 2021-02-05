@@ -74,18 +74,12 @@ if ( $action eq q{} ) {
 
 my $mandatory = GetMandatoryFields($action);
 
-my @libraries = Koha::Libraries->search;
+my $params = undef;
 if ( $action eq 'create' || $action eq 'new' ) {
     my @PatronSelfRegistrationLibraryList = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList');
-    if (@PatronSelfRegistrationLibraryList) {
-        @libraries = map {
-            my $l = $_;
-            ( grep { $l->branchcode eq $_ } @PatronSelfRegistrationLibraryList )
-              ? $l
-              : ()
-        } @libraries;
-    }
+    $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } };
 }
+my @libraries = Koha::Libraries->search($params);
 
 my ( $min, $max ) = C4::Members::get_cardnumber_length();
 if ( defined $min ) {
