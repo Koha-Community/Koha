@@ -26,7 +26,6 @@ my $base_notices_file = "en/mandatory/sample_notices.yml";
 my @trans_notices_files = qw(
     fr-FR/1-Obligatoire/sample_notices.sql
     fr-CA/obligatoire/sample_notices.sql
-    it-IT/necessari/notices.sql
     nb-NO/1-Obligatorisk/sample_notices.sql
     pl-PL/mandatory/sample_notices.sql
     ru-RU/mandatory/sample_notices.sql
