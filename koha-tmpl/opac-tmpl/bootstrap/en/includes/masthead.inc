@@ -442,7 +442,7 @@
                                         <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
                                     </div>
                                 [% END %]
-                                [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                                [% IF Koha.Preference('PatronSelfRegistration') && Categories.all( categorycode => Koha.Preference('PatronSelfRegistrationDefaultCategory') ).count %]
                                     <div id="patronregistration-modal" class="patronregistration">
                                         <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
                                     </div>
