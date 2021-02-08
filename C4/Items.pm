@@ -489,7 +489,7 @@ lists of authorized values for certain item fields.
   offset       => $offset,
   size         => $size,
   statushash   => $statushash,
-  itemtypes    => @itemsarray,
+  itemtypes    => \@itemsarray,
 } );
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
@@ -522,7 +522,7 @@ sub GetItemsForInventory {
     my $size         = $parameters->{'size'}         // '';
     my $statushash   = $parameters->{'statushash'}   // '';
     my $ignore_waiting_holds = $parameters->{'ignore_waiting_holds'} // '';
-    my $items        = $parameters->{'itemtypes'}    // '';
+    my $itemtypes    = $parameters->{'itemtypes'}    || [];
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
@@ -592,12 +592,9 @@ sub GetItemsForInventory {
         push( @where_strings, q{(reserves.found != 'W' OR reserves.found IS NULL)} );
     }
 
-    if ( $items and @{$items} > 0 ){
-        my $joinedvals;
-        for my $itemtype (@{$items}){
-            $joinedvals = join(',', @{$items});
-        }
-        push @where_strings, "( biblioitems.itemtype IN (" . $joinedvals . ") OR items.itype IN (" . $joinedvals . ") )";
+    if ( @$itemtypes ) {
+        my $itemtypes_str = join ', ', @$itemtypes;
+        push @where_strings, "( biblioitems.itemtype IN (" . $itemtypes_str . ") OR items.itype IN (" . $itemtypes_str . ") )";
     }
 
     if ( @where_strings ) {
