@@ -23485,6 +23485,15 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27581, "Rename system preference 'UseICU' to 'UseICUStyleQuotes'");
 }
 
+$DBversion = '20.12.00.010';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+        DELETE FROM systempreferences WHERE variable="OpacGroupResults"
+    });
+
+    NewVersion( $DBversion, 20410, "Remove OpacGroupResults");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
