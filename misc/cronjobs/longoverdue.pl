@@ -270,7 +270,7 @@ if ( ! defined($lost) ) {
     else {
         pod2usage( {
                 -exitval => 1,
-                -msg => q|ERROR: No --lost (-l) option defined|,
+                -msg => q|ERROR: No --lost (-l) option or system preferences DefaultLongOverdueLostValue/DefaultLongOverdueDays defined|,
         } );
     }
 }
