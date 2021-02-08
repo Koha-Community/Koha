@@ -75,7 +75,7 @@ if ( $action eq q{} ) {
 
 my $mandatory = GetMandatoryFields($action);
 
-my $params = undef;
+my $params = {};
 if ( $action eq 'create' || $action eq 'new' ) {
     my @PatronSelfRegistrationLibraryList = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList');
     $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } };
