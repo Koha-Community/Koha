@@ -179,7 +179,7 @@ $contextmodule->mock('preference', sub {
         return '1';
     } elsif ($pref eq 'UseControlNumber') {
         return '0';
-    } elsif ($pref eq 'UseICU') {
+    } elsif ($pref eq 'UseICUStyleQuotes') {
         return '0';
     } elsif ($pref eq 'viewISBD') {
         return '1';
