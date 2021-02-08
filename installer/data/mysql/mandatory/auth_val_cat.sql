@@ -66,3 +66,7 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
 -- For Claims returned
 INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
     ('RETURN_CLAIM_RESOLUTION');
+
+-- For file uploads
+INSERT IGNORE INTO authorised_value_categories(  category_name, is_system  ) VALUES
+    ('UPLOAD', 1);
