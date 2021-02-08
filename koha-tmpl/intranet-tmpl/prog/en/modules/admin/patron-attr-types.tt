@@ -77,7 +77,13 @@
            <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% attribute_type.description |html %]" />
            <span class="required">Required</span>
        </li>
-       <li><label for="repeatable">Repeatable: </label>
+
+        [% IF attribute_type AND attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]
+            <li aria-disabled="true">
+        [% ELSE %]
+            <li>
+        [% END %]
+            <label for="repeatable">Repeatable: </label>
             [% IF attribute_type %]
                 [% IF attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]
                     <input type="checkbox" id="repeatable" name="repeatable" checked="checked" disabled="disabled" />
@@ -91,8 +97,14 @@
                 <input type="checkbox" id="repeatable" name="repeatable" />
             [% END %]
             <span>Check to let a patron record have multiple values of this attribute.</span>
-       </li>
-       <li><label for="unique_id">Unique identifier: </label>
+        </li>
+
+        [% IF attribute_type AND not can_be_set_to_unique %]
+            <li aria-disabled="true">
+        [% ELSE %]
+            <li>
+        [% END %]
+            <label for="unique_id">Unique identifier: </label>
             [% IF attribute_type %]
                 [% IF attribute_type.unique_id %]
                     <input type="checkbox" id="unique_id" name="unique_id" checked="checked" />
@@ -107,7 +119,8 @@
             [% END %]
             <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
                   cannot be given to a different record.</span>
-       </li>
+        </li>
+
        <li><label for="opac_display">Display in OPAC: </label>
           [% IF attribute_type AND attribute_type.opac_display %]
             <input type="checkbox" id="opac_display" name="opac_display" checked="checked" />
