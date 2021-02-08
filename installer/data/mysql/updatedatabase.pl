@@ -23479,6 +23479,12 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25552, "Add missing Claims Returned option to MarkLostItemsAsReturned");
 }
 
+$DBversion = '20.12.00.009';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET variable = 'UseICUStyleQUotes' WHERE variable = 'UseICU'" );
+    NewVersion( $DBversion, 27581, "Rename system preference 'UseICU' to 'UseICUStyleQuotes'");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
