@@ -880,7 +880,8 @@ Circulation:
         -
             - 'Patron categories not affected by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup">OPACHoldsIfAvailableAtPickup</a>:'
             - pref: OPACHoldsIfAvailableAtPickupExceptions
-            - "(list of patron categories separated with a pipe '|')"
+              choices: patron-categories
+              class: multiple
         -
             - pref: CanMarkHoldsToPullAsLost
               choices:
@@ -1142,7 +1143,8 @@ Circulation:
         -
             - "Patron categories allowed to checkout in a batch:"
             - pref: BatchCheckoutsValidCategories
-            - "(list of patron categories separated with a pipe '|')."
+              choices: patron-categories
+              class: multiple
     Housebound module:
         -
             - pref: HouseboundModule

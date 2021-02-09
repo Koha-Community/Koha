@@ -116,7 +116,7 @@ my $batch = $query->param('batch');
 my $batch_allowed = 0;
 if ( $batch && C4::Context->preference('BatchCheckouts') ) {
     $template_name = q|circ/circulation_batch_checkouts.tt|;
-    my @batch_category_codes = split '\|', C4::Context->preference('BatchCheckoutsValidCategories');
+    my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
     my $categorycode = $patron->categorycode;
     if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
         $batch_allowed = 1;

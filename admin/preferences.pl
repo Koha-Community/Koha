@@ -91,6 +91,7 @@ sub _get_chunk {
         $chunk->{'languages'} = getTranslatedLanguages( $interface, $theme, undef, $current_languages );
         $chunk->{'type'} = 'languages';
     } elsif ( $options{ 'choices' } ) {
+        my $add_blank;
         if ( $options{'choices'} && ref( $options{ 'choices' } ) eq '' ) {
             if ( $options{'choices'} eq 'class-sources' ) {
                 my $sources = GetClassSources();
@@ -99,6 +100,9 @@ sub _get_chunk {
                 $options{'choices'} = { map { $_ => $_ } getallthemes( 'opac' ) }
             } elsif ( $options{'choices'} eq 'staff-templates' ) {
                 $options{'choices'} = { map { $_ => $_ } getallthemes( 'intranet' ) }
+            } elsif ( $options{choices} eq 'patron-categories' ) {
+                $options{choices} = { map { $_->categorycode => $_->description } Koha::Patron::Categories->search };
+                $add_blank = 1;
             } else {
                 die 'Unrecognized source of preference values: ' . $options{'choices'};
             }
@@ -106,12 +110,31 @@ sub _get_chunk {
 
         $value ||= 0;
 
-        $chunk->{'type'} = 'select';
+        $chunk->{'type'} = ( $options{class} && $options{class} eq 'multiple' ) ? 'multiple' : 'select';
+
+        my @values;
+        @values = split /,/, $value if defined($value);
         $chunk->{'CHOICES'} = [
             sort { $a->{'text'} cmp $b->{'text'} }
-            map { { text => $options{'choices'}->{$_}, value => $_, selected => ( $_ eq $value || ( $_ eq '' && ( $value eq '0' || !$value ) ) ) } }
+            map {
+                my $c = $_;
+                {
+                    text     => $options{'choices'}->{$c},
+                    value    => $c,
+                    selected => (
+                        grep { $_ eq $c || ( $c eq '' && ($value eq '0' || !$value ) ) } @values
+                    ) ? 1 : 0,
+                }
+              }
             keys %{ $options{'choices'} }
         ];
+
+        # Add a first blank value if needed
+        unshift @{ $chunk->{CHOICES} }, {
+            text  => '',
+            value => '',
+        } if $add_blank && $chunk->{type} eq 'select';
+
     } elsif ( $options{'multiple'} ) {
         my @values;
         @values = split /,/, $value if defined($value);
