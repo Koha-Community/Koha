@@ -585,6 +585,8 @@
                                                                         Patron already has hold for this item
                                                                     [% ELSIF itemloo.not_holdable == 'cannotBeTransferred' %]
                                                                         Cannot be transferred to pickup library
+                                                                    [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
+                                                                        Only pickup locations within the same hold group are allowed
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]
@@ -1010,7 +1012,8 @@
             notReservable: _("Not holdable"),
             cannotReserveFromOtherBranches: _("Patron is from different library"),
             itemAlreadyOnHold: _("Patron already has hold for this item"),
-            cannotBeTransferred: _("Cannot be transferred to pickup library")
+            cannotBeTransferred: _("Cannot be transferred to pickup library"),
+            pickupNotInHoldGroup: _("Only pickup locations within the same hold group are allowed")
         }
         columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
         $.fn.select2.defaults.set("width", "100%" );
