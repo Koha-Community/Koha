@@ -51,15 +51,18 @@
 
 [% IF budgets %]
 
-<table id="budgeth" class="group">
     [% UNLESS budget_period_id %]
-      <caption>
-        <span class="actions"><a href="#" id="expand_all">Expand all</a>
-        | <a href="#" id="collapse_all">Collapse all</a>
-        | <a href="#" id="hide_inactive">Hide inactive budgets</a>
-        | <a href="#" id="show_inactive">Show inactive budgets</a></span>
-      </caption>
+        <div class="toolbar btn-toolbar">
+            <span class="actions">
+                <a href="#" id="expand_all">Expand all</a> |
+                <a href="#" id="collapse_all">Collapse all</a> |
+                <a href="#" id="hide_inactive">Hide inactive budgets</a> |
+                <a href="#" id="show_inactive">Show inactive budgets</a>
+            </span>
+        </div>
     [% END %]
+
+<table id="budgeth" class="group">
     <thead>
         <tr>
             <th>Active</th>
