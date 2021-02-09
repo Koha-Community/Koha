@@ -67,7 +67,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 );
 
 my $showallitems = $input->param('showallitems');
-my $pickup = $input->param('pickup') || C4::Context->userenv->{'branch'};
+my $pickup = $input->param('pickup');
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
@@ -556,7 +556,8 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $pickup )->{status};
+                my $reserves_control_branch = $pickup // C4::Reserves::GetReservesControlBranch( $item, $patron_unblessed );
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $reserves_control_branch )->{status};
                 $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
                 $item->{item_level_holds} = Koha::CirculationRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
