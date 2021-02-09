@@ -111,21 +111,22 @@
                 </td>
             </tr>
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion | html %]</td></tr>
+            <tr><th scope="row">Zebra status: </th>
             [% IF (errZebraConnection == 10000) %]
-            <tr><th scope="row"><strong>Error</strong> </th><td>Zebra server seems not to be available. Is it started?</td></tr>
+            <td class="status_fatal"><strong>Zebra server seems not to be available. Is it started?</strong></td>
             [% ELSIF (errZebraConnection) %]
-            <tr><th scope="row"><strong>Warning</strong> </th><td>Error message from Zebra: [% ( errZebraConnection ) | html %] </td></tr>
+            <td class="status_warn"><strong>Error message from Zebra: [% ( errZebraConnection ) | html %]</strong></td>
+            [% ELSE %]
+            <td class="status_ok">Running</td>
             [% END %]
+            </tr>
             <tr>
                 <th scope="row">Message broker: </th>
-                <td>
-                    Status:
-                    [% IF warnConnectBroker %]
-                        <span class="status_warn">connection failed</span>
-                    [% ELSE %]
-                        <span class="status_ok">running</span>
-                    [% END %]
-                </td>
+                [% IF warnConnectBroker %]
+                <td class="status_warn"><strong>Using SQL Polling</strong></td>
+                [% ELSE %]
+                <td class="status_ok">Using RabbitMQ</td>
+                [% END %]
             </tr>
             <tr>
               <th scope="row">Date and time: </th>
