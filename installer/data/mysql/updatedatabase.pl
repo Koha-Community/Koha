@@ -23465,6 +23465,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, "", "Koha 20.11.03 release" );
 }
 
+$DBversion = '20.11.03.001';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES
+        ('OPACShibOnly','0','If ON enables shibboleth only authentication for the opac','','YesNo'),
+        ('staffShibOnly','0','If ON enables shibboleth only authentication for the staff client','','YesNo')
+    } );
+    NewVersion( $DBversion, 18506, "Add OPACShibOnly and staffShibOnly system preferences" );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
