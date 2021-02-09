@@ -48,7 +48,7 @@ subtest 'get_yaml_pref_hash' => sub {
     plan tests => 1;
 
     my $the_pref = Koha::Config::SysPrefs->find({variable=>'ItemsDeniedRenewal'});
-    $the_pref->value(q{
+    t::lib::Mocks::mock_preference('ItemsDeniedRenewal', q{
         nulled: [NULL,'']
         this: [just_that]
         multi_this: [that,another]
