@@ -78,21 +78,22 @@
     <h3>All available funds</h3>
 
     <div id="BudgetsAndFunds">
-    <table id="accounts">
-        <caption>
-          <span class="actions"><a href="#" id="expand_all">Expand all</a>
-          | <a href="#" id="collapse_all">Collapse all</a>
-          | <a href="#" id="hide_inactive">Hide inactive budgets</a>
-          | <a href="#" id="show_inactive">Show inactive budgets</a>
-          | <select id="library-filter">
-              <option value="">Filter by library</option>
-              [% FOREACH b IN Branches.all %]
-                <option value="[% b.branchname | html %]">[% b.branchname | html %]</option>
-              [% END %]
-            </select>
-        </span>
+        <div class="toolbar btn-toolbar">
+            <span class="actions">
+                <a href="#" id="expand_all">Expand all</a> |
+                <a href="#" id="collapse_all">Collapse all</a> |
+                <a href="#" id="hide_inactive">Hide inactive budgets</a> |
+                <a href="#" id="show_inactive">Show inactive budgets</a> |
+                <select id="library-filter">
+                    <option value="">Filter by library</option>
+                    [% FOREACH b IN Branches.all %]
+                        <option value="[% b.branchname | html %]">[% b.branchname | html %]</option>
+                    [% END %]
+                </select>
+            </span>
+        </div>
 
-        </caption>
+    <table id="accounts">
 
         <thead>
         <tr>
