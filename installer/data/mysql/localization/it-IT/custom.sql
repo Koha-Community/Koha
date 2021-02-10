@@ -62,3 +62,20 @@ UPDATE systempreferences SET value = '1' WHERE variable = 'UseICUStyleQuotes';
 UPDATE systempreferences SET value = 'URLLinkText' WHERE variable = 'URLLinkText';
 
 UPDATE systempreferences SET value = '#200|<span style=\"font-weight:bold\">|{200a}{. 200c}{ : 200e}{200d}{ / 200f}{ ; 200g}{. 200h}{. 200i}|</span>\r\n#210|. &ndash; |{210a}{ : 210c}{, 210d}|\r\n#215|. &ndash; |{215a}{ ; 215d}|\r\n#225|. &ndash; |{(225a}{ ; 225v)}|\r\n#010|. &ndash; |{ISBN 010a}|' WHERE variable = 'ISBD';
+
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+('COUNTRY', 'IT', 'Italia'),
+('COUNTRY', 'US', 'Stati Uniti'),
+('COUNTRY', 'GB', 'Regno Unito - UK '),
+('COUNTRY', 'DE', 'Germania'),
+('COUNTRY', 'FR', 'Francia'),
+('COUNTRY', 'VA', 'Vaticano'),
+('COUNTRY', 'CN', 'Cina'),
+('COUNTRY', 'IN', 'India');
+
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+('LANG', 'ita', 'italiano'),
+('LANG', 'eng', 'inglese'),
+('LANG', 'ger', 'tedesco'),
+('LANG', 'fre', 'francese'),
+('LANG', 'lat', 'latino');
