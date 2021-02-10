@@ -33,7 +33,6 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::RecordProcessor;
-use YAML;
 use URI::Escape;
 use Business::ISBN;
 use MARC::Record;

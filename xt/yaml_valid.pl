@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use Getopt::Long;
-use YAML;
+use YAML::XS;
 
 my $usage = <<EOF;
 yaml_valid.pl - give it a filename and it will told you if it is an exact yaml file.
@@ -39,7 +39,7 @@ GetOptions(
 die $usage if $help;
 
 say "Testing file: $file";
-eval { YAML::LoadFile($file); };
+eval { YAML::XS::LoadFile($file); };
 if ($@) {
     print "KO!\n$@\n";
 }

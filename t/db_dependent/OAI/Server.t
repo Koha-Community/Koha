@@ -27,7 +27,7 @@ use File::Spec;
 use Test::MockModule;
 use Test::Warn;
 use XML::Simple;
-use YAML;
+use YAML::XS;
 
 use t::lib::Mocks;
 
@@ -176,9 +176,9 @@ sub test_query {
     delete $response->{responseDate};
     unless (is_deeply($response, \%full_expected, $test)) {
         diag
-            "PARAM:" . Dump($param) .
-            "EXPECTED:" . Dump(\%full_expected) .
-            "RESPONSE:" . Dump($response);
+            "PARAM:" . YAML::XS::Dump($param) .
+            "EXPECTED:" . YAML::XS::Dump(\%full_expected) .
+            "RESPONSE:" . YAML::XS::Dump($response);
     }
 }
 

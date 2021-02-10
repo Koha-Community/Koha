@@ -11,7 +11,7 @@ use File::Basename;
 use File::Copy;
 use FindBin qw($Bin);
 use XML::LibXML;
-use YAML;
+use YAML::XS;
 use ZOOM;
 
 BEGIN {
@@ -51,7 +51,7 @@ subtest 'test_search' => sub {
         MARC::Field->new('999', '', '', c => '1234567'),
     );
 
-    my $yaml = Test::MockModule->new('YAML');
+    my $yaml = Test::MockModule->new('YAML::XS');
     $yaml->mock('LoadFile', sub {
         return {
             biblios => {

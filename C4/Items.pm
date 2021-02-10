@@ -57,7 +57,7 @@ use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
 use List::MoreUtils qw(any);
-use YAML qw(Load);
+use YAML::XS;
 use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
@@ -982,7 +982,7 @@ sub GetHiddenItemnumbers {
     $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $hidingrules;
     eval {
-        $hidingrules = YAML::Load($yaml);
+        $hidingrules = YAML::XS::Load($yaml);
     };
     if ($@) {
         warn "Unable to parse OpacHiddenItems syspref : $@";

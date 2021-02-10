@@ -34,7 +34,7 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use List::MoreUtils qw/any/;
-use YAML;
+use YAML::XS;
 
 =head1 NAME
 
@@ -218,7 +218,7 @@ sub calculate {
 	my @sqlorparams;
 	my @sqlor;
 	my @sqlwhere;
-	($debug) and print STDERR Dump($filters_hashref);
+    ($debug) and print STDERR YAML::XS::Dump($filters_hashref);
 	foreach my $filter (keys %$filters_hashref){
 		my $string;
 		my $stringfield=$filter;

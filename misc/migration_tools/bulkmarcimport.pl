@@ -26,7 +26,7 @@ use C4::Charset;
 use C4::Items;
 use C4::MarcModificationTemplates;
 
-use YAML;
+use YAML::XS;
 use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;
@@ -565,7 +565,7 @@ if ($logfile){
 }
 if ($yamlfile) {
     open my $yamlfileout, q{>}, "$yamlfile" or die "cannot open $yamlfile \n";
-    print $yamlfileout Dump($yamlhash);
+    print $yamlfileout YAML::XS::Dump($yamlhash);
 }
 exit 0;
 
@@ -631,9 +631,9 @@ sub printlog{
 sub get_heading_fields{
     my $headingfields;
     if ($authtypes){
-        $headingfields=YAML::LoadFile($authtypes);
+        $headingfields = YAML::XS::LoadFile($authtypes);
         $headingfields={C4::Context->preference('marcflavour')=>$headingfields};
-        $debug && warn YAML::Dump($headingfields);
+        $debug && warn YAML::XS::Dump($headingfields);
     }
     unless ($headingfields){
         $headingfields=$dbh->selectall_hashref("SELECT auth_tag_to_report, authtypecode from auth_types",'auth_tag_to_report',{Slice=>{}});

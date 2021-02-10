@@ -129,7 +129,7 @@ requires 'XML::RSS', '1.31';
 requires 'XML::SAX::ParserFactory', '1.01';
 requires 'XML::SAX::Writer', '0.44';
 requires 'XML::Simple', '2.14';
-requires 'YAML', '0.71';
+requires 'YAML::XS', '0.71';
 requires 'YAML::Syck', '0.71';
 recommends 'AnyEvent', '5.0';
 recommends 'AnyEvent::HTTP', '2.13';

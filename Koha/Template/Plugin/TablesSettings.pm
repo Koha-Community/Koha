@@ -54,7 +54,6 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use YAML qw( LoadFile );
 use JSON qw( to_json );
 
 use C4::Context qw( config );

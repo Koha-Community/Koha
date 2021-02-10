@@ -24,7 +24,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use Carp;
-use YAML qw/Load/;
+use YAML::XS;
 use List::MoreUtils qw/uniq/;
 
 use C4::Context;
@@ -678,7 +678,7 @@ sub get_infos_syspref {
     my $syspref = C4::Context->preference($syspref_name);
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
-        YAML::Load($syspref);
+        YAML::XS::Load($syspref);
     };
     if ( $@ ) {
         warn "Unable to parse $syspref syspref : $@";
@@ -724,7 +724,7 @@ sub get_infos_syspref_on_item {
     my $syspref = C4::Context->preference($syspref_name);
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
-        YAML::Load($syspref);
+        YAML::XS::Load($syspref);
     };
     if ( $@ ) {
         warn "Unable to parse $syspref syspref : $@";

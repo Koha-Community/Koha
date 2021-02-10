@@ -4,7 +4,6 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use YAML;
 
 use C4::Serials;
 use C4::Serials::Frequency;

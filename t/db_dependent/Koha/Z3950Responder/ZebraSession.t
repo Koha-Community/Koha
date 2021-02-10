@@ -6,7 +6,6 @@ use Test::More tests => 3;
 use Test::MockObject;
 use t::lib::Mocks qw(mock_preference);
 
-use YAML;
 use ZOOM;
 
 BEGIN {

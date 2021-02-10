@@ -59,7 +59,7 @@ use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 use Koha::SearchEngine::Elasticsearch;
 
-use YAML;
+use YAML::XS;
 use Getopt::Long;
 use Pod::Usage;
 
@@ -81,4 +81,4 @@ if ( $type && $type !~ /^(marc21|unimarc|normarc)$/ ) {
 my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings( $type );
 
 binmode STDOUT, ":encoding(UTF-8)";
-print Dump($mappings);
+print YAML::XS::Dump($mappings);

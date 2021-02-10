@@ -20,8 +20,6 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 use Koha::DateUtils;
 
-use YAML;
-
 use t::lib::Mocks;
 t::lib::Mocks::mock_preference('OrderPriceRounding','');
 

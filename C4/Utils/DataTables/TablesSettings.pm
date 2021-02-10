@@ -2,7 +2,7 @@ package C4::Utils::DataTables::TablesSettings;
 
 use Modern::Perl;
 use List::Util qw( first );
-use YAML;
+use YAML::XS;
 use C4::Context;
 use Koha::Database;
 use Koha::Caches;
@@ -13,7 +13,7 @@ sub get_yaml {
     my $yaml  = $cache->get_from_cache('TablesSettingsYaml');
 
     unless ($yaml) {
-        $yaml = eval { YAML::LoadFile($yml_path) };
+        $yaml = eval { YAML::XS::LoadFile($yml_path) };
         warn "ERROR: the yaml file for DT::TablesSettings is not correctly formatted: $@"
           if $@;
         $cache->set_in_cache( 'TablesSettingsYaml', $yaml, { expiry => 3600 } );

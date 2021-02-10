@@ -102,8 +102,8 @@ sub send_sms {
 
     my %args;
     if ( -f $conf_file ) {
-        require YAML;
-        my $conf = YAML::LoadFile( $conf_file );
+        require YAML::XS;
+        my $conf = YAML::XS::LoadFile( $conf_file );
         %args = map { q{_} . $_ => $conf->{$_} } keys %$conf;
     }
 

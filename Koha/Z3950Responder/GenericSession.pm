@@ -49,8 +49,8 @@ sub start_search {
     my ( $self, $args, $num_to_prefetch ) = @_;
 
     if (!defined $self->{'attribute_mappings'}) {
-        require YAML;
-        $self->{'attribute_mappings'} = YAML::LoadFile($self->{server}->{config_dir} . 'attribute_mappings.yaml');
+        require YAML::XS;
+        $self->{'attribute_mappings'} = YAML::XS::LoadFile($self->{server}->{config_dir} . 'attribute_mappings.yaml');
     }
 
     my $database = $args->{DATABASES}->[0];

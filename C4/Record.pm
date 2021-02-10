@@ -29,7 +29,7 @@ use Unicode::Normalize; # _entity_encode
 use C4::Biblio; #marc2bibtex
 use C4::Koha; #marc2csv
 use C4::XSLT ();
-use YAML; #marcrecords2csv
+use YAML::XS; #marcrecords2csv
 use Template;
 use Text::CSV::Encoded; #marc2csv
 use Koha::Items;
@@ -415,7 +415,7 @@ sub marc2csv {
     my $configfile = "../tools/csv-profiles/$id.yaml";
     my ($preprocess, $postprocess, $fieldprocessing);
     if (-e $configfile){
-        ($preprocess,$postprocess, $fieldprocessing) = YAML::LoadFile($configfile);
+        ($preprocess,$postprocess, $fieldprocessing) = YAML::XS::LoadFile($configfile);
     }
 
     # Preprocessing
@@ -800,7 +800,7 @@ sub marc2bibtex {
     my $additional_fields;
     if ($BibtexExportAdditionalFields) {
         $BibtexExportAdditionalFields = "$BibtexExportAdditionalFields\n\n";
-        $additional_fields = eval { YAML::Load($BibtexExportAdditionalFields); };
+        $additional_fields = eval { YAML::XS::Load($BibtexExportAdditionalFields); };
         if ($@) {
             warn "Unable to parse BibtexExportAdditionalFields : $@";
             $additional_fields = undef;

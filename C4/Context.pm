@@ -96,7 +96,7 @@ use Encode;
 use File::Spec;
 use Module::Load::Conditional qw(can_load);
 use POSIX ();
-use YAML qw/Load/;
+use YAML::XS;
 use ZOOM;
 
 use C4::Boolean;
@@ -445,7 +445,7 @@ the value cannot be properly decoded as YAML.
 sub yaml_preference {
     my ( $self, $preference ) = @_;
 
-    my $yaml = eval { YAML::Load( $self->preference( $preference ) ); };
+    my $yaml = eval { YAML::XS::Load( $self->preference( $preference ) ); };
     if ($@) {
         warn "Unable to parse $preference syspref : $@";
         return;

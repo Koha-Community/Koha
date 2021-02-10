@@ -50,7 +50,7 @@ use C4::Koha;
 use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Output;
-use YAML::Syck qw( Dump LoadFile );
+use YAML::Syck qw( LoadFile );
 
 my %tabsysprefs; #we do no longer need to keep track of a tab per pref (yaml)
 

@@ -21,7 +21,7 @@ use DBI;
 use Test::More tests => 35;
 use Test::MockModule;
 use Test::Warn;
-use YAML;
+use YAML::XS;
 
 use t::lib::Mocks;
 
@@ -36,7 +36,7 @@ subtest 'yaml_preference() tests' => sub {
     my $data = [ 'uno', 'dos', { 'tres' => 'cuatro' } ];
 
     my $context = Test::MockModule->new( 'C4::Context' );
-    $context->mock( 'preference', YAML::Dump($data) );
+    $context->mock( 'preference', YAML::XS::Dump($data) );
 
     my $pref = C4::Context->new->yaml_preference( 'nothing' );
 

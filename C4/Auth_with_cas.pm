@@ -26,7 +26,7 @@ use Koha::AuthUtils qw(get_script_name);
 use Authen::CAS::Client;
 use CGI qw ( -utf8 );
 use FindBin;
-use YAML;
+use YAML::XS;
 
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
@@ -44,7 +44,7 @@ my $yamlauthfile = C4::Context->config('intranetdir') . "/C4/Auth_cas_servers.ya
 
 # If there's a configuration for multiple cas servers, then we get it
 if (multipleAuth()) {
-    ($defaultcasserver, $casservers) = YAML::LoadFile($yamlauthfile);
+    ($defaultcasserver, $casservers) = YAML::XS::LoadFile($yamlauthfile);
     $defaultcasserver = $defaultcasserver->{'default'};
 } else {
 # Else, we fall back to casServerUrl syspref

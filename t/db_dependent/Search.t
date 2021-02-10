@@ -19,8 +19,6 @@ use Modern::Perl;
 
 use utf8;
 
-use YAML;
-
 use C4::Debug;
 use C4::AuthoritiesMarc qw( SearchAuthorities );
 use C4::XSLT;

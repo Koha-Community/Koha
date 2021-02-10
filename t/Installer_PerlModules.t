@@ -16,7 +16,7 @@ ok ($modules = C4::Installer::PerlModules->new(), 'Tests modules object');
 my $prereq_pm = $modules->prereq_pm();
 ok (exists($prereq_pm->{"DBI"}), 'DBI required for installer to run');
 ok (exists($prereq_pm->{"CGI"}), 'CGI required for installer to run' );
-ok (exists($prereq_pm->{"YAML"}), 'YAML required for installer to run');
+ok (exists($prereq_pm->{"YAML::XS"}), 'YAML::XS required for installer to run');
 
 subtest 'versions_info' => sub {
     plan tests => 4;

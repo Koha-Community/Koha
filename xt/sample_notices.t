@@ -78,7 +78,6 @@ sub compare_notices {
        open( my $trans_fh,"<", "$root_dir/$trans_file" ),
        "Open translated sample notices file $root_dir/$trans_file" );
     my $trans_notice = get_notices_from_sql_file( $trans_fh );
-    use YAML;
     my @trans_notices = sort { lc $a cmp lc $b } keys %$trans_notice;
     cmp_ok(
         $#trans_notices, '>=', 0,

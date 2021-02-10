@@ -24,7 +24,7 @@ use File::Basename;
 use FindBin qw($Bin);
 use Getopt::Long;
 use Locale::PO;
-use YAML qw(LoadFile);
+use YAML::XS;
 use utf8;
 
 use Koha::Database;
@@ -68,17 +68,17 @@ EOT
     exit 0;
 }
 
-my $defaults = LoadFile("$Bin/data/defaults.yml");
-my $authorised_values = LoadFile("$Bin/data/authorised_values.yml");
-my $authtypes = LoadFile("$Bin/data/authtypes.yml");
+my $defaults = YAML::XS::LoadFile("$Bin/data/defaults.yml");
+my $authorised_values = YAML::XS::LoadFile("$Bin/data/authorised_values.yml");
+my $authtypes = YAML::XS::LoadFile("$Bin/data/authtypes.yml");
 my @authtags;
 my @authsubfields;
 for my $authfw (qw(default CLASS CO EXP FAM GENRE_FORM NP NTEXP NTWORK PA PERS PUB SAUTTIT SNC SNG TM TU WORK)) {
-    my $file = LoadFile("$Bin/data/auth/$authfw.yml");
+    my $file = YAML::XS::LoadFile("$Bin/data/auth/$authfw.yml");
     push @authtags, @{ $file->{authtags} };
     push @authsubfields, @{ $file->{authsubfields} };
 }
-my $biblio = LoadFile("$Bin/data/biblio/default.yml");
+my $biblio = YAML::XS::LoadFile("$Bin/data/biblio/default.yml");
 my @tags = @{ $biblio->{tags} };
 my @subfields = @{ $biblio->{subfields} };
 

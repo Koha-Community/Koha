@@ -33,7 +33,7 @@ use XML::Simple;
 use Config;
 use Search::Elasticsearch;
 use Try::Tiny;
-use YAML qw/LoadFile/;
+use YAML::XS;
 
 use C4::Output;
 use C4::Auth;
@@ -429,7 +429,7 @@ my @bad_yaml_prefs;
 foreach my $syspref (@yaml_prefs) {
     my $yaml = C4::Context->preference( $syspref );
     if ( $yaml ) {
-        eval { YAML::Load( "$yaml\n\n" ); };
+        eval { YAML::XS::Load( "$yaml\n\n" ); };
         if ($@) {
             push @bad_yaml_prefs, $syspref;
         }
@@ -666,7 +666,7 @@ if ( defined C4::Context->config('docdir') ) {
 ## Release teams
 my $teams =
   -e "$docdir" . "/teams.yaml"
-  ? LoadFile( "$docdir" . "/teams.yaml" )
+  ? YAML::XS::LoadFile( "$docdir" . "/teams.yaml" )
   : {};
 my $dev_team = (sort {$b <=> $a} (keys %{$teams->{team}}))[0];
 my $short_version = substr($versions{'kohaVersion'},0,5);
@@ -678,7 +678,7 @@ $template->param( development_version => $development_version );
 ## Contributors
 my $contributors =
   -e "$docdir" . "/contributors.yaml"
-  ? LoadFile( "$docdir" . "/contributors.yaml" )
+  ? YAML::XS::LoadFile( "$docdir" . "/contributors.yaml" )
   : {};
 for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
     for my $role ( keys %{ $teams->{team}->{$version} } ) {

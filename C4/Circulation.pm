@@ -21,6 +21,8 @@ package C4::Circulation;
 use Modern::Perl;
 use DateTime;
 use POSIX qw( floor );
+use YAML::XS;
+
 use Koha::DateUtils;
 use C4::Context;
 use C4::Stats;
@@ -2014,7 +2016,7 @@ sub AddReturn {
     if ($yaml) {
         $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
         my $rules;
-        eval { $rules = YAML::Load($yaml); };
+        eval { $rules = YAML::XS::Load($yaml); };
         if ($@) {
             warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
         }
