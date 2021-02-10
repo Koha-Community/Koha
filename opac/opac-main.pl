@@ -60,17 +60,17 @@ elsif (C4::Context->userenv and defined $input->param('branch') and length $inpu
 }
 
 my $news_id = $input->param('news_id');
-my @all_koha_news;
+my $all_koha_news;
 
 if (defined $news_id){
-    @all_koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
-    if( @all_koha_news ) { # we only expect one btw
-        $template->param( news_item => $all_koha_news[0] );
+    $all_koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
+    if( $all_koha_news->count ) { # we only expect one btw
+        $template->param( news_item => $all_koha_news->next );
     } else {
         $template->param( single_news_error => 1 );
     }
 } else {
-    @all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
+    $all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
 }
 
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
@@ -99,7 +99,7 @@ if ( $patron ) {
 }
 
 $template->param(
-    koha_news           => @all_koha_news,
+    koha_news           => $all_koha_news,
     branchcode          => $homebranch,
     display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
     daily_quote         => $quote,
