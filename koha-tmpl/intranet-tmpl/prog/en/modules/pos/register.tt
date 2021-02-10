@@ -321,6 +321,7 @@
     [% Asset.js("lib/jquery/plugins/rowGroup/dataTables.rowGroup.min.js") | $raw %]
     [% Asset.js("js/cashup_modal.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
     <script>
         var sales_table = $("#sales").dataTable($.extend(true, {}, dataTablesDefaults, {
             orderFixed: [ 0, 'asc'],
@@ -421,18 +422,24 @@
                 {
                     "data": "timestamp",
                     "searchable": true,
-                    "orderable": true
+                    "orderable": true,
+                    "render": function(data, type, row, meta) {
+                        return $datetime(row.timestamp);
+                    }
                 },
                 {
                     "data": "amount",
                     "searchable": true,
-                    "orderable": true
+                    "orderable": true,
+                    "render": function(data, type, row, meta) {
+                        var amt = row.amount * -1;
+                        return (amt).format_price();
+                    }
                 },
                 {
                     "data": function( row, type, val, meta ) {
                         var result = '<a class="btn btn-default btn-xs" role="button" data-toggle="modal" data-cashup="'+encodeURIComponent(row.cashup_id)+'" data-register="[% register.description | html %]" href="#cashupSummaryModal"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Summary")+'</a>\n';
                         return result;
-
                     },
                     "searchable": false,
                     "orderable": false
