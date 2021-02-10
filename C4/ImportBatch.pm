@@ -576,7 +576,7 @@ sub BatchCommitRecords {
     my $num_items_errored = 0;
     my $num_ignored = 0;
     # commit (i.e., save, all records in the batch)
-    SetImportBatchStatus('importing');
+    SetImportBatchStatus($batch_id, 'importing');
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
     my $item_action = GetImportBatchItemAction($batch_id);
@@ -813,7 +813,7 @@ sub BatchRevertRecords {
     my $num_ignored = 0;
     my $num_items_deleted = 0;
     # commit (i.e., save, all records in the batch)
-    SetImportBatchStatus('reverting');
+    SetImportBatchStatus($batch_id, 'reverting');
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
     my $dbh = C4::Context->dbh;
