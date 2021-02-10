@@ -3,7 +3,7 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q{
         UPDATE systempreferences
-        value=REPLACE(value, '|', ',')
+        SET value=REPLACE(value, '|', ',')
         WHERE variable="OPACHoldsIfAvailableAtPickupExceptions"
            OR variable="BatchCheckoutsValidCategories"
     });
