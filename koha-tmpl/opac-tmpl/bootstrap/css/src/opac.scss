@@ -624,8 +624,24 @@ th {
     }
 }
 
+div {
+    &.required_label {
+        display: none;
+
+        &.required {
+            color: #C00;
+            display: block;
+            font-size: 95%;
+            margin-left: 10rem;
+            margin-top: 3px;
+        }
+    }
+}
+
 .required {
-    color: #C00;
+    &.valid {
+        color: #000;
+    }
 }
 
 
@@ -686,12 +702,21 @@ fieldset {
         .label {
             float: left;
             font-weight: bold;
-            margin-right: 1em;
+            margin-right: 1rem;
             text-align: right;
-            width: 9em;
+            width: 9rem;
         }
 
         label {
+            &.error {
+                color: #C00;
+                float: none;
+                font-style: italic;
+                font-weight: normal;
+                margin-left: 1rem;
+                text-align: left;
+                width: auto;
+            }
             &.lradio {
                 float: none;
                 margin: inherit;
@@ -744,7 +769,7 @@ fieldset {
 
         .hint {
             display: block;
-            margin-left: 11em;
+            margin-left: 10rem;
         }
     }
 
@@ -784,7 +809,7 @@ div {
                 font-weight: bold;
                 margin-right: 1em;
                 text-align: left;
-                width: 9em;
+                width: 9rem;
             }
         }
 
@@ -2246,14 +2271,11 @@ nav {
 #memberentry-form {
     input.error {
         border-color: #C00;
-        box-shadow: 0 1px 1px #C00 inset, 0 0 8px #C00;
-        color: #F00;
         outline: 0 none;
 
         &:focus {
             border-color: #C00;
-            box-shadow: 0 1px 1px #C00 inset, 0 0 8px #C00;
-            color: #F00;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(204, 0, 0, .6);
             outline: 0 none;
         }
 
