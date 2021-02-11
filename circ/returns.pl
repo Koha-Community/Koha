@@ -91,7 +91,7 @@ my $userenv_branch = $userenv->{'branch'} // '';
 my $printer = $userenv->{'branchprinter'} // '';
 my $forgivemanualholdsexpire = $query->param('forgivemanualholdsexpire');
 
-my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
+my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') eq 'production');
  #
 # Some code to handle the error if there is no branch or printer setting.....
 #
