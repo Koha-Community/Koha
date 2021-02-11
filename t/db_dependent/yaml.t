@@ -3,6 +3,7 @@ use Test::More;
 
 use YAML::XS;
 use Template;
+use Encode;
 use utf8;
 
 my $template = Template->new( ENCODING => 'UTF-8' );
@@ -11,7 +12,7 @@ my $vars;
 my $output;
 $template->process( 't/db_dependent/data/syspref.pref', $vars, \$output );
 
-my $yaml = YAML::XS::Load( $output );
+my $yaml = YAML::XS::Load( Encode::encode_utf8( $output ) );
 my $syspref_1 = $yaml->{Test}->{Testing}->[0];
 my $syspref_2 = $yaml->{Test}->{Testing}->[1];
 my $syspref_3 = $yaml->{Test}->{Testing}->[2];
