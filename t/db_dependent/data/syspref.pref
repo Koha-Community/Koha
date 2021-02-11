@@ -1,0 +1,28 @@
+Test:
+    Testing:
+        -
+            - Do it
+            - pref: syspref_1
+              choices:
+                  on: certainly
+                  off: "I don't think so"
+        -
+            - pref: syspref_2
+              choices:
+                  '': Do
+                  dont: "Don't do"
+                  0: "really don't do"
+            - it.
+        -
+            - "We love unicode"
+            - pref: syspref_3
+              choices:
+                  ★ : ❤️
+                  no: "Not really"
+        -
+            - "List of fields"
+            - pref: syspref_4
+              choices:
+                  020: 020
+                  "020": "020"
+                  "123": "123"
