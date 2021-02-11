@@ -3,110 +3,110 @@ Logging:
         -
             - pref: LetterLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when an automatic claim notice is sent.
         -
             - pref: BorrowersLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - changes to patron records.
         -
             - pref: CataloguingLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - any changes to bibliographic or item records.
         -
             - pref: AuthoritiesLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - changes to authority records.
         -
             - pref: FinesLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when fines are charged, paid, or forgiven.
         -
             - pref: HoldsLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - any actions on holds (create, cancel, suspend, resume, etc).
         -
             - pref: IllLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when changes to ILL requests take place.
         -
             - pref: IssueLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when items are checked out.
         -
             - pref: ReturnLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when items are checked in.
         -
             - pref: RenewalLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when items are renewed.
         -
             - pref: SubscriptionLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when serials are added, deleted or changed.
         -
             - pref: CronjobLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - information from cron jobs.
         -
             - pref: ReportsLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - when reports are added, deleted or changed.
         -
             - pref: AuthFailureLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - " authentication failures."
         -
             - pref: AuthSuccessLog
               choices:
-                  on: Log
-                  off: "Don't log"
+                  1: Log
+                  0: "Don't log"
             - " successful authentications."
 
     Debugging:
         -
             - pref: DumpTemplateVarsIntranet
               choices:
-                  on: Do
-                  off: "Don't"
+                  1: Do
+                  0: "Don't"
             - dump all Template Toolkit variables to a comment in the HTML source for the staff interface.
         -
             - pref: DumpTemplateVarsOpac
               choices:
-                  on: Do
-                  off: "Don't"
+                  1: Do
+                  0: "Don't"
             - dump all Template Toolkit variables to a comment in the HTML source for the OPAC.
         -
             - pref: DumpSearchQueryTemplate
               choices:
-                  on: Do
-                  off: "Don't"
+                  1: Do
+                  0: "Don't"
             - dump search query as a template parameter, requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=DumpTemplateVars">DumpTemplateVars</a>[interface] to be visible.
