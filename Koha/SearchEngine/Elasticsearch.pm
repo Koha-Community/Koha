@@ -312,6 +312,7 @@ sub _get_elasticsearch_field_config {
     if (!defined $settings) {
         my $config_file = C4::Context->config('elasticsearch_field_config');
         $config_file ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/field_config.yaml';
+        local $YAML::XS::Boolean = 'JSON::PP';
         $settings = YAML::XS::LoadFile( $config_file );
     }
 
