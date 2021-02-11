@@ -201,6 +201,14 @@ my $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist = ( not $anonymous_pat
 
 my $warnPrefKohaAdminEmailAddress = not Email::Valid->address(C4::Context->preference('KohaAdminEmailAddress'));
 
+my $invalid_yesno = Koha::Config::SysPrefs->search(
+    {
+        type  => 'YesNo',
+        value => { -or => { 'is' => undef, -not_in => [ "1", "0" ] } }
+    }
+);
+$template->param( invalid_yesno => $invalid_yesno );
+
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
 my $warnIsRootUser   = (! $loggedinuser);
