@@ -34,7 +34,6 @@ use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use List::MoreUtils qw/any/;
-use YAML::XS;
 
 =head1 NAME
 
