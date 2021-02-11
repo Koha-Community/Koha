@@ -49,6 +49,7 @@ BEGIN {
 
 use Carp;
 use Try::Tiny;
+use Encode;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
@@ -982,7 +983,7 @@ sub GetHiddenItemnumbers {
     $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $hidingrules;
     eval {
-        $hidingrules = YAML::XS::Load($yaml);
+        $hidingrules = YAML::XS::Load(Encode::encode_utf8($yaml));
     };
     if ($@) {
         warn "Unable to parse OpacHiddenItems syspref : $@";

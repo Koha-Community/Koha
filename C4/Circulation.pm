@@ -22,6 +22,7 @@ use Modern::Perl;
 use DateTime;
 use POSIX qw( floor );
 use YAML::XS;
+use Encode;
 
 use Koha::DateUtils;
 use C4::Context;
@@ -2016,7 +2017,7 @@ sub AddReturn {
     if ($yaml) {
         $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
         my $rules;
-        eval { $rules = YAML::XS::Load($yaml); };
+        eval { $rules = YAML::XS::Load(Encode::encode_utf8($yaml)); };
         if ($@) {
             warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
         }

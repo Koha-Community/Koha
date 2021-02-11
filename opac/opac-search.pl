@@ -31,6 +31,7 @@ use C4::Context;
 use List::MoreUtils q/any/;
 use Try::Tiny;
 use YAML::XS;
+use Encode;
 
 use Data::Dumper; # TODO remove
 
@@ -246,7 +247,7 @@ my $yaml = C4::Context->preference('OpacHiddenItems');
 if ( $yaml =~ /\S/ ) {
     $yaml = "$yaml\n\n"; # YAML expects trailing newline. Surplus does not hurt.
     eval {
-        $hidingrules = YAML::XS::Load($yaml);
+        $hidingrules = YAML::XS::Load(Encode::encode_utf8($yaml));
     };
     if ($@) {
         warn "Unable to parse OpacHiddenItems syspref : $@";

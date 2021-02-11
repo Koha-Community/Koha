@@ -26,6 +26,7 @@ use CGI qw ( -utf8 );
 use Carp;
 use YAML::XS;
 use List::MoreUtils qw/uniq/;
+use Encode;
 
 use C4::Context;
 use C4::Auth;
@@ -678,7 +679,7 @@ sub get_infos_syspref {
     my $syspref = C4::Context->preference($syspref_name);
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
-        YAML::XS::Load($syspref);
+        YAML::XS::Load(Encode::encode_utf8($syspref));
     };
     if ( $@ ) {
         warn "Unable to parse $syspref syspref : $@";
@@ -724,7 +725,7 @@ sub get_infos_syspref_on_item {
     my $syspref = C4::Context->preference($syspref_name);
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
-        YAML::XS::Load($syspref);
+        YAML::XS::Load(Encode::encode_utf8($syspref));
     };
     if ( $@ ) {
         warn "Unable to parse $syspref syspref : $@";

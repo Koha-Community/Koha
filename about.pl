@@ -34,6 +34,7 @@ use Config;
 use Search::Elasticsearch;
 use Try::Tiny;
 use YAML::XS;
+use Encode;
 
 use C4::Output;
 use C4::Auth;
@@ -429,7 +430,7 @@ my @bad_yaml_prefs;
 foreach my $syspref (@yaml_prefs) {
     my $yaml = C4::Context->preference( $syspref );
     if ( $yaml ) {
-        eval { YAML::XS::Load( "$yaml\n\n" ); };
+        eval { YAML::XS::Load( Encode::encode_utf8("$yaml\n\n") ); };
         if ($@) {
             push @bad_yaml_prefs, $syspref;
         }

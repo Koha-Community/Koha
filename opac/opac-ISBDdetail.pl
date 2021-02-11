@@ -41,6 +41,7 @@ the items attached to the biblio
 
 use Modern::Perl;
 use YAML::XS;
+use Encode;
 
 use C4::Auth;
 use C4::Context;
@@ -83,7 +84,7 @@ my $patron = Koha::Patrons->find($loggedinuser);
 my $opachiddenitems_rules;
 eval {
     my $yaml = C4::Context->preference('OpacHiddenItems') . "\n\n";
-    $opachiddenitems_rules = YAML::XS::Load($yaml);
+    $opachiddenitems_rules = YAML::XS::Load(Encode::encode_utf8($yaml));
 };
 
 unless ( $patron and $patron->category->override_hidden_items ) {

@@ -64,6 +64,7 @@ use Modern::Perl;
 
 use List::MoreUtils qw/uniq/;
 use YAML::XS;
+use Encode;
 use vars qw(@ISA @EXPORT);
 
 use Koha::SimpleMARC qw(read_field);
@@ -120,7 +121,7 @@ sub marc2ris {
     my $ris_additional_fields;
     if ($RisExportAdditionalFields) {
         $RisExportAdditionalFields = "$RisExportAdditionalFields\n\n";
-        $ris_additional_fields = eval { YAML::XS::Load($RisExportAdditionalFields); };
+        $ris_additional_fields = eval { YAML::XS::Load(Encode::encode_utf8($RisExportAdditionalFields)); };
         if ($@) {
             warn "Unable to parse RisExportAdditionalFields : $@";
             $ris_additional_fields = undef;

@@ -31,7 +31,7 @@ my $biblio = Koha::Biblios->find(
 my $opachiddenitems_rules;
 eval {
     my $yaml = C4::Context->preference('OpacHiddenItems') . "\n\n";
-    $opachiddenitems_rules = YAML::XS::Load($yaml);
+    $opachiddenitems_rules = YAML::XS::Load(Encode::encode_utf8($yaml));
 };
 
 my @items  = grep { !$_->hidden_in_opac({ rules => $opachiddenitems_rules }) @{$biblio->items};

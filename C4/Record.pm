@@ -30,6 +30,7 @@ use C4::Biblio; #marc2bibtex
 use C4::Koha; #marc2csv
 use C4::XSLT ();
 use YAML::XS; #marcrecords2csv
+use Encode;
 use Template;
 use Text::CSV::Encoded; #marc2csv
 use Koha::Items;
@@ -800,7 +801,7 @@ sub marc2bibtex {
     my $additional_fields;
     if ($BibtexExportAdditionalFields) {
         $BibtexExportAdditionalFields = "$BibtexExportAdditionalFields\n\n";
-        $additional_fields = eval { YAML::XS::Load($BibtexExportAdditionalFields); };
+        $additional_fields = eval { YAML::XS::Load(Encode::encode_utf8($BibtexExportAdditionalFields)); };
         if ($@) {
             warn "Unable to parse BibtexExportAdditionalFields : $@";
             $additional_fields = undef;

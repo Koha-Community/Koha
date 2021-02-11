@@ -22,6 +22,7 @@ use Modern::Perl;
 use constant PULL_INTERVAL => 2;
 use List::MoreUtils qw( uniq );
 use YAML::XS;
+use Encode;
 
 use C4::Context;
 use C4::Output;
@@ -110,7 +111,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
         if ( my $yaml = C4::Context->preference('UpdateItemWhenLostFromHoldList') ) {
             $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
             my $assignments;
-            eval { $assignments = YAML::XS::Load($yaml); };
+            eval { $assignments = YAML::XS::Load(Encode::encode_utf8($yaml)); };
             if ($@) {
                 warn "Unable to parse UpdateItemWhenLostFromHoldList syspref : $@" if $@;
             }
