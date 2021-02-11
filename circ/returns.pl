@@ -87,7 +87,7 @@ my $userenv = C4::Context->userenv;
 my $userenv_branch = $userenv->{'branch'} // '';
 my $forgivemanualholdsexpire = $query->param('forgivemanualholdsexpire');
 
-my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
+my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') eq 'production');
 
 # Set up the item stack ....
 my %returneditems;
