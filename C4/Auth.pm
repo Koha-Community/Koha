@@ -1190,7 +1190,7 @@ sub checkauth {
                         $register_name = $register->name if ($register);
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
-                    if ( $type ne 'opac' and C4::Context->boolean_preference('AutoLocation') ) {
+                    if ( $type ne 'opac' and C4::Context->preference('AutoLocation') ) {
 
                         # we have to check they are coming from the right ip range
                         my $domain = $branches->{$branchcode}->{'branchip'};

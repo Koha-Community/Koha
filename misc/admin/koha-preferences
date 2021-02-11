@@ -20,7 +20,6 @@
 
 use Modern::Perl;
 use Koha::Script;
-use C4::Boolean;
 use C4::Context;
 use C4::Debug;
 use C4::Log;
@@ -56,27 +55,6 @@ sub _debug {
     print STDERR $message . "\n" if ( $C4::Debug::debug );
 }
 
-sub _normalize_value {
-    my ($row) = @_;
-
-    # AFAIK, there are no sysprefs where NULL has a different meaning than ''.
-    return ( $row->{'value'} || '' ) unless ( $row->{'type'} eq 'YesNo' );
-
-    #
-    # In theory, YesNo sysprefs should always contain 1/0.
-    # In practice, however, they don't.
-    # - Yogi Berra
-    #
-    my $bool_value = eval {
-        return C4::Boolean::true_p( $row->{'value'} ) ? 1 : 0;
-    };
-    if ( $@ ) {
-        return 0;
-    } else {
-        return $bool_value;
-    }
-}
-
 sub _set_preference {
     my ( $preference, $value ) = @_;
 
@@ -89,7 +67,7 @@ sub GetPreferences {
     my $dbh = C4::Context->dbh;
 
     return {
-        map { $_->{'variable'},  _normalize_value($_) }
+        map { $_->{'variable'},  $_ }
         @{ $dbh->selectall_arrayref( "
             SELECT
               variable, value, type
@@ -112,11 +90,6 @@ sub SetPreferences {
     ", { Slice => {} }, keys %preferences );
 
     exit 2 if ( scalar( @$current_state ) != scalar( keys %preferences ) );
-
-    foreach my $row ( @$current_state ) {
-        # YAML::Syck encodes no as '', so deal with that
-        $preferences{$row->{'variable'}} = $preferences{$row->{'variable'}} eq '' ? 0 : C4::Boolean::true_p( $preferences{$row->{'variable'}} ) if ( $row->{'type'} eq 'YesNo' );
-    }
 
     # Iterate through again, now that we've checked all of the YesNo sysprefs
 
@@ -151,9 +124,7 @@ sub _fetch_preference {
 sub GetPreference {
     my ( $preference ) = @_;
 
-    my $row = _fetch_preference( $preference );
-
-    return _normalize_value( $row );
+    return _fetch_preference( $preference );
 }
 
 sub SetPreference {
@@ -161,9 +132,7 @@ sub SetPreference {
 
     my $row = _fetch_preference( $preference );
 
-    $value = C4::Boolean::true_p($value) ? 1 : 0 if ( $row->{'type'} eq 'YesNo' );
-
-    exit 3 if ( $value eq $row->{'value'} );
+    exit 3 if ( $value eq $row->{'value'} ); #FIXME exit??
 
     _set_preference( $preference, $value );
 }

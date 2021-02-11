@@ -26,7 +26,6 @@ use Plack::Request;
 use Mojo::Server::PSGI;
 
 # Pre-load libraries
-use C4::Boolean;
 use C4::Koha;
 use C4::Languages;
 use C4::Letters;

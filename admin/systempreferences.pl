@@ -114,7 +114,7 @@ sub GetPrefParams {
         $params->{'type_choice'} = 1;
     } elsif ( $data->{'type'} eq 'YesNo' ) {
         $params->{'type_yesno'} = 1;
-        $data->{'value'}        = C4::Context->boolean_preference( $data->{'variable'} );
+        $data->{'value'}        = C4::Context->preference( $data->{'variable'} );
         if ( defined( $data->{'value'} ) and $data->{'value'} eq '1' ) {
             $params->{'value_yes'} = 1;
         } else {

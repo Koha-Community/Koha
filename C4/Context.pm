@@ -99,7 +99,6 @@ use POSIX ();
 use YAML::XS;
 use ZOOM;
 
-use C4::Boolean;
 use C4::Debug;
 use Koha::Caches;
 use Koha::Config::SysPref;
@@ -425,13 +424,6 @@ sub preference {
         $syspref_cache->set_in_cache("syspref_$var", $value);
     }
     return $value;
-}
-
-sub boolean_preference {
-    my $self = shift;
-    my $var = shift;        # The system preference to return
-    my $it = preference($self, $var);
-    return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
 =head2 yaml_preference

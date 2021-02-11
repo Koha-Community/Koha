@@ -163,7 +163,7 @@ if ( $action eq 'create' ) {
     }
     else {
         if (
-            C4::Context->boolean_preference(
+            C4::Context->preference(
                 'PatronSelfRegistrationVerifyByEmail')
           )
         {
@@ -401,7 +401,7 @@ sub GetMandatoryFields {
 
     if ( $action eq 'create' || $action eq 'new' ) {
         $mandatory_fields{'email'} = 1
-          if C4::Context->boolean_preference(
+          if C4::Context->preference(
             'PatronSelfRegistrationVerifyByEmail');
     }
 
