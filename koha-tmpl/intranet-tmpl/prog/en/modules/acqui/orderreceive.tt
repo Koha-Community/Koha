@@ -486,7 +486,7 @@
 
         $(document).ready(function() {
             [% IF (AcqCreateItem == 'receiving') %]
-                cloneItemBlock(0, '[% UniqueItemFields | html %]');
+                cloneItemBlock(0, '[% Koha.Preference('UniqueItemFields') | html %]');
             [% ELSIF (AcqCreateItem == 'ordering') && not order.subscriptionid %]
                 $("input[name='items_to_receive']").change(function() {
                     CalcQtyToReceive();
