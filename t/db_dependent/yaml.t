@@ -23,8 +23,8 @@ is_deeply(
         "Do it",
         {
             choices => {
-                1  => "certainly",
-                '' => "I don't think so"
+                on  => "certainly",
+                off => "I don't think so"
             },
             pref => "syspref_1"
         }
@@ -50,7 +50,7 @@ is_deeply(
         "We love unicode",
         {
             choices => {
-                ''    => "Not really",
+                no  => "Not really",
                 '★' => "❤️"
             },
             pref => "syspref_3"
