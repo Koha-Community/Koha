@@ -44,7 +44,7 @@ my $indexes = {
     }
 };
 
-my $yaml = Test::MockModule->new('YAML::Syck');
+my $yaml = Test::MockModule->new('YAML::XS');
 $yaml->mock( 'LoadFile', sub { return $indexes; } );
 
 use_ok('Koha::SearchEngine::Elasticsearch');

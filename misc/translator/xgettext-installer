@@ -48,9 +48,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Locale::PO;
 use Pod::Usage;
-use YAML::Syck qw(LoadFile);
-
-$YAML::Syck::ImplicitTyping = 1;
+use YAML::XS;
 
 my $output = 'messages.pot';
 my $files_from;
@@ -89,7 +87,7 @@ my $pot = {
 };
 
 for my $file (@files) {
-    my $yaml = LoadFile($file);
+    my $yaml = YAML::XS::LoadFile($file);
     my @tables = @{ $yaml->{'tables'} };
 
     my $tablec = 0;

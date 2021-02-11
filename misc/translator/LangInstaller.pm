@@ -22,14 +22,13 @@ use Modern::Perl;
 use C4::Context;
 # WARNING: Any other tested YAML library fails to work properly in this
 # script content
-use YAML::Syck qw( LoadFile DumpFile );
+# FIXME Really?
+use YAML::XS;
 use Locale::PO;
 use FindBin qw( $Bin );
 use File::Basename;
 use File::Path qw( make_path );
 use File::Copy;
-
-$YAML::Syck::ImplicitTyping = 1;
 
 sub set_lang {
     my ($self, $lang) = @_;
@@ -244,7 +243,7 @@ sub install_prefs {
     $self->{po} = Locale::PO->load_file_ashash($self->po_filename("-pref.po"), 'utf8');
 
     for my $file ( @{$self->{pref_files}} ) {
-        my $pref = LoadFile( $self->{path_pref_en} . "/$file" );
+        my $pref = YAML::XS::LoadFile( $self->{path_pref_en} . "/$file" );
 
         my $translated_pref = {
             map {
@@ -258,7 +257,7 @@ sub install_prefs {
 
         my $file_trans = $self->{po_path_lang} . "/$file";
         print "Write $file\n" if $self->{verbose};
-        DumpFile($file_trans, $translated_pref);
+        YAML::XS::DumpFile($file_trans, $translated_pref);
     }
 }
 
@@ -309,7 +308,7 @@ sub translate_yaml {
 
     my $po_ref  = Locale::PO->load_file_ashash( $po_file );
 
-    my $dstyml   = LoadFile( $srcyml );
+    my $dstyml   = YAML::XS::LoadFile( $srcyml );
 
     # translate fields in table rows
     my @tables = @{ $dstyml->{'tables'} };
@@ -402,7 +401,7 @@ sub install_installer {
                 if ( $file =~ /yml$/ ) {
                     my $translated_yaml = translate_yaml( $self, $target, "$intradir/$dir/$file" );
                     open(my $fh, ">:encoding(UTF-8)", "$intradir/$tdir/$file");
-                    DumpFile( $fh, $translated_yaml );
+                    YAML::XS::DumpFile( $fh, $translated_yaml );
                     close($fh);
                 } else {
                     File::Copy::copy( "$intradir/$dir/$file", "$intradir/$tdir/$file" );

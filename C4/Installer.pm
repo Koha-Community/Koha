@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Encode qw( encode is_utf8 );
 use DBIx::RunSQL;
-use YAML::Syck qw( LoadFile );
+use YAML::XS;
 use C4::Context;
 use DBI;
 use Koha;
@@ -153,7 +153,7 @@ sub marc_framework_sql_list {
             my ( $name, $ext ) = split /\./, $_;
             my @lines;
             if ( $ext =~ /yml/ ) {
-                my $yaml = LoadFile("$dir/$requirelevel/$name\.$ext");
+                my $yaml = YAML::XS::LoadFile("$dir/$requirelevel/$name\.$ext");
                 @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
@@ -236,7 +236,7 @@ sub sample_data_sql_list {
             my ( $name, $ext ) = split /\./, $_;
             my @lines;
             if ( $ext =~ /yml/ ) {
-                my $yaml = LoadFile("$dir/$requirelevel/$name\.$ext");
+                my $yaml = YAML::XS::LoadFile("$dir/$requirelevel/$name\.$ext");
                 @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
@@ -560,7 +560,7 @@ sub load_sql {
         }
         else {                                                                       # YAML files
             eval {
-                my $yaml         = LoadFile( $filename );                            # Load YAML
+                my $yaml         = YAML::XS::LoadFile( $filename );                            # Load YAML
                 for my $table ( @{ $yaml->{'tables'} } ) {
                     my $query_info   = process_yml_table($table);
                     my $query        = $query_info->{query};

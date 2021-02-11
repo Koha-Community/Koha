@@ -26,9 +26,8 @@ use C4::Debug;
 use C4::Log;
 use Getopt::Long;
 use Pod::Usage;
-use YAML::Syck qw();
-$YAML::Syck::ImplicitTyping = 1;
-$YAML::Syck::SortKeys = 1;
+use YAML::XS;
+use Encode;
 our %NOT_SET_PREFS = map { $_, 1 } qw( Version );
 
 =head1 NAME
@@ -239,9 +238,9 @@ my %commands = (
         ) || _print_usage( 1 );
 
         if ( $outfile ) {
-            YAML::Syck::DumpFile( $outfile, GetPreferences() );
+            YAML::XS::DumpFile( $outfile, GetPreferences() );
         } else {
-            print YAML::Syck::Dump( GetPreferences() );
+            print YAML::XS::Dump( Encode::encode_utf8(GetPreferences()) );
         }
     },
     load => sub {
@@ -252,7 +251,7 @@ my %commands = (
             'f' => \$force_version,
         );
 
-        my $preferences = YAML::Syck::LoadFile($infile || \*STDIN);
+        my $preferences = YAML::XS::LoadFile($infile || \*STDIN);
 
         die "Expected a YAML mapping" if ( ref($preferences) ne 'HASH' );
 

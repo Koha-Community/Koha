@@ -31,10 +31,9 @@ use C4::Templates;
 use Koha::Acquisition::Currencies;
 use File::Spec;
 use IO::File;
-use YAML::Syck qw();
+use YAML::XS;
+use Encode;
 use List::MoreUtils qw(any);
-$YAML::Syck::ImplicitTyping = 1;
-$YAML::Syck::ImplicitUnicode = 1;
 
 # use Smart::Comments;
 #
@@ -53,7 +52,7 @@ sub GetTab {
         local_currency => $local_currency, # currency code is used, because we do not know how a given currency is formatted.
     );
 
-    return YAML::Syck::Load( $tab_template->output() );
+    return YAML::XS::Load( Encode::encode_utf8($tab_template->output()));
 }
 
 sub _get_chunk {
@@ -237,6 +236,7 @@ sub SearchPrefs {
     our @terms = split( /\s+/, $searchfield );
 
     foreach my $tab_name ( sort keys %tab_files ) {
+        # FIXME Hum?
         # Force list context to remove 'uninitialized value in goto' warn coming from YAML::Syck; note that the other GetTab call is in list context too. The actual cause however is the null value for the pref OpacRenewalBranch in opac.pref
         my ($data) = GetTab( $input, $tab_name );
         my $title = ( keys( %$data ) )[0];

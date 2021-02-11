@@ -50,7 +50,7 @@ use C4::Koha;
 use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Output;
-use YAML::Syck qw( LoadFile );
+use YAML::XS;
 
 my %tabsysprefs; #we do no longer need to keep track of a tab per pref (yaml)
 
@@ -407,7 +407,7 @@ sub get_prefs_from_files {
         }
     };
     for my $file (@pref_files) {
-        my $pref = LoadFile( "$path_pref_en/$file" );
+        my $pref = YAML::XS::LoadFile( "$path_pref_en/$file" );
         for my $tab ( keys %$pref ) {
             my $content = $pref->{$tab};
             if ( ref($content) eq 'ARRAY' ) {

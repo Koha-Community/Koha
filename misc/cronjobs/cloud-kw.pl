@@ -22,7 +22,7 @@ use strict;
 use warnings;
 use diagnostics;
 use Carp;
-use YAML::Syck;
+use YAML::XS;
 use Pod::Usage;
 use Getopt::Long;
 
@@ -51,7 +51,7 @@ cronlogaction();
 my @clouds;
 print "Reading configuration file: $conf\n" if $verbose;
 eval {
-    @clouds = LoadFile( $conf );
+    @clouds = YAML::XS::LoadFile( $conf );
 };
 croak "Unable to read configuration file: $conf\n" if $@;
 

@@ -37,7 +37,7 @@ use Modern::Perl;
 use Readonly;
 use Search::Elasticsearch;
 use Try::Tiny;
-use YAML::Syck;
+use YAML::XS;
 
 use List::Util qw( sum0 reduce all );
 use MARC::File::XML;
@@ -164,7 +164,7 @@ sub get_elasticsearch_settings {
     if (!defined $settings) {
         my $config_file = C4::Context->config('elasticsearch_index_config');
         $config_file ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/index_config.yaml';
-        $settings = LoadFile( $config_file );
+        $settings = YAML::XS::LoadFile( $config_file );
     }
 
     return $settings;
@@ -312,7 +312,7 @@ sub _get_elasticsearch_field_config {
     if (!defined $settings) {
         my $config_file = C4::Context->config('elasticsearch_field_config');
         $config_file ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/field_config.yaml';
-        $settings = LoadFile( $config_file );
+        $settings = YAML::XS::LoadFile( $config_file );
     }
 
     if (!defined $settings->{$purpose}) {
@@ -341,7 +341,7 @@ $indexes = _load_elasticsearch_mappings();
 sub _load_elasticsearch_mappings {
     my $mappings_yaml = C4::Context->config('elasticsearch_index_mappings');
     $mappings_yaml ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
-    return LoadFile( $mappings_yaml );
+    return YAML::XS::LoadFile( $mappings_yaml );
 }
 
 sub reset_elasticsearch_mappings {

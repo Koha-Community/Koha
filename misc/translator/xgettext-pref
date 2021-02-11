@@ -49,9 +49,7 @@ use File::Basename;
 use Getopt::Long;
 use Locale::PO;
 use Pod::Usage;
-use YAML::Syck qw(LoadFile);
-
-$YAML::Syck::ImplicitTyping = 1;
+use YAML::XS;
 
 my $output = 'messages.pot';
 my $files_from;
@@ -89,7 +87,7 @@ my $pot = {
 };
 
 for my $file (@files) {
-    my $pref = LoadFile($file);
+    my $pref = YAML::XS::LoadFile($file);
     while ( my ($tab, $tab_content) = each %$pref ) {
         add_po(undef, basename($file));
 

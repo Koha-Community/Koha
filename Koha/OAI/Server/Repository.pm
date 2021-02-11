@@ -32,7 +32,7 @@ use Koha::OAI::Server::GetRecord;
 use Koha::OAI::Server::ListRecords;
 use Koha::OAI::Server::ListIdentifiers;
 use XML::SAX::Writer;
-use YAML::Syck qw( LoadFile );
+use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
 use C4::Biblio;
@@ -108,7 +108,7 @@ sub new {
 
     # Load configuration file if defined in OAI-PMH:ConfFile syspref
     if ( my $file = C4::Context->preference("OAI-PMH:ConfFile") ) {
-        $self->{ conf } = LoadFile( $file );
+        $self->{ conf } = YAML::XS::LoadFile( $file );
         my @formats = keys %{ $self->{conf}->{format} };
         $self->{ koha_metadata_format } =  \@formats;
     }
