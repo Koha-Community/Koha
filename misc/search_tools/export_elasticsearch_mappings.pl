@@ -52,6 +52,7 @@ Full documentation.
 =cut
 
 use Modern::Perl;
+use Encode;
 
 use Koha::Script;
 use Koha::Database;
@@ -81,4 +82,4 @@ if ( $type && $type !~ /^(marc21|unimarc|normarc)$/ ) {
 my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings( $type );
 
 binmode STDOUT, ":encoding(UTF-8)";
-print YAML::XS::Dump($mappings);
+print Encode::decode_utf8( YAML::XS::Dump($mappings) );

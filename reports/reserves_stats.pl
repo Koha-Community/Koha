@@ -218,7 +218,6 @@ sub calculate {
 	my @sqlorparams;
 	my @sqlor;
 	my @sqlwhere;
-    ($debug) and print STDERR YAML::XS::Dump($filters_hashref);
 	foreach my $filter (keys %$filters_hashref){
 		my $string;
 		my $stringfield=$filter;

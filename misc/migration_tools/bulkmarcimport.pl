@@ -16,6 +16,7 @@ use MARC::File::XML;
 use MARC::Record;
 use MARC::Batch;
 use MARC::Charset;
+use Encode;
 
 use Koha::Script;
 use C4::Context;
@@ -565,7 +566,7 @@ if ($logfile){
 }
 if ($yamlfile) {
     open my $yamlfileout, q{>}, "$yamlfile" or die "cannot open $yamlfile \n";
-    print $yamlfileout YAML::XS::Dump($yamlhash);
+    print $yamlfileout YAML::XS::Dump(Encode::decode_utf8($yamlhash));
 }
 exit 0;
 
@@ -633,7 +634,7 @@ sub get_heading_fields{
     if ($authtypes){
         $headingfields = YAML::XS::LoadFile($authtypes);
         $headingfields={C4::Context->preference('marcflavour')=>$headingfields};
-        $debug && warn YAML::XS::Dump($headingfields);
+        $debug && warn YAML::XS::Dump(Encode::decode_utf8($headingfields));
     }
     unless ($headingfields){
         $headingfields=$dbh->selectall_hashref("SELECT auth_tag_to_report, authtypecode from auth_types",'auth_tag_to_report',{Slice=>{}});
