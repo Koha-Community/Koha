@@ -39,8 +39,8 @@ Administration:
             - pref: noItemTypeImages
               default: 0
               choices:
-                  yes: "No"
-                  no: "Yes"
+                  1: "No"
+                  0: "Yes"
         -
             - "Default separator for columns in an exported CSV file: "
             - pref: CSVDelimiter
@@ -56,26 +56,26 @@ Administration:
             - "Allow staff and patrons to create and view saved lists of books: "
             - pref: virtualshelves
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
         -
             - "Default view when editing circulation rules: "
             - pref: DefaultToLoggedInLibraryCircRules
               choices:
-                  yes: "The logged-in library"
-                  no: "All libraries"
+                  1: "The logged-in library"
+                  0: "All libraries"
         -
             - "Default view when editing notices and slips: "
             - pref: DefaultToLoggedInLibraryNoticesSlips
               choices:
-                  yes: "The logged-in library"
-                  no: "All libraries"
+                  1: "The logged-in library"
+                  0: "All libraries"
         -
             - "Default view when editing overdue notice/status triggers: "
             - pref: DefaultToLoggedInLibraryOverdueTriggers
               choices:
-                  yes: "The logged-in library"
-                  no: "All libraries"
+                  1: "The logged-in library"
+                  0: "All libraries"
     Login options:
         -
             - "Inactivity timeout in seconds to automatically log out users: "
@@ -87,16 +87,16 @@ Administration:
             - pref: AutoLocation
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
             - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
         -
             - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
               default: 1
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
             - (Disable only when remote IP address changes frequently.)
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
@@ -113,38 +113,38 @@ Administration:
             - pref: IndependentBranches
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
             - "<p class='text-danger'><strong>Warning:</strong> Changing this system preference will radically alter the behavior of Koha. Changing preference on a production system is highly discouraged.</p>"
         -
             - "Prevent staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries: "
             - pref: IndependentBranchesPatronModifications
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
         -
             - "Prevent staff (but not superlibrarians) from transfering items to other libraries: "
             - pref: IndependentBranchesTransfers
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
     CAS authentication:
         -
             - "Use CAS for login authentication: "
             - pref: casAuthentication
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
         -
             - "Logout of CAS when logging out of Koha: "
             - pref: casLogout
               default: 0
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
         -
             - "URL of the CAS Authentication Server: "
             - pref: casServerUrl
@@ -162,8 +162,8 @@ Administration:
             - "Use Google OpenID Connect login: "
             - pref: GoogleOpenIDConnect
               choices:
-                yes: "Yes"
-                no: "No"
+                1: "Yes"
+                0: "No"
             - You will need to select OAuth2 when creating an app in the Google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
         -
             - "Google OAuth2 Client ID: "
@@ -178,8 +178,8 @@ Administration:
         -
             - pref: GoogleOpenIDConnectAutoRegister
               choices:
-                yes: Allow
-                no: "Don't allow"
+                1: Allow
+                0: "Don't allow"
             - patrons logging in with Google Open ID to automatically register.
         -
             - "Use this category code when automatically registering a Google Open ID patron: "
@@ -195,8 +195,8 @@ Administration:
             - pref: UsageStats
               default: 2
               choices:
-                  yes: "Yes"
-                  no: "No"
+                  1: "Yes"
+                  0: "No"
                   2: "No, let me think about it"
             - "."
             - "<br>Website where usage statistics are published: <a href=\"https://hea.koha-community.org\">Hea Koha community website</a>."
@@ -435,8 +435,8 @@ Administration:
         -
             - pref: UsageStatsLibrariesInfo
               choices:
-                  yes: "Share"
-                  no: "Don't share"
+                  1: "Share"
+                  0: "Don't share"
             - "libraries information (name, URL, country)."
             - <br><strong>NOTE:</strong> This value has no effect if the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=UsageStats">UsageStats</a> system preference is set to "No" (don't share).
         -

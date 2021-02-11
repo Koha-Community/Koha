@@ -9,8 +9,8 @@ Web services:
         -
             - pref: RESTBasicAuth
               choices:
-                  yes: Enable
-                  no: "Disable"
+                  1: Enable
+                  0: "Disable"
             - '<a href="https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA" target="_blank">Basic authentication</a> for the REST API.'
         -
             - "Set the default number of results returned by the REST API endpoints to"
@@ -20,27 +20,27 @@ Web services:
         -
             - pref: RESTOAuth2ClientCredentials
               choices:
-                  yes: Enable
-                  no: "Disable"
+                  1: Enable
+                  0: "Disable"
             - "the OAuth2 client credentials grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. [EXPERIMENTAL]"
         -
             - pref: RESTPublicAnonymousRequests
               choices:
-                yes: "Enable"
-                no: "Disable"
+                1: "Enable"
+                0: "Disable"
             - anonymous access to public routes (that don't require authenticated access)
         -
             - pref: RESTPublicAPI
               choices:
-                  yes: Enable
-                  no: "Disable"
+                  1: Enable
+                  0: "Disable"
             - "the /public namespace of the API."
     OAI-PMH:
         -
             - pref: OAI-PMH
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - "Koha's"
             - '<a href="http://www.openarchives.org/pmh/">OAI-PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)'
         -
@@ -62,14 +62,14 @@ Web services:
         -
             - pref: "OAI-PMH:AutoUpdateSets"
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - automatic update of OAI-PMH sets when a bibliographic or item record is created or updated.
         -
             - pref: "OAI-PMH:AutoUpdateSetsEmbedItemData"
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - embedding of item data when automatically updating OAI-PMH sets.
             - <br><strong>NOTE:</strong> This needs <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OAI-PMH:AutoUpdateSets">OAI-PMH:AutoUpdateSets</a> syspref to be enabled.
         -
@@ -78,14 +78,14 @@ Web services:
               choices:
                   persistent: will never be emptied or truncated (persistent)
                   transient: might be emptied or truncated at some point (transient)
-                  no: will never have any data in it (no)
+                  0: will never have any data in it (no)
             - "."
     ILS-DI:
         -
             - pref: ILS-DI
               choices:
-                yes: Enable
-                no: Disable
+                1: Enable
+                0: Disable
             - "ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
         -
             - Allow IP addresses
@@ -96,8 +96,8 @@ Web services:
         -
             - pref: Mana
               choices:
-                yes: Enable
-                no: Disable
+                1: Enable
+                0: Disable
                 2: No, let me think about
             - submissions to Mana KB. Mana centralizes information between other Koha installations to facilitate the creation of new subscriptions, vendors, reports, etc. You can search, share, import, and comment on the content of Mana. The information shared with Mana KB is shared under the <a href="https://creativecommons.org/choose/zero/">CC-0 license</a>
         -
@@ -120,7 +120,7 @@ Web services:
         -
             - pref: IdRef
               choices:
-                yes: Enable
-                no: Disable
+                1: Enable
+                0: Disable
             - the IdRef web service from the OPAC detail page. IdRef allows requests for authorities from the Sudoc database.
             - Please note that this feature is available only for UNIMARC.

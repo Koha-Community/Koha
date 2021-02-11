@@ -9,21 +9,21 @@ Cataloging:
         -
             - pref: advancedMARCeditor
               choices:
-                  yes: "Don't display"
-                  no: Display
+                  1: "Don't display"
+                  0: Display
             - descriptions of fields and subfields in the MARC editor.
         -
             - pref: EasyAnalyticalRecords
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - "easy ways to create analytical record relationships."
         -
             - pref: EnableAdvancedCatalogingEditor
               default: 0
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - the advanced cataloging editor.
             - "<br/> <strong>NOTE:</strong>"
             - Currently does not include support for UNIMARC or NORMARC fixed fields.
@@ -40,8 +40,8 @@ Cataloging:
             - When using the quick spine label printer,
             - pref: SpineLabelAutoPrint
               choices:
-                  yes: do
-                  no: "don't"
+                  1: do
+                  0: "don't"
             - automatically pop up a print dialog.
         -
             - "Include the following fields on a quick-printed spine label:"
@@ -51,8 +51,8 @@ Cataloging:
         -
             - pref: SpineLabelShowPrintOnBibDetails
               choices:
-                  yes: Display
-                  no:  "Don't display"
+                  1: Display
+                  0:  "Don't display"
             - buttons on the bibliographic details page to print item spine labels.
         -
     Record structure:
@@ -76,8 +76,8 @@ Cataloging:
             - Use the item type of the
             - pref: item-level_itypes
               choices:
-                  yes: specific item
-                  no: bibliographic record
+                  1: specific item
+                  0: bibliographic record
             - as the authoritative item type (for determining circulation and fines rules, for displaying an item type icon on either opac detail or results page, etc).
         -
             - Map the MARC subfields
@@ -102,8 +102,8 @@ Cataloging:
         -
             - pref: z3950NormalizeAuthor
               choices:
-                  yes: Copy
-                  no: "Don't copy"
+                  1: Copy
+                  0: "Don't copy"
             - authors from the UNIMARC
             - pref: z3950AuthorAuthFields
               class: multi
@@ -121,8 +121,8 @@ Cataloging:
             - When a new item is added,
             - pref: PrefillItem
               choices:
-                  yes: the new item is prefilled with last created item values.
-                  no: the new item is not prefilled with last created item values.
+                  1: the new item is prefilled with last created item values.
+                  0: the new item is not prefilled with last created item values.
         -
             - "Define a list of subfields to use when prefilling items (separated by space):"
             - pref: SubfieldsToUseWhenPrefill
@@ -171,8 +171,8 @@ Cataloging:
         -
             - pref: UseControlNumber
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - record control number ($w subfields) and control number (001) for linking of bibliographic records.
         -
             - Use
@@ -185,8 +185,8 @@ Cataloging:
         -
             - pref: hide_marc
               choices:
-                  yes: "Don't display"
-                  no: Display
+                  1: "Don't display"
+                  0: Display
             - MARC tag numbers, subfield codes and indicators in MARC views.
         -
             - pref: LabelMARCView
@@ -211,8 +211,8 @@ Cataloging:
         -
             - pref: OpacSuppression
               choices:
-                  yes: Hide
-                  no: "Don't hide"
+                  1: Hide
+                  0: "Don't hide"
             - bibliographic records marked as suppressed from OPAC search results.
             - <br />Restrict the suppression to IP addresses outside of the IP range
             - pref: OpacSuppressionByIPRange
@@ -221,8 +221,8 @@ Cataloging:
             - <br />Redirect the opac detail page for suppressed records to
             - pref: OpacSuppressionRedirect
               choices:
-                  yes: "an explanatory page ('This record is blocked')."
-                  no: "the 404 error page ('Not found')."
+                  1: "an explanatory page ('This record is blocked')."
+                  0: "the 404 error page ('Not found')."
             - "<br />Display the following message on the redirect page for suppressed bibliographic records:"
             - pref: OpacSuppressionMessage
               type: textarea
@@ -230,8 +230,8 @@ Cataloging:
         -
             - pref: SeparateHoldings
               choices:
-                  yes: Separate
-                  no: "Don't separate"
+                  1: Separate
+                  0: "Don't separate"
             - "items display into two tabs, where the first tab contains items whose"
             - pref: SeparateHoldingsBranch
               choices:
@@ -248,8 +248,8 @@ Cataloging:
         -
             - pref: AcquisitionDetails
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - acquisition details on the bibliographic record detail page.
         -
             - "Show the following fields for deleted records after a merge:"
@@ -265,8 +265,8 @@ Cataloging:
             - When matching on ISBN with the record import tool,
             - pref: AggressiveMatchOnISBN
               choices:
-                  yes: "do"
-                  no: "don't"
+                  1: "do"
+                  0: "don't"
             - attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records.
         -
             - Display the MARC field/subfields
@@ -276,8 +276,8 @@ Cataloging:
             - When matching on ISSN with the record import tool,
             - pref: AggressiveMatchOnISSN
               choices:
-                  yes: "do"
-                  no: "don't"
+                  1: "do"
+                  0: "don't"
             - attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records.
 
     Exporting:

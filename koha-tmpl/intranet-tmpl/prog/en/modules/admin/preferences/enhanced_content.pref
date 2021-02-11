@@ -6,8 +6,8 @@ Enhanced content:
             - pref: AdlibrisCoversEnabled
               default: 0
               choices:
-                  no: "Don't show"
-                  yes: "Show"
+                  0: "Don't show"
+                  1: "Show"
             - cover images in OPAC results and detail listing from Swedish retailer <a href="https://www.adlibris.com/se">Adlibris</a>.
         -
             - "Use base URL: "
@@ -22,15 +22,15 @@ Enhanced content:
             - pref: FRBRizeEditions
               default: 0
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - other editions of an item on the staff interface (if found by one of the services below).
         -
             - pref: OPACFRBRizeEditions
               default: 0
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - other editions of an item on the OPAC.
     Amazon:
         -
@@ -53,22 +53,22 @@ Enhanced content:
             - pref: AmazonCoverImages
               default: 1
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - cover images from Amazon on search results and item detail pages on the staff interface.
         -
             - pref: OPACAmazonCoverImages
               default: 1
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - cover images from Amazon on search results and item detail pages on the OPAC.
     Babelthèque:
         -
             - pref: Babeltheque
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - include information (such as reviews and citations) from Babelthèque in item detail pages on the OPAC.
         -
             - "Use this URL for the Babelthèque javascript file: "
@@ -84,8 +84,8 @@ Enhanced content:
         -
             - pref: BakerTaylorEnabled
               choices:
-                  yes: Add
-                  no: "Don't add"
+                  1: Add
+                  0: "Don't add"
             - Baker and Taylor links and cover images to the OPAC and staff interface. This requires that you have entered in a username and password (which can be seen in image links).
         -
             - 'Baker and Taylor "My Library Bookstore" links should be accessed at <code>https://'
@@ -104,8 +104,8 @@ Enhanced content:
         -
             - pref: NovelistSelectEnabled
               choices:
-                  yes: Add
-                  no: "Don't add"
+                  1: Add
+                  0: "Don't add"
             - Novelist Select content to the OPAC (requires that you have entered in a user profile and password, which can be seen in image links).
         -
             - Display Novelist Select content
@@ -132,8 +132,8 @@ Enhanced content:
         -
             - pref: NovelistSelectStaffEnabled
               choices:
-                  yes: Add
-                  no: "Don't add"
+                  1: Add
+                  0: "Don't add"
             - Novelist Select content to the staff interface (requires that you have entered in a user profile and password, which can be seen in image links).
         -
             - Display Novelist Select staff interface content
@@ -147,35 +147,35 @@ Enhanced content:
         -
             - pref: GoogleJackets
               choices:
-                  yes: Add
-                  no: "Don't add"
+                  1: Add
+                  0: "Don't add"
             - cover images from Google Books to search results and item detail pages on the OPAC.
     Open Library:
         -
             - pref: OpenLibraryCovers
               choices:
-                  yes: Add
-                  no: "Don't add"
+                  1: Add
+                  0: "Don't add"
             - cover images from Open Library to search results and item detail pages on the OPAC.
         -
             - pref: OpenLibrarySearch
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - search results from Open Library on the OPAC.
     Library Thing:
         # Awkward syntax below, due to quoting conflicts
         -
             - pref: ThingISBN
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - the ThingISBN service to show other editions of a title (when either <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FRBRizeEditions">FRBRizeEditions</a> or <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions">OPACFRBRizeEditions</a> is on). This is separate from Library Thing for Libraries.
         -
             - pref: LibraryThingForLibrariesEnabled
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - "reviews, similar items, and tags from Library Thing for Libraries on item detail pages on the OPAC. If you've enabled this, you need to "
             - <a href="https://www.librarything.com/forlibraries/">sign up</a>, then enter in your ID below.
         -
@@ -186,14 +186,14 @@ Enhanced content:
             - Show Library Thing for Libraries content
             - pref: LibraryThingForLibrariesTabbedView
               choices:
-                  yes: in tabs.
-                  no: in line with the bibliographic information.
+                  1: in tabs.
+                  0: in line with the bibliographic information.
     Syndetics:
         -
             - pref: SyndeticsEnabled
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - content from Syndetics. Note that this requires that you have signed up for the service and entered in your client code below.
         -
             - Use the client code
@@ -202,8 +202,8 @@ Enhanced content:
         -
             - pref: SyndeticsCoverImages
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - cover images from Syndetics on search results and item detail pages on the OPAC in a
             - pref: SyndeticsCoverImageSize
               choices:
@@ -213,63 +213,63 @@ Enhanced content:
         -
             - pref: SyndeticsAuthorNotes
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - notes about the author of a title from Syndetics on item detail pages on the OPAC.
         -
             - pref: SyndeticsAwards
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - information from Syndetics about the awards a title has won on item detail pages on the OPAC.
         -
             - pref: SyndeticsEditions
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - information about other editions of a title from Syndetics on item detail pages on the OPAC (when <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFRBRizeEditions">OPACFRBRizeEditions</a> is on).
         -
             - pref: SyndeticsExcerpt
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - excerpts from of a title from Syndetics on item detail pages on the OPAC.
         -
             - pref: SyndeticsReviews
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - reviews of a title from Syndetics on item detail pages on the OPAC.
         -
             - pref: SyndeticsSeries
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - "information on other books in a title's series from Syndetics on item detail pages on the OPAC."
         -
             - pref: SyndeticsSummary
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - a summary of a title from Syndetics on item detail pages on the OPAC.
         -
             - pref: SyndeticsTOC
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - the table of contents of a title from Syndetics on item detail pages on the OPAC.
     Tagging:
         -
             - pref: TagsEnabled
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons and staff to put tags on items.
         -
             - pref: TagsModeration
               choices:
-                  yes: Require
-                  no: "Don't require"
+                  1: Require
+                  0: "Don't require"
             - that tags submitted by patrons be reviewed by a staff member before being shown.
         -
             - Show
@@ -279,8 +279,8 @@ Enhanced content:
         -
             - pref: TagsInputOnList
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons to input tags on search results on the OPAC.
         -
             - Show
@@ -290,8 +290,8 @@ Enhanced content:
         -
             - pref: TagsInputOnDetail
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons to input tags on item detail pages on the OPAC.
         -
             - Allow tags in the dictionary of the ispell executable
@@ -302,31 +302,31 @@ Enhanced content:
         -
             - pref: LocalCoverImages
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - local cover images on staff interface search and details pages.
         -
             - pref: OPACLocalCoverImages
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - local cover images on OPAC search and details pages.
         -
             - pref: AllowMultipleCovers
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - multiple images to be attached to each bibliographic record and item.
         -
             - pref: CustomCoverImages
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - "custom remote URL images in the staff interface.<br/>"
             - pref: OPACCustomCoverImages
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - "custom remote URL images at the OPAC.<br/>"
             - "Using the following URL:"
             - pref: CustomCoverImagesURL
@@ -350,8 +350,8 @@ Enhanced content:
         -
             - pref: HTML5MediaYouTube
               choices:
-                  yes: "Embed"
-                  no: "Don't embed"
+                  1: "Embed"
+                  0: "Don't embed"
             - YouTube links as videos.
     OverDrive:
         -
@@ -375,8 +375,8 @@ Enhanced content:
         -
             - pref: OverDriveCirculation
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - users to access their OverDrive circulation history, and circulate items.<br />
             - Overdrive uses the patron's
             - pref: OverDriveUsername
@@ -387,8 +387,8 @@ Enhanced content:
             - A password is
             - pref: OverDrivePasswordRequired
               choices:
-                  yes: Required
-                  no: Not required
+                  1: Required
+                  0: Not required
             - for user access to OverDrive. <br />
             - If you enable access you must have a SIP connection registered with
             - OverDrive for patron authentication against Koha
@@ -408,14 +408,14 @@ Enhanced content:
         -
             - pref: OpacCoce
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - a Coce image cache service in the OPAC.
         -
             - pref: IntranetCoce
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - a Coce image cache service in the staff interface.
         -
             - Coce server URL

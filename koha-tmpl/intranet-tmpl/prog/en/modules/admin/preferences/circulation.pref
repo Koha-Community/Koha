@@ -3,27 +3,27 @@ Circulation:
         -
             - pref: CircSidebar
               choices:
-                  yes: Activate
-                  no: Deactivate
+                  1: Activate
+                  0: Deactivate
             - the navigation sidebar on all circulation pages.
         -
             - pref: CircConfirmItemParts
               choices:
-                  yes: "Require"
-                  no: "Don't require"
+                  1: "Require"
+                  0: "Don't require"
             - staff to confirm that all parts of an item are present at checkin/checkout.
         -
             - pref: AutoSwitchPatron
               choices:
-                  yes: "Enable"
-                  no: "Don't enable"
+                  1: "Enable"
+                  0: "Don't enable"
             - the automatic redirection to another patron when a patron barcode is scanned instead of a book.
             - This should not be enabled if you have overlapping patron and book barcodes.
         -
             - pref: PatronAutoComplete
               choices:
-                  yes: Try
-                  no: "Don't try"
+                  1: Try
+                  0: "Don't try"
             - to guess the patron being entered while typing a patron search for circulation or patron search.
             - Only returns the first 10 results at a time.
         -
@@ -39,8 +39,8 @@ Circulation:
         -
             - pref: itemBarcodeFallbackSearch
               choices:
-                  yes: "Enable"
-                  no: "Don't enable"
+                  1: "Enable"
+                  0: "Don't enable"
             - the automatic use of a keyword catalog search if the phrase entered as a barcode on the checkout page does not turn up any results during an item barcode search.
         -
             - Sort previous checkouts on the circulation page from
@@ -60,14 +60,14 @@ Circulation:
         -
             - pref: SpecifyDueDate
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to specify a due date for a checkout.
         -
             - pref: SpecifyReturnDate
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to specify a return date for a check in.
         -
             - Set the default start date for the Holds to pull list to
@@ -77,8 +77,8 @@ Circulation:
         -
             - pref: AllowAllMessageDeletion
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to delete messages added from other libraries.
         -
             - Show the
@@ -88,32 +88,32 @@ Circulation:
         -
             - pref: FineNotifyAtCheckin
               choices:
-                  yes: Notify
-                  no: "Don't notify"
+                  1: Notify
+                  0: "Don't notify"
             - librarians of overdue fines on the items they are checking in.
         -
             - pref: WaitingNotifyAtCheckin
               choices:
-                  yes: Notify
-                  no: "Don't notify"
+                  1: Notify
+                  0: "Don't notify"
             - librarians of waiting holds for the patron whose items they are checking in.
         -
             - pref: FilterBeforeOverdueReport
               choices:
-                  yes: Require
-                  no: "Don't require"
+                  1: Require
+                  0: "Don't require"
             - staff to choose which checkouts to show before running the overdues report.
         -
             - pref: DisplayClearScreenButton
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - a button to clear the current patron from the screen on the circulation screen.
         -
             - pref: RecordLocalUseOnReturn
               choices:
-                  yes: Record
-                  no: "Don't record"
+                  1: Record
+                  0: "Don't record"
             - local use when an unissued item is checked in.
         -
             - When an empty barcode field is submitted in circulation
@@ -131,14 +131,14 @@ Circulation:
         -
             - pref: UpdateTotalIssuesOnCirc
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - update a bibliographic record's total checkouts count whenever an item is checked out (WARNING! This increases server load significantly; if performance is a concern, use the update_totalissues.pl cron job to update the total checkouts count).
         -
             - pref: ExportCircHistory
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - the export patron checkout history options.
         -
             - "The following fields should be excluded from the patron checkout history CSV or MARC (ISO 2709) export:"
@@ -147,108 +147,108 @@ Circulation:
         -
             - pref: AllowOfflineCirculation
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - "offline circulation on regular circulation computers. (<strong>NOTE:</strong> This system preference does not affect the Firefox add-on or the desktop application)."
         -
             - pref: ShowAllCheckins
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - all items in the "Checked-in items" list, even items that were not checked out.
         -
             - pref: AllowCheckoutNotes
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons to submit notes about checked out items.
         -
             - pref: UseCirculationDesks
               choices:
-                  yes: "Use"
-                  no: "Don't use"
+                  1: "Use"
+                  0: "Don't use"
             - circulation desks with circulation.
 
     Checkout policy:
         -
             - pref: OnSiteCheckoutAutoCheck
               choices:
-                  yes: Enable
-                  no: Don't enable
+                  1: Enable
+                  0: Don't enable
             - on-site checkout by default if last checkout was an on-site one.
         -
             - pref: AutoReturnCheckedOutItems
               choices:
-                  yes: Don't
-                  no: Do
+                  1: Don't
+                  0: Do
             - require librarians to manually confirm a checkout where the item is already checked out to another patron.
         -
             - pref: AllowTooManyOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to override and check out items when the patron has reached the maximum number of allowed checkouts.
         -
             - pref: AutoRemoveOverduesRestrictions
               choices:
-                  yes: "Do"
-                  no: "Don't"
+                  1: "Do"
+                  0: "Don't"
             - allow OVERDUES restrictions triggered by sent notices to be cleared automatically when all overdue items are returned by a patron.
         -
             - pref: AllowNotForLoanOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to override and check out items that are marked as not for loan.
         -
             - pref: AllowRenewalLimitOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature for the "No renewal before" setting in the circulation policy or has been scheduled for automatic renewal.
         -
             - pref: AllowRenewalOnHoldOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to renew items that are on hold by manually specifying a due date.
         -
             - pref: AllowItemsOnHoldCheckoutSIP
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - checkouts of items reserved to someone else via SIP checkout messages.
             - If allowed do not generate RESERVE_WAITING and RESERVED warning.
             - This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as "unavailable" if this set to "Don't allow".
         -
             - pref: AllowItemsOnHoldCheckoutSCO
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
         -
             - pref: AllFinesNeedOverride
               choices:
-                  yes: Require
-                  no: "Don't require"
+                  1: Require
+                  0: "Don't require"
             - staff to manually override all fines, even fines less than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: AllowFineOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to manually override and check out items to patrons who have more in fines than set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: AutomaticItemReturn
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - automatically transfer items to their home library when they are checked in.
         -
             - pref: UseBranchTransferLimits
               choices:
-                  yes: Enforce
-                  no: "Don't enforce"
+                  1: Enforce
+                  0: "Don't enforce"
             - library transfer limits based on
             - pref: BranchTransferLimitsType
               choices:
@@ -258,8 +258,8 @@ Circulation:
         -
             - pref: UseTransportCostMatrix
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - the transport cost matrix for calculating optimal holds filling between libraries.
         -
             - Use the checkout and fines rules of
@@ -316,14 +316,14 @@ Circulation:
         -
             - pref: RenewalSendNotice
               choices:
-                  yes: Send
-                  no: "Don't send"
+                  1: Send
+                  0: "Don't send"
             - "a renewal notice according to patron's messaging preferences for 'Item checkout'."
         -
             - pref: UnseenRenewals
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - renewals to be recorded as "unseen" by the library, and count against the patrons unseen renewals limit.
         -
             - Prevent patrons from making holds on the OPAC if they owe more than
@@ -338,8 +338,8 @@ Circulation:
         -
             - pref: IssuingInProcess
               choices:
-                  yes: "Don't prevent"
-                  no: "Prevent"
+                  1: "Don't prevent"
+                  0: "Prevent"
             - patrons from checking out an item whose rental charge would take them over the limit.
         -
             - "Restrict patrons with the following target audience values from checking out inappropriate materials:"
@@ -348,8 +348,8 @@ Circulation:
         -
             - pref: AgeRestrictionOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to check out an item with age restriction.
         -
             - Prevent patrons from checking out items if they have more than
@@ -369,26 +369,26 @@ Circulation:
         -
             - pref: RentalsInNoissuesCharge
               choices:
-                  yes: Include
-                  no: "Don't include"
+                  1: Include
+                  0: "Don't include"
             - rental charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: ManInvInNoissuesCharge
               choices:
-                  yes: Include
-                  no: "Don't include"
+                  1: Include
+                  0: "Don't include"
             - custom debit type charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: HoldsInNoissuesCharge
               choices:
-                  yes: Include
-                  no: "Don't include"
+                  1: Include
+                  0: "Don't include"
             - hold charges when summing up charges for limit set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge">noissuescharge</a> system preference.
         -
             - pref: ReturnBeforeExpiry
               choices:
-                  yes: Require
-                  no: "Don't require"
+                  1: Require
+                  0: "Don't require"
             - "patrons to return items before their accounts expire (by restricting due dates to before the patron's expiration date)."
         -
             - "Send all notices as a BCC to this email address:"
@@ -396,8 +396,8 @@ Circulation:
         -
             - pref: OverdueNoticeCalendar
               choices:
-                  yes: "Use calendar"
-                  no: "Ignore calendar"
+                  1: "Use calendar"
+                  0: "Ignore calendar"
             - "when working out the period for overdue notices."
         -
             - Include up to
@@ -415,8 +415,8 @@ Circulation:
             - "When checking out an item with rental fees, "
             - pref: RentalFeesCheckoutConfirmation
               choices:
-                  yes: ask
-                  no: "don't ask"
+                  1: ask
+                  0: "don't ask"
             - "for confirmation."
         -
             - By default, set the LOST value of an item to
@@ -455,8 +455,8 @@ Circulation:
             - "When checking out an item, "
             - pref: RecordStaffUserOnCheckout
               choices:
-                  yes: "record"
-                  no: "don't record"
+                  1: "record"
+                  0: "don't record"
             - "the user who checked out the item."
         -
             - "Mark items as returned when flagged as lost "
@@ -473,34 +473,34 @@ Circulation:
         -
             - pref: AllowMultipleIssuesOnABiblio
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - "patrons to check out multiple items from the same record. (<strong>NOTE:</strong> This will only affect records without a subscription attached.)"
         -
             - pref: OnSiteCheckouts
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - the on-site checkouts feature.
         -
             - pref: OnSiteCheckoutsForce
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - the on-site checkout for all cases (even if a patron is debarred, etc.).
         -
             - pref: ConsiderOnSiteCheckoutsAsNormalCheckouts
               choices:
-                  yes: Consider
-                  no: "Don't consider"
+                  1: Consider
+                  0: "Don't consider"
             - on-site checkouts as normal checkouts.
             - If enabled, on-site checkouts will count toward the checkout limit for regular checkouts. The on-site limit will still apply for on-site checkouts.
             - If disabled, both values will be checked separately.
         -
             - pref: SwitchOnSiteCheckouts
               choices:
-                  yes: Switch
-                  no: "Don't switch"
+                  1: Switch
+                  0: "Don't switch"
             - on-site checkouts to normal checkouts when checked out.
         -
             - When a patron's checked out item is overdue,
@@ -514,29 +514,29 @@ Circulation:
             - If a patron is restricted,
             - pref: RestrictionBlockRenewing
               choices:
-                  yes: block
-                  no: allow
+                  1: block
+                  0: allow
             - renewing of items.
         -
             - If a patron owes more than the value of <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACFineNoRenewals">OPACFineNoRenewals</a>,
             - pref: OPACFineNoRenewalsBlockAutoRenew
               choices:
-                  yes: block
-                  no: allow
+                  1: block
+                  0: allow
             - their auto-renewals.
         -
             - If a patron pays off all fines on an overdue item that is accruing fines,
             - pref: RenewAccruingItemWhenPaid
               choices:
-                  yes: renew
-                  no: "don't renew"
+                  1: renew
+                  0: "don't renew"
             - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
         -
             - If a patron pays off all fines on an overdue item that is accruing fines in the OPAC via a payment plugin,
             - pref: RenewAccruingItemInOpac
               choices:
-                  yes: renew
-                  no: "don't renew"
+                  1: renew
+                  0: "don't renew"
             - the item automatically. If the system preference <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RenewalPeriodBase">RenewalPeriodBase</a> is set to "due date", renewed items may still be overdue.
         -
             - pref: ItemsDeniedRenewal
@@ -554,8 +554,8 @@ Circulation:
         -
             - pref: TrapHoldsOnOrder
               choices:
-                  yes: Trap
-                  no: "Don't trap"
+                  1: Trap
+                  0: "Don't trap"
             - items that are not for loan but holdable ( notforloan < 0 ) to fill holds.
         -
             - Never trap items with 'not for loan' values of
@@ -566,46 +566,46 @@ Circulation:
         -
             - pref: HoldsAutoFill
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - automatically fill holds instead of asking the librarian.
         -
             - pref: HoldsNeedProcessingSIP
               choices:
-                  yes: "Don't fulfill"
-                  no: Fulfill
+                  1: "Don't fulfill"
+                  0: Fulfill
             - holds automatically if matching item is returned via SIP protocol.
         -
             - pref: HoldsAutoFillPrintSlip
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - automatically display the hold slip dialog for auto-filled holds.
         -
             - pref: BlockReturnOfWithdrawnItems
               choices:
-                  yes: Block
-                  no: "Don't block"
+                  1: Block
+                  0: "Don't block"
             - returning of items that have been withdrawn.
         -
             - pref: BlockReturnOfLostItems
               choices:
-                  yes: Block
-                  no: "Don't block"
+                  1: Block
+                  0: "Don't block"
             - returning of items that have been lost.
         -
             - pref: CalculateFinesOnReturn
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - calculate and update overdue charges when an item is returned.
             - "<br /><strong>NOTE:</strong> If you are doing hourly loans then you should have this on."
             - '<br /><strong>NOTE:</strong> This system preference requires <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=FinesMode">FinesMode</a> to be set to "Calculate and charge."'
         -
             - pref: CalculateFinesOnBackdate
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - calculate and update overdue charges when an item is returned with a backdated return date.
         -
             - pref: UpdateItemLocationOnCheckin
@@ -635,27 +635,27 @@ Circulation:
         -
             - pref: CumulativeRestrictionPeriods
               choices:
-                  yes: Cumulate
-                  no: "Don't cumulate"
+                  1: Cumulate
+                  0: "Don't cumulate"
             - the restriction periods.
         -
             - pref: HidePersonalPatronDetailOnCirculation
               choices:
-                  yes: "Hide"
-                  no: "Don't hide"
+                  1: "Hide"
+                  0: "Don't hide"
             - "a patron's phone number, email address, street address and city on the circulation page."
         -
             - pref: TransfersBlockCirc
               choices:
-                  yes: "Block"
-                  no: "Don't block"
+                  1: "Block"
+                  0: "Don't block"
             - staff from continuing to checkin items when a transfer is triggered.
         -
             - pref: StoreLastBorrower
               default: 0
               choices:
-                  yes: Store
-                  no: "Don't store"
+                  1: Store
+                  0: "Don't store"
             - 'the last patron to return an item. This setting is independent of the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory">opacreadinghistory</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preferences.'
     Holds policy:
         -
@@ -677,38 +677,38 @@ Circulation:
         -
             - pref: AllowHoldItemTypeSelection
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - hold fulfillment to be limited by item type.
         -
             - pref: AllowRenewalIfOtherItemsAvailable
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - a patron to renew an item with unfilled holds if other available items can fill that hold.
         -
             - pref: AllowHoldPolicyOverride
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - staff to override hold policies when placing holds.
         -
             - pref: AllowHoldsOnDamagedItems
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - hold requests to be placed on and filled by damaged items.
         -
             - pref: AllowHoldDateInFuture
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - hold requests to be placed that do not enter the waiting list until a certain future date.
         -
             - pref: OPACAllowHoldDateInFuture
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons to place holds that don't enter the waiting list until a certain future date. (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AllowHoldDateInFuture">AllowHoldDateInFuture</a> must also be enabled).
         -
             - Confirm future hold requests (starting no later than
@@ -730,8 +730,8 @@ Circulation:
         -
             - pref: ExpireReservesMaxPickUpDelay
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - 'holds to expire automatically if they have not been picked by within the time period specified in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesMaxPickUpDelay">ReservesMaxPickUpDelay</a> system preference.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it.'
         -
             - If using <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their waiting hold to expire a fee of
@@ -746,31 +746,31 @@ Circulation:
             - when they are
             - pref: HoldsQueueSkipClosed
               choices:
-                  yes: open
-                  no: open or closed
+                  1: open
+                  0: open or closed
             - pref: RandomizeHoldsQueueWeight
               choices:
-                  yes: in random order.
-                  no: in that order.
+                  1: in random order.
+                  0: in that order.
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
             -
         -
             - pref: canreservefromotherbranches
               choices:
-                  yes: Allow
-                  no: "Don't allow (with independentbranches)"
+                  1: Allow
+                  0: "Don't allow (with independentbranches)"
             - a user from one library to place a hold on an item from another library
         -
             - pref: OPACAllowUserToChooseBranch
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - a user to choose the library to pick up a hold from.
         -
             - pref: ReservesNeedReturns
               choices:
-                  yes: "Don't automatically"
-                  no: Automatically
+                  1: "Don't automatically"
+                  0: Automatically
             - mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in.
         -
             - Patrons can only have
@@ -780,57 +780,57 @@ Circulation:
         -
             - pref: emailLibrarianWhenHoldIsPlaced
               choices:
-                  yes: Enable
-                  no:  "Don't enable"
+                  1: Enable
+                  0:  "Don't enable"
             - "sending an email to the Koha administrator email address whenever a hold request is placed."
         -
             - pref: DisplayMultiPlaceHold
               choices:
-                  yes: Enable
-                  no:  "Don't enable"
+                  1: Enable
+                  0:  "Don't enable"
             - "the ability to place holds on multiple bibliographic records from the search results"
         -
             - pref: TransferWhenCancelAllWaitingHolds
               choices:
-                  yes: Transfer
-                  no: "Don't transfer"
+                  1: Transfer
+                  0: "Don't transfer"
             - items when cancelling all waiting holds.
         -
             - pref: AutoResumeSuspendedHolds
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - "suspended holds to be automatically resumed by a set date."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: SuspendHoldsIntranet
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - holds to be suspended from the staff interface.
         -
             - pref: SuspendHoldsOpac
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - holds to be suspended from the OPAC.
         -
             - pref: ExpireReservesOnHolidays
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - expired holds to be canceled on days the library is closed.
         -
             - pref: ExcludeHolidaysFromMaxPickUpDelay
               choices:
-                  yes: Use the calendar
-                  no: Ignore the calendar
+                  1: Use the calendar
+                  0: Ignore the calendar
             - when calculating the period for a hold's max pickup delay.
         -
             - pref: decreaseLoanHighHolds
               choices:
-                  yes: Enable
-                  no:  "Don't enable"
+                  1: Enable
+                  0:  "Don't enable"
             - the reduction of loan period to
             - pref: decreaseLoanHighHoldsDuration
               class: integer
@@ -853,14 +853,14 @@ Circulation:
         -
             - pref: AllowHoldsOnPatronsPossessions
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - a patron to place a hold on a record where the patron already has one or more items attached to that record checked out.
         -
             - pref: LocalHoldsPriority
               choices:
-                  yes: Give
-                  no: "Don't give"
+                  1: Give
+                  0: "Don't give"
             - priority for filling holds to patrons whose
             - pref: LocalHoldsPriorityPatronControl
               choices:
@@ -874,8 +874,8 @@ Circulation:
         -
             - pref: OPACHoldsIfAvailableAtPickup
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - to pickup holds at libraries where the item is available.
         -
             - 'Patron categories not affected by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACHoldsIfAvailableAtPickup">OPACHoldsIfAvailableAtPickup</a>:'
@@ -899,8 +899,8 @@ Circulation:
             - pref: ILLModule
               default: 0
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - the interlibrary loans module (master switch).
         -
             - "Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
@@ -916,22 +916,22 @@ Circulation:
             - pref: ILLModuleUnmediated
               default: 0
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - unmediated interlibrary loan requests. If enabled and the ILL backend supports it, the newly created requests are immediately requested by backend.
         -
             - pref: CirculateILL
               default: 0
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - the circulation of ILL requested items.
         -
             - pref: ILLCheckAvailability
               default: 0
               choices:
-                  yes: Check
-                  no: "Don't check"
+                  1: Check
+                  0: "Don't check"
             - external sources for availability during the request process.
         -
             - "ILL statuses that are considered finished and should not be displayed in the ILL module: "
@@ -979,14 +979,14 @@ Circulation:
         -
             - pref: FinesIncludeGracePeriod
               choices:
-                  yes: Include
-                  no: "Don't include"
+                  1: Include
+                  0: "Don't include"
             - the grace period when calculating the fine for an overdue item.
         -
             - pref: WhenLostForgiveFine
               choices:
-                  yes: Forgive
-                  no: "Don't forgive"
+                  1: Forgive
+                  0: "Don't forgive"
             - the fines on an item when it is marked as lost.
         -
             - "Don't refund lost fees if a lost item is checked in more than"
@@ -996,8 +996,8 @@ Circulation:
         -
             - pref: WhenLostChargeReplacementFee
               choices:
-                  yes: Charge
-                  no: "Don't charge"
+                  1: Charge
+                  0: "Don't charge"
             - the replacement price when a patron loses an item.
         -
             - Charge a hold fee
@@ -1009,8 +1009,8 @@ Circulation:
         -
             - pref: useDefaultReplacementCost
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - the default replacement cost defined for the item type.
         -
             - "Text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined for the item type) is applied:"
@@ -1027,8 +1027,8 @@ Circulation:
         -
             - pref: SelfCheckInModule
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - "the standalone self check-in module (available at: /cgi-bin/koha/sci/sci-main.pl)."
         -
             - "Reset the current self check-in screen after"
@@ -1069,21 +1069,21 @@ Circulation:
         -
             - pref: ShowPatronImageInWebBasedSelfCheck
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - "the patron's picture (if one has been added) when they use the web-based self checkout."
         -
             - pref: WebBasedSelfCheck
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - "the web-based self checkout system (available at: /cgi-bin/koha/sco/sco-main.pl)."
         -
             - Have patrons log into the web-based self checkout system with their
             - pref: SelfCheckoutByLogin
               choices:
-                  yes: username and password
-                  no: cardnumber
+                  1: username and password
+                  0: cardnumber
             - "."
         -
             - "Time out the current patron's web-based self checkout system login after"
@@ -1093,8 +1093,8 @@ Circulation:
         -
             - pref: SCOAllowCheckin
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - patrons to return items through web-based self checkout system. 
         -
             - "Include the following HTML in the Help page of the web-based self checkout system:"
@@ -1105,8 +1105,8 @@ Circulation:
         -
             - pref: AutoSelfCheckAllowed
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - "the web-based self checkout system to automatically log in with this staff login"
             - pref: AutoSelfCheckID
             - and this password
@@ -1117,8 +1117,8 @@ Circulation:
         -
             - pref: SelfCheckReceiptPrompt
               choices:
-                  yes: Show
-                  no: "Don't show"
+                  1: Show
+                  0: "Don't show"
             - "the print receipt popup dialog when self checkout is finished."
         -
             - "Allow access to the self check from the following IP addresses:"
@@ -1129,15 +1129,15 @@ Circulation:
         -
             - pref: UseCourseReserves
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - "course reserves."
     Batch checkout:
         -
             - pref: BatchCheckouts
               choices:
-                  yes: Allow
-                  no: "Don't allow"
+                  1: Allow
+                  0: "Don't allow"
             - "batch checkouts."
         -
             - "Patron categories allowed to checkout in a batch:"
@@ -1147,22 +1147,22 @@ Circulation:
         -
             - pref: HouseboundModule
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - "the housebound module."
     Stock rotation module:
         -
             - pref: StockRotation
               choices:
-                  yes: Enable
-                  no: Disable
+                  1: Enable
+                  0: Disable
             - "the stock rotation module."
     Article requests:
         -
             - pref: ArticleRequests
               choices:
-                  yes: Enable
-                  no: "Don't enable"
+                  1: Enable
+                  0: "Don't enable"
             - patrons to place article requests.
         -
             - pref: ArticleRequestsLinkControl

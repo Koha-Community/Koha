@@ -4,8 +4,8 @@ Authorities:
             - pref: AuthDisplayHierarchy
               default: no
               choices:
-                  yes: Display
-                  no: "Don't display"
+                  1: Display
+                  0: "Don't display"
             - broader term/narrower term hierarchies when viewing authorities.
         -
             - Use the following text to edit how authority records control indicators of attached bibliographic fields (and possibly subfield $2).<br>
@@ -19,16 +19,16 @@ Authorities:
             - pref: BiblioAddsAuthorities
               default: no
               choices:
-                  yes: allow
-                  no: "don't allow"
+                  1: allow
+                  0: "don't allow"
             - them to automatically create new authority records if needed, rather than having to reference existing authorities.
         -
             - When editing records,
             - pref: AutoCreateAuthorities
               default: yes
               choices:
-                  yes: generate
-                  no: "don't generate"
+                  1: generate
+                  0: "don't generate"
             - authority records that are missing (<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BiblioAddsAuthorities">BiblioAddsAuthorities</a> must be set to "allow" for this to have any effect).
         -
             - When modifying an authority record, do not update attached bibliographic records if the number exceeds
@@ -46,8 +46,8 @@ Authorities:
             - pref: UseAuthoritiesForTracings
               default: yes
               choices:
-                  yes: Use
-                  no: "Don't use"
+                  1: Use
+                  0: "Don't use"
             - authority record numbers instead of text strings for searches from subject tracings.
         -
             - "Use the following text for the contents of UNIMARC authority field 100 position 08-35 (fixed length data elements). Do NOT include the date (position 00-07):"
@@ -83,20 +83,20 @@ Authorities:
             - pref: LinkerRelink
               default: yes
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - relink headings that have previously been linked to authority records.
         -
             - pref: LinkerKeepStale
               default: no
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - keep existing links to authority records for headings where the linker is unable to find a match.
         -
             - pref: CatalogModuleRelink
               default: no
               choices:
-                  yes: Do
-                  no: "Don't"
+                  1: Do
+                  0: "Don't"
             - automatically relink headings that have previously been linked when saving records in the cataloging module.

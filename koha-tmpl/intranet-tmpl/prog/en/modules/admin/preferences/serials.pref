@@ -10,20 +10,20 @@ Serials:
     -
         - pref: RenewSerialAddsSuggestion
           choices:
-              yes: Add
-              no: "Don't add"
+              1: Add
+              0: "Don't add"
         - a suggestion for a bibliographic record when its attached serial is renewed.
     -
         - pref: RoutingSerials
           choices:
-              yes: Use
-              no: "Don't use"
+              1: Use
+              0: "Don't use"
         - the routing list feature in the serials module.
     -
         - pref: RoutingListAddReserves
           choices:
-              yes: Place
-              no: "Don't place"
+              1: Place
+              0: "Don't place"
         - received serials on hold if they are on a routing list.
     -
         - "Include the following note on all routing lists:"
@@ -53,12 +53,12 @@ Serials:
     -
         - pref: makePreviousSerialAvailable
           choices:
-            yes: Make
-            no: Don't make
+            1: Make
+            0: Don't make
         - previous serial automatically available when receiving a new serial issue. The previous issue can also be set to another item type when receiving a new one. Please note that the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=item-level_itypes">item-level_itypes</a> system preference must be set to specific item.
     -
         - pref: PreserveSerialNotes
           choices:
-            yes: Do
-            no: Don't
+            1: Do
+            0: Don't
         - prefill the notes from the last 'Arrived' serial when generating the next 'Expected' issue.
