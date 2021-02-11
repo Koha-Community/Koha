@@ -379,7 +379,7 @@ foreach my $item (@items) {
     if ( $analyze ) {
         # count if item is used in analytical bibliorecords
         # The 'countanalytics' flag is only used in the templates if analyze is set
-        my $countanalytics = C4::Context->preference('EasyAnalyticalRecords') ? GetAnalyticsCount($item->{itemnumber}) : 0;
+        my $countanalytics = GetAnalyticsCount( $item->{itemnumber} );
         if ($countanalytics > 0){
             $analytics_flag=1;
             $item->{countanalytics} = $countanalytics;
