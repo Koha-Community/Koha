@@ -1,12 +1,9 @@
 use Modern::Perl;
 use Test::More;
 
-use YAML::Syck;
+use YAML::XS;
 use Template;
 use utf8;
-
-$YAML::Syck::ImplicitTyping = 1;
-$YAML::Syck::ImplicitUnicode = 1;
 
 my $template = Template->new( ENCODING => 'UTF-8' );
 
@@ -14,9 +11,7 @@ my $vars;
 my $output;
 $template->process( 't/db_dependent/data/syspref.pref', $vars, \$output );
 
-use Data::Printer colored => 1; warn p $output;
-
-my $yaml = YAML::Syck::Load( $output );
+my $yaml = YAML::XS::Load( $output );
 my $syspref_1 = $yaml->{Test}->{Testing}->[0];
 my $syspref_2 = $yaml->{Test}->{Testing}->[1];
 my $syspref_3 = $yaml->{Test}->{Testing}->[2];
