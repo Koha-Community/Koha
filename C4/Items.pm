@@ -1274,6 +1274,10 @@ counts Usage of itemnumber in Analytical bibliorecords.
 sub GetAnalyticsCount {
     my ($itemnumber) = @_;
 
+    if ( !C4::Context->preference('EasyAnalyticalRecords') ) {
+        return 0;
+    }
+
     ### ZOOM search here
     my $query;
     $query= "hi=".$itemnumber;
