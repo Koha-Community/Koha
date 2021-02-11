@@ -182,7 +182,7 @@ sub barcodedecode {
 	} elsif ($filter eq 'cuecat') {
 		chomp($barcode);
 	    my @fields = split( /\./, $barcode );
-	    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
+	    my @results = map( C4::Circulation::_decode($_), @fields[ 1 .. $#fields ] );
 	    ($#results == 2) and return $results[2];
 	} elsif ($filter eq 'T-prefix') {
 		if ($barcode =~ /^[Tt](\d)/) {
@@ -213,9 +213,9 @@ sub barcodedecode {
     return $barcode;    # return barcode, modified or not
 }
 
-=head2 decode
+=head2 _decode
 
-  $str = &decode($chunk);
+  $str = &_decode($chunk);
 
 Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
@@ -225,7 +225,7 @@ or Javascript based decoding on the client side.
 
 =cut
 
-sub decode {
+sub _decode {
     my ($encoded) = @_;
     my $seq =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-';
