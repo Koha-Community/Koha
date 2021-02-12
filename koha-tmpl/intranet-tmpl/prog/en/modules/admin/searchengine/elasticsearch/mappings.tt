@@ -56,16 +56,7 @@ a.add, a.delete {
     [% END %]
 
     <h1>Search engine configuration (Elasticsearch)</h1>
-    <div class="dialog message">
-        Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
 
-        <p>Weight: define weight as a positive number. Higher numbers indicate increased relevancy.
-        <strong>Note that fields weighting works only for simple search.</strong></p>
-        <ol>
-          <li>only search fields mapped with biblios can be weighted</li>
-          <li>search will boost/increase weighted field(s) relevancy</li>
-        </ol>
-    </div>
     [% IF errors %]
         <div class="dialog alert">
         Changes have not been applied. Please check the following values:
@@ -90,12 +81,25 @@ a.add, a.delete {
                 <input type="hidden" name="op" value="reset_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
             </form>
-            <br>
+
             <form method="post">
                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not reset mappings</button>
             </form>
         </div>
     [% END %]
+
+    <div class="note">
+        <i class="fa fa-exclamation"></i>
+        <strong>Warning:</strong> Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
+
+        <p><strong>Weight:</strong> define weight as a positive number. Higher numbers indicate increased relevancy.
+        <strong>Note that fields weighting works only for simple search.</strong></p>
+        <ol>
+          <li>Only search fields mapped with biblios can be weighted</li>
+          <li>Search will boost/increase weighted field(s) relevancy</li>
+        </ol>
+    </div>
+
     <form method="post">
         <div id="tabs" class="toptabs" style="clear:both">
             <ul>
@@ -446,7 +450,7 @@ a.add, a.delete {
         </div>
         <p>
             <button class="btn btn-default" type="submit" name="op" value="edit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button>
-            <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</button>
+            <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset mappings</button>
         </p>
     </form>
 
