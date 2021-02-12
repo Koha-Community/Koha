@@ -370,28 +370,21 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
 
 =cut
 
-our $libraries = {};
 sub _checkHoldPolicy {
     my ($item, $request) = @_;
 
     return 0 unless $item->{holdallowed};
     return 0 if $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch};
 
-    $libraries->{$item->{homebranch}} ||= Koha::Libraries->find($item->{homebranch});
-    my $library = $libraries->{$item->{homebranch}};
-
-    return 0 if $item->{'holdallowed'} == 3 && !$library->validate_hold_sibling({branchcode => $request->{borrowerbranch}});
+    return 0 if $item->{'holdallowed'} == 3 && !Koha::Libraries->find($item->{homebranch})->validate_hold_sibling({branchcode => $request->{borrowerbranch}});
 
     my $hold_fulfillment_policy = $item->{hold_fulfillment_policy};
 
-    return 0 if $hold_fulfillment_policy eq 'holdgroup' && !$library->validate_hold_sibling({branchcode => $request->{branchcode}});
+    return 0 if $hold_fulfillment_policy eq 'holdgroup' && !Koha::Libraries->find($item->{homebranch})->validate_hold_sibling({branchcode => $request->{branchcode}});
     return 0 if $hold_fulfillment_policy eq 'homebranch' && $request->{branchcode} ne $item->{$hold_fulfillment_policy};
     return 0 if $hold_fulfillment_policy eq 'holdingbranch' && $request->{branchcode} ne $item->{$hold_fulfillment_policy};
 
-    $libraries->{$request->{borrowerbranch}} ||= Koha::Libraries->find($request->{borrowerbranch});
-    my $patronLibrary = $libraries->{$request->{borrowerbranch}};
-
-    return 0 if $hold_fulfillment_policy eq 'patrongroup' && !$patronLibrary->validate_hold_sibling({branchcode => $request->{branchcode}});
+    return 0 if $hold_fulfillment_policy eq 'patrongroup' && !Koha::Libraries->find($request->{borrowerbranch})->validate_hold_sibling({branchcode => $request->{branchcode}});
 
     return 1;
 
