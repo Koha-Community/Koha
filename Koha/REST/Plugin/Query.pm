@@ -92,7 +92,7 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
 
             if ( defined $args->{params}->{_order_by} ) {
                 my $order_by = $args->{params}->{_order_by};
-                $order_by = [ split(/,/, $order_by) ] if ( index(',',$order_by) == -1);
+                $order_by = [ split(/,/, $order_by) ] if ( !reftype($order_by) && index(',',$order_by) == -1);
                 if ( reftype($order_by) and reftype($order_by) eq 'ARRAY' ) {
                     my @order_by = map { _build_order_atom({ string => $_, result_set => $result_set }) }
                                 @{ $order_by };
