@@ -78,6 +78,7 @@ BEGIN {
     SetImportRecordOverlayStatus
     GetImportRecordStatus
     SetImportRecordStatus
+    SetMatchedBiblionumber
     GetImportRecordMatches
     SetImportRecordMatches
 	);
@@ -631,7 +632,7 @@ sub BatchCommitRecords {
             if ($record_type eq 'biblio') {
                 my $biblioitemnumber;
                 ($recordid, $biblioitemnumber) = AddBiblio($marc_record, $framework);
-                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
+                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
                     my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
                     $num_items_added += $bib_items_added;
@@ -664,7 +665,7 @@ sub BatchCommitRecords {
                 $oldxml = $old_marc->as_xml($marc_type);
 
                 ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode);
-                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
+                $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
                     my ($bib_items_added, $bib_items_replaced, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $recordid, $item_result);
@@ -697,7 +698,7 @@ sub BatchCommitRecords {
                 $num_items_errored += $bib_items_errored;
                 # still need to record the matched biblionumber so that the
                 # items can be reverted
-                my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
+                my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"); # FIXME call SetMatchedBiblionumber instead
                 $sth2->execute($recordid, $rowref->{'import_record_id'});
                 SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             }
@@ -881,7 +882,7 @@ sub BatchRevertRecords {
         my $query;
         if ($record_type eq 'biblio') {
             # remove matched_biblionumber only if there is no 'imported' item left
-            $query = "UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?";
+            $query = "UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?"; # FIXME Remove me
             $query = "UPDATE import_biblios SET matched_biblionumber = NULL WHERE import_record_id = ?  AND NOT EXISTS (SELECT * FROM import_items WHERE import_items.import_record_id=import_biblios.import_record_id and status='imported')";
         } else {
             $query = "UPDATE import_auths SET matched_authid = NULL WHERE import_record_id = ?";
@@ -1215,6 +1216,22 @@ sub SetImportBatchStatus {
     $sth->execute($new_status, $batch_id);
     $sth->finish();
 
+}
+
+=head2 SetMatchedBiblionumber
+
+  SetMatchedBiblionumber($import_record_id, $biblionumber);
+
+=cut
+
+sub SetMatchedBiblionumber {
+    my ($import_record_id, $biblionumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+    $dbh->do(
+        q|UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?|,
+        undef, $biblionumber, $import_record_id
+    );
 }
 
 =head2 GetImportBatchOverlayAction
