@@ -117,6 +117,7 @@ subtest 'GetReservedAuthorisedValues' => sub {
         'cn_source' => 1,
         'categorycode' => 1,
         'biblio_framework' => 1,
+        'list' => 1,
     );
 
     my $reserved_authorised_values = GetReservedAuthorisedValues();
@@ -125,7 +126,7 @@ subtest 'GetReservedAuthorisedValues' => sub {
 };
 
 subtest 'IsAuthorisedValueValid' => sub {
-    plan tests => 8;
+    plan tests => 9;
     ok( IsAuthorisedValueValid('LOC'),
         'User defined authorised value category is valid');
 
