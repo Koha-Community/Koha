@@ -141,6 +141,14 @@
                     </li>
                     [% END %]
 
+                    [% IF Koha.Preference('UseCashRegisters') && !(Registers.session_register_name == '') %]
+                        <li class="loggedin-menu-label">
+                            Register: <br />
+                            <span class="logged-in-register-name">[% Registers.session_register_name | html %]</span>
+                            <span class="logged-in-register-id content_hidden">[% Registers.session_register_id | html %]</span>
+                        </li>
+                    [% END %]
+
                     [% IF !( Koha.Preference('IndependentBranches') && !CAN_user_superlibrarian && !CAN_user_editcatalogue_edit_catalogue ) %]
                     <li role="separator" class="loggedin-menu-label divider"></li>
                     <li>
