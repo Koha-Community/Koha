@@ -199,11 +199,7 @@ if ($op eq ""){
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
 
-        my $dbh = C4::Context->dbh;
-        $dbh->do(
-            q|UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?|,
-            undef, $biblionumber, $biblio->{import_record_id}
-        );
+        SetMatchedBiblionumber( $biblio->{import_record_id}, $biblionumber );
 
         # Add items from MarcItemFieldsToOrder
         my @homebranches = $input->multi_param('homebranch_' . $biblio_count);
