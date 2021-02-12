@@ -20,8 +20,32 @@ function clone_line(line) {
     return new_line;
 }
 
+function tableInit( oldtabid, newtabid ) {
+
+    var oldTableId = $("#" + oldtabid + "_table");
+    var newTableId = $("#" + newtabid + "_table");
+
+    oldTableId.DataTable().destroy();
+    newTableId.DataTable(
+        $.extend(true, {}, dataTablesDefaults, {
+            "columnDefs": [
+                { "orderable": false, "searchable": false, 'targets': ['NoSort'] },
+            ],
+            "paging": false,
+            "autoWidth": false
+        }));
+}
+
 $(document).ready(function () {
-    $("#tabs").tabs();
+
+    tableInit( "", "search_fields");
+
+    $("#tabs").tabs({
+        activate: function( event, ui ){
+            tableInit( ui.oldPanel.attr('id'), ui.newPanel.attr('id') );
+        },
+    });
+
     $('.delete').click(function () {
         if ($(this).hasClass('mandatory') && $(".mandatory[data-field_name=" + $(this).attr('data-field_name') + "]").length < 2) {
             alert( __("This field is mandatory and must have at least one mapping") );
@@ -34,6 +58,7 @@ $(document).ready(function () {
     $("table.mappings").tableDnD({
         onDragClass: "dragClass",
     });
+
     $('.add').click(function () {
         var table = $(this).closest('table');
         var index_name = $(table).attr('data-index_name');

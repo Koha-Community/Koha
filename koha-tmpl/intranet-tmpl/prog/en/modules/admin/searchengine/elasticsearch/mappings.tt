@@ -108,27 +108,26 @@ a.add, a.delete {
                 [% END %]
             </ul>
             <div id="search_fields">
-              <table class="search_fields">
+              <table class="search_fields" id="search_fields_table">
                 <thead>
                   <tr>
                     <th>Name</th>
                     <th>Aliases</th>
                     <th>Label</th>
                     <th>Type</th>
-                    <th colspan="2">Searchable</th>
                     <th>Weight</th>
+                    <th colspan="2">Searchable</th>
                   </tr>
                   <tr>
-                    <th colspan=4>&nbsp;</th>
-                    <th>Staff interface</th>
-                    <th>OPAC</th>
-                    <th>&nbsp;</th>
+                    <th colspan="5" class="NoSort">&nbsp;</th>
+                    <th class="NoSort">Staff interface</th>
+                    <th class="NoSort">OPAC</th>
                   </tr>
                 </thead>
                 <tbody>
                   [% FOREACH search_field IN all_search_fields %]
                     <tr>
-                      <td>
+                      <td data-order="[% search_field.name | html %]">
                         [% IF search_field.mandatory %]
                             <input type="text" name="search_field_name" value="[% search_field.name | html %]" readonly />
                         [% ELSE %]
@@ -138,14 +137,14 @@ a.add, a.delete {
                       <td>
                           [% search_field.aliases.join(', ') | html %]
                       </td>
-                      <td>
+                      <td data-order="[% search_field.label | html %]">
                         [% IF search_field.mandatory %]
                             <input type="text" name="search_field_label" value="[% search_field.label | html %]" readonly />
                         [% ELSE %]
                             <input type="text" name="search_field_label" value="[% search_field.label | html %]" />
                         [% END %]
                       </td>
-                      <td>
+                      <td data-order="[% search_field.type | html %]">
                         [% IF search_field.mandatory %]
                             <input type="hidden" name="search_field_type" value="[% search_field.type | html %]" />
                             <select name="search_field_type" disabled>
@@ -195,6 +194,13 @@ a.add, a.delete {
                               [% END %]
                             </select>
                       </td>
+                        <td data-order="[% search_field.weight | html %]">
+                            [% IF search_field.mapped_biblios %]
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" name="search_field_weight" value="[% search_field.weight | html %]" />
+                            [% ELSE %]
+                                <input type="text" name="search_field_weight" value="">
+                            [% END %]
+                        </td>
                       <td>
                         <select name="search_field_staff_client">
                           [% IF search_field.staff_client %]
@@ -217,13 +223,6 @@ a.add, a.delete {
                           [% END %]
                         </select>
                       </td>
-                      <td>
-                        [% IF search_field.mapped_biblios %]
-                            <input type="text" inputmode="numeric" pattern="[0-9]*" name="search_field_weight" value="[% search_field.weight | html %]" />
-                        [% ELSE %]
-                            <input type="hidden" name="search_field_weight" value="">
-                        [% END %]
-                      </td>
                     </tr>
                   [% END %]
                 </tbody>
@@ -231,7 +230,7 @@ a.add, a.delete {
             </div>
             [% FOREACH index IN indexes %]
                 <div id="mapping_[% index.index_name | html %]">
-                    <table class="mappings" data-index_name="[% index.index_name | html %]">
+                    <table class="mappings" data-index_name="[% index.index_name | html %]" data-ordering="false" id="mapping_[% index.index_name | html %]_table">
                       <thead>
                         <tr class="nodrag nodrop">
                           <th>Search field</th>
@@ -240,7 +239,7 @@ a.add, a.delete {
                           <th>Suggestible</th>
                           <th>Searchable</th>
                           <th>Mapping</th>
-                          <th></th>
+                          <th>&nbsp;</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -271,6 +270,7 @@ a.add, a.delete {
                                 <td>
                                     <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                 </td>
+                                <td>&nbsp;</td>
                               </tr>
                             [% ELSE %]
                               <tr>
@@ -444,10 +444,10 @@ a.add, a.delete {
                 </div>
             [% END %]
         </div>
-        <p>
+        <fieldset class="action">
             <button class="btn btn-default" type="submit" name="op" value="edit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button>
             <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</button>
-        </p>
+        </fieldset>
     </form>
 
             </main>
@@ -461,6 +461,7 @@ a.add, a.delete {
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
     [% Asset.js("js/elasticsearch-mappings.js") | $raw %]
 [% END %]
