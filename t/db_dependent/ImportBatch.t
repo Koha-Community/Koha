@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
@@ -133,6 +133,11 @@ $original_record->delete_fields($original_record->field($item_tag)); #Remove ite
 my $record_from_import_biblio_without_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id );
 $original_record->leader($record_from_import_biblio_without_items->leader());
 is_deeply( $record_from_import_biblio_without_items, $original_record, 'GetRecordFromImportBiblio should return the record without items by default' );
+
+my $another_biblio = $builder->build_sample_biblio;
+C4::ImportBatch::SetMatchedBiblionumber( $import_record_id, $another_biblio->biblionumber );
+my $import_biblios = GetImportBiblios( $import_record_id );
+is( $import_biblios->[0]->{matched_biblionumber}, $another_biblio->biblionumber, 'SetMatchedBiblionumber  should set the correct biblionumber' );
 
 # Add a few tests for GetItemNumbersFromImportBatch
 my @a = GetItemNumbersFromImportBatch( $id_import_batch1 );

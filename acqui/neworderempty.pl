@@ -180,11 +180,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     $listprice = GetMarcPrice($marcrecord, $marcflavour);
     SetImportRecordStatus($params->{'breedingid'}, 'imported');
 
-    my $dbh = C4::Context->dbh;
-    $dbh->do(
-        q|UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?|,
-        undef, $biblionumber, $params->{breedingid}
-    );
+    SetMatchedBiblionumber( $params->{breedingid}, $biblionumber );
 }
 
 
