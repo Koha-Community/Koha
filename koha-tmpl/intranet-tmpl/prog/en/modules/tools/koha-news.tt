@@ -103,7 +103,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 [% END %]
             </li>
             <li><label for="content">News: </label>
-            <textarea name="content" id="content"  cols="75" rows="10">[% new_detail.content | $raw %]</textarea>
+            <textarea name="content" id="content"  cols="75" rows="10">[% new_detail.content | html %]</textarea>
             </li>
             </ol>
 			</fieldset>
