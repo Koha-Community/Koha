@@ -10,9 +10,11 @@ Patrons:
                hardno: "Do not"
          - " check borrower checkout history to see if the current item has been checked out before."
      -
+         - "Trigger a warning if the current item has been checked out no longer than"
          - pref: CheckPrevCheckoutDelay
            default: 0
-         - "Maximum number of days that will trigger a warning if the patron has borrowed that item in the past when CheckPrevCheckout is enabled. Disabled if 0 or empty."
+         - "days ago."
+         - "Requires <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CheckPrevCheckout'>CheckPrevCheckout</a> to be enabled. There is no time limit if 0 or empty."
      -
          - pref: ExtendedPatronAttributes
            choices:
