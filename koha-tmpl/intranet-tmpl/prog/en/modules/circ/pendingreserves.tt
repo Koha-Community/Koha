@@ -311,7 +311,7 @@
           $("#homebranchfilter").each( function () {
               $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
               $('select', this).change( function () {
-                  holdst.fnFilter( $(this).child().val(), 5 );
+                  holdst.fnFilter( $(this).val(), 5 );
               });
           });
           $("#itemtype-filter").each( function () {
