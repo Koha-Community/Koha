@@ -23505,6 +23505,21 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 18506, "Add OPACShibOnly and staffShibOnly system preferences" );
 }
 
+$DBversion = '20.12.00.012';
+if( CheckVersion( $DBversion ) ) {
+    my $category_exists = $dbh->selectrow_array("SELECT count(category_name) FROM authorised_value_categories WHERE category_name='UPLOAD'");
+    my $description;
+    if( $category_exists ){
+        $description = "The UPLOAD authorized value category exists. Update the 'is_system' value to 1.";
+        $dbh->do( "UPDATE authorised_value_categories SET is_system = 1 WHERE category_name = 'UPLOAD'" );
+    } else {
+        $description = "The UPLOAD authorized value category does not exist. Create it.";
+        $dbh->do( "INSERT IGNORE INTO authorised_value_categories (category_name, is_system) VALUES ('UPLOAD', 1)" );
+    }
+
+    NewVersion( $DBversion, 27598, ["Add UPLOAD as a built-in system authorized value category", $description] );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
