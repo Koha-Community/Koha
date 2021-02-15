@@ -60,14 +60,23 @@ sub _set_preference {
 
     _debug( "Setting $preference to $value" );
 
-    C4::Context->set_preference( $preference, $value );
+    if (   $preference->{type} eq 'YesNo'
+        && $value ne '0'
+        && $value ne '1' )
+    {
+        print STDERR sprintf "System preference %s is YesNo and expects 1 or 0. '%s' was given, using '0'\n",
+          $preference->{variable}, $value;
+        $value = 0;
+    }
+
+    C4::Context->set_preference( $preference->{variable}, $value );
 }
 
 sub GetPreferences {
     my $dbh = C4::Context->dbh;
 
     return {
-        map { $_->{'variable'},  $_ }
+        map { $_->{variable},  $_->{value} }
         @{ $dbh->selectall_arrayref( "
             SELECT
               variable, value, type
@@ -91,12 +100,11 @@ sub SetPreferences {
 
     exit 2 if ( scalar( @$current_state ) != scalar( keys %preferences ) );
 
-    # Iterate through again, now that we've checked all of the YesNo sysprefs
-
     foreach my $row ( @$current_state ) {
-        next if ( $preferences{$row->{'variable'}} eq $row->{'value'} );
+        my $new_value = $preferences{ $row->{variable} };
+        next if $new_value && $row->{value} && $new_value eq $row->{value};
 
-        _set_preference( $row->{'variable'}, $preferences{$row->{'variable'}} );
+        _set_preference( $row, $new_value );
     }
 
     # FIXME This may be not needed
@@ -134,7 +142,7 @@ sub SetPreference {
 
     exit 3 if ( $value eq $row->{'value'} ); #FIXME exit??
 
-    _set_preference( $preference, $value );
+    _set_preference( $row, $value );
 }
 
 sub ClearPreference {
@@ -148,7 +156,7 @@ sub ClearPreference {
 
     exit 3 if ( $value eq $row->{'value'} );
 
-    _set_preference( $preference, $value );
+    _set_preference( $row, $value );
 }
 
 =head1 OPTIONS
