@@ -209,7 +209,7 @@ my %commands = (
         if ( $outfile ) {
             YAML::XS::DumpFile( $outfile, GetPreferences() );
         } else {
-            print YAML::XS::Dump( Encode::encode_utf8(GetPreferences()) );
+            print Encode::decode_utf8(YAML::XS::Dump(GetPreferences()));
         }
     },
     load => sub {
