@@ -46,14 +46,15 @@
 [% END # / IF fullpage %]
 
                     <div id="userdownloadshelf" class="maincontent">
+
                         [% UNLESS ( invalidlist ) %]
 
+                            <h1>Download list <em>[% shelf.shelfname | html %]</em></h1>
                             [% IF ( format ) %]
                                 <div class="alert alert-info">
                                     <p>Your download should begin automatically.</p>
                                 </div>
                             [% ELSE %]
-                                <h1>Download list <em>[% shelf.shelfname | html %]</em></h1>
                                 <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
                                     <fieldset>
                                         <select name="format" id="dlformat" required="required">
@@ -92,7 +93,7 @@
                             [% END # / IF format %]
 
                         [% ELSE %]
-
+                            <h1>Download list unsuccessful</h1>
                             <div class="alert alert-warning">
                                 <p>You do not have permission to download this list.</p>
                             </div>

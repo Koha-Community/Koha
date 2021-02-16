@@ -129,7 +129,7 @@
 
             <!--Bug 13381 -->
             <xsl:if test="marc:datafield[@tag=245]">
-                <h2 class="title" property="name">
+                <h1 class="title" property="name">
                     <xsl:for-each select="marc:datafield[@tag=245]">
                         <xsl:call-template name="subfieldSelect">
                             <xsl:with-param name="codes">a</xsl:with-param>
@@ -154,7 +154,7 @@
                             </xsl:choose>
                         </xsl:for-each>
                     </xsl:for-each>
-                </h2>
+                </h1>
             </xsl:if>
 
 

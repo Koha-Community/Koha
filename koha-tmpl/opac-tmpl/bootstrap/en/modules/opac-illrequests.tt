@@ -70,7 +70,7 @@
                 [% ELSE %]
                     <div id="illrequests" class="maincontent">
                         [% IF method == 'create' %]
-                            <h2>New interlibrary loan request</h2>
+                            <h1>New interlibrary loan request</h1>
                             [% IF stage == 'copyrightclearance' %]
                                 [% INCLUDE messages %]
                                 <div>
@@ -105,7 +105,7 @@
                                 [% END %]
                             [% END # /IF stage == 'copyrightclearance' %]
                         [% ELSIF method == 'list' %]
-                            <h2>Interlibrary loan requests</h2>
+                            <h1>Interlibrary loan requests</h1>
                             [% INCLUDE messages %]
 
                             <div id="illrequests-create-button" class="dropdown btn-group">
@@ -166,7 +166,7 @@
                                 </tbody>
                             </table>
                         [% ELSIF method == 'view' %]
-                            <h2>View interlibrary loan request</h2>
+                            <h1>View interlibrary loan request</h1>
                             [% INCLUDE messages %]
                             [% status = request.status %]
                             <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
@@ -240,9 +240,9 @@
                                 </fieldset>
                             </form>
                         [% ELSIF method == 'availability' %]
-                            <h2>Interlibrary loan item availability</h2>
+                            <h1>Interlibrary loan item availability</h1>
                             <div id="results">
-                                <h3>Displaying availability results</h3>
+                                <h2>Displaying availability results</h2>
                                 <form method="POST" action="/cgi-bin/koha/opac-illrequests.pl">
                                     [% FOREACH key IN whole.keys %]
                                         [% value = whole.$key %]
@@ -266,7 +266,7 @@
                                     </div>
                                 </form>
                                 [% FOR service IN services %]
-                                    <h4 class="ill_availability_sourcename">[% service.name | html %]</h4>
+                                    <h3 class="ill_availability_sourcename">[% service.name | html %]</h3>
                                     [% INCLUDE 'ill-availability-table.inc' service=service %]
                                 [% END %]
                             </div> <!-- /#illrequestupdate-form -->

@@ -42,6 +42,7 @@
             <div class="col-md-12 col-lg-10 order-1">
                 <div id="useraccount" class="maincontent">
 
+                    <h1>Charges</h1>
                     [% IF message %]
                         <div class="alert alert-info">
                             [% IF message == 'valid_payment' %]
@@ -73,7 +74,7 @@
                             <p><strong>Payment applied:</strong> your payment of [% payment | html %] has been applied to your account</p>
                         </div>
                     [% END %]
-                    <h2>Charges</h2>
+
                     [% PROCESS 'account-table.inc' ACCOUNT_LINES = ACCOUNT_LINES, ENABLE_OPAC_PAYMENTS = ENABLE_OPAC_PAYMENTS, plugins = plugins %]
 
                 </div> <!-- / #useraccount -->

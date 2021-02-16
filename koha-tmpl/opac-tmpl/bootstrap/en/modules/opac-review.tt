@@ -9,6 +9,7 @@
             <div class="row">
                 <div class="col order-first order-md-first order-lg-2">
                     <div id="userreview" class="maincontent">
+                        <h1>Reviews</h1>
                         [% IF ( cgi_debug ) %]
                             <div class="debug">CGI debug is on.</div>
                         [% END %]
@@ -39,7 +40,7 @@
                             </div>
                         [% END # / ERRORs %]
 
-                        <h1>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h1>
+                        <h2>Comments on <em>[% INCLUDE 'biblio-title.inc' %]</em></h2>
                         [% IF ( biblio.author ) %]<h3>[% biblio.author | html %]</h3>[% END %]
                         <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
                             <input type="hidden" name="biblionumber" value="[% biblio.biblionumber | html %]" />

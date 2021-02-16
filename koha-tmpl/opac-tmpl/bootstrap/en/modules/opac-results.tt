@@ -64,7 +64,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
-                        <h2 id="numresults">No results found!</h2>
+                        <h1 id="numresults">No results found!</h1>
                         <p>
                             [% IF ( searchdesc ) %]
                                 No results found for that in [% LibraryName | html %] catalog.
@@ -118,12 +118,12 @@
 
                 [% IF ( searchdesc ) %]
                     [% IF ( total ) %]
-                        <h2 id="numresults">
+                        <h1 id="numresults">
                             Your search returned [% total | html %] results.
                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="btn btn-link rsssearchlink noprint" aria-label="Subscribe to this search">
                                 <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
                             </a>
-                        </h2>
+                        </h1>
                         [% IF ( related ) %]
                             <p>(related searches:[% FOREACH relate IN related %] [% relate.related_search | html %][% END %]).</p>
                         [% END %]

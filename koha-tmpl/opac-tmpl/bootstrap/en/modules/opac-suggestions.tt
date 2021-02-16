@@ -41,18 +41,20 @@
                 <div class="col-md-12 col-lg-10 order-1">
 
                     <div id="usersuggestions" class="maincontent">
+                        <h1>Your purchase suggestions</h1>
                         [% IF ( op_add ) %]
                             [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
-                                    <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
-                                    <h2 class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</h2>
+                                    <h2 class="TooManySuggestions">You cannot place any more suggestions</h2>
+                                    <h3 class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</h3>
                             [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                    <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
-                                    <h2 class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h2>
+                                    <h2 class="TooManySuggestions">You cannot place any more suggestions</h2>
+                                    <h3 class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h3>
                             [% ELSE %]
+
                             [% IF ( opacsuggestion ) %]
                                 [% PROCESS koha_news_block news => opacsuggestion %]
                             [% ELSE %]
-                                <h1>Enter a new purchase suggestion</h1>
+                                <h2>Enter a new purchase suggestion</h2>
 
                                 <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
                                 <p>Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
@@ -259,7 +261,7 @@
                         [% END #  IF op_add %]
 
                         [% IF ( op_else ) %]
-                            <h1>
+                            <h2>
                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                     Purchase suggestions
                                 [% ELSE %]
@@ -269,7 +271,7 @@
                                         Purchase suggestions
                                     [% END %]
                                 [% END %]
-                            </h1>
+                            </h2>
                             [% FOR m IN messages %]
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]

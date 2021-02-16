@@ -37,7 +37,7 @@
             <div class="col">
                 <div id="course_reserves" class="maincontent">
 
-                    <h2>Course reserves for <em>[% course.course_name | html %]</em></h2>
+                    <h1>Course reserves for <em>[% course.course_name | html %]</em></h1>
                     <div class="rows">
                         <ol>
                             [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]

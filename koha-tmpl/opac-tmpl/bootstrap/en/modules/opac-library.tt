@@ -101,7 +101,7 @@
                 [% IF ( library ) %]
 
                     <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
-                        <h3 property="name">[% library.branchname | html %]</h3>
+                        <h1 property="name">[% library.branchname | html %]</h1>
 
                         <div class="row">
                             <div class="col-lg-8">
@@ -139,7 +139,7 @@
 
                 [% ELSE %]
                     <div id="library_info" class="maincontent">
-                        <h2>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h2>
+                        <h1>[% IF ( singleBranchMode ) %]Library[% ELSE %]Libraries[% END %]</h1>
 
                         [% FOREACH library IN libraries %]
                             <h3 property="name">

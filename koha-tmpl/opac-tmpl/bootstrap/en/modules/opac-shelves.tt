@@ -194,12 +194,12 @@
                     [% END %]
 
                     [% IF shelf AND op == 'view' %]
-                        <h2>
+                        <h1>
                             [% shelf.shelfname | html %]
                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint" aria-label="Subscribe to this list">
                                 <i class="fa fa-fw fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this list"></i>
                             </a>
-                        </h2>
+                        </h1>
 
                         [% IF ( itemsloop ) %]
                             [% SET contents = shelf.get_contents %]
@@ -618,10 +618,10 @@
                             <fieldset class="rows">
                                 [% IF op == 'add_form' %]
                                     <div id="addshelf">
-                                    <legend>Create a new list</legend>
+                                        <legend><h1>Create a new list</h1></legend>
                                     <input type="hidden" name="op" value="add" />
                                 [% ELSE %]
-                                    <legend>Editing <em>[% shelf.shelfname | html %]</em></legend>
+                                <legend><h1>Editing <em>[% shelf.shelfname | html %]</em></h1></legend>
                                     <input type="hidden" name="op" value="edit" />
                                     <input type="hidden" name="referer" value="[% referer | html %]" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
@@ -700,7 +700,7 @@
                         </form>
 
                     [% ELSIF op == 'list' %]
-                        <h2>Lists</h2>
+                        <h1>Lists</h1>
                         <div class="toptabs ui-tabs ui-widget ui-widget-content ui-corner-all">
                             <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]

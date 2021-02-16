@@ -36,7 +36,7 @@
                     [% IF article_request_type == 'bib_only' %]  [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsRecordOnly') %] [% END %]
                     [% IF article_request_type == 'item_only' %] [% SET mandatory_fields = Koha.Preference('ArticleRequestsMandatoryFieldsItemOnly') %]   [% END %]
 
-                    <h3>Place article request for [% biblio.title | html %]</h3>
+                    <h1>Place article request for [% biblio.title | html %]</h1>
 
                     <form id="place-article-request" method="post" action="/cgi-bin/koha/opac-request-article.pl">
                         <input type="hidden" name="action" value="create" />

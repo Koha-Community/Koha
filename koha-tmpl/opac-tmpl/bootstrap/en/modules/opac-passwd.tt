@@ -33,7 +33,7 @@
             </div>
             <div class="col-10 order-first order-lg-2">
                 <div id="userpasswd" class="maincontent">
-                    <h3>Change your password </h3>
+                    <h1>Change your password </h1>
 
                     [% IF ( Error_messages ) %]
                         <div class="alert alert-warning">
@@ -93,7 +93,8 @@
 
                     [% IF ( password_updated ) %]
                         <div class="alert alert-info">
-                            <h1>Password updated</h1>
+                            <strong>Password updated</strong>
+                            <br />
                             Your password has been changed
                         </div>
                         <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">

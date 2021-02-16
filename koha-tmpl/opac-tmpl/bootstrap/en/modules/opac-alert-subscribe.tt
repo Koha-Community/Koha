@@ -18,8 +18,9 @@
             <div class="row">
                 <div class="col order-first order-md-first order-lg-2">
                     <div id="useralertsubscribe" class="maincontent">
+                            <h1>Subscription alerts</h1>
                         [% IF ( typeissue ) %]
-                            <h1>Subscribe to a subscription alert</h1>
+                            <h2>Subscribe to a subscription alert</h2>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
                                 <h4>[% bibliotitle | html %]</h4>
@@ -33,7 +34,7 @@
                             </form>
                         [% END %]
                         [% IF ( typeissuecancel ) %]
-                            <h1>Unsubscribe from a subscription alert</h1>
+                            <h2>Unsubscribe from a subscription alert</h2>
                             <form action="opac-alert-subscribe.pl" method="post">
                                 <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
                                 <h4>[% bibliotitle | html %]</h4>

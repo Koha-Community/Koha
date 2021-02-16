@@ -141,7 +141,7 @@
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc | $raw %]
                     [% ELSE %]
-                        <h2 class="title">[% INCLUDE 'biblio-title.inc' %]</h2>
+                        <h1 class="title">[% INCLUDE 'biblio-title.inc' %]</h1>
                         [% IF ( author ) %]
                             <span class="results_summary author h3">by <a class="contributors" href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></span>
                         [% END %]

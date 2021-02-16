@@ -31,9 +31,9 @@
                     <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="errormsg[% errno | html %]">
-                        <h3>Sorry, the requested page is not available</h3>
-                        <h4>Error [% errno | html %]</h4>
-                        <h5>This message can have the following reason(s):</h5>
+                        <h1>Sorry, the requested page is not available</h1>
+                        <h2>Error [% errno | html %]</h2>
+                        <h3>This message can have the following reason(s):</h3>
                         <ul>
                             [% IF ( errno == 400 ) %]
                                 <li>The link is broken and the page does not exist.</li>
@@ -61,7 +61,7 @@
                                 <li>An error occurred while processing your request.</li>
                             [% END %]
                         </ul>
-                        <h4>What's next?</h4>
+                        <h2>What's next?</h2>
                         <ul>
                             [% IF ( errno == 401 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                 <li>Please log in to the catalog and try again. <a href="/cgi-bin/koha/opac-user.pl">Login page</a></li>
@@ -70,7 +70,7 @@
                             <li>You can search our catalog using the search form at the top of this page.</li>
                             <li><a href="/cgi-bin/koha/opac-main.pl">Return to the catalog home page.</a></li>
                         </ul>
-                        <h4>Report issues and broken links</h4>
+                        <h2>Report issues and broken links</h2>
                         <ul>
                             <li>To report this error, please contact the Koha Administrator.
                                     <a href="mailto:[% admin | uri %]">Send email</a>.</li>
