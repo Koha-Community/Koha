@@ -319,7 +319,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                         recname = 'record-'+controlnumfield.subfield('@')+'.xml';
                     }
                 [% END %]
-                saveAs( new Blob( [record.toXML()], { 'type': 'application/octe     t-stream;charset=utf-8' } ), recname );
+                saveAs( new Blob( [record.toXML()], { 'type': 'application/octet-stream;charset=utf-8' } ), recname );
 
                 done( {} );
             }
