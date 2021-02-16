@@ -77,7 +77,8 @@ my $mandatory = GetMandatoryFields($action);
 my $params = {};
 if ( $action eq 'create' || $action eq 'new' ) {
     my @PatronSelfRegistrationLibraryList = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList');
-    $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } };
+    $params = { branchcode => { -in => \@PatronSelfRegistrationLibraryList } }
+      if @PatronSelfRegistrationLibraryList;
 }
 my @libraries = Koha::Libraries->search($params);
 
