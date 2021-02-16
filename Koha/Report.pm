@@ -22,6 +22,7 @@ use Carp;
 use Koha::Database;
 use JSON;
 use Koha::Reports;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use base qw(Koha::Object);
 
