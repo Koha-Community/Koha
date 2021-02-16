@@ -3483,7 +3483,6 @@ sub SendCirculationAlert {
             }
         ) or next;
 
-        $schema->storage->txn_begin;
         C4::Context->dbh->do(q|LOCK TABLE message_queue READ|) unless $do_not_lock;
         C4::Context->dbh->do(q|LOCK TABLE message_queue WRITE|) unless $do_not_lock;
         my $message = C4::Message->find_last_message($borrower, $type, $mtt);
@@ -3495,7 +3494,6 @@ sub SendCirculationAlert {
             $message->update;
         }
         C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
-        $schema->storage->txn_commit;
     }
 
     return;
