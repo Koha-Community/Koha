@@ -23520,6 +23520,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 27598, ["Add UPLOAD as a built-in system authorized value category", $description] );
 }
 
+$DBversion = '20.12.00.013';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+         INSERT IGNORE INTO systempreferences
+         (variable, value, explanation, options, type) VALUES
+         ('DefaultSaveRecordFileID', 'biblionumber', 'Defines whether the advanced cataloging editor will use the bibliographic record number or control number field to populate the name of the save file.', 'biblionumber|controlnumber', 'Choice')
+    });
+    NewVersion( $DBversion, 24108, "Add system preference DefaultSaveRecordFileID");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
