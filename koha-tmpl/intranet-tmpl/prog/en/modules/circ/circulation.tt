@@ -480,11 +480,15 @@
                                             </div>
                                             <div class="modal-body">
                                                 <table class="table_borrowers">
-                                                    [% FOREACH book IN options %]
+                                                    [% FOREACH item IN options %]
                                                         <tr>
                                                             <td>
-                                                                <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% book.biblionumber | html %]">[% book.title | html %] <i class="fa fa-window-restore"></i></a>
-                                                                [% book.barcode | html %]
+                                                                <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]">[% item.biblio.title | html %] <i class="fa fa-window-restore"></i></a>
+                                                                [% item.barcode | html %]
+                                                                [% IF item.itemcallnumber %]Callnumber: [% item.itemcallnumber %][% END %]
+                                                                [% IF item.copynumber %]Copy number: [% item.copynumber %][% END %]
+                                                                [% IF item.stocknumber %]Inventory number: [% item.stocknumber %][% END %]
+                                                                [% IF item.enumchron %]Serial enumeration: [% item.enumchron %][% END %]
                                                             </td>
                                                             <td>
                                                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
@@ -496,7 +500,7 @@
                                                                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                                                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
                                                                     <input type="hidden" name="branch" value="[% branch | html %]" />
-                                                                    <input type="hidden" name="barcode" value="[% book.barcode | html %]" />
+                                                                    <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                                                     <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
                                                                     <input type="hidden" name="auto_renew" value="[% auto_renew | html %]" />
                                                                     <button class="btn btn-default btn-xs" type="submit" name="x"><i class="fa fa-check"></i> Check out</button>

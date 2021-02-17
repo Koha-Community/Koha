@@ -361,21 +361,18 @@ if (@$barcodes) {
 
         # if multiple hits, offer options to librarian
         if ( $total_hits > 0 ) {
-            my @options = ();
+            my @barcodes;
             foreach my $hit ( @{$results} ) {
-                my $chosen =
+                my $chosen = # Maybe easier to retrieve the itemnumber from $hit?
                   TransformMarcToKoha( C4::Search::new_record_from_zebra('biblioserver',$hit) );
 
                 # offer all barcodes individually
                 if ( $chosen->{barcode} ) {
-                    foreach my $barcode ( sort split(/\s*\|\s*/, $chosen->{barcode}) ) {
-                        my %chosen_single = %{$chosen};
-                        $chosen_single{barcode} = $barcode;
-                        push( @options, \%chosen_single );
-                    }
+                    push @barcodes, sort split(/\s*\|\s*/, $chosen->{barcode});
                 }
             }
-            $template_params->{options} = \@options;
+            my $items = Koha::Items->search({ barcode => {-in => \@barcodes}});
+            $template_params->{options} = $items;
         }
     }
 
