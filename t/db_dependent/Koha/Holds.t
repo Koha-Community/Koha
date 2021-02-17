@@ -410,17 +410,19 @@ subtest 'Desks' => sub {
 };
 
 subtest 'get_items_that_can_fill' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $biblio = $builder->build_sample_biblio;
-    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $itype_1 = $builder->build_object({ class => 'Koha::ItemTypes' }); # For 1, 2, 3, 4
+    my $itype_2 = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_1->itemtype } );
         # waiting
-    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_1->itemtype } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_1->itemtype } )
       ;    # onloan
-    my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )
+    my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_1->itemtype } )
       ;    # in transfer
-    my $item_5 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_5 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itype => $itype_2->itemtype } );
     my $lost       = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, itemlost => 1 } );
     my $withdrawn  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, withdrawn => 1 } );
     my $notforloan = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, notforloan => 1 } );
@@ -480,9 +482,22 @@ subtest 'get_items_that_can_fill' => sub {
         }
     );
 
-    my @items = $holds->get_items_that_can_fill;
-    is_deeply( [ map { $_->itemnumber } @items ],
+    my $items = $holds->get_items_that_can_fill;
+    is_deeply( [ map { $_->itemnumber } $items->as_list ],
         [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 2 and 5 are available for filling the hold' );
+
+    # Marking item_5 is no hold allowed
+    Koha::CirculationRule->new(
+        {
+            rule_name  => 'holdallowed',
+            rule_value => 0,
+            itemtype   => $item_5->itype
+        }
+    )->store;
+    $items = $holds->get_items_that_can_fill;
+    is_deeply( [ map { $_->itemnumber } $items->as_list ],
+        [ $item_2->itemnumber ], 'Only item 1 is available for filling the hold' );
+
 };
 
 $schema->storage->txn_rollback;
