@@ -55,10 +55,17 @@ $retrieved_news_item_1->delete;
 is( Koha::News->search->count, $nb_of_news + 1, 'Delete should have deleted the news_item' );
 
 subtest '->author' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     my $news_item = $builder->build_object({ class => 'Koha::News' });
-    is( ref($news_item->author), 'Koha::Patron', 'Koha::NewsItem->author returns a Koha::Patron object' );
+    my $author = $news_item->author;
+    is( ref($author), 'Koha::Patron', 'Koha::NewsItem->author returns a Koha::Patron object' );
+
+    $author->delete;
+
+    $news_item = Koha::News->find($news_item->idnew);
+    is( ref($news_item), 'Koha::NewsItem', 'News are not deleted alongwith the author' );
+    is( $news_item->author, undef, '->author returns undef is the author has been deleted' );
 };
 
 $schema->storage->txn_rollback;
