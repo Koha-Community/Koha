@@ -717,6 +717,10 @@ issued to someone else.
 
 reserved for someone else.
 
+=head3 TRANSFERRED
+
+reserved and being transferred for someone else.
+
 =head3 INVALID_DATE
 
 sticky due date is invalid or due date in the past
@@ -1121,6 +1125,17 @@ sub CanBookBeIssued {
                 elsif ( $restype eq "Reserved" ) {
                     # The item is on reserve for someone else.
                     $needsconfirmation{RESERVED} = 1;
+                    $needsconfirmation{'resfirstname'} = $patron->firstname;
+                    $needsconfirmation{'ressurname'} = $patron->surname;
+                    $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
+                    $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
+                    $needsconfirmation{'resbranchcode'} = $patron->branchcode;
+                    $needsconfirmation{'resreservedate'} = $res->{reservedate};
+                    $needsconfirmation{'reserve_id'} = $res->{reserve_id};
+                }
+                elsif ( $restype eq "Transferred" ) {
+                    # The item is determined hold being transferred for someone else.
+                    $needsconfirmation{TRANSFERRED} = 1;
                     $needsconfirmation{'resfirstname'} = $patron->firstname;
                     $needsconfirmation{'ressurname'} = $patron->surname;
                     $needsconfirmation{'rescardnumber'} = $patron->cardnumber;

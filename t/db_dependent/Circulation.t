@@ -3347,7 +3347,7 @@ subtest 'Set waiting flag' => sub {
     is( $hold->found, 'T', 'Hold is in transit' );
 
     my ( $status ) = CheckReserves($item->itemnumber);
-    is( $status, 'Reserved', 'Hold is not waiting yet');
+    is( $status, 'Transferred', 'Hold is not waiting yet');
 
     set_userenv( $library_2 );
     $do_transfer = 0;

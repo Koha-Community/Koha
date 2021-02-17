@@ -1146,7 +1146,7 @@ subtest 'CheckReserves additional test' => sub {
     my ( $status, $matched_reserve, $possible_reserves ) =
       CheckReserves( $item->itemnumber );
 
-    is( $status, 'Reserved', "We found a reserve" );
+    is( $status, 'Transferred', "We found a reserve" );
     is( $matched_reserve->{reserve_id},
         $reserve1->reserve_id, "We got the Transit reserve" );
     is( scalar @$possible_reserves, 2, 'We do get both reserves' );

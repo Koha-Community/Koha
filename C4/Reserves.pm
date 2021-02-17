@@ -853,14 +853,12 @@ sub CheckReserves {
 
         my $priority = 10000000;
         foreach my $res (@reserves) {
-            if ( $res->{'itemnumber'} && $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
-                if ($res->{'found'} eq 'W') {
-                    return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
-                } elsif ($res->{'found'} eq 'P') {
-                    return ( "Processing", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
-                 } else {
-                    return ( "Reserved", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
-                }
+            if ($res->{'found'} eq 'W') {
+                return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
+            } elsif ($res->{'found'} eq 'P') {
+                return ( "Processing", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
+            } elsif ($res->{'found'} eq 'T') {
+                return ( "Transferred", $res, \@reserves ); # Found determinated hold, e. g. the transferred one
             } else {
                 my $patron;
                 my $item;
