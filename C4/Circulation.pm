@@ -1423,15 +1423,26 @@ sub CanBookBeReturned {
         $message = $to_branch = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
     }
 
+    return ( $allowed, $message ) unless $allowed;
+
     # Make sure there are no branch transfer limits between item's current
     # branch (holdinbranch) and the return branch
-    my $to_library = Koha::Libraries->find($to_branch);
-    if ( !$item->can_be_transferred( { to => $to_library } ) ) {
-        $allowed = 0;
-        $message = $item->homebranch;
+    my $return_library = Koha::Libraries->find($to_branch);
+    if ( !$item->can_be_transferred( { to => $return_library } ) ) {
+        return ( 0, $item->homebranch );
     }
 
-    return ( $allowed, $message );
+    # Make sure there are no branch transfer limits between
+    # either homebranch and holdinbranch and the return branch
+    my $home_library    = Koha::Libraries->find( $item->homebranch );
+    my $holding_library = Koha::Libraries->find( $item->holdingbranch );
+    if (   $item->can_be_transferred( { from => $return_library, to => $holding_library } )
+        or $item->can_be_transferred( { from => $return_library, to => $home_library } ) )
+    {
+        return ( 1, undef );
+    }
+
+    return ( 0, $item->homebranch );
 }
 
 =head2 CheckHighHolds
