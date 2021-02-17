@@ -1375,7 +1375,7 @@ sub CanBookBeIssued {
 
 =head2 CanBookBeReturned
 
-  ($returnallowed, $message) = CanBookBeReturned($item, $branch)
+  ($returnallowed, $message) = CanBookBeReturned($item, $branch, [$transferbranch])
 
 Check whether the item can be returned to the provided branch
 
@@ -1400,49 +1400,39 @@ Returns:
 =cut
 
 sub CanBookBeReturned {
-    my ( $item, $branch ) = @_;
+    my ( $item, $returnbranch, $transferbranch ) = @_;
     my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
 
     # assume return is allowed to start
-    my $allowed   = 1;
-    my $to_branch = $branch;
+    my $allowed = 1;
     my $message;
 
     # identify all cases where return is forbidden
-    if ( $allowreturntobranch eq 'homebranch' && $branch ne $item->homebranch ) {
+    if ( $allowreturntobranch eq 'homebranch' && $returnbranch ne $item->homebranch ) {
         $allowed = 0;
-        $message = $to_branch = $item->homebranch;
-    } elsif ( $allowreturntobranch eq 'holdingbranch' && $branch ne $item->holdingbranch ) {
+        $message = $item->homebranch;
+    } elsif ( $allowreturntobranch eq 'holdingbranch' && $returnbranch ne $item->holdingbranch ) {
         $allowed = 0;
-        $message = $to_branch = $item->holdingbranch;
+        $message = $item->holdingbranch;
     } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
-        && $branch ne $item->homebranch
-        && $branch ne $item->holdingbranch )
+        && $returnbranch ne $item->homebranch
+        && $returnbranch ne $item->holdingbranch )
     {
         $allowed = 0;
-        $message = $to_branch = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
+        $message = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
     }
 
-    return ( $allowed, $message ) unless $allowed;
-
-    # Make sure there are no branch transfer limits between item's current
-    # branch (holdinbranch) and the return branch
-    my $return_library = Koha::Libraries->find($to_branch);
-    if ( !$item->can_be_transferred( { to => $return_library } ) ) {
-        return ( 0, $item->homebranch );
+    # identify cases where transfer rules prohibit return
+    if ( defined($transferbranch) && $allowed ) {
+        my $from_library = Koha::Libraries->find($returnbranch);
+        my $to_library   = Koha::Libraries->find($transferbranch);
+        if ( !$item->can_be_transferred( { from => $from_library, to => $to_library } ) ) {
+            $allowed = 0;
+            $message = $transferbranch;
+        }
     }
 
-    # Make sure there are no branch transfer limits between
-    # either homebranch and holdinbranch and the return branch
-    my $home_library    = Koha::Libraries->find( $item->homebranch );
-    my $holding_library = Koha::Libraries->find( $item->holdingbranch );
-    if (   $item->can_be_transferred( { from => $return_library, to => $holding_library } )
-        or $item->can_be_transferred( { from => $return_library, to => $home_library } ) )
-    {
-        return ( 1, undef );
-    }
-
-    return ( 0, $item->homebranch );
+    return ( $allowed, $message );
 }
 
 =head2 CheckHighHolds
@@ -2392,7 +2382,7 @@ sub AddReturn {
     }
 
     # check if the return is allowed at this branch
-    my ( $returnallowed, $message ) = CanBookBeReturned( $item, $branch );
+    my ( $returnallowed, $message ) = CanBookBeReturned( $item, $branch, $returnbranch );
 
     unless ($returnallowed) {
         $messages->{'Wrongbranch'} = {
