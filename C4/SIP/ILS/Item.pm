@@ -108,8 +108,8 @@ sub new {
     my $biblio = Koha::Biblios->find( $self->{biblionumber} );
     my $holds = $biblio->current_holds->unblessed;
     $self->{hold_queue} = $holds;
-    $self->{hold_attached} = [( grep { defined $_->{found}  and ( $_->{found} eq 'W' or $_->{found} eq 'P' ) } @{$self->{hold_queue}} )];
-    $self->{pending_queue} = [( grep {(! defined $_->{found}) or ( $_->{found} ne 'W' and $_->{found} ne 'P' ) } @{$self->{hold_queue}} )];
+    $self->{hold_attached} = [( grep { defined $_->{found}  and ( $_->{found} eq 'W' or $_->{found} eq 'P' or $_->{found} eq 'T' ) } @{$self->{hold_queue}} )];
+    $self->{pending_queue} = [( grep {(! defined $_->{found}) or ( $_->{found} ne 'W' and $_->{found} ne 'P' and $_->{found} ne 'T' ) } @{$self->{hold_queue}} )];
     $self->{title} = $biblio->title;
     $self->{author} = $biblio->author;
     bless $self, $type;
