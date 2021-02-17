@@ -422,7 +422,7 @@ if (@$barcodes) {
         }
     }
 
-    if ($question->{RESERVE_WAITING} or $question->{RESERVED} or $question->{TRANSFERRED}){
+    if ($question->{RESERVE_WAITING} or $question->{RESERVED} or $question->{TRANSFERRED} or $question->{PROCESSING}){
         $template->param(
             reserveborrowernumber => $question->{'resborrowernumber'},
             reserve_id => $question->{reserve_id},

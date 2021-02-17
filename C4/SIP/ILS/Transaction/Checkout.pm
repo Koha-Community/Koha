@@ -74,7 +74,9 @@ sub do_checkout {
                 $noerror = 0;
             } elsif ($confirmation eq 'RESERVED' and C4::Context->preference("AllowItemsOnHoldCheckoutSIP")) {
                 next;
-            } elsif ($confirmation eq 'RESERVE_WAITING' or $confirmation eq 'TRANSFERRED') {
+            } elsif ($confirmation eq 'RESERVE_WAITING'
+                      or $confirmation eq 'TRANSFERRED'
+                      or $confirmation eq 'PROCESSED') {
                $debug and warn "Item is on hold for another patron.";
                $self->screen_msg("Item is on hold for another patron.");
                $noerror = 0;

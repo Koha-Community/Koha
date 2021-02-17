@@ -1144,6 +1144,17 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resreservedate'} = $res->{reservedate};
                     $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
+                elsif ( $restype eq "Processing" ) {
+                    # The item is determined hold being processed for someone else.
+                    $needsconfirmation{PROCESSED} = 1;
+                    $needsconfirmation{'resfirstname'} = $patron->firstname;
+                    $needsconfirmation{'ressurname'} = $patron->surname;
+                    $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
+                    $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
+                    $needsconfirmation{'resbranchcode'} = $patron->branchcode;
+                    $needsconfirmation{'resreservedate'} = $res->{reservedate};
+                    $needsconfirmation{'reserve_id'} = $res->{reserve_id};
+                }
             }
         }
     }

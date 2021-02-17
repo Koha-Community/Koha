@@ -126,6 +126,10 @@
                                     <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) and being transferred to [% Branches.GetName( resbranchcode ) | html %]</li>
                                 [% END %]
 
+                                [% IF ( PROCESSED ) %]
+                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is being processed for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %]</li>
+                                [% END %]
+
                                 [% IF ( RESERVED ) %]
                                     <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
                                 [% END %]
@@ -250,6 +254,15 @@
                                         </p>
                                     [% END %]
 
+                                    [% IF ( PROCESSED ) %]
+                                        <p>
+                                            <label for="cancelreserve">Cancel hold</label>
+                                            <input type="radio" value="cancel" name="cancelreserve" id="cancelreserve" /><br />
+                                            <label for="revertreserve">Revert In Processing status</label>
+                                            <input type="radio" value="revert" name="cancelreserve" id="revertreserve" checked="checked"/>
+                                        </p>
+                                    [% END %]
+
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="issueconfirmed" value="1" />
@@ -280,7 +293,7 @@
                                 </form>
                             [% END # /IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 
-                            [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED ) %]
+                            [% IF ( RESERVED or RESERVE_WAITING or TRANSFERRED or PROCESSING ) %]
                                 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
                                     <input type="hidden" name="restoreduedatespec" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
