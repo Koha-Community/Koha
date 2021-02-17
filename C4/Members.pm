@@ -595,6 +595,13 @@ sub IssueSlip {
         my @news;
         while ( my $n = $news->next ) {
             my $all = $n->unblessed_all_relateds;
+
+            # FIXME We keep newdate and timestamp for backward compatibility (from GetNewsToDisplay)
+            # But we should remove them and adjust the existing templates in a db rev
+            my $published_on_dt = output_pref({ dt => dt_from_string( $all->{published_on} ), dateonly => 1 });
+            $all->{newdate} = $published_on_dt;
+            $all->{timestamp} = $published_on_dt;
+
             push @news, {
                 opac_news => $all,
             };
