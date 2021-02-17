@@ -43,7 +43,7 @@ sub get {
     });
 
 
-    if( $content ){
+    if( $content->count ){
         return {
             content => $content,
             location => $display_location,
