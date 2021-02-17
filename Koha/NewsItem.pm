@@ -47,8 +47,10 @@ Return the Koha::Patron object for the patron who authored this news item
 =cut
 
 sub author {
-    my ( $self ) = @_;
-    return Koha::Patron->_new_from_dbic($self->_result->borrowernumber);
+    my ($self) = @_;
+    my $author_rs = $self->_result->borrowernumber;
+    return unless $author_rs;
+    return Koha::Patron->_new_from_dbic($author_rs);
 }
 
 =head3 _type
