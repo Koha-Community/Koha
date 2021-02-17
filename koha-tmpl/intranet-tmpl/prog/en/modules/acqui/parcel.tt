@@ -402,7 +402,7 @@
                       "orderable": true,
                       "render": function(data, type, row, meta) {
                         if (type != 'display') return _escape_str(data);
-                        return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + encodeURIComponent(row.basket.basket_id) + "\">" + data.escapeHtml() + " (" + row.basket.basket_id.escapeHtml() + ")</a>";
+                        return "<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=" + encodeURIComponent(row.basket.basket_id) + "\">" + _escape_str(data) + " (" + _escape_str(row.basket.basket_id) + ")</a>";
                       }
                     },
                     { "data": "basket.basket_group.name",
@@ -418,7 +418,7 @@
                             return "<a href=\"/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid="
                                     + encodeURIComponent(row.basket.vendor_id) + "&amp;basketgroupid="
                                     + encodeURIComponent(row.basket.basket_group_id) + "\">"
-                                    + row.basket.basket_group.name.escapeHtml() + " (" + row.basket.basket_group_id.escapeHtml() + ")</a>";
+                                    + _escape_str(row.basket.basket_group.name) + " (" + _escape_str(row.basket.basket_group_id) + ")</a>";
                         }
                       }
                     },
@@ -426,7 +426,7 @@
                         "data": "order_id",
                         "render": function(data, type, row, meta) {
                             if (type != 'display') return _escape_str(data);
-                            return "<a href=\"neworderempty.pl?ordernumber="+encodeURIComponent(data)+"&amp;booksellerid="+encodeURIComponent(row.basket.vendor_id)+"\">"+data.escapeHtml()+"</a>";
+                            return "<a href=\"neworderempty.pl?ordernumber="+encodeURIComponent(data)+"&amp;booksellerid="+encodeURIComponent(row.basket.vendor_id)+"\">"+_escape_str(data)+"</a>";
                         }
                     },
                     {
@@ -436,22 +436,22 @@
                         "render": function(data, type, row, meta) {
                             var result = '';
                             if ( row && row.biblio_id != null ) {
-                                result = "<p><a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber="+encodeURIComponent(row.biblio_id)+"\">"+row.biblio.title.escapeHtml()+"</a>";
+                                result = "<p><a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber="+encodeURIComponent(row.biblio_id)+"\">"+_escape_str(row.biblio.title)+"</a>";
                                 if ( row.biblio.author != null )
-                                    result += _(" by ") + row.biblio.author.escapeHtml();
+                                    result += _(" by ") + _escape_str(row.biblio.author);
                                 if ( row.biblio.isbn != null )
-                                    result += " &ndash; " + row.biblio.isbn.escapeHtml();
+                                    result += " &ndash; " + _escape_str(row.biblio.isbn);
                                 [% IF Koha.Preference('marcflavour')=='UNIMARC' %]
                                     if ( row.biblio.ean != null )
-                                        result += " &ndash; EAN:" + row.biblio.ean.escapeHtml();
+                                        result += " &ndash; EAN:" + _escape_str(row.biblio.ean);
                                 [% END %]
                                 if ( row.biblio.publisher != null ) {
-                                    result += "<br/>" + _("Publisher: ") + row.biblio.publisher.escapeHtml();
+                                    result += "<br/>" + _("Publisher: ") + _escape_str(row.biblio.publisher);
                                     if ( row.biblio.publication_year != null ) {
-                                        result += ", " + row.biblio.publication_year.escapeHtml();
+                                        result += ", " + _escape_str(row.biblio.publication_year);
                                     }
                                     else if ( row.biblio.copyright_date != null ) {
-                                        result += row.biblio.copyright_date.escapeHtml();
+                                        result += _escape_str(row.biblio.copyright_date);
                                     }
                                 }
                                 var suggestions = row.biblio.suggestions;
@@ -461,10 +461,10 @@
                                         var suggester = suggestion.suggester;
                                         var suggested_by = [];
                                         if ( suggester.surname != null ) {
-                                            suggested_by.push(suggester.surname.escapeHtml());
+                                            suggested_by.push(_escape_str(suggester.surname));
                                         }
                                         if ( suggester.firstname != null ) {
-                                            suggested_by.push(suggester.firstname.escapeHtml());
+                                            suggested_by.push(_escape_str(suggester.firstname));
                                         }
 
                                             result += "<br/>" + _("Suggested by: ") +
@@ -472,7 +472,7 @@
                                                             + encodeURIComponent(suggestion.suggestionid)
                                                             + '&amp;op=show">'
                                                             + suggested_by.join(", ")
-                                                            + " (#" + suggestions[0].suggestionid.escapeHtml() + ")</a>"; // FIXME: could be changed if we allow matching multiple suggestions
+                                                            + " (#" + _escape_str(suggestions[0].suggestionid) + ")</a>"; // FIXME: could be changed if we allow matching multiple suggestions
                                     }
                                 }
                                 result += '</p>';
@@ -482,7 +482,7 @@
                             if ( internal_note != null && internal_note != '' ) {
                                 result += '<p class="ordernote"><strong>'
                                             + _("Internal note: ")
-                                            + '</strong>' + internal_note.escapeHtml()
+                                            + '</strong>' + _escape_str(internal_note)
                                             + ' [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber='
                                             + encodeURIComponent(row.order_id) + '&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]'
                                             + '&type=internal">' + _("Change internal note") + '</a>]</p>';
@@ -497,7 +497,7 @@
                             if ( vendor_note != null && vendor_note != '' ) {
                                 result += '<p class="ordernote"><strong>'
                                             + _("Vendor note: ")
-                                            + '</strong>' + vendor_note.escapeHtml() + '</p>';
+                                            + '</strong>' + _escape_str(vendor_note) + '</p>';
                             }
                             else {
                                 result += ' [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber='
@@ -523,7 +523,7 @@
                     {
                         "data": "replacement_price",
                         "render": function(data, type, row, meta) {
-                            return (row.replacement_price).format_price();
+                            return _escape_price(row.replacement_price);
                         },
                     },
                     {
@@ -533,13 +533,13 @@
                     {
                         "data": "ecost",
                         "render": function(data, type, row, meta) {
-                            return (row.ecost).format_price();
+                            return _escape_price(row.ecost);
                         },
                     },
                     {
                         "data": "",
                         "render": function(data, type, row, meta) {
-                            return (row.quantity * row.ecost).format_price();
+                            return _escape_price(row.quantity * row.ecost);
                         },
                         "orderable": false, // FIXME: How can we do it in DBIC?
                         "searchable": false
@@ -547,8 +547,8 @@
                     {
                         "data": "fund.name",
                         "render": function(data, type, row, meta) {
-                            if (type != 'display') return data.escapeHtml();
-                            return row.fund.name.escapeHtml();
+                            if (type != 'display') return _escape_str(data);
+                            return _escape_str(row.fund.name);
                         }
                     },
                     {
@@ -557,7 +557,7 @@
                             return '<a href="orderreceive.pl?ordernumber='
                                     + encodeURIComponent(row.order_id) + '&amp;invoiceid=[% invoiceid | uri %]' + '">'
                                     + _("Receive") + '</a><br/>'
-                                    + '<a href="#" onclick="transfer_order_popup(' + row.order_id.escapeHtml() + '); return false;">'
+                                    + '<a href="#" onclick="transfer_order_popup(' + _escape_str(row.order_id) + '); return false;">'
                                     + _("Transfer") + '</a>';
                         },
                         "orderable": false,
@@ -570,7 +570,7 @@
 
                             if ( row.current_holds_count > 0 ) {
                                 result += '<span class="button" title="'
-                                        + _("Can't cancel order, (%s) holds are linked with this order. Cancel holds first").format( row.holds_count.escapeHtml() ) + '">'
+                                        + _("Can't cancel order, (%s) holds are linked with this order. Cancel holds first").format( _escape_str(row.holds_count) ) + '">'
                                         + _("Can't cancel order") + '</span><br/>';
                             }
                             else {
