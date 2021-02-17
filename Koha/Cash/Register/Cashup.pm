@@ -110,6 +110,7 @@ sub summary {
                 'debit_type_code.description'
             ],
             'as' => [ 'total', 'debit_type_code', 'debit_description' ],
+            order_by => { '-asc' => 'debit_type_code.description' },
         }
     );
 
@@ -130,6 +131,7 @@ sub summary {
                 'credit_type_code.description'
             ],
             'as' => [ 'total', 'credit_type_code', 'credit_description' ],
+            order_by => { '-asc' => 'credit_type_code.description' },
         }
     );
 
