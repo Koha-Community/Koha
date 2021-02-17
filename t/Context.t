@@ -42,7 +42,7 @@ subtest 'yaml_preference() tests' => sub {
 
     is_deeply( $pref, $data, 'yaml_preference returns the right structure' );
 
-    $context->mock( 'preference', q{- uno - dos: asd} );
+    $context->mock( 'preference', qq{- uno: dsa\n\t- dos: asd} );
     warning_like
         { $pref = C4::Context->new->yaml_preference('nothing') }
         qr/^Unable to parse nothing syspref/,
