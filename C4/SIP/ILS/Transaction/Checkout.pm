@@ -55,9 +55,7 @@ sub do_checkout {
     my $overridden_duedate; # usually passed as undef to AddIssue
     my $prevcheckout_block_checkout  = $account->{prevcheckout_block_checkout};
     $debug and warn "do_checkout borrower: . " . $patron->borrowernumber;
-    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode,
-        C4::Context->preference("AllowItemsOnHoldCheckoutSIP")
-    );
+    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode, 0);
 
     my $noerror=1;  # If set to zero we block the issue
     if (keys %{$issuingimpossible}) {
@@ -71,14 +69,15 @@ sub do_checkout {
         foreach my $confirmation (keys %{$needsconfirmation}) {
             if ($confirmation eq 'RENEW_ISSUE'){
                 $self->screen_msg("Item already checked out to you: renewing item.");
-            } elsif ($confirmation eq 'RESERVED' or $confirmation eq 'RESERVE_WAITING' or $confirmation eq 'TRANSFERRED') {
-                my $x = $self->{item}->available($patron->borrowernumber);
-                if ($x) {
-                    $self->screen_msg("Item was reserved for you.");
-                } else {
-                    $self->screen_msg("Item is reserved for another patron upon return.");
-                    $noerror = 0;
-                }
+            } elsif ($confirmation eq 'RESERVED' and !C4::Context->preference("AllowItemsOnHoldCheckoutSIP")) {
+                $self->screen_msg("Item is reserved for another patron upon return.");
+                $noerror = 0;
+            } elsif ($confirmation eq 'RESERVED' and C4::Context->preference("AllowItemsOnHoldCheckoutSIP")) {
+                next;
+            } elsif ($confirmation eq 'RESERVE_WAITING' or $confirmation eq 'TRANSFERRED') {
+               $debug and warn "Item is on hold for another patron.";
+               $self->screen_msg("Item is on hold for another patron.");
+               $noerror = 0;
             } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
                 $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
                 $noerror = 0;
@@ -113,15 +112,6 @@ sub do_checkout {
         }
     }
     my $itemnumber = $self->{item}->{itemnumber};
-    foreach (@$shelf) {
-        $debug and warn sprintf( "shelf has (%s for %s). this is (%is, %s)", $_->{itemnumber}, $_->{borrowernumber}, $itemnumber, $patron->borrowernumber );
-        ($_->{itemnumber} eq $itemnumber) or next;    # skip it if not this item
-        ($_->{borrowernumber} == $patron->borrowernumber) and last;
-            # if item was waiting for this patron, we're done.  AddIssue takes care of the "W" hold.
-        $debug and warn "Item is on hold for another patron.";
-        $self->screen_msg("Item is on hold for another patron.");
-        $noerror = 0;
-    }
     my ($fee, undef) = GetIssuingCharges($itemnumber, $patron->borrowernumber);
     if ( $fee > 0 ) {
         $self->{sip_fee_type} = '06';
