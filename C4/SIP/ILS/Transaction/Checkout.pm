@@ -71,7 +71,7 @@ sub do_checkout {
         foreach my $confirmation (keys %{$needsconfirmation}) {
             if ($confirmation eq 'RENEW_ISSUE'){
                 $self->screen_msg("Item already checked out to you: renewing item.");
-            } elsif ($confirmation eq 'RESERVED' or $confirmation eq 'RESERVE_WAITING') {
+            } elsif ($confirmation eq 'RESERVED' or $confirmation eq 'RESERVE_WAITING' or $confirmation eq 'TRANSFERRED') {
                 my $x = $self->{item}->available($patron->borrowernumber);
                 if ($x) {
                     $self->screen_msg("Item was reserved for you.");

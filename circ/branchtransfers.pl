@@ -73,6 +73,7 @@ my $messages;
 my $found;
 my $reserved;
 my $waiting;
+my $hold_transferred;
 my $reqmessage;
 my $cancelled;
 my $setwaiting;
@@ -176,6 +177,11 @@ if ($found) {
     if ( $res->{'ResFound'} eq "Waiting" ) {
         $waiting = 1;
     }
+
+    if ( $res->{'ResFound'} eq "Transferred" ) {
+        $hold_transferred = 1;
+    }
+
     elsif ( $res->{'ResFound'} eq "Reserved" ) {
         $reserved  = 1;
         $biblionumber = $res->{'biblionumber'};
@@ -218,6 +224,7 @@ $template->param(
     found                   => $found,
     reserved                => $reserved,
     waiting                 => $waiting,
+    transferred             => $hold_transferred,
     borrowernumber          => $borrowernumber,
     itemnumber              => $itemnumber,
     barcode                 => $barcode,
