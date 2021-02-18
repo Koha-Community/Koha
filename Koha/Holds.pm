@@ -92,6 +92,12 @@ sub forced_hold_level {
     return;
 }
 
+=head3 get_items_that_can_fill
+
+Developer will certainly submit an appropriate description.
+
+=cut
+
 sub get_items_that_can_fill {
     my ( $self ) = @_;
 

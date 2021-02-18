@@ -414,6 +414,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     my $biblio = $builder->build_sample_biblio;
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+        # waiting
     my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } )
       ;    # onloan
@@ -481,7 +482,7 @@ subtest 'get_items_that_can_fill' => sub {
 
     my @items = $holds->get_items_that_can_fill;
     is_deeply( [ map { $_->itemnumber } @items ],
-        [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 1 and 5 are available for filling the hold' );
+        [ $item_2->itemnumber, $item_5->itemnumber ], 'Only item 2 and 5 are available for filling the hold' );
 };
 
 $schema->storage->txn_rollback;
