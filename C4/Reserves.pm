@@ -1200,15 +1200,10 @@ sub ModReserveAffect {
     } else {
         $hold->set_waiting($desk_id);
         _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
-        my $transfers = Koha::Item::Transfers->search({
-            itemnumber => $itemnumber,
-            datearrived => undef
-        });
-        while( my $transfer = $transfers->next ){
-            $transfer->datearrived( dt_from_string() )->store;
-        };
+        # Complete transfer if one exists
+        my $transfer = $hold->item->get_transfer;
+        $transfer->receive if $transfer;
     }
-
 
     _FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
