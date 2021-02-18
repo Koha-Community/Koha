@@ -30,6 +30,8 @@ BEGIN {
 
 =head1 NAME
 
+! DEPRECATED - This module is deprecated, the REST API route and REST API Datatables wrapper must be used instead!
+
 C4::Utils::DataTables - Utility subs for building query when DataTables source is AJAX
 
 =head1 SYNOPSYS
