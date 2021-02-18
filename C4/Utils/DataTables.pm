@@ -25,7 +25,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
 
     @ISA        = qw(Exporter);
-    @EXPORT     = qw(dt_build_orderby dt_build_having dt_get_params dt_build_query);
+    @EXPORT     = qw(dt_build_orderby dt_build_having dt_get_params);
 }
 
 =head1 NAME
@@ -207,77 +207,6 @@ sub dt_get_params {
         }
     }
     return %dtparam;
-}
-
-=head2 dt_build_query_simple
-
-    my ( $query, $params )= dt_build_query_simple( $value, $field )
-
-    This function takes a value and a field (table.field).
-
-    It returns (undef, []) if not $value.
-    Else, returns a SQL where string and an arrayref containing parameters
-    for the execute method of the statement.
-
-=cut
-sub dt_build_query_simple {
-    my ( $value, $field ) = @_;
-    my $query;
-    my @params;
-    if( $value ) {
-        $query .= " AND $field = ? ";
-        push @params, $value;
-    }
-    return ( $query, \@params );
-}
-
-=head2 dt_build_query_dates
-
-    my ( $query, $params )= dt_build_query_dates( $datefrom, $dateto, $field)
-
-    This function takes a datefrom, dateto and a field (table.field).
-
-    It returns (undef, []) if not $value.
-    Else, returns a SQL where string and an arrayref containing parameters
-    for the execute method of the statement.
-
-=cut
-sub dt_build_query_dates {
-    my ( $datefrom, $dateto, $field ) = @_;
-    my $query;
-    my @params;
-    if ( $datefrom ) {
-        $query .= " AND $field >= ? ";
-        push @params, eval { output_pref( { dt => dt_from_string( $datefrom ), dateonly => 1, dateformat => 'iso' } ); };
-    }
-    if ( $dateto ) {
-        $query .= " AND $field <= ? ";
-        push @params, eval { output_pref( { dt => dt_from_string( $dateto ), dateonly => 1, dateformat => 'iso' } ); };
-    }
-    return ( $query, \@params );
-}
-
-=head2 dt_build_query
-
-    my ( $query, $filter ) = dt_build_query( $type, @params )
-
-    This function takes a value and a list of parameters.
-
-    It calls dt_build_query_dates or dt_build_query_simple function of $type.
-
-    $type can contain 'simple' or 'range_dates'.
-    if $type is not matched it returns undef
-
-=cut
-sub dt_build_query {
-    my ( $type, @params ) = @_;
-    if ( $type =~ m/simple/ ) {
-        return dt_build_query_simple(@params);
-    }
-    elsif ( $type =~ m/range_dates/ ) {
-        return dt_build_query_dates(@params);
-    }
-    return;
 }
 
 1;
