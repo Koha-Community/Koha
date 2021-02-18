@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -365,6 +365,77 @@ subtest do_checkin => sub {
         is( $hold->itemnumber, $item->itemnumber, );
         is( Koha::Checkouts->search({itemnumber => $item->itemnumber})->count, 0, );
     };
+};
+
+subtest do_checkout_with_holds => sub {
+    plan tests => 7;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $reserve = AddReserve(
+        {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron2->borrowernumber,
+                biblionumber   => $item->biblionumber,
+        }
+    );
+
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $co_transaction = C4::SIP::ILS::Transaction::Checkout->new();
+    is( $co_transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction" );
+    is( $co_transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction" );
+
+    # Test attached holds
+    ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 0, $reserve ); # Mark waiting (W)
+    my $hold = Koha::Holds->find($reserve);
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to attached hold (W)');
+
+    $hold->set_transfer;
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to attached hold (T)');
+
+    $hold->set_processing;
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout was not done due to attached hold (P)');
+
+    # Test non-attached holds
+    C4::Reserves::RevertWaitingStatus({ itemnumber => $hold->itemnumber });
+    t::lib::Mocks::mock_preference('AllowItemsOnHoldCheckoutSIP', '0');
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 0, 'Checkout refused due to hold and AllowItemsOnHoldCheckoutSIP');
+
+    t::lib::Mocks::mock_preference('AllowItemsOnHoldCheckoutSIP', '1');
+    $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 1, 'Checkout allowed due to hold and AllowItemsOnHoldCheckoutSIP');
 };
 
 subtest checkin_lost => sub {
