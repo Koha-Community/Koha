@@ -333,8 +333,10 @@ tbody {
     tr {
         &:nth-child(odd) {
             td {
-                background-color: $table-odd-row;
                 border-right: 1px solid $table-border-color;
+                &:not(.bg-danger):not(.bg-warning):not(.bg-info):not(.bg-success):not(.bg-primary) {
+                    background-color: $table-odd-row;
+                }
             }
         }
     }
