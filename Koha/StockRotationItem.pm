@@ -202,14 +202,14 @@ sub advance {
     my $stage = $self->stage;
     my $new_stage;
     if ( $self->indemand && !$self->fresh ) {
-        $self->indemand(0)->store;                          # De-activate indemand
+        $self->indemand(0);                                  # De-activate indemand
         $new_stage = $stage;
     }
     else {
         # New to rota?
         if ( $self->fresh ) {
             $new_stage = $self->stage->first_sibling || $self->stage;
-            $self->fresh(0)->store;                         # Reset fresh
+            $self->fresh(0);                                 # Reset fresh
         }
         # Last stage?
         elsif ( !$stage->last_sibling ) {
@@ -229,7 +229,8 @@ sub advance {
     }
 
     # Update stage and record transfer
-    $self->stage_id( $new_stage->stage_id )->store;          # Set new stage
+    $self->stage_id( $new_stage->stage_id );                 # Set new stage
+    $self->store();
     $item->homebranch( $new_stage->branchcode_id )->store;   # Update homebranch
     $transfer = try {
         $item->request_transfer(
