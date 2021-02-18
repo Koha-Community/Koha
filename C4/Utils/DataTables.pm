@@ -100,6 +100,11 @@ sub dt_build_orderby {
         $i++;
     }
 
+    return unless @orderbys;
+
+    # Must be "branches.branchname asc", "borrowers.firstname desc", etc.
+    @orderbys = grep { /^\w+\.\w+\s(asc|desc)$/ } @orderbys;
+
     $orderby = " ORDER BY " . join(',', @orderbys) . " " if @orderbys;
     return $orderby;
 }
