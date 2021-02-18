@@ -25,7 +25,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
 
     @ISA        = qw(Exporter);
-    @EXPORT     = qw(dt_build_orderby dt_build_having dt_get_params);
+    @EXPORT     = qw(dt_build_orderby dt_get_params);
 }
 
 =head1 NAME
@@ -46,8 +46,6 @@ C4::Utils::DataTables - Utility subs for building query when DataTables source i
         FROM borrowers
         WHERE borrowernumber = ?
     };
-    my ($having, $having_params) = dt_build_having($vars);
-    $query .= $having;
     $query .= dt_build_orderby($vars);
     $query .= " LIMIT ?,? ";
 
@@ -104,82 +102,6 @@ sub dt_build_orderby {
 
     $orderby = " ORDER BY " . join(',', @orderbys) . " " if @orderbys;
     return $orderby;
-}
-
-=head2 dt_build_having
-
-    my ($having, $having_params) = dt_build_having($dt_params)
-
-    This function takes a reference to a hash containing DataTables parameters
-    and build the corresponding 'HAVING' clause.
-    This hash must contains the following keys:
-        sSearch is the text entered in the global filter
-        iColumns is the number of columns
-        bSearchable_N is a boolean value that is true if the column is searchable
-        mDataProp_N is a mapping between the column index, and the name of a SQL field
-        sSearch_N is the text entered in individual filter for column N
-
-=cut
-
-sub dt_build_having {
-    my $param = shift;
-
-    my @filters;
-    my @params;
-
-    # Global filter
-    if($param->{'sSearch'}) {
-        my $sSearch = $param->{'sSearch'};
-        my $i = 0;
-        my @gFilters;
-        my @gParams;
-        while($i < $param->{'iColumns'}) {
-            if($param->{'bSearchable_'.$i} eq 'true') {
-                my $mDataProp = $param->{'mDataProp_'.$i};
-                my @filter_fields = $param->{$mDataProp.'_filteron'}
-                    ? split(' ', $param->{$mDataProp.'_filteron'})
-                    : ();
-                if(@filter_fields > 0) {
-                    foreach my $field (@filter_fields) {
-                        push @gFilters, " $field LIKE ? ";
-                        push @gParams, "%$sSearch%";
-                    }
-                } else {
-                    push @gFilters, " $mDataProp LIKE ? ";
-                    push @gParams, "%$sSearch%";
-                }
-            }
-            $i++;
-        }
-        push @filters, " (" . join(" OR ", @gFilters) . ") ";
-        push @params, @gParams;
-    }
-
-    # Individual filters
-    my $i = 0;
-    while($i < $param->{'iColumns'}) {
-        my $sSearch = $param->{'sSearch_'.$i};
-        if($sSearch) {
-            my $mDataProp = $param->{'mDataProp_'.$i};
-            my @filter_fields = $param->{$mDataProp.'_filteron'}
-                ? split(' ', $param->{$mDataProp.'_filteron'})
-                : ();
-            if(@filter_fields > 0) {
-                my @localfilters;
-                foreach my $field (@filter_fields) {
-                    push @localfilters, " $field LIKE ? ";
-                    push @params, "%$sSearch%";
-                }
-                push @filters, " ( ". join(" OR ", @localfilters) ." ) ";
-            } else {
-                push @filters, " $mDataProp LIKE ? ";
-                push @params, "%$sSearch%";
-            }
-        }
-        $i++;
-    }
-
-    return (\@filters, \@params);
 }
 
 =head2 dt_get_params
