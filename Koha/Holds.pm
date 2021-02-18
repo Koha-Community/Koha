@@ -94,7 +94,18 @@ sub forced_hold_level {
 
 =head3 get_items_that_can_fill
 
-Developer will certainly submit an appropriate description.
+    my $items = $holds->get_items_that_can_fill();
+
+Return the list of items that can fill the hold set.
+
+Items that are not:
+
+  in transit
+  waiting
+  lost
+  widthdrawn
+  not for loan
+  not on loan
 
 =cut
 
