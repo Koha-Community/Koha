@@ -480,16 +480,39 @@
                                             </div>
                                             <div class="modal-body">
                                                 <table class="table_borrowers">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Title</th>
+                                                            <th>Barcode</th>
+                                                            <th>Call number</th>
+                                                            <th>Collection</th>
+                                                            [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
+                                                            <th>&nbsp;</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
                                                     [% FOREACH item IN options %]
                                                         <tr>
                                                             <td>
                                                                 <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]">[% item.biblio.title | html %] <i class="fa fa-window-restore"></i></a>
-                                                                [% item.barcode | html %]
-                                                                [% IF item.itemcallnumber %]Callnumber: [% item.itemcallnumber %][% END %]
-                                                                [% IF item.copynumber %]Copy number: [% item.copynumber %][% END %]
-                                                                [% IF item.stocknumber %]Inventory number: [% item.stocknumber %][% END %]
-                                                                [% IF item.enumchron %]Serial enumeration: [% item.enumchron %][% END %]
                                                             </td>
+                                                            <td>
+                                                                [% item.barcode | html %]
+                                                            </td>
+                                                            <td>
+                                                                [% IF item.itemcallnumber %][% item.itemcallnumber | html %][% END %]
+                                                                [% IF item.copynumber %]<br /> Copy number: [% item.copynumber | html %][% END %]
+                                                                [% IF item.stocknumber %]<br /> Inventory number: [% item.stocknumber | html %][% END %]
+                                                                [% IF item.enumchron %]<br /> Serial enumeration: [% item.enumchron | html %][% END %]
+                                                            </td>
+                                                            <td>
+                                                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]
+                                                            </td>
+                                                            [% IF ( item_level_itypes ) %]
+                                                                <td>
+                                                                    [% ItemTypes.GetDescription( item.itype ) | html %]
+                                                                </td>
+                                                            [% END %]
                                                             <td>
                                                                 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
                                                                     [% IF (forceallow) %]
@@ -508,6 +531,7 @@
                                                             </td>
                                                         </tr>
                                                     [% END %]
+                                                    </tbody>
                                                 </table>
                                             </div> <!-- /.modal-body -->
                                             <div class="modal-footer">
