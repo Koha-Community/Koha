@@ -218,6 +218,13 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         var singleBranchMode = '[% singleBranchMode | html %]';
+        var dtMemberResults;
+        var search = 1;
+        /* popstate event triggered by forward and back button. Need to refresh search */
+        window.addEventListener('popstate', (event) => {
+            getSearchByLocation( false );
+        });
+
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
@@ -319,7 +326,7 @@
             });
             $(".filterByLetter").on("click",function(e){
                 e.preventDefault();
-                filterByFirstLetterSurname($(this).text());
+                filterByFirstLetterSurname( $(this).text(), true );
             });
             $("#select_all").on("click",function(e){
                 e.preventDefault();
@@ -335,11 +342,6 @@
             });
             $("#searchform").on("submit", filter);
 
-        });
-
-        var dtMemberResults;
-        var search = 1;
-        $(document).ready(function() {
             [% IF searchmember %]
                 $("#searchmember_filter").val("[% searchmember | html %]");
             [% END %]
@@ -451,6 +453,8 @@
                             // redirect if there is only 1 result.
                             if ( json.aaData.length == 1 ) {
                                 var borrowernumber = json.aaData[0].borrowernumber;
+                                /* Overwrite history state of firstletter search since only one result was returned; This prevents a loop upon clicking back */
+                                history.replaceState( {}, null, window.location.href.split("?" )[0]);
                                 document.location.href="/cgi-bin/koha/members/moremember.pl?borrowernumber="+borrowernumber;
                                 return false;
                             }
@@ -501,7 +505,23 @@
                 }
             }, columns_settings);
             update_searched();
+            /* Initial page load doesn't trigger the popstate event, so we explicitly call this */
+            getSearchByLocation( false );
+
         });
+
+        function getSearchByLocation( setstate ){
+            /* Check to see if the URL contains a search parameter */
+            if( location.search != ""){
+                var params = new URLSearchParams( location.search );
+                var firstletter = params.get("firstletter");
+                /* Check to see if search is a first letter param */
+                if( firstletter ){
+                    /* Trigger function to return search results by letter */
+                    filterByFirstLetterSurname( firstletter, setstate );
+                }
+            }
+        }
 
         // Update the string "Results found ..."
         function update_searched(){
@@ -542,16 +562,22 @@
             $("#firstletter_filter").val('');
             $("#searchmember_filter").val('');
             if(redraw) {
-                search = 1;
-                $("#searchresults").show();
+                /* remove any search string added by firstletter search */
+                history.pushState( {}, null, window.location.href.split("?" )[0]);
+                update_searched();
+                search = 0;
+                $("#searchresults").hide();
                 dtMemberResults.fnDraw();
             }
         }
 
         // User has clicked on a letter
-        function filterByFirstLetterSurname(letter) {
+        function filterByFirstLetterSurname( letter, setstate ) {
             clearFilters(false);
             $("#firstletter_filter").val(letter);
+            if( setstate ){
+                history.pushState( null, null, "?firstletter=" + letter );
+            }
             update_searched();
             search = 1;
             $("#searchresults").show();
