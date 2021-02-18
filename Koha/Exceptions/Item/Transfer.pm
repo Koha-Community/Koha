@@ -22,7 +22,7 @@ use Exception::Class (
     'Koha::Exceptions::Item::Transfer' => {
         description => 'Something went wrong'
     },
-    'Koha::Exceptions::Item::Transfer::Found' => {
+    'Koha::Exceptions::Item::Transfer::InQueue' => {
         isa         => 'Koha::Exceptions::Item::Transfer',
         description => "Active item transfer already exists",
         fields      => ['transfer']
@@ -31,11 +31,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Item::Transfer',
         description => "Transfer not allowed"
     },
-    'Koha::Exceptions::Item::Transfer::Out' => {
+    'Koha::Exceptions::Item::Transfer::OnLoan' => {
         isa         => 'Koha::Exceptions::Item::Transfer',
         description => "Transfer item is currently checked out"
     },
-    'Koha::Exceptions::Item::Transfer::Transit' => {
+    'Koha::Exceptions::Item::Transfer::InTransit' => {
         isa         => 'Koha::Exceptions::Item::Transfer',
         description => "Transfer item is currently in transit"
     }
@@ -51,7 +51,7 @@ Koha::Exceptions::Item::Transfer - Base class for Transfer exceptions
 
 Generic Item::Transfer exception
 
-=head2 Koha::Exceptions::Item::Transfer::Found
+=head2 Koha::Exceptions::Item::Transfer::InQueue
 
 Exception to be used when an active item transfer prevents a transfer action.
 
@@ -59,11 +59,11 @@ Exception to be used when an active item transfer prevents a transfer action.
 
 Exception to be used when transfer limits prevent a transfer action.
 
-=head2 Koha::Exceptions::Item::Transfer::Out
+=head2 Koha::Exceptions::Item::Transfer::OnLoan
 
 Exception to be used when an active checkout prevents a transfer action.
 
-=head2 Koha::Exceptions::Item::Transfer::Transit
+=head2 Koha::Exceptions::Item::Transfer::InTransit
 
 Exception to be used when an in transit transfer prevents a transfer action.
 

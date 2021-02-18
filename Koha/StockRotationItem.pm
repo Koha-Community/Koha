@@ -242,7 +242,7 @@ sub advance {
         );                                              # Add transfer
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Item::Transfer::Found') ) {
+        if ( $_->isa('Koha::Exceptions::Item::Transfer::InQueue') ) {
             my $exception = $_;
             my $found_transfer = $_->transfer;
             if (   $found_transfer->in_transit

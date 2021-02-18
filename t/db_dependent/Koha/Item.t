@@ -483,7 +483,7 @@ subtest 'request_transfer' => sub {
 
     # Transfer already in progress
     throws_ok { $item->request_transfer( { to => $library2, reason => 'Manual' } ) }
-    'Koha::Exceptions::Item::Transfer::Found',
+    'Koha::Exceptions::Item::Transfer::InQueue',
       'Exception thrown if transfer is already in progress';
 
     my $exception = $@;

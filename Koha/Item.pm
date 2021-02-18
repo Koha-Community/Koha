@@ -444,7 +444,7 @@ sub request_transfer {
         || $self->can_be_transferred( { to => $params->{to} } ) );
 
     my $request = $self->get_transfer;
-    Koha::Exceptions::Item::Transfer::Found->throw( transfer => $request )
+    Koha::Exceptions::Item::Transfer::InQueue->throw( transfer => $request )
       if ( $request && !$params->{enqueue} && !$params->{replace} );
 
     $request->cancel( { reason => $params->{reason}, force => 1 } )

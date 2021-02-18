@@ -92,7 +92,7 @@ subtest 'transit tests' => sub {
     is( ref($checkout), 'Koha::Checkout', 'Mock checkout added' );
 
     throws_ok { $transfer->transit() }
-    'Koha::Exceptions::Item::Transfer::Out',
+    'Koha::Exceptions::Item::Transfer::OnLoan',
       'Exception thrown if item is checked out';
 
     $checkout->delete;
@@ -155,7 +155,7 @@ subtest 'receive tests' => sub {
     is( ref($checkout), 'Koha::Checkout', 'Mock checkout added' );
 
     throws_ok { $transfer->receive() }
-    'Koha::Exceptions::Item::Transfer::Out',
+    'Koha::Exceptions::Item::Transfer::OnLoan',
       'Exception thrown if item is checked out';
 
     $checkout->delete;
@@ -246,7 +246,7 @@ subtest 'cancel tests' => sub {
 
     # Item in transit should result in failure
     throws_ok { $transfer->cancel({ reason => $cancellation_reason }) }
-    'Koha::Exceptions::Item::Transfer::Transit',
+    'Koha::Exceptions::Item::Transfer::InTransit',
       'Exception thrown if item is in transit';
 
     $transfer->cancel({ reason => $cancellation_reason, force => 1});
