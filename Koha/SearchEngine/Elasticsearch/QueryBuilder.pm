@@ -449,23 +449,18 @@ sub build_authorities_query {
                 );
             }
             my $query = $self->_join_queries( @tokens );
-
+            my $query_string = {
+                query            => $query,
+                lenient          => JSON::true,
+                analyze_wildcard => JSON::true,
+            };
             if ($wh) {
-                push @query_parts, { query_string => {
-                    default_field => $wh,
-                    analyze_wildcard => JSON::true,
-                    query => $query
-                } };
+                $query_string->{default_field} = $wh;
             }
             else {
-                push @query_parts, {
-                    query_string => {
-                        analyze_wildcard => JSON::true,
-                        query => $query,
-                        fields => $self->_search_fields(),
-                    }
-                };
+                $query_string->{fields} = $self->_search_fields();
             }
+            push @query_parts, { query_string => $query_string };
         }
     }
 
