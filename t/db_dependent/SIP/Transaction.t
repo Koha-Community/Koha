@@ -324,7 +324,17 @@ subtest do_checkin => sub {
 
     my $result  = $ci_transaction->do_checkin($library2->branchcode, undef);
     is($ci_transaction->alert_type,'04',"Checkin of item no issued at another branch succeeds");
-    is_deeply($result,{ messages => { 'NotIssued' => $item->barcode, 'WasTransfered' => 1 } },"Messages show not issued and transferred");
+    is_deeply(
+        $result,
+        {
+            messages => {
+                'NotIssued'       => $item->barcode,
+                'WasTransfered'   => $library->branchcode,
+                'TransferTrigger' => 'ReturnToHome'
+            }
+        },
+        "Messages show not issued and transferred"
+    );
     is( $ci_transaction->item->destination_loc,$library->branchcode,"Item destination correctly set");
 
     subtest 'Checkin an in transit item' => sub {
