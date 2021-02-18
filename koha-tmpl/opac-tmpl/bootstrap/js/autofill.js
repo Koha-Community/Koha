@@ -103,6 +103,15 @@
                         if( ! field.$target )
                             continue;
 
+                        /* format copyrightdate */
+                        if ( field.target == 'copyrightdate' ) {
+                            if ( value.indexOf('-') > -1 ) {
+                                var hyphenIndex = value.indexOf('-');
+                                var newval = value.slice(0, hyphenIndex);
+                                value = newval;
+                            }
+                        }
+
                         /* handle differently depending on datatype */
                         switch(typeString(value)) {
                             case 'array':
