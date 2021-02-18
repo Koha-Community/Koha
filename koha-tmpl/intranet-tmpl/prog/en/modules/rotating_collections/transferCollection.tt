@@ -21,16 +21,14 @@
 
                 [% IF ( messages ) %]
                     [% FOREACH message IN messages %]
-                        [%- SWITCH message.type -%]
-                            [%- CASE 'failure' %]
-                            <div class="dialog error">
-                                <p>Cannot transfer item [% message.item.itemnumber | html %] due to transfer limits</p>
-                            </div>
-                            [%- CASE 'enqueu' -%]
-                            <div class="dialog message">
-                                <p>Item [% message.item.itemnumber | html %] queued behind [% message.found_transfer.reason | html %] transfer to [% Branches.GetName(message.found_transfer.tobranch) | html %]</p>
-                            </div>
-                       [% END %]
+                        <div class="dialog [% m.type | html %]">
+                        [%- SWITCH message.code -%]
+                        [%- CASE 'limits' %]
+                            <p>Cannot transfer item [% message.item.itemnumber | html %] due to transfer limits</p>
+                        [%- CASE 'enqueued' -%]
+                            <p>Item [% message.item.itemnumber | html %] queued behind [% message.found_transfer.reason | html %] transfer to [% Branches.GetName(message.found_transfer.tobranch) | html %]</p>
+                        [% END %]
+                        </div>
                     [% END %]
                 [% END %]
 

@@ -473,7 +473,8 @@ sub TransferCollection {
                     );    # Queue transfer
                     push @{$messages},
                       {
-                        type           => 'enqueu',
+                        type           => 'alert',
+                        code           => 'enqueued',
                         item           => $item_object,
                         found_transfer => $found_transfer
                       };
@@ -492,7 +493,12 @@ sub TransferCollection {
                 }
             }
             elsif ( $_->isa('Koha::Exceptions::Item::Transfer::Limit') ) {
-                push @{$messages}, { type => 'failure', item => $item_object };
+                push @{$messages},
+                  {
+                    type => 'error',
+                    code => 'limits',
+                    item => $item_object
+                  };
             }
             else {
                 $_->rethrow();
