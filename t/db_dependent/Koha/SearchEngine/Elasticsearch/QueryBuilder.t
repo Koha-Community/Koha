@@ -103,7 +103,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
-    plan tests => 57;
+    plan tests => 65;
 
     my $qb;
 
@@ -124,6 +124,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
                 "a*");
         }
         is( $query->{query}->{bool}->{must}[0]->{query_string}->{analyze_wildcard}, JSON::true, 'Set analyze_wildcard true' );
+        is( $query->{query}->{bool}->{must}[0]->{query_string}->{lenient}, JSON::true, 'Set lenient true' );
     }
 
     $search_term = 'Donald Duck';
