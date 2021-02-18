@@ -154,7 +154,7 @@ sub do_checkin {
             ModItemTransfer( $item->itemnumber,
                 $branch,
                 $messages->{ResFound}->{branchcode},
-                $messages->{TransferTrigger},
+                'Reserve',
             );
 
         }
