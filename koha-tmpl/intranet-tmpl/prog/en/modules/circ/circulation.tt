@@ -126,7 +126,7 @@
                                     <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) and being transferred to [% Branches.GetName( resbranchcode ) | html %]</li>
                                 [% END %]
 
-                                [% IF ( PROCESSED ) %]
+                                [% IF ( PROCESSING ) %]
                                     <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is being processed for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %]</li>
                                 [% END %]
 
@@ -254,7 +254,7 @@
                                         </p>
                                     [% END %]
 
-                                    [% IF ( PROCESSED ) %]
+                                    [% IF ( PROCESSING ) %]
                                         <p>
                                             <label for="cancelreserve">Cancel hold</label>
                                             <input type="radio" value="cancel" name="cancelreserve" id="cancelreserve" /><br />
