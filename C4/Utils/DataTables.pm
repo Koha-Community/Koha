@@ -85,8 +85,8 @@ sub dt_build_orderby {
     my $param = shift;
 
     my $i = 0;
-    my $orderby;
     my @orderbys;
+    my $dbh = C4::Context->dbh;
     while(exists $param->{'iSortCol_'.$i}){
         my $iSortCol = $param->{'iSortCol_'.$i};
         my $sSortDir = $param->{'sSortDir_'.$i};
@@ -105,9 +105,18 @@ sub dt_build_orderby {
     return unless @orderbys;
 
     # Must be "branches.branchname asc", "borrowers.firstname desc", etc.
-    @orderbys = grep { /^\w+\.\w+\s(asc|desc)$/ } @orderbys;
+    @orderbys = grep { /^\w+\.\w+ (asc|desc)$/ } @orderbys;
 
-    $orderby = " ORDER BY " . join(',', @orderbys) . " " if @orderbys;
+    my @sanitized_orderbys;
+    for my $orderby (@orderbys) {
+      my ($identifier, $direction) = split / /, $orderby, 2;
+      my ($table, $column) = split /\./, $identifier, 2;
+      my $sanitized_identifier = $dbh->quote_identifier(undef, $table, $column);
+      my $sanitized_direction = $direction eq 'asc' ? 'ASC' : 'DESC';
+      push @sanitized_orderbys, "$sanitized_identifier $sanitized_direction";
+    }
+
+    my $orderby = " ORDER BY " . join(',', @sanitized_orderbys) . " " if @sanitized_orderbys;
     return $orderby;
 }
 
