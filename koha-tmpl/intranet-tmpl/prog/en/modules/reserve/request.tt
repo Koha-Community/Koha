@@ -20,9 +20,7 @@
 </head>
 
 <body id="circ_request" class="catalog">
-<script>
-    $.fn.select2.defaults.set("width", "100%" );
-</script>
+
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
@@ -1015,6 +1013,8 @@
             cannotBeTransferred: _("Cannot be transferred to pickup library")
         }
         columns_settings_borrowers_table = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
+        $.fn.select2.defaults.set("width", "100%" );
+        $.fn.select2.defaults.set("dropdownAutoWidth", true );
 
         $(document).ready(function() {
             $('#cancellation-reason-fieldset').hide();
