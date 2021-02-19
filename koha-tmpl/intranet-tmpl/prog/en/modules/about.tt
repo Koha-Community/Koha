@@ -54,7 +54,11 @@
             [% IF elasticsearch_fatal_config_error %]
                 <td><span class="bg-warning">[% elasticsearch_fatal_config_error | html %]</span></td>
             [% ELSE %]
-                <td>
+                [% IF elasticsearch_status.running %]
+                    <td class="bg-success">
+                [% ELSE %]
+                    <td>
+                [% END %]
                     Version:
                     <span>[% elasticsearch_status.version | html %]</span>
                     |
@@ -63,7 +67,7 @@
                     |
                     Status:
                 [% IF elasticsearch_status.running %]
-                    <span class="bg-success">running</span>
+                    <span>running</span>
                     |
                     Indices:
                   [% FOREACH index IN elasticsearch_status.indexes %]
@@ -77,7 +81,11 @@
             </tr>
           [% END %]
             <tr><th scope="row">Memcached: </th>
-                <td>
+                [% IF memcached_running AND is_memcached_still_active AND where_is_memcached_config == 'config_only' %]
+                    <td class="bg-success">
+                [% ELSE %]
+                    <td>
+                [% END %]
                     Servers: [% IF memcached_servers %]<span>[% memcached_servers | html %]</span>
                              [% ELSE %]<span>undefined</span>[% END %] |
                     Namespace: [% IF memcached_namespace %]<span>[% memcached_namespace | html %]</span>
