@@ -26,7 +26,6 @@ use C4::Log;
 use Getopt::Long;
 use Pod::Usage;
 use YAML::XS;
-use Encode;
 our %NOT_SET_PREFS = map { $_, 1 } qw( Version );
 
 =head1 NAME
@@ -214,11 +213,7 @@ my %commands = (
             'o:s' => \$outfile
         ) || _print_usage( 1 );
 
-        if ( $outfile ) {
-            YAML::XS::DumpFile( $outfile, GetPreferences() );
-        } else {
-            print Encode::decode_utf8(YAML::XS::Dump(GetPreferences()));
-        }
+        YAML::XS::DumpFile( $outfile || \*STDOUT, GetPreferences() );
     },
     load => sub {
         my ( $infile, $force_version );
