@@ -47,7 +47,7 @@ subtest 'dt_build_orderby' => sub {
     };
 
     my $orderby = dt_build_orderby($dt_params);
-    is( $orderby, " ORDER BY branches.branchname asc,borrowers.surname desc,borrowers.firstname desc ", 'ORDER BY has been correctly built' );
+    is( $orderby, " ORDER BY `branches`.`branchname` ASC,`borrowers`.`surname` DESC,`borrowers`.`firstname` DESC ", 'ORDER BY has been correctly built' );
 
     $dt_params = {
         %$dt_params,
@@ -57,5 +57,5 @@ subtest 'dt_build_orderby' => sub {
     };
 
     $orderby = dt_build_orderby($dt_params);
-    is( $orderby, " ORDER BY branches.branchname asc,borrowers.surname desc,borrowers.firstname desc ", 'ORDER BY has been correctly built, even with invalid stuff');
+    is( $orderby, " ORDER BY `branches`.`branchname` ASC,`borrowers`.`surname` DESC,`borrowers`.`firstname` DESC ", 'ORDER BY has been correctly built, even with invalid stuff');
 };
