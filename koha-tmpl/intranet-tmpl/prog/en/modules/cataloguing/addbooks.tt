@@ -247,7 +247,7 @@
             });
 
             $("#useadvanced").click(function(){
-                $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/' } );
+                Cookies.set( "catalogue_editor_[% logged_in_user.borrowernumber | html %]", "advanced", { expires: 365, path: '/' } );
                 return true;
             });
 

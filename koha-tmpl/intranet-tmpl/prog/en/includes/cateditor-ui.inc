@@ -1207,7 +1207,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         $( '#switch-editor' ).click( function() {
             if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return;
 
-            $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'basic', { expires: 365, path: '/' } );
+            Cookies.set( "catalogue_editor_[% logged_in_user.borrowernumber | html %]", "basic", { expires: 365, path: '/' } );
 
             if ( state.backend == 'catalog' ) {
                 window.location = '/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=' + state.recordID;
