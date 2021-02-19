@@ -326,16 +326,15 @@ subtest 'Check holds availability with different item types' => sub {
     # (Bug 24683):
 
     my $biblio2       = $builder->build_sample_biblio( { itemtype => $itemtype } );
-    my $biblionumber1 = $biblio2->biblionumber;
     my $item4         = $builder->build_sample_item(
-        {   biblionumber  => $biblionumber1,
+        {   biblionumber  => $biblio2->biblionumber,
             itype         => $itemtype,
             homebranch    => $library_A,
             holdingbranch => $library_A
         }
     );
     my $item5 = $builder->build_sample_item(
-        {   biblionumber  => $biblionumber1,
+        {   biblionumber  => $biblio2->biblionumber,
             itype         => $itemtype2,
             homebranch    => $library_A,
             holdingbranch => $library_A
@@ -371,7 +370,7 @@ subtest 'Check holds availability with different item types' => sub {
         }
     );
 
-    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 1, "Items availability: 2 items, one allowed by smart rule but not checked out, another one not allowed to be held by smart rule" );
 
     $is = IsAvailableForItemLevelRequest( $item4, $patron1 );
@@ -382,7 +381,7 @@ subtest 'Check holds availability with different item types' => sub {
 
     AddIssue( $patron2->unblessed, $item4->barcode );
 
-    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 0, "Items availability: 2 items, one allowed by smart rule and checked out, another one not allowed to be held by smart rule" );
 
     $is = IsAvailableForItemLevelRequest( $item4, $patron1 );
@@ -397,9 +396,8 @@ subtest 'Check item checkout availability with ordered item' => sub {
     plan tests => 1;
 
     my $biblio2       = $builder->build_sample_biblio( { itemtype => $itemtype } );
-    my $biblionumber1 = $biblio2->biblionumber;
     my $item1 = $builder->build_sample_item(
-        {   biblionumber  => $biblionumber1,
+        {   biblionumber  => $biblio2->biblionumber,
             itype         => $itemtype2,
             homebranch    => $library_A,
             holdingbranch => $library_A,
@@ -422,7 +420,7 @@ subtest 'Check item checkout availability with ordered item' => sub {
         }
     );
 
-    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblionumber1, patron => $patron1 } );
+    $is = ItemsAnyAvailableAndNotRestricted( { biblionumber => $biblio2->biblionumber, patron => $patron1 } );
     is( $is, 0, "Ordered item cannot be checked out" );
 };
 
