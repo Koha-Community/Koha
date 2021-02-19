@@ -224,7 +224,7 @@ $template->param(
     reserved                => $reserved,
     waiting                 => $waiting,
     transferred             => $hold_transferred,
-    processed               => $hold_processed,
+    processing              => $hold_processed,
     borrowernumber          => $borrowernumber,
     itemnumber              => $itemnumber,
     barcode                 => $barcode,

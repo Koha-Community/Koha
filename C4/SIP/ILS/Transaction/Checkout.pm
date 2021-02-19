@@ -76,7 +76,7 @@ sub do_checkout {
                 next;
             } elsif ($confirmation eq 'RESERVE_WAITING'
                       or $confirmation eq 'TRANSFERRED'
-                      or $confirmation eq 'PROCESSED') {
+                      or $confirmation eq 'PROCESSING') {
                $debug and warn "Item is on hold for another patron.";
                $self->screen_msg("Item is on hold for another patron.");
                $noerror = 0;

@@ -150,7 +150,7 @@
                   [% IF checkout_info.TRANSFERRED %]
                       <li><i class="fa fa-li fa-warning"></i>This item is on hold and being transferred to another patron.</li>
                   [% END %]
-                  [% IF checkout_info.PROCESSED %]
+                  [% IF checkout_info.PROCESSING %]
                       <li><i class="fa fa-li fa-warning"></i>This item is on hold and being processed for another patron.</li>
                   [% END %]
                   [% IF checkout_info.ISSUED_TO_ANOTHER %]
@@ -193,7 +193,7 @@
                       </script>
                   [% END %]
 
-                  [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout || checkout_info.HIGHHOLDS ) && ( checkout_info.RESERVED || checkout_info.RESERVE_WAITING || checkout_info.TRANSFERRED || checkout_info.PROCESSED ) %] <!-- arbitrary choice, revert the reserve is not possible-->
+                  [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout || checkout_info.HIGHHOLDS ) && ( checkout_info.RESERVED || checkout_info.RESERVE_WAITING || checkout_info.TRANSFERRED || checkout_info.PROCESSING ) %] <!-- arbitrary choice, revert the reserve is not possible-->
                       <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
                   [% ELSIF checkout_info.RESERVED %]
                       <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron.</li>

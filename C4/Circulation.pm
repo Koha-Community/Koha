@@ -1149,7 +1149,7 @@ sub CanBookBeIssued {
                 }
                 elsif ( $restype eq "Processing" ) {
                     # The item is determined hold being processed for someone else.
-                    $needsconfirmation{PROCESSED} = 1;
+                    $needsconfirmation{PROCESSING} = 1;
                     $needsconfirmation{'resfirstname'} = $patron->firstname;
                     $needsconfirmation{'ressurname'} = $patron->surname;
                     $needsconfirmation{'rescardnumber'} = $patron->cardnumber;
