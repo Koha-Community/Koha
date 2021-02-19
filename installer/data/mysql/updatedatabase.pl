@@ -155,7 +155,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.006";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    sanitize_zeo_date('issues', 'issuedate');
+    sanitize_zero_date('issues', 'issuedate');
     print "Upgrade to $DBversion done (filled issues.issuedate with timestamp)\n";
     SetVersion ($DBversion);
 }
@@ -1954,7 +1954,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (remove default '0000-00-00' in subscriptionhistory.enddate field)\n";
     $dbh->do("ALTER TABLE `subscriptionhistory` CHANGE `enddate` `enddate` DATE NULL DEFAULT NULL ");
 
-    sanitize_zeo_date('subscriptionhistory', 'enddate');
+    sanitize_zero_date('subscriptionhistory', 'enddate');
 
     SetVersion ($DBversion);
 }
@@ -2909,7 +2909,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # match the new type of the corresponding field
     $dbh->do('ALTER TABLE fundmapping modify column bookfundid varchar(30)');
     # System did not ensure budgetdate was valid historically
-    sanitize_zeo_date('fundmapping', 'budgetdate');
+    sanitize_zero_date('fundmapping', 'budgetdate');
     $dbh->do(q|UPDATE fundmapping SET budgetdate = entrydate WHERE budgetdate IS NULL|);
     # We save the map in fundmapping in case you need later processing
     $dbh->do(q|ALTER TABLE fundmapping add column aqbudgetid integer|);
@@ -7611,7 +7611,7 @@ if ( CheckVersion($DBversion) ) {
         WHERE subscriptionid = ?
     |);
 
-    sanitize_zeo_date('subscription', 'firstacquidate');
+    sanitize_zero_date('subscription', 'firstacquidate');
     my $get_subscriptions_sth = $dbh->prepare(qq|
         SELECT subscriptionid, startdate
         FROM subscription
@@ -10645,7 +10645,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.009";
 if ( CheckVersion($DBversion) ) {
 
-    sanitize_zeo_date('aqorders', 'datecancellationprinted');
+    sanitize_zero_date('aqorders', 'datecancellationprinted');
 
     $dbh->do(q|
         UPDATE aqorders SET orderstatus='cancelled'
@@ -10883,10 +10883,10 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.023";
 if ( CheckVersion($DBversion) ) {
 
-    sanitize_zeo_date('borrowers', 'debarred');
-    sanitize_zeo_date('borrowers', 'dateexpiry');
-    sanitize_zeo_date('borrowers', 'dateofbirth');
-    sanitize_zeo_date('borrowers', 'dateenrolled');
+    sanitize_zero_date('borrowers', 'debarred');
+    sanitize_zero_date('borrowers', 'dateexpiry');
+    sanitize_zero_date('borrowers', 'dateofbirth');
+    sanitize_zero_date('borrowers', 'dateenrolled');
 
     print "Upgrade to $DBversion done (Bug 14717: Prevent 0000-00-00 dates in patron data)\n";
     SetVersion($DBversion);
