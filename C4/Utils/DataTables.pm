@@ -116,8 +116,7 @@ sub dt_build_orderby {
       push @sanitized_orderbys, "$sanitized_identifier $sanitized_direction";
     }
 
-    my $orderby = " ORDER BY " . join(',', @sanitized_orderbys) . " " if @sanitized_orderbys;
-    return $orderby;
+    return " ORDER BY " . join(',', @sanitized_orderbys) . " " if @sanitized_orderbys;
 }
 
 =head2 dt_get_params
