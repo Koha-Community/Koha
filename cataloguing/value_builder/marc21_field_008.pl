@@ -36,7 +36,8 @@ my $builder = sub {
     my $lang = C4::Context->preference('DefaultLanguageField008' );
     $lang = "eng" unless $lang;
     $lang = pack("A3", $lang);
-    my $country = C4::Context->preference('DefaultCountryField008') // "xxu";
+    my $country = C4::Context->preference('DefaultCountryField008');
+    $country = "|||" unless $country;
     $country = pack("A3", $country);
 
     my $function_name = $params->{id};
