@@ -675,7 +675,7 @@ sub GetNormalizedOCLCNumber {
         my @fields = $marcrecord->field('035');
         foreach my $field (@fields) {
             my $oclc = $field->subfield('a');
-            if ($oclc =~ /OCoLC/) {
+            if ($oclc && $oclc =~ /OCoLC/) {
                 $oclc =~ s/\(OCoLC\)//;
                 return $oclc;
             }
