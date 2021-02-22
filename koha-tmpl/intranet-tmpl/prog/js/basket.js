@@ -1,4 +1,5 @@
-/* global __ */
+/* global __ getContextBiblioNumbers */
+/* exported readCookie readCookieValue SelectAll addMultiple selRecord delSingleRecord delBasket quit sendBasket downloadBasket printBasket showMore showLess openBiblio addSelToShelf vShelfAdd */
 
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
@@ -9,16 +10,17 @@ var CGIBIN = "/cgi-bin/koha/";
 var nameCookie = "intranet_bib_list";
 var nameParam = "bib_list";
 var valCookie = readCookie(nameCookie);
+var basketcount;
 
 if(valCookie){
     var arrayRecords = valCookie.split("/");
     if(arrayRecords.length > 0){
-        var basketcount = arrayRecords.length-1;
+        basketcount = arrayRecords.length-1;
     } else {
-        var basketcount = "";
+        basketcount = "";
     }
 } else {
-        var basketcount = "";
+    basketcount = "";
 }
 
 function writeCookie(name, val, wd) {
@@ -39,7 +41,6 @@ function readCookieValue (str, val_beg) {
 
 function readCookie(name, wd) {
     var str_name = name + "=";
-    var str_len = str_name.length;
     var str_cookie = "";
     if (wd) {
         str_cookie = parent.opener.document.cookie;
@@ -47,13 +48,13 @@ function readCookie(name, wd) {
     else {
         str_cookie = parent.document.cookie;
     }
-        // fixed - getting the part of the basket that is bib_list
-        var cookie_parts = str_cookie.split(";");
-            for(var i=0;i < cookie_parts.length;i++) {
-	            var c = cookie_parts[i];
-                    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if(c.indexOf(str_name) === 0) return c.substring(str_name.length,c.length);
-            }
+    // fixed - getting the part of the basket that is bib_list
+    var cookie_parts = str_cookie.split(";");
+    for(var i=0;i < cookie_parts.length;i++) {
+        var c = cookie_parts[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if(c.indexOf(str_name) === 0) return c.substring(str_name.length,c.length);
+    }
     return null;
 }
 
@@ -61,9 +62,9 @@ function delCookie(name) {
     var exp = new Date();
     exp.setTime(exp.getTime()-1);
     if(parent.opener){
-	parent.opener.document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
+        parent.opener.document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
     } else {
-	document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
+        document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
     }
 }
 
@@ -139,18 +140,18 @@ function addRecord(val, selection,NoMsgAlert) {
 }
 
 function AllAreChecked(s){
-	if (! s.length)	{ return false;}
-	var l = s.length;
-	for (var i=0; i < l; i++) {
-		if(! s[i].checked) { return false; }
-	}
-	return true;
+    if (! s.length){ return false;}
+    var l = s.length;
+    for (var i=0; i < l; i++) {
+        if(! s[i].checked) { return false; }
+    }
+    return true;
 }
 
 function SelectAll(){
     if(document.bookbag_form.biblionumber.length > 0) {
-		var checky = AllAreChecked(document.bookbag_form.biblionumber);
-		var l = document.bookbag_form.biblionumber.length;
+        var checky = AllAreChecked(document.bookbag_form.biblionumber);
+        var l = document.bookbag_form.biblionumber.length;
         for (var i=0; i < l; i++) {
             document.bookbag_form.biblionumber[i].checked = (checky) ? false : true;
         }
@@ -159,8 +160,9 @@ function SelectAll(){
 
 function addMultiple(biblist){
     var c_value = "";
+    var i = 0;
     if( biblist && biblist.length > 0 ) {
-        for (var i=0; i < biblist.length; i++) {
+        for ( i=0; i < biblist.length; i++ ) {
             if (biblist[i].checked) {
                 c_value = c_value + biblist[i].value + "/";
             }
@@ -168,12 +170,12 @@ function addMultiple(biblist){
     } else {
         var bibnums = getContextBiblioNumbers();
         if ( bibnums.length > 0 ) {
-            for ( var i = 0 ; i < bibnums.length ; i++ ) {
+            for ( i = 0 ; i < bibnums.length ; i++ ) {
                 c_value = c_value + bibnums[i] + "/";
             }
         } else {
             if(document.bookbag_form.biblionumber.length > 0) {
-                for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
+                for ( i=0; i < document.bookbag_form.biblionumber.length; i++ ) {
                     if (document.bookbag_form.biblionumber[i].checked) {
                         c_value = c_value + document.bookbag_form.biblionumber[i].value + "/";
                     }
@@ -186,8 +188,9 @@ function addMultiple(biblist){
     addSelRecords(c_value);
 }
 
-function addSelRecords(valSel) { // function for adding a selection of biblios to the basket
-                                                // from the results list
+/* function for adding a selection of biblios to the basket
+   from the results list */
+function addSelRecords(valSel) {
     var arrayRecords = valSel.split("/");
     var i = 0;
     var nbAdd = 0;
@@ -218,19 +221,19 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
             msg = __("No item was added to your cart (already in your cart)!");
         }
     }
-	showCartUpdate(msg);
+    showCartUpdate(msg);
 }
 
 function showCartUpdate(msg){
-	// set body of popup window
-	$("#cartDetails").html(msg);
-	showCart();
+    // set body of popup window
+    $("#cartDetails").html(msg);
+    showCart();
     setTimeout(hideCart,2000);
 }
 
 function showListsUpdate(msg){
-       // set body of popup window
-       alert(msg);
+    // set body of popup window
+    alert(msg);
 }
 
 function selRecord(num, status) {
@@ -261,7 +264,7 @@ function delSelRecords() {
     var recordsSel = 0;
     var end = 0;
     var valCookie = readCookie(nameCookie, 1);
-
+    var s;
     if (valCookie) {
         var str = document.myform.records.value;
         if (str.length > 0){
@@ -270,7 +273,7 @@ function delSelRecords() {
             while (!end){
                 s = str.indexOf("/");
                 if (s>0){
-                    num = str.substring(0, s);
+                    var num = str.substring(0, s);
                     str = delRecord(num,str);
                     str2 = delRecord(num,str2);
                     updateLink(num,"del",top.opener);
@@ -331,7 +334,6 @@ function delRecord (n, s) {
     return s;
 }
 
-
 function delBasket(context,rep) {
     if (rep === undefined){
         rep = confirm(__("Are you sure you want to empty your cart?"));
@@ -349,7 +351,6 @@ function delBasket(context,rep) {
         }
     }
 }
-
 
 function quit() {
     if (document.myform.records.value) {
@@ -370,7 +371,7 @@ function sendBasket() {
     var loc = CGIBIN + "basket/sendbasket.pl?" + strCookie;
 
     var optWin="scrollbars=no,resizable=no,height=400,width=650,top=50,left=100";
-    var win_form = open(loc,"win_form",optWin);
+    open(loc,"win_form",optWin);
 }
 
 function downloadBasket() {
@@ -409,14 +410,13 @@ function showLess() {
 }
 
 function updateBasket(updated_value,target) {
-	if(target){
-	target.$('#basketcount').html(" <span>("+updated_value+")</span>");
-    target.$('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
-	} else {
-	$('#basketcount').html(" <span>("+updated_value+")</span>");
-    $('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
-	}
-	var basketcount = updated_value;
+    if(target){
+        target.$('#basketcount').html(" <span>("+updated_value+")</span>");
+        target.$('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
+    } else {
+        $('#basketcount').html(" <span>("+updated_value+")</span>");
+        $('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
+    }
 }
 
 function openBiblio(openerURL) {
@@ -426,9 +426,9 @@ function openBiblio(openerURL) {
 
 function addSelToShelf() {
     var items = document.getElementById('records').value;
-	if(items){
-    document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
-	} else {
+    if(items){
+        document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
+    } else {
         alert(__("No item was selected"));
     }
 }
@@ -437,8 +437,9 @@ function addSelToShelf() {
 
 function vShelfAdd(biblist) {
     var bibs = new Array;
+    var i;
     if( biblist && biblist.length > 0 ) {
-        for (var i=0; i < biblist.length; i++) {
+        for ( i=0; i < biblist.length; i++ ) {
             if (biblist[i].checked) {
                 bibs.push("biblionumber=" +  biblist[i].value);
             }
@@ -448,7 +449,7 @@ function vShelfAdd(biblist) {
     } else {
         var bibnums = getContextBiblioNumbers();
         if ( bibnums.length > 0 ) {
-            for ( var i = 0 ; i < bibnums.length ; i++ ) {
+            for ( i = 0 ; i < bibnums.length ; i++ ) {
                 bibs.push("biblionumber=" + bibnums[i]);
             }
             return bibs.join("&");
@@ -521,5 +522,5 @@ $(document).ready(function(){
         e.preventDefault();
         openBasket();
     });
-	if(basketcount){ updateBasket(basketcount); }
+    if(basketcount){ updateBasket(basketcount); }
 });
