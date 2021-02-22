@@ -1,10 +1,10 @@
-/* global dataTablesDefaults allColumns */
+/* global dataTablesDefaults allColumns Cookies */
 // Set expiration date for cookies
 var date = new Date();
 date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
 
 function hideColumns() {
-    var valCookie = $.cookie("showColumns");
+    var valCookie = Cookies.get("showColumns");
     if (valCookie) {
         valCookie = valCookie.split("/");
         $("#showall").prop("checked", false).parent().removeClass("selected");
@@ -20,7 +20,7 @@ function hideColumns() {
 
 function hideColumn(num) {
     $("#hideall,#showall").prop("checked", false).parent().removeClass("selected");
-    var valCookie = $.cookie("showColumns");
+    var valCookie = Cookies.get("showColumns");
     // set the index of the table column to hide
     $("#" + num).parent().removeClass("selected");
     var hide = Number(num.replace("checkheader", "")) + 3;
@@ -39,10 +39,10 @@ function hideColumn(num) {
         if (!found) {
             valCookie.push(hide);
             var cookieString = valCookie.join("/");
-            $.cookie("showColumns", cookieString, { expires: date, path: '/' });
+            Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
         }
     } else {
-        $.cookie("showColumns", hide, { expires: date, path: '/' });
+        Cookies.set("showColumns", hide, { expires: date, path: '/' });
     }
 }
 
@@ -57,7 +57,7 @@ Array.prototype.remove = function (from, to) {
 function showColumn(num) {
     $("#hideall").prop("checked", false).parent().removeClass("selected");
     $("#" + num).parent().addClass("selected");
-    var valCookie = $.cookie("showColumns");
+    var valCookie = Cookies.get("showColumns");
     // set the index of the table column to hide
     var show = Number(num.replace("checkheader", "")) + 3;
     // hide header and cells matching the index
@@ -74,7 +74,7 @@ function showColumn(num) {
         }
         if (found) {
             var cookieString = valCookie.join("/");
-            $.cookie("showColumns", cookieString, { expires: date, path: '/' });
+            Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
         }
     }
 }
@@ -97,7 +97,7 @@ function hideAllColumns() {
     $("#itemst td:nth-child(3),#itemst th:nth-child(3)").nextAll().hide();
     $("#hideall").prop("checked", true).parent().addClass("selected");
     var cookieString = allColumns.join("/");
-    $.cookie("showColumns", cookieString, { expires: date, path: '/' });
+    Cookies.set("showColumns", cookieString, { expires: date, path: '/' });
 }
 
 $(document).ready(function () {
