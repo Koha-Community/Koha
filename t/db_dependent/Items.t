@@ -146,7 +146,7 @@ subtest 'ModItemTransfer tests' => sub {
     );
 
     ModItemTransfer( $item->itemnumber, $library1->{branchcode},
-        $library2->{branchcode} );
+        $library2->{branchcode}, 'Manual' );
 
     my $transfers = Koha::Item::Transfers->search(
         {
@@ -159,7 +159,7 @@ subtest 'ModItemTransfer tests' => sub {
     is($item->holdingbranch, $library1->{branchcode}, "Items holding branch was updated to frombranch");
 
     ModItemTransfer( $item->itemnumber, $library2->{branchcode},
-        $library1->{branchcode} );
+        $library1->{branchcode}, 'Manual' );
     $transfers = Koha::Item::Transfers->search(
         { itemnumber => $item->itemnumber, },
         { order_by   => { '-asc' => 'branchtransfer_id' } }
@@ -168,8 +168,8 @@ subtest 'ModItemTransfer tests' => sub {
     is($transfers->count, 2, "Second transfer recorded on second call of ModItemTransfer");
     my $transfer1 = $transfers->next;
     my $transfer2 = $transfers->next;
-    isnt($transfer1->datearrived, undef, "First transfer marked as completed by ModItemTransfer");
-    like($transfer1->comments,qr/^Canceled/, "First transfer contains 'Canceled' comment");
+    isnt($transfer1->datecancelled, undef, "First transfer marked as cancelled by ModItemTransfer");
+    like($transfer1->cancellation_reason,qr/^Manual/, "First transfer contains cancellation_reason 'Manual'");
     is($transfer2->datearrived, undef, "Second transfer is now the active transfer");
     $item->discard_changes;
     is($item->holdingbranch, $library2->{branchcode}, "Items holding branch was updated to frombranch");
