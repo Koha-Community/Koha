@@ -244,8 +244,8 @@ sub validate_hold_sibling {
     return 1 if $params->{branchcode} eq $self->id;
 
     my $branchcode = $params->{branchcode};
-    my @hold_libraries = $self->get_hold_libraries;
-    return grep {$_->branchcode eq $branchcode} @hold_libraries;
+    return $self->get_hold_libraries->search( { branchcode => $branchcode } )
+      ->count > 0;
 }
 
 =head2 Internal methods
