@@ -12,7 +12,7 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
+<title>
 [% IF ( searchdesc ) %]
     [% IF ( ms_value ) %]
         Results of search for '[% ms_value | html %]'
@@ -21,7 +21,10 @@
     [% END %]
 [% ELSE %]
     You did not specify any search criteria.
-[% END %]</title>
+[% END %]
+&rsaquo;
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" />

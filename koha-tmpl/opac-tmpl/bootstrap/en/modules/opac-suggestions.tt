@@ -7,9 +7,9 @@
 [% USE KohaNews %]
 [% SET opacsuggestion = KohaNews.get( location => "OpacSuggestioninstructions", lang => lang, library => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
-[% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
-[% IF ( op_else ) %]Purchase Suggestions[% END %]</title>
+<title>[% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
+[% IF ( op_else ) %]Purchase Suggestions[% END %] &rsaquo;
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>

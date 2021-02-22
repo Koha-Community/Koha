@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% IF ( fullpage ) %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname | html %]</title>[% INCLUDE 'doc-head-close.inc' %]
+    <title>Download list [% shelf.shelfname | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>[% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
     </head>
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]

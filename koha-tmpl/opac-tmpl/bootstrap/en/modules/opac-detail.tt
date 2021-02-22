@@ -30,7 +30,7 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% INCLUDE 'biblio-title-head.inc' %]</title>
+<title>Details for: [% INCLUDE 'biblio-title-head.inc' %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
     [% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
     [% IF ( Koha.Preference('OPACShowMusicalInscripts') ) %]

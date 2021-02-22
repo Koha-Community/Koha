@@ -3,14 +3,16 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-    [% IF ( LibraryNameTitle ) %]
+   [% IF ( library ) %]
+        [% library.branchname | html %] &rsaquo;
+    [% END %]
+    Libraries
+    &rsaquo;
+[% IF ( LibraryNameTitle ) %]
         [% LibraryNameTitle | html %]
     [% ELSE %]
         Koha online
-    [% END %] catalog &rsaquo; Libraries
-    [% IF ( library ) %]
-        &rsaquo; [% library.branchname | html %]
-    [% END %]
+    [% END %] catalog
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]

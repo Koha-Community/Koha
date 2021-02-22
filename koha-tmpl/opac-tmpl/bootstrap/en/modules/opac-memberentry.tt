@@ -19,7 +19,7 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %]</title>
+    <title>[% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
