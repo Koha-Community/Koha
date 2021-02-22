@@ -20,6 +20,7 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Indexer;
 
@@ -158,21 +159,31 @@ subtest 'Test indexer calls' => sub {
             AddReturn($item->barcode, $item->homebranch, 0, undef);
         } [$engine,'C4::Circulation'], "index_records is called once for $engine when calling AddReturn if item not issued";
 
-        $builder->build({
-            source => 'Branchtransfer',
-            value => {
-                itemnumber => $item->itemnumber,
-                datearrived => undef}
-        });
+        $builder->build(
+            {
+                source => 'Branchtransfer',
+                value  => {
+                    itemnumber    => $item->itemnumber,
+                    datesent      => dt_from_string,
+                    datearrived   => undef,
+                    datecancelled => undef
+                }
+            }
+        );
         warnings_are{
             LostItem( $item->itemnumber, "tests");
         } [$engine,"Koha::Item"], "index_records is called for $engine when calling LostItem and transfer exists";
-        $builder->build({
-            source => 'Branchtransfer',
-            value => {
-                itemnumber => $item2->itemnumber,
-                datearrived => undef}
-        });
+        $builder->build(
+            {
+                source => 'Branchtransfer',
+                value  => {
+                    itemnumber    => $item2->itemnumber,
+                    datesent      => dt_from_string,
+                    datearrived   => undef,
+                    datecancelled => undef
+                }
+            }
+        );
         warnings_are{
             LostItem( $item->itemnumber, "tests", undef, { skip_record_index => 1 });
         } undef, "index_records is not called for $engine when calling LostItem and transfer exists if skip_record_index";
