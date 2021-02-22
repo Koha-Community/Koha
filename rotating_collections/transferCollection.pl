@@ -43,7 +43,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 ## Transfer collection
 my ( $success, $messages );
 if ($toBranch) {
-    ( $success, $messages) =
+    ( $success, $messages ) =
       TransferCollection( $colId, $toBranch );
 
     if ($success) {

@@ -194,7 +194,8 @@ my $samplebranch = {
     opac_info      => 'sample opac',
 };
 Koha::Library->new($samplebranch)->store;
-is( TransferCollection( $collection_id1, $samplebranch->{branchcode} ),
+my ( $transferred, $messages ) = TransferCollection( $collection_id1, $samplebranch->{branchcode} );
+is( $transferred,
     1, "Collection1 has been transfered in the branch SAB" );
 @collection1 = GetCollection($collection_id1);
 is_deeply(
@@ -205,12 +206,11 @@ is_deeply(
     ],
     "Collection1 belongs to the sample branch (SAB)"
 );
-is( TransferCollection, "NO_ID", "TransferCollection without ID" );
-is(
-    TransferCollection($collection_id1),
-    'NO_BRANCHCODE',
-    "TransferCollection without branchcode"
-);
+( $transferred, $messages ) = TransferCollection();
+is( $messages->[0]->{code}, "NO_ID", "TransferCollection without ID" );
+( $transferred, $messages ) = TransferCollection($collection_id1);
+is( $messages->[0]->{code},
+    'NO_BRANCHCODE', "TransferCollection without branchcode" );
 
 #Test AddItemToCollection
 my $record = MARC::Record->new();

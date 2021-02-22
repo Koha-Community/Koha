@@ -399,7 +399,7 @@ sub RemoveItemFromCollection {
 
 =head2 TransferCollection
 
- ( $success, $errorcode, $errormessage ) = TransferCollection( $colId, $colBranchcode );
+ ( $success, $messages ) = TransferCollection( $colId, $colBranchcode );
 
 Transfers a collection to another branch
 
@@ -418,10 +418,10 @@ sub TransferCollection {
 
     ## Check for all necessary parameters
     if ( !$colId ) {
-        return ( 0, 1, "NO_ID" );
+        return ( 0, [{ type => 'error', code => 'NO_ID' }] );
     }
     if ( !$colBranchcode ) {
-        return ( 0, 2, "NO_BRANCHCODE" );
+        return ( 0, [{ type => 'error', code => 'NO_BRANCHCODE' }] );
     }
 
     my $dbh = C4::Context->dbh;
