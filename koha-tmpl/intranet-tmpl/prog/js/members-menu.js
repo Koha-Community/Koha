@@ -1,4 +1,4 @@
-/* global borrowernumber advsearch dateformat __ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky */
+/* global borrowernumber advsearch dateformat __ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky Cookies */
 
 $(document).ready(function(){
 
@@ -158,6 +158,6 @@ function printx_window(print_type) {
 function searchToHold(){
     var date = new Date();
     date.setTime(date.getTime() + (10 * 60 * 1000));
-    $.cookie("holdfor", borrowernumber, { path: "/", expires: date });
+    Cookies.set("holdfor", borrowernumber, { path: "/", expires: date });
     location.href="/cgi-bin/koha/catalogue/search.pl";
 }

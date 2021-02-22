@@ -235,7 +235,7 @@
         function SearchToHold(club_id) {
             var date = new Date();
             date.setTime(date.getTime() + (10 * 60 * 1000));
-            $.cookie("holdforclub", club_id, { path: "/", expires: date });
+            Cookies.set("holdforclub", club_id, { path: "/", expires: date });
             location.href="/cgi-bin/koha/catalogue/search.pl";
         }
     </script>
